@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.5.90\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-07-27 17:17+0200\n"
+"POT-Creation-Date: 2012-08-03 09:44+0200\n"
 "PO-Revision-Date: 2012-07-07 12:35+0200\n"
 "Last-Translator: Michael Piefel <piefel@informatik.hu-berlin.de>\n"
 "Language-Team: German <translation-team-de@lists.sourceforge.net>\n"
@@ -394,7 +394,7 @@ msgstr "ungültiger Wert für %%define-Variable %s: %s"
 msgid "accepted value: %s"
 msgstr "akzeptierte Werte: %s"
 
-#: src/parse-gram.y:744
+#: src/parse-gram.y:746
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "fehlender Bezeichner in Parameterdeklaration"

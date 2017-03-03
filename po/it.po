@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.0\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-07-27 17:17+0200\n"
+"POT-Creation-Date: 2012-08-03 09:44+0200\n"
 "PO-Revision-Date: 2005-05-23 12:37+0100\n"
 "Last-Translator: Paolo Bonzini <bonzini@gnu.org>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -350,7 +350,7 @@ msgstr ""
 msgid "accepted value: %s"
 msgstr "valore non valido: %s"
 
-#: src/parse-gram.y:744
+#: src/parse-gram.y:746
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "manca un identificatore nella dichirazione di un parametro"

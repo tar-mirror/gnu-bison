@@ -1,8 +1,8 @@
 This is bison.info, produced by makeinfo version 4.13 from
 /Users/akim/src/gnu/bison-2.5/doc/bison.texi.
 
-This manual (18 July 2012) is for GNU Bison (version 2.6), the GNU
-parser generator.
+This manual (27 July 2012) is for GNU Bison (version 2.6.1-dirty), the
+GNU parser generator.
 
    Copyright (C) 1988-1993, 1995, 1998-2012 Free Software Foundation,
 Inc.
@@ -1811,7 +1811,7 @@ changed several times, it is safer to require the version you designed
 the grammar for.
 
      %skeleton "lalr1.cc" /* -*- C++ -*- */
-     %require "2.6"
+     %require "2.6.1-dirty"
      %defines
      %define parser_class_name "calcxx_parser"
 
@@ -4060,7 +4060,7 @@ free software license, such as the GNU General Public License, to
 permit their use in free software.
 
 
-File: bison.info,  Node: Bibliography,  Next: Index,  Prev: Copying This Manual,  Up: Top
+File: bison.info,  Node: Bibliography,  Next: Index of Terms,  Prev: Copying This Manual,  Up: Top
 
 Bibliography
 ************
@@ -4105,10 +4105,10 @@ Bibliography
      `http://www.cs.rhul.ac.uk/research/languages/publications/tomita_style_1.ps'
 
 
-File: bison.info,  Node: Index,  Prev: Bibliography,  Up: Top
+File: bison.info,  Node: Index of Terms,  Prev: Bibliography,  Up: Top
 
-Index
-*****
+Index of Terms
+**************
 
  [index ]
 * Menu:

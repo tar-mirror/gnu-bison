@@ -184,6 +184,9 @@
 /* Define to 1 when the gnulib module memchr should be tested. */
 #undef GNULIB_TEST_MEMCHR
 
+/* Define to 1 when the gnulib module obstack-printf should be tested. */
+#undef GNULIB_TEST_OBSTACK_PRINTF
+
 /* Define to 1 when the gnulib module open should be tested. */
 #undef GNULIB_TEST_OPEN
 
@@ -438,6 +441,10 @@
    otherwise. */
 #undef HAVE_DECL_MBSWIDTH_IN_WCHAR_H
 
+/* Define to 1 if you have the declaration of `obstack_printf', and to 0 if
+   you don't. */
+#undef HAVE_DECL_OBSTACK_PRINTF
+
 /* Define to 1 if you have the declaration of `program_invocation_name', and
    to 0 if you don't. */
 #undef HAVE_DECL_PROGRAM_INVOCATION_NAME
@@ -631,6 +638,9 @@
 
 /* Define to 1 if libc includes obstacks. */
 #undef HAVE_OBSTACK
+
+/* Define to 1 if you have the `obstack_printf' function. */
+#undef HAVE_OBSTACK_PRINTF
 
 /* Define to 1 if you have the <paths.h> header file. */
 #undef HAVE_PATHS_H

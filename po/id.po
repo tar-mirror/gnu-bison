@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison-2.4.1b\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-07-27 17:17+0200\n"
+"POT-Creation-Date: 2012-08-03 09:44+0200\n"
 "PO-Revision-Date: 2010-02-27 07:30+0700\n"
 "Last-Translator: Arif E. Nugroho <arif_endro@yahoo.com>\n"
 "Language-Team: Indonesian <translation-team-id@lists.sourceforge.net>\n"
@@ -372,7 +372,7 @@ msgstr "nilai tidak valid untuk %%define variable `%s': `%s'"
 msgid "accepted value: %s"
 msgstr "nilai tidak digunakan: $%d"
 
-#: src/parse-gram.y:744
+#: src/parse-gram.y:746
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "identifier tidak ada dalam deklarasi parameter"

@@ -1,8 +1,8 @@
 This is bison.info, produced by makeinfo version 4.13 from
 /Users/akim/src/gnu/bison-2.5/doc/bison.texi.
 
-This manual (18 July 2012) is for GNU Bison (version 2.6), the GNU
-parser generator.
+This manual (27 July 2012) is for GNU Bison (version 2.6.1-dirty), the
+GNU parser generator.
 
    Copyright (C) 1988-1993, 1995, 1998-2012 Free Software Foundation,
 Inc.
@@ -30,8 +30,8 @@ File: bison.info,  Node: Top,  Next: Introduction,  Up: (dir)
 Bison
 *****
 
-This manual (18 July 2012) is for GNU Bison (version 2.6), the GNU
-parser generator.
+This manual (27 July 2012) is for GNU Bison (version 2.6.1-dirty), the
+GNU parser generator.
 
    Copyright (C) 1988-1993, 1995, 1998-2012 Free Software Foundation,
 Inc.
@@ -74,7 +74,7 @@ Reference sections:
 * Glossary::            Basic concepts are explained.
 * Copying This Manual:: License for copying this manual.
 * Bibliography::        Publications cited in this manual.
-* Index::               Cross-references to the text.
+* Index of Terms::      Cross-references to the text.
 
  --- The Detailed Node Listing ---
 
@@ -362,7 +362,7 @@ Bison has grown more robust and evolved many other new features thanks
 to the hard work of a long list of volunteers.  For details, see the
 `THANKS' and `ChangeLog' files included in the Bison distribution.
 
-   This edition corresponds to version 2.6 of Bison.
+   This edition corresponds to version 2.6.1-dirty of Bison.
 
 
 File: bison.info,  Node: Conditions,  Next: Copying,  Prev: Introduction,  Up: Top
@@ -4642,8 +4642,8 @@ code.
 
  -- Directive: %initial-action { CODE }
      Declare that the braced CODE must be invoked before parsing each
-     time `yyparse' is called.  The CODE may use `$$' and `@$' --
-     initial value and location of the lookahead -- and the
+     time `yyparse' is called.  The CODE may use `$$' (or `$<TAG>$')
+     and `@$' -- initial value and location of the lookahead -- and the
      `%parse-param'.
 
    For instance, if your locations use a file name, you may use
@@ -4677,9 +4677,9 @@ symbol is automatically discarded.
 
  -- Directive: %destructor { CODE } SYMBOLS
      Invoke the braced CODE whenever the parser discards one of the
-     SYMBOLS.  Within CODE, `$$' designates the semantic value
-     associated with the discarded symbol, and `@$' designates its
-     location.  The additional parser parameters are also available
+     SYMBOLS.  Within CODE, `$$' (or `$<TAG>$') designates the semantic
+     value associated with the discarded symbol, and `@$' designates
+     its location.  The additional parser parameters are also available
      (*note The Parser Function `yyparse': Parser Function.).
 
      When a symbol is listed among SYMBOLS, its `%destructor' is called
@@ -4789,10 +4789,10 @@ Discarded Symbols: Destructor Decl.).
  -- Directive: %printer { CODE } SYMBOLS
      Invoke the braced CODE whenever the parser displays one of the
      SYMBOLS.  Within CODE, `yyoutput' denotes the output stream (a
-     `FILE*' in C, and an `std::ostream&' in C++), `$$' designates the
-     semantic value associated with the symbol, and `@$' its location.
-     The additional parser parameters are also available (*note The
-     Parser Function `yyparse': Parser Function.).
+     `FILE*' in C, and an `std::ostream&' in C++), `$$' (or `$<TAG>$')
+     designates the semantic value associated with the symbol, and `@$'
+     its location.  The additional parser parameters are also available
+     (*note The Parser Function `yyparse': Parser Function.).
 
      The SYMBOLS are defined as for `%destructor' (*note Freeing
      Discarded Symbols: Destructor Decl.): they can be per-type (e.g.,

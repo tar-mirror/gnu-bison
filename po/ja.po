@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU bison 2.5.1\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-07-27 17:17+0200\n"
+"POT-Creation-Date: 2012-08-03 09:44+0200\n"
 "PO-Revision-Date: 2012-06-10 18:47+0900\n"
 "Last-Translator: Takeshi Hamasaki <hmatrjp@users.sourceforge.jp>\n"
 "Language-Team: Japanese <translation-team-ja@lists.sourceforge.net>\n"
@@ -338,7 +338,7 @@ msgstr "アイコン型として不適切な値 '%s'"
 msgid "accepted value: %s"
 msgstr "無効な値\n"
 
-#: src/parse-gram.y:744
+#: src/parse-gram.y:746
 #, fuzzy, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "マクロ仮引数リストに ')' がありません"

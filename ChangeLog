@@ -1,3 +1,109 @@
+2012-08-03  Akim Demaille  <akim@lrde.epita.fr>
+
+	version 2.6.2
+	* NEWS: Record release date.
+
+2012-08-02  Akim Demaille  <akim@lrde.epita.fr>
+
+	NEWS: update.
+	* NEWS: Catch up with the other changes from 2.6.1.
+
+2012-08-02  Akim Demaille  <akim@lrde.epita.fr>
+
+	yacc: remove trailing end of line at end of file
+	There are still spurious spaces at the end of some lines.  But this is
+	addressed in the master branch, and I am reluctant to try to backport
+	this.
+
+	* data/yacc.c, data/glr.c, data/lalr1.cc, data/glr.cc: here.
+	* tests/calc.at (AT_CHECK_SPACES): New.
+	Use it.
+	Be sure not to introduce trailing empty lines in the *.y files.
+	* NEWS: Doc it.
+	* cfg.mk (syntax-check): Remove the exception.
+
+2012-08-02  Akim Demaille  <akim@lrde.epita.fr>
+
+	thanks: fix a contributor name
+	* THANKS: On his request.
+
+2012-08-01  Akim Demaille  <akim@lrde.epita.fr>
+
+	gnulib: update
+
+2012-08-01  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: synch line -> syncline, for consistency
+	* tests/synclines.at: Do it, as "syncline" is used consistently
+	everywhere else in Bison.
+
+2012-08-01  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: synclines: style changes
+	* tests/synclines.at (AT_TEST_SYNCLINE): Rename as...
+	(AT_TEST): this.
+	Use pushdef/popdef.
+	Formatting changes.
+	Use '+' instead of '*' where appropriate.
+
+2012-08-01  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: synclines: fix perl invocation
+	Reported by Summum Bonum.
+
+	* tests/synclines.at: Fix Perl invocation: its -f is not like sed's.
+
+2012-08-01  Akim Demaille  <akim@lrde.epita.fr>
+
+	regen
+
+2012-08-01  Akim Demaille  <akim@lrde.epita.fr>
+
+	c++: trailing end-of-lines in %parse-param
+	* src/parse-gram.y (add_param): No only skip ' ' and '\t', skip all
+	leading and trailing spaces.
+	* tests/regression.at (Lex and parse params): Check it.
+	* NEWS: Document it.
+
+2012-08-01  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: simplify
+	* tests/regression.at: Remove useless compilations: AT_FULL_COMPILE
+	includes the compilation by bison.
+
+2012-07-31  Akim Demaille  <akim@lrde.epita.fr>
+
+	use obstack_printf
+	This is not just nicer, it is also much safer, since we were
+	using sprintf...
+
+	* bootstrap.conf: Require it.
+	* src/system.h (obstack_fgrow1, obstack_fgrow2, obstack_fgrow3)
+	(obstack_fgrow4): Remove.
+	Adjust dependencies.
+
+2012-07-30  Akim Demaille  <akim@lrde.epita.fr>
+
+	scanner: restore a missing start condition
+	$ flex src/scan-skel.l
+	src/scan-skel.l:145: multiple <<EOF>> rules for start condition SC_AT_DIRECTIVE_ARGS
+	src/scan-skel.l:145: multiple <<EOF>> rules for start condition SC_AT_DIRECTIVE_SKIP_WS
+	This is warning, and it seems there are no means to make it an error.
+
+	* src/scan-skel.l: Restore the start-condition INITIAL for an <<EOF>>
+	clause.
+
+2012-07-30  Akim Demaille  <akim@lrde.epita.fr>
+
+	gnulib: update
+
+2012-07-30  Akim Demaille  <akim@lrde.epita.fr>
+
+	maint: post-release administrivia
+	* NEWS: Add header line for next release.
+	* .prev-version: Record previous version.
+	* cfg.mk (old_NEWS_hash): Auto-update.
+
 2012-07-30  Akim Demaille  <akim@lrde.epita.fr>
 
 	version 2.6.1

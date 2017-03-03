@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.5\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-07-27 17:17+0200\n"
+"POT-Creation-Date: 2012-08-03 09:44+0200\n"
 "PO-Revision-Date: 2012-05-22 18:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -401,7 +401,7 @@ msgstr "luach neamhbhailí ar athróg %%define `%s': `%s'"
 msgid "accepted value: %s"
 msgstr "luach glactha: `%s'"
 
-#: src/parse-gram.y:744
+#: src/parse-gram.y:746
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "aitheantóir ar iarraidh i bhfógra paraiméadair"

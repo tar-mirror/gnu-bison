@@ -137,6 +137,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module multiarch:
   # Code from module nocrash:
   # Code from module obstack:
+  # Code from module obstack-printf:
   # Code from module open:
   # Code from module pathmax:
   # Code from module perror:
@@ -499,6 +500,11 @@ fi
 gl_MULTIARCH
 AC_FUNC_OBSTACK
 dnl Note: AC_FUNC_OBSTACK does AC_LIBSOURCES([obstack.h, obstack.c]).
+gl_FUNC_OBSTACK_PRINTF
+if test $ac_cv_func_obstack_printf = no || test $REPLACE_OBSTACK_PRINTF = 1; then
+  AC_LIBOBJ([obstack_printf])
+fi
+gl_STDIO_MODULE_INDICATOR([obstack-printf])
 gl_FUNC_OPEN
 if test $REPLACE_OPEN = 1; then
   AC_LIBOBJ([open])
@@ -998,6 +1004,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/msvc-nothrow.h
   lib/obstack.c
   lib/obstack.h
+  lib/obstack_printf.c
   lib/open.c
   lib/pathmax.h
   lib/perror.c
@@ -1201,6 +1208,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/multiarch.m4
   m4/nls.m4
   m4/nocrash.m4
+  m4/obstack-printf.m4
   m4/off_t.m4
   m4/open.m4
   m4/pathmax.m4

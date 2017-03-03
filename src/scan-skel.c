@@ -1082,8 +1082,6 @@ YY_RULE_SETUP
 ECHO;
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-case YY_STATE_EOF(SC_AT_DIRECTIVE_ARGS):
-case YY_STATE_EOF(SC_AT_DIRECTIVE_SKIP_WS):
 #line 94 "scan-skel.l"
 {
   if (outname)
@@ -1174,6 +1172,8 @@ YY_RULE_SETUP
 
 
 
+case YY_STATE_EOF(SC_AT_DIRECTIVE_ARGS):
+case YY_STATE_EOF(SC_AT_DIRECTIVE_SKIP_WS):
 #line 145 "scan-skel.l"
 {
     fatal (_("unclosed %s directive in skeleton"), at_directive_argv[0]);

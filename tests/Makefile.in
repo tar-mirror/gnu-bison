@@ -113,10 +113,10 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/00gnulib.m4 \
 	$(top_srcdir)/m4/msvc-inval.m4 \
 	$(top_srcdir)/m4/msvc-nothrow.m4 $(top_srcdir)/m4/multiarch.m4 \
 	$(top_srcdir)/m4/nls.m4 $(top_srcdir)/m4/nocrash.m4 \
-	$(top_srcdir)/m4/off_t.m4 $(top_srcdir)/m4/open.m4 \
-	$(top_srcdir)/m4/pathmax.m4 $(top_srcdir)/m4/perror.m4 \
-	$(top_srcdir)/m4/pipe2.m4 $(top_srcdir)/m4/po.m4 \
-	$(top_srcdir)/m4/posix_spawn.m4 \
+	$(top_srcdir)/m4/obstack-printf.m4 $(top_srcdir)/m4/off_t.m4 \
+	$(top_srcdir)/m4/open.m4 $(top_srcdir)/m4/pathmax.m4 \
+	$(top_srcdir)/m4/perror.m4 $(top_srcdir)/m4/pipe2.m4 \
+	$(top_srcdir)/m4/po.m4 $(top_srcdir)/m4/posix_spawn.m4 \
 	$(top_srcdir)/m4/printf-frexp.m4 \
 	$(top_srcdir)/m4/printf-frexpl.m4 \
 	$(top_srcdir)/m4/printf-posix-rpl.m4 \

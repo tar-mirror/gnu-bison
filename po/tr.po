@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU bison 2.0\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-07-27 17:17+0200\n"
+"POT-Creation-Date: 2012-08-03 09:44+0200\n"
 "PO-Revision-Date: 2005-03-20 22:03+0100\n"
 "Last-Translator: Çaðrý Çöltekin <cagri@xs4all.nl>\n"
 "Language-Team: Turkish <gnu-tr-u12a@lists.sourceforge.net>\n"
@@ -356,7 +356,7 @@ msgstr ""
 msgid "accepted value: %s"
 msgstr "geçersiz deðer: %s"
 
-#: src/parse-gram.y:744
+#: src/parse-gram.y:746
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "parametre bildiriminde eksik tanýtýcý"
