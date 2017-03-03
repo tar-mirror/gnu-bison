@@ -1,6 +1,35 @@
 Bison News
 ----------
 
+Changes in version 1.29:
+
+* Output file does not redefine const; that is now config.h's job.
+
+* Added `-g' and `--graph'.
+
+* The Bison manual is now distributed under the terms of the GNU FDL.
+
+* The input and the output files has automatically a similar extension.
+
+* Russian translation added.
+
+* NLS support updated; should hopefully be less troublesome.
+
+* Added the old Bison reference card.
+
+* Added `--locations' and `%locations'.
+
+* Added `-S' and `--skeleton'.
+
+* `%raw', `-r', `--raw' is disabled.
+
+* Special characters are escaped when output.  This solves the problems
+  of the #line lines with path names including backslashes.
+
+* New directives.
+  `%yacc', `%fixed_output_files', `%defines', `%no_parser', `%verbose',
+  `%debug', `%source_extension' and `%header_extension'.
+
 Changes in version 1.28:
 
 * Should compile better now with K&R compilers.
@@ -37,7 +66,7 @@ Changes in version 1.25:
 
 * Errors in the input grammar are not fatal; Bison keeps reading
 the grammar file, and reports all the errors found in it.
-		
+
 * Tokens can now be specified as multiple-character strings: for
 example, you could use "<=" for a token which looks like <=, instead
 of chosing a name like LESSEQ.

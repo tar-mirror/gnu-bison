@@ -1,172 +1,112 @@
 /* Output the generated parsing program for bison,
-   Copyright (C) 1984, 1986, 1989, 1992 Free Software Foundation, Inc.
+   Copyright 1984, 1986, 1989, 1992, 2000, 2001 Free Software Foundation, Inc.
 
-This file is part of Bison, the GNU Compiler Compiler.
+   This file is part of Bison, the GNU Compiler Compiler.
 
-Bison is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2, or (at your option)
-any later version.
+   Bison is free software; you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2, or (at your option)
+   any later version.
 
-Bison is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+   Bison is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with Bison; see the file COPYING.  If not, write to
-the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-Boston, MA 02111-1307, USA.  */
+   You should have received a copy of the GNU General Public License
+   along with Bison; see the file COPYING.  If not, write to the Free
+   Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+   02111-1307, USA.  */
 
 
-/* functions to output parsing data to various files.  Entries are:
+/* The parser tables consist of these tables.
+   Starred ones needed only for the semantic parser.
+   Double starred are output only if switches are set.
 
-  output_headers ()
+   yytranslate = vector mapping yylex's token numbers into bison's token
+   numbers.
 
-Output constant strings to the beginning of certain files.
+   ** yytname = vector of string-names indexed by bison token number
 
-  output_trailers()
+   ** yytoknum = vector of yylex token numbers corresponding to entries
+   in yytname
 
-Output constant strings to the ends of certain files.
+   yyrline = vector of line-numbers of all rules.  For yydebug printouts.
 
-  output ()
+   yyrhs = vector of items of all rules.
+   This is exactly what ritems contains.  For yydebug and for semantic
+   parser.
 
-Output the parsing tables and the parser code to ftable.
+   yyprhs[r] = index in yyrhs of first item for rule r.
 
-The parser tables consist of these tables.
-Starred ones needed only for the semantic parser.
-Double starred are output only if switches are set.
+   yyr1[r] = symbol number of symbol that rule r derives.
 
-yytranslate = vector mapping yylex's token numbers into bison's token numbers.
+   yyr2[r] = number of symbols composing right hand side of rule r.
 
-** yytname = vector of string-names indexed by bison token number
+   * yystos[s] = the symbol number of the symbol that leads to state s.
 
-** yytoknum = vector of yylex token numbers corresponding to entries in yytname
+   yydefact[s] = default rule to reduce with in state s,
+   when yytable doesn't specify something else to do.
+   Zero means the default is an error.
 
-yyrline = vector of line-numbers of all rules.  For yydebug printouts.
+   yydefgoto[i] = default state to go to after a reduction of a rule that
+   generates variable ntokens + i, except when yytable
+   specifies something else to do.
 
-yyrhs = vector of items of all rules.
-        This is exactly what ritems contains.  For yydebug and for semantic
-	parser.
+   yypact[s] = index in yytable of the portion describing state s.
+   The lookahead token's type is used to index that portion
+   to find out what to do.
 
-yyprhs[r] = index in yyrhs of first item for rule r.
+   If the value in yytable is positive,
+   we shift the token and go to that state.
 
-yyr1[r] = symbol number of symbol that rule r derives.
+   If the value is negative, it is minus a rule number to reduce by.
 
-yyr2[r] = number of symbols composing right hand side of rule r.
+   If the value is zero, the default action from yydefact[s] is used.
 
-* yystos[s] = the symbol number of the symbol that leads to state s.
+   yypgoto[i] = the index in yytable of the portion describing
+   what to do after reducing a rule that derives variable i + ntokens.
+   This portion is indexed by the parser state number, s,
+   as of before the text for this nonterminal was read.
+   The value from yytable is the state to go to if
+   the corresponding value in yycheck is s.
 
-yydefact[s] = default rule to reduce with in state s,
-	      when yytable doesn't specify something else to do.
-	      Zero means the default is an error.
+   yytable = a vector filled with portions for different uses,
+   found via yypact and yypgoto.
 
-yydefgoto[i] = default state to go to after a reduction of a rule that
-	       generates variable ntokens + i, except when yytable
-	       specifies something else to do.
+   yycheck = a vector indexed in parallel with yytable.
+   It indicates, in a roundabout way, the bounds of the
+   portion you are trying to examine.
 
-yypact[s] = index in yytable of the portion describing state s.
-            The lookahead token's type is used to index that portion
-            to find out what to do.
+   Suppose that the portion of yytable starts at index p
+   and the index to be examined within the portion is i.
+   Then if yycheck[p+i] != i, i is outside the bounds
+   of what is actually allocated, and the default
+   (from yydefact or yydefgoto) should be used.
+   Otherwise, yytable[p+i] should be used.
 
-	    If the value in yytable is positive,
-	    we shift the token and go to that state.
-
-	    If the value is negative, it is minus a rule number to reduce by.
-
-	    If the value is zero, the default action from yydefact[s] is used.
-
-yypgoto[i] = the index in yytable of the portion describing 
-             what to do after reducing a rule that derives variable i + ntokens.
-             This portion is indexed by the parser state number, s,
-	     as of before the text for this nonterminal was read.
-	     The value from yytable is the state to go to if 
-             the corresponding value in yycheck is s.
-
-yytable = a vector filled with portions for different uses,
-          found via yypact and yypgoto.
-
-yycheck = a vector indexed in parallel with yytable.
-	  It indicates, in a roundabout way, the bounds of the
-	  portion you are trying to examine.
-
-	  Suppose that the portion of yytable starts at index p
-	  and the index to be examined within the portion is i.
-	  Then if yycheck[p+i] != i, i is outside the bounds
-	  of what is actually allocated, and the default
-	  (from yydefact or yydefgoto) should be used.
-	  Otherwise, yytable[p+i] should be used.
-
-YYFINAL = the state number of the termination state.
-YYFLAG = most negative short int.  Used to flag ??
-YYNTBASE = ntokens.
-
+   YYFINAL = the state number of the termination state.
+   YYFLAG = most negative short int.  Used to flag ??
+   YYNTBASE = ntokens.
 */
 
-#include <stdio.h>
 #include "system.h"
-#include "machine.h"
-#include "alloc.h"
+#include "obstack.h"
+#include "quotearg.h"
+#include "getargs.h"
+#include "xalloc.h"
 #include "files.h"
 #include "gram.h"
-#include "state.h"
+#include "LR0.h"
+#include "complain.h"
+#include "output.h"
+#include "lalr.h"
+#include "reader.h"
+#include "conflicts.h"
+
+extern void berror PARAMS((const char *));
 
 
-extern int debugflag;
-extern int nolinesflag;
-extern int noparserflag;
-extern int toknumflag;
-
-extern char **tags;
-extern int *user_toknums;
-extern int tokensetsize;
-extern int final_state;
-extern core **state_table;
-extern shifts **shift_table;
-extern errs **err_table;
-extern reductions **reduction_table;
-extern short *accessing_symbol;
-extern unsigned *LA;
-extern short *LAruleno;
-extern short *lookaheads;
-extern char *consistent;
-extern short *goto_map;
-extern short *from_state;
-extern short *to_state;
-extern int lineno;
-
-void output_headers PARAMS((void));
-void output_trailers PARAMS((void));
-void output PARAMS((void));
-void output_token_translations PARAMS((void));
-void output_gram PARAMS((void));
-void output_stos PARAMS((void));
-void output_rule_data PARAMS((void));
-void output_defines PARAMS((void));
-void output_actions PARAMS((void));
-void token_actions PARAMS((void));
-void save_row PARAMS((int));
-void goto_actions PARAMS((void));
-void save_column PARAMS((int, int));
-void sort_actions PARAMS((void));
-void pack_table PARAMS((void));
-void output_base PARAMS((void));
-void output_table PARAMS((void));
-void output_check PARAMS((void));
-void output_parser PARAMS((void));
-void output_program PARAMS((void));
-void free_shifts PARAMS((void));
-void free_reductions PARAMS((void));
-void free_itemsets PARAMS((void));
-int action_row PARAMS((int));
-int default_goto PARAMS((int));
-int matching_state PARAMS((int));
-int pack_vector PARAMS((int));
-
-extern void berror PARAMS((char *));
-extern void fatals PARAMS((char *, char *));
-extern char *int_to_string PARAMS((int));
-extern void reader_output_yylsp PARAMS((FILE *));
 
 static int nvectors;
 static int nentries;
@@ -186,543 +126,405 @@ static int high;
 
 
 
-#define	GUARDSTR	"\n#include \"%s\"\nextern int yyerror;\n\
-extern int yycost;\nextern char * yymsg;\nextern YYSTYPE yyval;\n\n\
-yyguard(n, yyvsp, yylsp)\nregister int n;\nregister YYSTYPE *yyvsp;\n\
-register YYLTYPE *yylsp;\n\
-{\n  yyerror = 0;\nyycost = 0;\n  yymsg = 0;\nswitch (n)\n    {"
+static inline void
+output_short_or_char_table (struct obstack *oout,
+			    const char *comment,
+			    const char *type,
+			    const char *table_name,
+			    short *short_table,
+			    short first_value,
+			    short begin, short end)
+{
+  int i, j;
 
-#define	ACTSTR		"\n#include \"%s\"\nextern YYSTYPE yyval;\
-\nextern int yychar;\
-yyaction(n, yyvsp, yylsp)\nregister int n;\nregister YYSTYPE *yyvsp;\n\
-register YYLTYPE *yylsp;\n{\n  switch (n)\n{"
+  if (comment)
+    obstack_fgrow1 (oout, "/* %s. */\n", comment);
+
+  obstack_fgrow3 (oout, "static const %s %s[] =\n{\n  %6d",
+		  type, table_name, first_value);
+
+  j = 1;
+  for (i = begin; i < end; i++)
+    {
+      obstack_1grow (oout, ',');
+
+      if (j >= 10)
+	{
+	  obstack_sgrow (oout, "\n  ");
+	  j = 1;
+	}
+      else
+	{
+	  j++;
+	}
+
+      obstack_fgrow1 (oout, "%6d", short_table[i]);
+    }
+
+  obstack_sgrow (oout, "\n};\n");
+}
+
+
+static inline void
+output_short_table (struct obstack *oout,
+		    const char *comment,
+		    const char *table_name,
+		    short *short_table,
+		    short first_value,
+		    short begin, short end)
+{
+  output_short_or_char_table (oout, comment, "short", table_name, short_table,
+			      first_value, begin, end);
+}
+
+
+/*--------------------------------------------------------------.
+| output_headers -- Output constant strings to the beginning of |
+| certain files.                                                |
+`--------------------------------------------------------------*/
+
+/* Don't put the `%s' insides quotes, since it quotearg puts them. */
+
+#define	GUARDSTR	\
+"\n\
+#include %s\n\
+extern int yyerror;\n\
+extern int yycost;\n\
+extern char * yymsg;\n\
+extern YYSTYPE yyval;\n\
+\n\
+yyguard(n, yyvsp, yylsp)\n\
+register int n;\n\
+register YYSTYPE *yyvsp;\n\
+register YYLTYPE *yylsp;\n\
+{\n\
+  yyerror = 0;\n\
+  yycost = 0;\n\
+  yymsg = 0;\n\
+  switch (n)\n\
+    {"
+
+#define	ACTSTR		\
+"\n\
+#include %s\n\
+extern YYSTYPE yyval;\n\
+extern int yychar;\n\
+\n\
+yyaction(n, yyvsp, yylsp)\n\
+register int n;\n\
+register YYSTYPE *yyvsp;\n\
+register YYLTYPE *yylsp;\n\
+{\n\
+  switch (n)\n\
+    {"
 
 #define	ACTSTR_SIMPLE	"\n  switch (yyn) {\n"
-
 
 void
 output_headers (void)
 {
+  char *attrsfile_quoted = 0;
+
   if (semantic_parser)
-    fprintf(fguard, GUARDSTR, attrsfile);
+    {
+      /* FIXME: This is *buggy*.  ATTRSFILE is not computed yet, since
+	 we are waiting for the full input file to have been read to
+	 be sure of the output file name.  So basically, here, a SEGV
+	 is guaranteed.  OTOH, currently semantic parsers are not
+	 supported.  */
+      attrsfile_quoted = quotearg_style (c_quoting_style, attrsfile);
+      obstack_fgrow1 (&guard_obstack, GUARDSTR, attrsfile_quoted);
+    }
 
-  if (noparserflag)
-	return;
+  if (no_parser_flag)
+    return;
 
-  fprintf(faction, (semantic_parser ? ACTSTR : ACTSTR_SIMPLE), attrsfile);
-/*  if (semantic_parser)	JF moved this below
-    fprintf(ftable, "#include \"%s\"\n", attrsfile);
-  fprintf(ftable, "#include <stdio.h>\n\n");
-*/
+  if (semantic_parser)
+    obstack_fgrow1 (&action_obstack, ACTSTR, attrsfile_quoted);
+  else
+    obstack_sgrow (&action_obstack, ACTSTR_SIMPLE);
 
   /* Rename certain symbols if -p was specified.  */
   if (spec_name_prefix)
     {
-      fprintf(ftable, "#define yyparse %sparse\n", spec_name_prefix);
-      fprintf(ftable, "#define yylex %slex\n", spec_name_prefix);
-      fprintf(ftable, "#define yyerror %serror\n", spec_name_prefix);
-      fprintf(ftable, "#define yylval %slval\n", spec_name_prefix);
-      fprintf(ftable, "#define yychar %schar\n", spec_name_prefix);
-      fprintf(ftable, "#define yydebug %sdebug\n", spec_name_prefix);
-      fprintf(ftable, "#define yynerrs %snerrs\n", spec_name_prefix);
+      obstack_fgrow1 (&table_obstack,
+		      "#define yyparse %sparse\n", spec_name_prefix);
+      obstack_fgrow1 (&table_obstack,
+		      "#define yylex %slex\n", spec_name_prefix);
+      obstack_fgrow1 (&table_obstack,
+		      "#define yyerror %serror\n", spec_name_prefix);
+      obstack_fgrow1 (&table_obstack,
+		      "#define yylval %slval\n", spec_name_prefix);
+      obstack_fgrow1 (&table_obstack,
+		      "#define yychar %schar\n", spec_name_prefix);
+      obstack_fgrow1 (&table_obstack,
+		      "#define yydebug %sdebug\n", spec_name_prefix);
+      obstack_fgrow1 (&table_obstack,
+		      "#define yynerrs %snerrs\n", spec_name_prefix);
     }
 }
 
+
+/*-------------------------------------------------------.
+| Output constant strings to the ends of certain files.  |
+`-------------------------------------------------------*/
 
 void
 output_trailers (void)
 {
   if (semantic_parser)
-      fprintf(fguard, "\n    }\n}\n");
+    obstack_sgrow (&guard_obstack, "\n    }\n}\n");
 
-  fprintf(faction, "\n");
-  
-  if (noparserflag) 
-      return;
+  obstack_1grow (&action_obstack, '\n');
+
+  if (no_parser_flag)
+    return;
 
   if (semantic_parser)
-      fprintf(faction, "    }\n");
-  fprintf(faction, "}\n");
+    obstack_sgrow (&action_obstack, "    }\n");
+
+  obstack_sgrow (&action_obstack, "}\n");
 }
 
 
-void
-output (void)
-{
-  int c;
 
-  /* output_token_defines(ftable);	/ * JF put out token defines FIRST */
-  if (!semantic_parser)		/* JF Put out other stuff */
-    {
-      rewind(fattrs);
-      while ((c=getc(fattrs))!=EOF)
-        putc(c,ftable);
-    }
-  reader_output_yylsp(ftable);
-  if (debugflag)
-    fprintf(ftable, "#ifndef YYDEBUG\n#define YYDEBUG %d\n#endif\n\n",
-	    !!debugflag);
-
-  if (semantic_parser)
-    fprintf(ftable, "#include \"%s\"\n", attrsfile);
-
-  if (! noparserflag)
-    fprintf(ftable, "#include <stdio.h>\n\n");
-
-  /* Make "const" do nothing if not in ANSI C.  */
-  fprintf (ftable, "#ifndef __cplusplus\n#ifndef __STDC__\n#define const\n#endif\n#endif\n\n");
-
-  free_itemsets();
-  output_defines();
-  output_token_translations();
-/*   if (semantic_parser) */
-  /* This is now unconditional because debugging printouts can use it.  */
-  output_gram();
-  FREE(ritem);
-  if (semantic_parser)
-    output_stos();
-  output_rule_data();
-  output_actions();
-  if (! noparserflag)
-    output_parser();
-  output_program();
-}
-
-
-void
+static void
 output_token_translations (void)
 {
-  register int i, j;
-/*   register short *sp; JF unused */
+  obstack_sgrow (&table_obstack, "\
+\n\
+/* YYTRANSLATE(YYLEX) -- Bison token number corresponding to YYLEX. */\n");
 
   if (translations)
     {
-      fprintf(ftable,
-	      "\n#define YYTRANSLATE(x) ((unsigned)(x) <= %d ? yytranslate[x] : %d)\n",
-	      max_user_token_number, nsyms);
-    
-      if (ntokens < 127)  /* play it very safe; check maximum element value.  */
-        fprintf(ftable, "\nstatic const char yytranslate[] = {     0");
-      else
-	fprintf(ftable, "\nstatic const short yytranslate[] = {     0");
-    
-      j = 10;
-      for (i = 1; i <= max_user_token_number; i++)
-	{
-	  putc(',', ftable);
-    
-	  if (j >= 10)
-	    {
-	      putc('\n', ftable);
-	      j = 1;
-	    }
-	  else
-	    {
-	      j++;
-	    }
-    
-	  fprintf(ftable, "%6d", token_translations[i]);
-	}
-    
-      fprintf(ftable, "\n};\n");
+      obstack_fgrow2 (&table_obstack,
+      "#define YYTRANSLATE(x) ((unsigned)(x) <= %d ? yytranslate[x] : %d)\
+\n\
+\n",
+	       max_user_token_number, nsyms);
+
+      output_short_or_char_table (&table_obstack,
+	     "YYTRANSLATE[YYLEX] -- Bison token number corresponding to YYLEX",
+		    ntokens < 127 ? "char" : "short",
+		    "yytranslate", token_translations,
+		    0, 1, max_user_token_number + 1);
     }
   else
     {
-      fprintf(ftable, "\n#define YYTRANSLATE(x) (x)\n");
-    } 
+      obstack_sgrow (&table_obstack,
+			   "\n#define YYTRANSLATE(x) (x)\n");
+    }
 }
 
 
-void
+static void
 output_gram (void)
 {
-  register int i;
-  register int j;
-  register short *sp;
-
-  /* With the ordinary parser, 
+  /* With the ordinary parser,
      yyprhs and yyrhs are needed only for yydebug. */
-  /* With the noparser option, all tables are generated */
-  if (! semantic_parser  && ! noparserflag)
-    fprintf(ftable, "\n#if YYDEBUG != 0");
+  /* With the no_parser option, all tables are generated */
+  if (!semantic_parser && !no_parser_flag)
+    obstack_sgrow (&table_obstack, "\n#if YYDEBUG != 0\n");
 
-  fprintf(ftable, "\nstatic const short yyprhs[] = {     0");
+  output_short_table (&table_obstack, NULL, "yyprhs", rrhs,
+		      0, 1, nrules + 1);
 
-  j = 10;
-  for (i = 1; i <= nrules; i++)
-    {
-      putc(',', ftable);
+  {
+    size_t yyrhs_size = 1;
+    short *yyrhs, *sp;
+    int i;
 
-      if (j >= 10)
-	{
-	  putc('\n', ftable);
-	  j = 1;
-	}
-      else
-	{
-	  j++;
-	}
+    for (sp = ritem + 1; *sp; sp++)
+      ++yyrhs_size;
+    yyrhs = XMALLOC (short, yyrhs_size);
 
-      fprintf(ftable, "%6d", rrhs[i]);
-    }
+    for (sp = ritem + 1, i = 1; *sp; ++sp, ++i)
+      yyrhs[i] = *sp > 0 ? *sp : 0;
 
-  fprintf(ftable, "\n};\n");
+    output_short_table (&table_obstack, NULL, "yyrhs", yyrhs,
+			ritem[0], 1, yyrhs_size);
+    XFREE (yyrhs);
+  }
 
-  fprintf(ftable, "\nstatic const short yyrhs[] = {%6d", ritem[0]);
-
-  j = 10;
-  for (sp = ritem + 1; *sp; sp++)
-    {
-      putc(',', ftable);
-
-      if (j >= 10)
-	{
-	  putc('\n', ftable);
-	  j = 1;
-	}
-      else
-	{
-	  j++;
-	}
-
-      if (*sp > 0)
-	fprintf(ftable, "%6d", *sp);
-      else
-	fprintf(ftable, "     0");
-    }
-
-  fprintf(ftable, "\n};\n");
-
-  if (! semantic_parser  && ! noparserflag)
-    fprintf(ftable, "\n#endif\n");
+  if (!semantic_parser && !no_parser_flag)
+    obstack_sgrow (&table_obstack, "\n#endif\n");
 }
 
 
-void
+static void
 output_stos (void)
 {
-  register int i;
-  register int j;
-
-  fprintf(ftable, "\nstatic const short yystos[] = {     0");
-
-  j = 10;
-  for (i = 1; i < nstates; i++)
-    {
-      putc(',', ftable);
-
-      if (j >= 10)
-	{
-	  putc('\n', ftable);
-	  j = 1;
-	}
-      else
-	{
-	  j++;
-	}
-
-      fprintf(ftable, "%6d", accessing_symbol[i]);
-    }
-
-  fprintf(ftable, "\n};\n");
+  output_short_table (&table_obstack, NULL, "yystos", accessing_symbol,
+		      0, 1, nstates);
 }
 
 
-void
+static void
 output_rule_data (void)
 {
-  register int i;
-  register int j;
+  int i;
+  int j;
+  short *short_tab = NULL;
 
-  fprintf(ftable, "\n#if YYDEBUG != 0\n");
-  fprintf(ftable, "static const short yyrline[] = { 0");
+  obstack_sgrow (&table_obstack, "\n\
+#if YYDEBUG != 0\n");
 
-  j = 10;
-  for (i = 1; i <= nrules; i++)
+  output_short_table (&table_obstack,
+           "YYRLINE[YYN] -- source line where rule number YYN was defined",
+		      "yyrline", rline,
+		      0, 1, nrules + 1);
+
+  obstack_sgrow (&table_obstack, "#endif\n\n");
+
+  if (token_table_flag || no_parser_flag)
     {
-      putc(',', ftable);
-
-      if (j >= 10)
-	{
-	  putc('\n', ftable);
-	  j = 1;
-	}
-      else
-	{
-	  j++;
-	}
-
-      fprintf(ftable, "%6d", rline[i]);
+      obstack_fgrow1 (&table_obstack, "#define YYNTOKENS %d\n", ntokens);
+      obstack_fgrow1 (&table_obstack, "#define YYNNTS %d\n", nvars);
+      obstack_fgrow1 (&table_obstack, "#define YYNRULES %d\n", nrules);
+      obstack_fgrow1 (&table_obstack, "#define YYNSTATES %d\n", nstates);
+      obstack_fgrow1 (&table_obstack, "#define YYMAXUTOK %d\n\n",
+		      max_user_token_number);
     }
-  fprintf(ftable, "\n};\n#endif\n\n");
-
-  if (toknumflag || noparserflag)
-    {
-      fprintf(ftable, "#define YYNTOKENS %d\n", ntokens);
-      fprintf(ftable, "#define YYNNTS %d\n", nvars);
-      fprintf(ftable, "#define YYNRULES %d\n", nrules);
-      fprintf(ftable, "#define YYNSTATES %d\n", nstates);
-      fprintf(ftable, "#define YYMAXUTOK %d\n\n", max_user_token_number);
-    }
-
-  if (! toknumflag  && ! noparserflag)
-    fprintf(ftable, "\n#if YYDEBUG != 0 || defined (YYERROR_VERBOSE)\n\n");
 
   /* Output the table of symbol names.  */
+  if (!token_table_flag && !no_parser_flag)
+    obstack_sgrow (&table_obstack,
+			 "\n#if YYDEBUG != 0 || defined YYERROR_VERBOSE\n\n");
+  obstack_sgrow (&table_obstack, "\
+/* YYTNAME[TOKEN_NUM] -- String name of the token TOKEN_NUM. */\n");
+  obstack_sgrow (&table_obstack,
+	   "static const char *const yytname[] =\n{\n  ");
 
-  fprintf(ftable,
-          "static const char * const yytname[] = {   \"%s\"",
-          tags[0]);
-
-  j = strlen (tags[0]) + 44;
-  for (i = 1; i < nsyms; i++)
-		/* this used to be i<=nsyms, but that output a final "" symbol
-			almost by accident */
+  j = 0;
+  for (i = 0; i < nsyms; i++)
+    /* this used to be i<=nsyms, but that output a final "" symbol
+       almost by accident */
     {
-      register char *p;
-      putc(',', ftable);
-      j++;
+      /* Width of the next token, including the two quotes, the coma
+	 and the space.  */
+      int strsize = 4;
+      char *p;
 
-      if (j > 75)
+      for (p = tags[i]; p && *p; p++)
+	if (*p == '"' || *p == '\\' || *p == '\n' || *p == '\t'
+	    || *p == '\b')
+	  strsize += 2;
+	else if (*p < 040 || *p >= 0177)
+	  strsize += 4;
+	else
+	  strsize++;
+
+      if (j + strsize > 75)
 	{
-	  putc('\n', ftable);
-	  j = 0;
+	  obstack_sgrow (&table_obstack, "\n  ");
+	  j = 2;
 	}
 
-      putc ('\"', ftable);
-      j++;
-
+      obstack_1grow (&table_obstack, '\"');
       for (p = tags[i]; p && *p; p++)
 	{
 	  if (*p == '"' || *p == '\\')
-	    {
-	      fprintf(ftable, "\\%c", *p);
-	      j += 2;
-	    }
+	    obstack_fgrow1 (&table_obstack, "\\%c", *p);
 	  else if (*p == '\n')
-	    {
-	      fprintf(ftable, "\\n");
-	      j += 2;
-	    }
+	    obstack_sgrow (&table_obstack, "\\n");
 	  else if (*p == '\t')
-	    {
-	      fprintf(ftable, "\\t");
-	      j += 2;
-	    }
+	    obstack_sgrow (&table_obstack, "\\t");
 	  else if (*p == '\b')
-	    {
-	      fprintf(ftable, "\\b");
-	      j += 2;
-	    }
+	    obstack_sgrow (&table_obstack, "\\b");
 	  else if (*p < 040 || *p >= 0177)
-	    {
-	      fprintf(ftable, "\\%03o", *p);
-	      j += 4;
-	    }
+	    obstack_fgrow1 (&table_obstack, "\\%03o", *p);
 	  else
-	    {
-	      putc(*p, ftable);
-	      j++;
-	    }
+	    obstack_1grow (&table_obstack, *p);
 	}
 
-      putc ('\"', ftable);
-      j++;
+      obstack_sgrow (&table_obstack, "\", ");
+      j += strsize;
     }
-    fprintf(ftable, ", NULL\n};\n");	/* add a NULL entry to list of tokens */
+  /* add a NULL entry to list of tokens */
+  obstack_sgrow (&table_obstack, "NULL\n};\n");
 
-  if (! toknumflag  && ! noparserflag)
-    fprintf(ftable, "#endif\n\n");
+  if (!token_table_flag && !no_parser_flag)
+    obstack_sgrow (&table_obstack, "#endif\n\n");
 
-  if (toknumflag) 
+  /* Output YYTOKNUM. */
+  if (token_table_flag)
     {
-      fprintf(ftable, "static const short yytoknum[] = { 0");
-      j = 10;
-      for (i = 1; i <= ntokens; i++) {
-          putc(',', ftable);
-          if (j >= 10) 
-            {
-              putc('\n', ftable);
-              j = 1;
-            }
-          else
-            j++;
-          fprintf(ftable, "%6d", user_toknums[i]);
-      }
-      fprintf(ftable, "\n};\n\n");
+      output_short_table (&table_obstack,
+		  "YYTOKNUM[YYLEX] -- Index in YYTNAME corresponding to YYLEX",
+			  "yytoknum", user_toknums,
+			  0, 1, ntokens + 1);
     }
 
-  fprintf(ftable, "static const short yyr1[] = {     0");
+  /* Output YYR1. */
+  output_short_table (&table_obstack,
+	      "YYR1[YYN] -- Symbol number of symbol that rule YYN derives",
+		      "yyr1", rlhs,
+		      0, 1, nrules + 1);
+  XFREE (rlhs + 1);
 
-  j = 10;
-  for (i = 1; i <= nrules; i++)
-    {
-      putc(',', ftable);
+  obstack_1grow (&table_obstack, '\n');
 
-      if (j >= 10)
-	{
-	  putc('\n', ftable);
-	  j = 1;
-	}
-      else
-	{
-	  j++;
-	}
-
-      fprintf(ftable, "%6d", rlhs[i]);
-    }
-
-  FREE(rlhs + 1);
-
-  fprintf(ftable, "\n};\n\nstatic const short yyr2[] = {     0");
-
-  j = 10;
+  /* Output YYR2. */
+  short_tab = XMALLOC (short, nrules + 1);
   for (i = 1; i < nrules; i++)
-    {
-      putc(',', ftable);
+    short_tab[i] = rrhs[i + 1] - rrhs[i] - 1;
+  short_tab[nrules] = nitems - rrhs[nrules] - 1;
+  output_short_table (&table_obstack,
+        "YYR2[YYN] -- Number of symbols composing right hand side of rule YYN",
+		      "yyr2", short_tab,
+		      0, 1, nrules + 1);
+  obstack_1grow (&table_obstack, '\n');
 
-      if (j >= 10)
-	{
-	  putc('\n', ftable);
-	  j = 1;
-	}
-      else
-	{
-	  j++;
-	}
+  XFREE (short_tab);
 
-      fprintf(ftable, "%6d", rrhs[i + 1] - rrhs[i] - 1);
-    }
-
-  putc(',', ftable);
-  if (j >= 10)
-    putc('\n', ftable);
-
-  fprintf(ftable, "%6d\n};\n", nitems - rrhs[nrules] - 1);
-  FREE(rrhs + 1);
+  XFREE (rrhs + 1);
 }
 
 
-void
+static void
 output_defines (void)
 {
-  fprintf(ftable, "\n\n#define\tYYFINAL\t\t%d\n", final_state);
-  fprintf(ftable, "#define\tYYFLAG\t\t%d\n", MINSHORT);
-  fprintf(ftable, "#define\tYYNTBASE\t%d\n", ntokens);
+  obstack_fgrow1 (&table_obstack, "\n\n#define\tYYFINAL\t\t%d\n", final_state);
+  obstack_fgrow1 (&table_obstack, "#define\tYYFLAG\t\t%d\n", MINSHORT);
+  obstack_fgrow1 (&table_obstack, "#define\tYYNTBASE\t%d\n", ntokens);
 }
 
 
+/*------------------------------------------------------------------.
+| Decide what to do for each type of token if seen as the lookahead |
+| token in specified state.  The value returned is used as the      |
+| default action (yydefact) for the state.  In addition, actrow is  |
+| filled with what to do for each kind of token, index by symbol    |
+| number, with zero meaning do the default action.  The value       |
+| MINSHORT, a very negative number, means this situation is an      |
+| error.  The parser recognizes this value specially.               |
+|                                                                   |
+| This is where conflicts are resolved.  The loop over lookahead    |
+| rules considered lower-numbered rules last, and the last rule     |
+| considered that likes a token gets to handle it.                  |
+`------------------------------------------------------------------*/
 
-/* compute and output yydefact, yydefgoto, yypact, yypgoto, yytable and yycheck.  */
-
-void
-output_actions (void)
-{
-  nvectors = nstates + nvars;
-
-  froms = NEW2(nvectors, short *);
-  tos = NEW2(nvectors, short *);
-  tally = NEW2(nvectors, short);
-  width = NEW2(nvectors, short);
-
-  token_actions();
-  free_shifts();
-  free_reductions();
-  FREE(lookaheads);
-  FREE(LA);
-  FREE(LAruleno);
-  FREE(accessing_symbol);
-
-  goto_actions();
-  FREE(goto_map + ntokens);
-  FREE(from_state);
-  FREE(to_state);
-
-  sort_actions();
-  pack_table();
-  output_base();
-  output_table();
-  output_check();
-}
-
-
-
-/* figure out the actions for the specified state, indexed by lookahead token type.
-
-   The yydefact table is output now.  The detailed info
-   is saved for putting into yytable later.  */
-
-void
-token_actions (void)
-{
-  register int i;
-  register int j;
-  register int k;
-
-  actrow = NEW2(ntokens, short);
-
-  k = action_row(0);
-  fprintf(ftable, "\nstatic const short yydefact[] = {%6d", k);
-  save_row(0);
-
-  j = 10;
-  for (i = 1; i < nstates; i++)
-    {
-      putc(',', ftable);
-
-      if (j >= 10)
-	{
-	  putc('\n', ftable);
-	  j = 1;
-	}
-      else
-	{
-	  j++;
-	}
-
-      k = action_row(i);
-      fprintf(ftable, "%6d", k);
-      save_row(i);
-    }
-
-  fprintf(ftable, "\n};\n");
-  FREE(actrow);
-}
-
-
-
-/* Decide what to do for each type of token if seen as the lookahead token in specified state.
-   The value returned is used as the default action (yydefact) for the state.
-   In addition, actrow is filled with what to do for each kind of token,
-   index by symbol number, with zero meaning do the default action.
-   The value MINSHORT, a very negative number, means this situation
-   is an error.  The parser recognizes this value specially.
-
-   This is where conflicts are resolved.  The loop over lookahead rules
-   considered lower-numbered rules last, and the last rule considered that likes
-   a token gets to handle it.  */
-
-int
+static int
 action_row (int state)
 {
-  register int i;
-  register int j;
-  register int k;
-  register int m = 0;
-  register int n = 0;
-  register int count;
-  register int default_rule;
-  register int nreds;
-  register int max;
-  register int rule;
-  register int shift_state;
-  register int symbol;
-  register unsigned mask;
-  register unsigned *wordp;
-  register reductions *redp;
-  register shifts *shiftp;
-  register errs *errp;
-  int nodefault = 0;  /* set nonzero to inhibit having any default reduction */
+  int i;
+  int j;
+  int k;
+  int m = 0;
+  int n = 0;
+  int count;
+  int default_rule;
+  int nreds;
+  int max;
+  int rule;
+  int shift_state;
+  int symbol;
+  unsigned mask;
+  unsigned *wordp;
+  reductions *redp;
+  shifts *shiftp;
+  errs *errp;
+  int nodefault = 0;		/* set nonzero to inhibit having any default reduction */
 
   for (i = 0; i < ntokens; i++)
     actrow[i] = 0;
@@ -737,20 +539,23 @@ action_row (int state)
 
       if (nreds >= 1)
 	{
-	  /* loop over all the rules available here which require lookahead */
+	  /* loop over all the rules available here which require
+	     lookahead */
 	  m = lookaheads[state];
 	  n = lookaheads[state + 1];
 
 	  for (i = n - 1; i >= m; i--)
 	    {
-	      rule = - LAruleno[i];
+	      rule = -LAruleno[i];
 	      wordp = LA + i * tokensetsize;
 	      mask = 1;
 
-	      /* and find each token which the rule finds acceptable to come next */
+	      /* and find each token which the rule finds acceptable
+	         to come next */
 	      for (j = 0; j < ntokens; j++)
 		{
-		  /* and record this rule as the rule to use if that token follows.  */
+		  /* and record this rule as the rule to use if that
+		     token follows.  */
 		  if (mask & *wordp)
 		    actrow[j] = rule;
 
@@ -767,8 +572,9 @@ action_row (int state)
 
   shiftp = shift_table[state];
 
-  /* now see which tokens are allowed for shifts in this state.
-     For them, record the shift as the thing to do.  So shift is preferred to reduce.  */
+  /* Now see which tokens are allowed for shifts in this state.  For
+     them, record the shift as the thing to do.  So shift is preferred
+     to reduce.  */
 
   if (shiftp)
     {
@@ -777,25 +583,27 @@ action_row (int state)
       for (i = 0; i < k; i++)
 	{
 	  shift_state = shiftp->shifts[i];
-	  if (! shift_state) continue;
+	  if (!shift_state)
+	    continue;
 
 	  symbol = accessing_symbol[shift_state];
 
-	  if (ISVAR(symbol))
+	  if (ISVAR (symbol))
 	    break;
 
 	  actrow[symbol] = shift_state;
 
-	  /* do not use any default reduction if there is a shift for error */
-
-	  if (symbol == error_token_number) nodefault = 1;
+	  /* Do not use any default reduction if there is a shift for
+	     error */
+	  if (symbol == error_token_number)
+	    nodefault = 1;
 	}
     }
 
   errp = err_table[state];
 
-  /* See which tokens are an explicit error in this state
-     (due to %nonassoc).  For them, record MINSHORT as the action.  */
+  /* See which tokens are an explicit error in this state (due to
+     %nonassoc).  For them, record MINSHORT as the action.  */
 
   if (errp)
     {
@@ -808,9 +616,10 @@ action_row (int state)
 	}
     }
 
-  /* now find the most common reduction and make it the default action for this state.  */
+  /* Now find the most common reduction and make it the default action
+     for this state.  */
 
-  if (nreds >= 1 && ! nodefault)
+  if (nreds >= 1 && !nodefault)
     {
       if (consistent[state])
 	default_rule = redp->rules[0];
@@ -820,24 +629,24 @@ action_row (int state)
 	  for (i = m; i < n; i++)
 	    {
 	      count = 0;
-	      rule = - LAruleno[i];
-    
+	      rule = -LAruleno[i];
+
 	      for (j = 0; j < ntokens; j++)
 		{
 		  if (actrow[j] == rule)
 		    count++;
 		}
-    
+
 	      if (count > max)
 		{
 		  max = count;
 		  default_rule = rule;
 		}
 	    }
-    
+
 	  /* actions which match the default are replaced with zero,
 	     which means "use the default" */
-    
+
 	  if (max > 0)
 	    {
 	      for (j = 0; j < ntokens; j++)
@@ -845,8 +654,8 @@ action_row (int state)
 		  if (actrow[j] == default_rule)
 		    actrow[j] = 0;
 		}
-    
-	      default_rule = - default_rule;
+
+	      default_rule = -default_rule;
 	    }
 	}
     }
@@ -861,18 +670,18 @@ action_row (int state)
 	  actrow[j] = 0;
       }
 
-  return (default_rule);
+  return default_rule;
 }
 
 
-void
+static void
 save_row (int state)
 {
-  register int i;
-  register int count;
-  register short *sp;
-  register short *sp1;
-  register short *sp2;
+  int i;
+  int count;
+  short *sp;
+  short *sp1;
+  short *sp2;
 
   count = 0;
   for (i = 0; i < ntokens; i++)
@@ -884,8 +693,8 @@ save_row (int state)
   if (count == 0)
     return;
 
-  froms[state] = sp1 = sp = NEW2(count, short);
-  tos[state] = sp2 = NEW2(count, short);
+  froms[state] = sp1 = sp = XCALLOC (short, count);
+  tos[state] = sp2 = XCALLOC (short, count);
 
   for (i = 0; i < ntokens; i++)
     {
@@ -901,67 +710,125 @@ save_row (int state)
 }
 
 
+/*------------------------------------------------------------------.
+| Figure out the actions for the specified state, indexed by        |
+| lookahead token type.                                             |
+|                                                                   |
+| The YYDEFACT table is output now.  The detailed info is saved for |
+| putting into YYTABLE later.                                       |
+`------------------------------------------------------------------*/
 
-/* figure out what to do after reducing with each rule,
-   depending on the saved state from before the beginning
-   of parsing the data that matched this rule.
-
-   The yydefgoto table is output now.  The detailed info
-   is saved for putting into yytable later.  */
-
-void
-goto_actions (void)
+static void
+token_actions (void)
 {
-  register int i;
-  register int j;
-  register int k;
+  int i;
+  short *yydefact = XCALLOC (short, nstates);
 
-  state_count = NEW2(nstates, short);
-
-  k = default_goto(ntokens);
-  fprintf(ftable, "\nstatic const short yydefgoto[] = {%6d", k);
-  save_column(ntokens, k);
-
-  j = 10;
-  for (i = ntokens + 1; i < nsyms; i++)
+  actrow = XCALLOC (short, ntokens);
+  for (i = 0; i < nstates; ++i)
     {
-      putc(',', ftable);
-
-      if (j >= 10)
-	{
-	  putc('\n', ftable);
-	  j = 1;
-	}
-      else
-	{
-	  j++;
-	}
-
-      k = default_goto(i);
-      fprintf(ftable, "%6d", k);
-      save_column(i, k);
+      yydefact[i] = action_row (i);
+      save_row (i);
     }
+  XFREE (actrow);
 
-  fprintf(ftable, "\n};\n");
-  FREE(state_count);
+  output_short_table (&table_obstack,
+  "YYDEFACT[S] -- default rule to reduce with in state S when YYTABLE\n\
+   doesn't specify something else to do.  Zero means the default is an\n\
+   error",
+		      "yydefact", yydefact,
+		      yydefact[0], 1, nstates);
+  obstack_1grow (&table_obstack, '\n');
+  XFREE (yydefact);
+}
+
+
+static void
+free_shifts (void)
+{
+  shifts *sp, *sptmp;	/* JF derefrenced freed ptr */
+
+  XFREE (shift_table);
+
+  for (sp = first_shift; sp; sp = sptmp)
+    {
+      sptmp = sp->next;
+      XFREE (sp);
+    }
+}
+
+
+static void
+free_reductions (void)
+{
+  reductions *rp, *rptmp;	/* JF fixed freed ptr */
+
+  XFREE (reduction_table);
+
+  for (rp = first_reduction; rp; rp = rptmp)
+    {
+      rptmp = rp->next;
+      XFREE (rp);
+    }
 }
 
 
 
-int
+static void
+save_column (int symbol, int default_state)
+{
+  int i;
+  short *sp;
+  short *sp1;
+  short *sp2;
+  int count;
+  int symno;
+
+  short begin = goto_map[symbol];
+  short end = goto_map[symbol + 1];
+
+  count = 0;
+  for (i = begin; i < end; i++)
+    {
+      if (to_state[i] != default_state)
+	count++;
+    }
+
+  if (count == 0)
+    return;
+
+  symno = symbol - ntokens + nstates;
+
+  froms[symno] = sp1 = sp = XCALLOC (short, count);
+  tos[symno] = sp2 = XCALLOC (short, count);
+
+  for (i = begin; i < end; i++)
+    {
+      if (to_state[i] != default_state)
+	{
+	  *sp1++ = from_state[i];
+	  *sp2++ = to_state[i];
+	}
+    }
+
+  tally[symno] = count;
+  width[symno] = sp1[-1] - sp[0] + 1;
+}
+
+static int
 default_goto (int symbol)
 {
-  register int i;
-  register int m;
-  register int n;
-  register int default_state;
-  register int max;
+  int i;
+  int m;
+  int n;
+  int default_state;
+  int max;
 
   m = goto_map[symbol];
   n = goto_map[symbol + 1];
 
   if (m == n)
-    return (-1);
+    return -1;
 
   for (i = 0; i < nstates; i++)
     state_count[i] = 0;
@@ -981,68 +848,55 @@ default_goto (int symbol)
 	}
     }
 
-  return (default_state);
+  return default_state;
 }
 
 
-void
-save_column (int symbol, int default_state)
+/*-------------------------------------------------------------------.
+| Figure out what to do after reducing with each rule, depending on  |
+| the saved state from before the beginning of parsing the data that |
+| matched this rule.                                                 |
+|                                                                    |
+| The YYDEFGOTO table is output now.  The detailed info is saved for |
+| putting into YYTABLE later.                                        |
+`-------------------------------------------------------------------*/
+
+static void
+goto_actions (void)
 {
-  register int i;
-  register int m;
-  register int n;
-  register short *sp;
-  register short *sp1;
-  register short *sp2;
-  register int count;
-  register int symno;
+  int i;
 
-  m = goto_map[symbol];
-  n = goto_map[symbol + 1];
+  short *yydefgoto = XMALLOC (short, nsyms - ntokens);
+  state_count = XCALLOC (short, nstates);
 
-  count = 0;
-  for (i = m; i < n; i++)
+  for (i = ntokens; i < nsyms; ++i)
     {
-      if (to_state[i] != default_state)
-	count++;
+      int default_state = default_goto (i);
+      save_column (i, default_state);
+      yydefgoto[i - ntokens] = default_state;
     }
 
-  if (count == 0)
-    return;
+  output_short_table (&table_obstack, NULL, "yydefgoto", yydefgoto,
+		      yydefgoto[0], 1, nsyms - ntokens);
 
-  symno = symbol - ntokens + nstates;
-
-  froms[symno] = sp1 = sp = NEW2(count, short);
-  tos[symno] = sp2 = NEW2(count, short);
-
-  for (i = m; i < n; i++)
-    {
-      if (to_state[i] != default_state)
-	{
-	  *sp1++ = from_state[i];
-	  *sp2++ = to_state[i];
-	}
-    }
-
-  tally[symno] = count;
-  width[symno] = sp1[-1] - sp[0] + 1;
+  XFREE (state_count);
+  XFREE (yydefgoto);
 }
 
 
+/* The next few functions decide how to pack the actions and gotos
+   information into yytable. */
 
-/* the next few functions decide how to pack 
-   the actions and gotos information into yytable. */
-
-void
+static void
 sort_actions (void)
 {
-  register int i;
-  register int j;
-  register int k;
-  register int t;
-  register int w;
+  int i;
+  int j;
+  int k;
+  int t;
+  int w;
 
-  order = NEW2(nvectors, short);
+  order = XCALLOC (short, nvectors);
   nentries = 0;
 
   for (i = 0; i < nvectors; i++)
@@ -1069,69 +923,20 @@ sort_actions (void)
 }
 
 
-void
-pack_table (void)
-{
-  register int i;
-  register int place;
-  register int state;
-
-  base = NEW2(nvectors, short);
-  pos = NEW2(nentries, short);
-  table = NEW2(MAXTABLE, short);
-  check = NEW2(MAXTABLE, short);
-
-  lowzero = 0;
-  high = 0;
-
-  for (i = 0; i < nvectors; i++)
-    base[i] = MINSHORT;
-
-  for (i = 0; i < MAXTABLE; i++)
-    check[i] = -1;
-
-  for (i = 0; i < nentries; i++)
-    {
-      state = matching_state(i);
-
-      if (state < 0)
-	place = pack_vector(i);
-      else
-	place = base[state];
-
-      pos[i] = place;
-      base[order[i]] = place;
-    }
-
-  for (i = 0; i < nvectors; i++)
-    {
-      if (froms[i])
-	FREE(froms[i]);
-      if (tos[i])
-	FREE(tos[i]);
-    }
-
-  FREE(froms);
-  FREE(tos);
-  FREE(pos);
-}
-
-
-
-int
+static int
 matching_state (int vector)
 {
-  register int i;
-  register int j;
-  register int k;
-  register int t;
-  register int w;
-  register int match;
-  register int prev;
+  int i;
+  int j;
+  int k;
+  int t;
+  int w;
+  int match;
+  int prev;
 
   i = order[vector];
   if (i >= nstates)
-    return (-1);
+    return -1;
 
   t = tally[i];
   w = width[i];
@@ -1140,7 +945,7 @@ matching_state (int vector)
     {
       j = order[prev];
       if (width[j] != w || tally[j] != t)
-	return (-1);
+	return -1;
 
       match = 1;
       for (k = 0; match && k < t; k++)
@@ -1150,31 +955,29 @@ matching_state (int vector)
 	}
 
       if (match)
-	return (j);
+	return j;
     }
 
-  return (-1);
+  return -1;
 }
 
 
-
-int
+static int
 pack_vector (int vector)
 {
-  register int i;
-  register int j;
-  register int k;
-  register int t;
-  register int loc = 0;
-  register int ok;
-  register short *from;
-  register short *to;
+  int i;
+  int j;
+  int k;
+  int t;
+  int loc = 0;
+  int ok;
+  short *from;
+  short *to;
 
   i = order[vector];
   t = tally[i];
 
-  if (t == 0)
-    berror("pack_vector");
+  assert (t);
 
   from = froms[i];
   to = tos[i];
@@ -1187,7 +990,7 @@ pack_vector (int vector)
 	{
 	  loc = j + from[k];
 	  if (loc > MAXTABLE)
-	    fatals(_("maximum table size (%s) exceeded"), int_to_string(MAXTABLE));
+	    fatal (_("maximum table size (%d) exceeded"), MAXTABLE);
 
 	  if (table[loc] != 0)
 	    ok = 0;
@@ -1214,268 +1017,341 @@ pack_vector (int vector)
 	  if (loc > high)
 	    high = loc;
 
-	  return (j);
+	  return j;
 	}
     }
 
-  berror("pack_vector");
-  return 0;	/* JF keep lint happy */
+  berror ("pack_vector");
+  return 0;			/* JF keep lint happy */
 }
 
 
+static void
+pack_table (void)
+{
+  int i;
+  int place;
+  int state;
+
+  base = XCALLOC (short, nvectors);
+  pos = XCALLOC (short, nentries);
+  table = XCALLOC (short, MAXTABLE);
+  check = XCALLOC (short, MAXTABLE);
+
+  lowzero = 0;
+  high = 0;
+
+  for (i = 0; i < nvectors; i++)
+    base[i] = MINSHORT;
+
+  for (i = 0; i < MAXTABLE; i++)
+    check[i] = -1;
+
+  for (i = 0; i < nentries; i++)
+    {
+      state = matching_state (i);
+
+      if (state < 0)
+	place = pack_vector (i);
+      else
+	place = base[state];
+
+      pos[i] = place;
+      base[order[i]] = place;
+    }
+
+  for (i = 0; i < nvectors; i++)
+    {
+      if (froms[i])
+	XFREE (froms[i]);
+      if (tos[i])
+	XFREE (tos[i]);
+    }
+
+  XFREE (froms);
+  XFREE (tos);
+  XFREE (pos);
+}
 
 /* the following functions output yytable, yycheck
    and the vectors whose elements index the portion starts */
 
-void
+static void
 output_base (void)
 {
-  register int i;
-  register int j;
+  output_short_table (&table_obstack, NULL, "yypact", base,
+		      base[0], 1, nstates);
 
-  fprintf(ftable, "\nstatic const short yypact[] = {%6d", base[0]);
+  obstack_1grow (&table_obstack, '\n');
 
-  j = 10;
-  for (i = 1; i < nstates; i++)
-    {
-      putc(',', ftable);
+  output_short_table (&table_obstack, NULL, "yypgoto", base,
+		      base[nstates], nstates + 1, nvectors);
 
-      if (j >= 10)
-	{
-	  putc('\n', ftable);
-	  j = 1;
-	}
-      else
-	{
-	  j++;
-	}
-
-      fprintf(ftable, "%6d", base[i]);
-    }
-
-  fprintf(ftable, "\n};\n\nstatic const short yypgoto[] = {%6d", base[nstates]);
-
-  j = 10;
-  for (i = nstates + 1; i < nvectors; i++)
-    {
-      putc(',', ftable);
-
-      if (j >= 10)
-	{
-	  putc('\n', ftable);
-	  j = 1;
-	}
-      else
-	{
-	  j++;
-	}
-
-      fprintf(ftable, "%6d", base[i]);
-    }
-
-  fprintf(ftable, "\n};\n");
-  FREE(base);
+  XFREE (base);
 }
 
 
-void
+static void
 output_table (void)
 {
-  register int i;
-  register int j;
-
-  fprintf(ftable, "\n\n#define\tYYLAST\t\t%d\n\n", high);
-  fprintf(ftable, "\nstatic const short yytable[] = {%6d", table[0]);
-
-  j = 10;
-  for (i = 1; i <= high; i++)
-    {
-      putc(',', ftable);
-
-      if (j >= 10)
-	{
-	  putc('\n', ftable);
-	  j = 1;
-	}
-      else
-	{
-	  j++;
-	}
-
-      fprintf(ftable, "%6d", table[i]);
-    }
-
-  fprintf(ftable, "\n};\n");
-  FREE(table);
+  obstack_fgrow1 (&table_obstack, "\n\n#define\tYYLAST\t\t%d\n\n\n", high);
+  output_short_table (&table_obstack, NULL, "yytable", table,
+		      table[0], 1, high + 1);
+  XFREE (table);
 }
 
 
-void
+static void
 output_check (void)
 {
-  register int i;
-  register int j;
-
-  fprintf(ftable, "\nstatic const short yycheck[] = {%6d", check[0]);
-
-  j = 10;
-  for (i = 1; i <= high; i++)
-    {
-      putc(',', ftable);
-
-      if (j >= 10)
-	{
-	  putc('\n', ftable);
-	  j = 1;
-	}
-      else
-	{
-	  j++;
-	}
-
-      fprintf(ftable, "%6d", check[i]);
-    }
-
-  fprintf(ftable, "\n};\n");
-  FREE(check);
+  output_short_table (&table_obstack, NULL, "yycheck", check,
+		      check[0], 1, high + 1);
+  XFREE (check);
 }
 
+/* compute and output yydefact, yydefgoto, yypact, yypgoto, yytable
+   and yycheck.  */
 
+static void
+output_actions (void)
+{
+  nvectors = nstates + nvars;
 
-/* copy the parser code into the ftable file at the end.  */
+  froms = XCALLOC (short *, nvectors);
+  tos = XCALLOC (short *, nvectors);
+  tally = XCALLOC (short, nvectors);
+  width = XCALLOC (short, nvectors);
 
-void
+  token_actions ();
+  free_shifts ();
+  free_reductions ();
+  XFREE (lookaheads);
+  XFREE (LA);
+  XFREE (LAruleno);
+  XFREE (accessing_symbol);
+
+  goto_actions ();
+  XFREE (goto_map + ntokens);
+  XFREE (from_state);
+  XFREE (to_state);
+
+  sort_actions ();
+  pack_table ();
+  obstack_1grow (&table_obstack, '\n');
+  output_base ();
+  output_table ();
+  obstack_1grow (&table_obstack, '\n');
+  output_check ();
+}
+
+/*------------------------------------------.
+| Copy the parser code into TABLE_OBSTACK.  |
+`------------------------------------------*/
+
+static void
 output_parser (void)
 {
-  register int c;
-#ifdef DONTDEF
-  FILE *fpars;
-#else
-#define fpars fparser
-#endif
+  int c;
+  FILE *fskel;
+  size_t line;
+  int actions_dumped = 0;
 
   if (pure_parser)
-    fprintf(ftable, "#define YYPURE 1\n\n");
-
-#ifdef DONTDEF	/* JF no longer needed 'cuz open_extra_files changes the
-		   currently open parser from bison.simple to bison.hairy */
-  if (semantic_parser)
-    fpars = fparser;
-  else fpars = fparser1;
-#endif
+    obstack_sgrow (&table_obstack, "#define YYPURE 1\n\n");
 
   /* Loop over lines in the standard parser file.  */
+  if (!skeleton)
+    {
+      if (semantic_parser)
+	skeleton = skeleton_find ("BISON_HAIRY", BISON_HAIRY);
+      else
+	skeleton = skeleton_find ("BISON_SIMPLE", BISON_SIMPLE);
+    }
+  fskel = xfopen (skeleton, "r");
+
+  /* Set LINE to 2, not 1: `#line LINENUM' -- Here LINENUM is a
+     decimal integer constant.  This specifies that the line number of
+     the *following* line of input, in its original source file, was
+     LINENUM.  */
+  line = 2;
 
   while (1)
     {
-      int write_line = 1;
+      enum line_type_e
+	{
+	  regular_line,
+	  sync_line,	/* #line. */
+	  actions_line	/* %% actions. */
+	};
+      enum line_type_e line_type = regular_line;
 
-      c = getc(fpars);
+      c = getc (fskel);
 
-      /* See if the line starts with `#line.
-	 If so, set write_line to 0.  */
-      if (nolinesflag)
-	if (c == '#') 
-	  {
-	    c = getc(fpars);
-	    if (c == 'l')
-	      {
-		c = getc(fpars);
-		if (c == 'i')
-		  {
-		    c = getc(fpars);
-		    if (c == 'n')
-		      {
-			c = getc(fpars);
-			if (c == 'e')
-			  write_line = 0;
-			else
-			  fprintf(ftable, "#lin");
-		      }
-		    else
-		      fprintf(ftable, "#li");
-		  }
+      /* Is this line special? */
+      if (c == '#')
+	{
+	  /* See if it's a `#line' line. */
+	  if ((c = getc (fskel)) == 'l')
+	    if ((c = getc (fskel)) == 'i')
+	      if ((c = getc (fskel)) == 'n')
+		if ((c = getc (fskel)) == 'e')
+		  line_type = sync_line;
 		else
-		  fprintf(ftable, "#l");
-	      }
+		  obstack_sgrow (&table_obstack, "#lin");
+	      else
+		obstack_sgrow (&table_obstack, "#li");
 	    else
-	      fprintf(ftable, "#");
+	      obstack_sgrow (&table_obstack, "#l");
+	  else
+	    obstack_sgrow (&table_obstack, "#");
+	}
+      else if (c == '%')
+	{
+	  /* See if it's a `%% actions' line. */
+	  if ((c = getc (fskel)) == '%')
+	    if ((c = getc (fskel)) == ' ')
+	      if ((c = getc (fskel)) == 'a')
+		if ((c = getc (fskel)) == 'c')
+		  if ((c = getc (fskel)) == 't')
+		    if ((c = getc (fskel)) == 'i')
+		      if ((c = getc (fskel)) == 'o')
+			if ((c = getc (fskel)) == 'n')
+			  if ((c = getc (fskel)) == 's')
+			    line_type = actions_line;
+			  else
+			    obstack_sgrow (&table_obstack, "%% action");
+			else
+			  obstack_sgrow (&table_obstack, "%% actio");
+		      else
+			obstack_sgrow (&table_obstack, "%% acti");
+		    else
+		      obstack_sgrow (&table_obstack, "%% act");
+		  else
+		    obstack_sgrow (&table_obstack, "%% ac");
+		else
+		  obstack_sgrow (&table_obstack, "%% a");
+	      else
+		obstack_sgrow (&table_obstack, "%% ");
+	    else
+	      obstack_sgrow (&table_obstack, "%%");
+	  else
+	    obstack_sgrow (&table_obstack, "%");
+	}
+
+      switch (line_type)
+	{
+	case sync_line:
+	  if (!no_lines_flag)
+	    obstack_fgrow2 (&table_obstack, "#line %d %s\n",
+			    line, quotearg_style (c_quoting_style, skeleton));
+
+	  /* Skip the end of line. */
+	  for (; c != '\n' && c != EOF; c = getc (fskel))
+	    /* nothing */;
+	  break;
+
+	case actions_line:
+	  {
+	    size_t size = obstack_object_size (&action_obstack);
+
+	    actions_dumped++;
+	    assert (actions_dumped == 1);
+	    obstack_grow (&table_obstack,
+			  obstack_finish (&action_obstack),
+			  size);
 	  }
 
-      /* now write out the line... */
-      for (; c != '\n' && c != EOF; c = getc(fpars))
-	if (write_line) {
-	  if (c == '$')
-	    {
-	      /* `$' in the parser file indicates where to put the actions.
-		 Copy them in at this point.  */
-	      rewind(faction);
-	      for(c=getc(faction);c!=EOF;c=getc(faction))
-		putc(c,ftable);
-	    }
-	  else
-	    putc(c, ftable);
+	  /* Skip the end of line. */
+	  for (; c != '\n' && c != EOF; c = getc (fskel))
+	    /* nothing */;
+	  break;
+
+	case regular_line:
+	  for (; c != '\n' && c != EOF; c = getc (fskel))
+	    obstack_1grow (&table_obstack, c);
 	}
+
       if (c == EOF)
 	break;
-      putc(c, ftable);
+      obstack_1grow (&table_obstack, c);
+      line++;
     }
+  assert (actions_dumped == 1);
+  xfclose (fskel);
 }
 
-void
+static void
 output_program (void)
 {
-  register int c;
+  int c;
 
-  if (!nolinesflag)
-    fprintf(ftable, "#line %d \"%s\"\n", lineno, infile);
+  if (!no_lines_flag)
+    obstack_fgrow2 (&table_obstack, "#line %d %s\n",
+		    lineno, quotearg_style (c_quoting_style, infile));
 
-  c = getc(finput);
-  while (c != EOF)
+  while ((c = getc (finput)) != EOF)
+    obstack_1grow (&table_obstack, c);
+}
+
+
+static void
+free_itemsets (void)
+{
+  core *cp, *cptmp;
+
+  XFREE (state_table);
+
+  for (cp = first_state; cp; cp = cptmp)
     {
-      putc(c, ftable);
-      c = getc(finput);
+      cptmp = cp->next;
+      XFREE (cp);
     }
 }
 
 
-void
-free_itemsets (void)
-{
-  register core *cp,*cptmp;
-
-  FREE(state_table);
-
-  for (cp = first_state; cp; cp = cptmp) {
-    cptmp=cp->next;
-    FREE(cp);
-  }
-}
-
+/*----------------------------------------------------------.
+| Output the parsing tables and the parser code to ftable.  |
+`----------------------------------------------------------*/
 
 void
-free_shifts (void)
+output (void)
 {
-  register shifts *sp,*sptmp;/* JF derefrenced freed ptr */
+  /* output_token_defines(ftable);      / * JF put out token defines FIRST */
 
-  FREE(shift_table);
+  /* If using a simple parser the definition of YYSTYPE are put into
+     TABLE_OBSTACK.  */
+  if (!semantic_parser)
+    {
+      size_t size = obstack_object_size (&attrs_obstack);
+      obstack_grow (&table_obstack, obstack_finish (&attrs_obstack), size);
+    }
+  reader_output_yylsp (&table_obstack);
+  if (debug_flag)
+    obstack_sgrow (&table_obstack, "\
+#ifndef YYDEBUG\n\
+# define YYDEBUG 1\n\
+#endif\n\
+\n");
 
-  for (sp = first_shift; sp; sp = sptmp) {
-    sptmp=sp->next;
-    FREE(sp);
-  }
-}
+  if (semantic_parser)
+    obstack_fgrow1 (&table_obstack, "#include %s\n",
+		    quotearg_style (c_quoting_style, attrsfile));
 
+  if (!no_parser_flag)
+    obstack_sgrow (&table_obstack, "#include <stdio.h>\n\n");
 
-void
-free_reductions (void)
-{
-  register reductions *rp,*rptmp;/* JF fixed freed ptr */
-
-  FREE(reduction_table);
-
-  for (rp = first_reduction; rp; rp = rptmp) {
-    rptmp=rp->next;
-    FREE(rp);
-  }
+  free_itemsets ();
+  output_defines ();
+  output_token_translations ();
+/*   if (semantic_parser) */
+  /* This is now unconditional because debugging printouts can use it.  */
+  output_gram ();
+  XFREE (ritem);
+  if (semantic_parser)
+    output_stos ();
+  output_rule_data ();
+  output_actions ();
+  if (!no_parser_flag)
+    output_parser ();
+  output_program ();
 }

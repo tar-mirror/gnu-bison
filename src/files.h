@@ -1,53 +1,77 @@
+#ifndef FILES_H_
+# define FILES_H_
 /* File names and variables for bison,
-   Copyright (C) 1984, 1989 Free Software Foundation, Inc.
+   Copyright 1984, 1989, 2000 Free Software Foundation, Inc.
 
-This file is part of Bison, the GNU Compiler Compiler.
+   This file is part of Bison, the GNU Compiler Compiler.
 
-Bison is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2, or (at your option)
-any later version.
+   Bison is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2, or (at your option)
+   any later version.
 
-Bison is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+   Bison is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with Bison; see the file COPYING.  If not, write to
-the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-Boston, MA 02111-1307, USA.  */
-
+   You should have received a copy of the GNU General Public License
+   along with Bison; see the file COPYING.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.  */
 
 /* These two should be pathnames for opening the sample parser files.
    When bison is installed, they should be absolute pathnames.
    XPFILE1 and XPFILE2 normally come from config.h.  */
 
-#define PFILE	XPFILE		/* Simple parser */
-#define PFILE1	XPFILE1		/* Semantic parser */
-
-extern FILE *finput;   /* read grammar specifications */
-extern FILE *foutput;  /* optionally output messages describing the actions taken */
-extern FILE *fdefines; /* optionally output #define's for token numbers. */
-extern FILE *ftable;   /* output the tables and the parser */
-extern FILE *fattrs;   /* if semantic parser, output a .h file that defines YYSTYPE */
-		       /* and also contains all the %{ ... %} definitions.  */
-extern FILE *fguard;   /* if semantic parser, output yyguard, containing all the guard code */
-extern FILE *faction;  /* output all the action code; precise form depends on which parser */
-extern FILE *fparser;  /* read the parser to copy into ftable */
-
 /* File name specified with -o for the output file, or 0 if no -o.  */
 extern char *spec_outfile;
 
-extern char *spec_name_prefix; /* for -a, from getargs.c */
+/* For -a. */
+extern char *spec_name_prefix;
 
 /* File name pfx specified with -b, or 0 if no -b.  */
 extern char *spec_file_prefix;
 
+
+/* Read grammar specifications. */
+extern FILE *finput;
+
+/* Output all the action code; precise form depends on which parser. */
+extern struct obstack action_obstack;
+
+/* Output the tables and the parser and also contains all the %{
+   ... %} definitions.  */
+extern struct obstack table_obstack;
+
+/* optionally output #define's for token numbers. */
+extern struct obstack defines_obstack;
+
+/* If semantic parser, output a .h file that defines YYSTYPE... */
+extern struct obstack attrs_obstack;
+
+/* ... and output yyguard, containing all the guard code. */
+extern struct obstack guard_obstack;
+
+/* The verbose output. */
+extern struct obstack output_obstack;
+
+/* The VCG graph output. */
+extern struct obstack graph_obstack;
+
 extern char *infile;
-extern char *outfile;
-extern char *defsfile;
-extern char *tabfile;
 extern char *attrsfile;
-extern char *guardfile;
-extern char *actfile;
+
+extern const char *src_extension;
+extern const char *header_extension;
+
+void open_files PARAMS((void));
+
+void output_files PARAMS((void));
+
+FILE *xfopen PARAMS ((const char *name, const char *mode));
+int xfclose PARAMS ((FILE *ptr));
+
+const char *skeleton_find PARAMS ((const char *envvar,
+				   const char *skeleton_name));
+#endif /* !FILES_H_ */

@@ -1,5 +1,5 @@
 /* Allocate input grammar variables for bison,
-   Copyright (C) 1984, 1986, 1989 Free Software Foundation, Inc.
+   Copyright 1984, 1986, 1989 Free Software Foundation, Inc.
 
 This file is part of Bison, the GNU Compiler Compiler.
 
@@ -18,6 +18,10 @@ along with Bison; see the file COPYING.  If not, write to
 the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 Boston, MA 02111-1307, USA.  */
 
+
+#include "system.h"
+
+void dummy PARAMS((void));
 
 /* comments for these variables are in gram.h  */
 

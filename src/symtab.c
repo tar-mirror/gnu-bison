@@ -1,98 +1,103 @@
 /* Symbol table manager for Bison,
-   Copyright (C) 1984, 1989 Free Software Foundation, Inc.
+   Copyright 1984, 1989, 2000 Free Software Foundation, Inc.
 
-This file is part of Bison, the GNU Compiler Compiler.
+   This file is part of Bison, the GNU Compiler Compiler.
 
-Bison is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2, or (at your option)
-any later version.
+   Bison is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2, or (at your option)
+   any later version.
 
-Bison is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+   Bison is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with Bison; see the file COPYING.  If not, write to
-the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-Boston, MA 02111-1307, USA.  */
+   You should have received a copy of the GNU General Public License
+   along with Bison; see the file COPYING.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.  */
 
 
-#include <stdio.h>
 #include "system.h"
-#include "alloc.h"
+#include "xalloc.h"
 #include "symtab.h"
 #include "gram.h"
 
 
-bucket **symtab;
 bucket *firstsymbol;
-bucket *lastsymbol;
-
-void tabinit PARAMS((void));
-void free_symtab PARAMS((void));
-
+static bucket *lastsymbol;
+static bucket **symtab;
 
 static int
-hash (char *key)
+hash (const char *key)
 {
-  register char *cp;
-  register int k;
+  const char *cp;
+  int k;
 
   cp = key;
   k = 0;
   while (*cp)
     k = ((k << 1) ^ (*cp++)) & 0x3fff;
 
-  return (k % TABSIZE);
+  return k % TABSIZE;
 }
 
+/*--------------------------------------------------------------.
+| Create a new symbol, named TAG, which hash value is HASHVAL.  |
+`--------------------------------------------------------------*/
 
-
-static char *
-copys (char *s)
+static bucket *
+bucket_new (const char *tag, int hashval)
 {
-  register int i;
-  register char *cp;
-  register char *result;
+  bucket *res = XMALLOC (bucket, 1);
 
-  i = 1;
-  for (cp = s; *cp; cp++)
-    i++;
+  res->link = symtab[hashval];
+  res->next = NULL;
+  res->tag = xstrdup (tag);
+  res->type_name = NULL;
+  res->value = 0;
+  res->prec = 0;
+  res->assoc = right_assoc;
+  res->user_token_number = 0;
+  res->alias = NULL;
+  res->class = unknown_sym;
 
-  result = xmalloc((unsigned int)i);
-  strcpy(result, s);
-  return (result);
+  nsyms++;
+
+  return res;
 }
 
 
 void
 tabinit (void)
 {
-/*   register int i; JF unused */
-
-  symtab = NEW2(TABSIZE, bucket *);
+  symtab = XCALLOC (bucket *, TABSIZE);
 
   firstsymbol = NULL;
   lastsymbol = NULL;
 }
 
 
-bucket *
-getsym (char *key)
-{
-  register int hashval;
-  register bucket *bp;
-  register int found;
+/*----------------------------------------------------------------.
+| Find the symbol named KEY, and return it.  If it does not exist |
+| yet, create it.                                                 |
+`----------------------------------------------------------------*/
 
-  hashval = hash(key);
+bucket *
+getsym (const char *key)
+{
+  int hashval;
+  bucket *bp;
+  int found;
+
+  hashval = hash (key);
   bp = symtab[hashval];
 
   found = 0;
   while (bp != NULL && found == 0)
     {
-      if (strcmp(key, bp->tag) == 0)
+      if (strcmp (key, bp->tag) == 0)
 	found = 1;
       else
 	bp = bp->link;
@@ -100,13 +105,7 @@ getsym (char *key)
 
   if (found == 0)
     {
-      nsyms++;
-
-      bp = NEW(bucket);
-      bp->link = symtab[hashval];
-      bp->next = NULL;
-      bp->tag = copys(key);
-      bp->class = SUNKNOWN;
+      bp = bucket_new (key, hashval);
 
       if (firstsymbol == NULL)
 	{
@@ -122,15 +121,15 @@ getsym (char *key)
       symtab[hashval] = bp;
     }
 
-  return (bp);
+  return bp;
 }
 
 
 void
 free_symtab (void)
 {
-  register int i;
-  register bucket *bp,*bptmp;/* JF don't use ptr after free */
+  int i;
+  bucket *bp, *bptmp;		/* JF don't use ptr after free */
 
   for (i = 0; i < TABSIZE; i++)
     {
@@ -138,13 +137,15 @@ free_symtab (void)
       while (bp)
 	{
 	  bptmp = bp->link;
-#if 0 /* This causes crashes because one string can appear more than once.  */
+#if 0
+	  /* This causes crashes because one string can appear more
+	     than once.  */
 	  if (bp->type_name)
-	    FREE(bp->type_name);
+	    XFREE (bp->type_name);
 #endif
-	  FREE(bp);
+	  XFREE (bp);
 	  bp = bptmp;
 	}
     }
-  FREE(symtab);
+  XFREE (symtab);
 }
