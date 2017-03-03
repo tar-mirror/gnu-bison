@@ -1,3 +1,19 @@
+Tue Feb 16 11:05:48 1999  Jesse Thilo  <jthilo@gnu.org>
+
+	* configure.in: Bumped version number to 1.27.
+
+	* Makefile.am:
+	Added `bison.simple' to list of files removed by `make distclean'.
+
+Fri Feb 12 15:18:12 1999  Jesse Thilo  <jthilo@gnu.org>
+
+	* Makefile.am, acconfig.h, acinclude.m4, configure.in, files.c, files.h:
+	Defined locations of parser files in config.h instead of Makefile.
+
+Tue Feb  9 03:51:09 1999  Jesse Thilo  <jthilo@gnu.org>
+
+	* Makefile.am: Removed inappropriate use of $< macro.
+
 Wed Jan 27 03:34:47 1999  Jesse Thilo  <jthilo@gnu.org>
 
 	* README: Document help-bison list.

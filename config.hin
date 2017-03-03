@@ -40,6 +40,12 @@
 /* Define if you have the ANSI C header files.  */
 #undef STDC_HEADERS
 
+/* The location of the simple parser (bison.simple).  */
+#undef XPFILE
+
+/* The location of the semantic parser (bison.hairy).  */
+#undef XPFILE1
+
 /* Define if you have the mkstemp function.  */
 #undef HAVE_MKSTEMP
 

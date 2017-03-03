@@ -691,7 +691,7 @@ fi
 
 PACKAGE=bison
 
-VERSION=1.26
+VERSION=1.27
 
 if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
   { echo "configure: error: source directory already configured; run "make distclean" there first" 1>&2; exit 1; }
@@ -1998,6 +1998,31 @@ else
   echo "$ac_t""no" 1>&6
 fi
 done
+
+
+PFILE="${datadir}/bison.simple"
+
+        ac_expanded=`(
+            test "x$prefix" = xNONE && prefix="$ac_default_prefix"
+            test "x$exec_prefix" = xNONE && exec_prefix="${prefix}"
+            eval echo \""$PFILE"\"
+        )`
+        cat >> confdefs.h <<EOF
+#define XPFILE "$ac_expanded"
+EOF
+
+
+PFILE1="${datadir}/bison.hairy"
+
+        ac_expanded=`(
+            test "x$prefix" = xNONE && prefix="$ac_default_prefix"
+            test "x$exec_prefix" = xNONE && exec_prefix="${prefix}"
+            eval echo \""$PFILE1"\"
+        )`
+        cat >> confdefs.h <<EOF
+#define XPFILE1 "$ac_expanded"
+EOF
+
 
 
 trap '' 1 2 15
