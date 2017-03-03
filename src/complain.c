@@ -1,7 +1,7 @@
 /* Declaration for error-reporting function for Bison.
 
-   Copyright (C) 2000, 2001, 2002, 2004, 2005, 2006, 2009, 2010 Free
-   Software Foundation, Inc.
+   Copyright (C) 2000-2002, 2004-2006, 2009-2011 Free Software
+   Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@
 #include "getargs.h"
 
 bool complaint_issued;
+static unsigned *indent_ptr = 0;
 
 
 
@@ -49,11 +50,22 @@ error_message (location *loc,
 	       const char *prefix,
 	       const char *message, va_list args)
 {
+  unsigned pos = 0;
+
   if (loc)
-    location_print (stderr, *loc);
+    pos += location_print (stderr, *loc);
   else
-    fputs (current_file ? current_file : program_name, stderr);
-  fputs (": ", stderr);
+    pos += fprintf(stderr, "%s", current_file ? current_file : program_name);
+  pos += fprintf(stderr, ": ");
+
+  if (indent_ptr)
+    {
+      if (!*indent_ptr)
+        *indent_ptr = pos;
+      else if (*indent_ptr > pos)
+        fprintf (stderr, "%*s", *indent_ptr - pos, "");
+      indent_ptr = 0;
+    }
 
   if (prefix)
     fprintf (stderr, "%s: ", prefix);
@@ -82,7 +94,7 @@ error_message (location *loc,
 | Report a warning, and proceed.  |
 `--------------------------------*/
 
-static void
+void
 set_warning_issued (void)
 {
   static bool warning_issued = false;
@@ -97,13 +109,28 @@ set_warning_issued (void)
 void
 warn_at (location loc, const char *message, ...)
 {
+  if (!(warnings_flag & warnings_other))
+    return;
   set_warning_issued ();
+  ERROR_MESSAGE (&loc, _("warning"), message);
+}
+
+void
+warn_at_indent (location loc, unsigned *indent,
+                const char *message, ...)
+{
+  if (!(warnings_flag & warnings_other))
+    return;
+  set_warning_issued ();
+  indent_ptr = indent;
   ERROR_MESSAGE (&loc, _("warning"), message);
 }
 
 void
 warn (const char *message, ...)
 {
+  if (!(warnings_flag & warnings_other))
+    return;
   set_warning_issued ();
   ERROR_MESSAGE (NULL, _("warning"), message);
 }
@@ -121,12 +148,50 @@ complain_at (location loc, const char *message, ...)
 }
 
 void
+complain_at_indent (location loc, unsigned *indent,
+                    const char *message, ...)
+{
+  indent_ptr = indent;
+  ERROR_MESSAGE (&loc, NULL, message);
+  complaint_issued = true;
+}
+
+void
 complain (const char *message, ...)
 {
   ERROR_MESSAGE (NULL, NULL, message);
   complaint_issued = true;
 }
 
+
+/*--------------------------------------------------------------.
+| An incompatibility with POSIX Yacc: mapped either to warn* or |
+| complain* depending on yacc_flag.                             |
+`--------------------------------------------------------------*/
+
+void
+yacc_at (location loc, const char *message, ...)
+{
+  if (yacc_flag)
+    {
+      ERROR_MESSAGE (&loc, NULL, message);
+      complaint_issued = true;
+    }
+  else if (warnings_flag & warnings_yacc)
+    {
+      set_warning_issued ();
+      ERROR_MESSAGE (&loc, _("warning"), message);
+    }
+}
+
+void
+midrule_value_at (location loc, const char *message, ...)
+{
+  if (!(warnings_flag & warnings_midrule_values))
+    return;
+  set_warning_issued ();
+  ERROR_MESSAGE (&loc, _("warning"), message);
+}
 
 /*-------------------------------------------------.
 | A severe error has occurred, we cannot proceed.  |

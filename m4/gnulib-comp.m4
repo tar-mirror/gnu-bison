@@ -1,7 +1,7 @@
 # -*- buffer-read-only: t -*- vi: set ro:
 # DO NOT EDIT! GENERATED AUTOMATICALLY!
 # DO NOT EDIT! GENERATED AUTOMATICALLY!
-# Copyright (C) 2002-2010 Free Software Foundation, Inc.
+# Copyright (C) 2002-2011 Free Software Foundation, Inc.
 #
 # This file is free software, distributed under the terms of the GNU
 # General Public License.  As a special exception to the GNU General
@@ -14,7 +14,8 @@
 # This file represents the compiled summary of the specification in
 # gnulib-cache.m4. It lists the computed macro invocations that need
 # to be invoked from configure.ac.
-# In projects using CVS, this file can be treated like other built files.
+# In projects that use version control, this file can be treated like
+# other built files.
 
 
 # This macro should be invoked from ./configure.ac, in the section
@@ -28,6 +29,7 @@ AC_DEFUN([gl_EARLY],
   m4_pattern_allow([^gl_LTLIBOBJS$])dnl a variable
   AC_REQUIRE([AC_PROG_RANLIB])
   AC_REQUIRE([AM_PROG_CC_C_O])
+  # Code from module alignof:
   # Code from module alloca-opt:
   # Code from module announce-gen:
   # Code from module arg-nonnull:
@@ -38,11 +40,15 @@ AC_DEFUN([gl_EARLY],
   # Code from module c++defs:
   # Code from module c-ctype:
   # Code from module c-strcase:
+  # Code from module calloc-posix:
   # Code from module cloexec:
+  # Code from module close:
+  # Code from module close-hook:
   # Code from module config-h:
   # Code from module configmake:
   # Code from module dirname:
   # Code from module dirname-lgpl:
+  # Code from module dosname:
   # Code from module double-slash-root:
   # Code from module dup2:
   # Code from module environ:
@@ -52,11 +58,20 @@ AC_DEFUN([gl_EARLY],
   # Code from module extensions:
   AC_REQUIRE([gl_USE_SYSTEM_EXTENSIONS])
   # Code from module fatal-signal:
+  # Code from module fclose:
   # Code from module fcntl:
   # Code from module fcntl-h:
   # Code from module fd-safer-flag:
+  # Code from module float:
   # Code from module fopen:
   # Code from module fopen-safer:
+  # Code from module fpieee:
+  AC_REQUIRE([gl_FP_IEEE])
+  # Code from module fprintf-posix:
+  # Code from module fpucw:
+  # Code from module frexp-nolibm:
+  # Code from module frexpl-nolibm:
+  # Code from module fseterr:
   # Code from module gendocs:
   # Code from module getdtablesize:
   # Code from module getopt-gnu:
@@ -71,20 +86,38 @@ AC_DEFUN([gl_EARLY],
   # Code from module inline:
   # Code from module intprops:
   # Code from module inttypes:
+  # Code from module ioctl:
+  # Code from module isnan:
+  # Code from module isnand:
+  # Code from module isnand-nolibm:
+  # Code from module isnanf:
+  # Code from module isnanf-nolibm:
+  # Code from module isnanl:
+  # Code from module isnanl-nolibm:
+  # Code from module iswblank:
   # Code from module javacomp-script:
   # Code from module javaexec-script:
+  # Code from module ldexpl:
   # Code from module localcharset:
   # Code from module maintainer-makefile:
-  # Code from module malloc:
+  # Code from module malloc-gnu:
   # Code from module malloc-posix:
+  # Code from module math:
+  # Code from module mbchar:
   # Code from module mbrtowc:
+  # Code from module mbschr:
   # Code from module mbsinit:
+  # Code from module mbsrchr:
   # Code from module mbswidth:
+  # Code from module mbuiter:
   # Code from module memchr:
   # Code from module multiarch:
+  # Code from module nocrash:
+  # Code from module nonblocking:
   # Code from module obstack:
   # Code from module open:
-  # Code from module pipe:
+  # Code from module perror:
+  # Code from module pipe-posix:
   # Code from module pipe2:
   # Code from module pipe2-safer:
   # Code from module posix_spawn-internal:
@@ -98,15 +131,27 @@ AC_DEFUN([gl_EARLY],
   # Code from module posix_spawnattr_setflags:
   # Code from module posix_spawnattr_setsigmask:
   # Code from module posix_spawnp:
+  # Code from module printf-frexp:
+  # Code from module printf-frexpl:
+  # Code from module printf-posix:
+  # Code from module printf-safe:
   # Code from module quote:
   # Code from module quotearg:
   # Code from module quotearg-simple:
   # Code from module rawmemchr:
+  # Code from module realloc-posix:
   # Code from module sched:
   # Code from module sigaction:
   # Code from module signal:
+  # Code from module signbit:
   # Code from module sigprocmask:
+  # Code from module size_max:
+  # Code from module snprintf:
+  # Code from module snprintf-posix:
+  # Code from module socklen:
   # Code from module spawn:
+  # Code from module spawn-pipe:
+  # Code from module sprintf-posix:
   # Code from module stat:
   # Code from module stdbool:
   # Code from module stddef:
@@ -115,14 +160,18 @@ AC_DEFUN([gl_EARLY],
   # Code from module stdlib:
   # Code from module stpcpy:
   # Code from module strchrnul:
+  # Code from module strdup-posix:
   # Code from module streq:
   # Code from module strerror:
   # Code from module string:
   # Code from module strndup:
   # Code from module strnlen:
+  # Code from module strnlen1:
   # Code from module strtol:
   # Code from module strtoul:
   # Code from module strverscmp:
+  # Code from module sys_ioctl:
+  # Code from module sys_socket:
   # Code from module sys_stat:
   # Code from module sys_wait:
   # Code from module time:
@@ -135,16 +184,23 @@ AC_DEFUN([gl_EARLY],
   # Code from module unsetenv:
   # Code from module update-copyright:
   # Code from module useless-if-before-free:
+  # Code from module vasnprintf:
   # Code from module vc-list-files:
   # Code from module verify:
+  # Code from module vfprintf-posix:
+  # Code from module vsnprintf:
+  # Code from module vsnprintf-posix:
+  # Code from module vsprintf-posix:
   # Code from module wait-process:
+  # Code from module waitpid:
   # Code from module warn-on-use:
   # Code from module warnings:
   # Code from module wchar:
-  # Code from module wctype:
+  # Code from module wctype-h:
   # Code from module wcwidth:
   # Code from module xalloc:
   # Code from module xalloc-die:
+  # Code from module xsize:
   # Code from module xstrndup:
 ])
 
@@ -164,6 +220,7 @@ AC_DEFUN([gl_INIT],
   m4_pushdef([gl_LIBSOURCES_DIR], [])
   gl_COMMON
   gl_source_base='lib'
+  # Code from module alignof:
   # Code from module alloca-opt:
   gl_FUNC_ALLOCA
   # Code from module announce-gen:
@@ -178,17 +235,26 @@ AC_DEFUN([gl_INIT],
   # Code from module c++defs:
   # Code from module c-ctype:
   # Code from module c-strcase:
+  # Code from module calloc-posix:
+  gl_FUNC_CALLOC_POSIX
+  gl_STDLIB_MODULE_INDICATOR([calloc-posix])
   # Code from module cloexec:
   gl_CLOEXEC
   gl_MODULE_INDICATOR_FOR_TESTS([cloexec])
+  # Code from module close:
+  gl_FUNC_CLOSE
+  gl_UNISTD_MODULE_INDICATOR([close])
+  # Code from module close-hook:
   # Code from module config-h:
   gl_CONFIG_H
   # Code from module configmake:
+  gl_CONFIGMAKE_PREP
   # Code from module dirname:
   gl_DIRNAME
   gl_MODULE_INDICATOR([dirname])
   # Code from module dirname-lgpl:
   gl_DIRNAME_LGPL
+  # Code from module dosname:
   # Code from module double-slash-root:
   gl_DOUBLE_SLASH_ROOT
   # Code from module dup2:
@@ -208,6 +274,9 @@ AC_DEFUN([gl_INIT],
   # Code from module extensions:
   # Code from module fatal-signal:
   gl_FATAL_SIGNAL
+  # Code from module fclose:
+  gl_FUNC_FCLOSE
+  gl_STDIO_MODULE_INDICATOR([fclose])
   # Code from module fcntl:
   gl_FUNC_FCNTL
   gl_FCNTL_MODULE_INDICATOR([fcntl])
@@ -215,12 +284,26 @@ AC_DEFUN([gl_INIT],
   gl_FCNTL_H
   # Code from module fd-safer-flag:
   gl_MODULE_INDICATOR([fd-safer-flag])
+  # Code from module float:
+  gl_FLOAT_H
   # Code from module fopen:
   gl_FUNC_FOPEN
   gl_STDIO_MODULE_INDICATOR([fopen])
   # Code from module fopen-safer:
   gl_FOPEN_SAFER
   gl_MODULE_INDICATOR([fopen-safer])
+  # Code from module fpieee:
+  # Code from module fprintf-posix:
+  gl_FUNC_FPRINTF_POSIX
+  gl_STDIO_MODULE_INDICATOR([fprintf-posix])
+  # Code from module fpucw:
+  # Code from module frexp-nolibm:
+  gl_FUNC_FREXP_NO_LIBM
+  gl_MATH_MODULE_INDICATOR([frexp])
+  # Code from module frexpl-nolibm:
+  gl_FUNC_FREXPL_NO_LIBM
+  gl_MATH_MODULE_INDICATOR([frexpl])
+  # Code from module fseterr:
   # Code from module gendocs:
   # Code from module getdtablesize:
   gl_FUNC_GETDTABLESIZE
@@ -257,12 +340,39 @@ AC_DEFUN([gl_INIT],
   # Code from module intprops:
   # Code from module inttypes:
   gl_INTTYPES_H
+  # Code from module ioctl:
+  gl_FUNC_IOCTL
+  gl_SYS_IOCTL_MODULE_INDICATOR([ioctl])
+  # Code from module isnan:
+  gl_ISNAN
+  gl_MATH_MODULE_INDICATOR([isnan])
+  # Code from module isnand:
+  gl_FUNC_ISNAND
+  gl_MATH_MODULE_INDICATOR([isnand])
+  # Code from module isnand-nolibm:
+  gl_FUNC_ISNAND_NO_LIBM
+  # Code from module isnanf:
+  gl_FUNC_ISNANF
+  gl_MATH_MODULE_INDICATOR([isnanf])
+  # Code from module isnanf-nolibm:
+  gl_FUNC_ISNANF_NO_LIBM
+  # Code from module isnanl:
+  gl_FUNC_ISNANL
+  gl_MATH_MODULE_INDICATOR([isnanl])
+  # Code from module isnanl-nolibm:
+  gl_FUNC_ISNANL_NO_LIBM
+  # Code from module iswblank:
+  gl_FUNC_ISWBLANK
+  gl_WCTYPE_MODULE_INDICATOR([iswblank])
   # Code from module javacomp-script:
   # You need to invoke gt_JAVACOMP yourself, possibly with arguments.
   AC_CONFIG_FILES([javacomp.sh:build-aux/javacomp.sh.in])
   # Code from module javaexec-script:
   # You need to invoke gt_JAVAEXEC yourself, possibly with arguments.
   AC_CONFIG_FILES([javaexec.sh:build-aux/javaexec.sh.in])
+  # Code from module ldexpl:
+  gl_FUNC_LDEXPL
+  gl_MATH_MODULE_INDICATOR([ldexpl])
   # Code from module localcharset:
   gl_LOCALCHARSET
   LOCALCHARSET_TESTS_ENVIRONMENT="CHARSETALIASDIR=\"\$(top_builddir)/$gl_source_base\""
@@ -270,33 +380,50 @@ AC_DEFUN([gl_INIT],
   # Code from module maintainer-makefile:
   AC_CONFIG_COMMANDS_PRE([m4_ifdef([AH_HEADER],
     [AC_SUBST([CONFIG_INCLUDE], m4_defn([AH_HEADER]))])])
-  # Code from module malloc:
+  # Code from module malloc-gnu:
   gl_FUNC_MALLOC_GNU
-  AC_DEFINE([GNULIB_MALLOC_GNU], 1, [Define to indicate the 'malloc' module.])
+  gl_MODULE_INDICATOR([malloc-gnu])
   # Code from module malloc-posix:
   gl_FUNC_MALLOC_POSIX
   gl_STDLIB_MODULE_INDICATOR([malloc-posix])
+  # Code from module math:
+  gl_MATH_H
+  # Code from module mbchar:
+  gl_MBCHAR
   # Code from module mbrtowc:
   gl_FUNC_MBRTOWC
   gl_WCHAR_MODULE_INDICATOR([mbrtowc])
+  # Code from module mbschr:
+  gl_STRING_MODULE_INDICATOR([mbschr])
   # Code from module mbsinit:
   gl_FUNC_MBSINIT
   gl_WCHAR_MODULE_INDICATOR([mbsinit])
+  # Code from module mbsrchr:
+  gl_STRING_MODULE_INDICATOR([mbsrchr])
   # Code from module mbswidth:
   gl_MBSWIDTH
+  # Code from module mbuiter:
+  gl_MBITER
   # Code from module memchr:
   gl_FUNC_MEMCHR
   gl_STRING_MODULE_INDICATOR([memchr])
   # Code from module multiarch:
   gl_MULTIARCH
+  # Code from module nocrash:
+  # Code from module nonblocking:
+  gl_FCNTL_MODULE_INDICATOR([nonblocking])
   # Code from module obstack:
   AC_FUNC_OBSTACK
   dnl Note: AC_FUNC_OBSTACK does AC_LIBSOURCES([obstack.h, obstack.c]).
   # Code from module open:
   gl_FUNC_OPEN
   gl_FCNTL_MODULE_INDICATOR([open])
-  # Code from module pipe:
-  gl_PIPE
+  # Code from module perror:
+  gl_FUNC_PERROR
+  gl_STRING_MODULE_INDICATOR([perror])
+  # Code from module pipe-posix:
+  gl_FUNC_PIPE
+  gl_UNISTD_MODULE_INDICATOR([pipe])
   # Code from module pipe2:
   gl_FUNC_PIPE2
   gl_UNISTD_MODULE_INDICATOR([pipe2])
@@ -374,6 +501,15 @@ AC_DEFUN([gl_INIT],
     gl_POSIX_SPAWN_INTERNAL
   fi
   gl_SPAWN_MODULE_INDICATOR([posix_spawnp])
+  # Code from module printf-frexp:
+  gl_FUNC_PRINTF_FREXP
+  # Code from module printf-frexpl:
+  gl_FUNC_PRINTF_FREXPL
+  # Code from module printf-posix:
+  gl_FUNC_PRINTF_POSIX
+  gl_STDIO_MODULE_INDICATOR([printf-posix])
+  # Code from module printf-safe:
+  m4_divert_text([INIT_PREPARE], [gl_printf_safe=yes])
   # Code from module quote:
   gl_QUOTE
   # Code from module quotearg:
@@ -382,6 +518,9 @@ AC_DEFUN([gl_INIT],
   # Code from module rawmemchr:
   gl_FUNC_RAWMEMCHR
   gl_STRING_MODULE_INDICATOR([rawmemchr])
+  # Code from module realloc-posix:
+  gl_FUNC_REALLOC_POSIX
+  gl_STDLIB_MODULE_INDICATOR([realloc-posix])
   # Code from module sched:
   gl_SCHED_H
   # Code from module sigaction:
@@ -389,11 +528,29 @@ AC_DEFUN([gl_INIT],
   gl_SIGNAL_MODULE_INDICATOR([sigaction])
   # Code from module signal:
   gl_SIGNAL_H
+  # Code from module signbit:
+  gl_SIGNBIT
+  gl_MATH_MODULE_INDICATOR([signbit])
   # Code from module sigprocmask:
   gl_SIGNALBLOCKING
   gl_SIGNAL_MODULE_INDICATOR([sigprocmask])
+  # Code from module size_max:
+  gl_SIZE_MAX
+  # Code from module snprintf:
+  gl_FUNC_SNPRINTF
+  gl_STDIO_MODULE_INDICATOR([snprintf])
+  gl_MODULE_INDICATOR([snprintf])
+  # Code from module snprintf-posix:
+  gl_FUNC_SNPRINTF_POSIX
+  # Code from module socklen:
+  gl_TYPE_SOCKLEN_T
   # Code from module spawn:
   gl_SPAWN_H
+  # Code from module spawn-pipe:
+  gl_SPAWN_PIPE
+  # Code from module sprintf-posix:
+  gl_FUNC_SPRINTF_POSIX
+  gl_STDIO_MODULE_INDICATOR([sprintf-posix])
   # Code from module stat:
   gl_FUNC_STAT
   gl_SYS_STAT_MODULE_INDICATOR([stat])
@@ -413,6 +570,9 @@ AC_DEFUN([gl_INIT],
   # Code from module strchrnul:
   gl_FUNC_STRCHRNUL
   gl_STRING_MODULE_INDICATOR([strchrnul])
+  # Code from module strdup-posix:
+  gl_FUNC_STRDUP_POSIX
+  gl_STRING_MODULE_INDICATOR([strdup])
   # Code from module streq:
   # Code from module strerror:
   gl_FUNC_STRERROR
@@ -425,6 +585,7 @@ AC_DEFUN([gl_INIT],
   # Code from module strnlen:
   gl_FUNC_STRNLEN
   gl_STRING_MODULE_INDICATOR([strnlen])
+  # Code from module strnlen1:
   # Code from module strtol:
   gl_FUNC_STRTOL
   # Code from module strtoul:
@@ -432,6 +593,12 @@ AC_DEFUN([gl_INIT],
   # Code from module strverscmp:
   gl_FUNC_STRVERSCMP
   gl_STRING_MODULE_INDICATOR([strverscmp])
+  # Code from module sys_ioctl:
+  gl_SYS_IOCTL_H
+  AC_PROG_MKDIR_P
+  # Code from module sys_socket:
+  gl_HEADER_SYS_SOCKET
+  AC_PROG_MKDIR_P
   # Code from module sys_stat:
   gl_HEADER_SYS_STAT_H
   AC_PROG_MKDIR_P
@@ -449,7 +616,7 @@ AC_DEFUN([gl_INIT],
   # Code from module uniwidth/base:
   gl_LIBUNISTRING_LIBHEADER([0.9], [uniwidth.h])
   # Code from module uniwidth/width:
-  gl_LIBUNISTRING_MODULE([0.9], [uniwidth/width])
+  gl_LIBUNISTRING_MODULE([0.9.4], [uniwidth/width])
   # Code from module unlocked-io:
   gl_FUNC_GLIBC_UNLOCKED_IO
   # Code from module unsetenv:
@@ -457,16 +624,32 @@ AC_DEFUN([gl_INIT],
   gl_STDLIB_MODULE_INDICATOR([unsetenv])
   # Code from module update-copyright:
   # Code from module useless-if-before-free:
+  # Code from module vasnprintf:
+  gl_FUNC_VASNPRINTF
   # Code from module vc-list-files:
   # Code from module verify:
+  # Code from module vfprintf-posix:
+  gl_FUNC_VFPRINTF_POSIX
+  gl_STDIO_MODULE_INDICATOR([vfprintf-posix])
+  # Code from module vsnprintf:
+  gl_FUNC_VSNPRINTF
+  gl_STDIO_MODULE_INDICATOR([vsnprintf])
+  # Code from module vsnprintf-posix:
+  gl_FUNC_VSNPRINTF_POSIX
+  # Code from module vsprintf-posix:
+  gl_FUNC_VSPRINTF_POSIX
+  gl_STDIO_MODULE_INDICATOR([vsprintf-posix])
   # Code from module wait-process:
   gl_WAIT_PROCESS
+  # Code from module waitpid:
+  gl_FUNC_WAITPID
+  gl_SYS_WAIT_MODULE_INDICATOR([waitpid])
   # Code from module warn-on-use:
   # Code from module warnings:
   AC_SUBST([WARN_CFLAGS])
   # Code from module wchar:
   gl_WCHAR_H
-  # Code from module wctype:
+  # Code from module wctype-h:
   gl_WCTYPE_H
   # Code from module wcwidth:
   gl_FUNC_WCWIDTH
@@ -474,6 +657,8 @@ AC_DEFUN([gl_INIT],
   # Code from module xalloc:
   gl_XALLOC
   # Code from module xalloc-die:
+  # Code from module xsize:
+  gl_XSIZE
   # Code from module xstrndup:
   gl_XSTRNDUP
   # End of code from modules
@@ -629,9 +814,11 @@ AC_DEFUN([gl_FILE_LIST], [
   build-aux/vc-list-files
   build-aux/warn-on-use.h
   doc/gendocs_template
+  lib/alignof.h
   lib/alloca.in.h
   lib/argmatch.c
   lib/argmatch.h
+  lib/asnprintf.c
   lib/basename-lgpl.c
   lib/basename.c
   lib/binary-io.h
@@ -641,12 +828,17 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/c-strcase.h
   lib/c-strcasecmp.c
   lib/c-strncasecmp.c
+  lib/calloc.c
   lib/cloexec.c
   lib/cloexec.h
+  lib/close-hook.c
+  lib/close-hook.h
+  lib/close.c
   lib/config.charset
   lib/dirname-lgpl.c
   lib/dirname.c
   lib/dirname.h
+  lib/dosname.h
   lib/dup-safer-flag.c
   lib/dup-safer.c
   lib/dup2.c
@@ -657,12 +849,21 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/exitfail.h
   lib/fatal-signal.c
   lib/fatal-signal.h
+  lib/fclose.c
   lib/fcntl.c
   lib/fcntl.in.h
   lib/fd-safer-flag.c
   lib/fd-safer.c
+  lib/float+.h
+  lib/float.in.h
   lib/fopen-safer.c
   lib/fopen.c
+  lib/fprintf.c
+  lib/fpucw.h
+  lib/frexp.c
+  lib/frexpl.c
+  lib/fseterr.c
+  lib/fseterr.h
   lib/getdtablesize.c
   lib/getopt.c
   lib/getopt.in.h
@@ -673,36 +874,71 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/hash.h
   lib/intprops.h
   lib/inttypes.in.h
+  lib/ioctl.c
+  lib/isnan.c
+  lib/isnand-nolibm.h
+  lib/isnand.c
+  lib/isnanf-nolibm.h
+  lib/isnanf.c
+  lib/isnanl-nolibm.h
+  lib/isnanl.c
+  lib/iswblank.c
+  lib/ldexpl.c
   lib/localcharset.c
   lib/localcharset.h
   lib/malloc.c
+  lib/math.in.h
+  lib/mbchar.c
+  lib/mbchar.h
   lib/mbrtowc.c
+  lib/mbschr.c
   lib/mbsinit.c
+  lib/mbsrchr.c
   lib/mbswidth.c
   lib/mbswidth.h
+  lib/mbuiter.h
   lib/memchr.c
   lib/memchr.valgrind
+  lib/nonblocking.c
+  lib/nonblocking.h
   lib/obstack.c
   lib/obstack.h
   lib/open.c
+  lib/perror.c
   lib/pipe-safer.c
   lib/pipe.c
-  lib/pipe.h
   lib/pipe2-safer.c
   lib/pipe2.c
+  lib/printf-args.c
+  lib/printf-args.h
+  lib/printf-frexp.c
+  lib/printf-frexp.h
+  lib/printf-frexpl.c
+  lib/printf-frexpl.h
+  lib/printf-parse.c
+  lib/printf-parse.h
+  lib/printf.c
   lib/quote.c
   lib/quote.h
   lib/quotearg.c
   lib/quotearg.h
   lib/rawmemchr.c
   lib/rawmemchr.valgrind
+  lib/realloc.c
   lib/ref-add.sin
   lib/ref-del.sin
   lib/sched.in.h
   lib/sig-handler.h
   lib/sigaction.c
   lib/signal.in.h
+  lib/signbitd.c
+  lib/signbitf.c
+  lib/signbitl.c
   lib/sigprocmask.c
+  lib/size_max.h
+  lib/snprintf.c
+  lib/spawn-pipe.c
+  lib/spawn-pipe.h
   lib/spawn.in.h
   lib/spawn_faction_addclose.c
   lib/spawn_faction_adddup2.c
@@ -716,27 +952,33 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/spawnattr_setsigmask.c
   lib/spawni.c
   lib/spawnp.c
+  lib/sprintf.c
   lib/stat.c
   lib/stdbool.in.h
   lib/stddef.in.h
   lib/stdint.in.h
   lib/stdio--.h
+  lib/stdio-impl.h
   lib/stdio-safer.h
-  lib/stdio-write.c
   lib/stdio.in.h
   lib/stdlib.in.h
   lib/stpcpy.c
   lib/strchrnul.c
   lib/strchrnul.valgrind
+  lib/strdup.c
   lib/streq.h
   lib/strerror.c
   lib/string.in.h
   lib/stripslash.c
   lib/strndup.c
   lib/strnlen.c
+  lib/strnlen1.c
+  lib/strnlen1.h
   lib/strtol.c
   lib/strtoul.c
   lib/strverscmp.c
+  lib/sys_ioctl.in.h
+  lib/sys_socket.in.h
   lib/sys_stat.in.h
   lib/sys_wait.in.h
   lib/time.in.h
@@ -749,16 +991,24 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/uniwidth/width.c
   lib/unlocked-io.h
   lib/unsetenv.c
+  lib/vasnprintf.c
+  lib/vasnprintf.h
   lib/verify.h
+  lib/vfprintf.c
+  lib/vsnprintf.c
+  lib/vsprintf.c
+  lib/w32sock.h
   lib/w32spawn.h
   lib/wait-process.c
   lib/wait-process.h
+  lib/waitpid.c
   lib/wchar.in.h
   lib/wctype.in.h
   lib/wcwidth.c
   lib/xalloc-die.c
   lib/xalloc.h
   lib/xmalloc.c
+  lib/xsize.h
   lib/xstrndup.c
   lib/xstrndup.h
   m4/00gnulib.m4
@@ -766,22 +1016,33 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/argmatch.m4
   m4/asm-underscore.m4
   m4/assert.m4
+  m4/calloc.m4
   m4/cloexec.m4
+  m4/close.m4
   m4/codeset.m4
   m4/config-h.m4
+  m4/configmake.m4
   m4/dirname.m4
-  m4/dos.m4
   m4/double-slash-root.m4
   m4/dup2.m4
   m4/environ.m4
   m4/errno_h.m4
   m4/error.m4
+  m4/exponentd.m4
+  m4/exponentf.m4
+  m4/exponentl.m4
   m4/extensions.m4
   m4/fatal-signal.m4
+  m4/fclose.m4
   m4/fcntl-o.m4
   m4/fcntl.m4
   m4/fcntl_h.m4
+  m4/float_h.m4
   m4/fopen.m4
+  m4/fpieee.m4
+  m4/fprintf-posix.m4
+  m4/frexp.m4
+  m4/frexpl.m4
   m4/getdtablesize.m4
   m4/getopt.m4
   m4/gettext.m4
@@ -797,12 +1058,20 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/intldir.m4
   m4/intlmacosx.m4
   m4/intmax.m4
+  m4/intmax_t.m4
   m4/inttypes-pri.m4
   m4/inttypes.m4
   m4/inttypes_h.m4
+  m4/ioctl.m4
+  m4/isnan.m4
+  m4/isnand.m4
+  m4/isnanf.m4
+  m4/isnanl.m4
+  m4/iswblank.m4
   m4/javacomp.m4
   m4/javaexec.m4
   m4/lcmessage.m4
+  m4/ldexpl.m4
   m4/lib-ld.m4
   m4/lib-link.m4
   m4/lib-prefix.m4
@@ -814,6 +1083,9 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/lock.m4
   m4/longlong.m4
   m4/malloc.m4
+  m4/math_h.m4
+  m4/mbchar.m4
+  m4/mbiter.m4
   m4/mbrtowc.m4
   m4/mbsinit.m4
   m4/mbstate_t.m4
@@ -823,24 +1095,38 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/mode_t.m4
   m4/multiarch.m4
   m4/nls.m4
+  m4/nocrash.m4
   m4/open.m4
+  m4/perror.m4
   m4/pipe.m4
   m4/pipe2.m4
   m4/po.m4
   m4/posix_spawn.m4
+  m4/printf-frexp.m4
+  m4/printf-frexpl.m4
+  m4/printf-posix-rpl.m4
   m4/printf-posix.m4
+  m4/printf.m4
   m4/progtest.m4
   m4/quote.m4
   m4/quotearg.m4
   m4/rawmemchr.m4
+  m4/realloc.m4
   m4/sched_h.m4
   m4/setenv.m4
   m4/sig_atomic_t.m4
   m4/sigaction.m4
   m4/signal_h.m4
   m4/signalblocking.m4
+  m4/signbit.m4
   m4/size_max.m4
+  m4/snprintf-posix.m4
+  m4/snprintf.m4
+  m4/socklen.m4
+  m4/sockpfaf.m4
+  m4/spawn-pipe.m4
   m4/spawn_h.m4
+  m4/sprintf-posix.m4
   m4/stat.m4
   m4/stdbool.m4
   m4/stddef_h.m4
@@ -851,6 +1137,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/stdlib_h.m4
   m4/stpcpy.m4
   m4/strchrnul.m4
+  m4/strdup.m4
   m4/strerror.m4
   m4/string_h.m4
   m4/strndup.m4
@@ -858,6 +1145,8 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/strtol.m4
   m4/strtoul.m4
   m4/strverscmp.m4
+  m4/sys_ioctl_h.m4
+  m4/sys_socket_h.m4
   m4/sys_stat_h.m4
   m4/sys_wait_h.m4
   m4/threadlib.m4
@@ -866,8 +1155,14 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/unistd-safer.m4
   m4/unistd_h.m4
   m4/unlocked-io.m4
+  m4/vasnprintf.m4
+  m4/vfprintf-posix.m4
   m4/visibility.m4
+  m4/vsnprintf-posix.m4
+  m4/vsnprintf.m4
+  m4/vsprintf-posix.m4
   m4/wait-process.m4
+  m4/waitpid.m4
   m4/warn-on-use.m4
   m4/warnings.m4
   m4/wchar_h.m4

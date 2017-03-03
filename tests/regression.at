@@ -1,7 +1,6 @@
 # Bison Regressions.                               -*- Autotest -*-
 
-# Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-# 2010 Free Software Foundation, Inc.
+# Copyright (C) 2001-2011 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -939,11 +938,7 @@ m4_define([AT_CHECK_DANCER],
 AT_BISON_OPTION_PUSHDEFS([$1])
 _AT_DATA_DANCER_Y([$1])
 AT_BISON_CHECK([-o dancer.c dancer.y])
-AT_LALR1_CC_IF(
-  [AT_BISON_CHECK([-o dancer.cc dancer.y])
-   AT_COMPILE_CXX([dancer])],
-  [AT_BISON_CHECK([-o dancer.c dancer.y])
-   AT_COMPILE([dancer])])
+AT_FULL_COMPILE([dancer])
 AT_PARSER_CHECK([./dancer], 1, [],
 [syntax error, unexpected ':'
 ])
@@ -1039,11 +1034,7 @@ m4_define([AT_CHECK_EXPECT2],
 AT_BISON_OPTION_PUSHDEFS([$1])
 _AT_DATA_EXPECT2_Y([$1])
 AT_BISON_CHECK([-o expect2.c expect2.y])
-AT_LALR1_CC_IF(
-  [AT_BISON_CHECK([-o expect2.cc expect2.y])
-   AT_COMPILE_CXX([expect2])],
-  [AT_BISON_CHECK([-o expect2.c expect2.y])
-   AT_COMPILE([expect2])])
+AT_FULL_COMPILE([expect2])
 AT_PARSER_CHECK([./expect2], 1, [],
 [syntax error, unexpected '+', expecting A or B
 ])
@@ -1214,12 +1205,15 @@ AT_DATA_GRAMMAR([input.y],
 %}
 
 %error-verbose
+%right END 0
 %left TK1 1 TK2 2 "tok alias" 3
 
 %%
 
-start: TK1 sr_conflict "tok alias" ;
-
+start:
+    TK1 sr_conflict "tok alias"
+  | start %prec END
+  ;
 sr_conflict:
   TK2
   | TK2 "tok alias"
@@ -1249,7 +1243,8 @@ main (void)
 ]])
 
 AT_BISON_CHECK([[-o input.c input.y]], [[0]],,
-[[input.y:24.5-19: warning: rule useless in parser due to conflicts: sr_conflict: TK2 "tok alias"
+[[input.y:23.5-19: warning: rule useless in parser due to conflicts: start: start
+input.y:27.5-19: warning: rule useless in parser due to conflicts: sr_conflict: TK2 "tok alias"
 ]])
 AT_COMPILE([[input]])
 AT_PARSER_CHECK([[./input]])
@@ -1258,24 +1253,421 @@ AT_CLEANUP
 
 
 
-## ----------------------------------------------- ##
-## Fix user actions without a trailing semicolon.  ##
-## ----------------------------------------------- ##
+## --------------------------- ##
+## parse-gram.y: LALR = IELR.  ##
+## --------------------------- ##
 
-AT_SETUP([[Fix user actions without a trailing semicolon]])
+# If parse-gram.y's LALR and IELR parser tables ever begin to differ, we
+# need to fix parse-gram.y or start using IELR.
 
-# This feature is undocumented, but we accidentally broke it in 2.3a, and there
-# was a complaint at:
-# <http://lists.gnu.org/archive/html/bug-bison/2008-11/msg00001.html>.
+AT_SETUP([[parse-gram.y: LALR = IELR]])
 
-AT_DATA([input.y],
-[[%%
-start: {asdffdsa} ;
+# Avoid differences in synclines by telling bison that the output files
+# have the same name.
+[cp $abs_top_srcdir/src/parse-gram.y input.y]
+AT_BISON_CHECK([[-o input.c -Dlr.type=lalr input.y]])
+[mv input.c lalr.c]
+AT_BISON_CHECK([[-o input.c -Dlr.type=ielr input.y]])
+[mv input.c ielr.c]
+AT_CHECK([[diff -u lalr.c ielr.c]])
+
+AT_CLEANUP
+
+
+
+## --------------------------------------- ##
+## %error-verbose and YYSTACK_USE_ALLOCA.  ##
+## --------------------------------------- ##
+
+AT_SETUP([[%error-verbose and YYSTACK_USE_ALLOCA]])
+
+AT_DATA_GRAMMAR([input.y],
+[[%code {
+  #include <stdio.h>
+  void yyerror (char const *);
+  int yylex (void);
+  #define YYSTACK_USE_ALLOCA 1
+}
+
+%error-verbose
+
+%%
+
+start: check syntax_error syntax_error ;
+
+check:
+{
+  if (128 < sizeof yymsgbuf)
+    {
+      fprintf (stderr,
+               "The initial size of yymsgbuf in yyparse has increased\n"
+               "since this test group was last updated.  As a result,\n"
+               "this test group may no longer manage to induce a\n"
+               "reallocation of the syntax error message buffer.\n"
+               "This test group must be adjusted to produce a longer\n"
+               "error message.\n");
+      YYABORT;
+    }
+}
+;
+
+// Induce a syntax error message whose total length is more than
+// sizeof yymsgbuf in yyparse.  Each token here is 64 bytes.
+syntax_error:
+  "123456789112345678921234567893123456789412345678951234567896123A"
+| "123456789112345678921234567893123456789412345678951234567896123B"
+| error 'a' 'b' 'c'
+;
+
+%%
+
+void
+yyerror (char const *msg)
+{
+  fprintf (stderr, "%s\n", msg);
+}
+
+int
+yylex (void)
+{
+  /* Induce two syntax error messages (which requires full error
+     recovery by shifting 3 tokens) in order to detect any loss of the
+     reallocated buffer.  */
+  static char const *input = "abc";
+  return *input++;
+}
+
+int
+main (void)
+{
+  return yyparse ();
+}
 ]])
 
 AT_BISON_CHECK([[-o input.c input.y]])
-AT_CHECK([[sed -n '/asdffdsa/s/^ *//p' input.c]], [[0]],
-[[{asdffdsa;}
+AT_COMPILE([[input]])
+AT_PARSER_CHECK([[./input]], [[1]], [],
+[[syntax error, unexpected 'a', expecting 123456789112345678921234567893123456789412345678951234567896123A or 123456789112345678921234567893123456789412345678951234567896123B
+syntax error, unexpected $end, expecting 123456789112345678921234567893123456789412345678951234567896123A or 123456789112345678921234567893123456789412345678951234567896123B
 ]])
+
+AT_CLEANUP
+
+
+
+## ------------------------- ##
+## %error-verbose overflow.  ##
+## ------------------------- ##
+
+# Imagine the case where YYSTACK_ALLOC_MAXIMUM = YYSIZE_MAXIMUM and an
+# invocation of yysyntax_error has caused yymsg_alloc to grow to exactly
+# YYSTACK_ALLOC_MAXIMUM (perhaps because the normal doubling of size had
+# to be clipped to YYSTACK_ALLOC_MAXIMUM).  In an old version of yacc.c,
+# a subsequent invocation of yysyntax_error that overflows during its
+# size calculation would return YYSIZE_MAXIMUM to yyparse.  Then,
+# yyparse would invoke yyerror using the old contents of yymsg.
+
+AT_SETUP([[%error-verbose overflow]])
+
+AT_DATA_GRAMMAR([input.y],
+[[%code {
+  #include <stdio.h>
+  void yyerror (char const *);
+  int yylex (void);
+
+  /* This prevents this test case from having to induce error messages
+     large enough to overflow size_t.  */
+  #define YYSIZE_T unsigned char
+
+  /* Bring in malloc and set EXIT_SUCCESS so yacc.c doesn't try to
+     provide a malloc prototype using our YYSIZE_T.  */
+  #include <stdlib.h>
+  #ifndef EXIT_SUCCESS
+  # define EXIT_SUCCESS 0
+  #endif
+
+  /* Max depth is usually much smaller than YYSTACK_ALLOC_MAXIMUM, and
+     we don't want gcc to warn everywhere this constant would be too big
+     to make sense for our YYSIZE_T.  */
+  #define YYMAXDEPTH 100
+}
+
+%error-verbose
+
+%%
+
+start: syntax_error1 check syntax_error2 ;
+
+// Induce a syntax error message whose total length causes yymsg in
+// yyparse to be reallocated to size YYSTACK_ALLOC_MAXIMUM, which
+// should be 255.  Each token here is 64 bytes.
+syntax_error1:
+  "123456789112345678921234567893123456789412345678951234567896123A"
+| "123456789112345678921234567893123456789412345678951234567896123B"
+| "123456789112345678921234567893123456789412345678951234567896123C"
+| error 'a' 'b' 'c'
+;
+
+check:
+{
+  if (yymsg_alloc != YYSTACK_ALLOC_MAXIMUM
+      || YYSTACK_ALLOC_MAXIMUM != YYSIZE_MAXIMUM
+      || YYSIZE_MAXIMUM != 255)
+    {
+      fprintf (stderr,
+               "The assumptions of this test group are no longer\n"
+               "valid, so it may no longer catch the error it was\n"
+               "designed to catch.  Specifically, the following\n"
+               "values should all be 255:\n\n");
+      fprintf (stderr, "  yymsg_alloc = %d\n", yymsg_alloc);
+      fprintf (stderr, "  YYSTACK_ALLOC_MAXIMUM = %d\n",
+               YYSTACK_ALLOC_MAXIMUM);
+      fprintf (stderr, "  YYSIZE_MAXIMUM = %d\n", YYSIZE_MAXIMUM);
+      YYABORT;
+    }
+}
+;
+
+// Now overflow.
+syntax_error2:
+  "123456789112345678921234567893123456789412345678951234567896123A"
+| "123456789112345678921234567893123456789412345678951234567896123B"
+| "123456789112345678921234567893123456789412345678951234567896123C"
+| "123456789112345678921234567893123456789412345678951234567896123D"
+| "123456789112345678921234567893123456789412345678951234567896123E"
+;
+
+%%
+
+void
+yyerror (char const *msg)
+{
+  fprintf (stderr, "%s\n", msg);
+}
+
+int
+yylex (void)
+{
+  /* Induce two syntax error messages (which requires full error
+     recovery by shifting 3 tokens).  */
+  static char const *input = "abc";
+  return *input++;
+}
+
+int
+main (void)
+{
+  /* Push parsers throw away the message buffer between tokens, so skip
+     this test under maintainer-push-check.  */
+  if (YYPUSH)
+    return 77;
+  return yyparse ();
+}
+]])
+
+AT_BISON_CHECK([[-o input.c input.y]])
+
+# gcc warns about tautologies and fallacies involving comparisons for
+# unsigned char.  However, it doesn't produce these same warnings for
+# size_t and many other types when the warnings would seem to make just
+# as much sense.  We ignore the warnings.
+[CFLAGS="$NO_WERROR_CFLAGS"]
+AT_COMPILE([[input]])
+
+AT_PARSER_CHECK([[./input]], [[2]], [],
+[[syntax error, unexpected 'a', expecting 123456789112345678921234567893123456789412345678951234567896123A or 123456789112345678921234567893123456789412345678951234567896123B or 123456789112345678921234567893123456789412345678951234567896123C
+syntax error
+memory exhausted
+]])
+
+AT_CLEANUP
+
+
+
+## ------------------------ ##
+## LAC: Exploratory stack.  ##
+## ------------------------ ##
+
+AT_SETUP([[LAC: Exploratory stack]])
+
+m4_pushdef([AT_LAC_CHECK], [
+
+AT_BISON_OPTION_PUSHDEFS([$1])
+
+AT_DATA_GRAMMAR([input.y],
+[[%code {
+  #include <stdio.h>
+  void yyerror (char const *);
+  int yylex (]AT_PURE_IF([[YYSTYPE *]], [[void]])[);
+}
+
+]$1[
+%error-verbose
+%token 'c'
+
+%%
+
+// default reductions in inconsistent states
+// v   v v   v v v v   v v v v v v v
+S: A B A A B A A A A B A A A A A A A B C C A A A A A A A A A A A A B ;
+//       ^                     ^                               ^
+// LAC reallocs
+
+A: 'a' | /*empty*/ { printf ("inconsistent default reduction\n"); } ;
+B: 'b' ;
+C: /*empty*/ { printf ("consistent default reduction\n"); } ;
+
+%%
+
+void
+yyerror (char const *msg)
+{
+  fprintf (stderr, "%s\n", msg);
+}
+
+int
+yylex (]AT_PURE_IF([[YYSTYPE *v]], [[void]])[)
+{
+  static char const *input = "bbbbc";]AT_PURE_IF([[
+  *v = 0;]])[
+  return *input++;
+}
+
+int
+main (void)
+{
+  yydebug = 1;
+  return yyparse ();
+}
+]])
+
+AT_BISON_CHECK([[-Dparse.lac=full -Dparse.lac.es-capacity-initial=1 \
+                 -Dparse.lac.memory-trace=full \
+                 -t -o input.c input.y]], [[0]], [],
+[[input.y: conflicts: 21 shift/reduce
+]])
+AT_COMPILE([[input]])
+AT_PARSER_CHECK([[./input > stdout.txt 2> stderr.txt]], [[1]])
+
+# Make sure syntax error doesn't forget that 'a' is expected.  It would
+# be forgotten without lookahead correction.
+AT_CHECK([[grep 'syntax error,' stderr.txt]], [[0]],
+[[syntax error, unexpected 'c', expecting 'a' or 'b'
+]])
+
+# Check number of default reductions in inconsistent states to be sure
+# syntax error is detected before unnecessary reductions are performed.
+AT_CHECK([[perl -0777 -ne 'print s/inconsistent default reduction//g;' \
+           < stdout.txt || exit 77]], [[0]], [[14]])
+
+# Check number of default reductions in consistent states to be sure
+# it is performed before the syntax error is detected.
+AT_CHECK([[perl -0777 -ne 'print s/\bconsistent default reduction//g;' \
+           < stdout.txt || exit 77]], [[0]], [[2]])
+
+# Check number of reallocs to be sure reallocated memory isn't somehow
+# lost between LAC invocations.
+AT_CHECK([[perl -0777 -ne 'print s/\(realloc//g;' < stderr.txt \
+           || exit 77]], [[0]], [[3]])
+
+AT_BISON_OPTION_POPDEFS
+])
+
+AT_LAC_CHECK([[%define api.push-pull pull]])
+AT_LAC_CHECK([[%define api.push-pull pull %define api.pure]])
+AT_LAC_CHECK([[%define api.push-pull both]])
+AT_LAC_CHECK([[%define api.push-pull both %define api.pure]])
+
+m4_popdef([AT_LAC_CHECK])
+
+AT_CLEANUP
+
+
+
+## ------------------------ ##
+## LAC: Memory exhaustion.  ##
+## ------------------------ ##
+
+AT_SETUP([[LAC: Memory exhaustion]])
+
+m4_pushdef([AT_LAC_CHECK], [
+
+AT_DATA_GRAMMAR([input.y],
+[[%code {
+  #include <stdio.h>
+  void yyerror (char const *);
+  int yylex (void);
+  #define YYMAXDEPTH 8
+}
+
+%error-verbose
+
+%%
+
+S: A A A A A A A A A ;
+A: /*empty*/ | 'a' ;
+
+%%
+
+void
+yyerror (char const *msg)
+{
+  fprintf (stderr, "%s\n", msg);
+}
+
+int
+yylex (void)
+{
+  static char const *input = "]$1[";
+  return *input++;
+}
+
+int
+main (void)
+{
+  yydebug = 1;
+  return yyparse ();
+}
+]])
+
+AT_BISON_CHECK([[-Dparse.lac=full -Dparse.lac.es-capacity-initial=1 \
+                 -t -o input.c input.y]], [[0]], [],
+[[input.y: conflicts: 8 shift/reduce
+]])
+AT_COMPILE([[input]])
+
+])
+
+# Check for memory exhaustion during parsing.
+AT_LAC_CHECK([[]])
+AT_PARSER_CHECK([[./input]], [[2]], [[]],
+[[Starting parse
+Entering state 0
+Reading a token: Now at end of input.
+LAC: initial context established for $end
+LAC: checking lookahead $end: R2 G3 R2 G5 R2 G6 R2 G7 R2 G8 R2 G9 R2 G10 R2 G11 R2 (max size exceeded)
+memory exhausted
+Cleanup: discarding lookahead token $end ()
+Stack now 0
+]])
+
+# Induce an immediate syntax error with an undefined token, and check
+# for memory exhaustion while building syntax error message.
+AT_LAC_CHECK([[z]], [[0]])
+AT_PARSER_CHECK([[./input]], [[2]], [[]],
+[[Starting parse
+Entering state 0
+Reading a token: Next token is token $undefined ()
+LAC: initial context established for $undefined
+LAC: checking lookahead $undefined: Always Err
+Constructing syntax error message
+LAC: checking lookahead $end: R2 G3 R2 G5 R2 G6 R2 G7 R2 G8 R2 G9 R2 G10 R2 G11 R2 (max size exceeded)
+syntax error
+memory exhausted
+Cleanup: discarding lookahead token $undefined ()
+Stack now 0
+]])
+
+m4_popdef([AT_LAC_CHECK])
 
 AT_CLEANUP

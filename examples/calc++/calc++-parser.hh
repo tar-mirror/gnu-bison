@@ -1,9 +1,8 @@
-/* A Bison parser, made by GNU Bison 2.4.3.  */
+/* A Bison parser, made by GNU Bison 2.5.  */
 
 /* Skeleton interface for Bison LALR(1) parsers in C++
    
-      Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free
-   Software Foundation, Inc.
+      Copyright (C) 2002-2011 Free Software Foundation, Inc.
    
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -39,7 +38,7 @@
 /* "%code requires" blocks.  */
 
 /* Line 35 of lalr1.cc  */
-#line 8440 "../../doc/bison.texinfo"
+#line 9107 "../../doc/bison.texinfo"
 
 # include <string>
 class calcxx_driver;
@@ -47,26 +46,12 @@ class calcxx_driver;
 
 
 /* Line 35 of lalr1.cc  */
-#line 51 "./calc++-parser.hh"
+#line 50 "./calc++-parser.hh"
 
 
 #include <string>
 #include <iostream>
 #include "stack.hh"
-
-
-namespace yy {
-
-/* Line 35 of lalr1.cc  */
-#line 62 "./calc++-parser.hh"
-  class position;
-  class location;
-
-} // yy
-
-/* Line 35 of lalr1.cc  */
-#line 69 "./calc++-parser.hh"
-
 #include "location.hh"
 
 /* Enabling traces.  */
@@ -87,30 +72,11 @@ namespace yy {
 # define YYTOKEN_TABLE 0
 #endif
 
-/* YYLLOC_DEFAULT -- Set CURRENT to span from RHS[1] to RHS[N].
-   If N is 0, then set CURRENT to the empty location which ends
-   the previous symbol: RHS[0] (always defined).  */
-
-#ifndef YYLLOC_DEFAULT
-# define YYLLOC_DEFAULT(Current, Rhs, N)		\
-do {							\
-  if (N)						\
-    {							\
-      (Current).begin = (Rhs)[1].begin;			\
-      (Current).end   = (Rhs)[N].end;			\
-    }							\
-  else							\
-    {							\
-      (Current).begin = (Current).end = (Rhs)[0].end;	\
-    }							\
-} while (false)
-#endif
-
 
 namespace yy {
 
 /* Line 35 of lalr1.cc  */
-#line 114 "./calc++-parser.hh"
+#line 80 "./calc++-parser.hh"
 
   /// A Bison parser.
   class calcxx_parser
@@ -122,7 +88,7 @@ namespace yy {
     {
 
 /* Line 35 of lalr1.cc  */
-#line 8492 "../../doc/bison.texinfo"
+#line 9160 "../../doc/bison.texinfo"
 
   int          ival;
   std::string *sval;
@@ -130,7 +96,7 @@ namespace yy {
 
 
 /* Line 35 of lalr1.cc  */
-#line 134 "./calc++-parser.hh"
+#line 100 "./calc++-parser.hh"
     };
 #else
     typedef YYSTYPE semantic_type;
@@ -219,6 +185,14 @@ namespace yy {
     /// The location stack.
     location_stack_type yylocation_stack_;
 
+    /// Whether the given \c yypact_ value indicates a defaulted state.
+    /// \param yyvalue   the value to check
+    static bool yy_pact_value_is_default_ (int yyvalue);
+
+    /// Whether the given \c yytable_ value indicates a syntax error.
+    /// \param yyvalue   the value to check
+    static bool yy_table_value_is_error_ (int yyvalue);
+
     /// Internal symbol numbers.
     typedef unsigned char token_number_type;
     /* Tables.  */
@@ -226,7 +200,7 @@ namespace yy {
     static const signed char yypact_[];
     static const signed char yypact_ninf_;
 
-    /// For a state, default rule to reduce.
+    /// For a state, default reduction number.
     /// Unless\a  yytable_ specifies something else to do.
     /// Zero means the default is an error.
     static const unsigned char yydefact_[];
@@ -257,10 +231,8 @@ namespace yy {
     static const char* const yytname_[];
 #endif
 
-#if YYERROR_VERBOSE
     /// Convert the symbol name \a n to a form suitable for a diagnostic.
-    virtual std::string yytnamerr_ (const char *n);
-#endif
+    static std::string yytnamerr_ (const char *n);
 
 #if YYDEBUG
     /// A type to store symbol numbers and -1.
@@ -319,7 +291,7 @@ namespace yy {
 } // yy
 
 /* Line 35 of lalr1.cc  */
-#line 323 "./calc++-parser.hh"
+#line 295 "./calc++-parser.hh"
 
 
 

@@ -1,7 +1,6 @@
 # Make bison/src.
 
-# Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-# 2010 Free Software Foundation, Inc.
+# Copyright (C) 2001-2011 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,14 +23,17 @@ LDADD = ../lib/libbison.a $(LIBINTL)
 
 # Use our own Bison to build the parser.  Of course, you ought to
 # keep a sane version of Bison nearby...
-YACC = ../tests/bison -y --warnings=all,error
+YACC = ../tests/bison -y --warnings=all,error --report=all
 
 bin_PROGRAMS = bison
 bin_SCRIPTS = $(YACC_SCRIPT)
 EXTRA_SCRIPTS = yacc
 
 bison_SOURCES =					  \
+	AnnotationList.c AnnotationList.h	  \
+	InadequacyList.c InadequacyList.h	  \
 	LR0.c LR0.h				  \
+	Sbitset.c Sbitset.h			  \
 	assoc.c assoc.h				  \
 	closure.c closure.h			  \
 	complain.c complain.h			  \
@@ -42,9 +44,11 @@ bison_SOURCES =					  \
 	getargs.c getargs.h			  \
 	gram.c gram.h				  \
 	lalr.h lalr.c				  \
+	ielr.h ielr.c				  \
 	location.c location.h			  \
 	main.c					  \
-	muscle_tab.c muscle_tab.h		  \
+	muscle-tab.c muscle-tab.h		  \
+	named-ref.c named-ref.h			  \
 	nullable.c nullable.h			  \
 	output.c output.h			  \
 	parse-gram.h parse-gram.y		  \

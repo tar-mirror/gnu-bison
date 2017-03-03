@@ -1,7 +1,7 @@
 /* Parse command line arguments for bison.
 
-   Copyright (C) 1984, 1986, 1989, 1992, 2000, 2001, 2002, 2003, 2004,
-   2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1986, 1989, 1992, 2000-2011 Free Software
+   Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -106,6 +106,8 @@ enum trace
     trace_time      = 1 << 8,  /**< Time consumption. */
     trace_skeleton  = 1 << 9,  /**< Skeleton postprocessing. */
     trace_m4        = 1 << 10, /**< M4 traces. */
+    trace_muscles   = 1 << 11, /**< M4 definitions of the muscles. */
+    trace_ielr      = 1 << 12, /**< IELR conversion. */
     trace_all       = ~0       /**< All of the above.  */
   };
 /** What debug items bison displays during its run.  */
@@ -121,6 +123,9 @@ enum warnings
     warnings_error            = 1 << 0, /**< Warnings are treated as errors.  */
     warnings_midrule_values   = 1 << 1, /**< Unset or unused midrule values.  */
     warnings_yacc             = 1 << 2, /**< POSIXME.  */
+    warnings_conflicts_sr     = 1 << 3, /**< S/R conflicts.  */
+    warnings_conflicts_rr     = 1 << 4, /**< R/R conflicts.  */
+    warnings_other            = 1 << 5, /**< All other warnings.  */
     warnings_all              = ~warnings_error /**< All above warnings.  */
   };
 /** What warnings are issued.  */
@@ -135,7 +140,10 @@ extern int warnings_flag;
 void getargs (int argc, char *argv[]);
 
 /* Used by parse-gram.y.  */
-void language_argmatch (char const *arg, int prio, location const *loc);
-void skeleton_arg (const char *arg, int prio, location const *loc);
+void language_argmatch (char const *arg, int prio, location loc);
+void skeleton_arg (const char *arg, int prio, location loc);
+
+/** In the string \c s, replace all characters \c from by \c to.  */
+void tr (char *s, char from, char to);
 
 #endif /* !GETARGS_H_ */

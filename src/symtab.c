@@ -1,7 +1,7 @@
 /* Symbol table manager for Bison.
 
-   Copyright (C) 1984, 1989, 2000, 2001, 2002, 2004, 2005, 2006, 2007,
-   2008, 2009, 2010 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989, 2000-2002, 2004-2011 Free Software
+   Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -27,6 +27,13 @@
 #include "complain.h"
 #include "gram.h"
 #include "symtab.h"
+
+/*-------------------------------------------------------------------.
+| Symbols sorted by tag.  Allocated by the first invocation of       |
+| symbols_do, after which no more symbols should be created.         |
+`-------------------------------------------------------------------*/
+
+static symbol **symbols_sorted = NULL;
 
 /*------------------------.
 | Distinguished symbols.  |
@@ -58,6 +65,13 @@ symbol_new (uniqstr tag, location loc)
   symbol *res = xmalloc (sizeof *res);
 
   uniqstr_assert (tag);
+
+  /* If the tag is not a string (starts with a double quote), check
+     that it is valid for Yacc. */
+  if (tag[0] != '\"' && tag[0] != '\'' && mbschr (tag, '-'))
+    yacc_at (loc, _("POSIX Yacc forbids dashes in symbol names: %s"),
+             tag);
+
   res->tag = tag;
   res->location = loc;
 
@@ -150,6 +164,7 @@ semantic_type_redeclaration (semantic_type *s, const char *what, location first,
 }
 
 
+
 /*-----------------------------------------------------------------.
 | Set the TYPE_NAME associated with SYM.  Does nothing if passed 0 |
 | as TYPE_NAME.                                                    |
@@ -167,24 +182,6 @@ symbol_type_set (symbol *sym, uniqstr type_name, location loc)
       sym->type_location = loc;
     }
 }
-
-/*-----------------------------------.
-| Get the CLASS associated with SYM. |
-`-----------------------------------*/
-
-const char *
-symbol_class_get_string (symbol *sym)
-{
-  if (sym->class)
-    {
-      if (sym->class == token_sym)
-	return "terminal";
-      else if (sym->class == nterm_sym)
-	return "nonterminal";
-    }
-  return "unknown";
-}
-
 
 /*-----------------------------------------.
 | Set the DESTRUCTOR associated with SYM.  |
@@ -358,7 +355,7 @@ symbol_user_token_number_set (symbol *sym, int user_token_number, location loc)
 {
   int *user_token_numberp;
 
-  if (sym->user_token_number != USER_NUMBER_ALIAS)
+  if (sym->user_token_number != USER_NUMBER_HAS_STRING_ALIAS)
     user_token_numberp = &sym->user_token_number;
   else
     user_token_numberp = &sym->alias->user_token_number;
@@ -371,10 +368,11 @@ symbol_user_token_number_set (symbol *sym, int user_token_number, location loc)
   if (user_token_number == 0)
     {
       endtoken = sym;
-      endtoken->number = 0;
       /* It is always mapped to 0, so it was already counted in
 	 NTOKENS.  */
-      --ntokens;
+      if (endtoken->number != NUMBER_UNDEFINED)
+        --ntokens;
+      endtoken->number = 0;
     }
 }
 
@@ -407,29 +405,24 @@ symbol_check_defined_processor (void *sym, void *null ATTRIBUTE_UNUSED)
 }
 
 
-/*------------------------------------------------------------------.
-| Declare the new symbol SYM.  Make it an alias of SYMVAL, and type |
-| SYMVAL with SYM's type.                                           |
-`------------------------------------------------------------------*/
-
 void
-symbol_make_alias (symbol *sym, symbol *symval, location loc)
+symbol_make_alias (symbol *sym, symbol *str, location loc)
 {
-  if (symval->alias)
+  if (str->alias)
     warn_at (loc, _("symbol `%s' used more than once as a literal string"),
-	     symval->tag);
+	     str->tag);
   else if (sym->alias)
     warn_at (loc, _("symbol `%s' given more than one literal string"),
 	     sym->tag);
   else
     {
-      symval->class = token_sym;
-      symval->user_token_number = sym->user_token_number;
-      sym->user_token_number = USER_NUMBER_ALIAS;
-      symval->alias = sym;
-      sym->alias = symval;
-      symval->number = sym->number;
-      symbol_type_set (symval, sym->type_name, loc);
+      str->class = token_sym;
+      str->user_token_number = sym->user_token_number;
+      sym->user_token_number = USER_NUMBER_HAS_STRING_ALIAS;
+      str->alias = sym;
+      sym->alias = str;
+      str->number = sym->number;
+      symbol_type_set (str, sym->type_name, loc);
     }
 }
 
@@ -442,46 +435,47 @@ symbol_make_alias (symbol *sym, symbol *symval, location loc)
 static inline void
 symbol_check_alias_consistency (symbol *this)
 {
-  symbol *alias = this;
-  symbol *orig  = this->alias;
+  symbol *sym = this;
+  symbol *str = this->alias;
 
-  /* Check only those that _are_ the aliases.  */
-  if (!(this->alias && this->user_token_number == USER_NUMBER_ALIAS))
+  /* Check only the symbol in the symbol-string pair.  */
+  if (!(this->alias
+        && this->user_token_number == USER_NUMBER_HAS_STRING_ALIAS))
     return;
 
-  if (orig->type_name != alias->type_name)
+  if (str->type_name != sym->type_name)
     {
-      if (orig->type_name)
-	symbol_type_set (alias, orig->type_name, orig->type_location);
+      if (str->type_name)
+	symbol_type_set (sym, str->type_name, str->type_location);
       else
-	symbol_type_set (orig, alias->type_name, alias->type_location);
+	symbol_type_set (str, sym->type_name, sym->type_location);
     }
 
 
-  if (orig->destructor.code || alias->destructor.code)
+  if (str->destructor.code || sym->destructor.code)
     {
-      if (orig->destructor.code)
-	symbol_destructor_set (alias, &orig->destructor);
+      if (str->destructor.code)
+	symbol_destructor_set (sym, &str->destructor);
       else
-	symbol_destructor_set (orig, &alias->destructor);
+	symbol_destructor_set (str, &sym->destructor);
     }
 
-  if (orig->printer.code || alias->printer.code)
+  if (str->printer.code || sym->printer.code)
     {
-      if (orig->printer.code)
-	symbol_printer_set (alias, &orig->printer);
+      if (str->printer.code)
+	symbol_printer_set (sym, &str->printer);
       else
-	symbol_printer_set (orig, &alias->printer);
+	symbol_printer_set (str, &sym->printer);
     }
 
-  if (alias->prec || orig->prec)
+  if (sym->prec || str->prec)
     {
-      if (orig->prec)
-	symbol_precedence_set (alias, orig->prec, orig->assoc,
-			       orig->prec_location);
+      if (str->prec)
+	symbol_precedence_set (sym, str->prec, str->assoc,
+			       str->prec_location);
       else
-	symbol_precedence_set (orig, alias->prec, alias->assoc,
-			       alias->prec_location);
+	symbol_precedence_set (str, sym->prec, sym->assoc,
+			       sym->prec_location);
     }
 }
 
@@ -502,31 +496,11 @@ symbol_check_alias_consistency_processor (void *this,
 static inline bool
 symbol_pack (symbol *this)
 {
+  aver (this->number != NUMBER_UNDEFINED);
   if (this->class == nterm_sym)
-    {
-      this->number += ntokens;
-    }
-  else if (this->alias)
-    {
-      /* This symbol and its alias are a single token defn.
-	 Allocate a tokno, and assign to both check agreement of
-	 prec and assoc fields and make both the same */
-      if (this->number == NUMBER_UNDEFINED)
-	{
-	  if (this == endtoken || this->alias == endtoken)
-	    this->number = this->alias->number = 0;
-	  else
-	    {
-	      aver (this->alias->number != NUMBER_UNDEFINED);
-	      this->number = this->alias->number;
-	    }
-	}
-      /* Do not do processing below for USER_NUMBER_ALIASes.  */
-      if (this->user_token_number == USER_NUMBER_ALIAS)
-	return true;
-    }
-  else /* this->class == token_sym */
-    aver (this->number != NUMBER_UNDEFINED);
+    this->number += ntokens;
+  else if (this->user_token_number == USER_NUMBER_HAS_STRING_ALIAS)
+    return true;
 
   symbols[this->number] = this;
   return true;
@@ -539,7 +513,26 @@ symbol_pack_processor (void *this, void *null ATTRIBUTE_UNUSED)
 }
 
 
+static void
+user_token_number_redeclaration (int num, symbol *first, symbol *second)
+{
+  /* User token numbers are not assigned during the parsing, but in a
+     second step, via a traversal of the symbol table sorted on tag.
 
+     However, error messages make more sense if we keep the first
+     declaration first.  */
+  if (location_cmp (first->location, second->location) > 0)
+    {
+      symbol* tmp = first;
+      first = second;
+      second = tmp;
+    }
+  complain_at (second->location,
+               _("user token number %d redeclaration for %s"),
+               num, second->tag);
+  complain_at (first->location, _("previous declaration for %s"),
+               first->tag);
+}
 
 /*--------------------------------------------------.
 | Put THIS in TOKEN_TRANSLATIONS if it is a token.  |
@@ -550,14 +543,14 @@ symbol_translation (symbol *this)
 {
   /* Non-terminal? */
   if (this->class == token_sym
-      && this->user_token_number != USER_NUMBER_ALIAS)
+      && this->user_token_number != USER_NUMBER_HAS_STRING_ALIAS)
     {
       /* A token which translation has already been set? */
       if (token_translations[this->user_token_number] != undeftoken->number)
-	complain_at (this->location,
-		     _("tokens %s and %s both assigned number %d"),
-		     symbols[token_translations[this->user_token_number]]->tag,
-		     this->tag, this->user_token_number);
+	user_token_number_redeclaration
+          (this->user_token_number,
+           symbols[token_translations[this->user_token_number]],
+           this);
 
       token_translations[this->user_token_number] = this->number;
     }
@@ -671,6 +664,7 @@ symbol_from_uniqstr (const uniqstr key, location loc)
   if (!entry)
     {
       /* First insertion in the hash. */
+      aver (!symbols_sorted);
       entry = symbol_new (key, loc);
       if (!hash_insert (symbol_table, entry))
         xalloc_die ();
@@ -765,6 +759,7 @@ symbols_free (void)
   hash_free (symbol_table);
   hash_free (semantic_type_table);
   free (symbols);
+  free (symbols_sorted);
 }
 
 
@@ -773,12 +768,35 @@ symbols_free (void)
 | terminals.                                                     |
 `---------------------------------------------------------------*/
 
+static int
+symbols_cmp (symbol const *a, symbol const *b)
+{
+  return strcmp (a->tag, b->tag);
+}
+
+static int
+symbols_cmp_qsort (void const *a, void const *b)
+{
+  return symbols_cmp (*(symbol * const *)a, *(symbol * const *)b);
+}
+
 static void
 symbols_do (Hash_processor processor, void *processor_data)
 {
-  hash_do_for_each (symbol_table, processor, processor_data);
+  size_t count = hash_get_n_entries (symbol_table);
+  if (!symbols_sorted)
+    {
+      symbols_sorted = xnmalloc (count, sizeof *symbols_sorted);
+      hash_get_entries (symbol_table, (void**)symbols_sorted, count);
+      qsort (symbols_sorted, count, sizeof *symbols_sorted,
+             symbols_cmp_qsort);
+    }
+  {
+    size_t i;
+    for (i = 0; i < count; ++i)
+      processor (symbols_sorted[i], processor_data);
+  }
 }
-
 
 /*--------------------------------------------------------------.
 | Check that all the symbols are defined.  Report any undefined |

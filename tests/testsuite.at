@@ -1,7 +1,7 @@
 # Test suite for GNU Bison.				-*- Autotest -*-
 
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2006, 2007, 2009, 2010
-# Free Software Foundation, Inc.
+# Copyright (C) 2000-2004, 2006-2007, 2009-2011 Free Software
+# Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,6 +19,9 @@
 
 # Testing resistance to user bugs.
 m4_include([input.at])
+
+# Testing named references.
+m4_include([named-refs.at])
 
 # Testing output file names.
 m4_include([output.at])

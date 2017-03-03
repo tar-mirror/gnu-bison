@@ -1,7 +1,7 @@
 /* Top level entry point of Bison.
 
-   Copyright (C) 1984, 1986, 1989, 1992, 1995, 2000, 2001, 2002, 2004,
-   2005, 2006, 2007, 2009, 2010 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1986, 1989, 1992, 1995, 2000-2002, 2004-2011 Free
+   Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -35,7 +35,8 @@
 #include "getargs.h"
 #include "gram.h"
 #include "lalr.h"
-#include "muscle_tab.h"
+#include "ielr.h"
+#include "muscle-tab.h"
 #include "nullable.h"
 #include "output.h"
 #include "print.h"
@@ -62,6 +63,7 @@ main (int argc, char *argv[])
   (void) textdomain (PACKAGE);
 
   uniqstrs_new ();
+  muscle_init ();
 
   getargs (argc, argv);
 
@@ -71,8 +73,6 @@ main (int argc, char *argv[])
 
   if (trace_flag & trace_bitsets)
     bitset_stats_enable ();
-
-  muscle_init ();
 
   /* Read the input.  Copy some parts of it to FGUARD, FACTION, FTABLE
      and FATTRS.  In file reader.c.  The other parts are recorded in
@@ -97,16 +97,15 @@ main (int argc, char *argv[])
   nullable_compute ();
   timevar_pop (TV_SETS);
 
-  /* Convert to nondeterministic finite state machine.  In file LR0.
-     See state.h for more info.  */
+  /* Compute LR(0) parser states.  See state.h for more info.  */
   timevar_push (TV_LR0);
   generate_states ();
   timevar_pop (TV_LR0);
 
-  /* make it deterministic.  In file lalr.  */
-  timevar_push (TV_LALR);
-  lalr ();
-  timevar_pop (TV_LALR);
+  /* Add lookahead sets to parser states.  Except when LALR(1) is
+     requested, split states to eliminate LR(1)-relative
+     inadequacies.  */
+  ielr ();
 
   /* Find and record any conflicts: places where one token of
      lookahead is not enough to disambiguate the parsing.  In file
@@ -114,8 +113,7 @@ main (int argc, char *argv[])
      declarations.  */
   timevar_push (TV_CONFLICTS);
   conflicts_solve ();
-  muscle_percent_define_default ("lr.keep_unreachable_states", "false");
-  if (!muscle_percent_define_flag_if ("lr.keep_unreachable_states"))
+  if (!muscle_percent_define_flag_if ("lr.keep-unreachable-states"))
     {
       state_number *old_to_new = xnmalloc (nstates, sizeof *old_to_new);
       state_number nstates_old = nstates;

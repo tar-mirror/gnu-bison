@@ -1,7 +1,6 @@
 /* Scan Bison Skeletons.                                       -*- C -*-
 
-   Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2009, 2010
-   Free Software Foundation, Inc.
+   Copyright (C) 2001-2007, 2009-2011 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -59,7 +58,7 @@ static void fail_for_invalid_at (char const *at);
 %%
 
 %{
-  int out_lineno IF_LINT (= 0);
+  int out_lineno PACIFY_CC (= 0);
   char *outname = NULL;
 
   /* Currently, only the @warn, @complain, @fatal, @warn_at, @complain_at, and

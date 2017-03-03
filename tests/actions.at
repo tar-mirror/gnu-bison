@@ -1,7 +1,6 @@
 # Executing Actions.                               -*- Autotest -*-
 
-# Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2009, 2010
-# Free Software Foundation, Inc.
+# Copyright (C) 2001-2011 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -157,6 +156,52 @@ AT_BISON_CHECK([-d -v -o input.c input.y], 0)
 AT_COMPILE([input])
 AT_PARSER_CHECK([./input], 0,
 [[15
+]])
+
+# Make sure that fields after $n or $-n are parsed correctly.  At one
+# point while implementing dashes in symbol names, we were dropping
+# fields after $-n.
+AT_DATA_GRAMMAR([[input.y]],
+[[
+%{
+# include <stdio.h>
+  static int yylex (void);
+  static void yyerror (char const *msg);
+  typedef struct { int val; } stype;
+# define YYSTYPE stype
+%}
+
+%%
+start: one two { $$.val = $1.val + $2.val; } sum ;
+one: { $$.val = 1; } ;
+two: { $$.val = 2; } ;
+sum: { printf ("%d\n", $0.val + $-1.val + $-2.val); } ;
+
+%%
+
+static int
+yylex (void)
+{
+  return 0;
+}
+
+static void
+yyerror (char const *msg)
+{
+  fprintf (stderr, "%s\n", msg);
+}
+
+int
+main (void)
+{
+  return yyparse ();
+}
+]])
+
+AT_BISON_CHECK([[-o input.c input.y]])
+AT_COMPILE([[input]])
+AT_PARSER_CHECK([[./input]], [[0]],
+[[6
 ]])
 
 AT_CLEANUP
@@ -368,11 +413,7 @@ main (int argc, const char *argv[])
 }
 ]])
 
-AT_LALR1_CC_IF(
-  [AT_BISON_CHECK([-o input.cc input.y])
-   AT_COMPILE_CXX([input])],
-  [AT_BISON_CHECK([-o input.c input.y])
-   AT_COMPILE([input])])
+AT_FULL_COMPILE([input])
 
 
 # Check the location of "empty"
@@ -1158,7 +1199,7 @@ AT_DATA_GRAMMAR([[input.y]],
   static int yylex (void);
 # define USE(SYM)
 # define YYLTYPE int
-# define YYLLOC_DEFAULT(Current, Rhs, N)
+# define YYLLOC_DEFAULT(Current, Rhs, N) (void)(Rhs)
 # define YY_LOCATION_PRINT(File, Loc)
 %}
 
@@ -1305,3 +1346,182 @@ AT_CLEANUP])
 AT_CHECK_ACTION_LOCATIONS([[%initial-action]])
 AT_CHECK_ACTION_LOCATIONS([[%destructor]])
 AT_CHECK_ACTION_LOCATIONS([[%printer]])
+
+
+## ----------------------------------------------- ##
+## Fix user actions without a trailing semicolon.  ##
+## ----------------------------------------------- ##
+
+AT_SETUP([[Fix user actions without a trailing semicolon]])
+
+# This feature is undocumented, but we accidentally broke it in 2.3a,
+# and there was a complaint at:
+# <http://lists.gnu.org/archive/html/bug-bison/2008-11/msg00001.html>.
+
+AT_DATA([input.y],
+[[%%
+start: test2 test1 test0 testc;
+
+test2
+: 'a' { semi;			/* TEST:N:2 */ }
+| 'b' { if (0) {no_semi}	/* TEST:N:2 */ }
+| 'c' { if (0) {semi;}		/* TEST:N:2 */ }
+| 'd' { semi;   no_semi		/* TEST:Y:2 */ }
+| 'e' { semi(); no_semi()	/* TEST:Y:2 */ }
+| 'f' { semi[]; no_semi[]	/* TEST:Y:2 */ }
+| 'g' { semi++; no_semi++	/* TEST:Y:2 */ }
+| 'h' { {no_semi} no_semi	/* TEST:Y:2 */ }
+| 'i' { {semi;}   no_semi	/* TEST:Y:2 */ }
+;
+test1
+  : 'a' { semi;			// TEST:N:1 ;
+} | 'b' { if (0) {no_semi}	// TEST:N:1 ;
+} | 'c' { if (0) {semi;}	// TEST:N:1 ;
+} | 'd' { semi;   no_semi	// TEST:Y:1 ;
+} | 'e' { semi(); no_semi()	// TEST:Y:1 ;
+} | 'f' { semi[]; no_semi[]	// TEST:Y:1 ;
+} | 'g' { semi++; no_semi++	// TEST:Y:1 ;
+} | 'h' { {no_semi} no_semi	// TEST:Y:1 ;
+} | 'i' { {semi;}   no_semi	// TEST:Y:1 ;
+} ;
+test0
+  : 'a' { semi;			// TEST:N:1 {}
+} | 'b' { if (0) {no_semi}	// TEST:N:1 {}
+} | 'c' { if (0) {semi;}	// TEST:N:1 {}
+} | 'd' { semi;   no_semi	// TEST:Y:1 {}
+} | 'e' { semi(); no_semi()	// TEST:Y:1 {}
+} | 'f' { semi[]; no_semi[]	// TEST:Y:1 {}
+} | 'g' { semi++; no_semi++	// TEST:Y:1 {}
+} | 'h' { {no_semi} no_semi	// TEST:Y:1 {}
+} | 'i' { {semi;}   no_semi	// TEST:Y:1 {}
+} ;
+
+testc
+: 'a' {
+#define TEST_MACRO_N \
+[]"broken\" $ @ $$ @$ [];\
+string;"}
+| 'b' {
+no_semi
+#define TEST_MACRO_N \
+[]"broken\" $ @ $$ @$ [];\
+string;"}
+]])
+
+AT_BISON_CHECK([[-o input.c input.y]], [0], [],
+[[input.y:8.48: warning: a `;' might be needed at the end of action code
+input.y:8.48: warning: future versions of Bison will not add the `;'
+input.y:9.48: warning: a `;' might be needed at the end of action code
+input.y:9.48: warning: future versions of Bison will not add the `;'
+input.y:10.48: warning: a `;' might be needed at the end of action code
+input.y:10.48: warning: future versions of Bison will not add the `;'
+input.y:11.48: warning: a `;' might be needed at the end of action code
+input.y:11.48: warning: future versions of Bison will not add the `;'
+input.y:12.48: warning: a `;' might be needed at the end of action code
+input.y:12.48: warning: future versions of Bison will not add the `;'
+input.y:13.48: warning: a `;' might be needed at the end of action code
+input.y:13.48: warning: future versions of Bison will not add the `;'
+input.y:20.1: warning: a `;' might be needed at the end of action code
+input.y:20.1: warning: future versions of Bison will not add the `;'
+input.y:21.1: warning: a `;' might be needed at the end of action code
+input.y:21.1: warning: future versions of Bison will not add the `;'
+input.y:22.1: warning: a `;' might be needed at the end of action code
+input.y:22.1: warning: future versions of Bison will not add the `;'
+input.y:23.1: warning: a `;' might be needed at the end of action code
+input.y:23.1: warning: future versions of Bison will not add the `;'
+input.y:24.1: warning: a `;' might be needed at the end of action code
+input.y:24.1: warning: future versions of Bison will not add the `;'
+input.y:25.1: warning: a `;' might be needed at the end of action code
+input.y:25.1: warning: future versions of Bison will not add the `;'
+input.y:31.1: warning: a `;' might be needed at the end of action code
+input.y:31.1: warning: future versions of Bison will not add the `;'
+input.y:32.1: warning: a `;' might be needed at the end of action code
+input.y:32.1: warning: future versions of Bison will not add the `;'
+input.y:33.1: warning: a `;' might be needed at the end of action code
+input.y:33.1: warning: future versions of Bison will not add the `;'
+input.y:34.1: warning: a `;' might be needed at the end of action code
+input.y:34.1: warning: future versions of Bison will not add the `;'
+input.y:35.1: warning: a `;' might be needed at the end of action code
+input.y:35.1: warning: future versions of Bison will not add the `;'
+input.y:36.1: warning: a `;' might be needed at the end of action code
+input.y:36.1: warning: future versions of Bison will not add the `;'
+]])
+
+AT_MATCHES_CHECK([input.c], [[/\* TEST:N:2 \*/ \}$]],       [[3]])
+AT_MATCHES_CHECK([input.c], [[/\* TEST:Y:2 \*/ ;\}$]],      [[6]])
+AT_MATCHES_CHECK([input.c], [[// TEST:N:1 [;{}]*\n\}$]],    [[6]])
+AT_MATCHES_CHECK([input.c], [[// TEST:Y:1 [;{}]*\n;\}$]],  [[12]])
+AT_MATCHES_CHECK([input.c], [[#define TEST_MACRO_N \\\n\[\]"broken\\" \$ \@ \$\$ \@\$ \[\];\\\nstring;"\}]], [[2]])
+
+AT_CLEANUP
+
+
+## -------------------------------------------------- ##
+## Destroying lookahead assigned by semantic action.  ##
+## -------------------------------------------------- ##
+
+AT_SETUP([[Destroying lookahead assigned by semantic action]])
+
+AT_DATA_GRAMMAR([input.y],
+[[
+%code {
+  #include <assert.h>
+  #include <stdio.h>
+  static void yyerror (char const *);
+  static int yylex (void);
+  #define USE(Var)
+}
+
+%destructor { fprintf (stderr, "'a' destructor\n"); } 'a'
+%destructor { fprintf (stderr, "'b' destructor\n"); } 'b'
+
+%%
+
+// In a previous version of Bison, yychar assigned by the semantic
+// action below was not translated into yytoken before the lookahead was
+// discarded and thus before its destructor (selected according to
+// yytoken) was called in order to return from yyparse.  This would
+// happen even if YYACCEPT was performed in a later semantic action as
+// long as only consistent states with default reductions were visited
+// in between.  However, we leave YYACCEPT in the same semantic action
+// for this test in order to show that skeletons cannot simply translate
+// immediately after every semantic action because a semantic action
+// that has set yychar might not always return normally.  Instead,
+// skeletons must translate before every use of yytoken.
+start: 'a' accept { USE($1); } ;
+accept: /*empty*/ {
+  assert (yychar == YYEMPTY);
+  yychar = 'b';
+  YYACCEPT;
+} ;
+
+%%
+
+static void
+yyerror (char const *msg)
+{
+  fprintf (stderr, "%s\n", msg);
+}
+
+static int
+yylex (void)
+{
+  static char const *input = "a";
+  return *input++;
+}
+
+int
+main (void)
+{
+  return yyparse ();
+}
+]])
+
+AT_BISON_CHECK([[-o input.c input.y]])
+AT_COMPILE([[input]])
+AT_PARSER_CHECK([[./input]], [[0]], [],
+[['b' destructor
+'a' destructor
+]])
+
+AT_CLEANUP

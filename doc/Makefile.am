@@ -1,7 +1,6 @@
 ## Process this file with automake to produce Makefile.in -*-Makefile-*-
 
-## Copyright (C) 2001, 2002, 2003, 2005, 2006, 2007, 2008, 2009, 2010
-## Free Software Foundation, Inc.
+## Copyright (C) 2001-2003, 2005-2011 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,9 +26,12 @@ clean-local:
 
 CROSS_OPTIONS_PL = $(top_srcdir)/build-aux/cross-options.pl
 $(srcdir)/cross-options.texi: $(top_srcdir)/src/getargs.c $(CROSS_OPTIONS_PL)
-	-rm -f $@ $@.tmp
+	mv -f $@ $@~ || : >$@~
+	-rm -f $@.tmp
 	cd $(top_builddir)/src && $(MAKE) $(AM_MAKEFLAGS) bison
-	$(top_builddir)/src/bison --help | perl $(CROSS_OPTIONS_PL) >$@.tmp
+	$(top_builddir)/src/bison --help \
+	  | perl $(CROSS_OPTIONS_PL) $(top_srcdir)/src/scan-gram.l >$@.tmp
+	diff -u $@~ $@.tmp || true
 	mv $@.tmp $@
 MAINTAINERCLEANFILES = $(srcdir)/cross-options.texi
 

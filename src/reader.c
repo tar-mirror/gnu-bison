@@ -1,7 +1,7 @@
 /* Input parser for Bison
 
-   Copyright (C) 1984, 1986, 1989, 1992, 1998, 2000, 2001, 2002, 2003,
-   2005, 2006, 2007, 2009, 2010 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1986, 1989, 1992, 1998, 2000-2003, 2005-2007,
+   2009-2011 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -21,6 +21,7 @@
 #include <config.h>
 #include "system.h"
 
+#include <quote.h>
 #include <quotearg.h>
 
 #include "complain.h"
@@ -28,13 +29,14 @@
 #include "files.h"
 #include "getargs.h"
 #include "gram.h"
-#include "muscle_tab.h"
+#include "muscle-tab.h"
 #include "reader.h"
 #include "symlist.h"
 #include "symtab.h"
 #include "scan-gram.h"
 #include "scan-code.h"
 
+static void prepare_percent_define_front_end_variables (void);
 static void check_and_convert_grammar (void);
 
 static symbol_list *grammar = NULL;
@@ -169,7 +171,7 @@ free_merger_functions (void)
 static symbol_list *grammar_end = NULL;
 
 /* Append SYM to the grammar.  */
-static void
+static symbol_list *
 grammar_symbol_append (symbol *sym, location loc)
 {
   symbol_list *p = symbol_list_sym_new (sym, loc);
@@ -185,7 +187,26 @@ grammar_symbol_append (symbol *sym, location loc)
      part of it.  */
   if (sym)
     ++nritems;
+
+  return p;
 }
+
+static void
+assign_named_ref (symbol_list *p, named_ref *name)
+{
+  symbol *sym = p->content.sym;
+
+  if (name->id == sym->tag)
+    {
+      warn_at (name->loc,
+	       _("duplicated symbol name for %s ignored"),
+	       quote (sym->tag));
+      named_ref_free (name);
+    }
+  else
+    p->named_ref = name;
+}
+
 
 /* The rule currently being defined, and the previous rule.
    CURRENT_RULE points to the first LHS of the current rule, while
@@ -199,12 +220,19 @@ static symbol_list *previous_rule_end = NULL;
 `----------------------------------------------*/
 
 void
-grammar_current_rule_begin (symbol *lhs, location loc)
+grammar_current_rule_begin (symbol *lhs, location loc,
+			    named_ref *lhs_name)
 {
+  symbol_list* p;
+
   /* Start a new rule and record its lhs.  */
   ++nrules;
   previous_rule_end = grammar_end;
-  grammar_symbol_append (lhs, loc);
+
+  p = grammar_symbol_append (lhs, loc);
+  if (lhs_name)
+    assign_named_ref (p, named_ref_copy (lhs_name));
+
   current_rule = grammar_end;
 
   /* Mark the rule's lhs as a nonterminal if not already so.  */
@@ -222,22 +250,25 @@ grammar_current_rule_begin (symbol *lhs, location loc)
 /*----------------------------------------------------------------------.
 | A symbol should be used if either:                                    |
 |   1. It has a destructor.                                             |
-|   2. --warnings=midrule-values and the symbol is a mid-rule symbol    |
-|      (i.e., the generated LHS replacing a mid-rule action) that was   |
-|      assigned to or used, as in "exp: { $$ = 1; } { $$ = $1; }".      |
+|   2. The symbol is a mid-rule symbol (i.e., the generated LHS         |
+|      replacing a mid-rule action) that was assigned to or used, as in |
+|      "exp: { $$ = 1; } { $$ = $1; }".                                 |
 `----------------------------------------------------------------------*/
 
 static bool
-symbol_should_be_used (symbol_list const *s)
+symbol_should_be_used (symbol_list const *s, bool *midrule_warning)
 {
   if (symbol_destructor_get (s->content.sym)->code)
     return true;
-  if (warnings_flag & warnings_midrule_values)
-    return ((s->midrule && s->midrule->action_props.is_value_used)
-	    || (s->midrule_parent_rule
-		&& symbol_list_n_get (s->midrule_parent_rule,
-				      s->midrule_parent_rhs_index)
-                     ->action_props.is_value_used));
+  if ((s->midrule && s->midrule->action_props.is_value_used)
+      || (s->midrule_parent_rule
+          && symbol_list_n_get (s->midrule_parent_rule,
+                                s->midrule_parent_rhs_index)
+               ->action_props.is_value_used))
+    {
+      *midrule_warning = true;
+      return true;
+    }
   return false;
 }
 
@@ -281,16 +312,21 @@ grammar_rule_check (const symbol_list *r)
     symbol_list const *l = r;
     int n = 0;
     for (; l && l->content.sym; l = l->next, ++n)
-      if (! (l->action_props.is_value_used
-	     || !symbol_should_be_used (l)
-	     /* The default action, $$ = $1, `uses' both.  */
-	     || (!r->action_props.code && (n == 0 || n == 1))))
-	{
-	  if (n)
-	    warn_at (r->location, _("unused value: $%d"), n);
-	  else
-	    warn_at (r->location, _("unset value: $$"));
-	}
+      {
+        bool midrule_warning = false;
+        if (!l->action_props.is_value_used
+            && symbol_should_be_used (l, &midrule_warning)
+            /* The default action, $$ = $1, `uses' both.  */
+            && (r->action_props.code || (n != 0 && n != 1)))
+          {
+            void (*warn_at_ptr)(location, char const*, ...) =
+              midrule_warning ? midrule_value_at : warn_at;
+            if (n)
+              warn_at_ptr (r->location, _("unused value: $%d"), n);
+            else
+              warn_at_ptr (r->location, _("unset value: $$"));
+          }
+      }
   }
 
   /* See comments in grammar_current_rule_prec_set for how POSIX
@@ -337,6 +373,9 @@ grammar_midrule_action (void)
   symbol *dummy = dummy_symbol_get (dummy_location);
   symbol_list *midrule = symbol_list_sym_new (dummy, dummy_location);
 
+  /* Remember named_ref of previous action. */
+  named_ref *action_name = current_rule->action_props.named_ref;
+
   /* Make a new rule, whose body is empty, before the current one, so
      that the action just read can belong to it.  */
   ++nrules;
@@ -346,7 +385,7 @@ grammar_midrule_action (void)
   code_props_rule_action_init (&midrule->action_props,
                                current_rule->action_props.code,
                                current_rule->action_props.location,
-                               midrule);
+                               midrule, 0);
   code_props_none_init (&current_rule->action_props);
 
   if (previous_rule_end)
@@ -362,7 +401,8 @@ grammar_midrule_action (void)
 
   /* Insert the dummy nonterminal replacing the midrule action into
      the current rule.  Bind it to its dedicated rule.  */
-  grammar_current_rule_symbol_append (dummy, dummy_location);
+  grammar_current_rule_symbol_append (dummy, dummy_location,
+                                      action_name);
   grammar_end->midrule = midrule;
   midrule->midrule_parent_rule = current_rule;
   midrule->midrule_parent_rhs_index = symbol_list_length (current_rule->next);
@@ -421,24 +461,29 @@ grammar_current_rule_merge_set (uniqstr name, location loc)
    action as a mid-rule action.  */
 
 void
-grammar_current_rule_symbol_append (symbol *sym, location loc)
+grammar_current_rule_symbol_append (symbol *sym, location loc,
+				    named_ref *name)
 {
+  symbol_list *p;
   if (current_rule->action_props.code)
     grammar_midrule_action ();
-  grammar_symbol_append (sym, loc);
+  p = grammar_symbol_append (sym, loc);
+  if (name)
+    assign_named_ref(p, name);
 }
 
 /* Attach an ACTION to the current rule.  */
 
 void
-grammar_current_rule_action_append (const char *action, location loc)
+grammar_current_rule_action_append (const char *action, location loc,
+				    named_ref *name)
 {
   if (current_rule->action_props.code)
     grammar_midrule_action ();
   /* After all symbol declarations have been parsed, packgram invokes
      code_props_translate_code.  */
   code_props_rule_action_init (&current_rule->action_props, action, loc,
-                               current_rule);
+                               current_rule, name);
 }
 
 
@@ -573,11 +618,41 @@ reader (void)
   gram_debug = trace_flag & trace_parse;
   gram_scanner_initialize ();
   gram_parse ();
+  prepare_percent_define_front_end_variables ();
 
   if (! complaint_issued)
     check_and_convert_grammar ();
 
   xfclose (gram_in);
+}
+
+static void
+prepare_percent_define_front_end_variables (void)
+{
+  /* Set %define front-end variable defaults.  */
+  muscle_percent_define_default ("lr.keep-unreachable-states", "false");
+  {
+    char *lr_type;
+    /* IELR would be a better default, but LALR is historically the
+       default.  */
+    muscle_percent_define_default ("lr.type", "lalr");
+    lr_type = muscle_percent_define_get ("lr.type");
+    if (0 != strcmp (lr_type, "canonical-lr"))
+      muscle_percent_define_default ("lr.default-reductions", "most");
+    else
+      muscle_percent_define_default ("lr.default-reductions", "accepting");
+    free (lr_type);
+  }
+
+  /* Check %define front-end variables.  */
+  {
+    static char const * const values[] = {
+      "lr.type", "lalr", "ielr", "canonical-lr", NULL,
+      "lr.default-reductions", "most", "consistent", "accepting", NULL,
+      NULL
+    };
+    muscle_percent_define_check_values (values);
+  }
 }
 
 
@@ -593,9 +668,6 @@ check_and_convert_grammar (void)
   if (nrules == 0)
     fatal (_("no rules in the input grammar"));
 
-  /* Report any undefined symbols and consider them nonterminals.  */
-  symbols_check_defined ();
-
   /* If the user did not define her ENDTOKEN, do it now. */
   if (!endtoken)
     {
@@ -605,6 +677,9 @@ check_and_convert_grammar (void)
       /* Value specified by POSIX.  */
       endtoken->user_token_number = 0;
     }
+
+  /* Report any undefined symbols and consider them nonterminals.  */
+  symbols_check_defined ();
 
   /* Find the start symbol if no %start.  */
   if (!start_flag)

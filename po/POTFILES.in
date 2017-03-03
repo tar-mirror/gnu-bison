@@ -3,9 +3,10 @@ src/conflicts.c
 src/files.c
 src/getargs.c
 src/gram.c
+src/graphviz.c
 src/location.c
 src/main.c
-src/muscle_tab.c
+src/muscle-tab.c
 src/parse-gram.y
 src/print.c
 src/reader.c
@@ -21,7 +22,7 @@ lib/bitset_stats.c
 lib/error.c
 lib/getopt.c
 lib/obstack.c
-lib/pipe.c
+lib/spawn-pipe.c
 lib/quotearg.c
 lib/timevar.c
 lib/w32spawn.h

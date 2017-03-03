@@ -1,7 +1,6 @@
 /* Locations for Bison
 
-   Copyright (C) 2002, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free
-   Software Foundation, Inc.
+   Copyright (C) 2002, 2004-2011 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -56,6 +55,19 @@ boundary_set (boundary *b, const char *f, int l, int c)
   b->column = c;
 }
 
+/* Return -1, 0, 1, depending whether a is before, equal, or
+   after b.  */
+static inline int
+boundary_cmp (boundary a, boundary b)
+{
+  int res = strcmp (a.file, b.file);
+  if (!res)
+    res = a.line - b.line;
+  if (!res)
+    res = a.column - b.column;
+  return res;
+}
+
 /* Return nonzero if A and B are equal boundaries.  */
 static inline bool
 equal_boundaries (boundary a, boundary b)
@@ -86,7 +98,20 @@ extern location const empty_location;
 void location_compute (location *loc,
 		       boundary *cur, char const *token, size_t size);
 
-void location_print (FILE *out, location loc);
+/* Print location to file. Return number of actually printed
+   characters.  */
+unsigned location_print (FILE *out, location loc);
+
+/* Return -1, 0, 1, depending whether a is before, equal, or
+   after b.  */
+static inline int
+location_cmp (location a, location b)
+{
+  int res = boundary_cmp (a.start, b.start);
+  if (!res)
+    res = boundary_cmp (a.end, b.end);
+  return res;
+}
 
 /* LOC_STR must be formatted as `file:line.column', it will be modified.  */
 void boundary_set_from_string (boundary *bound, char *loc_str);

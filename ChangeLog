@@ -1,3 +1,803 @@
+2011-05-14  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	Version 2.5.
+	* NEWS (2.5): Set date.
+
+2011-05-14  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	Don't use IF_LINT in Bison sources.
+	It creates unnecessary differences between the sources that Bison
+	maintainers build and test (given that maintainers normally
+	configure with --enable-gcc-warnings) and the sources that Bison
+	users build.  Instead, use PACIFY_CC, which doesn't.  This change
+	fixes compiler warnings reported by Tys Lefering at
+	<http://lists.gnu.org/archive/html/bison-patches/2011-05/msg00004.html>.
+	* configure.ac: Don't AC_DEFINE lint regardless of the configure
+	options.  This change affects imported gnulib sources, where
+	IF_LINT still appears and depends on lint.
+	* src/scan-gram.l, src/scan-skel.l: Replace uses of IF_LINT with
+	PACIFY_CC.
+	* src/system.h (IF_LINT): Remove cpp macro.
+	(PACIFY_CC): New cpp macro.
+
+2011-05-01  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	Fix precedence for end token.
+	Since Bison 2.3b, which restored the ability of precedence
+	directives to assign user token numbers, doing so for user token
+	number 0 has produced an assertion failure.
+	* NEWS (2.5): Document fix.
+	* src/symtab.c (symbol_user_token_number_set): In the case of the
+	end token, don't decrement ntokens if it was never incremented.
+	* tests/regression.at (Token number in precedence declaration):
+	Extend.
+
+2011-05-01  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	Prepare for 2.5 release.
+	* NEWS (2.5_rc1): Rename back to...
+	(2.5): ... this, and unset date.
+
+2011-05-01  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	Version 2.5_rc1.
+	* NEWS (2.5): Rename to...
+	(2.5_rc1): ... this, and set date.
+
+2011-05-01  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	Pacify -DGNULIB_POSIXCHECK.
+	* bootstrap.conf (gnulib_modules): Add all modules suggested by
+	-DGNULIB_POSIXCHECK.
+	* src/files.c (file_name_split)
+	* src/getargs.c (getargs)
+	* src/location.c (boundary_set_from_string)
+	* src/output.c (token_definitions_output, output_skeleton)
+	* src/parse-gram.y (prologue_declaration)
+	* src/scan-gram.l (handle_syncline)
+	* src/symtab.c (symbol_new): Use mbschr and mbsrchr instead of
+	strchr and strrchr.  In the cases of command-line options, file
+	names, and thus locations, functionality may be improved.  In the
+	case of symbol names, there should be no functional difference as
+	all characters are ASCII, so the intended benefit is just warning
+	suppression.
+
+2011-05-01  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	* NEWS (2.5): Fix minor typos.
+
+2011-05-01  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	doc: clean up quotation style in NEWS.
+	* NEWS (2.5): For multi-character tokens in example grammar rules,
+	use "token" not 'token'.  In English, use a consistent quotation
+	style; we might as well follow the precedent seen in info pages:
+	`quote' not "quote".
+
+2011-04-16  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	tests: pacify gcc 4.6.0's -Wunused-but-set-variable.
+	Reported by Jim Meyering at
+	<http://lists.gnu.org/archive/html/bug-bison/2011-04/msg00002.html>.
+	* tests/actions.at
+	(Default %printer and %destructor for mid-rule values): Define
+	YYLLOC_DEFAULT so that it uses its Rhs argument.
+
+2011-04-16  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	glr.c: omit yyresolveLocations when locations are disabled.
+	This prevents gcc 4.6.0's -Wunused-but-set-variable from warning
+	about yyresolveLocations's local yyrhsloc.  When locations are
+	enabled, there's no such warning because YYLLOC_DEFAULT then uses
+	yyrhsloc.  Reported by Jim Meyering at
+	<http://lists.gnu.org/archive/html/bug-bison/2011-04/msg00002.html>.
+	* data/glr.c (yyresolveLocations): Omit definition when locations
+	are disabled.
+	(yyresolveValue): Omit yyresolveLocations invocation when
+	locations are disabled.
+
+2011-04-16  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	gnulib, autoconf: update.
+	* README-hacking (Updating a submodule): Give advice on how to
+	determine the versions of gnulib and autoconf to which we should
+	update.
+	(Release Procedure): Note that submodules should be updated.
+	* bootstrap.conf (gnulib_modules): Rename pipe to spawn-pipe as
+	suggested in updated gnulib NEWS.
+	* gnulib: Choose a stable snapshot according to advice in Bison's
+	README-hacking.
+	* po/POTFILES.in (lib/pipe.c): Rename to...
+	(lib/spawn-pipe.c): ... this.
+	* src/output.c: Update to include spawn-pipe.h.
+	* submodules/autoconf: Update to latest for improvement in m4.m4
+	that excludes M4 with buggy strstr.  The only other changes to
+	files that we use are copyright updates.
+
+2011-04-09  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	Fix missing updates to GPLv3.
+	Reported by Tys Lefering at
+	<http://lists.gnu.org/archive/html/bison-patches/2011-04/msg00000.html>.
+	* src/print-xml.c, src/print-xml.h: In these files.
+
+2011-03-27  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	Add -Wconflicts-sr and -Wconflicts-rr.
+	Thus, conflict reports are now affected by -Werror and -Wnone
+	(unless %expect or %expect-rr is specified).  Reported by George
+	Neuner at
+	<http://lists.gnu.org/archive/html/bug-bison/2010-08/msg00002.html>.
+	* NEWS (2.5): Document.
+	* doc/bison.texinfo (Bison Options): Document.
+	* src/complain.c, src/complain.h (set_warning_issued): Export
+	function.
+	* src/conflicts.c (conflicts_print): Suppress conflict report
+	based on -Wno-conflicts-sr and -Wno-conflicts-rr, and treat
+	conflicts as errors if -Werror.
+	* src/getargs.c (warnings_flag): Initialize with
+	warnings_conflicts_sr and warnings_conflicts_rr as well.
+	(warnings_args, warnings_types): Add entries for
+	warnings_conflicts_sr and warnings_conflicts_rr.
+	(usage): Update.
+	* src/getargs.h (enum warnings): Add entries for
+	warnings_conflicts_sr and warnings_conflicts_rr.
+	* tests/conflicts.at (-W versus %expect and %expect-rr): New test
+	group.
+	* tests/local.at (AT_BISON_CHECK_NO_XML): Update now that the
+	conflict report can produce a "warnings being treated as errors"
+	message.  Also, check that stderr is now fully scrubbed by -Wnone
+	when the exit status is 0.
+
+2011-03-27  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	Pacify maintainer-check-posix.
+	Adding command-line options after the grammar file name is not
+	permitted, so disable checks that do that when
+	maintainer-check-posix is running.
+	* tests/local.at (AT_BISON_CHECK_NO_XML): Don't run the
+	problematic checks when POSIXLY_CORRECT=1.  Also, for readability,
+	remove an unnecessary m4_if.
+
+2011-03-27  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	Add -Wother so -Wnone suppresses all warnings.
+	Reported by George Neuner at
+	<http://lists.gnu.org/archive/html/bug-bison/2010-08/msg00002.html>.
+	* NEWS (2.5): Document.
+	* THANKS (George Neuner): Add.
+	* doc/bison.texinfo (Bison Options): Document.
+	* src/complain.c, src/complain.h
+	(warn_at, warn_at_indent, warn): Suppress warning if -Wno-other.
+	(midrule_value_at): New warning function, similar to yacc_at in
+	that it's controlled by its own warning category.
+	* src/getargs.c (warnings_flag): Initialize to warnings_other.
+	(warnings_args, warnings_types): Add entry for warnings_other.
+	(usage): Update.
+	* src/getargs.h (enum warnings): Add entry for warnings_other.
+	* src/gram.c (grammar_rules_useless_report): If -Wno-other, then
+	don't print useless rules.
+	* src/reader.c (symbol_should_be_used): Rather than adjusting the
+	return value based on whether midrule value warnings are enabled,
+	accept a new parameter for telling the caller whether true is
+	being returned for a potential midrule warning.
+	(grammar_rule_check): Use midrule_value_at for midrule value
+	warnings, and continue to use warn_at for all other warnings.  Let
+	them check whether the warnings are enabled.
+	* tests/local.at (AT_BISON_CHECK): Update documentation.
+	(AT_BISON_CHECK_NO_XML): Check that -Wnone and --warnings=none
+	disable all warnings exercised in the test suite.
+
+2011-03-27  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	Don't let -Wnone disable -Werror.
+	Discussed at
+	<http://lists.gnu.org/archive/html/bison-patches/2010-08/msg00009.html>.
+	* NEWS (2.5): Document.
+	* src/getargs.c (flags_argmatch): Accept a new argument that
+	specifies what flags "all" and thus "none" affect.
+	(FLAGS_ARGMATCH): Update flags_argmatch invocation.
+	* tests/input.at (-Werror is not affected by -Wnone and -Wall):
+	New test group.
+
+2011-03-27  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	* NEWS (2.5): Document fix for -Wno-CATEGORY.
+
+2008-11-21  Di-an Jan  <dianj@freeshell.org>
+
+	Implement no-XXX arguments for --warnings, --report, --trace.
+	* src/getargs.c (flags_argmatch): Handles no-XXX.
+	Fix typo in doxygen comment.
+
+2011-03-20  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	doc: fix confusing citation of LAC publication.
+	Suggested by Akim Demaille.
+	* doc/bison.texinfo (LAC): Here.
+
+2011-03-20  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	lr.default-reductions: rename "full" value to "most".
+	Unlike "consistent" and "accepting", "full" doesn't answer the
+	question of "which states".
+	* doc/bison.texinfo (%define Summary): Update.
+	(Default Reductions): Update.
+	* src/print.c (print_reductions): Update.
+	* src/reader.c (prepare_percent_define_front_end_variables):
+	Update.
+	* src/tables.c (action_row): Update.
+	* tests/input.at (%define enum variables): Update.
+	* tests/reduce.at (%define lr.default-reductions): Update.
+
+2011-03-13  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	* src/parse-gram.c, src/parse-gram.h: Regenerate.
+
+2011-03-09  Akim Demaille  <akim@lrde.epita.fr>
+
+	named references: fix double free.
+	In `rhs[name]: "a" | "b"', do not free "name" twice.
+	Reported by Tys Lefering.
+	<http://lists.gnu.org/archive/html/bug-bison/2010-06/msg00002.html>
+	* src/named-ref.h, src/named-ref.c (named_ref_copy): New.
+	* src/parse-gram.y (current_lhs): Rename as...
+	(current_lhs_symbol): this.
+	(current_lhs): New function.  Use it to free the current lhs
+	named reference.
+	* src/reader.c: Bind lhs to a copy of the current named reference.
+	* src/symlist.c: Rely on free (0) being valid.
+	* tests/named-refs.at: Test this.
+
+2011-03-09  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: style changes.
+	* tests/named-refs.at (Redundant words in LHS brackets)
+	(Unresolved references): here.
+
+2011-03-06  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	java: fix parser tracing bug.
+	* NEWS (2.5): Document.
+	* data/lalr1.java (YYParser::YYStack::print): Don't skip top
+	element.
+
+2011-03-06  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	java: finish fixing parser stack popping bug.
+	* NEWS (2.5): Document.
+	* data/lalr1.java (YYParser::YYStack::pop): Fix off-by-one error
+	in clearing the location stack.  Also fix pop function that
+	accepts no arguments.
+
+2011-03-06  Angelo Borsotti  <angelo.borsotti@gmail.com>  (tiny change)
+
+	java: fix parser stack popping bug.
+	Reported at
+	<http://lists.gnu.org/archive/html/bug-bison/2011-02/msg00005.html>.
+	* THANKS (Angelo Borsotti): Add.
+	* data/lalr1.java (YYParser::YYStack::pop): Fix off-by-one error
+	in clearing the value stack.  Previously, the top element of the
+	stack wasn't cleared and so the value was not garbage collected.
+
+2011-03-06  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	doc: cite publication for LAC.
+	* doc/bison.texinfo (LAC): Here.
+
+2011-03-06  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	doc: clean up terminology for mysterious conflicts.
+	* doc/bison.texinfo (Mystery Conflicts): Rename node to...
+	(Mysterious Conflicts): ... this, which is already the section
+	title and the name used in the index.  Update all cross-references
+	to this node.  Also, don't imply that R/R conflicts are the only
+	kind of mysterious conflict.
+
+2011-03-06  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	lr.default-reductions: rename "all" value to "full".
+	States that shift the error token do not have default reductions,
+	and GLR disables some default reductions, so "all" was a misnomer.
+	* doc/bison.texinfo (%define Summary): Update.
+	(Default Reductions): Update.
+	* src/print.c (print_reductions): Update.
+	* src/reader.c (prepare_percent_define_front_end_variables):
+	Update.
+	* src/tables.c (action_row): Update.
+	* tests/input.at (%define enum variables): Update.
+	* tests/reduce.at (%define lr.default-reductions): Update.
+
+2011-03-06  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	doc: create a new Tuning LR section in the manual.
+	And clean up all other documentation of the features described
+	there.
+	* NEWS (2.5): Tweak wording of lr.type and parse.lac entries a
+	bit, update the cross-references to the manual, and point out that
+	LAC has caveats.  Don't be so adamant that IELR+LAC=canonical LR.
+	That is, as the referenced section in the manual documents, LAC
+	does not fix infinite parsing loops on syntax errors.
+	* doc/bison.texinfo: Consistently drop the "(1)" suffix from LALR,
+	IELR, and LR in @cindex.
+	(%define Summary): Condense the entries for lr.default-reductions,
+	lr.keep-unreachable-states, lr.type, and parse.lac into brief
+	summaries, and cross-reference the appropriate subsections of
+	Tuning LR.  For parse.lac, mention that it's only implemented for
+	deterministic parsers in C.
+	(Error Reporting): When mentioning %error-verbose, mention LAC,
+	and add cross-reference to the LAC section.
+	(Tuning LR): New section with an extended version of the
+	documentation removed from %define Summary.  Change all
+	cross-references in the manual to point here instead of there.
+	(Calc++ Parser): When mentioning %error-verbose, mention LAC, and
+	add cross-reference to the LAC section.
+	(Table of Symbols): In %error-verbose and YYERROR_VERBOSE entries,
+	add cross-references to Error Reporting.
+	(Glossary): Capitalize entry titles consistently.  Add definitions
+	for "defaulted state" and "unreachable state".  Expand IELR
+	acronym in IELR's entry.
+
+2011-02-20  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	doc: add bibliography to manual.
+	* doc/bison.texinfo (Mystery Conflicts): Cross-reference
+	bibliography instead of citing publications directly.
+	(Generalized LR Parsing): Likewise.
+	(Bibliography): New section.  Not all entries are cross-referenced
+	yet, but that will come in future patches.
+
+2011-02-19  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	java: test and document previous bug fix.
+	* NEWS (2.5): Document it.
+	* tests/java.at (_AT_DATA_JAVA_CALC_Y): To one of the yyerror
+	invocations, pass a location that spans multiple tokens.  Change
+	yyerror to report all of a location rather than just the begin
+	position.  Extend yylex and Position to count tokens on a line.
+	Remove getHashCode as it's unused.  Update all expected output.
+
+2011-02-19  Bernd Kiefer  <kiefer@dfki.de>  (tiny change)
+
+	java: fix location handling bug.
+	Reported at
+	<http://lists.gnu.org/archive/html/bison-patches/2011-02/msg00005.html>.
+	* data/lalr1.java (YYParser::yylloc): For non-empty RHS, fix
+	reversed access to location stack.
+	* THANKS (Bernd Kiefer): Add.
+
+2010-05-11  Akim Demaille  <demaille@gostai.com>
+
+	doc: please Emacs.
+	* doc/bison.texinfo (Local Variables): Move this after the
+	LocalWords, since the latter are looked for in the whole document,
+	while the former are looked for only at its end.
+	Require american spell checking.
+
+2011-02-06  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	doc: clean up new subsections in manual.
+	* doc/bison.texinfo (%define Summary): Reword so it reads well as
+	a separate section.  For example, add an intro, and move most of
+	the text outside of the @deffn so it is not indented so far.
+	(%code Summary): Likewise.
+	(Table of Symbols): Reword %code entry to match the %code entry in
+	Decl Summary.
+
+2011-02-06  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	doc: finish splitting apart the manual's Decl Summary section.
+	Suggested by Akim Demaille at
+	<http://lists.gnu.org/archive/html/bison-patches/2009-05/msg00013.html>.
+	* doc/bison.texinfo (Decl Summary): Extract most of the %define
+	entry into...
+	(%define Summary): ... this new subsection, and update all
+	cross-references.  For readability of the patches, rewriting of
+	the text so it makes sense as a separate subsection will come in a
+	later patch.  Moreover, the majority of the text describing the
+	various new LR features should likely move to another new section
+	somewhere.
+
+2011-02-06  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	doc: begin to split apart the manual's Decl Summary section.
+	Discussed in thread starting at
+	<http://lists.gnu.org/archive/html/bison-patches/2009-05/msg00013.html>.
+	* doc/bison.texinfo (Decl Summary): Extract most of the %code
+	entry into...
+	(%code Summary): ... this new subsection, and update all
+	cross-references.  For readability of the patches, rewriting of
+	the text so it makes sense as a separate subsection will come in a
+	later patch.
+
+2011-02-06  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	doc: clean up naming of various Bison files.
+	The Bison manual's names for various files associated with a Bison
+	parser has devolved into inconsistency.  This patch makes the
+	naming consistent for the most important files.  First, it chooses
+	"grammar file" over "input file".  The former appears to be more
+	traditional in the Bison manual, and Bison has other input
+	files (skeletons).  Second, it chooses "parser implementation
+	file" over names like "parser file", "parser source file", "parser
+	source code file", and "parser output file".  The new name makes
+	it clearer where Bison generates the main parser implementation,
+	and it is easily distinguishable from "parser header file".
+	* doc/bison.texinfo: Implement throughout.
+
+2011-02-06  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	doc: give credit to more of Bison's developers.
+	* doc/bison.texinfo (Introduction): Don't imply that only Robert
+	Corbett, Richard Stallman, and Wilfred Hansen have contributed to
+	Bison.  However, I don't have time to write a full history, so
+	just point readers to THANKS and ChangeLog.
+
+2011-02-06  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	doc: document experimental features better.
+	* doc/bison.texinfo (Introduction): Say that IELR(1) and canonical
+	LR(1) are experimental.  Mention Java.  Normally experimental
+	features probably shouldn't be mentioned in the introduction.
+	However, if Bison's limitations to LALR(1), C, and C++ are so
+	important that they should be mentioned here, then it's important
+	to point out that Bison is beginning to escape those limitations.
+	Moreover, these particular experimental features have very little
+	chance of being removed.
+	* src/getargs.c (usage): Say that IELR(1) and canonical LR(1) are
+	experimental.
+
+2011-01-29  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	Do not allow identifiers that start with a dash.
+	This cleans up our previous fixes for a bug whereby Bison
+	discarded `.field' in `$-1.field'.  The previous fixes were less
+	restrictive about where a dash could appear in an identifier, but
+	the restrictions were hard to explain.  That bug was reported and
+	this final fix was originally suggested by Paul Hilfinger.  This
+	also fixes a remaining bug reported by Paul Eggert whereby Bison
+	parses `%token ID -123' as `%token ID - 123' and handles `-' as an
+	identifier.  Now, `-' cannot be an identifier.  Discussed in
+	threads beginning at
+	<http://lists.gnu.org/archive/html/bug-bison/2011-01/msg00000.html>,
+	<http://lists.gnu.org/archive/html/bug-bison/2011-01/msg00004.html>.
+	* NEWS (2.5): Update entry describing the dash extension to
+	grammar symbol names.  Also, move that entry before the named
+	references entry because the latter mentions the former.
+	* doc/bison.texinfo (Symbol): Update documentation for symbol
+	names.  As suggested by Paul Eggert, mention the effect of periods
+	and dashes on named references.
+	(Decl Summary): Update documentation for unquoted %define values,
+	which, as a side effect, can no longer start with dashes either.
+	* src/scan-code.l (id): Implement.
+	* src/scan-gram.l (id): Implement.
+	* tests/actions.at (Exotic Dollars): Extend test group to exercise
+	bug reported by Paul Hilfinger.
+	* tests/input.at (Symbols): Update test group, and extend to
+	exercise bug reported by Paul Eggert.
+	* tests/named-refs.at (Stray symbols in brackets): Update test
+	group.
+	($ or @ followed by . or -): Likewise.
+	* tests/regression.at (Invalid inputs): Likewise.
+
+2011-01-24  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	* data/yacc.c: Fix last apostrophe warning from xgettext.
+
+2011-01-09  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Fix minor problems encountered by a fresh bootstrap.
+	* data/glr.c, data/yacc.c: Do not use apostrophes in '#' comments,
+	as they confuse xgettext, which tries to parse them as C character
+	constants in a preprocessor directive.
+	* data/yacc.c (yy_lac): Don't use printf %d format on *yyesp, as
+	that expression might not promote to int on some platforms.
+	* src/parse-gram.c, src/parse-gram.h: Regenerate.
+
+2011-01-09  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	Improve error messages for `$' or `@' followed by `.' or `-'.
+	Previously, for this special case of an invalid reference, the
+	usual "symbol not found in production:" was printed.  However,
+	because the symbol name was parsed as the empty string, that
+	message was followed immediately by a newline instead of a symbol
+	name.  In reality, this is a syntax error, so the reference is
+	invalid regardless of the symbols actually appearing in the
+	production.  Discussed at
+	<http://lists.gnu.org/archive/html/bison-patches/2011-01/msg00012.html>.
+	* src/scan-code.l (parse_ref): Report the above case as a syntax
+	error.  Other than that, continue to handle this case like any
+	other invalid reference that Bison manages to parse because
+	"possibly meant" messages can still be helpful to the user.
+	* tests/named-refs.at ($ or @ followed by . or -): New test group.
+
+2011-01-08  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	doc: don't use @acronym.
+	Lately, many GNU packages are dropping it.  See
+	<http://lists.gnu.org/archive/html/bison-patches/2011-01/msg00003.html>.
+	* doc/bison.texinfo: Remove all uses.
+
+2011-01-05  Alex Rozenman  <rozenman@gmail.com>
+
+	Do not allow identifiers that start with a negative number.
+	Reported by Paul Hilfinger as a side effect of named references
+	support at
+	<http://lists.gnu.org/archive/html/bug-bison/2011-01/msg00000.html>.
+	Suggested by Paul Eggert.
+	* src/scan-code.l ({letter}, {id}): Adjust lexical definitions.
+	* src/scan-gram.l ({letter}, {id}): Likewise.
+
+2011-01-03  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	* ChangeLog (2011-01-02): improve description.
+
+2011-01-03  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	maint: don't update copyright years in bootstrap.
+	* .x-update-copyright: Add entry for bootstrap.
+	* bootstrap: Remove 2011 from copyright years.  The bootstrap
+	version we're currently using comes from an older version of
+	gnulib.
+	* bootstrap.conf (bootstrap_sync): Add comments explaining this
+	issue.
+
+2011-01-02  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	maint: run "make update-copyright".
+
+2011-01-02  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	maint: prepare to use year ranges in copyright notices.
+	* README (Copyright statements): New section explaining the range
+	notation.  The GNU maintainers document requires this explanation:
+	<http://www.gnu.org/prep/maintain/maintain.html#Copyright-Notices>.
+	I copied our explanation from coreutils.
+	* build-aux/update-b4-copyright: Revert 2010-06-17 changes that
+	disabled Bison's automated use of ranges.
+	* cfg.mk (update-copyright-env): Likewise.
+
+2011-01-02  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	Correct my email address.
+	* ChangeLog: In all recent entries.
+	* THANKS (Joel E. Denny): Here.
+
+2010-12-19  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	doc: cleanup.
+	* NEWS (2.5): Try to sort entries according to how interesting
+	users might find them.
+
+2010-12-19  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	doc: cleanup.
+	* NEWS (2.5): Make some minor improvements to wording, and format
+	entries more consistently.
+	* doc/bison.texinfo (Language and Grammar): Point out that IELR
+	and canonical LR are experimental features.
+	(Decl Summary): In list of %define variables, make wording more
+	consistent.  Improve discussion of using LALR for GLR.
+
+2010-12-19  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	parse.lac: document.
+	* NEWS (2.5): Add entry for LAC, and mention LAC in entry for
+	other corrections to verbose syntax error messages.
+	* doc/bison.texinfo (Decl Summary): Rewrite entries for
+	lr.default-reductions and lr.type to be clearer, to mention
+	%nonassoc's effect on canonical LR, and to mention LAC.  Add entry
+	for parse.lac.
+	(Glossary): Add entry for LAC.
+
+2010-12-11  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	parse.lac: implement exploratory stack reallocations.
+	* data/yacc.c: Rename %define variable parse.lac.es-capacity to
+	parse.lac.es-capacity-initial.  Accept parse.lac.memory-trace
+	with values of "failures" (default) or "full".
+	(b4_declare_parser_state_variables): Add yyesa, yyes, and
+	yyes_capacity variables.
+	(YYSTACK_USE_ALLOCA): Ignore it if LAC requested.
+	(YYSTACK_ALLOC, YYSTACK_FREE, YYSTACK_ALLOC_MAXIMUM): Define if
+	LAC requested.
+	(YYCOPY_NEEDED): New cpp macro.
+	(YYCOPY): Define if LAC requested.
+	(yy_lac_stack_realloc): New function implementing stack
+	reallocations.  Use YYMAXDEPTH for maximum stack size given that
+	the stack should never need to grow larger than the main state
+	stack needs to grow without LAC.
+	(YY_LAC_ESTABLISH): Update yy_lac invocation.
+	(yy_lac): Add arguments for exploratory stack memory data
+	recorded in the main parser.  Invoke yy_lac_stack_realloc when
+	reallocation is necessary.
+	(yysyntax_error): Add the same new arguments and pass them to
+	yy_lac.
+	(yypstate_delete): Free yyes if necessary.
+	(yyesa, yyes, yyes_capacity): #define these to yypstate members
+	in the case of push parsing.
+	(yyparse, yypush_parse): Initialize yyes and yyes_capacity.
+	Update yysyntax_error invocations.  At yyreturn, free yyes if
+	necessary.
+	* src/parse-gram.y: %define parse.lac full.
+	* tests/input.at (LAC: errors for %define): Extend for
+	parse.lac-memory-trace.
+	* tests/regression.at (LAC: Exploratory stack): Extend to check
+	that stack reallocs happen when expected.
+	(LAC: Memory exhaustion): Update to use YYMAXDEPTH and
+	parse.lac.es-capacity-initial.
+
+2010-12-11  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	parse.lac: implement as %define variable.
+	LAC = lookahead correction.  See discussion at
+	<http://lists.gnu.org/archive/html/bison-patches/2009-09/msg00034.html>.
+	However, one point there must be corrected: because of %nonassoc,
+	LAC is *not* always redundant for lr.type=canonical-lr.
+	* data/yacc.c: Accept values of "none" (default) or "full" for
+	parse.lac.  Accept %define parse.lac.es-capacity to specify
+	capacity of LAC's temporary exploratory stack.  It defaults to 20
+	and, for now, will not grow dynamically.
+	(b4_lac_flag, b4_lac_if): New m4 macros.  Evaluate as true for
+	parse.lac!=none.
+	(YYBACKUP): Invoke YY_LAC_DISCARD.
+	(YY_LAC_ESTABLISH, YY_LAC_DISCARD): New cpp macros that invoke
+	yy_lac and track when it needs to be invoked
+	(yy_lac): New function that, given the current stack, determines
+	whether a token can eventually be shifted.  Return status mimics
+	yyparse return status.
+	(yysyntax_error): Change yystate argument to yyssp so stack top
+	can be passed to yy_lac.  If LAC is requested, build expected
+	token list by invoking yy_lac for every token instead of just
+	checking the current state for lookaheads.  Return 2 if yy_lac
+	exhausts memory.
+	(yyparse, yypush_parse): Use local variable yy_lac_established and
+	cpp macros YY_LAC_ESTABLISH and YY_LAC_DISCARD to implement LAC.
+	Update yysyntax_error invocation.  Add yyexhaustedlab code if LAC
+	is requested.
+	* tests/conflicts.at (%nonassoc and eof): Extend to check the
+	effect of each of -Dlr.type=canonical-lr and -Dparse.lac=full.
+	(%error-verbose and consistent errors): Likewise.
+	(LAC: %nonassoc requires splitting canonical LR states): New test
+	group demonstrating how LAC can fix canonical LR.
+	* tests/input.at (LAC: Errors for %define): New test group.
+	* tests/regression.at (LAC: Exploratory stack): New test group.
+	(LAC: Memory exhaustion): New test group.
+
+2010-11-21  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	build: use gnulib's new bootstrap_sync option.
+	Now, whenever we update bison's copy of gnulib, bootstrap will
+	update itself the next time it's run.
+	* bootstrap: Copy from latest gnulib for bootstrap_sync support.
+	* bootstrap.conf (bootstrap_sync): Set to true.
+	* gnulib: Update to latest so bootstrap is in sync now.
+
+2010-11-07  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	yysyntax_error: adjust prior fixes for branch-2.5's lalr1.cc.
+	On master, there is no yychar in lalr1.cc, but there is on
+	branch-2.5, and the prior cherry-pick of "Fix handling of yychar
+	manipulation in user semantic actions" wasn't adjusted for that
+	difference.
+	* data/lalr1.cc (yy::parser::parse): Translate yychar before
+	every use of yytoken, and add comments explaining this approach.
+	* tests/conflicts.at (%error-verbose and consistent errors):
+	Extend to test yychar manipulation with lalr1.cc.
+
+2010-11-07  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	yysyntax_error: fix for consistent error with lookahead.
+	* NEWS (2.5): Document.
+	* data/yacc.c (yysyntax_error): In a verbose syntax error
+	message while in a consistent state with a default action (which
+	must be an error action given that yysyntax_error is being
+	invoked), continue to drop the expected token list, but don't
+	drop the unexpected token unless there actually is no lookahead.
+	Moreover, handle that internally instead of returning 1 to tell
+	the caller to do it.  With that meaning of 1 gone, renumber
+	return codes more usefully.
+	(yyparse, yypush_parse): Update yysyntax_error usage.  Most
+	importantly, set yytoken to YYEMPTY when there's no lookahead.
+	* data/glr.c (yyreportSyntaxError): As in yacc.c, don't drop the
+	unexpected token unless there actually is no lookahead.
+	* data/lalr1.cc (yy::parser::parse): If there's no lookahead,
+	set yytoken to yyempty_ before invoking yysyntax_error_.
+	(yy::parser::yysyntax_error_): Again, don't drop the unexpected
+	token unless there actually is no lookahead.
+	* data/lalr1.java (YYParser::parse): If there's no lookahead,
+	set yytoken to yyempty_ before invoking yysyntax_error.
+	(YYParser::yysyntax_error): Again, don't drop the unexpected
+	token unless there actually is no lookahead.
+	* tests/conflicts.at (%error-verbose and consistent
+	errors): Extend test group to further reveal how the previous
+	use of the simple "syntax error" message was too general.  Test
+	yacc.c, glr.c, lalr1.cc, and lalr1.java.  No longer an expected
+	failure.
+	* tests/java.at (AT_JAVA_COMPILE, AT_JAVA_PARSER_CHECK): Move
+	to...
+	* tests/local.at: ... here.
+	(_AT_BISON_OPTION_PUSHDEFS): Push AT_SKEL_JAVA_IF definition.
+	(AT_BISON_OPTION_POPDEFS): Pop it.
+	(AT_FULL_COMPILE): Extend to handle Java.
+
+2010-11-07  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	yysyntax_error: more preparation for readability of next patch.
+	There are no behavioral changes here.
+	* data/glr.c (yyreportSyntaxError): Reorganize.
+	* data/lalr1.cc (yy::parser::yysyntax_error_): Reorganize.
+	* tests/conflicts.at (%error-verbose and consistent errors):
+	Reorganize.
+
+2010-11-07  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	yysyntax_error: prepare for readability of next patches.
+	These are purely whitespace changes that result in ugly code
+	but that make the next couple of patches much easier to read.
+	* data/glr.c (yyreportSyntaxError): Reindent.
+	* data/lalr1.cc (yy::parser::yysyntax_error_): Reindent.
+	* data/lalr1.java (YYParser::yysyntax_error): Reindent.
+	* data/yacc.c (yysyntax_error): Reindent.
+
+2010-10-31  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	yysyntax_error: improve invocation readability.
+	* data/yacc.c (yyparse, yypush_parse): For yysyntax_error
+	invocation, get rid of the while loop, which is misleading
+	because there are really at most two iterations.
+
+2010-10-31  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	* ChangeLog: Correct some errors in previous entries.
+
+2010-10-17  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	maint: re-anchor all .gitignore entries.
+	* bootstrap: Copy from gnulib's latest for the fix to
+	automatically anchor entries it constructs.
+	* gnulib: Update to latest just so it has the same bootstrap.
+	* .gitignore, build-aux/.gitignore, doc/.gitignore:
+	* lib/.gitignore, m4/.gitignore, po/.gitignore:
+	* runtime-po/.gitignore: Re-anchor all entries.
+
+2010-10-08  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Fix portability problem on OpenBSD 4.7.
+
+	Jim Meyering reported this in
+	<http://lists.gnu.org/archive/html/bug-bison/2010-10/msg00007.html>.
+	* data/yacc.c: Use EXIT_SUCCESS as a witness for stdlib.h,
+	not _STDLIB_H.  EXIT_SUCCESS has been defined by the standard
+	for quite some time.
+	* src/parse-gram.c, src/parse-gram.h: Regenerate.
+	* tests/regression.at: Tamper with the renamed witness.
+
+	Adjust to recent changes to gnulib bootstrap.
+
+	* .cvsignore, build-aux/.cvsignore, doc/.cvsignore, etc/.cvsignore:
+	* examples/calc++/.cvsignore, lib/.cvsignore, m4/.cvsignore:
+	* po/.cvsignore, runtime-po/.cvsignore, src/.cvsignore:
+	* tests/.cvsignore: Remove; I don't use CVS to maintain Bison
+	anymore and don't know of anybody else who does.  If someone needs
+	these files, they can resurrect them.
+	* .gitignore, build-aux/.gitignore, doc/.gitignore, lib/.gitignore:
+	* m4/.gitignore, po/.gitignore, runtime-po/.gitignore:
+	Omit leading '/', since bootstrap omits it.
+	Adjust file names to match current contents better.
+	* bootstrap: Sync from gnulib: this contains the new gnulib_mk_hook
+	installed just for us.
+	* bootstrap.conf (excluded_files): Don't exclude codeset.m4,
+	glibc21.m4, inttypes_h.m4, size_max.m4, xsize.m4, as they are now
+	needed somehow.  Don't have time to look into why.
+	(gnulib_modules): Change malloc to malloc-gnu.  Do we really assume
+	the GNU malloc behavior, where malloc (0) != NULL unless we're
+	out of storage?  If not, we can omit malloc-gnu; but for now I left
+	it in to be safe.
+	(vc_ignore): Remove.
+	* README-hacking: Renamed from HACKING, since gnulib bootstrap now
+	uses that convention.
+
 2010-08-05  Joel E. Denny  <joeldenny@joeldenny.org>
 
 	Version 2.4.3.
@@ -41,21 +841,10 @@
 	* configure.ac (AM_INIT_AUTOMAKE): Underscore or dash in a
 	version string should disable gnits.  Explain in comments.
 
-2010-07-29  Joel E. Denny  <joeldenny@joeldenny.org>
-
-	Prepare for 2.4.3 release.
-	* NEWS (2.4.3_rc1): Rename back to...
-	(2.4.3): ... this, and unset date.
-
 2010-07-28  Joel E. Denny  <joeldenny@joeldenny.org>
 
-	Version 2.4.3_rc1.
-	* NEWS (2.4.3): Rename to...
-	(2.4.3_rc1): ... this for now so we can include translation
-	updates in 2.4.3, and set release date.
-	* configure.ac (AM_INIT_AUTOMAKE): Underscore rather than dash
-	in version string now indicates a release candidate and that we
-	thus cannot enable gnits.  Dash confuses git-version-gen.
+	i18n: update.
+	* po/POTFILES.in: Add src/graphviz.c.
 
 2010-07-28  Joel E. Denny  <joeldenny@joeldenny.org>
 
@@ -72,27 +861,12 @@
 	required by latest gnulib.
 	* gnulib: Update to latest.
 
-2009-08-17  Akim Demaille  <demaille@gostai.com>
-
-	build: require gettext 0.17.
-
-	Suggested by Bruno Haible.
-	http://lists.gnu.org/archive/html/bug-bison/2009-08/msg00009.html
-	* configure.ac: require gettext 0.17 to ensure compatibility with
-	gnulib.
-
 2010-07-24  Joel E. Denny  <joeldenny@joeldenny.org>
 
 	tests: handle Valgrind that complains about >&-.
 	* tests/output.at (AT_CHECK_OUTPUT): Extend to accept pre-tests.
 	(Output files: -dv >&-): Skip test group if running
 	maintainer-check-valgrind.
-
-2010-07-21  Akim Demaille  <demaille@gostai.com>
-
-	Pacify gcc warnings.
-	* src/getargs.c (skeleton_arg): Pass "%s" to printf-like functions
-	with variable format and no argument.
 
 2010-06-17  Paul Eggert  <eggert@cs.ucla.edu>
 
@@ -132,16 +906,18 @@
 	* lib/timevar.def, lib/timevar.h, lib/vbitset.c:
 	* lib/vbitset.h, lib/yyerror.c, m4/bison-i18n.m4:
 	* m4/c-working.m4, m4/cxx.m4, m4/subpipe.m4, m4/timevar.m4:
-	* src/LR0.c:
-	* src/LR0.h, src/assoc.c:
+	* src/AnnotationList.c, src/AnnotationList.h:
+	* src/InadequacyList.c, src/InadequacyList.h, src/LR0.c:
+	* src/LR0.h, src/Sbitset.c, src/Sbitset.h, src/assoc.c:
 	* src/assoc.h, src/closure.c, src/closure.h, src/complain.c:
 	* src/complain.h, src/conflicts.c, src/conflicts.h:
 	* src/derives.c, src/derives.h, src/files.c, src/files.h:
 	* src/flex-scanner.h, src/getargs.c, src/getargs.h:
-	* src/gram.c, src/gram.h, src/graphviz.c:
-	* src/lalr.c, src/lalr.h:
+	* src/gram.c, src/gram.h, src/graphviz.c, src/ielr.c:
+	* src/ielr.h, src/lalr.c, src/lalr.h:
 	* src/location.c, src/location.h, src/main.c:
-	* src/nullable.c, src/nullable.h:
+	* src/muscle-tab.c, src/muscle-tab.h, src/named-ref.c:
+	* src/named-ref.h, src/nullable.c, src/nullable.h:
 	* src/output.c, src/output.h, src/parse-gram.y:
 	* src/print-xml.c, src/print-xml.h, src/print.c, src/print.h:
 	* src/print_graph.c, src/print_graph.h, src/reader.c:
@@ -155,14 +931,33 @@
 	* tests/calc.at, tests/conflicts.at, tests/cxx-type.at:
 	* tests/existing.at, tests/glr-regression.at:
 	* tests/headers.at, tests/input.at, tests/java.at:
-	* tests/local.at:
+	* tests/local.at, tests/named-refs.at:
 	* tests/output.at, tests/push.at, tests/reduce.at:
 	* tests/regression.at, tests/sets.at, tests/skeletons.at:
 	* tests/synclines.at, tests/testsuite.at, tests/torture.at:
 	* data/Makefile.am, data/location.cc, doc/Makefile.am, src/Makefile.am:
 	* tests/Makefile.am, lib/Makefile.am, examples/Makefile.am:
-	* etc/Makefile.am, m4/m4.m4, src/muscle_tab.c, src/muscle_tab.h:
+	* etc/Makefile.am:
 	Don't use date ranges in copyright notices.
+
+2010-05-11  Akim Demaille  <demaille@gostai.com>
+
+	lalrl1.cc: give a chance to user defined YYLLOC_DEFAULT.
+	* data/lalr1.cc (YYLLOC_DEFAULT): Move its definition from the
+	header file to the implementation file, after the user %code
+	sections.
+	* NEWS (2.5): Document this.
+
+2010-05-07  Akim Demaille  <demaille@gostai.com>
+
+	c++: use YYRHSLOC.
+	* data/lalr1.cc (YYRHSLOC): New.
+	(YYLLOC_DEFAULT): Use it.
+	* data/glr.cc: If location_type was user defined, do not include
+	location.hh, and do not produce location.hh and position.hh.
+	* tests/calc.at (YYLLOC_DEFAULT): Use YYRHSLOC.
+	Check that glr.cc supports user defined location_type.
+	* NEWS: Document this.
 
 2010-05-10  Akim Demaille  <demaille@gostai.com>
 
@@ -173,23 +968,72 @@
 	Document yy::parser::token.
 	Reported by Jerry Quinn.
 
-2010-05-07  Akim Demaille  <demaille@gostai.com>
+2010-05-04  Akim Demaille  <demaille@gostai.com>
 
-	doc: fix typo.
-	* tests/synclines.at: here.
+	lalr1.cc: don't generate location.hh when location_type is defined
+	* data/bison.m4 (b4_percent_define_use): New.
+	(b4_percent_define_get): Use it.
+	Accept a default value.
+	* data/c++.m4: Do not provide a default value for the %define
+	variable location_type, rather, use b4_percent_define_get with a
+	default argument where its value is needed.
+	* data/lalr1.cc: Do not load location.cc (which outputs both
+	location.hh and position.hh) if the user defined location_type.
+	Do not include location.hh either.
+	* data/glr.cc: Likewise.
+
+2010-05-04  Akim Demaille  <demaille@gostai.com>
+
+	lalr1.cc: location_type: make sure we don't depend on loc.(begin|end).
+	* tests/calc.at (Span): Instead of begin/end, as in the built-in
+	location class, use first and last.
+	Define YYLLOC_DEFAULT to adjust to these changes.
+	* tests/local.at (_AT_BISON_OPTION_PUSHDEFS): Adjust to the
+	location_type changes.
 
 2010-05-04  Akim Demaille  <demaille@gostai.com>
 
 	tests: enhance AT_SYNCLINES_COMPILE.
-	* tests/synclines.at (AT_SYNCLINES_COMPILE): More distcc patterns.
-	(AT_TEST_SYNCLINE): Remove GCC 4.5 protection which is already
-	taken care of in AT_SYNCLINES_COMPILE.
+	* tests/synclines.at (AT_TEST_SYNCLINE): Move GCC 4.5 protection
+	into...
+	(AT_SYNCLINES_COMPILE): here.
+	Add more distcc patterns.
+
+2010-05-01  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	tests: fix maintainer-xml-check.
+	* data/xslt/xml2dot.xsl (xsl:template match="bison-xml-report"):
+	Update output to include comments now produced by --graph.
+	(xsl:template match="automaton"): As for --graph, name the
+	digraph after the grammar file.
+	* src/print-xml.c (escape_bufs): Enlarge array.
+	(print_xml): Add bug-report and url attributes to
+	bison-xml-report element.
+
+2010-05-01  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	In DOT output, convert from "/*" comments to "//" comments.
+	This handles the possibility that a "*/" might appear in
+	variable portions of those comments at some point in the future.
+	* src/graphviz.c (start_graph): Implement.
 
 2010-04-30  Joel E. Denny  <joeldenny@joeldenny.org>
 
 	Document that undefined %prec identifier warnings will remain.
 	* NEWS (2.4.3): Here.
 	(2.4.2): Here.
+
+2010-04-30  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	Revert 2009-12-30 change for undefined %prec token complaints.
+	That is, keep them as warnings because that should be sufficient
+	to satisfy POSIX without creating backward compatibility issues.
+	Suggested by Richard Stallman at
+	<http://lists.gnu.org/archive/html/bison-patches/2010-03/msg00033.html>.
+	* NEWS (2.5): Remove mention of complaint.
+	* src/reader.c (grammar_rule_check): Convert complaint back to
+	warning.
+	* tests/input.at (%prec's token must be defined): Update.
 
 2010-04-25  Joel E. Denny  <joeldenny@joeldenny.org>
 
@@ -198,6 +1042,61 @@
 	<http://lists.gnu.org/archive/html/bug-bison/2010-03/msg00003.html>.
 	* bootstrap.conf (bootstrap_epilogue): New function to make sure
 	src/parse-gram.[ch] are stamped later than src/parse-gram.y.
+
+2010-04-25  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	i18n: fix untranslatable string.
+	Reported by Goran Uddeborg at
+	<http://lists.gnu.org/archive/html/bug-bison/2010-03/msg00000.html>.
+	* src/muscle-tab.c (muscle_percent_define_insert): Here.
+
+2010-04-13  Akim Demaille  <demaille@gostai.com>
+
+	tests: calc: minor refactoring.
+	* tests/calc.at (_AT_DATA_CALC_Y): Simplify yylex.
+
+2010-04-13  Akim Demaille  <demaille@gostai.com>
+
+	tests: calc: simplify location management.
+	* tests/local.at (AT_LOC_PUSHDEF, AT_LOC_POPDEF): New.
+	(_AT_BISON_OPTION_PUSHDEFS, AT_BISON_OPTION_POPDEFS): Use them to
+	define the appropriate AT_LOC accessors.
+	* tests/calc.at: Use AT_LOC accessors.
+
+2010-04-13  Akim Demaille  <demaille@gostai.com>
+
+	test location_type.
+	* tests/local.at (_AT_BISON_OPTION_PUSHDEFS):
+	Define AT_LOCATION_TYPE_IF.
+	(_AT_BISON_OPTION_POPDEFS): Undefine AT_LOCATION_TYPE_IF.
+	* tests/calc.at (_AT_DATA_CALC_Y): When %define location_type is
+	used, provide a user location type and use it.
+	(Simple LALR1 C++ Calculator): Add a test case for location_type.
+
+2010-04-13  Akim Demaille  <demaille@gostai.com>
+
+	tests: check fclose's return value.
+	* tests/calc.at (_AT_DATA_CALC_Y): Check fclose's return status.
+
+2010-04-13  Akim Demaille  <demaille@gostai.com>
+
+	tests: don't depend on the actual location type.
+	* tests/calc.at: Use yy::parser::location_type rather than
+	yy::location, since the former is always right, and might point to
+	another type than the latter.
+
+2010-04-13  Akim Demaille  <demaille@gostai.com>
+
+	formatting changes.
+	* tests/calc.at: Formatting changes.
+
+2010-04-13  Akim Demaille  <demaille@gostai.com>
+
+	lalr1.cc: remove useless forward declaration.
+	* data/lalr1.cc: Include location.hh before stack.hh.
+	Remove the useless forward declarations of position and location.
+	Reported by Chris Morley.
+	* data/glr.cc: Likewise.
 
 2010-04-11  Joel E. Denny  <joeldenny@joeldenny.org>
 
@@ -227,6 +1126,17 @@
 	* data/yacc.c (b4_declare_parser_state_variables,
 	yyparse, yypush_parse): Likewise.
 
+2010-04-05  Akim Demaille  <demaille@gostai.com>
+
+	remove useless include.
+	* src/graphviz.h: Don't include stdbool.h.
+
+2010-04-05  Akim Demaille  <demaille@gostai.com>
+
+	graph: sign the output file.
+	* src/graphviz.c (start_graph): Issue comments about Bison.
+	Suggested by Tys Lefering.
+
 2010-03-31  Joel E. Denny  <jdenny@ces.clemson.edu>
 
 	portability: fix test suite for GCC 4.5's new #error message.
@@ -240,6 +1150,12 @@
 	fix comments.
 	* src/graphviz.h: Add missing license notice.
 	Document.
+
+2010-03-25  Akim Demaille  <demaille@gostai.com>
+
+	tests: fix 250: parse.error=verbose overflow.
+	* tests/regression.at (parse.error=verbose overflow): Avoid the
+	double inclusion of stdlib.h as it triggers hard errors.
 
 2010-03-23  Joel E. Denny  <jdenny@ces.clemson.edu>
 
@@ -270,21 +1186,6 @@
 	* NEWS (2.4.2): Set version and date.  For the recent test suite
 	portability fixes, don't be so optimistic about their success
 	given the lack of feedback on the affected platforms.
-
-2010-02-22  Joel E. Denny  <jdenny@ces.clemson.edu>
-
-	Prepare for 2.4.2 release.
-	* NEWS (2.4.1b): Rename back to...
-	(2.4.2): ... this, and unset date.
-	* configure.ac (AM_INIT_AUTOMAKE): Re-enable gnits.
-
-2010-02-22  Joel E. Denny  <jdenny@ces.clemson.edu>
-
-	Version 2.4.1b.
-	* NEWS (2.4.2): Rename to...
-	(2.4.1b): ... this for now.  Set date.
-	* configure.ac (AM_INIT_AUTOMAKE): Disable gnits for now because
-	it does not like this version name.
 
 2010-02-22  Joel E. Denny  <jdenny@ces.clemson.edu>
 
@@ -351,38 +1252,13 @@
 	Update POTFILES.
 	* HACKING (Release Procedure): Add reminder about keeping
 	POTFILES files up-to-date.
-	* po/POTFILES.in (src/muscle_tab.c, src/scan-skel.l): Add.
+	* po/POTFILES.in (src/muscle-tab.c, src/scan-skel.l): Add.
 
-2010-02-01  Joel E. Denny  <jdenny@ces.clemson.edu>
+2010-02-01  Joel E. Denny  <jdenny@clemson.edu>
 
-	tests: link lib/libbison.a for gnulib.
-	This solves a problem on Solaris 2.7 where the testsuite needs
-	at least gnulib's rpl_fopen.  Reported by Albert Chin at
-	<http://lists.gnu.org/archive/html/bug-bison/2010-02/msg00001.html>.
-	* NEWS (2.4.2): Document.
-	* tests/atlocal.in (LIBS): As for LDADD in src/Makefile.am, add
-	lib/libbison.a.
-
-2010-01-22  Joel E. Denny  <jdenny@ces.clemson.edu>
-
-	Prepare for 2.4.2 release.
-	* NEWS (2.4.1a): Rename back to...
-	(2.4.2): ... this, and unset date.
-	* configure.ac (AM_INIT_AUTOMAKE): Re-enable gnits.
-
-2010-01-22  Joel E. Denny  <jdenny@ces.clemson.edu>
-
-	Version 2.4.1a delayed.
-	* NEWS (2.4.1a): Increment release date as there has been a
-	small delay in getting the announcements and tarballs out.
-
-2010-01-21  Joel E. Denny  <jdenny@ces.clemson.edu>
-
-	Version 2.4.1a.
-	* NEWS (2.4.2): Rename to...
-	(2.4.1a): ... this for now.  Set date.
-	* configure.ac (AM_INIT_AUTOMAKE): Disable gnits for now because
-	it does not like this version name.
+	Code cleanup.
+	* tests/atlocal.in (abs_top_srcdir): Remove shell variable,
+	which is already defined in atconfig.
 
 2010-01-21  Joel E. Denny  <jdenny@clemson.edu>
 
@@ -425,7 +1301,32 @@
 
 2010-01-04  Joel E. Denny  <jdenny@clemson.edu>
 
+	Fix some comments concerning LR(0) versus LALR(1).
+
+	Stop equating LR(0) with nondeterminism and LALR(1) with
+	determinism.  That is, if all states are consistent, then LR(0)
+	tables are deterministic.  On the other hand, LALR(1) tables
+	might be nondeterministic before conflict resolution, and GLR
+	permits LALR(1) tables to remain nondeterministic.
+	* src/LR0.c, src/LR0.h: Here.
+	* src/lalr.c, src/lalr.h: Here.
+	* src/main.c (main): Here.
+	* src/state.c, src/state.h: Here.
+
+	* src/ielr.h (ielr): In preconditions, expect LR(0) not LALR(1)
+	parser tables.
+
+2010-01-04  Joel E. Denny  <jdenny@clemson.edu>
+
 	maint: run "make update-copyright"
+
+2009-12-30  Joel E. Denny  <jdenny@clemson.edu>
+
+	POSIX: complain if %prec's token was not defined.
+	* NEWS (2.5): Document.
+	* src/reader.c (grammar_rule_check): Convert warning to
+	complaint.
+	* tests/input.at (%prec's token must be defined): Update.
 
 2009-12-30  Joel E. Denny  <jdenny@clemson.edu>
 
@@ -444,16 +1345,123 @@
 
 	* HACKING (Release Procedure): Recommend a secure automake.
 
+2008-12-11  Akim Demaille  <demaille@gostai.com>
+
+	Propagate i18n changes into glr.c.
+	* data/glr.c (yyreportSyntaxError): Use "switch" instead of
+	building the error message format dynamically.
+	* data/lalr1.java: Formatting changes.
+
+2009-12-22  Joel E. Denny  <jdenny@clemson.edu>
+
+	Port small part of master's 11707b2b so future ports are easier.
+	* data/lalr1.java (YYParser::yysyntax_error): Untabify.
+
+2008-12-11  Akim Demaille  <demaille@gostai.com>
+
+	Simplify the i18n of the error messages.
+	* data/lalr1.cc: Comment changes.
+
+2008-11-11  Akim Demaille  <demaille@gostai.com>
+
+	Prefer M4 to CPP.
+	* data/lalr1.cc: Use b4_error_verbose_if instead of #if
+	YYERROR_VERBOSE.
+
+2008-11-11  Akim Demaille  <demaille@gostai.com>
+
+	Support i18n of the parse error messages.
+	* TODO (lalr1.cc/I18n): Remove.
+	* data/lalr1.cc (yysyntax_error_): Support the translation of the
+	error messages, as done in yacc.c.
+	Stay within the yy* pseudo namespace.
+
+2009-12-22  Joel E. Denny  <jdenny@clemson.edu>
+
+	Port small part of master's 8901f32e so future ports are easier.
+	* data/lalr1.cc (yy::parser::yysyntax_error_): Always add second
+	argument, but name it in the function definition only when
+	verbose error messages are enabled and it'll thus be used.
+	(yy::parser::parse): Update use of yysyntax_error_.
+
+2009-12-29  Joel E. Denny  <jdenny@clemson.edu>
+
+	portability: `<' and `>' are not always defined on addresses.
+	Specifically, don't sort objects by their memory addresses when
+	they're not allocated in the same array or other object.  Though
+	I haven't found a test case where that fails on my platform, C
+	says the behavior is undefined.
+	* src/AnnotationList.c (AnnotationList__insertInto): Remove
+	FIXME.  Use new id field of InadequacyList nodes rather than
+	their memory addresses when sorting.
+	(AnnotationList__compute_from_inadequacies): Add
+	inadequacy_list_node_count argument to pass to
+	InadequacyList__new_conflict.
+	* src/AnnotationList.h
+	(AnnotationList__compute_from_inadequacies): Update prototype
+	and documentation for new argument.
+	* src/InadequacyList.c (InadequacyList__new_conflict): Add
+	node_count argument and use it to assign a unique ID.
+	* src/InadequacyList.h (InadequacyListNodeCount): New typedef.
+	(InadequacyList): Add id field.
+	(InadequacyList__new_conflict): Update prototype and
+	documentation for new argument.
+	* src/ielr.c (ielr_compute_annotation_lists): Update
+	AnnotationList__compute_from_inadequacies invocation.
+
+2009-12-20  Joel E. Denny  <jdenny@clemson.edu>
+
+	Fix handling of yychar manipulation in user semantic actions.
+	The problem was that yacc.c didn't always update the yychar
+	translation afterwards.  However, other skeletons appear to be
+	fine.  glr.c appears to already translate yychar before every
+	use.  lalr1.cc does not define yychar and does not document its
+	replacement, yyla, for users.  It does provide yyclearin, but
+	that does not manipulate yyla and thus requires no translation
+	update.  In lalr1.java, yychar is out of scope during semantic
+	actions.
+	* NEWS (2.5): Document.
+	* data/yacc.c (YYBACKUP): Don't bother translating yychar into
+	yytoken here.
+	(yyparse, yypush_parse): Instead, translate before every use of
+	yytoken, and add comments explaining this approach.
+	* tests/actions.at (Destroying lookahead assigned by semantic
+	action): New test group checking that translation happens before
+	lookahead destructor calls at parser return.  Previously,
+	incorrect destructors were called.
+	* tests/conflicts.at (%error-verbose and consistent
+	errors): New test group checking that translation happens at
+	syntax error detection before the associated verbose error
+	message and the associated lookahead destructor calls.  While
+	the destructor call is fixed by this patch, the verbose error
+	message is currently incorrect due to another bug (see
+	comments in test group), so this is an expected failure for now.
+
+2009-12-21  Joel E. Denny  <jdenny@clemson.edu>
+
+	YYFAIL: warn about uses and remove from lalr1.java.
+	* NEWS (2.5): Document.
+	* data/lalr1.java (YYParser::YYFAIL): Rename to YYERRLAB,
+	and make it private.  Update all uses.
+	* src/scan-code.l (SC_RULE_ACTION): Implement warning.
+
 2009-12-21  Joel E. Denny  <jdenny@clemson.edu>
 
 	YYFAIL: deprecate.
 	* NEWS (2.4.2): Document deprecation and the phase-out plan.
-	* data/lalr1.java (parser::YYStack::YYFAIL): Add comment about
+	* data/lalr1.java (YYParser::YYFAIL): Add comment about
 	deprecation.
 	* data/yacc.c (YYFAIL): Likewise, and suppress warnings about
 	YYFAIL from GCC cpp's -Wunused-macros.
 	* doc/bison.texinfo (Java Action Features): Remove YYFAIL
 	documentation.
+	(LocalWords): Remove YYFAIL.
+
+2009-12-17  Joel E. Denny  <jdenny@clemson.edu>
+
+	Code cleanup.
+	* src/symtab.c, src/symtab.h (symbol_class_get_string): Remove
+	function, which is no longer used.
 
 2009-12-16  Joel E. Denny  <jdenny@clemson.edu>
 
@@ -464,13 +1472,25 @@
 	* data/glr.c: Avoid warning about __STRICT_ANSI__.
 	* tests/atlocal.in (CFLAGS): Use WARN_CFLAGS_TEST instead of
 	WARN_CFLAGS.
+	(NO_WERROR_CFLAGS): Likewise.
 	(CXXFLAGS): Use WARN_CXXFLAGS_TEST instead of WARN_CXXFLAGS.
+
+2009-12-16  Joel E. Denny  <jdenny@clemson.edu>
+
+	* data/yacc.c: Reformat m4 a little.
 
 2009-12-16  Joel E. Denny  <jdenny@clemson.edu>
 
 	Document gcc -Wundef fix.
 	* NEWS (2.4.2): Here.
 	* THANKS (Jonathan Nieder): Add.
+
+2009-12-15  Jonathan Nieder  <jrnieder@gmail.com>  (tiny change)
+
+	Simplify y.tab.c when location tracking is disabled.
+	* data/yacc.c: Do not check YYLTYPE_IS_TRIVIAL if location
+	tracking is not enabled.  Instead, unconditionally define
+	YY_LOCATION_PRINT as a no-op for backward compatibility.
 
 2009-12-15  Jonathan Nieder  <jrnieder@gmail.com>  (tiny change)
 
@@ -482,9 +1502,24 @@
 
 2009-12-15  Joel E. Denny  <jdenny@clemson.edu>
 
-	Import M4 detection fix from Autoconf.
+	autoconf: update to latest for fix of M4 detection.
 	Reported by Eric Blake.
-	* m4/m4.m4: Copy serial 10.
+	* submodules/autoconf: Update.
+
+2009-12-15  Joel E. Denny  <jdenny@clemson.edu>
+
+	portability: use -DGNULIB_POSIXCHECK.
+	Reported by Eric Blake.  See discussions at
+	<http://lists.gnu.org/archive/html/bug-bison/2009-09/msg00008.html>
+	and
+	<http://lists.gnu.org/archive/html/bug-gnulib/2009-10/msg00108.html>.
+	* HACKING (Release checks): Suggest -DGNULIB_POSIXCHECK.
+	* bootstrap.conf (gnulib_modules): Add all the printf modules
+	suggested by -DGNULIB_POSIXCHECK.  Add realloc-posix as
+	suggested by -DGNULIB_POSIXCHECK for gnulib's own vasnprintf.c.
+	(excluded_files): Remove m4/printf-posix.m4.
+	* tests/atlocal.in (LIBS): As for LDADD in src/local.mk, add
+	lib/libbison.a so gnulib libraries can be linked.
 
 2009-12-14  Joel E. Denny  <jdenny@clemson.edu>
 
@@ -493,11 +1528,80 @@
 	* src/system.h (aver): Define as assert, and summarize the
 	discussion on this issue.
 
+2009-12-14  Joel E. Denny  <jdenny@clemson.edu>
+
+	Expand GLR acronym in summary of Bison.
+	Based on discussion with Akim Demaille starting at
+	<http://lists.gnu.org/archive/html/bison-patches/2009-04/msg00087.html>.
+	* doc/bison.texinfo (Introduction): Here.
+	* src/getargs.c (usage): Here.
+
+2009-10-03  Alex Rozenman  <rozenman@gmail.com>
+
+	Document named references.
+	* doc/bison.texinfo (Actions): Add new example and xref to
+	Using Named References node.
+	(Using Named References): New node.
+
+2009-10-16  Joel E. Denny  <jdenny@clemson.edu>
+
+	cleanup.
+	* src/Sbitset.c (Sbitset__new_on_obstack): Use Sbitset instead
+	of char*.
+	(Sbitset__isEmpty): Use Sbitset instead of char*.
+	* src/Sbitset.h (Sbitset): Make it a pointer to unsigned char
+	instead of char.  This helps to avoid casting errors.
+	(Sbitset__or): Use Sbitset instead of char*.
+
+2009-10-16  Joel E. Denny  <jdenny@clemson.edu>
+
+	portability: don't assume 8-bit bytes.
+	That is, use CHAR_BIT and UCHAR_MAX instead of 8 and 0xff.
+	* src/Sbitset.h (Sbitset__nbytes): Here.
+	(Sbitset__byteAddress): Here.
+	(Sbitset__bit_mask): Here.
+	(Sbitset__last_byte_mask): Here.
+	(Sbitset__ones): Here.
+	(SBITSET__FOR_EACH): Here.
+
 2009-10-11  Joel E. Denny  <jdenny@clemson.edu>
 
 	portability: use va_start and va_end in the same function.
 	* src/complain.c (error_message): Move va_end from here...
 	(ERROR_MESSAGE): ... to here.
+
+2009-10-08  Joel E. Denny  <jdenny@clemson.edu>
+
+	* data/bison.m4: Update comments for rename to muscle-tab.h.
+
+2009-10-08  Joel E. Denny  <jdenny@clemson.edu>
+
+	Rename muscle_tab.* to muscle-tab.* for consistency with master.
+	* src/Makefile.am (bison_SOURCES): Update.
+	* src/getargs.c, src/ielr.c, src/lalr.c, src/main.c,
+	src/output.c, src/parse-gram.y, src/print.c, src/reader.c,
+	src/tables.c: Update include.
+	* src/muscle_tab.c, src/muscle_tab.h: Rename to...
+	* src/muscle-tab.c, src/muscle-tab.h: ... these and update
+	include.
+
+2009-10-07  Joel E. Denny  <jdenny@clemson.edu>
+
+	Minor code cleanup.
+	* src/muscle_tab.c (MUSCLE_USER_NAME_CONVERT): Remove macro and
+	replace all uses with UNIQSTR_CONCAT.
+	* src/uniqstr.c (uniqstr_vsprintf): New function.
+	* src/uniqstr.h (uniqstr_vsprintf): Add prototype.
+	(UNIQSTR_CONCAT, UNIQSTR_GEN_FORMAT, UNIQSTR_GEN_FORMAT_): New
+	macros.
+
+2009-10-04  Joel E. Denny  <jdenny@clemson.edu>
+
+	Minor code cleanup.
+	* src/parse-gram.y: Clean up sorting of declarations.
+	Use types to simplify %printer declarations where possible.
+	Provide %printer for BRACKETED_ID and symbol.prec.
+	* src/symtab.c: Whitespace change.
 
 2009-10-04  Joel E. Denny  <jdenny@clemson.edu>
 
@@ -508,16 +1612,159 @@
 	* tests/output.at (AT_CHECK_OUTPUT_FILE_NAME): Fix.  Cygwin used
 	to fail at least for file names containing ":" or "\".
 
+2009-09-23  Joel E. Denny  <jdenny@clemson.edu>
+
+	yysyntax_error: avoid duplicate lookahead collection.
+	Except when memory reallocation is required, this change
+	eliminates the need to invoke yysyntax_error twice and thus to
+	repeat the collection of lookaheads.  It also prepares for
+	future extensions that will make those repetitions more
+	expensive and that will require additional memory management in
+	yysyntax_error.  Finally, it fixes an obscure bug already
+	exercised in the test suite.
+	* data/yacc.c (yysyntax_error): Add arguments for message
+	buffer variables stored in the parser.  Instead of size, return
+	status similar to yyparse status but indicating success of
+	message creation.  Other than the actual reallocation of the
+	message buffer, import and clean up memory management code
+	from...
+	(yyparse, yypush_parse): ... here.
+	* tests/regression.at (%error-verbose overflow): No longer an
+	expected failure.
+
+2009-09-23  Joel E. Denny  <jdenny@clemson.edu>
+
+	yysyntax_error: test memory management more.
+	* tests/atlocal.in (NO_WERROR_CFLAGS): New cpp macro.
+	* tests/regression.at (%error-verbose and YYSTACK_USE_ALLOCA):
+	New test group.
+	(%error-verbose overflow): New test group that reveals an
+	obscure bug.  Expected fail for now.
+
+2008-12-11  Akim Demaille  <demaille@gostai.com>
+
+	Pass the token type to yysyntax_error.
+	* data/yacc.c (yysyntax_error): Take the transated token instead
+	of the raw number.
+	Adjust callers.
+
+2008-12-11  Akim Demaille  <demaille@gostai.com>
+
+	Simplify the i18n of the error messages.
+	* data/yacc.c (yysyntax_error): Rewrite, using a switch instead
+	of building dynamically the format string.
+
+2009-10-03  Joel E. Denny  <jdenny@clemson.edu>
+
+	Remove dead code.
+	* src/symtab.c (symbol_pack): Here because every symbol's number
+	is always defined by this time.
+
+2009-10-03  Alex Rozenman  <rozenman@gmail.com>
+
+	Add additional space after periods in NEWS.
+	* NEWS (2.5): here.
+
+2009-09-29  Joel E. Denny  <jdenny@clemson.edu>
+
+	Use the correct conversion specifier for size_t.
+	Reported by Jim Meyering.
+	* src/Sbitset.h (SBITSET__INDEX__CONVERSION_SPEC): New, "zu"
+	because Sbitset__Index is size_t.
+	* src/Sbitset.c (Sbitset__fprint): Use it instead of %d.
+
+2009-09-27  Joel E. Denny  <jdenny@clemson.edu>
+
+	tests: don't abuse AT_BISON_CHECK.
+	* tests/regression.at (parse-gram.y: LALR = IELR): Move
+	additional shell commands outside of AT_BISON_CHECK.
+
+2009-09-26  Joel E. Denny  <jdenny@clemson.edu>
+
+	tests: check that parse-gram.y's IELR and LALR are identical.
+	* tests/atlocal.in (abs_top_srcdir): New shell variable.
+	* tests/regression.at (parse-gram.y: LALR = IELR): New test
+	group.
+
+2009-09-16  Akim Demaille  <demaille@gostai.com>
+
+	doc: comment changes.
+	* doc/bison.texinfo: Comment changes.
+
 2009-09-16  Akim Demaille  <demaille@gostai.com>
 
 	doc: spell checking.
 	* doc/bison.texinfo: here.
+
+2009-09-19  Alex Rozenman  <rozenman@gmail.com>
+
+	Keep sub-messages aligned. Fix strings for translation.
+	* src/location.h (location_print): Add return value.
+	* src/location.c (location_print): Return number of printed
+	characters.
+	* src/complain.h (complain_at_indent, warn_at_indent): Prototype
+	new functions.
+	* src/complain.cpp (indent_ptr): New static variable.
+	(error_message, complain_at_indent, warn_at_indent): Implement
+	the alignment mechanism.
+	* src/scan-code.l (parse_ref, show_sub_messages): Fix strings
+	for translations. Use new alignment mechanism.
+	* tests/named-ref.at: Adjust test-cases.
+	* NEWS (2.5): Add an announcement about named references.
 
 2009-09-13  Joel E. Denny  <jdenny@clemson.edu>
 
 	tests: clean up push.at test group titles.
 	* tests/push.at: Remove "Push Parsing: " from test group titles
 	because these are already under the banner "Push Parsing Tests".
+
+2009-09-12  Alex Rozenman  <rozenman@gmail.com>
+
+	Provide an additional sub-message for clarity.
+	Add "symbol not found in production" error message when
+	an "invalid reference" is detected in named references
+	resolution.
+	* src/scan-code.l: Update "invalid reference" case.
+	* tests/named-ref.at: Adjust test-cases.
+
+2009-09-10  Joel E. Denny  <jdenny@clemson.edu>
+
+	Clean up yacc.c a little.
+	* data/yacc.c: Clean up M4 for readability, and make output
+	whitespace more consistent.  For the main parse function
+	comment, instead of saying "yyparse or yypush_parse", say either
+	"yyparse" or "yypush_parse" depending on which it actually is.
+
+2009-09-03  Joel E. Denny  <jdenny@clemson.edu>
+
+	Complain about unused %define variables and %code qualifiers.
+	* NEWS (2.5): Document.
+	* data/bison.m4 (b4_check_user_names): Complain instead of warn.
+	* doc/bison.texinfo (Decl Summary): Document complaint, and
+	improve %define documentation a little otherwise.
+	* tests/input.at (Reject unused %code qualifiers): Update.
+	(%define errors): Update.
+	(%define, --define, --force-define): Update.
+	(%define backward compatibility): Update.
+	(Unused %define api.pure): Update.
+	* tests/push.at (Push Parsing: Unsupported Skeletons): Update.
+
+2009-09-03  Joel E. Denny  <jdenny@clemson.edu>
+
+	Use aver not assert.
+	* src/output.c: Don't include assert.h.
+	(output_skeleton): Use aver not assert.
+	* src/system.h (aver): In documentation of why, add links to
+	Paul Eggert's explanations in the mailing lists.
+
+2009-09-05  Alex Rozenman  <rozenman@gmail.com>
+
+	Use "Unresolved reference" error message when no symbols were found
+	in a symbolic reference resolution. Remove .expr and -expr from
+	the shown reference when the reference is unresolved.
+	* src/scan-code.l: Change the error message, adjust location columns,
+	rename variable "exact_mode" to "explicit_bracketing".
+	* tests/named-ref.at: Adjust existing tests and add a new one.
 
 2009-09-03  Akim Demaille  <demaille@gostai.com>
 
@@ -528,6 +1775,49 @@
 	bootstrap: fix/improve find_tool.
 	* bootstrap (find_tool): Improve error messages.
 	Fix typo about find_tool_names.
+
+2009-08-29  Joel E. Denny  <jdenny@clemson.edu>
+
+	Fix gcc 3.4.4 shadowing warning reported by Eric Blake.
+	See
+	<http://lists.gnu.org/archive/html/bison-patches/2009-08/msg00093.html>.
+	* src/scan-code.h (code_props_rule_action_init): Rename
+	named_ref arg to name so it doesn't shadow named_ref type.  This
+	makes it consistent with the function definition in scan-code.l
+	anyway.
+
+2009-08-28  Joel E. Denny  <jdenny@clemson.edu>
+
+	%define: accept unquoted values.
+	* NEWS (2.5): Group all %define changes together, and document
+	this one.  Remove quotes in IELR and canonical LR entry.
+	* doc/bison.texinfo: Remove quotes in most examples throughout.
+	(Decl Summary): Update %define documentation.
+	(Table of Symbols): Likewise.
+	* src/ielr.c (LrType): Update documentation.
+	* src/parse-gram.y (content.opt): Add production for ID.
+	* tests/calc.at: Remove quotes in most tests.
+	* tests/existing.at: Likewise.
+	* tests/input.at: Likewise.
+	* tests/local.at: Likewise.
+	* tests/push.at: Likewise.
+	* tests/reduce.at: Likewise.
+	* tests/torture.at: Likewise.
+
+2009-08-28  Joel E. Denny  <jdenny@clemson.edu>
+
+	%define lr.type: make values lowercase IDs.
+	That is, "LALR" => "lalr", "IELR" => "ielr", and
+	"canonical LR" => "canonical-lr".
+	* NEWS (2.5): Update documentation.
+	* doc/bison.texinfo (Decl Summary): Likewise.
+	* src/ielr.c (ielr): Use new values.
+	* src/ielr.h (ielr): Update documentation.
+	* src/reader.c (prepare_percent_define_front_end_variables): Use
+	and validate new values.
+	* tests/existing.at (AT_TEST_EXISTING_GRAMMAR): Update test
+	grammars.
+	* tests/reduce.at (AT_TEST_LR_TYPE): Likewise.
 
 2009-08-27  Eric Blake  <ebb9@byu.net>
 
@@ -545,6 +1835,106 @@
 	omitting final newlines.
 	(Bad escapes in literals): Use it here for special characters.
 
+2009-08-26  Joel E. Denny  <jdenny@clemson.edu>
+
+	tests: show a use of %define lr.default-reductions "consistent"
+	* tests/conflicts.at (%nonassoc and eof): Extend to test that it
+	prevents the omission of expected tokens for %error-verbose.
+
+2009-08-26  Akim Demaille  <demaille@gostai.com>
+
+	tests: portability fix.
+	* tests/input.at (Bad escapes in literals): Don't expect "echo
+	'\0'" to output \ then 0.
+
+2009-08-26  Joel E. Denny  <jdenny@clemson.edu>
+
+	Actually handle the yytable zero value correctly this time.
+	* data/glr.c, data/lalr1.cc, data/lalr1.java, data/yacc.c: Don't
+	mention zero values in the YYTABLE comments.
+	* data/glr.c (yytable_value_is_error): Don't check for zero
+	value.
+	* data/lalr1.cc (yy_table_value_is_error_): Likewise.
+	* data/yacc.c (yytable_value_is_error): Likewise.
+	* data/lalr1.java (yy_table_value_is_error_): Likewise.
+	(yysyntax_error): Fix typo in code: use yytable_ not yycheck_.
+	* src/tables.h: In header comments, explain why it's useless to
+	check for a zero value in yytable.
+
+2009-08-25  Joel E. Denny  <jdenny@clemson.edu>
+
+	More fixes related to last two patches.
+	* data/c.m4 (b4_table_value_equals): Comment that YYID must be
+	defined.
+	* data/glr.c, data/lalr1.cc, data/lalr1.java, data/yacc.c: Fix
+	yytable comments: zero indicates syntax error not default
+	action.
+	* data/glr.c (yyis_pact_ninf): Rename to...
+	(yypact_value_is_default): ... this.
+	(yyisDefaultedState): Update for rename.
+	(yyis_table_ninf): Rename to...
+	(yytable_value_is_error): ... this, and check for value zero
+	besides just YYTABLE_NINF.
+	(yygetLRActions): Check for default value from yypact.  It
+	appears that this check is always performed before this function
+	is invoked, and so adding the check here is probably redundant.
+	However, the code may evolve after this subtlety is forgotten.
+	Also, update for rename to yytable_value_is_error.  Because that
+	macro now checks for zero, a different but equivalent branch of
+	the if-then-else here is evaluated.
+	(yyreportSyntaxError): Update for rename to
+	yytable_value_is_error.  The zero condition was mishandled
+	before.
+	(yyrecoverSyntaxError): Update for renames.  No behavioral
+	changes.
+	* data/lalr1.cc, data/lalr1.java (yy_pact_value_is_default_):
+	New function.
+	(yy_table_value_is_error_): New function.
+	(parse): Use new functions where possible.  No behavioral
+	changes.
+	(yysyntax_error_, yysyntax_error): Use yy_table_value_is_error_.
+	The zero condition was mishandled before.
+	* data/yacc.c (yyis_pact_ninf): Rename to...
+	(yypact_value_is_default): ... this.
+	(yyis_table_ninf): Rename to...
+	(yytable_value_is_error): ... this, and check for value zero
+	besides just YYTABLE_NINF.
+	(yysyntax_error): Update for rename to yytable_value_is_error.
+	The zero condition was mishandled before.
+	(yyparse): Update for renames.  No behavioral changes.
+	* src/tables.h: Improve comments about yypact, yytable, etc.
+	more.  Most importantly, say yytable value of zero means syntax
+	error not default action.
+
+2009-08-25  Joel E. Denny  <jdenny@clemson.edu>
+
+	Fix %error-verbose for conflicts resolved by %nonassoc.
+	* NEWS (2.5): Document.
+	* data/glr.c (yyreportSyntaxError): Fix this by checking
+	yyis_table_ninf.
+	* data/yacc.c (yysyntax_error): Likewise.
+	* data/lalr1.cc (yysyntax_error_): Fix this by checking
+	yytable_ninf_.
+	* data/lalr1.java (yysyntax_error): Likewise.
+	* tests/conflicts.at (%nonassoc and eof): Update expected output
+	and remove FIXME.
+
+2009-08-25  Joel E. Denny  <jdenny@clemson.edu>
+
+	Some code and documentation improvements.
+	* data/c.m4 (b4_table_value_equals): New macro to capture
+	some repeated code.
+	* data/glr.c (yyis_pact_ninf): Use it here.
+	(yyis_table_ninf): Likewise.
+	(yyreportSyntaxError): Improve internal comments.
+	* data/yacc.c (yyis_pact_ninf): New macro copied from glr.c.
+	Use it everywhere possible.
+	(yyis_table_ninf): Likewise.
+	(yysyntax_error): Improve internal comments.
+	* data/lalr1.cc (yysyntax_error_): Likewise.
+	* data/lalr1.java (yysyntax_error): Likewise.
+	* src/tables.h: Improve comments about yypact, yytable, etc.
+
 2009-08-21  Joel E. Denny  <jdenny@clemson.edu>
 
 	Use locale when quoting.
@@ -560,7 +1950,7 @@
 	Suggested by Akim Demaille.
 
 	Import latest m4/m4.m4.
-	* m4/m4.m4: Copy from autoconf 2.64.
+	* submodules/autoconf: Update to autoconf 2.64.
 	* configure.ac (M4_GNU_OPTION): New define.
 	* src/output.c (output_skeleton): Use it to resolve FIXME.
 	* NEWS: Mention this.
@@ -580,7 +1970,15 @@
 	of the complaint line unless there's whitespace that quotearg
 	won't escape.
 	Consistently say "invalid" not "unrecognized".
+	Consistently prefer "empty character literal" over "extra
+	characters in character literal" warning for invalid escape
+	sequences; that is, consistently discard those sequences.
 	* tests/input.at (Bad escapes in literals): New.
+
+2009-08-19  Akim Demaille  <demaille@gostai.com>
+
+	doc: fixes.
+	* doc/bison.texinfo: Fix minor Texinfo errors.
 
 2009-08-19  Akim Demaille  <demaille@gostai.com>
 
@@ -598,6 +1996,15 @@
 	when .x-update-copyright is present.
 	* cfg.mk (update-copyright-local): Remove, now ignored.
 	(update-copyright): Declare update-b4-copyright as a dependency.
+
+2009-08-17  Akim Demaille  <demaille@gostai.com>
+
+	build: require gettext 0.17.
+
+	Suggested by Bruno Haible.
+	http://lists.gnu.org/archive/html/bug-bison/2009-08/msg00009.html
+	* configure.ac: require gettext 0.17 to ensure compatibility with
+	gnulib.
 
 2009-08-17  Akim Demaille  <demaille@gostai.com>
 
@@ -624,18 +2031,73 @@
 	* build-aux/update-b4-copyright: Fix.
 	* cfg.mk (update-copyright-env): Configure update-copyright.
 
+2009-08-13  Joel E. Denny  <jdenny@clemson.edu>
+
+	Make it easier to write deterministic tests.
+	Continues Akim's work from his 2009-06-10 commits.
+	* src/reader.c (check_and_convert_grammar): Don't add any
+	symbols after the first symbols_do invocation.
+	* src/symtab.c (symbols_sorted): New static global.
+	(user_token_number_redeclaration): Update comments.
+	(symbol_from_uniqstr): If a new symbol is being created, assert
+	that symbols_sorted hasn't been allocated yet.
+	(symbols_free): Free symbols_sorted.
+	(symbols_cmp, symbols_cmp_qsort): New functions.
+	(symbols_do): Sort symbol_table into symbols_sorted on first
+	invocation.
+	* tests/input.at (Numbered tokens): Recombine tests now that the
+	output should be deterministic across multiple numbers.
+
 2009-08-12  Akim Demaille  <demaille@gostai.com>
 
 	distcheck: fix.
 
 	* examples/calc++/Makefile.am: (EXTRA_DIST): Ship calc.stamp.
 
+2009-08-10  Joel E. Denny  <jdenny@clemson.edu>
+
+	* tests/Makefile.am (TESTSUITE_AT): Add named-refs.at.
+
+2009-08-10  Joel E. Denny  <jdenny@clemson.edu>
+
+	Miscellaneous code readability improvements.
+
+	* src/reader.c (reader): Move %define front-end variable
+	defaults and checking into...
+	(prepare_percent_define_front_end_variables): ... this new
+	function.
+
+	* src/scan-gram.l (INITIAL): For consistency with string
+	literals, don't store open quote on character literal.  It's
+	discarded before returning anyway.
+	(SC_ESCAPED_CHARACTER): Similarly, don't store close quote.
+	Make length test more readable, and make the character stored
+	for an empty literal more obvious while consistent with the
+	previous behavior.
+
+	* src/symtab.c, src/symtab.h: Rename USER_NUMBER_ALIAS to
+	USER_NUMBER_HAS_STRING_ALIAS throughout.
+	* src/symtab.c (symbol_make_alias): Remove comment from symtab.c
+	that is repeated in symtab.h.  Improve argument names to make it
+	clear which side of the symbol-string alias pair is which.
+	(symbol_check_alias_consistency): Improve local variable names
+	for the same purpose.
+	* src/symtab.h (struct symbol): Make comments about aliases
+	clearer.
+	(symbol_make_alias): Improve comments and argument name.
+	* src/output.c (token_definitions_output): Update for rename to
+	USER_NUMBER_HAS_STRING_ALIAS and improve comments about aliases.
+
+2009-08-08  Alex Rozenman  <rozenman@gmail.com>
+
+	Convert "misleading reference" messages to warnings.
+	* src/scan-code.l: New function 'show_sub_messages', more
+	factoring.
+	* tests/named-ref.at: Adjust tests.
+
 2009-08-06  Joel E. Denny  <jdenny@clemson.edu>
 
 	maint: run "make update-copyright"
-	But first...
-	* .x-update-copyright (^data/m4sugar/): Add, because these
-	files are from Autoconf.
 
 2009-08-06  Joel E. Denny  <jdenny@clemson.edu>
 
@@ -703,6 +2165,95 @@
 	* src/scan-gram.l: Likewise.
 	* src/scan-skel.l: Likewise.
 
+2009-07-31  Alex Rozenman  <rozenman@gmail.com>
+
+	Fix --enable-gcc-warnings problems.
+	* src/reader.c: Adjust variable names.
+	* src/scan-code.l: Fix prototypes and adjust names.
+	* src/named-ref.c: Remove redundant "if".
+
+2009-07-29  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Fix a --enable-gcc-warnings problem.
+	* src/scan-gram.l (SC_ESCAPED_CHARACTER): Actually use length
+	variable.
+
+2009-07-24  Alex Rozenman  <rozenman@gmail.com>
+
+	Fix some memory leaks.
+	* src/named-ref.c: Add a pointer check (named_ref_free).
+	* src/scan-code.l: New function (variant_table_free). Called in
+	code_scanner_free.
+	* src/symlist.c: Call to named_ref_free (symbol_list_free).
+
+2009-07-24  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Warn about character literals not of length one.
+	* NEWS (2.5): Document.
+	* src/scan-gram.l (INITIAL): Remove comment that we don't check
+	the length.
+	(SC_ESCAPED_CHARACTER): Warn if length is wrong.
+	* tests/input.at (Bad character literals): New test group.
+
+2009-07-24  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	* src/lalr.c (state_lookahead_tokens_count): Correct comment.
+
+2009-07-22  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Some M4 cleanup in the testsuite.
+	Suggested by Eric Blake at
+	<http://lists.gnu.org/archive/html/bison-patches/2009-04/msg00083.html>.
+	* tests/existing.at (_AT_TEST_EXISTING_GRAMMAR): Do not
+	complicate the code by distinguishing between a missing value
+	and an empty string value for an optional argument.  This fix is
+	allowed by the similar fix in AT_TEST_TABLES_AND_PARSE below.
+	* tests/local.at (_AT_TEST_TABLES_AND_PARSE): Merge into...
+	(AT_TEST_TABLES_AND_PARSE): ... this now that the special
+	arguments are not needed because of the following changes.
+	Fix stale comments.
+	Bison developers should use GNU M4 and should not use
+	POSIXLY_CORRECT when building the test suite, so do not
+	complicate the code by avoiding $10 and above.
+	Do not quote an empty string value for an optional argument, and
+	do not distinguish between a missing value and an empty string
+	value.
+
+2009-07-21  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	* m4/m4.m4: Make it a sym link to submodules/autoconf/m4/m4.m4.
+
+2009-07-15  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Revert unnecessary column realignment in --help output.
+	Reported by Akim Demaille at
+	<http://lists.gnu.org/archive/html/bison-patches/2009-06/msg00010.html>.
+	* src/getargs.c (usage): Here.
+
+2009-07-04  Alex Rozenman  <rozenman@gmail.com>
+
+	Alphabetical order in src/Makefile.am.
+	* src/Makefile.am: Adjust.
+
+2009-07-04  Alex Rozenman  <rozenman@gmail.com>
+
+	Style changes and factoring.
+	* src/named-ref.h: Add comments.
+	* src/parse-gram.y: Readability and style changes.
+	* src/reader.c: Factoring: assign_named_ref function.
+	* src/scan-code.l: Factoring and style changes. Rename
+	parse_named_ref to parse_ref. Use "c-ctype.h" from gnulib.
+	Use "unsigned" type for variant index. Improve readablity.
+	* src/scan-gram.l: Change error messages and add comments.
+	* src/symlist.h: symbol_list_null: New function decl.
+	* src/symlist.c: symbol_list_null: Implement here.
+	* tests/named-refs.at: Adjust for new error messages.
+
+2009-06-29  Eric Blake  <ebb9@byu.net>
+
+	scan-code: avoid compiler warnings
+	* src/scan-code.l (parse_named_ref): Use correct specifiers.
+
 2009-06-29  Akim Demaille  <demaille@gostai.com>
 
 	build: avoid concurrent extraction of calc++.
@@ -712,10 +2263,45 @@
 	Not only this is inefficient, this also builds incorrect sources
 	with several extractions mixed together.
 
+2009-06-27  Alex Rozenman  <rozenman@gmail.com>
+
+	Implement support for named symbol references.
+	* src/parse-gram.y: Add new syntax (named_ref.opt).
+	* src/reader.c: Store named refs in symbol lists.
+	* src/reader.h: New argument for symbol_append and
+	action_append functions.
+	* src/scan-code.h: Add new field (named_ref) into
+	code_props data structure. Keeps named ref of midrule
+	actions.
+	* src/scan-code.l: Support for named refs in semantic
+	action code. New function 'parse_named_ref'.
+	* src/scan-gram.l: Support bracketed id.
+	* src/symlist.c: Store named refs in symbol lists.
+	* src/symlist.h: New field in symbol list: named_ref.
+	* src/named-ref.h: New file, a struct for named_ref.
+	* src/named-ref.cp: New file, named_ref_new function.
+	* src/local.mk: Add two new files.
+	* tests/testsuite.at: Include new test group:
+	* tests/named-refs.at: this new file.
+
 2009-06-25  Akim Demaille  <demaille@gostai.com>
 
 	hash: check insertion for memory exhaustion.
 	* src/uniqstr.c (uniqstr_new): New.
+
+2009-06-11  Akim Demaille  <demaille@gostai.com>
+
+	style changes.
+	* data/xslt/xml2dot.xsl, data/xslt/xml2xhtml.xsl: Space changes.
+	* src/print-xml.c: Style changes.
+	* tests/conflicts.at: Comment changes.
+
+2009-06-11  Akim Demaille  <demaille@gostai.com>
+
+	xml: beware of user strings used to give a %prec to rules.
+	* tests/conflicts.at (%prec with user strings): New.
+	* src/gram.c (grammar_rules_print_xml): Escape the precedence for
+	XML output.
 
 2009-06-11  Akim Demaille  <demaille@gostai.com>
 
@@ -725,6 +2311,34 @@
 	hash_insert.
 
 2009-06-10  Akim Demaille  <demaille@gostai.com>
+
+	deterministic test suite.
+	Some consistency checks on symbols are performed after all the
+	symbols were read, by an iteration over the symbol table.  This
+	traversal is nondeterministic, which can be a problem for test
+	cases.
+	Avoid this.
+	Addresses another form of nondeterminism reported by Joel E. Denny.
+	http://lists.gnu.org/archive/html/bison-patches/2009-05/msg00023.html
+
+	* tests/input.at (Numbered tokens): Split the hexadecimal/decimal
+	test in two.
+	Use different file names for the three tests to make the
+	maintenance easier.
+
+2009-06-10  Akim Demaille  <demaille@gostai.com>
+
+	deterministic user-token-number redeclaration errors.
+	Address nondeterminism reported by Joel E. Denny.
+	http://lists.gnu.org/archive/html/bison-patches/2009-05/msg00023.html
+
+	* src/uniqstr.h: Comment changes.
+	* src/location.h (boundary_cmp, location_cmp): New.
+	* src/symtab.c (user_token_number_redeclaration): New.
+	(symbol_translation): Use it.
+	* tests/input.at (Numbered tokens): Adjust the expected output.
+
+2009-05-25  Akim Demaille  <demaille@gostai.com>
 
 	gnulib: update.
 	* gnulib: Update to latest.
@@ -737,7 +2351,54 @@
 
 2009-05-22  Joel E. Denny  <jdenny@ces.clemson.edu>
 
+	Convert multiple variable definition warnings to complaints.
+	* NEWS (2.5): Add a new entry for that change.
+	* doc/bison.texinfo (Decl Summary): Update %define entry.
+	(Bison Options): Update -D/--define/-F/--force-define entry.
+	* src/muscle_tab.c (muscle_percent_define_insert): Implement.
+	* src/muscle_tab.h (muscle_percent_define_insert): Update
+	comments.
+	* tests/input.at (`%define errors'): Update.
+	(`%define, --define, --force-define'): Update.
+
+2009-05-22  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	-F/--force-define and relative %define/-D/--define priorities.
+	* NEWS (2.5): Add documentation to -D/--define entry.
+	* build-aux/cross-options.pl: Hard-code association of
+	--force-define with %define.
+	* doc/bison.texinfo (Decl Summary): In %define entry,
+	cross-reference command-line options.
+	(Bison Options): Add documentation to -D/--define entry.
+	(Option Cross Key): Widen column for --force-define row.
+	* src/getargs.c (usage): Document -F/--force-define.  Realign
+	options in output.
+	(short_options, long_options, getargs): Parse -F/--force-define,
+	and update muscle_percent_define_insert invocation.
+	* src/muscle_tab.h (muscle_percent_define_how): New enum type.
+	(muscle_percent_define_insert): Add argument with that type.
+	* src/muscle_tab.c (muscle_percent_define_insert): Implement
+	-F/--force-define behavior and priorities.
+	* src/parse-gram.y (prologue_declaration): Update
+	muscle_percent_define_insert invocations.
+	* tests/input.at (`%define, --define'): Rename to...
+	(`%define, --define, --force-define'): ... this and extend.
+
+2009-05-22  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Update some comments to make sense for -D.
+	* data/bison.m4 (b4_check_user_names): In header comments, say
+	"user occurrence" instead of "grammar occurrence".
+	* src/muscle_tab.h (muscle_percent_define_insert): Likewise.
+	(muscle_percent_code_grow): Likewise just for consistency.
+
+2009-05-22  Joel E. Denny  <jdenny@ces.clemson.edu>
+
 	* data/c++.m4: Update copyright year.
+
+2009-05-20  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	* data/c++.m4 (b4_namespace_close): Simplify slightly.
 
 2009-05-19  Joel E. Denny  <jdenny@ces.clemson.edu>
 
@@ -747,11 +2408,50 @@
 	generated code easier to debug, but otherwise it should be
 	insignificant because a trailing `:' is a C++ error already.
 
+2009-05-19  Akim Demaille  <demaille@gostai.com>
+
+	remove useless variable.
+	* src/getargs.c (skeleton_arg): Remove now useless variable.
+	Should help the compiler see that this printf-like call is sane.
+
 2009-05-11  Akim Demaille  <demaille@gostai.com>
 
 	doc: use C++ headers.
 	* doc/bison.texinfo (Calc++ Scanner): Prefer C++ headers to C
 	headers.
+
+2009-05-05  Akim Demaille  <demaille@gostai.com>
+
+	fix hexadecimal token number support.
+	* src/scan-gram.l: Catch incorrect ids after hexadecimal numbers.
+
+2009-05-05  Akim Demaille  <demaille@gostai.com>
+
+	tests: check token numbers.
+	* tests/input.at (Numbered tokens): New.
+
+2009-05-04  Akim Demaille  <demaille@gostai.com>
+
+	bison: catch bad symbol names.
+	* src/scan-gram.l({int}{id}): Report as an invalid identifier.
+	* tests/input.at: Adjust.
+
+2009-05-04  Akim Demaille  <demaille@gostai.com>
+
+	space changes.
+	* src/scan-gram.l: Untabify to be robust to zealous editors.
+
+2009-05-04  Akim Demaille  <demaille@gostai.com>
+
+	identifiers: dashes are letters.
+	Dashes can now start identifiers (symbols and directives).
+
+	* src/scan-gram.l ({letter}): Add dash.
+	({id}): Remove it.
+	* tests/input.at (Symbols): Adjust.
+	Remove stray comment.
+	* tests/regression.at (Invalid inputs): Adjust error message.
+	* doc/bison.texinfo (Symbols): Update.
 
 2009-05-01  Joel E. Denny  <jdenny@ces.clemson.edu>
 
@@ -761,17 +2461,434 @@
 	experimental.
 	(Decl Summary): Likewise.
 
+2009-04-30  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Convert underscores to dashes in some %define variable names.
+	For now, just api.push-pull and lr.keep-unreachable-states.
+	Maintain old names for backward compatibility.
+	* NEWS (2.5): Document.
+	* data/c.m4 (b4_identification): Update comment.
+	* data/yacc.c: Update access.
+	* doc/bison.texinfo: Update.
+	* etc/bench.pl.in (bench_grammar): Update use.
+	* src/files.c (tr): Move to...
+	* src/getargs.c, src/getargs.h (tr): ... here because I can't
+	think of a better place to expose it.  My logic is that, for all
+	uses of tr so far, command-line arguments can be involved, and
+	getargs.h is already included.
+	* src/main.c (main): Update access.
+	* src/muscle_tab.c (muscle_percent_define_insert): Convert old
+	variable names to new variable names before assigning value.
+	* src/reader.c (reader): Update setting default.
+	* tests/calc.at: Update uses.
+	* tests/conflicts.at (Unreachable States After Conflict
+	Resolution): Update use.
+	* tests/input.at (%define enum variables): Update use.
+	(%define backward compatibility): New test group.
+	* tests/push.at: Update uses.
+	* tests/reduce.at: Update uses.
+	* tests/torture.at: Update uses.
+
+2009-04-30  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Set all front-end %define defaults in one place.
+	* src/main.c (main): Move lr.keep_unreachable_states default...
+	* src/reader.c (reader): ... to here.
+
+2009-04-29  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Rename lr.default_reductions to lr.default-reductions.
+	* NEWS (2.5): Here.
+	* doc/bison.texinfo: Here.
+	* src/lalr.c (initialize_LA): Here.
+	* src/print.c (print_reductions): Here.
+	* src/reader.c (reader): Here.
+	* src/tables.c (action_row): Here.
+	* tests/input.at (%define enum variables): Here.
+	* tests/reduce.at (AT_TEST_LR_DEFAULT_REDUCTIONS): Here.
+
+2009-04-29  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Pacify ./configure --enable-gcc-warnings.
+	* tests/input.at (Symbols): Prototype yyerror and yylex.
+
+2009-04-21  Akim Demaille  <demaille@gostai.com>
+
+	tests: check the use of dashes and periods in symbols.
+	* tests/input.at (Symbol): New test group.
+
+2009-04-29  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Document how `%define "var" "value"' is not M4-friendly.
+	* src/parse-gram.y (variable): In comments here.
+
+2009-04-29  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Add copyright updates missed during previous cherry pick.
+	* src/output.c: Here.
+	* src/parse-gram.y: Here.
+	* src/scan-gram.l: Here.
+
+2009-04-20  Akim Demaille  <demaille@gostai.com>
+
+	variables: accept dashes.
+	* src/scan-gram.l ({id}): Also accept dashes after the initial
+	letter.
+	({directive}): Use {id}.
+	* src/parse-gram.y: Comment and formatting changes.
+	* doc/bison.texinfo (Symbols): Adjust the lexical definitions of
+	symbols.
+	* src/complain.h, src/complain.c (yacc_at): New.
+	* src/symtab.c (symbol_new): Use yacc_at to report inappropriate
+	symbol names.
+	* src/output.c (token_definitions_output): Do not #define token
+	names with dashes.
+
+2009-04-24  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Clean up recent patches a little.
+	Reported by Akim Demaille.
+	* doc/bison.texinfo (Understanding): Fix typos.
+	* src/print.c (print_reductions): Don't use negated variable.
+
+2009-04-24  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	List accepted values for a %define enum variable with an invalid value.
+	Suggested by Akim Demaille at
+	<http://lists.gnu.org/archive/html/bison-patches/2009-04/msg00082.html>.
+	* data/bison.m4 (_b4_percent_define_check_values): Implement.
+	* src/muscle_tab.c (muscle_percent_define_check_values): Implement.
+	* tests/input.at (%define lr.default_reductions invalid values): Merge
+	into...
+	(%define enum variables): ... here, and update output.
+
+2009-04-23  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Rename "default rule" to "default reduction".
+	This includes changing variable names in code, changing
+	comments, and renaming %define lr.default_rules to %define
+	lr.default_reductions.
+	* NEWS (2.5): Update IELR documentation.
+	* data/glr.c, data/lalr1.cc, data/lalr1.java, data/yacc.c:
+	Adjust YYDEFACT and yydefact_ documentation.
+	* doc/bison.texinfo (Decl Summary): Adjust lr.default_reductions
+	and lr.type documentation.  Make some other wording
+	improvements.
+	(Glossary): Adjust cross-references and Default Reduction
+	definition.
+	* src/lalr.c (state_lookahead_tokens_count): Adjust code.
+	Remove a confusing comment pointed out by Akim Demaille.
+	(initialize_LA): Adjust code.
+	* src/print-xml.c (print_reductions): Adjust code.
+	* src/print.c (print_reductions): Adjust code.
+	* src/reader.c (reader): Adjust code.
+	* src/tables.c (action_row): Adjust code.
+	(token_actions): Adjust code.
+	* src/tables.h: Adjust YYDEFACT documentation.
+	* tests/input.at (%define lr.default_rules invalid values):
+	Rename test group to...
+	(%define lr.default_reductions invalid values): ... this, and
+	update grammar file and expected output.
+	* tests/reduce.at (AT_TEST_LR_DEFAULT_RULES): Rename to...
+	(AT_TEST_LR_DEFAULT_REDUCTIONS): ... this, and update.
+
+2009-04-21  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Document %define lr.type and lr.default_rules.
+	* NEWS (2.5): Add an entry.
+	* src/getargs.c (usage): Mention IELR(1) and canonical LR(1)
+	besides just LALR(1) and GLR(1).
+	* doc/bison.texinfo (Introduction): Likewise.
+	(Language and Grammar): Bison is no longer limited to LALR(1)
+	restrictions.
+	(GLR parsing): Say deterministic or LR(1) rather than LALR(1)
+	when trying to distinguish from GLR.  Talk about LR(1) grammars
+	rather than LALR(1) grammars.
+	(Decl Summary): In %define api.push_pull entry, say it applies
+	to deterministic parsers in C rather than LALR(1) parsers in C.
+	Add lr.default_rules entry.
+	Add lr.type entry.
+	(Mystery Conflicts): Bison is no longer limited to LALR(1)
+	restrictions.
+	(Generalized LR Parsing): Same changes as for the previous GLR
+	section.
+	(Memory Management): Say deterministic rather than LALR(1).
+	(Understanding): Correct some bison output.
+	Index discussion of "accepting state".
+	Say deterministic rather than LALR(1).
+	(Bison Options): In --yacc entry, say deterministic rather than
+	LALR(1).
+	In --report, --graph, and --xml entries, just don't mention
+	LALR(1).
+	(C++ Parsers): Say deterministic rather than LALR(1).
+	(Table of Symbols): Likewise in YYSTACK_USE_ALLOCA entry.
+	(Glossary): Add Accepting State, Consistent State, Default Rule,
+	and IELR(1) definitions.
+	In Generalized LR (GLR) definition, make same changes as in
+	previous GLR sections.
+	In LALR(1) definition, say Bison uses LALR(1) by default rather
+	than implying Bison is limited to LALR(1).
+	(LocalWords): Add IELR.
+
+2009-04-21  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Finish implementing %define lr.type.
+	Its value can be "LALR", "IELR", or "canonical LR".
+	* lib/timevar.def (TV_IELR_PHASE1): New var.
+	(TV_IELR_PHASE2): New var.
+	(TV_IELR_PHASE3): New var.
+	(TV_IELR_PHASE4): New var.
+	* src/Makefile.am (bison_SOURCES): Add AnnotationList.c,
+	AnnotationList.h, InadequacyList.c, InadequacyList.h, Sbitset.c,
+	Sbitset.h, ielr.h, and ielr.c.
+	* src/getargs.h, src/getargs.c (enum trace, trace_args,
+	trace_types): Add trace_ielr.
+	* src/lalr.h, src/lalr.c (ngotos): Export it.
+	(F): Rename to...
+	(goto_follows): ... this, update all uses, and export it.
+	(set_goto_map): Export it.
+	(map_goto): Export it.
+	(compute_lookahead_tokens): Don't free goto_follows yet.  Now
+	handled in ielr.
+	(initialize_LA): Export it.  Move lookback allocation to...
+	(lalr): ... here because, for canonical LR, initialize_LA must
+	be invoked but lookback and much of the rest of LALR isn't
+	needed.
+	* main.c (main): Instead of lalr, invoke ielr, which invokes
+	lalr.
+	* src/reader.c (reader): Default lr.type to "LALR".
+	Default lr.default_rules to "accepting" if lr.type is "canonical
+	LR".  Leave the default as "all" otherwise.
+	Check for a valid lr.type value.
+	* src/state.h, src/state.c (struct state_list): Add state_list
+	member.
+	(state_new): Initialize state_list member to NULL.
+	(state_new_isocore): New function, exported.
+	* tests/existing.at (AT_TEST_EXISTING_GRAMMAR): New macro that
+	exercises all values of lr.type.
+	(GNU AWK Grammar): Rename test group to...
+	(GNU AWK 3.1.0 Grammar): ... this, and extend to use
+	AT_TEST_EXISTING_GRAMMAR.
+	(GNU Cim Grammar): Extend to use AT_TEST_EXISTING_GRAMMAR.
+	(GNU pic Grammar): Rename test group to...
+	(GNU pic (Groff 1.18.1) Grammar): ... this, and extend to use
+	AT_TEST_EXISTING_GRAMMAR.
+	* tests/reduce.at (AT_TEST_LR_TYPE): New macro that exercises
+	all values of lr.type.
+	(Single State Split): New test groups using AT_TEST_LR_TYPE.
+	(Lane Split): Likewise.
+	(Complex Lane Split): Likewise.
+	(Split During Added Lookahead Propagation): Likewise.
+
+2009-04-21  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Add new files for IELR and canonical LR implementation.
+	* src/AnnotationList.c: New.
+	* src/AnnotationList.h: New.
+	* src/InadequacyList.c: New.
+	* src/InadequacyList.h: New.
+	* src/Sbitset.c: New.
+	* src/Sbitset.h: New.
+	* src/ielr.c: New.
+	* src/ielr.h: New.
+
+2009-04-20  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Implement %define lr.default_rules.
+	Its value describes the states that are permitted to contain
+	default rules: "all", "consistent", or "accepting".
+	* src/reader.c (reader): Default lr.default_rules to "all".
+	Check for a valid lr.default_rules value.
+	* src/lalr.c (state_lookahead_tokens_count): If lr.default_rules
+	is "accepting", then only mark the accepting state as
+	consistent.
+	(initialize_LA): Tell state_lookahead_tokens_count whether
+	lr.default_rules is "accepting".
+	* src/tables.c (action_row): If lr.default_rules is not "all",
+	then disable default rules in inconsistent states.
+	* src/print.c (print_reductions): Use this opportunity to
+	perform some assertions about whether lr.default_rules was
+	obeyed correctly.
+	* tests/local.at (AT_TEST_TABLES_AND_PARSE): New macro that
+	helps with checking the parser tables for a grammar.
+	* tests/input.at (%define lr.default_rules invalid values): New
+	test group.
+	* tests/reduce.at (AT_TEST_LR_DEFAULT_RULES): New macro using
+	AT_TEST_TABLES_AND_PARSE.
+	(`no %define lr.default_rules'): New test group generated by
+	AT_TEST_LR_DEFAULT_RULES.
+	(`%define lr.default_rules "all"'): Likewise.
+	(`%define lr.default_rules "consistent"'): Likewise.
+	(`%define lr.default_rules "accepting"'): Likewise.
+
+2009-04-20  Akim Demaille  <demaille@gostai.com>
+
+	Consistently refer to Yacc, not YACC.
+	* src/getargs.c (usage, warnings_args): s/YACC/Yacc/.
+
+2009-04-17  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Pacify make maintainer-check-posix.
+	* tests/input.at (%define, --define): Move bison command-line
+	options before grammar file name.
+
+2009-04-04  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Document semicolon warnings.
+	* NEWS (2.5): Here.
+
+2008-12-08  Akim Demaille  <demaille@gostai.com>
+
+	Fix portability issue in the test suite.
+	* tests/local.at (AT_MATCHES_CHECK): New.
+	Based on Perl instead of Sed.  Sed has too many portability
+	pitfalls, not ever Sed is GNU Sed.
+	* tests/actions.at (Fix user actions without a trailing semicolon):
+	Use it.
+
+2008-12-07  Di-an Jan  <dianj@freeshell.org>
+
+	Implement the FIXME that ends an user action with a semicolon
+	if it seems necessary.
+	* src/scan-code.l (flex rules section): Flag cpp directive from
+	any `#' to the first unescaped end-of-line.  Semicolon is not
+	needed after `;', `{', '}', or cpp directives and is needed after
+	any other token (whitespaces and comments have no effect).
+	* tests/actions.at (Fix user actions without a trailing semicolon):
+	New test.
+	* tests/input.at (AT_CHECK_UNUSED_VALUES): Add semicolons to
+	to make user actions complete statements.
+	Adjust column numbers in error messages.
+	* tests/regression.at (Fix user actions without a trailing semicolon):
+	Remove.  Covered by new test.
+
 2009-04-14  Akim Demaille  <demaille@gostai.com>
 
 	doc: minor fixes.
 	* doc/bison.texinfo (Decl Summary): Fix entry about %debug.
 	(Table of Symbols): Remove duplicate entry for %debug.
 
+2009-04-10  Eric Blake  <ebb9@byu.net>
+
+	submodules: update to latest
+	* submodules/autoconf: Use latest upstream Autoconf.
+
 2009-04-06  Eric Blake  <ebb9@byu.net>
 
 	Work around autoconf 2.63b bug in testsuite.
 	* tests/output.at (AT_CHECK_OUTPUT_FILE_NAME): Avoid tripping
 	autoconf bug related to # in test.
+
+2009-04-06  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	* NEWS (2.5): Describe new -D/--define feature.
+
+2008-11-10  Akim Demaille  <demaille@gostai.com>
+
+	--trace=muscles
+	* src/getargs.h, src/getargs.c (trace_muscle): New.
+	(trace_types, trace_args): Support it.
+	* src/output.c (output_skeleton): Use it.
+
+2008-11-10  Akim Demaille  <demaille@gostai.com>
+
+	muscles_output.
+	* src/output.c (muscles_output): New, extracted from...
+	(output_skeleton): here.
+	Adjust.
+
+2008-11-21  Akim Demaille  <demaille@gostai.com>
+
+	Display the changes in cross-options.texi.
+	* build-aux/cross-options.pl ($sep): New, to separate items.
+	* doc/Makefile.am ($(srcdir)/cross-options.texi): Use diff to display
+	the changes.
+
+2008-11-20  Di-an Jan  <dianj@freeshell.org>
+
+	Improves options in the manual.
+	* doc/bison.texinfo (-g, -x): Add space before argument.
+	(Option Cross Key): Implement FIXME: listing directives also.
+	* build-aux/cross-options.pl:  Read from <STDIN> rather than <>.
+	(Short Option): Special case -d.  Put arguments inside @option.
+	(Bison Directive): Add column, automatically extracted from
+	src/scan-gram.l (actual name passed as the first argument)
+	with special case for %define.
+	* doc/Makefile.am (doc/cross-options.texi): Pass src/scan-gram.l
+	to build-aux/cross-options.pl.
+	* src/getargs.c (usage): Document limitations of cross-options.pl.
+	* src/scan-gram.l: Likewise.
+
+2009-02-25  Akim Demaille  <demaille@gostai.com>
+
+	Copyright years.
+	* data/glr.c: Add 2007 and 2008 here, consistenly with the comments.
+
+2008-12-08  Akim Demaille  <demaille@gostai.com>
+
+	Install autoconf as a submodule to get m4sugar.
+	* .gitmodules: Add submodules/autoconf.
+	* data/m4sugar/foreach.m4, data/m4sugar/m4sugar.m4: Now links into
+	submodules/autoconf.
+
+2008-11-17  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Simplify last patch slightly.
+	* src/getargs.c (getargs): Here.
+
+2008-11-17  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Fix last warning from --enable-gcc-warnings.
+	* src/getargs.c (getargs): Don't assign const address to non-const
+	pointer.
+
+2008-11-17  Di-an Jan  <dianj@freeshell.org>
+
+	Handle --enable-gcc-warnings.
+	* src/getargs.c (command_line_location): Set parameters to void.
+
+2008-11-11  Akim Demaille  <demaille@gostai.com>
+
+	AT_FULL_COMPILE.
+	* tests/actions.at, tests/regression.at: Use it.
+
+2008-11-07  Akim Demaille  <demaille@gostai.com>
+
+	Pass command line location to skeleton_arg and language_argmatch.
+	* src/getargs.h, src/getargs.c (skeleton_arg, language_argmatch):
+	The location argument is now mandatory.
+	Adjust all dependencies.
+	(getargs): Use command_line_location.
+
+2008-11-07  Akim Demaille  <demaille@gostai.com>
+
+	-D, --define.
+	* src/getargs.c (usage): Document -D.
+	Fix help string for --locations.
+	(command_line_location): New.
+	(short_options, long_options, getargs): Support -D, --define.
+	(getargs): Move -d support at the right place.
+	* doc/bison.texinfo (Bison Options): Update.
+	* tests/input.at (%define, --define): New.
+
+2008-11-07  Akim Demaille  <demaille@gostai.com>
+
+	Initialize the muscle table before parsing the command line.
+	* src/getargs.c (quotearg.h, muscle_tab.h): Include.
+	(getargs): Define file_name.
+	* src/main.c (main): Initialize muscle_tab before calling
+	getargs.
+	* src/muscle_tab.c (muscle_init): No longer define file_name, as
+	its value is not available yet.
+
+2008-11-09  Akim Demaille  <demaille@gostai.com>
+
+	Require the generation of parse-gram.output.
+	* src/Makefile.am (YACC): Pass --report=all.
+
+2009-04-06  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	* NEWS (2.5): New stub.
 
 2009-04-06  Joel E. Denny  <jdenny@ces.clemson.edu>
 
@@ -22017,9 +24134,8 @@
 
 	-----
 
-	Copyright (C) 1987, 1988, 1991, 1992, 1993, 1994, 1995, 1996,
-	1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
-	2008, 2009, 2010 Free Software Foundation, Inc.
+	Copyright (C) 1987-1988, 1991-2011 Free Software Foundation,
+	Inc.
 
 	Copying and distribution of this file, with or without
 	modification, are permitted provided the copyright notice and this

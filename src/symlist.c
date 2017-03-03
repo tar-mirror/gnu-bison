@@ -1,7 +1,7 @@
 /* Lists of symbols for Bison
 
-   Copyright (C) 2002, 2005, 2006, 2007, 2009, 2010 Free Software
-   Foundation, Inc.
+   Copyright (C) 2002, 2005-2007, 2009-2011 Free Software Foundation,
+   Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -36,7 +36,7 @@ symbol_list_sym_new (symbol *sym, location loc)
 
   res->content_type = SYMLIST_SYMBOL;
   res->content.sym = sym;
-  res->location = loc;
+  res->location = res->sym_loc = loc;
 
   res->midrule = NULL;
   res->midrule_parent_rule = NULL;
@@ -47,6 +47,8 @@ symbol_list_sym_new (symbol *sym, location loc)
   res->ruleprec = NULL;
   res->dprec = 0;
   res->merger = 0;
+
+  res->named_ref = NULL;
 
   res->next = NULL;
 
@@ -65,7 +67,8 @@ symbol_list_type_new (uniqstr type_name, location loc)
 
   res->content_type = SYMLIST_TYPE;
   res->content.type_name = type_name;
-  res->location = loc;
+  res->location = res->sym_loc = loc;
+  res->named_ref = NULL;
   res->next = NULL;
 
   return res;
@@ -82,7 +85,8 @@ symbol_list_default_tagged_new (location loc)
   symbol_list *res = xmalloc (sizeof *res);
 
   res->content_type = SYMLIST_DEFAULT_TAGGED;
-  res->location = loc;
+  res->location = res->sym_loc = loc;
+  res->named_ref = NULL;
   res->next = NULL;
 
   return res;
@@ -99,7 +103,8 @@ symbol_list_default_tagless_new (location loc)
   symbol_list *res = xmalloc (sizeof *res);
 
   res->content_type = SYMLIST_DEFAULT_TAGLESS;
-  res->location = loc;
+  res->location = res->sym_loc = loc;
+  res->named_ref = NULL;
   res->next = NULL;
 
   return res;
@@ -142,7 +147,13 @@ symbol_list_prepend (symbol_list *list, symbol_list *node)
 void
 symbol_list_free (symbol_list *list)
 {
-  LIST_FREE (symbol_list, list);
+  symbol_list *node, *next;
+  for (node = list; node; node = next)
+    {
+      next = node->next;
+      named_ref_free (node->named_ref);
+      free (node);
+    }
 }
 
 
@@ -204,6 +215,12 @@ symbol_list_n_type_name_get (symbol_list *l, location loc, int n)
   return l->content.sym->type_name;
 }
 
+bool
+symbol_list_null (symbol_list *node)
+{
+  return !node ||
+    (node->content_type == SYMLIST_SYMBOL && !(node->content.sym));
+}
 
 void
 symbol_list_destructor_set (symbol_list *node, char const *code, location loc)

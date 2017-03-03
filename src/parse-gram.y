@@ -1,7 +1,6 @@
 %{/* Bison Grammar Parser                             -*- C -*-
 
-   Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
-   Free Software Foundation, Inc.
+   Copyright (C) 2002-2011 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -26,7 +25,8 @@
 #include "files.h"
 #include "getargs.h"
 #include "gram.h"
-#include "muscle_tab.h"
+#include "muscle-tab.h"
+#include "named-ref.h"
 #include "quotearg.h"
 #include "reader.h"
 #include "symlist.h"
@@ -61,9 +61,29 @@ static void add_param (char const *type, char *decl, location loc);
 
 static symbol_class current_class = unknown_sym;
 static uniqstr current_type = NULL;
-static symbol *current_lhs;
+static symbol *current_lhs_symbol;
 static location current_lhs_location;
+static named_ref *current_lhs_named_ref;
 static int current_prec = 0;
+
+/** Set the new current left-hand side symbol, possibly common
+ * to several right-hand side parts of rule.
+ */
+static
+void
+current_lhs(symbol *sym, location loc, named_ref *ref)
+{
+  current_lhs_symbol = sym;
+  current_lhs_location = loc;
+  /* In order to simplify memory management, named references for lhs
+     are always assigned by deep copy into the current symbol_list
+     node.  This is because a single named-ref in the grammar may
+     result in several uses when the user factors lhs between several
+     rules using "|".  Therefore free the parser's original copy.  */
+  free (current_lhs_named_ref);
+  current_lhs_named_ref = ref;
+}
+
 
 #define YYTYPE_INT16 int_fast16_t
 #define YYTYPE_INT8 int_fast8_t
@@ -77,6 +97,7 @@ static int current_prec = 0;
 %locations
 %pure-parser
 %error-verbose
+%define parse.lac full
 %name-prefix="gram_"
 %expect 0
 
@@ -98,6 +119,7 @@ static int current_prec = 0;
   assoc assoc;
   uniqstr uniqstr;
   unsigned char character;
+  named_ref *named_ref;
 };
 
 /* Define the tokens together with their human representation.  */
@@ -157,6 +179,7 @@ static int current_prec = 0;
 ;
 
 %token BRACED_CODE     "{...}"
+%token BRACKETED_ID    "[identifier]"
 %token CHAR            "char"
 %token EPILOGUE        "epilogue"
 %token EQUAL           "="
@@ -182,20 +205,23 @@ static int current_prec = 0;
 %printer { fprintf (stderr, "{\n%s\n}", $$); }
 	 braceless content.opt "{...}" "%{...%}" EPILOGUE
 
-%type <uniqstr> TYPE ID ID_COLON variable
-%printer { fprintf (stderr, "<%s>", $$); } TYPE
-%printer { fputs ($$, stderr); } ID variable
+%type <uniqstr> BRACKETED_ID ID ID_COLON TYPE variable
+%printer { fputs ($$, stderr); } <uniqstr>
+%printer { fprintf (stderr, "[%s]", $$); } BRACKETED_ID
 %printer { fprintf (stderr, "%s:", $$); } ID_COLON
+%printer { fprintf (stderr, "<%s>", $$); } TYPE
 
 %type <integer> INT
-%printer { fprintf (stderr, "%d", $$); } INT
+%printer { fprintf (stderr, "%d", $$); } <integer>
 
-%type <symbol> id id_colon symbol symbol.prec string_as_id
-%printer { fprintf (stderr, "%s", $$->tag); } id symbol string_as_id
+%type <symbol> id id_colon string_as_id symbol symbol.prec
+%printer { fprintf (stderr, "%s", $$->tag); } <symbol>
 %printer { fprintf (stderr, "%s:", $$->tag); } id_colon
 
 %type <assoc> precedence_declarator
 %type <list>  symbols.1 symbols.prec generic_symlist generic_symlist_item
+%type <named_ref> named_ref.opt
+
 %%
 
 input:
@@ -227,7 +253,8 @@ prologue_declaration:
 | "%debug"                         { debug_flag = true; }
 | "%define" variable content.opt
     {
-      muscle_percent_define_insert ($2, @2, $3);
+      muscle_percent_define_insert ($2, @2, $3,
+                                    MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE);
     }
 | "%defines"                       { defines_flag = true; }
 | "%defines" STRING
@@ -254,7 +281,7 @@ prologue_declaration:
       muscle_code_grow ("initial_action", action.code, @2);
       code_scanner_last_string_free ();
     }
-| "%language" STRING		{ language_argmatch ($2, grammar_prio, &@1); }
+| "%language" STRING		{ language_argmatch ($2, grammar_prio, @1); }
 | "%lex-param" "{...}"		{ add_param ("lex_param", $2, @2); }
 | "%locations"                  { locations_flag = true; }
 | "%name-prefix" STRING         { spec_name_prefix = $2; }
@@ -270,18 +297,20 @@ prologue_declaration:
          `%define api.pure' in a backward-compatible manner here.  First, don't
          complain if %pure-parser is specified multiple times.  */
       if (!muscle_find_const ("percent_define(api.pure)"))
-        muscle_percent_define_insert ("api.pure", @1, "");
+        muscle_percent_define_insert ("api.pure", @1, "",
+                                      MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE);
       /* In all cases, use api.pure now so that the backend doesn't complain if
          the skeleton ignores api.pure, but do warn now if there's a previous
          conflicting definition from an actual %define.  */
       if (!muscle_percent_define_flag_if ("api.pure"))
-        muscle_percent_define_insert ("api.pure", @1, "");
+        muscle_percent_define_insert ("api.pure", @1, "",
+                                      MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE);
     }
 | "%require" STRING             { version_check (&@2, $2); }
 | "%skeleton" STRING
     {
       char const *skeleton_user = $2;
-      if (strchr (skeleton_user, '/'))
+      if (mbschr (skeleton_user, '/'))
         {
           size_t dir_length = strlen (current_file);
           char *skeleton_build;
@@ -300,7 +329,7 @@ prologue_declaration:
           skeleton_user = uniqstr_new (skeleton_build);
           free (skeleton_build);
         }
-      skeleton_arg (skeleton_user, grammar_prio, &@1);
+      skeleton_arg (skeleton_user, grammar_prio, @1);
     }
 | "%token-table"                { token_table_flag = true; }
 | "%verbose"                    { report_flag |= report_states; }
@@ -516,7 +545,11 @@ rules_or_grammar_declaration:
 ;
 
 rules:
-  id_colon { current_lhs = $1; current_lhs_location = @1; } rhses.1
+  id_colon named_ref.opt { current_lhs ($1, @1, $2); } rhses.1
+  {
+    /* Free the current lhs. */
+    current_lhs (0, @1, 0);
+  }
 ;
 
 rhses.1:
@@ -527,11 +560,12 @@ rhses.1:
 
 rhs:
   /* Nothing.  */
-    { grammar_current_rule_begin (current_lhs, current_lhs_location); }
-| rhs symbol
-    { grammar_current_rule_symbol_append ($2, @2); }
-| rhs "{...}"
-    { grammar_current_rule_action_append ($2, @2); }
+    { grammar_current_rule_begin (current_lhs_symbol, current_lhs_location,
+				  current_lhs_named_ref); }
+| rhs symbol named_ref.opt
+    { grammar_current_rule_symbol_append ($2, @2, $3); }
+| rhs "{...}" named_ref.opt
+    { grammar_current_rule_action_append ($2, @2, $3); }
 | rhs "%prec" symbol
     { grammar_current_rule_prec_set ($3, @3); }
 | rhs "%dprec" INT
@@ -540,22 +574,28 @@ rhs:
     { grammar_current_rule_merge_set ($3, @3); }
 ;
 
+named_ref.opt:
+  /* Nothing. */ { $$ = 0; }
+|
+  BRACKETED_ID   { $$ = named_ref_new($1, @1); }
+;
+
 
 /*----------------------------*
  | variable and content.opt.  |
  *---------------------------*/
 
+/* The STRING form of variable is deprecated and is not M4-friendly.
+   For example, M4 fails for `%define "[" "value"'.  */
 variable:
   ID
-  | STRING { $$ = uniqstr_new ($1); } /* deprecated and not M4-friendly */
-  ;
+| STRING { $$ = uniqstr_new ($1); }
+;
 
 /* Some content or empty by default. */
 content.opt:
-  /* Nothing. */
-    {
-      $$ = "";
-    }
+  /* Nothing. */   { $$ = ""; }
+| ID { $$ = $1; }
 | STRING
 ;
 

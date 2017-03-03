@@ -1,7 +1,7 @@
 /* Print information on generated parser, for bison,
 
-   Copyright (C) 1984, 1986, 1989, 2000, 2001, 2002, 2003, 2004, 2005,
-   2007, 2009, 2010 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1986, 1989, 2000-2005, 2007, 2009-2011 Free
+   Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -31,6 +31,7 @@
 #include "getargs.h"
 #include "gram.h"
 #include "lalr.h"
+#include "muscle-tab.h"
 #include "print.h"
 #include "reader.h"
 #include "reduce.h"
@@ -241,15 +242,16 @@ print_reductions (FILE *out, state *s)
 {
   transitions *trans = s->transitions;
   reductions *reds = s->reductions;
-  rule *default_rule = NULL;
+  rule *default_reduction = NULL;
   size_t width = 0;
   int i, j;
+  bool default_reduction_only = true;
 
   if (reds->num == 0)
     return;
 
   if (yydefact[s->number] != 0)
-    default_rule = &rules[yydefact[s->number] - 1];
+    default_reduction = &rules[yydefact[s->number] - 1];
 
   bitset_zero (no_reduce_set);
   FOR_EACH_SHIFT (trans, i)
@@ -259,7 +261,7 @@ print_reductions (FILE *out, state *s)
       bitset_set (no_reduce_set, s->errs->symbols[i]->number);
 
   /* Compute the width of the lookahead token column.  */
-  if (default_rule)
+  if (default_reduction)
     width = strlen (_("$default"));
 
   if (reds->lookahead_tokens)
@@ -272,7 +274,7 @@ print_reductions (FILE *out, state *s)
 	    {
 	      if (! count)
 		{
-		  if (reds->rules[j] != default_rule)
+		  if (reds->rules[j] != default_reduction)
 		    max_length (&width, symbols[i]->tag);
 		  count = true;
 		}
@@ -296,26 +298,32 @@ print_reductions (FILE *out, state *s)
       {
 	bool defaulted = false;
 	bool count = bitset_test (no_reduce_set, i);
+        if (count)
+          default_reduction_only = false;
 
 	for (j = 0; j < reds->num; ++j)
 	  if (bitset_test (reds->lookahead_tokens[j], i))
 	    {
 	      if (! count)
 		{
-		  if (reds->rules[j] != default_rule)
-		    print_reduction (out, width,
-				     symbols[i]->tag,
-				     reds->rules[j], true);
+		  if (reds->rules[j] != default_reduction)
+                    {
+                      default_reduction_only = false;
+                      print_reduction (out, width,
+                                       symbols[i]->tag,
+                                       reds->rules[j], true);
+                    }
 		  else
 		    defaulted = true;
 		  count = true;
 		}
 	      else
 		{
+                  default_reduction_only = false;
 		  if (defaulted)
 		    print_reduction (out, width,
 				     symbols[i]->tag,
-				     default_rule, true);
+				     default_reduction, true);
 		  defaulted = false;
 		  print_reduction (out, width,
 				   symbols[i]->tag,
@@ -324,9 +332,17 @@ print_reductions (FILE *out, state *s)
 	    }
       }
 
-  if (default_rule)
-    print_reduction (out, width,
-		     _("$default"), default_rule, true);
+  if (default_reduction)
+    {
+      char *default_reductions =
+        muscle_percent_define_get ("lr.default-reductions");
+      print_reduction (out, width, _("$default"), default_reduction, true);
+      aver (0 == strcmp (default_reductions, "most")
+            || (0 == strcmp (default_reductions, "consistent")
+                && default_reduction_only)
+            || (reds->num == 1 && reds->rules[0]->number == 0));
+      free (default_reductions);
+    }
 }
 
 

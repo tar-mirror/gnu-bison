@@ -473,8 +473,8 @@ static void yy_fatal_error (yyconst char msg[]  );
 	(yy_c_buf_p) = yy_cp;
 
 /* %% [4.0] data tables for the DFA and the user's section 1 definitions go here */
-#define YY_NUM_RULES 24
-#define YY_END_OF_BUFFER 25
+#define YY_NUM_RULES 34
+#define YY_END_OF_BUFFER 35
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -482,33 +482,37 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static yyconst flex_int16_t yy_accept[68] =
+static yyconst flex_int16_t yy_accept[101] =
     {   0,
         0,    0,    0,    0,    3,    3,    4,    4,    4,    4,
-        0,    0,    0,    0,   25,   23,   19,   20,   21,   22,
-       23,    2,   23,    6,   23,    5,    8,   13,    7,   23,
-       14,   15,   16,   19,   20,    1,    0,    0,    3,    4,
-        4,    4,    4,   11,    0,   11,    0,    9,   10,    0,
-       12,    0,   12,   17,   18,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,    0
+       21,   21,    0,    0,   35,   33,   29,   30,   31,   32,
+       33,    2,   33,    6,   33,    5,   26,   23,   22,   22,
+        8,   20,   13,    7,   26,   17,   14,   25,   25,   15,
+       26,   16,   18,   19,    8,   29,    7,   33,   30,    1,
+        0,    0,    3,    4,    4,    4,    4,   11,    0,   11,
+       11,    0,    0,    9,   10,    0,   12,    0,   12,   12,
+        0,   25,   25,    0,   21,   27,   28,    0,    0,    0,
+        0,    0,    0,    0,   11,    0,    0,    0,    0,   12,
+        0,   25,    0,    0,    0,    0,   25,   25,   24,    0
+
     } ;
 
 static yyconst flex_int32_t yy_ec[256] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    2,    3,
-        2,    2,    1,    1,    1,    1,    1,    1,    1,    1,
+        4,    2,    5,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    2,    1,    4,    1,    5,    1,    1,    6,    1,
-        1,    7,    1,    1,    8,    1,    9,   10,   10,   10,
-       10,   10,   10,   10,   10,   10,   10,    1,    1,   11,
-        1,   12,    1,   13,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-       14,   15,   16,    1,    1,    1,    1,    1,    1,    1,
+        1,    2,    1,    6,    7,    8,    1,    1,    9,    1,
+        1,   10,    1,    1,   11,   12,   13,   14,   14,   14,
+       14,   14,   14,   14,   14,   14,   14,    1,   15,   16,
+        1,   17,    1,   18,   19,   20,   20,   20,   20,   21,
+       20,   20,   22,   20,   20,   23,   20,   20,   20,   20,
+       20,   20,   20,   20,   20,   20,   20,   20,   24,   20,
+       25,   26,   27,    1,   20,    1,   20,   20,   20,   20,
 
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,   17,    1,   18,    1,    1,    1,    1,    1,
+       20,   20,   20,   20,   20,   20,   20,   20,   20,   20,
+       20,   20,   20,   20,   20,   20,   20,   20,   20,   20,
+       20,   20,   28,    1,   29,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -525,66 +529,111 @@ static yyconst flex_int32_t yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static yyconst flex_int32_t yy_meta[20] =
+static yyconst flex_int32_t yy_meta[31] =
     {   0,
-        1,    1,    2,    1,    1,    1,    1,    1,    1,    1,
-        1,    2,    1,    1,    1,    1,    1,    1,    2
+        1,    1,    2,    1,    1,    1,    1,    3,    1,    1,
+        4,    5,    1,    6,    1,    1,    2,    1,    7,    7,
+        7,    7,    7,    7,    3,    1,    8,    1,    1,    2
     } ;
 
-static yyconst flex_int16_t yy_base[71] =
+static yyconst flex_int16_t yy_base[112] =
     {   0,
-        0,   12,   84,   82,    0,    3,    4,    5,    6,   16,
-       28,    0,   43,    0,   88,   97,   97,   97,   97,   97,
-       14,   97,    8,   97,   55,   97,   97,   66,   97,   71,
-       82,   97,   97,   80,   79,   97,   33,   36,   68,   97,
-       40,   67,   48,   97,   69,   65,    0,   97,   97,   51,
-       97,   45,   34,   97,   97,   57,   15,   59,   61,   63,
-       65,   66,   28,   70,    0,   16,   97,   92,   94,    0
+        0,    1,   21,   41,   66,    0,    4,    8,   12,   14,
+       93,    0,  121,    0,  233,  234,  234,  234,  234,  234,
+        7,  234,    0,  234,   39,  234,  234,  234,  234,  234,
+      234,  234,  140,  234,   34,  234,   42,    0,  208,  234,
+       33,  234,  234,  234,  234,  223,  234,   44,  222,  234,
+       59,   69,  192,  234,   73,  185,   76,  234,  189,    0,
+      156,    0,    0,  234,  234,   79,  234,  155,    0,  143,
+        0,    0,  132,   83,  124,  234,  234,   86,   19,  129,
+      133,  138,  141,  123,    0,  129,  111,  164,  145,    0,
+      101,  106,  170,   48,   31,   28,   30,    1,    0,  234,
+
+      174,  182,  188,  190,  194,  201,  205,  209,  212,  216,
+      221
     } ;
 
-static yyconst flex_int16_t yy_def[71] =
+static yyconst flex_int16_t yy_def[112] =
     {   0,
-       68,   68,    2,    2,    2,    2,    2,    2,    2,    2,
-        2,   11,    2,   13,   67,   67,   67,   67,   67,   67,
-       67,   67,   67,   67,   69,   67,   67,   67,   67,   67,
-       67,   67,   67,   67,   67,   67,   67,   67,   67,   67,
-       67,   67,   67,   67,   67,   67,   70,   67,   67,   67,
-       67,   67,   67,   67,   67,   67,   67,   67,   67,   67,
-       67,   69,   70,   67,   30,   28,    0,   67,   67,   67
+      101,  101,  101,  101,  101,    5,    5,    5,    5,    5,
+      100,   11,    5,   13,  100,  100,  100,  100,  100,  100,
+      100,  100,  100,  100,  102,  100,  100,  100,  100,  100,
+      100,  100,  100,  100,  100,  100,  103,  104,  104,  100,
+      100,  100,  100,  100,  100,  100,  100,  100,  100,  100,
+      100,  100,  100,  100,  100,  100,  100,  100,  100,  105,
+      100,  106,  107,  100,  100,  100,  100,  100,  108,  100,
+      109,  104,  104,  100,  100,  100,  100,  100,  100,  100,
+      100,  100,  100,  102,  105,  106,  110,  100,  100,  108,
+      111,  104,  100,   33,  110,  111,  104,  104,  104,    0,
+
+      100,  100,  100,  100,  100,  100,  100,  100,  100,  100,
+      100
     } ;
 
-static yyconst flex_int16_t yy_nxt[117] =
+static yyconst flex_int16_t yy_nxt[265] =
     {   0,
-       63,   67,   22,   67,   17,   22,   67,   24,   24,   38,
-       39,   26,   18,   19,   23,   20,   17,   23,   25,   25,
-       25,   26,   36,   36,   18,   19,   67,   20,   37,   37,
-       25,   27,   28,   29,   56,   57,   30,   38,   39,   66,
-       31,   59,   42,   53,   32,   33,   27,   34,   29,   61,
-       62,   30,   64,   65,   53,   35,   41,   42,   56,   57,
-       38,   39,   59,   42,   59,   42,   61,   62,   67,   43,
-       44,   64,   65,   45,   46,   46,   47,   48,   46,   49,
-       43,   60,   58,   55,   54,   50,   51,   67,   21,   52,
-       21,   53,   16,   16,   40,   40,   15,   67,   67,   67,
+      100,   52,   53,   52,  100,  100,   16,   17,   17,   24,
+       16,  100,  100,   24,   16,  100,   16,   18,   18,   50,
+       26,  100,   26,   99,   19,   19,   20,   20,   17,   25,
+       21,   50,   51,   25,   74,   75,   74,   25,   18,   25,
+       55,   56,   55,   64,   51,   19,   65,   20,   17,   67,
+       21,   98,   68,   64,   67,   70,   65,   58,   18,   66,
+       78,   79,   78,  100,   57,   19,   71,   20,   22,   66,
+       52,   53,   52,   17,   81,   56,   81,   83,   84,   83,
+       88,   89,   88,   18,   74,   75,   74,   78,   79,   78,
+       19,   23,   20,   27,   28,   29,   27,   30,   31,   32,
 
-       67,   67,   67,   67,   67,   67,   67,   67,   67,   67,
-       67,   67,   67,   67,   67,   67
+       33,   34,   27,   27,   27,   35,   27,   36,   27,   27,
+       37,   38,   38,   38,   38,   38,   39,   40,   41,   42,
+       43,   44,   27,   16,   97,  100,   45,   67,   46,   47,
+       52,   53,   52,   48,   81,   56,   81,   58,   49,   81,
+       56,   81,   83,   84,   83,   94,   16,   58,   57,   93,
+       59,   60,   92,   61,   64,   62,   70,   65,   60,   60,
+       60,   60,   60,   60,   63,   88,   89,   88,   70,   61,
+       66,   74,   75,   74,   16,   16,   16,   16,   16,   16,
+       16,   16,   54,   54,   54,   54,   54,   54,   54,   54,
+       69,   69,   69,   69,   69,   72,   72,   85,   85,   85,
+
+       85,   86,   61,   86,   86,   86,   86,   86,   86,   87,
+       82,   87,   90,   90,   90,   90,   91,   80,   91,   95,
+       95,   95,   95,   95,   96,   96,   96,   96,   96,   77,
+       76,   73,  100,   15,  100,  100,  100,  100,  100,  100,
+      100,  100,  100,  100,  100,  100,  100,  100,  100,  100,
+      100,  100,  100,  100,  100,  100,  100,  100,  100,  100,
+      100,  100,  100,  100
     } ;
 
-static yyconst flex_int16_t yy_chk[117] =
+static yyconst flex_int16_t yy_chk[265] =
     {   0,
-       70,    0,    5,    0,    1,    6,    0,    7,    8,   23,
-       23,    9,    1,    1,    5,    1,    2,    6,    7,    8,
-        9,   10,   21,   57,    2,    2,   66,    2,   21,   57,
-       10,   11,   11,   11,   37,   37,   11,   38,   38,   63,
-       11,   41,   41,   53,   11,   11,   13,   13,   13,   43,
-       43,   13,   50,   50,   52,   13,   25,   25,   56,   56,
-       58,   58,   59,   59,   60,   60,   61,   61,   62,   25,
-       28,   64,   64,   28,   46,   28,   28,   30,   45,   30,
-       62,   42,   39,   35,   34,   30,   31,   15,    4,   31,
-        3,   31,   68,   68,   69,   69,   67,   67,   67,   67,
+        0,   23,   23,   23,    0,    0,    7,    1,    2,    7,
+        8,    0,    0,    8,    9,    0,   10,    1,    2,   21,
+        9,    0,   10,   98,    1,    2,    1,    2,    3,    7,
+        3,   79,   21,    8,   41,   41,   41,    9,    3,   10,
+       25,   25,   25,   35,   79,    3,   35,    3,    4,   37,
+        4,   97,   37,   48,   96,   37,   48,   95,    4,   35,
+       51,   51,   51,   94,   25,    4,   37,    4,    5,   48,
+       52,   52,   52,    5,   55,   55,   55,   57,   57,   57,
+       66,   66,   66,    5,   74,   74,   74,   78,   78,   78,
+        5,    5,    5,   11,   11,   11,   11,   11,   11,   11,
 
-       67,   67,   67,   67,   67,   67,   67,   67,   67,   67,
-       67,   67,   67,   67,   67,   67
+       11,   11,   11,   11,   11,   11,   11,   11,   11,   11,
+       11,   11,   11,   11,   11,   11,   11,   11,   11,   11,
+       11,   11,   11,   13,   92,   84,   13,   91,   13,   13,
+       80,   80,   80,   13,   81,   81,   81,   87,   13,   82,
+       82,   82,   83,   83,   83,   86,   13,   33,   84,   75,
+       33,   33,   73,   33,   89,   33,   70,   89,   33,   33,
+       33,   33,   33,   33,   33,   88,   88,   88,   68,   61,
+       89,   93,   93,   93,  101,  101,  101,  101,  101,  101,
+      101,  101,  102,  102,  102,  102,  102,  102,  102,  102,
+      103,  103,  103,  103,  103,  104,  104,  105,  105,  105,
+
+      105,  106,   59,  106,  106,  106,  106,  106,  106,  107,
+       56,  107,  108,  108,  108,  108,  109,   53,  109,  110,
+      110,  110,  110,  110,  111,  111,  111,  111,  111,   49,
+       46,   39,   15,  100,  100,  100,  100,  100,  100,  100,
+      100,  100,  100,  100,  100,  100,  100,  100,  100,  100,
+      100,  100,  100,  100,  100,  100,  100,  100,  100,  100,
+      100,  100,  100,  100
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -593,11 +642,12 @@ static char *yy_last_accepting_cpos;
 extern int code__flex_debug;
 int code__flex_debug = 1;
 
-static yyconst flex_int16_t yy_rule_linenum[24] =
+static yyconst flex_int16_t yy_rule_linenum[34] =
     {   0,
-      100,  110,  111,  121,  126,  131,  136,  140,  144,  148,
-      156,  159,  163,  167,  172,  173,  202,  206,  219,  220,
-      221,  222,  229
+      125,  135,  136,  146,  151,  156,  161,  166,  171,  175,
+      183,  191,  199,  204,  209,  213,  218,  219,  220,  243,
+      245,  246,  247,  251,  259,  261,  266,  270,  283,  284,
+      285,  286,  293
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -611,8 +661,7 @@ char *code_text;
 #line 1 "scan-code.l"
 /* Bison Action Scanner                             -*- C -*-
 
-   Copyright (C) 2006, 2007, 2008, 2009, 2010 Free Software
-   Foundation, Inc.
+   Copyright (C) 2006-2011 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -629,7 +678,7 @@ char *code_text;
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 #define YY_NO_INPUT 1
-#line 25 "scan-code.l"
+#line 24 "scan-code.l"
 /* Work around a bug in flex 2.5.31.  See Debian bug 333231
    <http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=333231>.  */
 #undef code_wrap
@@ -641,11 +690,12 @@ char *code_text;
 #include "complain.h"
 #include "reader.h"
 #include "getargs.h"
-#include <get-errno.h>
-#include <quote.h>
-
 #include "scan-code.h"
 #include "symlist.h"
+
+#include <c-ctype.h>
+#include <get-errno.h>
+#include <quote.h>
 
 /* The current calling start condition: SC_RULE_ACTION or
    SC_SYMBOL_ACTION. */
@@ -657,6 +707,10 @@ YY_DECL;
 static void handle_action_dollar (symbol_list *rule, char *cp,
 				  location dollar_loc);
 static void handle_action_at (symbol_list *rule, char *cp, location at_loc);
+
+/* A string to be pushed to obstack after dollar/at has been handled. */
+static char *ref_tail_fields;
+
 static location the_location;
 static location *loc = &the_location;
 
@@ -665,6 +719,7 @@ static char *last_string;
 
 /* True if an untyped $$ or $n was seen.  */
 static bool untyped_var_seen;
+
 /* C and C++ comments in code. */
 
 /* Strings and characters in code. */
@@ -677,7 +732,10 @@ of $ and @.  */
    NUL and newline, as this simplifies our implementation.  */
 /* Zero or more instances of backslash-newline.  Following GCC, allow
    white space between the backslash and the newline.  */
-#line 681 "scan-code.c"
+/* C style identifier. Must start with letter. Will be used for
+   named symbol references. Shall be kept synchronized with
+   scan-gram.l "letter" and "id". */
+#line 739 "scan-code.c"
 
 #define INITIAL 0
 #define SC_COMMENT 1
@@ -928,12 +986,25 @@ YY_DECL
 	register int yy_act;
     
 /* %% [7.0] user's declarations go here */
-#line 79 "scan-code.l"
+#line 91 "scan-code.l"
 
 
 
   /* Nesting level of the current code in braces.  */
   int braces_level = 0;
+
+  /* Whether a semicolon is probably needed.
+     The heuristic is that a semicolon is not needed after `{', `}', `;',
+     or a C preprocessor directive, and that whitespaces and comments
+     do not affect this flag.
+     Note that `{' does not need a semicolon because of `{}'.
+     A semicolon may be needed before a cpp direcive, but don't bother.  */
+  bool need_semicolon = false;
+
+  /* Whether in a C preprocessor directive.  Don't use a start condition
+     for this because, at the end of strings and comments, we still need
+     to know whether we're in a directive.  */
+  bool in_cpp = false;
 
   /* This scanner is special: it is invoked only once, henceforth
      is expected to return only once.  This initialization is
@@ -948,7 +1019,7 @@ YY_DECL
   | Scanning a C comment.  The initial `/ *' is already eaten.  |
   `------------------------------------------------------------*/
 
-#line 952 "scan-code.c"
+#line 1023 "scan-code.c"
 
 	if ( !(yy_init) )
 		{
@@ -1011,13 +1082,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 68 )
+				if ( yy_current_state >= 101 )
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			++yy_cp;
 			}
-		while ( yy_current_state != 67 );
+		while ( yy_current_state != 100 );
 		yy_cp = (yy_last_accepting_cpos);
 		yy_current_state = (yy_last_accepting_state);
 
@@ -1036,13 +1107,13 @@ do_action:	/* This label is used only to access EOF actions. */
 			{
 			if ( yy_act == 0 )
 				fprintf( stderr, "--scanner backing up\n" );
-			else if ( yy_act < 24 )
+			else if ( yy_act < 34 )
 				fprintf( stderr, "--accepting rule at line %ld (\"%s\")\n",
 				         (long)yy_rule_linenum[yy_act], code_text );
-			else if ( yy_act == 24 )
+			else if ( yy_act == 34 )
 				fprintf( stderr, "--accepting default rule (\"%s\")\n",
 				         code_text );
-			else if ( yy_act == 25 )
+			else if ( yy_act == 35 )
 				fprintf( stderr, "--(end of buffer or a NUL)\n" );
 			else
 				fprintf( stderr, "--EOF (start condition %d)\n", YY_START );
@@ -1061,7 +1132,7 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 100 "scan-code.l"
+#line 125 "scan-code.l"
 STRING_GROW; BEGIN sc_context;
 	YY_BREAK
 
@@ -1073,13 +1144,13 @@ STRING_GROW; BEGIN sc_context;
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 110 "scan-code.l"
+#line 135 "scan-code.l"
 STRING_GROW; BEGIN sc_context;
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 111 "scan-code.l"
+#line 136 "scan-code.l"
 STRING_GROW;
 	YY_BREAK
 
@@ -1091,7 +1162,7 @@ STRING_GROW;
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 121 "scan-code.l"
+#line 146 "scan-code.l"
 STRING_GROW;
 	YY_BREAK
 
@@ -1099,7 +1170,7 @@ STRING_GROW;
 
 case 5:
 YY_RULE_SETUP
-#line 126 "scan-code.l"
+#line 151 "scan-code.l"
 STRING_GROW; BEGIN sc_context;
 	YY_BREAK
 
@@ -1107,31 +1178,33 @@ STRING_GROW; BEGIN sc_context;
 
 case 6:
 YY_RULE_SETUP
-#line 131 "scan-code.l"
+#line 156 "scan-code.l"
 STRING_GROW; BEGIN sc_context;
 	YY_BREAK
 
 
 case 7:
 YY_RULE_SETUP
-#line 136 "scan-code.l"
+#line 161 "scan-code.l"
 {
     STRING_GROW;
     BEGIN SC_CHARACTER;
+    need_semicolon = true;
   }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 140 "scan-code.l"
+#line 166 "scan-code.l"
 {
     STRING_GROW;
     BEGIN SC_STRING;
+    need_semicolon = true;
   }
 	YY_BREAK
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 144 "scan-code.l"
+#line 171 "scan-code.l"
 {
     STRING_GROW;
     BEGIN SC_COMMENT;
@@ -1140,7 +1213,7 @@ YY_RULE_SETUP
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 148 "scan-code.l"
+#line 175 "scan-code.l"
 {
     STRING_GROW;
     BEGIN SC_LINE_COMMENT;
@@ -1151,82 +1224,157 @@ YY_RULE_SETUP
 
 case 11:
 YY_RULE_SETUP
-#line 156 "scan-code.l"
+#line 183 "scan-code.l"
 {
+    ref_tail_fields = 0;
     handle_action_dollar (self->rule, code_text, *loc);
+    if (ref_tail_fields) {
+      obstack_sgrow (&obstack_for_string, ref_tail_fields);
+    }
+    need_semicolon = true;
   }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 159 "scan-code.l"
+#line 191 "scan-code.l"
 {
+    ref_tail_fields = 0;
     handle_action_at (self->rule, code_text, *loc);
+    if (ref_tail_fields) {
+      obstack_sgrow (&obstack_for_string, ref_tail_fields);
+    }
+    need_semicolon = true;
   }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 163 "scan-code.l"
+#line 199 "scan-code.l"
 {
     warn_at (*loc, _("stray `$'"));
     obstack_sgrow (&obstack_for_string, "$][");
+    need_semicolon = true;
   }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 167 "scan-code.l"
+#line 204 "scan-code.l"
 {
     warn_at (*loc, _("stray `@'"));
     obstack_sgrow (&obstack_for_string, "@@");
+    need_semicolon = true;
   }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 172 "scan-code.l"
-STRING_GROW; ++braces_level;
+#line 209 "scan-code.l"
+{
+    obstack_sgrow (&obstack_for_string, "@{");
+    need_semicolon = true;
+  }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 173 "scan-code.l"
+#line 213 "scan-code.l"
+{
+    obstack_sgrow (&obstack_for_string, "@}");
+    need_semicolon = true;
+  }
+	YY_BREAK
+case 17:
+YY_RULE_SETUP
+#line 218 "scan-code.l"
+STRING_GROW;                 need_semicolon = false;
+	YY_BREAK
+case 18:
+YY_RULE_SETUP
+#line 219 "scan-code.l"
+STRING_GROW; ++braces_level; need_semicolon = false;
+	YY_BREAK
+case 19:
+YY_RULE_SETUP
+#line 220 "scan-code.l"
 {
     bool outer_brace = --braces_level == 0;
 
     /* As an undocumented Bison extension, append `;' before the last
        brace in braced code, so that the user code can omit trailing
        `;'.  But do not append `;' if emulating Yacc, since Yacc does
-       not append one.  Also, some output languages (like Java) do not
-       accept an extra semicolon, so don't append if the user specified
-       a skeleton or language.
-
-       FIXME: Bison should warn if a semicolon seems to be necessary
-       here, and should omit the semicolon if it seems unnecessary
-       (e.g., after ';', '{', or '}', each followed by comments or
-       white space).  Such a warning shouldn't depend on --yacc; it
-       should depend on a new --pedantic option, which would cause
-       Bison to warn if it detects an extension to POSIX.  --pedantic
-       should also diagnose other Bison extensions like %yacc.
-       Perhaps there should also be a GCC-style --pedantic-errors
-       option, so that such warnings are diagnosed as errors.  */
+       not append one.  */
     if (outer_brace && !yacc_flag && language_prio == default_prio
-        && skeleton_prio == default_prio)
-      obstack_1grow (&obstack_for_string, ';');
+        && skeleton_prio == default_prio && need_semicolon && ! in_cpp)
+      {
+	warn_at (*loc, _("a `;' might be needed at the end of action code"));
+	warn_at (*loc, _("future versions of Bison will not add the `;'"));
+	obstack_1grow (&obstack_for_string, ';');
+      }
 
     STRING_GROW;
+    need_semicolon = false;
   }
+	YY_BREAK
+/* Preprocessing directives should only be recognized at the beginning
+     of lines, allowing whitespace including comments, but in C/C++,
+     `#' can only be the start of preprocessor directives or within
+     `#define' directives anyway, so don't bother with begin of line.  */
+case 20:
+YY_RULE_SETUP
+#line 243 "scan-code.l"
+STRING_GROW; in_cpp = true;
+	YY_BREAK
+case 21:
+/* rule 21 can match eol */
+YY_RULE_SETUP
+#line 245 "scan-code.l"
+STRING_GROW;
+	YY_BREAK
+case 22:
+/* rule 22 can match eol */
+YY_RULE_SETUP
+#line 246 "scan-code.l"
+STRING_GROW; if (in_cpp) in_cpp = need_semicolon = false; 
+	YY_BREAK
+case 23:
+YY_RULE_SETUP
+#line 247 "scan-code.l"
+STRING_GROW;
+	YY_BREAK
+/* YYFAIL is undocumented and was formally deprecated in Bison
+     2.4.2.  */
+case 24:
+YY_RULE_SETUP
+#line 251 "scan-code.l"
+{
+    STRING_GROW; need_semicolon = true;
+    warn_at (*loc, _("use of YYFAIL, which is deprecated and will be"
+                     " removed"));
+  }
+	YY_BREAK
+/* The sole purpose of this is to make sure identifiers that merely
+     contain YYFAIL don't produce the above warning.  */
+case 25:
+YY_RULE_SETUP
+#line 259 "scan-code.l"
+STRING_GROW; need_semicolon = true;
+	YY_BREAK
+case 26:
+YY_RULE_SETUP
+#line 261 "scan-code.l"
+STRING_GROW; need_semicolon = true;
 	YY_BREAK
 
 
 
-case 17:
+case 27:
 YY_RULE_SETUP
-#line 202 "scan-code.l"
+#line 266 "scan-code.l"
 {
     obstack_sgrow (&obstack_for_string, "]b4_dollar_dollar[");
     self->is_value_used = true;
   }
 	YY_BREAK
-case 18:
+case 28:
 YY_RULE_SETUP
-#line 206 "scan-code.l"
+#line 270 "scan-code.l"
 {
     obstack_sgrow (&obstack_for_string, "]b4_at_dollar[");
     locations_flag = true;
@@ -1238,34 +1386,34 @@ YY_RULE_SETUP
   `-----------------------------------------*/
 
 
-case 19:
+case 29:
 YY_RULE_SETUP
-#line 219 "scan-code.l"
+#line 283 "scan-code.l"
 obstack_sgrow (&obstack_for_string, "$][");
 	YY_BREAK
-case 20:
+case 30:
 YY_RULE_SETUP
-#line 220 "scan-code.l"
+#line 284 "scan-code.l"
 obstack_sgrow (&obstack_for_string, "@@");
 	YY_BREAK
-case 21:
+case 31:
 YY_RULE_SETUP
-#line 221 "scan-code.l"
+#line 285 "scan-code.l"
 obstack_sgrow (&obstack_for_string, "@{");
 	YY_BREAK
-case 22:
+case 32:
 YY_RULE_SETUP
-#line 222 "scan-code.l"
+#line 286 "scan-code.l"
 obstack_sgrow (&obstack_for_string, "@}");
 	YY_BREAK
 
 /*-----------------------------------------------------.
   | By default, grow the string obstack with the input.  |
   `-----------------------------------------------------*/
-case 23:
-/* rule 23 can match eol */
+case 33:
+/* rule 33 can match eol */
 YY_RULE_SETUP
-#line 229 "scan-code.l"
+#line 293 "scan-code.l"
 STRING_GROW;
 	YY_BREAK
 /* End of processing. */
@@ -1276,18 +1424,18 @@ case YY_STATE_EOF(SC_STRING):
 case YY_STATE_EOF(SC_CHARACTER):
 case YY_STATE_EOF(SC_RULE_ACTION):
 case YY_STATE_EOF(SC_SYMBOL_ACTION):
-#line 232 "scan-code.l"
+#line 296 "scan-code.l"
 {
                    STRING_FINISH;
                    return last_string;
                  }
 	YY_BREAK
-case 24:
+case 34:
 YY_RULE_SETUP
-#line 237 "scan-code.l"
+#line 301 "scan-code.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 1291 "scan-code.c"
+#line 1439 "scan-code.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1590,7 +1738,7 @@ static int yy_get_next_buffer (void)
 	for ( yy_cp = (yytext_ptr) + YY_MORE_ADJ; yy_cp < (yy_c_buf_p); ++yy_cp )
 		{
 /* %% [16.0] code to find the next state goes here */
-		register YY_CHAR yy_c = (*yy_cp ? yy_ec[YY_SC_TO_UI(*yy_cp)] : 19);
+		register YY_CHAR yy_c = (*yy_cp ? yy_ec[YY_SC_TO_UI(*yy_cp)] : 30);
 		if ( yy_accept[yy_current_state] )
 			{
 			(yy_last_accepting_state) = yy_current_state;
@@ -1599,7 +1747,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 68 )
+			if ( yy_current_state >= 101 )
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
@@ -1623,7 +1771,7 @@ static int yy_get_next_buffer (void)
     /* %% [17.0] code to find the next state, and perhaps do backing up, goes here */
 	register char *yy_cp = (yy_c_buf_p);
 
-	register YY_CHAR yy_c = 19;
+	register YY_CHAR yy_c = 30;
 	if ( yy_accept[yy_current_state] )
 		{
 		(yy_last_accepting_state) = yy_current_state;
@@ -1632,11 +1780,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 68 )
+		if ( yy_current_state >= 101 )
 			yy_c = yy_meta[(unsigned int) yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
-	yy_is_jam = (yy_current_state == 67);
+	yy_is_jam = (yy_current_state == 100);
 
 	return yy_is_jam ? 0 : yy_current_state;
 }
@@ -2374,9 +2522,391 @@ void code_free (void * ptr )
 
 /* %ok-for-header */
 
-#line 237 "scan-code.l"
+#line 301 "scan-code.l"
 
 
+
+static inline bool
+is_dot_or_dash (char ch)
+{
+  return ch == '.' || ch == '-';
+}
+
+static inline bool
+contains_dot_or_dash (const char* p)
+{
+  for (; *p; ++p)
+    if (is_dot_or_dash (*p))
+      return true;
+  return false;
+}
+
+/* Defines a variant of a symbolic name resolution. */
+typedef struct
+{
+  /* Index in symbol list. */
+  unsigned symbol_index;
+
+  /* Matched symbol id and loc. */
+  uniqstr id;
+  location loc;
+
+  /* Hiding named reference. */
+  named_ref* hidden_by;
+
+  /* Error flags. May contain zero (no errors) or
+     a combination of VARIANT_* values. */
+  unsigned err;
+} variant;
+
+/* Set when the variant refers to a symbol hidden
+   by an explicit symbol reference. */
+#define VARIANT_HIDDEN (1 << 0)
+
+/* Set when the variant refers to a symbol containing
+   dots or dashes. Will require explicit bracketing. */
+#define VARIANT_BAD_BRACKETING (1 << 1)
+
+/* Set when the variant refers to a symbol which is
+   not visible from current midrule. */
+#define VARIANT_NOT_VISIBLE_FROM_MIDRULE (1 << 2)
+
+static variant *variant_table = 0;
+static unsigned variant_table_size = 0;
+static unsigned variant_count = 0;
+
+static variant *
+variant_table_grow (void)
+{
+  ++variant_count;
+  if (variant_count > variant_table_size)
+    {
+      while (variant_count > variant_table_size)
+	variant_table_size = 2 * variant_table_size + 3;
+      variant_table = xnrealloc (variant_table, variant_table_size,
+				 sizeof *variant_table);
+    }
+  return &variant_table[variant_count - 1];
+}
+
+static void
+variant_table_free (void)
+{
+  free (variant_table);
+  variant_table = 0;
+  variant_table_size = variant_count = 0;
+}
+
+static char *
+find_prefix_end (const char *prefix, char *begin, char *end)
+{
+  char *ptr = begin;
+
+  for (; *prefix && ptr != end; ++prefix, ++ptr)
+    if (*prefix != *ptr)
+      return 0;
+
+  if (*prefix)
+    return 0;
+
+  return ptr;
+}
+
+static variant *
+variant_add (uniqstr id, location id_loc, unsigned symbol_index,
+	     char *cp, char *cp_end, bool explicit_bracketing)
+{
+  char *prefix_end;
+
+  prefix_end = find_prefix_end (id, cp, cp_end);
+  if (prefix_end &&
+      (prefix_end == cp_end ||
+       (!explicit_bracketing && is_dot_or_dash (*prefix_end))))
+    {
+      variant *r = variant_table_grow ();
+      r->symbol_index = symbol_index;
+      r->id = id;
+      r->loc = id_loc;
+      r->hidden_by = NULL;
+      r->err = 0;
+      return r;
+    }
+  else
+    return NULL;
+}
+
+static const char *
+get_at_spec(unsigned symbol_index)
+{
+  static char at_buf[20];
+  if (symbol_index == 0)
+    strcpy (at_buf, "$$");
+  else
+    snprintf (at_buf, sizeof at_buf, "$%u", symbol_index);
+  return at_buf;
+}
+
+static void
+show_sub_messages (const char* cp, bool explicit_bracketing,
+                   int midrule_rhs_index, char dollar_or_at,
+                   bool is_warning, unsigned indent)
+{
+  unsigned i;
+
+  for (i = 0; i < variant_count; ++i)
+    {
+      const variant *var = &variant_table[i];
+      const char *at_spec = get_at_spec (var->symbol_index);
+
+      if (var->err == 0)
+        {
+          if (is_warning)
+            warn_at_indent (var->loc, &indent, _("refers to: %c%s at %s"),
+                            dollar_or_at, var->id, at_spec);
+          else
+            complain_at_indent (var->loc, &indent, _("refers to: %c%s at %s"),
+                                dollar_or_at, var->id, at_spec);
+        }
+      else
+	{
+	  static struct obstack msg_buf;
+	  const char *tail = explicit_bracketing ? "" :
+	    cp + strlen (var->id);
+	  const char *id = var->hidden_by ? var->hidden_by->id :
+	    var->id;
+	  location id_loc = var->hidden_by ? var->hidden_by->loc :
+	    var->loc;
+
+	  /* Create the explanation message. */
+	  obstack_init (&msg_buf);
+
+	  obstack_fgrow1 (&msg_buf, _("possibly meant: %c"), dollar_or_at);
+	  if (contains_dot_or_dash (id))
+	    obstack_fgrow1 (&msg_buf, "[%s]", id);
+	  else
+	    obstack_sgrow (&msg_buf, id);
+	  obstack_sgrow (&msg_buf, tail);
+
+	  if (var->err & VARIANT_HIDDEN)
+	    {
+	      obstack_fgrow1 (&msg_buf, _(", hiding %c"), dollar_or_at);
+	      if (contains_dot_or_dash (var->id))
+		obstack_fgrow1 (&msg_buf, "[%s]", var->id);
+	      else
+		obstack_sgrow (&msg_buf, var->id);
+	      obstack_sgrow (&msg_buf, tail);
+	    }
+
+	  obstack_fgrow1 (&msg_buf, _(" at %s"), at_spec);
+
+	  if (var->err & VARIANT_NOT_VISIBLE_FROM_MIDRULE)
+            {
+              const char *format =
+                _(", cannot be accessed from mid-rule action at $%d");
+              obstack_fgrow1 (&msg_buf, format, midrule_rhs_index);
+            }
+
+	  obstack_1grow (&msg_buf, '\0');
+          if (is_warning)
+            warn_at_indent (id_loc, &indent, "%s",
+                            (char *) obstack_finish (&msg_buf));
+          else
+            complain_at_indent (id_loc, &indent, "%s",
+                                (char *) obstack_finish (&msg_buf));
+	  obstack_free (&msg_buf, 0);
+	}
+    }
+}
+
+/* Returned from "parse_ref" when the reference
+   is inappropriate. */
+#define INVALID_REF (INT_MIN)
+
+/* Returned from "parse_ref" when the reference
+   points to LHS ($$) of the current rule or midrule. */
+#define LHS_REF (INT_MIN + 1)
+
+/* Sub-messages indent. */
+#define SUB_INDENT (4)
+
+/* Parse named or positional reference. In case of positional
+   references, can return negative values for $-n "deep" stack
+   accesses. */
+static long int
+parse_ref (char *cp, symbol_list *rule, int rule_length,
+	   int midrule_rhs_index, char *text, location text_loc,
+	   char dollar_or_at)
+{
+  symbol_list *l;
+  char *cp_end;
+  bool explicit_bracketing;
+  unsigned i;
+  unsigned valid_variants = 0;
+  unsigned valid_variant_index = 0;
+
+  if ('$' == *cp)
+    return LHS_REF;
+
+  if (c_isdigit (*cp) || (*cp == '-' && c_isdigit (* (cp + 1))))
+    {
+      long int num = strtol (cp, &cp, 10);
+      if (1 - INT_MAX + rule_length <= num && num <= rule_length)
+	return num;
+      else
+	{
+	  complain_at (text_loc, _("integer out of range: %s"),
+                       quote (text));
+	  return INVALID_REF;
+	}
+    }
+
+  if ('[' == *cp)
+    {
+      /* Ignore the brackets. */
+      char *p;
+      for (p = ++cp; *p != ']'; ++p)
+	continue;
+      cp_end = p;
+
+      explicit_bracketing = true;
+    }
+  else
+    {
+      /* Take all characters of the name. */
+      char* p;
+      for (p = cp; *p; ++p)
+	if (is_dot_or_dash (*p))
+	  {
+	    ref_tail_fields = p;
+	    break;
+	  }
+      for (p = cp; *p; ++p)
+	continue;
+      cp_end = p;
+
+      explicit_bracketing = false;
+    }
+
+  /* Add all relevant variants. */
+  {
+    unsigned symbol_index;
+    variant_count = 0;
+    for (symbol_index = 0, l = rule; !symbol_list_null (l);
+         ++symbol_index, l = l->next)
+      {
+	variant *var;
+	if (l->content_type != SYMLIST_SYMBOL)
+	  continue;
+
+	var = variant_add (l->content.sym->tag, l->sym_loc,
+                           symbol_index, cp, cp_end, explicit_bracketing);
+	if (var && l->named_ref)
+	  var->hidden_by = l->named_ref;
+
+	if (l->named_ref)
+	  variant_add (l->named_ref->id, l->named_ref->loc,
+                       symbol_index, cp, cp_end, explicit_bracketing);
+      }
+  }
+
+  /* Check errors. */
+  for (i = 0; i < variant_count; ++i)
+    {
+      variant *var = &variant_table[i];
+      unsigned symbol_index = var->symbol_index;
+
+      /* Check visibility from mid-rule actions. */
+      if (midrule_rhs_index != 0
+	  && (symbol_index == 0 || midrule_rhs_index < symbol_index))
+        var->err |= VARIANT_NOT_VISIBLE_FROM_MIDRULE;
+
+      /* Check correct bracketing. */
+      if (!explicit_bracketing && contains_dot_or_dash (var->id))
+        var->err |= VARIANT_BAD_BRACKETING;
+
+      /* Check using of hidden symbols. */
+      if (var->hidden_by)
+        var->err |= VARIANT_HIDDEN;
+
+      if (!var->err)
+        {
+          valid_variant_index = i;
+          ++valid_variants;
+        }
+    }
+
+  switch (valid_variants)
+    {
+    case 0:
+      {
+        unsigned len = (explicit_bracketing || !ref_tail_fields) ?
+          cp_end - cp : ref_tail_fields - cp;
+        unsigned indent = 0;
+
+        complain_at_indent (text_loc, &indent, _("invalid reference: %s"),
+                            quote (text));
+        indent += SUB_INDENT;
+        if (len == 0)
+          {
+            location sym_loc = text_loc;
+            sym_loc.start.column += 1;
+            sym_loc.end = sym_loc.start;
+            const char *format =
+              _("syntax error after `%c', expecting integer, letter,"
+                " `_', `[', or `$'");
+            complain_at_indent (sym_loc, &indent, format, dollar_or_at);
+          }
+        else if (midrule_rhs_index)
+          {
+            const char *format =
+              _("symbol not found in production before $%d: %.*s");
+            complain_at_indent (rule->location, &indent, format,
+                                midrule_rhs_index, len, cp);
+          }
+        else
+          {
+            const char *format =
+              _("symbol not found in production: %.*s");
+            complain_at_indent (rule->location, &indent, format,
+                                len, cp);
+          }
+
+        if (variant_count > 0)
+          show_sub_messages (cp, explicit_bracketing, midrule_rhs_index,
+                             dollar_or_at, false, indent);
+        return INVALID_REF;
+      }
+    case 1:
+      {
+        unsigned indent = 0;
+        if (variant_count > 1)
+          {
+            warn_at_indent (text_loc, &indent, _("misleading reference: %s"),
+                            quote (text));
+            show_sub_messages (cp, explicit_bracketing, midrule_rhs_index,
+                               dollar_or_at, true, indent + SUB_INDENT);
+          }
+        {
+          unsigned symbol_index =
+            variant_table[valid_variant_index].symbol_index;
+          return (symbol_index == midrule_rhs_index) ? LHS_REF : symbol_index;
+        }
+      }
+    case 2:
+    default:
+      {
+        unsigned indent = 0;
+        complain_at_indent (text_loc, &indent, _("ambiguous reference: %s"),
+                            quote (text));
+        show_sub_messages (cp, explicit_bracketing, midrule_rhs_index,
+                           dollar_or_at, false, indent + SUB_INDENT);
+        return INVALID_REF;
+      }
+    }
+
+  /* Not reachable. */
+  return INVALID_REF;
+}
 
 /* Keeps track of the maximum number of semantic values to the left of
    a handle (those referenced by $0, $-1, etc.) are required by the
@@ -2397,8 +2927,10 @@ handle_action_dollar (symbol_list *rule, char *text, location dollar_loc)
 {
   char const *type_name = NULL;
   char *cp = text + 1;
+  char *gt_ptr = 0;
   symbol_list *effective_rule;
   int effective_rule_length;
+  int n;
 
   if (rule->midrule_parent_rule)
     {
@@ -2417,15 +2949,28 @@ handle_action_dollar (symbol_list *rule, char *text, location dollar_loc)
       type_name = ++cp;
       while (*cp != '>')
 	++cp;
-      *cp = '\0';
+
+      /* The '>' symbol will be later replaced by '\0'. Original
+	 'text' is needed for error messages. */
+      gt_ptr = cp;
       ++cp;
       if (untyped_var_seen)
 	complain_at (dollar_loc, _("explicit type given in untyped grammar"));
       tag_seen = true;
     }
 
-  if (*cp == '$')
+  n = parse_ref (cp, effective_rule, effective_rule_length,
+		 rule->midrule_parent_rhs_index, text, dollar_loc, '$');
+
+  if (gt_ptr)
+    *gt_ptr = '\0';
+
+  switch (n)
     {
+    case INVALID_REF:
+      break;
+
+    case LHS_REF:
       if (!type_name)
 	type_name = symbol_list_n_type_name_get (rule, dollar_loc, 0);
 
@@ -2451,39 +2996,31 @@ handle_action_dollar (symbol_list *rule, char *text, location dollar_loc)
       obstack_fgrow1 (&obstack_for_string,
 		      "]b4_lhs_value([%s])[", type_name);
       rule->action_props.is_value_used = true;
-    }
-  else
-    {
-      long int num = strtol (cp, NULL, 10);
+      break;
 
-      if (1 - INT_MAX + effective_rule_length <= num
-	  && num <= effective_rule_length)
+    default:
+      if (max_left_semantic_context < 1 - n)
+	max_left_semantic_context = 1 - n;
+      if (!type_name && 0 < n)
+	type_name =
+	  symbol_list_n_type_name_get (effective_rule, dollar_loc, n);
+      if (!type_name)
 	{
-	  int n = num;
-	  if (max_left_semantic_context < 1 - n)
-	    max_left_semantic_context = 1 - n;
-	  if (!type_name && 0 < n)
-	    type_name =
-	      symbol_list_n_type_name_get (effective_rule, dollar_loc, n);
-	  if (!type_name)
-	    {
-	      if (union_seen | tag_seen)
-		complain_at (dollar_loc, _("$%d of `%s' has no declared type"),
-			     n, effective_rule->content.sym->tag);
-	      else
-		untyped_var_seen = true;
-	      type_name = "";
-	    }
-
-	  obstack_fgrow3 (&obstack_for_string,
-			  "]b4_rhs_value(%d, %d, [%s])[",
-			  effective_rule_length, n, type_name);
-          if (n > 0)
-            symbol_list_n_get (effective_rule, n)->action_props.is_value_used =
-              true;
+	  if (union_seen | tag_seen)
+	    complain_at (dollar_loc, _("$%s of `%s' has no declared type"),
+			 cp, effective_rule->content.sym->tag);
+	  else
+	    untyped_var_seen = true;
+	  type_name = "";
 	}
-      else
-	complain_at (dollar_loc, _("integer out of range: %s"), quote (text));
+
+      obstack_fgrow3 (&obstack_for_string,
+		      "]b4_rhs_value(%d, %d, [%s])[",
+		      effective_rule_length, n, type_name);
+      if (n > 0)
+	symbol_list_n_get (effective_rule, n)->action_props.is_value_used =
+	  true;
+      break;
     }
 }
 
@@ -2497,28 +3034,38 @@ static void
 handle_action_at (symbol_list *rule, char *text, location at_loc)
 {
   char *cp = text + 1;
-  int effective_rule_length =
-    (rule->midrule_parent_rule
-     ? rule->midrule_parent_rhs_index - 1
-     : symbol_list_length (rule->next));
+  symbol_list *effective_rule;
+  int effective_rule_length;
+  int n;
+
+  if (rule->midrule_parent_rule)
+    {
+      effective_rule = rule->midrule_parent_rule;
+      effective_rule_length = rule->midrule_parent_rhs_index - 1;
+    }
+  else
+    {
+      effective_rule = rule;
+      effective_rule_length = symbol_list_length (rule->next);
+    }
 
   locations_flag = true;
 
-  if (*cp == '$')
-    obstack_sgrow (&obstack_for_string, "]b4_lhs_location[");
-  else
+  n = parse_ref (cp, effective_rule, effective_rule_length,
+		       rule->midrule_parent_rhs_index, text, at_loc, '@');
+  switch (n)
     {
-      long int num = strtol (cp, NULL, 10);
+    case INVALID_REF:
+      break;
 
-      if (1 - INT_MAX + effective_rule_length <= num
-	  && num <= effective_rule_length)
-	{
-	  int n = num;
-	  obstack_fgrow2 (&obstack_for_string, "]b4_rhs_location(%d, %d)[",
-			  effective_rule_length, n);
-	}
-      else
-	complain_at (at_loc, _("integer out of range: %s"), quote (text));
+    case LHS_REF:
+      obstack_sgrow (&obstack_for_string, "]b4_lhs_location[");
+      break;
+
+    default:
+      obstack_fgrow2 (&obstack_for_string, "]b4_rhs_location(%d, %d)[",
+		      effective_rule_length, n);
+      break;
     }
 }
 
@@ -2563,13 +3110,15 @@ code_props_none_init (code_props *self)
 code_props const code_props_none = CODE_PROPS_NONE_INIT;
 
 void
-code_props_plain_init (code_props *self, char const *code, location code_loc)
+code_props_plain_init (code_props *self, char const *code,
+		       location code_loc)
 {
   self->kind = CODE_PROPS_PLAIN;
   self->code = code;
   self->location = code_loc;
   self->is_value_used = false;
   self->rule = NULL;
+  self->named_ref = NULL;
 }
 
 void
@@ -2581,17 +3130,20 @@ code_props_symbol_action_init (code_props *self, char const *code,
   self->location = code_loc;
   self->is_value_used = false;
   self->rule = NULL;
+  self->named_ref = NULL;
 }
 
 void
 code_props_rule_action_init (code_props *self, char const *code,
-                             location code_loc, symbol_list *rule)
+                             location code_loc, symbol_list *rule,
+			     named_ref *name)
 {
   self->kind = CODE_PROPS_RULE_ACTION;
   self->code = code;
   self->location = code_loc;
   self->is_value_used = false;
   self->rule = rule;
+  self->named_ref = name;
 }
 
 void
@@ -2623,6 +3175,8 @@ void
 code_scanner_free (void)
 {
   obstack_free (&obstack_for_string, 0);
+  variant_table_free ();
+
   /* Reclaim Flex's buffers.  */
   code_lex_destroy ();
 }

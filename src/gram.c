@@ -1,7 +1,7 @@
 /* Allocate input grammar variables for Bison.
 
-   Copyright (C) 1984, 1986, 1989, 2001, 2002, 2003, 2005, 2006, 2007,
-   2009, 2010 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1986, 1989, 2001-2003, 2005-2011 Free Software
+   Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -24,6 +24,7 @@
 #include <quotearg.h>
 
 #include "complain.h"
+#include "getargs.h"
 #include "gram.h"
 #include "print-xml.h"
 #include "reader.h"
@@ -225,7 +226,8 @@ grammar_rules_print_xml (FILE *out, int level)
         fprintf (out, "<rule number=\"%d\" usefulness=\"%s\"",
                  rules[r].number, usefulness);
         if (rules[r].precsym)
-          fprintf (out, " percent_prec=\"%s\"", rules[r].precsym->tag);
+          fprintf (out, " percent_prec=\"%s\"",
+                   xml_escape (rules[r].precsym->tag));
         fputs (">\n", out);
       }
       rule_lhs_print_xml (&rules[r], out, level + 3);
@@ -309,8 +311,11 @@ grammar_rules_useless_report (const char *message)
     if (!rules[r].useful)
       {
         warn_at (rules[r].location, "%s: ", message);
-        rule_print (&rules[r], stderr);
-        fflush (stderr);
+        if (warnings_flag & warnings_other)
+          {
+            rule_print (&rules[r], stderr);
+            fflush (stderr);
+          }
       }
 }
 

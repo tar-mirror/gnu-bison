@@ -30,32 +30,31 @@
 
 @copying
 
-This manual (@value{UPDATED}) is for @acronym{GNU} Bison (version
-@value{VERSION}), the @acronym{GNU} parser generator.
+This manual (@value{UPDATED}) is for GNU Bison (version
+@value{VERSION}), the GNU parser generator.
 
-Copyright @copyright{} 1988, 1989, 1990, 1991, 1992, 1993, 1995, 1998, 1999,
-2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free
-Software Foundation, Inc.
+Copyright @copyright{} 1988-1993, 1995, 1998-2011 Free Software
+Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
-under the terms of the @acronym{GNU} Free Documentation License,
+under the terms of the GNU Free Documentation License,
 Version 1.3 or any later version published by the Free Software
 Foundation; with no Invariant Sections, with the Front-Cover texts
-being ``A @acronym{GNU} Manual,'' and with the Back-Cover Texts as in
+being ``A GNU Manual,'' and with the Back-Cover Texts as in
 (a) below.  A copy of the license is included in the section entitled
-``@acronym{GNU} Free Documentation License.''
+``GNU Free Documentation License.''
 
 (a) The FSF's Back-Cover Text is: ``You have the freedom to copy and
-modify this @acronym{GNU} manual.  Buying copies from the @acronym{FSF}
-supports it in developing @acronym{GNU} and promoting software
+modify this GNU manual.  Buying copies from the FSF
+supports it in developing GNU and promoting software
 freedom.''
 @end quotation
 @end copying
 
 @dircategory Software development
 @direntry
-* bison: (bison).       @acronym{GNU} parser generator (Yacc replacement).
+* bison: (bison).       GNU parser generator (Yacc replacement).
 @end direntry
 
 @titlepage
@@ -73,7 +72,7 @@ Published by the Free Software Foundation @*
 51 Franklin Street, Fifth Floor @*
 Boston, MA  02110-1301  USA @*
 Printed copies are available from the Free Software Foundation.@*
-@acronym{ISBN} 1-882114-44-2
+ISBN 1-882114-44-2
 @sp 2
 Cover art by Etienne Suvasa.
 @end titlepage
@@ -89,7 +88,7 @@ Cover art by Etienne Suvasa.
 @menu
 * Introduction::
 * Conditions::
-* Copying::             The @acronym{GNU} General Public License says
+* Copying::             The GNU General Public License says
                           how you can copy and share Bison.
 
 Tutorial sections:
@@ -104,12 +103,13 @@ Reference sections:
 * Context Dependency::  What to do if your language syntax is too
                           messy for Bison to handle straightforwardly.
 * Debugging::           Understanding or debugging Bison parsers.
-* Invocation::          How to run Bison (to produce the parser source file).
+* Invocation::          How to run Bison (to produce the parser implementation).
 * Other Languages::     Creating C++ and Java parsers.
 * FAQ::                 Frequently Asked Questions
 * Table of Symbols::    All the keywords of the Bison language are explained.
 * Glossary::            Basic concepts are explained.
 * Copying This Manual:: License for copying this manual.
+* Bibliography::        Publications cited in this manual.
 * Index::               Cross-references to the text.
 
 @detailmenu
@@ -131,12 +131,12 @@ The Concepts of Bison
 * Stages::               Stages in writing and running Bison grammars.
 * Grammar Layout::       Overall structure of a Bison grammar file.
 
-Writing @acronym{GLR} Parsers
+Writing GLR Parsers
 
-* Simple GLR Parsers::     Using @acronym{GLR} parsers on unambiguous grammars.
-* Merging GLR Parses::     Using @acronym{GLR} parsers to resolve ambiguities.
+* Simple GLR Parsers::     Using GLR parsers on unambiguous grammars.
+* Merging GLR Parses::     Using GLR parsers to resolve ambiguities.
 * GLR Semantic Actions::   Deferred semantic actions have special concerns.
-* Compiler Requirements::  @acronym{GLR} parsers require a modern C compiler.
+* Compiler Requirements::  GLR parsers require a modern C compiler.
 
 Examples
 
@@ -206,6 +206,7 @@ Defining Language Semantics
 * Mid-Rule Actions::  Most actions go at the end of a rule.
                       This says when, why and how to use the exceptional
                         action in the middle of a rule.
+* Named References::  Using named references in actions.
 
 Tracking Locations
 
@@ -227,6 +228,8 @@ Bison Declarations
 * Pure Decl::         Requesting a reentrant parser.
 * Push Decl::         Requesting a push parser.
 * Decl Summary::      Table of all Bison declarations.
+* %define Summary::   Defining variables to adjust Bison's behavior.
+* %code Summary::     Inserting code into the parser source.
 
 Parser C-Language Interface
 
@@ -261,7 +264,8 @@ The Bison Parser Algorithm
 * Contextual Precedence::  When an operator's precedence depends on context.
 * Parser States::     The parser is a finite-state-machine with stack.
 * Reduce/Reduce::     When two rules are applicable in the same situation.
-* Mystery Conflicts:: Reduce/reduce conflicts that look unjustified.
+* Mysterious Conflicts:: Conflicts that look unjustified.
+* Tuning LR::         How to tune fundamental aspects of LR-based parsing.
 * Generalized LR Parsing::  Parsing arbitrary context-free grammars.
 * Memory Management:: What happens when memory is exhausted.  How to avoid it.
 
@@ -271,6 +275,13 @@ Operator Precedence
 * Using Precedence::  How to specify precedence in Bison grammars.
 * Precedence Examples::  How these features are used in the previous example.
 * How Precedence::    How they work.
+
+Tuning LR
+
+* LR Table Construction:: Choose a different construction algorithm.
+* Default Reductions::    Disable default reductions.
+* LAC::                   Correct lookahead sets in the parser states.
+* Unreachable States::    Keep unreachable parser states for debugging.
 
 Handling Context Dependencies
 
@@ -331,7 +342,7 @@ Frequently Asked Questions
 * Strings are Destroyed::       @code{yylval} Loses Track of Strings
 * Implementing Gotos/Loops::    Control Flow in the Calculator
 * Multiple start-symbols::      Factoring closely related grammars
-* Secure?  Conform?::           Is Bison @acronym{POSIX} safe?
+* Secure?  Conform?::           Is Bison POSIX safe?
 * I can't build Bison::         Troubleshooting
 * Where can I find help?::      Troubleshouting
 * Bug Reports::                 Troublereporting
@@ -351,24 +362,33 @@ Copying This Manual
 @cindex introduction
 
 @dfn{Bison} is a general-purpose parser generator that converts an
-annotated context-free grammar into an @acronym{LALR}(1) or
-@acronym{GLR} parser for that grammar.  Once you are proficient with
-Bison, you can use it to develop a wide range of language parsers, from those
-used in simple desk calculators to complex programming languages.
+annotated context-free grammar into a deterministic LR or generalized
+LR (GLR) parser employing LALR(1) parser tables.  As an experimental
+feature, Bison can also generate IELR(1) or canonical LR(1) parser
+tables.  Once you are proficient with Bison, you can use it to develop
+a wide range of language parsers, from those used in simple desk
+calculators to complex programming languages.
 
-Bison is upward compatible with Yacc: all properly-written Yacc grammars
-ought to work with Bison with no change.  Anyone familiar with Yacc
-should be able to use Bison with little trouble.  You need to be fluent in
-C or C++ programming in order to use Bison or to understand this manual.
+Bison is upward compatible with Yacc: all properly-written Yacc
+grammars ought to work with Bison with no change.  Anyone familiar
+with Yacc should be able to use Bison with little trouble.  You need
+to be fluent in C or C++ programming in order to use Bison or to
+understand this manual.  Java is also supported as an experimental
+feature.
 
-We begin with tutorial chapters that explain the basic concepts of using
-Bison and show three explained examples, each building on the last.  If you
-don't know Bison or Yacc, start by reading these chapters.  Reference
-chapters follow which describe specific aspects of Bison in detail.
+We begin with tutorial chapters that explain the basic concepts of
+using Bison and show three explained examples, each building on the
+last.  If you don't know Bison or Yacc, start by reading these
+chapters.  Reference chapters follow, which describe specific aspects
+of Bison in detail.
 
-Bison was written primarily by Robert Corbett; Richard Stallman made it
-Yacc-compatible.  Wilfred Hansen of Carnegie Mellon University added
-multi-character string literals and other features.
+Bison was written originally by Robert Corbett.  Richard Stallman made
+it Yacc-compatible.  Wilfred Hansen of Carnegie Mellon University
+added multi-character string literals and other features.  Since then,
+Bison has grown more robust and evolved many other new features thanks
+to the hard work of a long list of volunteers.  For details, see the
+@file{THANKS} and @file{ChangeLog} files included in the Bison
+distribution.
 
 This edition corresponds to version @value{VERSION} of Bison.
 
@@ -377,23 +397,23 @@ This edition corresponds to version @value{VERSION} of Bison.
 
 The distribution terms for Bison-generated parsers permit using the
 parsers in nonfree programs.  Before Bison version 2.2, these extra
-permissions applied only when Bison was generating @acronym{LALR}(1)
+permissions applied only when Bison was generating LALR(1)
 parsers in C@.  And before Bison version 1.24, Bison-generated
 parsers could be used only in programs that were free software.
 
-The other @acronym{GNU} programming tools, such as the @acronym{GNU} C
+The other GNU programming tools, such as the GNU C
 compiler, have never
 had such a requirement.  They could always be used for nonfree
 software.  The reason Bison was different was not due to a special
 policy decision; it resulted from applying the usual General Public
 License to all of the Bison source code.
 
-The output of the Bison utility---the Bison parser file---contains a
-verbatim copy of a sizable piece of Bison, which is the code for the
-parser's implementation.  (The actions from your grammar are inserted
-into this implementation at one point, but most of the rest of the
-implementation is not changed.)  When we applied the @acronym{GPL}
-terms to the skeleton code for the parser's implementation,
+The main output of the Bison utility---the Bison parser implementation
+file---contains a verbatim copy of a sizable piece of Bison, which is
+the code for the parser's implementation.  (The actions from your
+grammar are inserted into this implementation at one point, but most
+of the rest of the implementation is not changed.)  When we applied
+the GPL terms to the skeleton code for the parser's implementation,
 the effect was to restrict the use of Bison output to free software.
 
 We didn't change the terms because of sympathy for people who want to
@@ -401,7 +421,7 @@ make software proprietary.  @strong{Software should be free.}  But we
 concluded that limiting Bison's use to free software was doing little to
 encourage people to make other software free.  So we decided to make the
 practical conditions for using Bison match the practical conditions for
-using the other @acronym{GNU} tools.
+using the other GNU tools.
 
 This exception applies when Bison is generating code for a parser.
 You can tell whether the exception applies to a Bison output file by
@@ -451,35 +471,34 @@ can be made of a minus sign and another expression''.  Another would be,
 recursive, but there must be at least one rule which leads out of the
 recursion.
 
-@cindex @acronym{BNF}
+@cindex BNF
 @cindex Backus-Naur form
 The most common formal system for presenting such rules for humans to read
-is @dfn{Backus-Naur Form} or ``@acronym{BNF}'', which was developed in
+is @dfn{Backus-Naur Form} or ``BNF'', which was developed in
 order to specify the language Algol 60.  Any grammar expressed in
-@acronym{BNF} is a context-free grammar.  The input to Bison is
-essentially machine-readable @acronym{BNF}.
+BNF is a context-free grammar.  The input to Bison is
+essentially machine-readable BNF.
 
-@cindex @acronym{LALR}(1) grammars
-@cindex @acronym{LR}(1) grammars
-There are various important subclasses of context-free grammar.  Although it
-can handle almost all context-free grammars, Bison is optimized for what
-are called @acronym{LALR}(1) grammars.
-In brief, in these grammars, it must be possible to
-tell how to parse any portion of an input string with just a single
-token of lookahead.  Strictly speaking, that is a description of an
-@acronym{LR}(1) grammar, and @acronym{LALR}(1) involves additional
-restrictions that are
-hard to explain simply; but it is rare in actual practice to find an
-@acronym{LR}(1) grammar that fails to be @acronym{LALR}(1).
-@xref{Mystery Conflicts, ,Mysterious Reduce/Reduce Conflicts}, for
-more information on this.
+@cindex LALR grammars
+@cindex IELR grammars
+@cindex LR grammars
+There are various important subclasses of context-free grammars.  Although
+it can handle almost all context-free grammars, Bison is optimized for what
+are called LR(1) grammars.  In brief, in these grammars, it must be possible
+to tell how to parse any portion of an input string with just a single token
+of lookahead.  For historical reasons, Bison by default is limited by the
+additional restrictions of LALR(1), which is hard to explain simply.
+@xref{Mysterious Conflicts}, for more information on this.  As an
+experimental feature, you can escape these additional restrictions by
+requesting IELR(1) or canonical LR(1) parser tables.  @xref{LR Table
+Construction}, to learn how.
 
-@cindex @acronym{GLR} parsing
-@cindex generalized @acronym{LR} (@acronym{GLR}) parsing
+@cindex GLR parsing
+@cindex generalized LR (GLR) parsing
 @cindex ambiguous grammars
 @cindex nondeterministic parsing
 
-Parsers for @acronym{LALR}(1) grammars are @dfn{deterministic}, meaning
+Parsers for LR(1) grammars are @dfn{deterministic}, meaning
 roughly that the next grammar rule to apply at any point in the input is
 uniquely determined by the preceding input and a fixed, finite portion
 (called a @dfn{lookahead}) of the remaining input.  A context-free
@@ -488,8 +507,8 @@ apply the grammar rules to get the same inputs.  Even unambiguous
 grammars can be @dfn{nondeterministic}, meaning that no fixed
 lookahead always suffices to determine the next grammar rule to apply.
 With the proper declarations, Bison is also able to parse these more
-general context-free grammars, using a technique known as @acronym{GLR}
-parsing (for Generalized @acronym{LR}).  Bison's @acronym{GLR} parsers
+general context-free grammars, using a technique known as GLR
+parsing (for Generalized LR).  Bison's GLR parsers
 are able to handle any context-free grammar for which the number of
 possible parses of any given string is finite.
 
@@ -700,16 +719,16 @@ The action says how to produce the semantic value of the sum expression
 from the values of the two subexpressions.
 
 @node GLR Parsers
-@section Writing @acronym{GLR} Parsers
-@cindex @acronym{GLR} parsing
-@cindex generalized @acronym{LR} (@acronym{GLR}) parsing
+@section Writing GLR Parsers
+@cindex GLR parsing
+@cindex generalized LR (GLR) parsing
 @findex %glr-parser
 @cindex conflicts
 @cindex shift/reduce conflicts
 @cindex reduce/reduce conflicts
 
-In some grammars, Bison's standard
-@acronym{LALR}(1) parsing algorithm cannot decide whether to apply a
+In some grammars, Bison's deterministic
+LR(1) parsing algorithm cannot decide whether to apply a
 certain grammar rule at a given point.  That is, it may not be able to
 decide (on the basis of the input read so far) which of two possible
 reductions (applications of a grammar rule) applies, or whether to apply
@@ -718,15 +737,15 @@ input.  These are known respectively as @dfn{reduce/reduce} conflicts
 (@pxref{Reduce/Reduce}), and @dfn{shift/reduce} conflicts
 (@pxref{Shift/Reduce}).
 
-To use a grammar that is not easily modified to be @acronym{LALR}(1), a
+To use a grammar that is not easily modified to be LR(1), a
 more general parsing algorithm is sometimes necessary.  If you include
 @code{%glr-parser} among the Bison declarations in your file
-(@pxref{Grammar Outline}), the result is a Generalized @acronym{LR}
-(@acronym{GLR}) parser.  These parsers handle Bison grammars that
+(@pxref{Grammar Outline}), the result is a Generalized LR
+(GLR) parser.  These parsers handle Bison grammars that
 contain no unresolved conflicts (i.e., after applying precedence
-declarations) identically to @acronym{LALR}(1) parsers.  However, when
+declarations) identically to deterministic parsers.  However, when
 faced with unresolved shift/reduce and reduce/reduce conflicts,
-@acronym{GLR} parsers use the simple expedient of doing both,
+GLR parsers use the simple expedient of doing both,
 effectively cloning the parser to follow both possibilities.  Each of
 the resulting parsers can again split, so that at any given time, there
 can be any number of possible parses being explored.  The parsers
@@ -749,28 +768,25 @@ user-defined function on the resulting values to produce an arbitrary
 merged result.
 
 @menu
-* Simple GLR Parsers::     Using @acronym{GLR} parsers on unambiguous grammars.
-* Merging GLR Parses::     Using @acronym{GLR} parsers to resolve ambiguities.
+* Simple GLR Parsers::     Using GLR parsers on unambiguous grammars.
+* Merging GLR Parses::     Using GLR parsers to resolve ambiguities.
 * GLR Semantic Actions::   Deferred semantic actions have special concerns.
-* Compiler Requirements::  @acronym{GLR} parsers require a modern C compiler.
+* Compiler Requirements::  GLR parsers require a modern C compiler.
 @end menu
 
 @node Simple GLR Parsers
-@subsection Using @acronym{GLR} on Unambiguous Grammars
-@cindex @acronym{GLR} parsing, unambiguous grammars
-@cindex generalized @acronym{LR} (@acronym{GLR}) parsing, unambiguous grammars
+@subsection Using GLR on Unambiguous Grammars
+@cindex GLR parsing, unambiguous grammars
+@cindex generalized LR (GLR) parsing, unambiguous grammars
 @findex %glr-parser
 @findex %expect-rr
 @cindex conflicts
 @cindex reduce/reduce conflicts
 @cindex shift/reduce conflicts
 
-In the simplest cases, you can use the @acronym{GLR} algorithm
-to parse grammars that are unambiguous, but fail to be @acronym{LALR}(1).
-Such grammars typically require more than one symbol of lookahead,
-or (in rare cases) fall into the category of grammars in which the
-@acronym{LALR}(1) algorithm throws away too much information (they are in
-@acronym{LR}(1), but not @acronym{LALR}(1), @ref{Mystery Conflicts}).
+In the simplest cases, you can use the GLR algorithm
+to parse grammars that are unambiguous but fail to be LR(1).
+Such grammars typically require more than one symbol of lookahead.
 
 Consider a problem that
 arises in the declaration of enumerated and subrange types in the
@@ -784,7 +800,7 @@ type enum = (a, b, c);
 @noindent
 The original language standard allows only numeric
 literals and constant identifiers for the subrange bounds (@samp{lo}
-and @samp{hi}), but Extended Pascal (@acronym{ISO}/@acronym{IEC}
+and @samp{hi}), but Extended Pascal (ISO/IEC
 10206) and many other
 Pascal implementations allow arbitrary expressions there.  This gives
 rise to the following situation, containing a superfluous pair of
@@ -807,7 +823,7 @@ type enum = (a);
 valid, and more-complicated cases can come up in practical programs.)
 
 These two declarations look identical until the @samp{..} token.
-With normal @acronym{LALR}(1) one-token lookahead it is not
+With normal LR(1) one-token lookahead it is not
 possible to decide between the two forms when the identifier
 @samp{a} is parsed.  It is, however, desirable
 for a parser to decide this, since in the latter case
@@ -830,8 +846,8 @@ value of @samp{a} from the outer scope.  So this approach cannot
 work.
 
 A simple solution to this problem is to declare the parser to
-use the @acronym{GLR} algorithm.
-When the @acronym{GLR} parser reaches the critical state, it
+use the GLR algorithm.
+When the GLR parser reaches the critical state, it
 merely splits into two branches and pursues both syntax rules
 simultaneously.  Sooner or later, one of them runs into a parsing
 error.  If there is a @samp{..} token before the next
@@ -846,11 +862,11 @@ reports a syntax error as usual.
 
 The effect of all this is that the parser seems to ``guess'' the
 correct branch to take, or in other words, it seems to use more
-lookahead than the underlying @acronym{LALR}(1) algorithm actually allows
-for.  In this example, @acronym{LALR}(2) would suffice, but also some cases
-that are not @acronym{LALR}(@math{k}) for any @math{k} can be handled this way.
+lookahead than the underlying LR(1) algorithm actually allows
+for.  In this example, LR(2) would suffice, but also some cases
+that are not LR(@math{k}) for any @math{k} can be handled this way.
 
-In general, a @acronym{GLR} parser can take quadratic or cubic worst-case time,
+In general, a GLR parser can take quadratic or cubic worst-case time,
 and the current Bison parser even takes exponential time and space
 for some grammars.  In practice, this rarely happens, and for many
 grammars it is possible to prove that it cannot happen.
@@ -901,7 +917,7 @@ expr : '(' expr ')'
 @end group
 @end example
 
-When used as a normal @acronym{LALR}(1) grammar, Bison correctly complains
+When used as a normal LR(1) grammar, Bison correctly complains
 about one reduce/reduce conflict.  In the conflicting situation the
 parser chooses one of the alternatives, arbitrarily the one
 declared first.  Therefore the following correct input is not
@@ -911,9 +927,9 @@ recognized:
 type t = (a) .. b;
 @end example
 
-The parser can be turned into a @acronym{GLR} parser, while also telling Bison
-to be silent about the one known reduce/reduce conflict, by
-adding these two declarations to the Bison input file (before the first
+The parser can be turned into a GLR parser, while also telling Bison
+to be silent about the one known reduce/reduce conflict, by adding
+these two declarations to the Bison grammar file (before the first
 @samp{%%}):
 
 @example
@@ -927,18 +943,18 @@ parser recognizes all valid declarations, according to the
 limited syntax above, transparently.  In fact, the user does not even
 notice when the parser splits.
 
-So here we have a case where we can use the benefits of @acronym{GLR},
+So here we have a case where we can use the benefits of GLR,
 almost without disadvantages.  Even in simple cases like this, however,
 there are at least two potential problems to beware.  First, always
-analyze the conflicts reported by Bison to make sure that @acronym{GLR}
-splitting is only done where it is intended.  A @acronym{GLR} parser
+analyze the conflicts reported by Bison to make sure that GLR
+splitting is only done where it is intended.  A GLR parser
 splitting inadvertently may cause problems less obvious than an
-@acronym{LALR} parser statically choosing the wrong alternative in a
+LR parser statically choosing the wrong alternative in a
 conflict.  Second, consider interactions with the lexer (@pxref{Semantic
 Tokens}) with great care.  Since a split parser consumes tokens without
 performing any actions during the split, the lexer cannot obtain
 information via parser actions.  Some cases of lexer interactions can be
-eliminated by using @acronym{GLR} to shift the complications from the
+eliminated by using GLR to shift the complications from the
 lexer to the parser.  You must check the remaining cases for
 correctness.
 
@@ -950,9 +966,9 @@ the type declaration is completed, it actually makes no difference since
 they cannot be used within the same enumerated type declaration.
 
 @node Merging GLR Parses
-@subsection Using @acronym{GLR} to Resolve Ambiguities
-@cindex @acronym{GLR} parsing, ambiguous grammars
-@cindex generalized @acronym{LR} (@acronym{GLR}) parsing, ambiguous grammars
+@subsection Using GLR to Resolve Ambiguities
+@cindex GLR parsing, ambiguous grammars
+@cindex generalized LR (GLR) parsing, ambiguous grammars
 @findex %dprec
 @findex %merge
 @cindex conflicts
@@ -1018,7 +1034,7 @@ parses as either an @code{expr} or a @code{stmt}
 Bison detects this as a reduce/reduce conflict between the rules
 @code{expr : ID} and @code{declarator : ID}, which it cannot resolve at the
 time it encounters @code{x} in the example above.  Since this is a
-@acronym{GLR} parser, it therefore splits the problem into two parses, one for
+GLR parser, it therefore splits the problem into two parses, one for
 each choice of resolving the reduce/reduce conflict.
 Unlike the example from the previous section (@pxref{Simple GLR Parsers}),
 however, neither of these parses ``dies,'' because the grammar as it stands is
@@ -1027,7 +1043,7 @@ the other reduces @code{stmt : decl}, after which both parsers are in an
 identical state: they've seen @samp{prog stmt} and have the same unprocessed
 input remaining.  We say that these parses have @dfn{merged.}
 
-At this point, the @acronym{GLR} parser requires a specification in the
+At this point, the GLR parser requires a specification in the
 grammar of how to choose between the competing parses.
 In the example above, the two @code{%dprec}
 declarations specify that Bison is to give precedence
@@ -1047,7 +1063,7 @@ T (x) + y;
 @end example
 
 @noindent
-This is another example of using @acronym{GLR} to parse an unambiguous
+This is another example of using GLR to parse an unambiguous
 construct, as shown in the previous section (@pxref{Simple GLR Parsers}).
 Here, there is no ambiguity (this cannot be parsed as a declaration).
 However, at the time the Bison parser encounters @code{x}, it does not
@@ -1118,14 +1134,14 @@ the offending merge.
 By definition, a deferred semantic action is not performed at the same time as
 the associated reduction.
 This raises caveats for several Bison features you might use in a semantic
-action in a @acronym{GLR} parser.
+action in a GLR parser.
 
 @vindex yychar
-@cindex @acronym{GLR} parsers and @code{yychar}
+@cindex GLR parsers and @code{yychar}
 @vindex yylval
-@cindex @acronym{GLR} parsers and @code{yylval}
+@cindex GLR parsers and @code{yylval}
 @vindex yylloc
-@cindex @acronym{GLR} parsers and @code{yylloc}
+@cindex GLR parsers and @code{yylloc}
 In any semantic action, you can examine @code{yychar} to determine the type of
 the lookahead token present at the time of the associated reduction.
 After checking that @code{yychar} is not set to @code{YYEMPTY} or @code{YYEOF},
@@ -1136,7 +1152,7 @@ influence syntax analysis.
 @xref{Lookahead, ,Lookahead Tokens}.
 
 @findex yyclearin
-@cindex @acronym{GLR} parsers and @code{yyclearin}
+@cindex GLR parsers and @code{yyclearin}
 In a deferred semantic action, it's too late to influence syntax analysis.
 In this case, @code{yychar}, @code{yylval}, and @code{yylloc} are set to
 shallow copies of the values they had at the time of the associated reduction.
@@ -1148,24 +1164,24 @@ to invoke @code{yyclearin} (@pxref{Action Features}) or to attempt to free
 memory referenced by @code{yylval}.
 
 @findex YYERROR
-@cindex @acronym{GLR} parsers and @code{YYERROR}
+@cindex GLR parsers and @code{YYERROR}
 Another Bison feature requiring special consideration is @code{YYERROR}
 (@pxref{Action Features}), which you can invoke in a semantic action to
 initiate error recovery.
-During deterministic @acronym{GLR} operation, the effect of @code{YYERROR} is
-the same as its effect in an @acronym{LALR}(1) parser.
+During deterministic GLR operation, the effect of @code{YYERROR} is
+the same as its effect in a deterministic parser.
 In a deferred semantic action, its effect is undefined.
 @c The effect is probably a syntax error at the split point.
 
 Also, see @ref{Location Default Action, ,Default Action for Locations}, which
-describes a special usage of @code{YYLLOC_DEFAULT} in @acronym{GLR} parsers.
+describes a special usage of @code{YYLLOC_DEFAULT} in GLR parsers.
 
 @node Compiler Requirements
-@subsection Considerations when Compiling @acronym{GLR} Parsers
+@subsection Considerations when Compiling GLR Parsers
 @cindex @code{inline}
-@cindex @acronym{GLR} parsers and @code{inline}
+@cindex GLR parsers and @code{inline}
 
-The @acronym{GLR} parsers require a compiler for @acronym{ISO} C89 or
+The GLR parsers require a compiler for ISO C89 or
 later.  In addition, they use the @code{inline} keyword, which is not
 C89, but is C99 and is a common extension in pre-C99 compilers.  It is
 up to the user of these parsers to handle
@@ -1219,18 +1235,20 @@ grouping, the default behavior of the output parser is to take the beginning
 of the first symbol, and the end of the last symbol.
 
 @node Bison Parser
-@section Bison Output: the Parser File
+@section Bison Output: the Parser Implementation File
 @cindex Bison parser
 @cindex Bison utility
 @cindex lexical analyzer, purpose
 @cindex parser
 
-When you run Bison, you give it a Bison grammar file as input.  The output
-is a C source file that parses the language described by the grammar.
-This file is called a @dfn{Bison parser}.  Keep in mind that the Bison
-utility and the Bison parser are two distinct programs: the Bison utility
-is a program whose output is the Bison parser that becomes part of your
-program.
+When you run Bison, you give it a Bison grammar file as input.  The
+most important output is a C source file that implements a parser for
+the language described by the grammar.  This parser is called a
+@dfn{Bison parser}, and this file is called a @dfn{Bison parser
+implementation file}.  Keep in mind that the Bison utility and the
+Bison parser are two distinct programs: the Bison utility is a program
+whose output is the Bison parser implementation file that becomes part
+of your program.
 
 The job of the Bison parser is to group tokens into groupings according to
 the grammar rules---for example, to build identifiers and operators into
@@ -1245,36 +1263,37 @@ may reflect this).  Typically the lexical analyzer makes the tokens by
 parsing characters of text, but Bison does not depend on this.
 @xref{Lexical, ,The Lexical Analyzer Function @code{yylex}}.
 
-The Bison parser file is C code which defines a function named
-@code{yyparse} which implements that grammar.  This function does not make
-a complete C program: you must supply some additional functions.  One is
-the lexical analyzer.  Another is an error-reporting function which the
-parser calls to report an error.  In addition, a complete C program must
-start with a function called @code{main}; you have to provide this, and
-arrange for it to call @code{yyparse} or the parser will never run.
-@xref{Interface, ,Parser C-Language Interface}.
+The Bison parser implementation file is C code which defines a
+function named @code{yyparse} which implements that grammar.  This
+function does not make a complete C program: you must supply some
+additional functions.  One is the lexical analyzer.  Another is an
+error-reporting function which the parser calls to report an error.
+In addition, a complete C program must start with a function called
+@code{main}; you have to provide this, and arrange for it to call
+@code{yyparse} or the parser will never run.  @xref{Interface, ,Parser
+C-Language Interface}.
 
 Aside from the token type names and the symbols in the actions you
-write, all symbols defined in the Bison parser file itself
-begin with @samp{yy} or @samp{YY}.  This includes interface functions
-such as the lexical analyzer function @code{yylex}, the error reporting
-function @code{yyerror} and the parser function @code{yyparse} itself.
-This also includes numerous identifiers used for internal purposes.
-Therefore, you should avoid using C identifiers starting with @samp{yy}
-or @samp{YY} in the Bison grammar file except for the ones defined in
-this manual.  Also, you should avoid using the C identifiers
-@samp{malloc} and @samp{free} for anything other than their usual
-meanings.
+write, all symbols defined in the Bison parser implementation file
+itself begin with @samp{yy} or @samp{YY}.  This includes interface
+functions such as the lexical analyzer function @code{yylex}, the
+error reporting function @code{yyerror} and the parser function
+@code{yyparse} itself.  This also includes numerous identifiers used
+for internal purposes.  Therefore, you should avoid using C
+identifiers starting with @samp{yy} or @samp{YY} in the Bison grammar
+file except for the ones defined in this manual.  Also, you should
+avoid using the C identifiers @samp{malloc} and @samp{free} for
+anything other than their usual meanings.
 
-In some cases the Bison parser file includes system headers, and in
-those cases your code should respect the identifiers reserved by those
-headers.  On some non-@acronym{GNU} hosts, @code{<alloca.h>}, @code{<malloc.h>},
-@code{<stddef.h>}, and @code{<stdlib.h>} are included as needed to
-declare memory allocators and related types.  @code{<libintl.h>} is
-included if message translation is in use
-(@pxref{Internationalization}).  Other system headers may
-be included if you define @code{YYDEBUG} to a nonzero value
-(@pxref{Tracing, ,Tracing Your Parser}).
+In some cases the Bison parser implementation file includes system
+headers, and in those cases your code should respect the identifiers
+reserved by those headers.  On some non-GNU hosts, @code{<alloca.h>},
+@code{<malloc.h>}, @code{<stddef.h>}, and @code{<stdlib.h>} are
+included as needed to declare memory allocators and related types.
+@code{<libintl.h>} is included if message translation is in use
+(@pxref{Internationalization}).  Other system headers may be included
+if you define @code{YYDEBUG} to a nonzero value (@pxref{Tracing,
+,Tracing Your Parser}).
 
 @node Stages
 @section Stages in Using Bison
@@ -1404,7 +1423,7 @@ provides a good starting point, since operator precedence is not an issue.
 The second example will illustrate how operator precedence is handled.
 
 The source code for this calculator is named @file{rpcalc.y}.  The
-@samp{.y} extension is a convention used for Bison input files.
+@samp{.y} extension is a convention used for Bison grammar files.
 
 @menu
 * Rpcalc Declarations::    Prologue (declarations) for rpcalc.
@@ -1646,7 +1665,7 @@ or sequences of characters into tokens.  The Bison parser gets its
 tokens by calling the lexical analyzer.  @xref{Lexical, ,The Lexical
 Analyzer Function @code{yylex}}.
 
-Only a simple lexical analyzer is needed for the @acronym{RPN}
+Only a simple lexical analyzer is needed for the RPN
 calculator.  This
 lexical analyzer skips blanks and tabs, then reads in numbers as
 @code{double} and returns them as @code{NUM} tokens.  Any other character
@@ -1768,34 +1787,35 @@ real calculator, but it is adequate for the first example.
 
 Before running Bison to produce a parser, we need to decide how to
 arrange all the source code in one or more source files.  For such a
-simple example, the easiest thing is to put everything in one file.  The
-definitions of @code{yylex}, @code{yyerror} and @code{main} go at the
-end, in the epilogue of the file
+simple example, the easiest thing is to put everything in one file,
+the grammar file.  The definitions of @code{yylex}, @code{yyerror} and
+@code{main} go at the end, in the epilogue of the grammar file
 (@pxref{Grammar Layout, ,The Overall Layout of a Bison Grammar}).
 
 For a large project, you would probably have several source files, and use
 @code{make} to arrange to recompile them.
 
-With all the source in a single file, you use the following command to
-convert it into a parser file:
+With all the source in the grammar file, you use the following command
+to convert it into a parser implementation file:
 
 @example
 bison @var{file}.y
 @end example
 
 @noindent
-In this example the file was called @file{rpcalc.y} (for ``Reverse Polish
-@sc{calc}ulator'').  Bison produces a file named @file{@var{file}.tab.c},
-removing the @samp{.y} from the original file name.  The file output by
-Bison contains the source code for @code{yyparse}.  The additional
-functions in the input file (@code{yylex}, @code{yyerror} and @code{main})
-are copied verbatim to the output.
+In this example, the grammar file is called @file{rpcalc.y} (for
+``Reverse Polish @sc{calc}ulator'').  Bison produces a parser
+implementation file named @file{@var{file}.tab.c}, removing the
+@samp{.y} from the grammar file name.  The parser implementation file
+contains the source code for @code{yyparse}.  The additional functions
+in the grammar file (@code{yylex}, @code{yyerror} and @code{main}) are
+copied verbatim to the parser implementation file.
 
 @node Rpcalc Compile
-@subsection Compiling the Parser File
+@subsection Compiling the Parser Implementation File
 @cindex compiling the parser
 
-Here is how to compile and run the parser file:
+Here is how to compile and run the parser implementation file:
 
 @example
 @group
@@ -2597,7 +2617,7 @@ uninitialized variable in any way except to store a value in it.
 Bison takes as input a context-free grammar specification and produces a
 C-language function that recognizes correct instances of the grammar.
 
-The Bison grammar input file conventionally has a name ending in @samp{.y}.
+The Bison grammar file conventionally has a name ending in @samp{.y}.
 @xref{Invocation, ,Invoking Bison}.
 
 @menu
@@ -2632,7 +2652,7 @@ appropriate delimiters:
 @end example
 
 Comments enclosed in @samp{/* @dots{} */} may appear in any of the sections.
-As a @acronym{GNU} extension, @samp{//} introduces a comment that
+As a GNU extension, @samp{//} introduces a comment that
 continues until end of line.
 
 @menu
@@ -2651,10 +2671,10 @@ continues until end of line.
 
 The @var{Prologue} section contains macro definitions and declarations
 of functions and variables that are used in the actions in the grammar
-rules.  These are copied to the beginning of the parser file so that
-they precede the definition of @code{yyparse}.  You can use
-@samp{#include} to get the declarations from a header file.  If you
-don't need any C declarations, you may omit the @samp{%@{} and
+rules.  These are copied to the beginning of the parser implementation
+file so that they precede the definition of @code{yyparse}.  You can
+use @samp{#include} to get the declarations from a header file.  If
+you don't need any C declarations, you may omit the @samp{%@{} and
 @samp{%@}} delimiters that bracket this section.
 
 The @var{Prologue} section is terminated by the first occurrence
@@ -2706,13 +2726,12 @@ feature test macros can affect the behavior of Bison-generated
 @findex %code top
 
 The functionality of @var{Prologue} sections can often be subtle and
-inflexible.
-As an alternative, Bison provides a %code directive with an explicit qualifier
-field, which identifies the purpose of the code and thus the location(s) where
-Bison should generate it.
-For C/C++, the qualifier can be omitted for the default location, or it can be
-one of @code{requires}, @code{provides}, @code{top}.
-@xref{Decl Summary,,%code}.
+inflexible.  As an alternative, Bison provides a @code{%code}
+directive with an explicit qualifier field, which identifies the
+purpose of the code and thus the location(s) where Bison should
+generate it.  For C/C++, the qualifier can be omitted for the default
+location, or it can be one of @code{requires}, @code{provides},
+@code{top}.  @xref{%code Summary}.
 
 Look again at the example of the previous section:
 
@@ -2737,17 +2756,16 @@ Look again at the example of the previous section:
 @end smallexample
 
 @noindent
-Notice that there are two @var{Prologue} sections here, but there's a subtle
-distinction between their functionality.
-For example, if you decide to override Bison's default definition for
-@code{YYLTYPE}, in which @var{Prologue} section should you write your new
-definition?
-You should write it in the first since Bison will insert that code into the
-parser source code file @emph{before} the default @code{YYLTYPE} definition.
-In which @var{Prologue} section should you prototype an internal function,
-@code{trace_token}, that accepts @code{YYLTYPE} and @code{yytokentype} as
-arguments?
-You should prototype it in the second since Bison will insert that code
+Notice that there are two @var{Prologue} sections here, but there's a
+subtle distinction between their functionality.  For example, if you
+decide to override Bison's default definition for @code{YYLTYPE}, in
+which @var{Prologue} section should you write your new definition?
+You should write it in the first since Bison will insert that code
+into the parser implementation file @emph{before} the default
+@code{YYLTYPE} definition.  In which @var{Prologue} section should you
+prototype an internal function, @code{trace_token}, that accepts
+@code{YYLTYPE} and @code{yytokentype} as arguments?  You should
+prototype it in the second since Bison will insert that code
 @emph{after} the @code{YYLTYPE} and @code{yytokentype} definitions.
 
 This distinction in functionality between the two @var{Prologue} sections is
@@ -2804,16 +2822,16 @@ functionality as the two kinds of @var{Prologue} sections, but it's always
 explicit which kind you intend.
 Moreover, both kinds are always available even in the absence of @code{%union}.
 
-The @code{%code top} block above logically contains two parts.
-The first two lines before the warning need to appear near the top of the
-parser source code file.
-The first line after the warning is required by @code{YYSTYPE} and thus also
-needs to appear in the parser source code file.
-However, if you've instructed Bison to generate a parser header file
-(@pxref{Decl Summary, ,%defines}), you probably want that line to appear before
-the @code{YYSTYPE} definition in that header file as well.
-The @code{YYLTYPE} definition should also appear in the parser header file to
-override the default @code{YYLTYPE} definition there.
+The @code{%code top} block above logically contains two parts.  The
+first two lines before the warning need to appear near the top of the
+parser implementation file.  The first line after the warning is
+required by @code{YYSTYPE} and thus also needs to appear in the parser
+implementation file.  However, if you've instructed Bison to generate
+a parser header file (@pxref{Decl Summary, ,%defines}), you probably
+want that line to appear before the @code{YYSTYPE} definition in that
+header file as well.  The @code{YYLTYPE} definition should also appear
+in the parser header file to override the default @code{YYLTYPE}
+definition there.
 
 In other words, in the @code{%code top} block above, all but the first two
 lines are dependency code required by the @code{YYSTYPE} and @code{YYLTYPE}
@@ -2856,35 +2874,36 @@ Thus, they belong in one or more @code{%code requires}:
 @end smallexample
 
 @noindent
-Now Bison will insert @code{#include "ptypes.h"} and the new @code{YYLTYPE}
-definition before the Bison-generated @code{YYSTYPE} and @code{YYLTYPE}
-definitions in both the parser source code file and the parser header file.
-(By the same reasoning, @code{%code requires} would also be the appropriate
-place to write your own definition for @code{YYSTYPE}.)
+Now Bison will insert @code{#include "ptypes.h"} and the new
+@code{YYLTYPE} definition before the Bison-generated @code{YYSTYPE}
+and @code{YYLTYPE} definitions in both the parser implementation file
+and the parser header file.  (By the same reasoning, @code{%code
+requires} would also be the appropriate place to write your own
+definition for @code{YYSTYPE}.)
 
-When you are writing dependency code for @code{YYSTYPE} and @code{YYLTYPE}, you
-should prefer @code{%code requires} over @code{%code top} regardless of whether
-you instruct Bison to generate a parser header file.
-When you are writing code that you need Bison to insert only into the parser
-source code file and that has no special need to appear at the top of that
-file, you should prefer the unqualified @code{%code} over @code{%code top}.
-These practices will make the purpose of each block of your code explicit to
-Bison and to other developers reading your grammar file.
-Following these practices, we expect the unqualified @code{%code} and
-@code{%code requires} to be the most important of the four @var{Prologue}
+When you are writing dependency code for @code{YYSTYPE} and
+@code{YYLTYPE}, you should prefer @code{%code requires} over
+@code{%code top} regardless of whether you instruct Bison to generate
+a parser header file.  When you are writing code that you need Bison
+to insert only into the parser implementation file and that has no
+special need to appear at the top of that file, you should prefer the
+unqualified @code{%code} over @code{%code top}.  These practices will
+make the purpose of each block of your code explicit to Bison and to
+other developers reading your grammar file.  Following these
+practices, we expect the unqualified @code{%code} and @code{%code
+requires} to be the most important of the four @var{Prologue}
 alternatives.
 
-At some point while developing your parser, you might decide to provide
-@code{trace_token} to modules that are external to your parser.
-Thus, you might wish for Bison to insert the prototype into both the parser
-header file and the parser source code file.
-Since this function is not a dependency required by @code{YYSTYPE} or
+At some point while developing your parser, you might decide to
+provide @code{trace_token} to modules that are external to your
+parser.  Thus, you might wish for Bison to insert the prototype into
+both the parser header file and the parser implementation file.  Since
+this function is not a dependency required by @code{YYSTYPE} or
 @code{YYLTYPE}, it doesn't make sense to move its prototype to a
-@code{%code requires}.
-More importantly, since it depends upon @code{YYLTYPE} and @code{yytokentype},
-@code{%code requires} is not sufficient.
-Instead, move its prototype from the unqualified @code{%code} to a
-@code{%code provides}:
+@code{%code requires}.  More importantly, since it depends upon
+@code{YYLTYPE} and @code{yytokentype}, @code{%code requires} is not
+sufficient.  Instead, move its prototype from the unqualified
+@code{%code} to a @code{%code provides}:
 
 @smallexample
 %code top @{
@@ -2925,17 +2944,18 @@ Instead, move its prototype from the unqualified @code{%code} to a
 @end smallexample
 
 @noindent
-Bison will insert the @code{trace_token} prototype into both the parser header
-file and the parser source code file after the definitions for
-@code{yytokentype}, @code{YYLTYPE}, and @code{YYSTYPE}.
+Bison will insert the @code{trace_token} prototype into both the
+parser header file and the parser implementation file after the
+definitions for @code{yytokentype}, @code{YYLTYPE}, and
+@code{YYSTYPE}.
 
-The above examples are careful to write directives in an order that reflects
-the layout of the generated parser source code and header files:
-@code{%code top}, @code{%code requires}, @code{%code provides}, and then
-@code{%code}.
-While your grammar files may generally be easier to read if you also follow
-this order, Bison does not require it.
-Instead, Bison lets you choose an organization that makes sense to you.
+The above examples are careful to write directives in an order that
+reflects the layout of the generated parser implementation and header
+files: @code{%code top}, @code{%code requires}, @code{%code provides},
+and then @code{%code}.  While your grammar files may generally be
+easier to read if you also follow this order, Bison does not require
+it.  Instead, Bison lets you choose an organization that makes sense
+to you.
 
 You may declare any of these directives multiple times in the grammar file.
 In that case, Bison concatenates the contained code in declaration order.
@@ -3008,15 +3028,16 @@ if it is the first thing in the file.
 @cindex epilogue
 @cindex C code, section for additional
 
-The @var{Epilogue} is copied verbatim to the end of the parser file, just as
-the @var{Prologue} is copied to the beginning.  This is the most convenient
-place to put anything that you want to have in the parser file but which need
-not come before the definition of @code{yyparse}.  For example, the
-definitions of @code{yylex} and @code{yyerror} often go here.  Because
-C requires functions to be declared before being used, you often need
-to declare functions like @code{yylex} and @code{yyerror} in the Prologue,
-even if you define them in the Epilogue.
-@xref{Interface, ,Parser C-Language Interface}.
+The @var{Epilogue} is copied verbatim to the end of the parser
+implementation file, just as the @var{Prologue} is copied to the
+beginning.  This is the most convenient place to put anything that you
+want to have in the parser implementation file but which need not come
+before the definition of @code{yyparse}.  For example, the definitions
+of @code{yylex} and @code{yyerror} often go here.  Because C requires
+functions to be declared before being used, you often need to declare
+functions like @code{yylex} and @code{yyerror} in the Prologue, even
+if you define them in the Epilogue.  @xref{Interface, ,Parser
+C-Language Interface}.
 
 If the last section is empty, you may omit the @samp{%%} that separates it
 from the grammar rules.
@@ -3048,8 +3069,13 @@ A @dfn{nonterminal symbol} stands for a class of syntactically
 equivalent groupings.  The symbol name is used in writing grammar rules.
 By convention, it should be all lower case.
 
-Symbol names can contain letters, digits (not at the beginning),
-underscores and periods.  Periods make sense only in nonterminals.
+Symbol names can contain letters, underscores, periods, and non-initial
+digits and dashes.  Dashes in symbol names are a GNU extension, incompatible
+with POSIX Yacc.  Periods and dashes make symbol names less convenient to
+use with named references, which require brackets around such names
+(@pxref{Named References}).  Terminal symbols that contain periods or dashes
+make little sense: since they are not valid symbols (in most programming
+languages) they are not exported as token names.
 
 There are three ways of writing terminal symbols in the grammar:
 
@@ -3130,10 +3156,10 @@ for a character token type is simply the positive numeric code of the
 character, so @code{yylex} can use the identical value to generate the
 requisite code, though you may need to convert it to @code{unsigned
 char} to avoid sign-extension on hosts where @code{char} is signed.
-Each named token type becomes a C macro in
-the parser file, so @code{yylex} can use the name to stand for the code.
-(This is why periods don't make sense in terminal symbols.)
-@xref{Calling Convention, ,Calling Convention for @code{yylex}}.
+Each named token type becomes a C macro in the parser implementation
+file, so @code{yylex} can use the name to stand for the code.  (This
+is why periods don't make sense in terminal symbols.)  @xref{Calling
+Convention, ,Calling Convention for @code{yylex}}.
 
 If @code{yylex} is defined in a separate file, you need to arrange for the
 token-type macro definitions to be available there.  Use the @samp{-d}
@@ -3153,14 +3179,14 @@ characters in the following C-language string:
 
 The @code{yylex} function and Bison must use a consistent character set
 and encoding for character tokens.  For example, if you run Bison in an
-@acronym{ASCII} environment, but then compile and run the resulting
+ASCII environment, but then compile and run the resulting
 program in an environment that uses an incompatible character set like
-@acronym{EBCDIC}, the resulting program may not work because the tables
-generated by Bison will assume @acronym{ASCII} numeric values for
+EBCDIC, the resulting program may not work because the tables
+generated by Bison will assume ASCII numeric values for
 character tokens.  It is standard practice for software distributions to
 contain C source files that were generated by Bison in an
-@acronym{ASCII} environment, so installers on platforms that are
-incompatible with @acronym{ASCII} must rebuild those files before
+ASCII environment, so installers on platforms that are
+incompatible with ASCII must rebuild those files before
 compiling them.
 
 The symbol @code{error} is a terminal symbol reserved for error recovery
@@ -3218,7 +3244,8 @@ This is an example of @dfn{braced code}, that is, C code surrounded by
 braces, much like a compound statement in C@.  Braced code can contain
 any sequence of C tokens, so long as its braces are balanced.  Bison
 does not check the braced code for correctness directly; it merely
-copies the code to the output file, where the C compiler can check it.
+copies the code to the parser implementation file, where the C
+compiler can check it.
 
 Within braced code, the balanced-brace count is not affected by braces
 within comments, string literals, or character constants, but it is
@@ -3361,6 +3388,7 @@ the numbers associated with @var{x} and @var{y}.
 * Mid-Rule Actions::  Most actions go at the end of a rule.
                       This says when, why and how to use the exceptional
                         action in the middle of a rule.
+* Named References::  Using named references in actions.
 @end menu
 
 @node Value Type
@@ -3372,7 +3400,7 @@ the numbers associated with @var{x} and @var{y}.
 
 In a simple program it may be sufficient to use the same data type for
 the semantic values of all language constructs.  This was true in the
-@acronym{RPN} and infix calculator examples (@pxref{RPN Calc, ,Reverse Polish
+RPN and infix calculator examples (@pxref{RPN Calc, ,Reverse Polish
 Notation Calculator}).
 
 Bison normally uses the type @code{int} for semantic values if your
@@ -3422,6 +3450,8 @@ Decl, ,Nonterminal Symbols}).
 @cindex action
 @vindex $$
 @vindex $@var{n}
+@vindex $@var{name}
+@vindex $[@var{name}]
 
 An action accompanies a syntactic rule and contains C code to be executed
 each time an instance of that rule is recognized.  The task of most actions
@@ -3435,13 +3465,17 @@ end of the rule, following all the components.  Actions in the middle of
 a rule are tricky and used only for special purposes (@pxref{Mid-Rule
 Actions, ,Actions in Mid-Rule}).
 
-The C code in an action can refer to the semantic values of the components
-matched by the rule with the construct @code{$@var{n}}, which stands for
-the value of the @var{n}th component.  The semantic value for the grouping
-being constructed is @code{$$}.  Bison translates both of these
-constructs into expressions of the appropriate type when it copies the
-actions into the parser file.  @code{$$} is translated to a modifiable
-lvalue, so it can be assigned to.
+The C code in an action can refer to the semantic values of the
+components matched by the rule with the construct @code{$@var{n}},
+which stands for the value of the @var{n}th component.  The semantic
+value for the grouping being constructed is @code{$$}.  In addition,
+the semantic values of symbols can be accessed with the named
+references construct @code{$@var{name}} or @code{$[@var{name}]}.
+Bison translates both of these constructs into expressions of the
+appropriate type when it copies the actions into the parser
+implementation file.  @code{$$} (or @code{$@var{name}}, when it stands
+for the current grouping) is translated to a modifiable lvalue, so it
+can be assigned to.
 
 Here is a typical example:
 
@@ -3453,15 +3487,30 @@ exp:    @dots{}
 @end group
 @end example
 
+Or, in terms of named references:
+
+@example
+@group
+exp[result]:    @dots{}
+        | exp[left] '+' exp[right]
+            @{ $result = $left + $right; @}
+@end group
+@end example
+
 @noindent
 This rule constructs an @code{exp} from two smaller @code{exp} groupings
 connected by a plus-sign token.  In the action, @code{$1} and @code{$3}
+(@code{$left} and @code{$right})
 refer to the semantic values of the two component @code{exp} groupings,
 which are the first and third symbols on the right hand side of the rule.
-The sum is stored into @code{$$} so that it becomes the semantic value of
+The sum is stored into @code{$$} (@code{$result}) so that it becomes the
+semantic value of
 the addition-expression just recognized by the rule.  If there were a
 useful semantic value associated with the @samp{+} token, it could be
 referred to as @code{$2}.
+
+@xref{Named References,,Using Named References}, for more information
+about using the named references construct.
 
 Note that the vertical-bar character @samp{|} is really a rule
 separator, and actions are attached to a single rule.  This is a
@@ -3757,6 +3806,93 @@ compound: subroutine
 Now Bison can execute the action in the rule for @code{subroutine} without
 deciding which rule for @code{compound} it will eventually use.
 
+@node Named References
+@subsection Using Named References
+@cindex named references
+
+While every semantic value can be accessed with positional references
+@code{$@var{n}} and @code{$$}, it's often much more convenient to refer to
+them by name.  First of all, original symbol names may be used as named
+references.  For example:
+
+@example
+@group
+invocation: op '(' args ')'
+  @{ $invocation = new_invocation ($op, $args, @@invocation); @}
+@end group
+@end example
+
+@noindent
+The positional @code{$$}, @code{@@$}, @code{$n}, and @code{@@n} can be
+mixed with @code{$name} and @code{@@name} arbitrarily.  For example:
+
+@example
+@group
+invocation: op '(' args ')'
+  @{ $$ = new_invocation ($op, $args, @@$); @}
+@end group
+@end example
+
+@noindent
+However, sometimes regular symbol names are not sufficient due to
+ambiguities:
+
+@example
+@group
+exp: exp '/' exp
+  @{ $exp = $exp / $exp; @} // $exp is ambiguous.
+
+exp: exp '/' exp
+  @{ $$ = $1 / $exp; @} // One usage is ambiguous.
+
+exp: exp '/' exp
+  @{ $$ = $1 / $3; @} // No error.
+@end group
+@end example
+
+@noindent
+When ambiguity occurs, explicitly declared names may be used for values and
+locations.  Explicit names are declared as a bracketed name after a symbol
+appearance in rule definitions.  For example:
+@example
+@group
+exp[result]: exp[left] '/' exp[right]
+  @{ $result = $left / $right; @}
+@end group
+@end example
+
+@noindent
+Explicit names may be declared for RHS and for LHS symbols as well.  In order
+to access a semantic value generated by a mid-rule action, an explicit name
+may also be declared by putting a bracketed name after the closing brace of
+the mid-rule action code:
+@example
+@group
+exp[res]: exp[x] '+' @{$left = $x;@}[left] exp[right]
+  @{ $res = $left + $right; @}
+@end group
+@end example
+
+@noindent
+
+In references, in order to specify names containing dots and dashes, an explicit
+bracketed syntax @code{$[name]} and @code{@@[name]} must be used:
+@example
+@group
+if-stmt: IF '(' expr ')' THEN then.stmt ';'
+  @{ $[if-stmt] = new_if_stmt ($expr, $[then.stmt]); @}
+@end group
+@end example
+
+It often happens that named references are followed by a dot, dash or other
+C punctuation marks and operators.  By default, Bison will read
+@code{$name.suffix} as a reference to symbol value @code{$name} followed by
+@samp{.suffix}, i.e., an access to the @samp{suffix} field of the semantic
+value.  In order to force Bison to recognize @code{name.suffix} in its entirety
+as the name of a semantic value, bracketed syntax @code{$[name.suffix]}
+must be used.
+
+
 @node Locations
 @section Tracking Locations
 @cindex location
@@ -3812,6 +3948,8 @@ Action Decl, , Performing Actions before Parsing}.
 @cindex actions, location
 @vindex @@$
 @vindex @@@var{n}
+@vindex @@@var{name}
+@vindex @@[@var{name}]
 
 Actions are not only useful for defining language semantics, but also for
 describing the behavior of the output parser with locations.
@@ -3822,6 +3960,11 @@ constructs can be used to access the locations of the elements being matched.
 The location of the @var{n}th component of the right hand side is
 @code{@@@var{n}}, while the location of the left hand side grouping is
 @code{@@$}.
+
+In addition, the named references construct @code{@@@var{name}} and
+@code{@@[@var{name}]} may also be used to address the symbol locations.
+@xref{Named References,,Using Named References}, for more information
+about using the named references construct.
 
 Here is a basic example using the default data type for locations:
 
@@ -3884,7 +4027,7 @@ This location is stored in @code{yylloc}.
 @node Location Default Action
 @subsection Default Action for Locations
 @vindex YYLLOC_DEFAULT
-@cindex @acronym{GLR} parsers and @code{YYLLOC_DEFAULT}
+@cindex GLR parsers and @code{YYLLOC_DEFAULT}
 
 Actually, actions are not the best place to compute locations.  Since
 locations are much more general than semantic values, there is room in
@@ -3892,7 +4035,7 @@ the output parser to redefine the default action to take for each
 rule.  The @code{YYLLOC_DEFAULT} macro is invoked each time a rule is
 matched, before the associated action is run.  It is also invoked
 while processing a syntax error, to compute the error's location.
-Before reporting an unresolvable syntactic ambiguity, a @acronym{GLR}
+Before reporting an unresolvable syntactic ambiguity, a GLR
 parser invokes @code{YYLLOC_DEFAULT} recursively to compute the location
 of that ambiguity.
 
@@ -3904,7 +4047,7 @@ the location of the grouping (the result of the computation).  When a
 rule is matched, the second parameter identifies locations of
 all right hand side elements of the rule being matched, and the third
 parameter is the size of the rule's right hand side.
-When a @acronym{GLR} parser reports an ambiguity, which of multiple candidate
+When a GLR parser reports an ambiguity, which of multiple candidate
 right hand sides it passes to @code{YYLLOC_DEFAULT} is undefined.
 When processing a syntax error, the second parameter identifies locations
 of the symbols that were discarded during error processing, and the third
@@ -3972,10 +4115,10 @@ All token type names (but not single-character literal tokens such as
 declared if you need to specify which data type to use for the semantic
 value (@pxref{Multiple Types, ,More Than One Value Type}).
 
-The first rule in the file also specifies the start symbol, by default.
-If you want some other symbol to be the start symbol, you must declare
-it explicitly (@pxref{Language and Grammar, ,Languages and Context-Free
-Grammars}).
+The first rule in the grammar file also specifies the start symbol, by
+default.  If you want some other symbol to be the start symbol, you
+must declare it explicitly (@pxref{Language and Grammar, ,Languages
+and Context-Free Grammars}).
 
 @menu
 * Require Decl::      Requiring a Bison version.
@@ -3990,6 +4133,8 @@ Grammars}).
 * Pure Decl::         Requesting a reentrant parser.
 * Push Decl::         Requesting a push parser.
 * Decl Summary::      Table of all Bison declarations.
+* %define Summary::   Defining variables to adjust Bison's behavior.
+* %code Summary::     Inserting code into the parser source.
 @end menu
 
 @node Require Decl
@@ -4183,7 +4328,7 @@ This says that the two alternative types are @code{double} and @code{symrec
 in the @code{%token} and @code{%type} declarations to pick one of the types
 for a terminal or nonterminal symbol (@pxref{Type Decl, ,Nonterminal Symbols}).
 
-As an extension to @acronym{POSIX}, a tag is allowed after the
+As an extension to POSIX, a tag is allowed after the
 @code{union}.  For example:
 
 @example
@@ -4200,7 +4345,7 @@ specifies the union tag @code{value}, so the corresponding C type is
 @code{union value}.  If you do not specify a tag, it defaults to
 @code{YYSTYPE}.
 
-As another extension to @acronym{POSIX}, you may specify multiple
+As another extension to POSIX, you may specify multiple
 @code{%union} declarations; their contents are concatenated.  However,
 only the first @code{%union} declaration can specify a tag.
 
@@ -4463,13 +4608,13 @@ be @var{n} shift/reduce conflicts and no reduce/reduce conflicts.
 Bison reports an error if the number of shift/reduce conflicts differs
 from @var{n}, or if there are any reduce/reduce conflicts.
 
-For normal @acronym{LALR}(1) parsers, reduce/reduce conflicts are more
+For deterministic parsers, reduce/reduce conflicts are more
 serious, and should be eliminated entirely.  Bison will always report
-reduce/reduce conflicts for these parsers.  With @acronym{GLR}
+reduce/reduce conflicts for these parsers.  With GLR
 parsers, however, both kinds of conflicts are routine; otherwise,
-there would be no need to use @acronym{GLR} parsing.  Therefore, it is
+there would be no need to use GLR parsing.  Therefore, it is
 also possible to specify an expected number of reduce/reduce conflicts
-in @acronym{GLR} parsers, using the declaration:
+in GLR parsers, using the declaration:
 
 @example
 %expect-rr @var{n}
@@ -4490,7 +4635,7 @@ go back to the beginning.
 
 @item
 Add an @code{%expect} declaration, copying the number @var{n} from the
-number which Bison printed.  With @acronym{GLR} parsers, add an
+number which Bison printed.  With GLR parsers, add an
 @code{%expect-rr} declaration as well.
 @end itemize
 
@@ -4557,7 +4702,7 @@ valid grammar.
 @subsection A Push Parser
 @cindex push parser
 @cindex push parser
-@findex %define api.push_pull
+@findex %define api.push-pull
 
 (The current push parsing interface is experimental and may evolve.
 More user feedback will help to stabilize it.)
@@ -4573,10 +4718,10 @@ within a certain time period.
 
 Normally, Bison generates a pull parser.
 The following Bison declaration says that you want the parser to be a push
-parser (@pxref{Decl Summary,,%define api.push_pull}):
+parser (@pxref{%define Summary,,api.push-pull}):
 
 @example
-%define api.push_pull "push"
+%define api.push-pull push
 @end example
 
 In almost all cases, you want to ensure that your push parser is also
@@ -4587,7 +4732,7 @@ what you are doing, your declarations should look like this:
 
 @example
 %define api.pure
-%define api.push_pull "push"
+%define api.push-pull push
 @end example
 
 There is a major notable functional difference between the pure push parser
@@ -4636,14 +4781,14 @@ for use by the next invocation of the @code{yypush_parse} function.
 
 Bison also supports both the push parser interface along with the pull parser
 interface in the same generated parser.  In order to get this functionality,
-you should replace the @code{%define api.push_pull "push"} declaration with the
-@code{%define api.push_pull "both"} declaration.  Doing this will create all of
+you should replace the @code{%define api.push-pull push} declaration with the
+@code{%define api.push-pull both} declaration.  Doing this will create all of
 the symbols mentioned earlier along with the two extra symbols, @code{yyparse}
 and @code{yypull_parse}.  @code{yyparse} can be used exactly as it normally
 would be used.  However, the user should note that it is implemented in the
 generated parser by calling @code{yypull_parse}.
 This makes the @code{yyparse} function that is generated with the
-@code{%define api.push_pull "both"} declaration slower than the normal
+@code{%define api.push-pull both} declaration slower than the normal
 @code{yyparse} function.  If the user
 calls the @code{yypull_parse} function it will parse the rest of the input
 stream.  It is possible to @code{yypush_parse} tokens to select a subgrammar
@@ -4660,8 +4805,8 @@ yypstate_delete (ps);
 @end example
 
 Adding the @code{%define api.pure} declaration does exactly the same thing to
-the generated parser with @code{%define api.push_pull "both"} as it did for
-@code{%define api.push_pull "push"}.
+the generated parser with @code{%define api.push-pull both} as it did for
+@code{%define api.push-pull push}.
 
 @node Decl Summary
 @subsection Bison Declaration Summary
@@ -4726,307 +4871,62 @@ In order to change the behavior of @command{bison}, use the following
 directives:
 
 @deffn {Directive} %code @{@var{code}@}
+@deffnx {Directive} %code @var{qualifier} @{@var{code}@}
 @findex %code
-This is the unqualified form of the @code{%code} directive.
-It inserts @var{code} verbatim at a language-dependent default location in the
-output@footnote{The default location is actually skeleton-dependent;
-  writers of non-standard skeletons however should choose the default location
-  consistently with the behavior of the standard Bison skeletons.}.
-
-@cindex Prologue
-For C/C++, the default location is the parser source code
-file after the usual contents of the parser header file.
-Thus, @code{%code} replaces the traditional Yacc prologue,
-@code{%@{@var{code}%@}}, for most purposes.
-For a detailed discussion, see @ref{Prologue Alternatives}.
-
-For Java, the default location is inside the parser class.
-@end deffn
-
-@deffn {Directive} %code @var{qualifier} @{@var{code}@}
-This is the qualified form of the @code{%code} directive.
-If you need to specify location-sensitive verbatim @var{code} that does not
-belong at the default location selected by the unqualified @code{%code} form,
-use this form instead.
-
-@var{qualifier} identifies the purpose of @var{code} and thus the location(s)
-where Bison should generate it.
-Not all values of @var{qualifier} are available for all target languages:
-
-@itemize @bullet
-@item requires
-@findex %code requires
-
-@itemize @bullet
-@item Language(s): C, C++
-
-@item Purpose: This is the best place to write dependency code required for
-@code{YYSTYPE} and @code{YYLTYPE}.
-In other words, it's the best place to define types referenced in @code{%union}
-directives, and it's the best place to override Bison's default @code{YYSTYPE}
-and @code{YYLTYPE} definitions.
-
-@item Location(s): The parser header file and the parser source code file
-before the Bison-generated @code{YYSTYPE} and @code{YYLTYPE} definitions.
-@end itemize
-
-@item provides
-@findex %code provides
-
-@itemize @bullet
-@item Language(s): C, C++
-
-@item Purpose: This is the best place to write additional definitions and
-declarations that should be provided to other modules.
-
-@item Location(s): The parser header file and the parser source code file after
-the Bison-generated @code{YYSTYPE}, @code{YYLTYPE}, and token definitions.
-@end itemize
-
-@item top
-@findex %code top
-
-@itemize @bullet
-@item Language(s): C, C++
-
-@item Purpose: The unqualified @code{%code} or @code{%code requires} should
-usually be more appropriate than @code{%code top}.
-However, occasionally it is necessary to insert code much nearer the top of the
-parser source code file.
-For example:
-
-@smallexample
-%code top @{
-  #define _GNU_SOURCE
-  #include <stdio.h>
-@}
-@end smallexample
-
-@item Location(s): Near the top of the parser source code file.
-@end itemize
-
-@item imports
-@findex %code imports
-
-@itemize @bullet
-@item Language(s): Java
-
-@item Purpose: This is the best place to write Java import directives.
-
-@item Location(s): The parser Java file after any Java package directive and
-before any class definitions.
-@end itemize
-@end itemize
-
-@cindex Prologue
-For a detailed discussion of how to use @code{%code} in place of the
-traditional Yacc prologue for C/C++, see @ref{Prologue Alternatives}.
+Insert @var{code} verbatim into the output parser source at the
+default location or at the location specified by @var{qualifier}.
+@xref{%code Summary}.
 @end deffn
 
 @deffn {Directive} %debug
-In the parser file, define the macro @code{YYDEBUG} to 1 if it is not
-already defined, so that the debugging facilities are compiled.
-@xref{Tracing, ,Tracing Your Parser}.
+In the parser implementation file, define the macro @code{YYDEBUG} to
+1 if it is not already defined, so that the debugging facilities are
+compiled.  @xref{Tracing, ,Tracing Your Parser}.
 @end deffn
 
 @deffn {Directive} %define @var{variable}
+@deffnx {Directive} %define @var{variable} @var{value}
 @deffnx {Directive} %define @var{variable} "@var{value}"
-Define a variable to adjust Bison's behavior.
-The possible choices for @var{variable}, as well as their meanings, depend on
-the selected target language and/or the parser skeleton (@pxref{Decl
-Summary,,%language}, @pxref{Decl Summary,,%skeleton}).
-
-Bison will warn if a @var{variable} is defined multiple times.
-
-Omitting @code{"@var{value}"} is always equivalent to specifying it as
-@code{""}.
-
-Some @var{variable}s may be used as Booleans.
-In this case, Bison will complain if the variable definition does not meet one
-of the following four conditions:
-
-@enumerate
-@item @code{"@var{value}"} is @code{"true"}
-
-@item @code{"@var{value}"} is omitted (or is @code{""}).
-This is equivalent to @code{"true"}.
-
-@item @code{"@var{value}"} is @code{"false"}.
-
-@item @var{variable} is never defined.
-In this case, Bison selects a default value, which may depend on the selected
-target language and/or parser skeleton.
-@end enumerate
-
-Some of the accepted @var{variable}s are:
-
-@itemize @bullet
-@item api.pure
-@findex %define api.pure
-
-@itemize @bullet
-@item Language(s): C
-
-@item Purpose: Request a pure (reentrant) parser program.
-@xref{Pure Decl, ,A Pure (Reentrant) Parser}.
-
-@item Accepted Values: Boolean
-
-@item Default Value: @code{"false"}
-@end itemize
-
-@item api.push_pull
-@findex %define api.push_pull
-
-@itemize @bullet
-@item Language(s): C (LALR(1) only)
-
-@item Purpose: Requests a pull parser, a push parser, or both.
-@xref{Push Decl, ,A Push Parser}.
-(The current push parsing interface is experimental and may evolve.
-More user feedback will help to stabilize it.)
-
-@item Accepted Values: @code{"pull"}, @code{"push"}, @code{"both"}
-
-@item Default Value: @code{"pull"}
-@end itemize
-
-@item lr.keep_unreachable_states
-@findex %define lr.keep_unreachable_states
-
-@itemize @bullet
-@item Language(s): all
-
-@item Purpose: Requests that Bison allow unreachable parser states to remain in
-the parser tables.
-Bison considers a state to be unreachable if there exists no sequence of
-transitions from the start state to that state.
-A state can become unreachable during conflict resolution if Bison disables a
-shift action leading to it from a predecessor state.
-Keeping unreachable states is sometimes useful for analysis purposes, but they
-are useless in the generated parser.
-
-@item Accepted Values: Boolean
-
-@item Default Value: @code{"false"}
-
-@item Caveats:
-
-@itemize @bullet
-
-@item Unreachable states may contain conflicts and may use rules not used in
-any other state.
-Thus, keeping unreachable states may induce warnings that are irrelevant to
-your parser's behavior, and it may eliminate warnings that are relevant.
-Of course, the change in warnings may actually be relevant to a parser table
-analysis that wants to keep unreachable states, so this behavior will likely
-remain in future Bison releases.
-
-@item While Bison is able to remove unreachable states, it is not guaranteed to
-remove other kinds of useless states.
-Specifically, when Bison disables reduce actions during conflict resolution,
-some goto actions may become useless, and thus some additional states may
-become useless.
-If Bison were to compute which goto actions were useless and then disable those
-actions, it could identify such states as unreachable and then remove those
-states.
-However, Bison does not compute which goto actions are useless.
-@end itemize
-@end itemize
-
-@item namespace
-@findex %define namespace
-
-@itemize
-@item Languages(s): C++
-
-@item Purpose: Specifies the namespace for the parser class.
-For example, if you specify:
-
-@smallexample
-%define namespace "foo::bar"
-@end smallexample
-
-Bison uses @code{foo::bar} verbatim in references such as:
-
-@smallexample
-foo::bar::parser::semantic_type
-@end smallexample
-
-However, to open a namespace, Bison removes any leading @code{::} and then
-splits on any remaining occurrences:
-
-@smallexample
-namespace foo @{ namespace bar @{
-  class position;
-  class location;
-@} @}
-@end smallexample
-
-@item Accepted Values: Any absolute or relative C++ namespace reference without
-a trailing @code{"::"}.
-For example, @code{"foo"} or @code{"::foo::bar"}.
-
-@item Default Value: The value specified by @code{%name-prefix}, which defaults
-to @code{yy}.
-This usage of @code{%name-prefix} is for backward compatibility and can be
-confusing since @code{%name-prefix} also specifies the textual prefix for the
-lexical analyzer function.
-Thus, if you specify @code{%name-prefix}, it is best to also specify
-@code{%define namespace} so that @code{%name-prefix} @emph{only} affects the
-lexical analyzer function.
-For example, if you specify:
-
-@smallexample
-%define namespace "foo"
-%name-prefix "bar::"
-@end smallexample
-
-The parser namespace is @code{foo} and @code{yylex} is referenced as
-@code{bar::lex}.
-@end itemize
-@end itemize
-
+Define a variable to adjust Bison's behavior.  @xref{%define Summary}.
 @end deffn
 
 @deffn {Directive} %defines
-Write a header file containing macro definitions for the token type
-names defined in the grammar as well as a few other declarations.
-If the parser output file is named @file{@var{name}.c} then this file
-is named @file{@var{name}.h}.
+Write a parser header file containing macro definitions for the token
+type names defined in the grammar as well as a few other declarations.
+If the parser implementation file is named @file{@var{name}.c} then
+the parser header file is named @file{@var{name}.h}.
 
-For C parsers, the output header declares @code{YYSTYPE} unless
+For C parsers, the parser header file declares @code{YYSTYPE} unless
 @code{YYSTYPE} is already defined as a macro or you have used a
-@code{<@var{type}>} tag without using @code{%union}.
-Therefore, if you are using a @code{%union}
-(@pxref{Multiple Types, ,More Than One Value Type}) with components that
-require other definitions, or if you have defined a @code{YYSTYPE} macro
-or type definition
-(@pxref{Value Type, ,Data Types of Semantic Values}), you need to
-arrange for these definitions to be propagated to all modules, e.g., by
-putting them in a prerequisite header that is included both by your
-parser and by any other module that needs @code{YYSTYPE}.
+@code{<@var{type}>} tag without using @code{%union}.  Therefore, if
+you are using a @code{%union} (@pxref{Multiple Types, ,More Than One
+Value Type}) with components that require other definitions, or if you
+have defined a @code{YYSTYPE} macro or type definition (@pxref{Value
+Type, ,Data Types of Semantic Values}), you need to arrange for these
+definitions to be propagated to all modules, e.g., by putting them in
+a prerequisite header that is included both by your parser and by any
+other module that needs @code{YYSTYPE}.
 
-Unless your parser is pure, the output header declares @code{yylval}
-as an external variable.  @xref{Pure Decl, ,A Pure (Reentrant)
-Parser}.
+Unless your parser is pure, the parser header file declares
+@code{yylval} as an external variable.  @xref{Pure Decl, ,A Pure
+(Reentrant) Parser}.
 
-If you have also used locations, the output header declares
+If you have also used locations, the parser header file declares
 @code{YYLTYPE} and @code{yylloc} using a protocol similar to that of
-the @code{YYSTYPE} macro and @code{yylval}.  @xref{Locations, ,Tracking
-Locations}.
+the @code{YYSTYPE} macro and @code{yylval}.  @xref{Locations,
+,Tracking Locations}.
 
-This output file is normally essential if you wish to put the definition
-of @code{yylex} in a separate source file, because @code{yylex}
-typically needs to be able to refer to the above-mentioned declarations
-and to the token type codes.  @xref{Token Values, ,Semantic Values of
-Tokens}.
+This parser header file is normally essential if you wish to put the
+definition of @code{yylex} in a separate source file, because
+@code{yylex} typically needs to be able to refer to the
+above-mentioned declarations and to the token type codes.  @xref{Token
+Values, ,Semantic Values of Tokens}.
 
 @findex %code requires
 @findex %code provides
 If you have declared @code{%code requires} or @code{%code provides}, the output
 header also contains their code.
-@xref{Decl Summary, ,%code}.
+@xref{%code Summary}.
 @end deffn
 
 @deffn {Directive} %defines @var{defines-file}
@@ -5039,8 +4939,8 @@ discarded symbols.  @xref{Destructor Decl, , Freeing Discarded Symbols}.
 @end deffn
 
 @deffn {Directive} %file-prefix "@var{prefix}"
-Specify a prefix to use for all Bison output file names.  The names are
-chosen as if the input file were named @file{@var{prefix}.y}.
+Specify a prefix to use for all Bison output file names.  The names
+are chosen as if the grammar file were named @file{@var{prefix}.y}.
 @end deffn
 
 @deffn {Directive} %language "@var{language}"
@@ -5086,20 +4986,22 @@ Precedence}).
 
 @deffn {Directive} %no-lines
 Don't generate any @code{#line} preprocessor commands in the parser
-file.  Ordinarily Bison writes these commands in the parser file so that
-the C compiler and debuggers will associate errors and object code with
-your source file (the grammar file).  This directive causes them to
-associate errors with the parser file, treating it an independent source
-file in its own right.
+implementation file.  Ordinarily Bison writes these commands in the
+parser implementation file so that the C compiler and debuggers will
+associate errors and object code with your source file (the grammar
+file).  This directive causes them to associate errors with the parser
+implementation file, treating it as an independent source file in its
+own right.
 @end deffn
 
 @deffn {Directive} %output "@var{file}"
-Specify @var{file} for the parser file.
+Specify @var{file} for the parser implementation file.
 @end deffn
 
 @deffn {Directive} %pure-parser
-Deprecated version of @code{%define api.pure} (@pxref{Decl Summary, ,%define}),
-for which Bison is more careful to warn about unreasonable usage.
+Deprecated version of @code{%define api.pure} (@pxref{%define
+Summary,,api.pure}), for which Bison is more careful to warn about
+unreasonable usage.
 @end deffn
 
 @deffn {Directive} %require "@var{version}"
@@ -5123,13 +5025,13 @@ This is similar to how most shells resolve commands.
 @end deffn
 
 @deffn {Directive} %token-table
-Generate an array of token names in the parser file.  The name of the
-array is @code{yytname}; @code{yytname[@var{i}]} is the name of the
-token whose internal Bison token code number is @var{i}.  The first
-three elements of @code{yytname} correspond to the predefined tokens
-@code{"$end"},
-@code{"error"}, and @code{"$undefined"}; after these come the symbols
-defined in the grammar file.
+Generate an array of token names in the parser implementation file.
+The name of the array is @code{yytname}; @code{yytname[@var{i}]} is
+the name of the token whose internal Bison token code number is
+@var{i}.  The first three elements of @code{yytname} correspond to the
+predefined tokens @code{"$end"}, @code{"error"}, and
+@code{"$undefined"}; after these come the symbols defined in the
+grammar file.
 
 The name in the table includes all the characters needed to represent
 the token in Bison.  For single-character literals and literal
@@ -5169,6 +5071,321 @@ including its naming conventions.  @xref{Bison Options}, for more.
 @end deffn
 
 
+@node %define Summary
+@subsection %define Summary
+
+There are many features of Bison's behavior that can be controlled by
+assigning the feature a single value.  For historical reasons, some
+such features are assigned values by dedicated directives, such as
+@code{%start}, which assigns the start symbol.  However, newer such
+features are associated with variables, which are assigned by the
+@code{%define} directive:
+
+@deffn {Directive} %define @var{variable}
+@deffnx {Directive} %define @var{variable} @var{value}
+@deffnx {Directive} %define @var{variable} "@var{value}"
+Define @var{variable} to @var{value}.
+
+@var{value} must be placed in quotation marks if it contains any
+character other than a letter, underscore, period, or non-initial dash
+or digit.  Omitting @code{"@var{value}"} entirely is always equivalent
+to specifying @code{""}.
+
+It is an error if a @var{variable} is defined by @code{%define}
+multiple times, but see @ref{Bison Options,,-D
+@var{name}[=@var{value}]}.
+@end deffn
+
+The rest of this section summarizes variables and values that
+@code{%define} accepts.
+
+Some @var{variable}s take Boolean values.  In this case, Bison will
+complain if the variable definition does not meet one of the following
+four conditions:
+
+@enumerate
+@item @code{@var{value}} is @code{true}
+
+@item @code{@var{value}} is omitted (or @code{""} is specified).
+This is equivalent to @code{true}.
+
+@item @code{@var{value}} is @code{false}.
+
+@item @var{variable} is never defined.
+In this case, Bison selects a default value.
+@end enumerate
+
+What @var{variable}s are accepted, as well as their meanings and default
+values, depend on the selected target language and/or the parser
+skeleton (@pxref{Decl Summary,,%language}, @pxref{Decl
+Summary,,%skeleton}).
+Unaccepted @var{variable}s produce an error.
+Some of the accepted @var{variable}s are:
+
+@itemize @bullet
+@item api.pure
+@findex %define api.pure
+
+@itemize @bullet
+@item Language(s): C
+
+@item Purpose: Request a pure (reentrant) parser program.
+@xref{Pure Decl, ,A Pure (Reentrant) Parser}.
+
+@item Accepted Values: Boolean
+
+@item Default Value: @code{false}
+@end itemize
+
+@item api.push-pull
+@findex %define api.push-pull
+
+@itemize @bullet
+@item Language(s): C (deterministic parsers only)
+
+@item Purpose: Request a pull parser, a push parser, or both.
+@xref{Push Decl, ,A Push Parser}.
+(The current push parsing interface is experimental and may evolve.
+More user feedback will help to stabilize it.)
+
+@item Accepted Values: @code{pull}, @code{push}, @code{both}
+
+@item Default Value: @code{pull}
+@end itemize
+
+@c ================================================== lr.default-reductions
+
+@item lr.default-reductions
+@findex %define lr.default-reductions
+
+@itemize @bullet
+@item Language(s): all
+
+@item Purpose: Specify the kind of states that are permitted to
+contain default reductions.  @xref{Default Reductions}.  (The ability to
+specify where default reductions should be used is experimental.  More user
+feedback will help to stabilize it.)
+
+@item Accepted Values: @code{most}, @code{consistent}, @code{accepting}
+@item Default Value:
+@itemize
+@item @code{accepting} if @code{lr.type} is @code{canonical-lr}.
+@item @code{most} otherwise.
+@end itemize
+@end itemize
+
+@c ============================================ lr.keep-unreachable-states
+
+@item lr.keep-unreachable-states
+@findex %define lr.keep-unreachable-states
+
+@itemize @bullet
+@item Language(s): all
+@item Purpose: Request that Bison allow unreachable parser states to
+remain in the parser tables.  @xref{Unreachable States}.
+@item Accepted Values: Boolean
+@item Default Value: @code{false}
+@end itemize
+
+@c ================================================== lr.type
+
+@item lr.type
+@findex %define lr.type
+
+@itemize @bullet
+@item Language(s): all
+
+@item Purpose: Specify the type of parser tables within the
+LR(1) family.  @xref{LR Table Construction}.  (This feature is experimental.
+More user feedback will help to stabilize it.)
+
+@item Accepted Values: @code{lalr}, @code{ielr}, @code{canonical-lr}
+
+@item Default Value: @code{lalr}
+@end itemize
+
+@item namespace
+@findex %define namespace
+
+@itemize
+@item Languages(s): C++
+
+@item Purpose: Specify the namespace for the parser class.
+For example, if you specify:
+
+@smallexample
+%define namespace "foo::bar"
+@end smallexample
+
+Bison uses @code{foo::bar} verbatim in references such as:
+
+@smallexample
+foo::bar::parser::semantic_type
+@end smallexample
+
+However, to open a namespace, Bison removes any leading @code{::} and then
+splits on any remaining occurrences:
+
+@smallexample
+namespace foo @{ namespace bar @{
+  class position;
+  class location;
+@} @}
+@end smallexample
+
+@item Accepted Values: Any absolute or relative C++ namespace reference without
+a trailing @code{"::"}.
+For example, @code{"foo"} or @code{"::foo::bar"}.
+
+@item Default Value: The value specified by @code{%name-prefix}, which defaults
+to @code{yy}.
+This usage of @code{%name-prefix} is for backward compatibility and can be
+confusing since @code{%name-prefix} also specifies the textual prefix for the
+lexical analyzer function.
+Thus, if you specify @code{%name-prefix}, it is best to also specify
+@code{%define namespace} so that @code{%name-prefix} @emph{only} affects the
+lexical analyzer function.
+For example, if you specify:
+
+@smallexample
+%define namespace "foo"
+%name-prefix "bar::"
+@end smallexample
+
+The parser namespace is @code{foo} and @code{yylex} is referenced as
+@code{bar::lex}.
+@end itemize
+
+@c ================================================== parse.lac
+@item parse.lac
+@findex %define parse.lac
+
+@itemize
+@item Languages(s): C (deterministic parsers only)
+
+@item Purpose: Enable LAC (lookahead correction) to improve
+syntax error handling.  @xref{LAC}.
+@item Accepted Values: @code{none}, @code{full}
+@item Default Value: @code{none}
+@end itemize
+@end itemize
+
+
+@node %code Summary
+@subsection %code Summary
+@findex %code
+@cindex Prologue
+
+The @code{%code} directive inserts code verbatim into the output
+parser source at any of a predefined set of locations.  It thus serves
+as a flexible and user-friendly alternative to the traditional Yacc
+prologue, @code{%@{@var{code}%@}}.  This section summarizes the
+functionality of @code{%code} for the various target languages
+supported by Bison.  For a detailed discussion of how to use
+@code{%code} in place of @code{%@{@var{code}%@}} for C/C++ and why it
+is advantageous to do so, @pxref{Prologue Alternatives}.
+
+@deffn {Directive} %code @{@var{code}@}
+This is the unqualified form of the @code{%code} directive.  It
+inserts @var{code} verbatim at a language-dependent default location
+in the parser implementation.
+
+For C/C++, the default location is the parser implementation file
+after the usual contents of the parser header file.  Thus, the
+unqualified form replaces @code{%@{@var{code}%@}} for most purposes.
+
+For Java, the default location is inside the parser class.
+@end deffn
+
+@deffn {Directive} %code @var{qualifier} @{@var{code}@}
+This is the qualified form of the @code{%code} directive.
+@var{qualifier} identifies the purpose of @var{code} and thus the
+location(s) where Bison should insert it.  That is, if you need to
+specify location-sensitive @var{code} that does not belong at the
+default location selected by the unqualified @code{%code} form, use
+this form instead.
+@end deffn
+
+For any particular qualifier or for the unqualified form, if there are
+multiple occurrences of the @code{%code} directive, Bison concatenates
+the specified code in the order in which it appears in the grammar
+file.
+
+Not all qualifiers are accepted for all target languages.  Unaccepted
+qualifiers produce an error.  Some of the accepted qualifiers are:
+
+@itemize @bullet
+@item requires
+@findex %code requires
+
+@itemize @bullet
+@item Language(s): C, C++
+
+@item Purpose: This is the best place to write dependency code required for
+@code{YYSTYPE} and @code{YYLTYPE}.
+In other words, it's the best place to define types referenced in @code{%union}
+directives, and it's the best place to override Bison's default @code{YYSTYPE}
+and @code{YYLTYPE} definitions.
+
+@item Location(s): The parser header file and the parser implementation file
+before the Bison-generated @code{YYSTYPE} and @code{YYLTYPE}
+definitions.
+@end itemize
+
+@item provides
+@findex %code provides
+
+@itemize @bullet
+@item Language(s): C, C++
+
+@item Purpose: This is the best place to write additional definitions and
+declarations that should be provided to other modules.
+
+@item Location(s): The parser header file and the parser implementation
+file after the Bison-generated @code{YYSTYPE}, @code{YYLTYPE}, and
+token definitions.
+@end itemize
+
+@item top
+@findex %code top
+
+@itemize @bullet
+@item Language(s): C, C++
+
+@item Purpose: The unqualified @code{%code} or @code{%code requires}
+should usually be more appropriate than @code{%code top}.  However,
+occasionally it is necessary to insert code much nearer the top of the
+parser implementation file.  For example:
+
+@smallexample
+%code top @{
+  #define _GNU_SOURCE
+  #include <stdio.h>
+@}
+@end smallexample
+
+@item Location(s): Near the top of the parser implementation file.
+@end itemize
+
+@item imports
+@findex %code imports
+
+@itemize @bullet
+@item Language(s): Java
+
+@item Purpose: This is the best place to write Java import directives.
+
+@item Location(s): The parser Java file after any Java package directive and
+before any class definitions.
+@end itemize
+@end itemize
+
+Though we say the insertion locations are language-dependent, they are
+technically skeleton-dependent.  Writers of non-standard skeletons
+however should choose their locations consistently with the behavior
+of the standard Bison skeletons.
+
+
 @node Multiple Parsers
 @section Multiple Parsers in the Same Program
 
@@ -5197,10 +5414,10 @@ name is used in different parsers.  For example, @code{YYSTYPE} is not
 renamed, but defining this in different ways in different parsers causes
 no trouble (@pxref{Value Type, ,Data Types of Semantic Values}).
 
-The @samp{-p} option works by adding macro definitions to the beginning
-of the parser source file, defining @code{yyparse} as
-@code{@var{prefix}parse}, and so on.  This effectively substitutes one
-name for the other in the entire parser file.
+The @samp{-p} option works by adding macro definitions to the
+beginning of the parser implementation file, defining @code{yyparse}
+as @code{@var{prefix}parse}, and so on.  This effectively substitutes
+one name for the other in the entire parser implementation file.
 
 @node Interface
 @chapter Parser C-Language Interface
@@ -5312,8 +5529,8 @@ exp: @dots{}    @{ @dots{}; *randomness += 1; @dots{} @}
 More user feedback will help to stabilize it.)
 
 You call the function @code{yypush_parse} to parse a single token.  This
-function is available if either the @code{%define api.push_pull "push"} or
-@code{%define api.push_pull "both"} declaration is used.
+function is available if either the @code{%define api.push-pull push} or
+@code{%define api.push-pull both} declaration is used.
 @xref{Push Decl, ,A Push Parser}.
 
 @deftypefun int yypush_parse (yypstate *yyps)
@@ -5330,7 +5547,7 @@ is required to finish parsing the grammar.
 More user feedback will help to stabilize it.)
 
 You call the function @code{yypull_parse} to parse the rest of the input
-stream.  This function is available if the @code{%define api.push_pull "both"}
+stream.  This function is available if the @code{%define api.push-pull both}
 declaration is used.
 @xref{Push Decl, ,A Push Parser}.
 
@@ -5346,8 +5563,8 @@ The value returned by @code{yypull_parse} is the same as for @code{yyparse}.
 More user feedback will help to stabilize it.)
 
 You call the function @code{yypstate_new} to create a new parser instance.
-This function is available if either the @code{%define api.push_pull "push"} or
-@code{%define api.push_pull "both"} declaration is used.
+This function is available if either the @code{%define api.push-pull push} or
+@code{%define api.push-pull both} declaration is used.
 @xref{Push Decl, ,A Push Parser}.
 
 @deftypefun yypstate *yypstate_new (void)
@@ -5365,8 +5582,8 @@ allocated.
 More user feedback will help to stabilize it.)
 
 You call the function @code{yypstate_delete} to delete a parser instance.
-function is available if either the @code{%define api.push_pull "push"} or
-@code{%define api.push_pull "both"} declaration is used.
+function is available if either the @code{%define api.push-pull push} or
+@code{%define api.push-pull both} declaration is used.
 @xref{Push Decl, ,A Push Parser}.
 
 @deftypefun void yypstate_delete (yypstate *yyps)
@@ -5384,13 +5601,14 @@ the input stream and returns them to the parser.  Bison does not create
 this function automatically; you must write it so that @code{yyparse} can
 call it.  The function is sometimes referred to as a lexical scanner.
 
-In simple programs, @code{yylex} is often defined at the end of the Bison
-grammar file.  If @code{yylex} is defined in a separate source file, you
-need to arrange for the token-type macro definitions to be available there.
-To do this, use the @samp{-d} option when you run Bison, so that it will
-write these macro definitions into a separate header file
-@file{@var{name}.tab.h} which you can include in the other source files
-that need it.  @xref{Invocation, ,Invoking Bison}.
+In simple programs, @code{yylex} is often defined at the end of the
+Bison grammar file.  If @code{yylex} is defined in a separate source
+file, you need to arrange for the token-type macro definitions to be
+available there.  To do this, use the @samp{-d} option when you run
+Bison, so that it will write these macro definitions into the separate
+parser header file, @file{@var{name}.tab.h}, which you can include in
+the other source files that need it.  @xref{Invocation, ,Invoking
+Bison}.
 
 @menu
 * Calling Convention::  How @code{yyparse} calls @code{yylex}.
@@ -5411,9 +5629,9 @@ for the type of token it has just found; a zero or negative value
 signifies end-of-input.
 
 When a token is referred to in the grammar rules by a name, that name
-in the parser file becomes a C macro whose definition is the proper
-numeric code for that token type.  So @code{yylex} can use the name
-to indicate that type.  @xref{Symbols}.
+in the parser implementation file becomes a C macro whose definition
+is the proper numeric code for that token type.  So @code{yylex} can
+use the name to indicate that type.  @xref{Symbols}.
 
 When a token is referred to in the grammar rules by a character literal,
 the numeric code for that character is also the code for the token type.
@@ -5640,10 +5858,11 @@ receives one argument.  For a syntax error, the string is normally
 @w{@code{"syntax error"}}.
 
 @findex %error-verbose
-If you invoke the directive @code{%error-verbose} in the Bison
-declarations section (@pxref{Bison Declarations, ,The Bison Declarations
-Section}), then Bison provides a more verbose and specific error message
-string instead of just plain @w{@code{"syntax error"}}.
+If you invoke the directive @code{%error-verbose} in the Bison declarations
+section (@pxref{Bison Declarations, ,The Bison Declarations Section}), then
+Bison provides a more verbose and specific error message string instead of
+just plain @w{@code{"syntax error"}}.  However, that message sometimes
+contains incorrect information if LAC is not enabled (@pxref{LAC}).
 
 The parser can detect one other kind of error: memory exhaustion.  This
 can happen when the input contains constructions that are very deeply
@@ -5677,7 +5896,7 @@ immediately return 1.
 
 Obviously, in location tracking pure parsers, @code{yyerror} should have
 an access to the current location.
-This is indeed the case for the @acronym{GLR}
+This is indeed the case for the GLR
 parsers, but not for the Yacc parser, for historical reasons.  I.e., if
 @samp{%locations %define api.pure} is passed then the prototypes for
 @code{yyerror} are:
@@ -5694,7 +5913,7 @@ void yyerror (int *nastiness, char const *msg);  /* Yacc parsers.  */
 void yyerror (int *nastiness, char const *msg);  /* GLR parsers.   */
 @end example
 
-Finally, @acronym{GLR} and Yacc parsers share the same @code{yyerror} calling
+Finally, GLR and Yacc parsers share the same @code{yyerror} calling
 convention for absolutely pure parsers, i.e., when the calling
 convention of @code{yylex} @emph{and} the calling convention of
 @code{%define api.pure} are pure.
@@ -5784,7 +6003,7 @@ Return immediately from @code{yyparse}, indicating success.
 @findex YYBACKUP
 Unshift a token.  This macro is allowed only for rules that reduce
 a single value, and only when there is no lookahead token.
-It is also disallowed in @acronym{GLR} parsers.
+It is also disallowed in GLR parsers.
 It installs a lookahead token with token type @var{token} and
 semantic value @var{value}; then it discards the value that was
 going to be reduced by this rule.
@@ -5910,19 +6129,19 @@ also supports outputting diagnostics in the user's native language.  To
 make this work, the user should set the usual environment variables.
 @xref{Users, , The User's View, gettext, GNU @code{gettext} utilities}.
 For example, the shell command @samp{export LC_ALL=fr_CA.UTF-8} might
-set the user's locale to French Canadian using the @acronym{UTF}-8
+set the user's locale to French Canadian using the UTF-8
 encoding.  The exact set of available locales depends on the user's
 installation.
 
 The maintainer of a package that uses a Bison-generated parser enables
 the internationalization of the parser's output through the following
-steps.  Here we assume a package that uses @acronym{GNU} Autoconf and
-@acronym{GNU} Automake.
+steps.  Here we assume a package that uses GNU Autoconf and
+GNU Automake.
 
 @enumerate
 @item
 @cindex bison-i18n.m4
-Into the directory containing the @acronym{GNU} Autoconf macros used
+Into the directory containing the GNU Autoconf macros used
 by the package---often called @file{m4}---copy the
 @file{bison-i18n.m4} file installed by Bison under
 @samp{share/aclocal/bison-i18n.m4} in Bison's installation directory.
@@ -6043,7 +6262,8 @@ This kind of parser is known in the literature as a bottom-up parser.
 * Contextual Precedence::  When an operator's precedence depends on context.
 * Parser States::     The parser is a finite-state-machine with stack.
 * Reduce/Reduce::     When two rules are applicable in the same situation.
-* Mystery Conflicts:: Reduce/reduce conflicts that look unjustified.
+* Mysterious Conflicts:: Conflicts that look unjustified.
+* Tuning LR::         How to tune fundamental aspects of LR-based parsing.
 * Generalized LR Parsing::  Parsing arbitrary context-free grammars.
 * Memory Management:: What happens when memory is exhausted.  How to avoid it.
 @end menu
@@ -6180,8 +6400,8 @@ different number.
 
 The definition of @code{if_stmt} above is solely to blame for the
 conflict, but the conflict does not actually appear without additional
-rules.  Here is a complete Bison input file that actually manifests the
-conflict:
+rules.  Here is a complete Bison grammar file that actually manifests
+the conflict:
 
 @example
 @group
@@ -6559,8 +6779,9 @@ redirects:redirect
         ;
 @end example
 
-@node Mystery Conflicts
-@section Mysterious Reduce/Reduce Conflicts
+@node Mysterious Conflicts
+@section Mysterious Conflicts
+@cindex Mysterious Conflicts
 
 Sometimes reduce/reduce conflicts can occur that don't look warranted.
 Here is an example:
@@ -6600,33 +6821,39 @@ name_list:
 It would seem that this grammar can be parsed with only a single token
 of lookahead: when a @code{param_spec} is being read, an @code{ID} is
 a @code{name} if a comma or colon follows, or a @code{type} if another
-@code{ID} follows.  In other words, this grammar is @acronym{LR}(1).
+@code{ID} follows.  In other words, this grammar is LR(1).
 
-@cindex @acronym{LR}(1)
-@cindex @acronym{LALR}(1)
-However, Bison, like most parser generators, cannot actually handle all
-@acronym{LR}(1) grammars.  In this grammar, two contexts, that after
-an @code{ID}
-at the beginning of a @code{param_spec} and likewise at the beginning of
-a @code{return_spec}, are similar enough that Bison assumes they are the
-same.  They appear similar because the same set of rules would be
+@cindex LR
+@cindex LALR
+However, for historical reasons, Bison cannot by default handle all
+LR(1) grammars.
+In this grammar, two contexts, that after an @code{ID} at the beginning
+of a @code{param_spec} and likewise at the beginning of a
+@code{return_spec}, are similar enough that Bison assumes they are the
+same.
+They appear similar because the same set of rules would be
 active---the rule for reducing to a @code{name} and that for reducing to
 a @code{type}.  Bison is unable to determine at that stage of processing
 that the rules would require different lookahead tokens in the two
 contexts, so it makes a single parser state for them both.  Combining
 the two contexts causes a conflict later.  In parser terminology, this
-occurrence means that the grammar is not @acronym{LALR}(1).
+occurrence means that the grammar is not LALR(1).
 
-In general, it is better to fix deficiencies than to document them.  But
-this particular deficiency is intrinsically hard to fix; parser
-generators that can handle @acronym{LR}(1) grammars are hard to write
-and tend to
-produce parsers that are very large.  In practice, Bison is more useful
-as it is now.
+@cindex IELR
+@cindex canonical LR
+For many practical grammars (specifically those that fall into the non-LR(1)
+class), the limitations of LALR(1) result in difficulties beyond just
+mysterious reduce/reduce conflicts.  The best way to fix all these problems
+is to select a different parser table construction algorithm.  Either
+IELR(1) or canonical LR(1) would suffice, but the former is more efficient
+and easier to debug during development.  @xref{LR Table Construction}, for
+details.  (Bison's IELR(1) and canonical LR(1) implementations are
+experimental.  More user feedback will help to stabilize them.)
 
-When the problem arises, you can often fix it by identifying the two
-parser states that are being confused, and adding something to make them
-look distinct.  In the above example, adding one rule to
+If you instead wish to work around LALR(1)'s limitations, you
+can often fix a mysterious conflict by identifying the two parser states
+that are being confused, and adding something to make them look
+distinct.  In the above example, adding one rule to
 @code{return_spec} as follows makes the problem go away:
 
 @example
@@ -6669,17 +6896,417 @@ return_spec:
         ;
 @end example
 
-For a more detailed exposition of @acronym{LALR}(1) parsers and parser
-generators, please see:
-Frank DeRemer and Thomas Pennello, Efficient Computation of
-@acronym{LALR}(1) Look-Ahead Sets, @cite{@acronym{ACM} Transactions on
-Programming Languages and Systems}, Vol.@: 4, No.@: 4 (October 1982),
-pp.@: 615--649 @uref{http://doi.acm.org/10.1145/69622.357187}.
+For a more detailed exposition of LALR(1) parsers and parser
+generators, @pxref{Bibliography,,DeRemer 1982}.
+
+@node Tuning LR
+@section Tuning LR
+
+The default behavior of Bison's LR-based parsers is chosen mostly for
+historical reasons, but that behavior is often not robust.  For example, in
+the previous section, we discussed the mysterious conflicts that can be
+produced by LALR(1), Bison's default parser table construction algorithm.
+Another example is Bison's @code{%error-verbose} directive, which instructs
+the generated parser to produce verbose syntax error messages, which can
+sometimes contain incorrect information.
+
+In this section, we explore several modern features of Bison that allow you
+to tune fundamental aspects of the generated LR-based parsers.  Some of
+these features easily eliminate shortcomings like those mentioned above.
+Others can be helpful purely for understanding your parser.
+
+Most of the features discussed in this section are still experimental.  More
+user feedback will help to stabilize them.
+
+@menu
+* LR Table Construction:: Choose a different construction algorithm.
+* Default Reductions::    Disable default reductions.
+* LAC::                   Correct lookahead sets in the parser states.
+* Unreachable States::    Keep unreachable parser states for debugging.
+@end menu
+
+@node LR Table Construction
+@subsection LR Table Construction
+@cindex Mysterious Conflict
+@cindex LALR
+@cindex IELR
+@cindex canonical LR
+@findex %define lr.type
+
+For historical reasons, Bison constructs LALR(1) parser tables by default.
+However, LALR does not possess the full language-recognition power of LR.
+As a result, the behavior of parsers employing LALR parser tables is often
+mysterious.  We presented a simple example of this effect in @ref{Mysterious
+Conflicts}.
+
+As we also demonstrated in that example, the traditional approach to
+eliminating such mysterious behavior is to restructure the grammar.
+Unfortunately, doing so correctly is often difficult.  Moreover, merely
+discovering that LALR causes mysterious behavior in your parser can be
+difficult as well.
+
+Fortunately, Bison provides an easy way to eliminate the possibility of such
+mysterious behavior altogether.  You simply need to activate a more powerful
+parser table construction algorithm by using the @code{%define lr.type}
+directive.
+
+@deffn {Directive} {%define lr.type @var{TYPE}}
+Specify the type of parser tables within the LR(1) family.  The accepted
+values for @var{TYPE} are:
+
+@itemize
+@item @code{lalr} (default)
+@item @code{ielr}
+@item @code{canonical-lr}
+@end itemize
+
+(This feature is experimental. More user feedback will help to stabilize
+it.)
+@end deffn
+
+For example, to activate IELR, you might add the following directive to you
+grammar file:
+
+@example
+%define lr.type ielr
+@end example
+
+@noindent For the example in @ref{Mysterious Conflicts}, the mysterious
+conflict is then eliminated, so there is no need to invest time in
+comprehending the conflict or restructuring the grammar to fix it.  If,
+during future development, the grammar evolves such that all mysterious
+behavior would have disappeared using just LALR, you need not fear that
+continuing to use IELR will result in unnecessarily large parser tables.
+That is, IELR generates LALR tables when LALR (using a deterministic parsing
+algorithm) is sufficient to support the full language-recognition power of
+LR.  Thus, by enabling IELR at the start of grammar development, you can
+safely and completely eliminate the need to consider LALR's shortcomings.
+
+While IELR is almost always preferable, there are circumstances where LALR
+or the canonical LR parser tables described by Knuth
+(@pxref{Bibliography,,Knuth 1965}) can be useful.  Here we summarize the
+relative advantages of each parser table construction algorithm within
+Bison:
+
+@itemize
+@item LALR
+
+There are at least two scenarios where LALR can be worthwhile:
+
+@itemize
+@item GLR without static conflict resolution.
+
+@cindex GLR with LALR
+When employing GLR parsers (@pxref{GLR Parsers}), if you do not resolve any
+conflicts statically (for example, with @code{%left} or @code{%prec}), then
+the parser explores all potential parses of any given input.  In this case,
+the choice of parser table construction algorithm is guaranteed not to alter
+the language accepted by the parser.  LALR parser tables are the smallest
+parser tables Bison can currently construct, so they may then be preferable.
+Nevertheless, once you begin to resolve conflicts statically, GLR behaves
+more like a deterministic parser in the syntactic contexts where those
+conflicts appear, and so either IELR or canonical LR can then be helpful to
+avoid LALR's mysterious behavior.
+
+@item Malformed grammars.
+
+Occasionally during development, an especially malformed grammar with a
+major recurring flaw may severely impede the IELR or canonical LR parser
+table construction algorithm.  LALR can be a quick way to construct parser
+tables in order to investigate such problems while ignoring the more subtle
+differences from IELR and canonical LR.
+@end itemize
+
+@item IELR
+
+IELR (Inadequacy Elimination LR) is a minimal LR algorithm.  That is, given
+any grammar (LR or non-LR), parsers using IELR or canonical LR parser tables
+always accept exactly the same set of sentences.  However, like LALR, IELR
+merges parser states during parser table construction so that the number of
+parser states is often an order of magnitude less than for canonical LR.
+More importantly, because canonical LR's extra parser states may contain
+duplicate conflicts in the case of non-LR grammars, the number of conflicts
+for IELR is often an order of magnitude less as well.  This effect can
+significantly reduce the complexity of developing a grammar.
+
+@item Canonical LR
+
+@cindex delayed syntax error detection
+@cindex LAC
+@findex %nonassoc
+While inefficient, canonical LR parser tables can be an interesting means to
+explore a grammar because they possess a property that IELR and LALR tables
+do not.  That is, if @code{%nonassoc} is not used and default reductions are
+left disabled (@pxref{Default Reductions}), then, for every left context of
+every canonical LR state, the set of tokens accepted by that state is
+guaranteed to be the exact set of tokens that is syntactically acceptable in
+that left context.  It might then seem that an advantage of canonical LR
+parsers in production is that, under the above constraints, they are
+guaranteed to detect a syntax error as soon as possible without performing
+any unnecessary reductions.  However, IELR parsers that use LAC are also
+able to achieve this behavior without sacrificing @code{%nonassoc} or
+default reductions.  For details and a few caveats of LAC, @pxref{LAC}.
+@end itemize
+
+For a more detailed exposition of the mysterious behavior in LALR parsers
+and the benefits of IELR, @pxref{Bibliography,,Denny 2008 March}, and
+@ref{Bibliography,,Denny 2010 November}.
+
+@node Default Reductions
+@subsection Default Reductions
+@cindex default reductions
+@findex %define lr.default-reductions
+@findex %nonassoc
+
+After parser table construction, Bison identifies the reduction with the
+largest lookahead set in each parser state.  To reduce the size of the
+parser state, traditional Bison behavior is to remove that lookahead set and
+to assign that reduction to be the default parser action.  Such a reduction
+is known as a @dfn{default reduction}.
+
+Default reductions affect more than the size of the parser tables.  They
+also affect the behavior of the parser:
+
+@itemize
+@item Delayed @code{yylex} invocations.
+
+@cindex delayed yylex invocations
+@cindex consistent states
+@cindex defaulted states
+A @dfn{consistent state} is a state that has only one possible parser
+action.  If that action is a reduction and is encoded as a default
+reduction, then that consistent state is called a @dfn{defaulted state}.
+Upon reaching a defaulted state, a Bison-generated parser does not bother to
+invoke @code{yylex} to fetch the next token before performing the reduction.
+In other words, whether default reductions are enabled in consistent states
+determines how soon a Bison-generated parser invokes @code{yylex} for a
+token: immediately when it @emph{reaches} that token in the input or when it
+eventually @emph{needs} that token as a lookahead to determine the next
+parser action.  Traditionally, default reductions are enabled, and so the
+parser exhibits the latter behavior.
+
+The presence of defaulted states is an important consideration when
+designing @code{yylex} and the grammar file.  That is, if the behavior of
+@code{yylex} can influence or be influenced by the semantic actions
+associated with the reductions in defaulted states, then the delay of the
+next @code{yylex} invocation until after those reductions is significant.
+For example, the semantic actions might pop a scope stack that @code{yylex}
+uses to determine what token to return.  Thus, the delay might be necessary
+to ensure that @code{yylex} does not look up the next token in a scope that
+should already be considered closed.
+
+@item Delayed syntax error detection.
+
+@cindex delayed syntax error detection
+When the parser fetches a new token by invoking @code{yylex}, it checks
+whether there is an action for that token in the current parser state.  The
+parser detects a syntax error if and only if either (1) there is no action
+for that token or (2) the action for that token is the error action (due to
+the use of @code{%nonassoc}).  However, if there is a default reduction in
+that state (which might or might not be a defaulted state), then it is
+impossible for condition 1 to exist.  That is, all tokens have an action.
+Thus, the parser sometimes fails to detect the syntax error until it reaches
+a later state.
+
+@cindex LAC
+@c If there's an infinite loop, default reductions can prevent an incorrect
+@c sentence from being rejected.
+While default reductions never cause the parser to accept syntactically
+incorrect sentences, the delay of syntax error detection can have unexpected
+effects on the behavior of the parser.  However, the delay can be caused
+anyway by parser state merging and the use of @code{%nonassoc}, and it can
+be fixed by another Bison feature, LAC.  We discuss the effects of delayed
+syntax error detection and LAC more in the next section (@pxref{LAC}).
+@end itemize
+
+For canonical LR, the only default reduction that Bison enables by default
+is the accept action, which appears only in the accepting state, which has
+no other action and is thus a defaulted state.  However, the default accept
+action does not delay any @code{yylex} invocation or syntax error detection
+because the accept action ends the parse.
+
+For LALR and IELR, Bison enables default reductions in nearly all states by
+default.  There are only two exceptions.  First, states that have a shift
+action on the @code{error} token do not have default reductions because
+delayed syntax error detection could then prevent the @code{error} token
+from ever being shifted in that state.  However, parser state merging can
+cause the same effect anyway, and LAC fixes it in both cases, so future
+versions of Bison might drop this exception when LAC is activated.  Second,
+GLR parsers do not record the default reduction as the action on a lookahead
+token for which there is a conflict.  The correct action in this case is to
+split the parse instead.
+
+To adjust which states have default reductions enabled, use the
+@code{%define lr.default-reductions} directive.
+
+@deffn {Directive} {%define lr.default-reductions @var{WHERE}}
+Specify the kind of states that are permitted to contain default reductions.
+The accepted values of @var{WHERE} are:
+@itemize
+@item @code{most} (default for LALR and IELR)
+@item @code{consistent}
+@item @code{accepting} (default for canonical LR)
+@end itemize
+
+(The ability to specify where default reductions are permitted is
+experimental.  More user feedback will help to stabilize it.)
+@end deffn
+
+@node LAC
+@subsection LAC
+@findex %define parse.lac
+@cindex LAC
+@cindex lookahead correction
+
+Canonical LR, IELR, and LALR can suffer from a couple of problems upon
+encountering a syntax error.  First, the parser might perform additional
+parser stack reductions before discovering the syntax error.  Such
+reductions can perform user semantic actions that are unexpected because
+they are based on an invalid token, and they cause error recovery to begin
+in a different syntactic context than the one in which the invalid token was
+encountered.  Second, when verbose error messages are enabled (@pxref{Error
+Reporting}), the expected token list in the syntax error message can both
+contain invalid tokens and omit valid tokens.
+
+The culprits for the above problems are @code{%nonassoc}, default reductions
+in inconsistent states (@pxref{Default Reductions}), and parser state
+merging.  Because IELR and LALR merge parser states, they suffer the most.
+Canonical LR can suffer only if @code{%nonassoc} is used or if default
+reductions are enabled for inconsistent states.
+
+LAC (Lookahead Correction) is a new mechanism within the parsing algorithm
+that solves these problems for canonical LR, IELR, and LALR without
+sacrificing @code{%nonassoc}, default reductions, or state merging.  You can
+enable LAC with the @code{%define parse.lac} directive.
+
+@deffn {Directive} {%define parse.lac @var{VALUE}}
+Enable LAC to improve syntax error handling.
+@itemize
+@item @code{none} (default)
+@item @code{full}
+@end itemize
+(This feature is experimental.  More user feedback will help to stabilize
+it.  Moreover, it is currently only available for deterministic parsers in
+C.)
+@end deffn
+
+Conceptually, the LAC mechanism is straight-forward.  Whenever the parser
+fetches a new token from the scanner so that it can determine the next
+parser action, it immediately suspends normal parsing and performs an
+exploratory parse using a temporary copy of the normal parser state stack.
+During this exploratory parse, the parser does not perform user semantic
+actions.  If the exploratory parse reaches a shift action, normal parsing
+then resumes on the normal parser stacks.  If the exploratory parse reaches
+an error instead, the parser reports a syntax error.  If verbose syntax
+error messages are enabled, the parser must then discover the list of
+expected tokens, so it performs a separate exploratory parse for each token
+in the grammar.
+
+There is one subtlety about the use of LAC.  That is, when in a consistent
+parser state with a default reduction, the parser will not attempt to fetch
+a token from the scanner because no lookahead is needed to determine the
+next parser action.  Thus, whether default reductions are enabled in
+consistent states (@pxref{Default Reductions}) affects how soon the parser
+detects a syntax error: immediately when it @emph{reaches} an erroneous
+token or when it eventually @emph{needs} that token as a lookahead to
+determine the next parser action.  The latter behavior is probably more
+intuitive, so Bison currently provides no way to achieve the former behavior
+while default reductions are enabled in consistent states.
+
+Thus, when LAC is in use, for some fixed decision of whether to enable
+default reductions in consistent states, canonical LR and IELR behave almost
+exactly the same for both syntactically acceptable and syntactically
+unacceptable input.  While LALR still does not support the full
+language-recognition power of canonical LR and IELR, LAC at least enables
+LALR's syntax error handling to correctly reflect LALR's
+language-recognition power.
+
+There are a few caveats to consider when using LAC:
+
+@itemize
+@item Infinite parsing loops.
+
+IELR plus LAC does have one shortcoming relative to canonical LR.  Some
+parsers generated by Bison can loop infinitely.  LAC does not fix infinite
+parsing loops that occur between encountering a syntax error and detecting
+it, but enabling canonical LR or disabling default reductions sometimes
+does.
+
+@item Verbose error message limitations.
+
+Because of internationalization considerations, Bison-generated parsers
+limit the size of the expected token list they are willing to report in a
+verbose syntax error message.  If the number of expected tokens exceeds that
+limit, the list is simply dropped from the message.  Enabling LAC can
+increase the size of the list and thus cause the parser to drop it.  Of
+course, dropping the list is better than reporting an incorrect list.
+
+@item Performance.
+
+Because LAC requires many parse actions to be performed twice, it can have a
+performance penalty.  However, not all parse actions must be performed
+twice.  Specifically, during a series of default reductions in consistent
+states and shift actions, the parser never has to initiate an exploratory
+parse.  Moreover, the most time-consuming tasks in a parse are often the
+file I/O, the lexical analysis performed by the scanner, and the user's
+semantic actions, but none of these are performed during the exploratory
+parse.  Finally, the base of the temporary stack used during an exploratory
+parse is a pointer into the normal parser state stack so that the stack is
+never physically copied.  In our experience, the performance penalty of LAC
+has proven insignificant for practical grammars.
+@end itemize
+
+While the LAC algorithm shares techniques that have been recognized in the
+parser community for years, for the publication that introduces LAC,
+@pxref{Bibliography,,Denny 2010 May}.
+
+@node Unreachable States
+@subsection Unreachable States
+@findex %define lr.keep-unreachable-states
+@cindex unreachable states
+
+If there exists no sequence of transitions from the parser's start state to
+some state @var{s}, then Bison considers @var{s} to be an @dfn{unreachable
+state}.  A state can become unreachable during conflict resolution if Bison
+disables a shift action leading to it from a predecessor state.
+
+By default, Bison removes unreachable states from the parser after conflict
+resolution because they are useless in the generated parser.  However,
+keeping unreachable states is sometimes useful when trying to understand the
+relationship between the parser and the grammar.
+
+@deffn {Directive} {%define lr.keep-unreachable-states @var{VALUE}}
+Request that Bison allow unreachable states to remain in the parser tables.
+@var{VALUE} must be a Boolean.  The default is @code{false}.
+@end deffn
+
+There are a few caveats to consider:
+
+@itemize @bullet
+@item Missing or extraneous warnings.
+
+Unreachable states may contain conflicts and may use rules not used in any
+other state.  Thus, keeping unreachable states may induce warnings that are
+irrelevant to your parser's behavior, and it may eliminate warnings that are
+relevant.  Of course, the change in warnings may actually be relevant to a
+parser table analysis that wants to keep unreachable states, so this
+behavior will likely remain in future Bison releases.
+
+@item Other useless states.
+
+While Bison is able to remove unreachable states, it is not guaranteed to
+remove other kinds of useless states.  Specifically, when Bison disables
+reduce actions during conflict resolution, some goto actions may become
+useless, and thus some additional states may become useless.  If Bison were
+to compute which goto actions were useless and then disable those actions,
+it could identify such states as unreachable and then remove those states.
+However, Bison does not compute which goto actions are useless.
+@end itemize
 
 @node Generalized LR Parsing
-@section Generalized @acronym{LR} (@acronym{GLR}) Parsing
-@cindex @acronym{GLR} parsing
-@cindex generalized @acronym{LR} (@acronym{GLR}) parsing
+@section Generalized LR (GLR) Parsing
+@cindex GLR parsing
+@cindex generalized LR (GLR) parsing
 @cindex ambiguous grammars
 @cindex nondeterministic parsing
 
@@ -6693,24 +7320,24 @@ sequence of reductions cannot have deterministic parsers in this sense.
 The same is true of languages that require more than one symbol of
 lookahead, since the parser lacks the information necessary to make a
 decision at the point it must be made in a shift-reduce parser.
-Finally, as previously mentioned (@pxref{Mystery Conflicts}),
-there are languages where Bison's particular choice of how to
+Finally, as previously mentioned (@pxref{Mysterious Conflicts}),
+there are languages where Bison's default choice of how to
 summarize the input seen so far loses necessary information.
 
 When you use the @samp{%glr-parser} declaration in your grammar file,
 Bison generates a parser that uses a different algorithm, called
-Generalized @acronym{LR} (or @acronym{GLR}).  A Bison @acronym{GLR}
+Generalized LR (or GLR).  A Bison GLR
 parser uses the same basic
 algorithm for parsing as an ordinary Bison parser, but behaves
 differently in cases where there is a shift-reduce conflict that has not
 been resolved by precedence rules (@pxref{Precedence}) or a
-reduce-reduce conflict.  When a @acronym{GLR} parser encounters such a
+reduce-reduce conflict.  When a GLR parser encounters such a
 situation, it
 effectively @emph{splits} into a several parsers, one for each possible
 shift or reduction.  These parsers then proceed as usual, consuming
 tokens in lock-step.  Some of the stacks may encounter other conflicts
 and split further, with the result that instead of a sequence of states,
-a Bison @acronym{GLR} parsing stack is what is in effect a tree of states.
+a Bison GLR parsing stack is what is in effect a tree of states.
 
 In effect, each stack represents a guess as to what the proper parse
 is.  Additional input may indicate that a guess was wrong, in which case
@@ -6726,7 +7353,7 @@ grammar symbol that produces the same segment of the input token
 stream.
 
 Whenever the parser makes a transition from having multiple
-states to having one, it reverts to the normal @acronym{LALR}(1) parsing
+states to having one, it reverts to the normal deterministic parsing
 algorithm, after resolving and executing the saved-up actions.
 At this transition, some of the states on the stack will have semantic
 values that are sets (actually multisets) of possible actions.  The
@@ -6738,10 +7365,10 @@ rules by the @samp{%merge} declaration,
 Bison resolves and evaluates both and then calls the merge function on
 the result.  Otherwise, it reports an ambiguity.
 
-It is possible to use a data structure for the @acronym{GLR} parsing tree that
-permits the processing of any @acronym{LALR}(1) grammar in linear time (in the
+It is possible to use a data structure for the GLR parsing tree that
+permits the processing of any LR(1) grammar in linear time (in the
 size of the input), any unambiguous (not necessarily
-@acronym{LALR}(1)) grammar in
+LR(1)) grammar in
 quadratic worst-case time, and any general (possibly ambiguous)
 context-free grammar in cubic worst-case time.  However, Bison currently
 uses a simpler data structure that requires time proportional to the
@@ -6751,16 +7378,12 @@ grammars can require exponential time and space to process.  Such badly
 behaving examples, however, are not generally of practical interest.
 Usually, nondeterminism in a grammar is local---the parser is ``in
 doubt'' only for a few tokens at a time.  Therefore, the current data
-structure should generally be adequate.  On @acronym{LALR}(1) portions of a
-grammar, in particular, it is only slightly slower than with the default
-Bison parser.
+structure should generally be adequate.  On LR(1) portions of a
+grammar, in particular, it is only slightly slower than with the
+deterministic LR(1) Bison parser.
 
-For a more detailed exposition of @acronym{GLR} parsers, please see: Elizabeth
-Scott, Adrian Johnstone and Shamsa Sadaf Hussain, Tomita-Style
-Generalised @acronym{LR} Parsers, Royal Holloway, University of
-London, Department of Computer Science, TR-00-12,
-@uref{http://www.cs.rhul.ac.uk/research/languages/publications/tomita_style_1.ps},
-(2000-12-24).
+For a more detailed exposition of GLR parsers, @pxref{Bibliography,,Scott
+2000}.
 
 @node Memory Management
 @section Memory Management, and How to Avoid Memory Exhaustion
@@ -6802,16 +7425,16 @@ The default value of @code{YYMAXDEPTH}, if you do not define it, is
 
 @vindex YYINITDEPTH
 You can control how much stack is allocated initially by defining the
-macro @code{YYINITDEPTH} to a positive integer.  For the C
-@acronym{LALR}(1) parser, this value must be a compile-time constant
+macro @code{YYINITDEPTH} to a positive integer.  For the deterministic
+parser in C, this value must be a compile-time constant
 unless you are assuming C99 or some other target language or compiler
 that allows variable-length arrays.  The default is 200.
 
 Do not allow @code{YYINITDEPTH} to be greater than @code{YYMAXDEPTH}.
 
 @c FIXME: C++ output.
-Because of semantic differences between C and C++, the
-@acronym{LALR}(1) parsers in C produced by Bison cannot grow when compiled
+Because of semantic differences between C and C++, the deterministic
+parsers in C produced by Bison cannot grow when compiled
 by C++ compilers.  In this precise case (compiling a C parser as C++) you are
 suggested to grow @code{YYINITDEPTH}.  The Bison maintainers hope to fix
 this deficiency in a future release.
@@ -6970,7 +7593,7 @@ This looks like a function call statement, but if @code{foo} is a typedef
 name, then this is actually a declaration of @code{x}.  How can a Bison
 parser for C decide how to parse this input?
 
-The method used in @acronym{GNU} C is to have two different token types,
+The method used in GNU C is to have two different token types,
 @code{IDENTIFIER} and @code{TYPENAME}.  When @code{yylex} finds an
 identifier, it looks up the current declaration of the identifier in order
 to decide which token type to return: @code{TYPENAME} if the identifier is
@@ -7086,9 +7709,10 @@ Here we assume that @code{yylex} looks at the value of @code{hexflag}; when
 it is nonzero, all integers are parsed in hexadecimal, and tokens starting
 with letters are parsed as integers if possible.
 
-The declaration of @code{hexflag} shown in the prologue of the parser file
-is needed to make it accessible to the actions (@pxref{Prologue, ,The Prologue}).
-You must also write the code in @code{yylex} to obey the flag.
+The declaration of @code{hexflag} shown in the prologue of the grammar
+file is needed to make it accessible to the actions (@pxref{Prologue,
+,The Prologue}).  You must also write the code in @code{yylex} to obey
+the flag.
 
 @node Tie-in Recovery
 @section Lexical Tie-ins and Error Recovery
@@ -7174,10 +7798,10 @@ representation of it, either textually or graphically (as a DOT file).
 The textual file is generated when the options @option{--report} or
 @option{--verbose} are specified, see @xref{Invocation, , Invoking
 Bison}.  Its name is made by removing @samp{.tab.c} or @samp{.c} from
-the parser output file name, and adding @samp{.output} instead.
-Therefore, if the input file is @file{foo.y}, then the parser file is
-called @file{foo.tab.c} by default.  As a consequence, the verbose
-output file is called @file{foo.output}.
+the parser implementation file name, and adding @samp{.output}
+instead.  Therefore, if the grammar file is @file{foo.y}, then the
+parser implementation file is called @file{foo.tab.c} by default.  As
+a consequence, the verbose output file is called @file{foo.output}.
 
 The following grammar file, @file{calc.y}, will be used in the sequel:
 
@@ -7199,7 +7823,8 @@ useless: STR;
 @command{bison} reports:
 
 @example
-calc.y: warning: 1 nonterminal and 1 rule useless in grammar
+calc.y: warning: 1 nonterminal useless in grammar
+calc.y: warning: 1 rule useless in grammar
 calc.y:11.1-7: warning: nonterminal useless in grammar: useless
 calc.y:11.10-12: warning: rule useless in grammar: useless: STR
 calc.y: conflicts: 7 shift/reduce
@@ -7387,6 +8012,7 @@ control will jump to state 4, corresponding to the item @samp{exp -> exp
 '+' . exp}.  Since there is no default action, any other token than
 those listed above will trigger a syntax error.
 
+@cindex accepting state
 The state 3 is named the @dfn{final state}, or the @dfn{accepting
 state}:
 
@@ -7467,7 +8093,7 @@ sentence @samp{NUM + NUM / NUM} can be parsed as @samp{NUM + (NUM /
 NUM)}, which corresponds to shifting @samp{/}, or as @samp{(NUM + NUM) /
 NUM}, which corresponds to reducing rule 1.
 
-Because in @acronym{LALR}(1) parsing a single decision can be made, Bison
+Because in deterministic parsing a single decision can be made, Bison
 arbitrarily chose to disable the reduction, see @ref{Shift/Reduce, ,
 Shift/Reduce Conflicts}.  Discarded actions are reported in between
 square brackets.
@@ -7573,21 +8199,21 @@ There are several means to enable compilation of trace facilities:
 @item the macro @code{YYDEBUG}
 @findex YYDEBUG
 Define the macro @code{YYDEBUG} to a nonzero value when you compile the
-parser.  This is compliant with @acronym{POSIX} Yacc.  You could use
+parser.  This is compliant with POSIX Yacc.  You could use
 @samp{-DYYDEBUG=1} as a compiler option or you could put @samp{#define
 YYDEBUG 1} in the prologue of the grammar file (@pxref{Prologue, , The
 Prologue}).
 
 @item the option @option{-t}, @option{--debug}
 Use the @samp{-t} option when you run Bison (@pxref{Invocation,
-,Invoking Bison}).  This is @acronym{POSIX} compliant too.
+,Invoking Bison}).  This is POSIX compliant too.
 
 @item the directive @samp{%debug}
 @findex %debug
 Add the @code{%debug} directive (@pxref{Decl Summary, ,Bison
 Declaration Summary}).  This is a Bison extension, which will prove
 useful when Bison will output parsers for languages that don't use a
-preprocessor.  Unless @acronym{POSIX} and Yacc portability matter to
+preprocessor.  Unless POSIX and Yacc portability matter to
 you, this is
 the preferred solution.
 @end table
@@ -7634,11 +8260,11 @@ the listing file.  Eventually you will arrive at the place where
 something undesirable happens, and you will see which parts of the
 grammar are to blame.
 
-The parser file is a C program and you can use C debuggers on it, but it's
-not easy to interpret what it is doing.  The parser function is a
-finite-state machine interpreter, and aside from the actions it executes
-the same code over and over.  Only the values of variables show where in
-the grammar it is working.
+The parser implementation file is a C program and you can use C
+debuggers on it, but it's not easy to interpret what it is doing.  The
+parser function is a finite-state machine interpreter, and aside from
+the actions it executes the same code over and over.  Only the values
+of variables show where in the grammar it is working.
 
 @findex YYPRINT
 The debugging information normally gives the token type of each token
@@ -7684,16 +8310,15 @@ bison @var{infile}
 @end example
 
 Here @var{infile} is the grammar file name, which usually ends in
-@samp{.y}.  The parser file's name is made by replacing the @samp{.y}
-with @samp{.tab.c} and removing any leading directory.  Thus, the
-@samp{bison foo.y} file name yields
-@file{foo.tab.c}, and the @samp{bison hack/foo.y} file name yields
-@file{foo.tab.c}.  It's also possible, in case you are writing
-C++ code instead of C in your grammar file, to name it @file{foo.ypp}
-or @file{foo.y++}.  Then, the output files will take an extension like
-the given one as input (respectively @file{foo.tab.cpp} and
-@file{foo.tab.c++}).
-This feature takes effect with all options that manipulate file names like
+@samp{.y}.  The parser implementation file's name is made by replacing
+the @samp{.y} with @samp{.tab.c} and removing any leading directory.
+Thus, the @samp{bison foo.y} file name yields @file{foo.tab.c}, and
+the @samp{bison hack/foo.y} file name yields @file{foo.tab.c}.  It's
+also possible, in case you are writing C++ code instead of C in your
+grammar file, to name it @file{foo.ypp} or @file{foo.y++}.  Then, the
+output files will take an extension like the given one as input
+(respectively @file{foo.tab.cpp} and @file{foo.tab.c++}).  This
+feature takes effect with all options that manipulate file names like
 @samp{-o} or @samp{-d}.
 
 For example :
@@ -7710,7 +8335,7 @@ bison -d -o @var{output.c++} @var{infile.y}
 @noindent
 will produce @file{output.c++} and @file{outfile.h++}.
 
-For compatibility with @acronym{POSIX}, the standard Bison
+For compatibility with POSIX, the standard Bison
 distribution also contains a shell script called @command{yacc} that
 invokes Bison with the @option{-y} option.
 
@@ -7755,17 +8380,16 @@ Print the name of the directory containing skeletons and XSLT.
 
 @item -y
 @itemx --yacc
-Act more like the traditional Yacc command.  This can cause
-different diagnostics to be generated, and may change behavior in
-other minor ways.  Most importantly, imitate Yacc's output
-file name conventions, so that the parser output file is called
-@file{y.tab.c}, and the other outputs are called @file{y.output} and
-@file{y.tab.h}.
-Also, if generating an @acronym{LALR}(1) parser in C, generate @code{#define}
-statements in addition to an @code{enum} to associate token numbers with token
-names.
-Thus, the following shell script can substitute for Yacc, and the Bison
-distribution contains such a script for compatibility with @acronym{POSIX}:
+Act more like the traditional Yacc command.  This can cause different
+diagnostics to be generated, and may change behavior in other minor
+ways.  Most importantly, imitate Yacc's output file name conventions,
+so that the parser implementation file is called @file{y.tab.c}, and
+the other outputs are called @file{y.output} and @file{y.tab.h}.
+Also, if generating a deterministic parser in C, generate
+@code{#define} statements in addition to an @code{enum} to associate
+token numbers with token names.  Thus, the following shell script can
+substitute for Yacc, and the Bison distribution contains such a script
+for compatibility with POSIX:
 
 @example
 #! /bin/sh
@@ -7802,9 +8426,23 @@ These warnings are not enabled by default since they sometimes prove to
 be false alarms in existing grammars employing the Yacc constructs
 @code{$0} or @code{$-@var{n}} (where @var{n} is some positive integer).
 
-
 @item yacc
-Incompatibilities with @acronym{POSIX} Yacc.
+Incompatibilities with POSIX Yacc.
+
+@item conflicts-sr
+@itemx conflicts-rr
+S/R and R/R conflicts.  These warnings are enabled by default.  However, if
+the @code{%expect} or @code{%expect-rr} directive is specified, an
+unexpected number of conflicts is an error, and an expected number of
+conflicts is not reported, so @option{-W} and @option{--warning} then have
+no effect on the conflict report.
+
+@item other
+All warnings not categorized above.  These warnings are enabled by default.
+
+This category is provided merely for the sake of completeness.  Future
+releases of Bison may move warnings from this category to new, more specific
+categories.
 
 @item all
 All the warnings.
@@ -7816,7 +8454,7 @@ Treat warnings as errors.
 
 A category can be turned off by prefixing its name with @samp{no-}.  For
 instance, @option{-Wno-yacc} will hide the warnings about
-@acronym{POSIX} Yacc incompatibilities.
+POSIX Yacc incompatibilities.
 @end table
 
 @noindent
@@ -7825,9 +8463,38 @@ Tuning the parser:
 @table @option
 @item -t
 @itemx --debug
-In the parser file, define the macro @code{YYDEBUG} to 1 if it is not
-already defined, so that the debugging facilities are compiled.
-@xref{Tracing, ,Tracing Your Parser}.
+In the parser implementation file, define the macro @code{YYDEBUG} to
+1 if it is not already defined, so that the debugging facilities are
+compiled.  @xref{Tracing, ,Tracing Your Parser}.
+
+@item -D @var{name}[=@var{value}]
+@itemx --define=@var{name}[=@var{value}]
+@itemx -F @var{name}[=@var{value}]
+@itemx --force-define=@var{name}[=@var{value}]
+Each of these is equivalent to @samp{%define @var{name} "@var{value}"}
+(@pxref{%define Summary}) except that Bison processes multiple
+definitions for the same @var{name} as follows:
+
+@itemize
+@item
+Bison quietly ignores all command-line definitions for @var{name} except
+the last.
+@item
+If that command-line definition is specified by a @code{-D} or
+@code{--define}, Bison reports an error for any @code{%define}
+definition for @var{name}.
+@item
+If that command-line definition is specified by a @code{-F} or
+@code{--force-define} instead, Bison quietly ignores all @code{%define}
+definitions for @var{name}.
+@item
+Otherwise, Bison reports an error if there are multiple @code{%define}
+definitions for @var{name}.
+@end itemize
+
+You should avoid using @code{-F} and @code{--force-define} in your
+make files unless you are confident that it is safe to quietly ignore
+any conflicting @code{%define} that may be added to the grammar file.
 
 @item -L @var{language}
 @itemx --language=@var{language}
@@ -7849,11 +8516,12 @@ Pretend that @code{%name-prefix "@var{prefix}"} was specified.
 
 @item -l
 @itemx --no-lines
-Don't put any @code{#line} preprocessor commands in the parser file.
-Ordinarily Bison puts them in the parser file so that the C compiler
-and debuggers will associate errors with your source file, the
-grammar file.  This option causes them to associate errors with the
-parser file, treating it as an independent source file in its own right.
+Don't put any @code{#line} preprocessor commands in the parser
+implementation file.  Ordinarily Bison puts them in the parser
+implementation file so that the C compiler and debuggers will
+associate errors with your source file, the grammar file.  This option
+causes them to associate errors with the parser implementation file,
+treating it as an independent source file in its own right.
 
 @item -S @var{file}
 @itemx --skeleton=@var{file}
@@ -7903,7 +8571,7 @@ separated list of @var{things} among:
 @table @code
 @item state
 Description of the grammar, conflicts (resolved and unresolved), and
-@acronym{LALR} automaton.
+parser's automaton.
 
 @item lookahead
 Implies @code{state} and augments the description of the automaton with
@@ -7925,23 +8593,23 @@ parser.  @xref{Decl Summary}.
 
 @item -o @var{file}
 @itemx --output=@var{file}
-Specify the @var{file} for the parser file.
+Specify the @var{file} for the parser implementation file.
 
 The other output files' names are constructed from @var{file} as
 described under the @samp{-v} and @samp{-d} options.
 
-@item -g[@var{file}]
+@item -g [@var{file}]
 @itemx --graph[=@var{file}]
-Output a graphical representation of the @acronym{LALR}(1) grammar
+Output a graphical representation of the parser's
 automaton computed by Bison, in @uref{http://www.graphviz.org/, Graphviz}
-@uref{http://www.graphviz.org/doc/info/lang.html, @acronym{DOT}} format.
+@uref{http://www.graphviz.org/doc/info/lang.html, DOT} format.
 @code{@var{file}} is optional.
 If omitted and the grammar file is @file{foo.y}, the output file will be
 @file{foo.dot}.
 
-@item -x[@var{file}]
+@item -x [@var{file}]
 @itemx --xml[=@var{file}]
-Output an XML report of the @acronym{LALR}(1) automaton computed by Bison.
+Output an XML report of the parser's automaton computed by Bison.
 @code{@var{file}} is optional.
 If omitted and the grammar file is @file{foo.y}, the output file will be
 @file{foo.xml}.
@@ -7952,12 +8620,11 @@ More user feedback will help to stabilize it.)
 @node Option Cross Key
 @section Option Cross Key
 
-@c FIXME: How about putting the directives too?
 Here is a list of options, alphabetized by long option, to help you find
-the corresponding short option.
+the corresponding short option and directive.
 
-@multitable {@option{--defines=@var{defines-file}}} {@option{-b @var{file-prefix}XXX}}
-@headitem Long Option @tab Short Option
+@multitable {@option{--force-define=@var{name}[=@var{value}]}} {@option{-F @var{name}[=@var{value}]}} {@code{%nondeterministic-parser}}
+@headitem Long Option @tab Short Option @tab Bison Directive
 @include cross-options.texi
 @end multitable
 
@@ -7966,10 +8633,10 @@ the corresponding short option.
 
 The Yacc library contains default implementations of the
 @code{yyerror} and @code{main} functions.  These default
-implementations are normally not useful, but @acronym{POSIX} requires
+implementations are normally not useful, but POSIX requires
 them.  To use the Yacc library, link your program with the
 @option{-ly} option.  Note that Bison's implementation of the Yacc
-library is distributed under the terms of the @acronym{GNU} General
+library is distributed under the terms of the GNU General
 Public License (@pxref{Copying}).
 
 If you use the Yacc library's @code{yyerror} function, you should
@@ -8015,7 +8682,7 @@ int yyparse (void);
 @c - Always pure
 @c - initial action
 
-The C++ @acronym{LALR}(1) parser is selected using the skeleton directive,
+The C++ deterministic parser is selected using the skeleton directive,
 @samp{%skeleton "lalr1.cc"}, or the synonymous command-line option
 @option{--skeleton=lalr1.cc}.
 @xref{Decl Summary}.
@@ -8023,9 +8690,9 @@ The C++ @acronym{LALR}(1) parser is selected using the skeleton directive,
 When run, @command{bison} will create several entities in the @samp{yy}
 namespace.
 @findex %define namespace
-Use the @samp{%define namespace} directive to change the namespace name, see
-@ref{Decl Summary}.
-The various classes are generated in the following files:
+Use the @samp{%define namespace} directive to change the namespace
+name, see @ref{%define Summary,,namespace}.  The various classes are
+generated in the following files:
 
 @table @file
 @item position.hh
@@ -8038,7 +8705,7 @@ An auxiliary class @code{stack} used by the parser.
 
 @item @var{file}.hh
 @itemx @var{file}.cc
-(Assuming the extension of the input file was @samp{.yy}.)  The
+(Assuming the extension of the grammar file was @samp{.yy}.)  The
 declaration and implementation of the C++ parser class.  The basename
 and extension of these two files follow the same rules as with regular C
 parsers (@pxref{Invocation}).
@@ -8411,9 +9078,9 @@ calcxx_driver::error (const std::string& m)
 @node Calc++ Parser
 @subsubsection Calc++ Parser
 
-The parser definition file @file{calc++-parser.yy} starts by asking for
-the C++ LALR(1) skeleton, the creation of the parser header file, and
-specifies the name of the parser class.  Because the C++ skeleton
+The grammar file @file{calc++-parser.yy} starts by asking for the C++
+deterministic parser skeleton, the creation of the parser header file,
+and specifies the name of the parser class.  Because the C++ skeleton
 changed several times, it is safer to require the version you designed
 the grammar for.
 
@@ -8433,7 +9100,7 @@ reciprocally, both cannot include the header of the other.  Because the
 driver's header needs detailed knowledge about the parser class (in
 particular its inner types), it is the parser's header which will simply
 use a forward declaration of the driver.
-@xref{Decl Summary, ,%code}.
+@xref{%code Summary}.
 
 @comment file: calc++-parser.yy
 @example
@@ -8472,8 +9139,9 @@ automatically propagated.
 @end example
 
 @noindent
-Use the two following directives to enable parser tracing and verbose
-error messages.
+Use the two following directives to enable parser tracing and verbose error
+messages.  However, verbose error messages can contain incorrect information
+(@pxref{LAC}).
 
 @comment file: calc++-parser.yy
 @example
@@ -8753,14 +9421,15 @@ The Java parser skeletons are selected using the @code{%language "Java"}
 directive or the @option{-L java}/@option{--language=java} option.
 
 @c FIXME: Documented bug.
-When generating a Java parser, @code{bison @var{basename}.y} will create
-a single Java source file named @file{@var{basename}.java}.  Using an
-input file without a @file{.y} suffix is currently broken.  The basename
-of the output file can be changed by the @code{%file-prefix} directive
-or the @option{-p}/@option{--name-prefix} option.  The entire output file
-name can be changed by the @code{%output} directive or the
-@option{-o}/@option{--output} option.  The output file contains a single
-class for the parser.
+When generating a Java parser, @code{bison @var{basename}.y} will
+create a single Java source file named @file{@var{basename}.java}
+containing the parser implementation.  Using a grammar file without a
+@file{.y} suffix is currently broken.  The basename of the parser
+implementation file can be changed by the @code{%file-prefix}
+directive or the @option{-p}/@option{--name-prefix} option.  The
+entire parser implementation file name can be changed by the
+@code{%output} directive or the @option{-o}/@option{--output} option.
+The parser implementation file contains a single class for the parser.
 
 You can create documentation for generated parsers using Javadoc.
 
@@ -8771,9 +9440,9 @@ and @code{%define api.pure} directives does not do anything when used in
 Java.
 
 Push parsers are currently unsupported in Java and @code{%define
-api.push_pull} have no effect.
+api.push-pull} have no effect.
 
-@acronym{GLR} parsers are currently unsupported in Java.  Do not use the
+GLR parsers are currently unsupported in Java.  Do not use the
 @code{glr-parser} directive.
 
 No header file can be generated for Java parsers.  Do not use the
@@ -8847,7 +9516,7 @@ in a file; Bison itself defines a class representing a @dfn{location},
 a range composed of a pair of positions (possibly spanning several
 files).  The location class is an inner class of the parser; the name
 is @code{Location} by default, and may also be renamed using
-@code{%define location_type "@var{class-name}}.
+@code{%define location_type "@var{class-name}"}.
 
 The location class treats the position as a completely opaque value.
 By default, the class name is @code{Position}, but this can be changed
@@ -9311,7 +9980,7 @@ are addressed.
 * Strings are Destroyed::       @code{yylval} Loses Track of Strings
 * Implementing Gotos/Loops::    Control Flow in the Calculator
 * Multiple start-symbols::      Factoring closely related grammars
-* Secure?  Conform?::           Is Bison @acronym{POSIX} safe?
+* Secure?  Conform?::           Is Bison POSIX safe?
 * I can't build Bison::         Troubleshooting
 * Where can I find help?::      Troubleshouting
 * Bug Reports::                 Troublereporting
@@ -9498,11 +10167,11 @@ i.e., precisely those that have a straightforward execution model:
 execute simple instructions one after the others.
 
 @cindex abstract syntax tree
-@cindex @acronym{AST}
+@cindex AST
 If you want a richer model, you will probably need to use the parser
 to construct a tree that does represent the structure it has
 recovered; this tree is usually called the @dfn{abstract syntax tree},
-or @dfn{@acronym{AST}} for short.  Then, walking through this tree,
+or @dfn{AST} for short.  Then, walking through this tree,
 traversing it in various ways, will enable treatments such as its
 execution or its translation, which will result in an interpreter or a
 compiler.
@@ -9569,7 +10238,7 @@ Is Bison secure?  Does it conform to POSIX?
 
 If you're looking for a guarantee or certification, we don't provide it.
 However, Bison is intended to be a reliable program that conforms to the
-@acronym{POSIX} specification for Yacc.  If you run into problems,
+POSIX specification for Yacc.  If you run into problems,
 please send us a bug report.
 
 @node I can't build Bison
@@ -9695,6 +10364,16 @@ In an action, the location of the @var{n}-th symbol of the right-hand
 side of the rule.  @xref{Locations, , Locations Overview}.
 @end deffn
 
+@deffn {Variable} @@@var{name}
+In an action, the location of a symbol addressed by name.
+@xref{Locations, , Locations Overview}.
+@end deffn
+
+@deffn {Variable} @@[@var{name}]
+In an action, the location of a symbol addressed by name.
+@xref{Locations, , Locations Overview}.
+@end deffn
+
 @deffn {Variable} $$
 In an action, the semantic value of the left-hand side of the rule.
 @xref{Actions}.
@@ -9705,6 +10384,16 @@ In an action, the semantic value of the @var{n}-th symbol of the
 right-hand side of the rule.  @xref{Actions}.
 @end deffn
 
+@deffn {Variable} $@var{name}
+In an action, the semantic value of a symbol addressed by name.
+@xref{Actions}.
+@end deffn
+
+@deffn {Variable} $[@var{name}]
+In an action, the semantic value of a symbol addressed by name.
+@xref{Actions}.
+@end deffn
+
 @deffn {Delimiter} %%
 Delimiter used to separate the grammar rule section from the
 Bison declarations section or the epilogue.
@@ -9713,9 +10402,9 @@ Bison declarations section or the epilogue.
 
 @c Don't insert spaces, or check the DVI output.
 @deffn {Delimiter} %@{@var{code}%@}
-All code listed between @samp{%@{} and @samp{%@}} is copied directly to
-the output file uninterpreted.  Such code forms the prologue of the input
-file.  @xref{Grammar Outline, ,Outline of a Bison
+All code listed between @samp{%@{} and @samp{%@}} is copied verbatim
+to the parser implementation file.  Such code forms the prologue of
+the grammar file.  @xref{Grammar Outline, ,Outline of a Bison
 Grammar}.
 @end deffn
 
@@ -9767,8 +10456,9 @@ Start-Symbol}.  It cannot be used in the grammar.
 
 @deffn {Directive} %code @{@var{code}@}
 @deffnx {Directive} %code @var{qualifier} @{@var{code}@}
-Insert @var{code} verbatim into output parser source.
-@xref{Decl Summary,,%code}.
+Insert @var{code} verbatim into the output parser source at the
+default location or at the location specified by @var{qualifier}.
+@xref{%code Summary}.
 @end deffn
 
 @deffn {Directive} %debug
@@ -9783,15 +10473,15 @@ Precedence}.
 @end deffn
 @end ifset
 
-@deffn {Directive} %define @var{define-variable}
-@deffnx {Directive} %define @var{define-variable} @var{value}
-Define a variable to adjust Bison's behavior.
-@xref{Decl Summary,,%define}.
+@deffn {Directive} %define @var{variable}
+@deffnx {Directive} %define @var{variable} @var{value}
+@deffnx {Directive} %define @var{variable} "@var{value}"
+Define a variable to adjust Bison's behavior.  @xref{%define Summary}.
 @end deffn
 
 @deffn {Directive} %defines
-Bison declaration to create a header file meant for the scanner.
-@xref{Decl Summary}.
+Bison declaration to create a parser header file, which is usually
+meant for the scanner.  @xref{Decl Summary}.
 @end deffn
 
 @deffn {Directive} %defines @var{defines-file}
@@ -9807,7 +10497,7 @@ discarded symbols.  @xref{Destructor Decl, , Freeing Discarded Symbols}.
 @deffn {Directive} %dprec
 Bison declaration to assign a precedence to a rule that is used at parse
 time to resolve reduce/reduce conflicts.  @xref{GLR Parsers, ,Writing
-@acronym{GLR} Parsers}.
+GLR Parsers}.
 @end deffn
 
 @deffn {Symbol} $end
@@ -9828,7 +10518,7 @@ token is reset to the token that originally caused the violation.
 
 @deffn {Directive} %error-verbose
 Bison declaration to request verbose, specific error message strings
-when @code{yyerror} is called.
+when @code{yyerror} is called.  @xref{Error Reporting}.
 @end deffn
 
 @deffn {Directive} %file-prefix "@var{prefix}"
@@ -9837,8 +10527,8 @@ Summary}.
 @end deffn
 
 @deffn {Directive} %glr-parser
-Bison declaration to produce a @acronym{GLR} parser.  @xref{GLR
-Parsers, ,Writing @acronym{GLR} Parsers}.
+Bison declaration to produce a GLR parser.  @xref{GLR
+Parsers, ,Writing GLR Parsers}.
 @end deffn
 
 @deffn {Directive} %initial-action
@@ -9865,7 +10555,7 @@ for Pure Parsers}.
 Bison declaration to assign a merging function to a rule.  If there is a
 reduce/reduce conflict with a rule having the same merging function, the
 function is applied to the two semantic values to get a single result.
-@xref{GLR Parsers, ,Writing @acronym{GLR} Parsers}.
+@xref{GLR Parsers, ,Writing GLR Parsers}.
 @end deffn
 
 @deffn {Directive} %name-prefix "@var{prefix}"
@@ -9882,7 +10572,7 @@ Precedence}.
 
 @deffn {Directive} %no-lines
 Bison declaration to avoid generating @code{#line} directives in the
-parser file.  @xref{Decl Summary}.
+parser implementation file.  @xref{Decl Summary}.
 @end deffn
 
 @deffn {Directive} %nonassoc
@@ -9891,8 +10581,8 @@ Bison declaration to assign nonassociativity to token(s).
 @end deffn
 
 @deffn {Directive} %output "@var{file}"
-Bison declaration to set the name of the parser file.  @xref{Decl
-Summary}.
+Bison declaration to set the name of the parser implementation file.
+@xref{Decl Summary}.
 @end deffn
 
 @deffn {Directive} %parse-param @{@var{argument-declaration}@}
@@ -9907,8 +10597,9 @@ Bison declaration to assign a precedence to a specific rule.
 @end deffn
 
 @deffn {Directive} %pure-parser
-Deprecated version of @code{%define api.pure} (@pxref{Decl Summary, ,%define}),
-for which Bison is more careful to warn about unreasonable usage.
+Deprecated version of @code{%define api.pure} (@pxref{%define
+Summary,,api.pure}), for which Bison is more careful to warn about
+unreasonable usage.
 @end deffn
 
 @deffn {Directive} %require "@var{version}"
@@ -9937,8 +10628,8 @@ Bison declaration to declare token(s) without specifying precedence.
 @end deffn
 
 @deffn {Directive} %token-table
-Bison declaration to include a token name table in the parser file.
-@xref{Decl Summary}.
+Bison declaration to include a token name table in the parser
+implementation file.  @xref{Decl Summary}.
 @end deffn
 
 @deffn {Directive} %type
@@ -10030,7 +10721,7 @@ An obsolete macro that you define with @code{#define} in the prologue
 to request verbose, specific error message strings
 when @code{yyerror} is called.  It doesn't matter what definition you
 use for @code{YYERROR_VERBOSE}, just whether you define it.  Using
-@code{%error-verbose} is preferred.
+@code{%error-verbose} is preferred.  @xref{Error Reporting}.
 @end deffn
 
 @deffn {Macro} YYINITDEPTH
@@ -10144,8 +10835,8 @@ is recovering from a syntax error, and 0 otherwise.
 @end deffn
 
 @deffn {Macro} YYSTACK_USE_ALLOCA
-Macro used to control the use of @code{alloca} when the C
-@acronym{LALR}(1) parser needs to extend its stacks.  If defined to 0,
+Macro used to control the use of @code{alloca} when the
+deterministic parser in C needs to extend its stacks.  If defined to 0,
 the parser will use @code{malloc} to extend its stacks.  If defined to
 1, the parser will use @code{alloca}.  Values other than 0 and 1 are
 reserved for future Bison extensions.  If not defined,
@@ -10170,11 +10861,19 @@ Data type of semantic values; @code{int} by default.
 @cindex glossary
 
 @table @asis
-@item Backus-Naur Form (@acronym{BNF}; also called ``Backus Normal Form'')
+@item Accepting state
+A state whose only action is the accept action.
+The accepting state is thus a consistent state.
+@xref{Understanding,,}.
+
+@item Backus-Naur Form (BNF; also called ``Backus Normal Form'')
 Formal method of specifying context-free grammars originally proposed
 by John Backus, and slightly improved by Peter Naur in his 1960-01-02
 committee document contributing to what became the Algol 60 report.
 @xref{Language and Grammar, ,Languages and Context-Free Grammars}.
+
+@item Consistent state
+A state containing only one possible action.  @xref{Default Reductions}.
 
 @item Context-free grammars
 Grammars specified as rules that can be applied regardless of context.
@@ -10182,6 +10881,16 @@ Thus, if there is a rule which says that an integer can be used as an
 expression, integers are allowed @emph{anywhere} an expression is
 permitted.  @xref{Language and Grammar, ,Languages and Context-Free
 Grammars}.
+
+@item Default reduction
+The reduction that a parser should perform if the current parser state
+contains no other action for the lookahead token.  In permitted parser
+states, Bison declares the reduction with the largest lookahead set to be
+the default reduction and removes that lookahead set.  @xref{Default
+Reductions}.
+
+@item Defaulted state
+A consistent state with a default reduction.  @xref{Default Reductions}.
 
 @item Dynamic allocation
 Allocation of memory that occurs during execution, rather than at
@@ -10199,19 +10908,30 @@ machine.  In the case of the parser, the input is the language being
 parsed, and the states correspond to various stages in the grammar
 rules.  @xref{Algorithm, ,The Bison Parser Algorithm}.
 
-@item Generalized @acronym{LR} (@acronym{GLR})
+@item Generalized LR (GLR)
 A parsing algorithm that can handle all context-free grammars, including those
-that are not @acronym{LALR}(1).  It resolves situations that Bison's
-usual @acronym{LALR}(1)
+that are not LR(1).  It resolves situations that Bison's
+deterministic parsing
 algorithm cannot by effectively splitting off multiple parsers, trying all
 possible parsers, and discarding those that fail in the light of additional
 right context.  @xref{Generalized LR Parsing, ,Generalized
-@acronym{LR} Parsing}.
+LR Parsing}.
 
 @item Grouping
 A language construct that is (in general) grammatically divisible;
 for example, `expression' or `declaration' in C@.
 @xref{Language and Grammar, ,Languages and Context-Free Grammars}.
+
+@item IELR(1) (Inadequacy Elimination LR(1))
+A minimal LR(1) parser table construction algorithm.  That is, given any
+context-free grammar, IELR(1) generates parser tables with the full
+language-recognition power of canonical LR(1) but with nearly the same
+number of parser states as LALR(1).  This reduction in parser states is
+often an order of magnitude.  More importantly, because canonical LR(1)'s
+extra parser states may contain duplicate conflicts in the case of non-LR(1)
+grammars, the number of conflicts for IELR(1) is often an order of magnitude
+less as well.  This can significantly reduce the complexity of developing a
+grammar.  @xref{LR Table Construction}.
 
 @item Infix operator
 An arithmetic operator that is placed between the operands on which it
@@ -10219,6 +10939,14 @@ performs some operation.
 
 @item Input stream
 A continuous flow of data between devices or programs.
+
+@item LAC (Lookahead Correction)
+A parsing mechanism that fixes the problem of delayed syntax error
+detection, which is caused by LR state merging, default reductions, and the
+use of @code{%nonassoc}.  Delayed syntax error detection results in
+unexpected semantic actions, initiation of error recovery in the wrong
+syntactic context, and an incorrect list of expected tokens in a verbose
+syntax error message.  @xref{LAC}.
 
 @item Language construct
 One of the typical usage schemas of the language.  For example, one of
@@ -10254,12 +10982,12 @@ A token which consists of two or more fixed characters.  @xref{Symbols}.
 A token already read but not yet shifted.  @xref{Lookahead, ,Lookahead
 Tokens}.
 
-@item @acronym{LALR}(1)
+@item LALR(1)
 The class of context-free grammars that Bison (like most other parser
-generators) can handle; a subset of @acronym{LR}(1).  @xref{Mystery
-Conflicts, ,Mysterious Reduce/Reduce Conflicts}.
+generators) can handle by default; a subset of LR(1).
+@xref{Mysterious Conflicts}.
 
-@item @acronym{LR}(1)
+@item LR(1)
 The class of context-free grammars in which at most one token of
 lookahead is needed to disambiguate the parsing of any piece of input.
 
@@ -10334,11 +11062,56 @@ the lexical analyzer.  @xref{Symbols}.
 A grammar symbol that has no rules in the grammar and therefore is
 grammatically indivisible.  The piece of text it represents is a token.
 @xref{Language and Grammar, ,Languages and Context-Free Grammars}.
+
+@item Unreachable state
+A parser state to which there does not exist a sequence of transitions from
+the parser's start state.  A state can become unreachable during conflict
+resolution.  @xref{Unreachable States}.
 @end table
 
 @node Copying This Manual
 @appendix Copying This Manual
 @include fdl.texi
+
+@node Bibliography
+@unnumbered Bibliography
+
+@table @asis
+@item [Denny 2008]
+Joel E. Denny and Brian A. Malloy, IELR(1): Practical LR(1) Parser Tables
+for Non-LR(1) Grammars with Conflict Resolution, in @cite{Proceedings of the
+2008 ACM Symposium on Applied Computing} (SAC'08), ACM, New York, NY, USA,
+pp.@: 240--245.  @uref{http://dx.doi.org/10.1145/1363686.1363747}
+
+@item [Denny 2010 May]
+Joel E. Denny, PSLR(1): Pseudo-Scannerless Minimal LR(1) for the
+Deterministic Parsing of Composite Languages, Ph.D. Dissertation, Clemson
+University, Clemson, SC, USA (May 2010).
+@uref{http://proquest.umi.com/pqdlink?did=2041473591&Fmt=7&clientId=79356&RQT=309&VName=PQD}
+
+@item [Denny 2010 November]
+Joel E. Denny and Brian A. Malloy, The IELR(1) Algorithm for Generating
+Minimal LR(1) Parser Tables for Non-LR(1) Grammars with Conflict Resolution,
+in @cite{Science of Computer Programming}, Vol.@: 75, Issue 11 (November
+2010), pp.@: 943--979.  @uref{http://dx.doi.org/10.1016/j.scico.2009.08.001}
+
+@item [DeRemer 1982]
+Frank DeRemer and Thomas Pennello, Efficient Computation of LALR(1)
+Look-Ahead Sets, in @cite{ACM Transactions on Programming Languages and
+Systems}, Vol.@: 4, No.@: 4 (October 1982), pp.@:
+615--649. @uref{http://dx.doi.org/10.1145/69622.357187}
+
+@item [Knuth 1965]
+Donald E. Knuth, On the Translation of Languages from Left to Right, in
+@cite{Information and Control}, Vol.@: 8, Issue 6 (December 1965), pp.@:
+607--639. @uref{http://dx.doi.org/10.1016/S0019-9958(65)90426-2}
+
+@item [Scott 2000]
+Elizabeth Scott, Adrian Johnstone, and Shamsa Sadaf Hussain,
+@cite{Tomita-Style Generalised LR Parsers}, Royal Holloway, University of
+London, Department of Computer Science, TR-00-12 (December 2000).
+@uref{http://www.cs.rhul.ac.uk/research/languages/publications/tomita_style_1.ps}
+@end table
 
 @node Index
 @unnumbered Index
@@ -10347,36 +11120,60 @@ grammatically indivisible.  The piece of text it represents is a token.
 
 @bye
 
+@c LocalWords: texinfo setfilename settitle setchapternewpage finalout texi FSF
+@c LocalWords: ifinfo smallbook shorttitlepage titlepage GPL FIXME iftex FSF's
+@c LocalWords: akim fn cp syncodeindex vr tp synindex dircategory direntry Naur
+@c LocalWords: ifset vskip pt filll insertcopying sp ISBN Etienne Suvasa Multi
+@c LocalWords: ifnottex yyparse detailmenu GLR RPN Calc var Decls Rpcalc multi
+@c LocalWords: rpcalc Lexer Expr ltcalc mfcalc yylex defaultprec Donnelly Gotos
+@c LocalWords: yyerror pxref LR yylval cindex dfn LALR samp gpl BNF xref yypush
+@c LocalWords: const int paren ifnotinfo AC noindent emph expr stmt findex lr
+@c LocalWords: glr YYSTYPE TYPENAME prog dprec printf decl init stmtMerge POSIX
+@c LocalWords: pre STDC GNUC endif yy YY alloca lf stddef stdlib YYDEBUG yypull
+@c LocalWords: NUM exp subsubsection kbd Ctrl ctype EOF getchar isdigit nonfree
+@c LocalWords: ungetc stdin scanf sc calc ulator ls lm cc NEG prec yyerrok rr
+@c LocalWords: longjmp fprintf stderr yylloc YYLTYPE cos ln Stallman Destructor
+@c LocalWords: smallexample symrec val tptr FNCT fnctptr func struct sym enum
+@c LocalWords: fnct putsym getsym fname arith fncts atan ptr malloc sizeof Lex
+@c LocalWords: strlen strcpy fctn strcmp isalpha symbuf realloc isalnum DOTDOT
+@c LocalWords: ptypes itype YYPRINT trigraphs yytname expseq vindex dtype Unary
+@c LocalWords: Rhs YYRHSLOC LE nonassoc op deffn typeless yynerrs nonterminal
+@c LocalWords: yychar yydebug msg YYNTOKENS YYNNTS YYNRULES YYNSTATES reentrant
+@c LocalWords: cparse clex deftypefun NE defmac YYACCEPT YYABORT param yypstate
+@c LocalWords: strncmp intval tindex lvalp locp llocp typealt YYBACKUP subrange
+@c LocalWords: YYEMPTY YYEOF YYRECOVERING yyclearin GE def UMINUS maybeword loc
+@c LocalWords: Johnstone Shamsa Sadaf Hussain Tomita TR uref YYMAXDEPTH inline
+@c LocalWords: YYINITDEPTH stmnts ref stmnt initdcl maybeasm notype Lookahead
+@c LocalWords: hexflag STR exdent itemset asis DYYDEBUG YYFPRINTF args Autoconf
+@c LocalWords: infile ypp yxx outfile itemx tex leaderfill Troubleshouting sqrt
+@c LocalWords: hbox hss hfill tt ly yyin fopen fclose ofirst gcc ll lookahead
+@c LocalWords: nbar yytext fst snd osplit ntwo strdup AST Troublereporting th
+@c LocalWords: YYSTACK DVI fdl printindex IELR nondeterministic nonterminals ps
+@c LocalWords: subexpressions declarator nondeferred config libintl postfix LAC
+@c LocalWords: preprocessor nonpositive unary nonnumeric typedef extern rhs
+@c LocalWords: yytokentype destructor multicharacter nonnull EBCDIC
+@c LocalWords: lvalue nonnegative XNUM CHR chr TAGLESS tagless stdout api TOK
+@c LocalWords: destructors Reentrancy nonreentrant subgrammar nonassociative
+@c LocalWords: deffnx namespace xml goto lalr ielr runtime lex yacc yyps env
+@c LocalWords: yystate variadic Unshift NLS gettext po UTF Automake LOCALEDIR
+@c LocalWords: YYENABLE bindtextdomain Makefile DEFS CPPFLAGS DBISON DeRemer
+@c LocalWords: autoreconf Pennello multisets nondeterminism Generalised baz
+@c LocalWords: redeclare automata Dparse localedir datadir XSLT midrule Wno
+@c LocalWords: Graphviz multitable headitem hh basename Doxygen fno
+@c LocalWords: doxygen ival sval deftypemethod deallocate pos deftypemethodx
+@c LocalWords: Ctor defcv defcvx arg accessors arithmetics CPP ifndef CALCXX
+@c LocalWords: lexer's calcxx bool LPAREN RPAREN deallocation cerrno climits
+@c LocalWords: cstdlib Debian undef yywrap unput noyywrap nounput zA yyleng
+@c LocalWords: errno strtol ERANGE str strerror iostream argc argv Javadoc
+@c LocalWords: bytecode initializers superclass stype ASTNode autoboxing nls
+@c LocalWords: toString deftypeivar deftypeivarx deftypeop YYParser strictfp
+@c LocalWords: superclasses boolean getErrorVerbose setErrorVerbose deftypecv
+@c LocalWords: getDebugStream setDebugStream getDebugLevel setDebugLevel url
+@c LocalWords: bisonVersion deftypecvx bisonSkeleton getStartPos getEndPos
+@c LocalWords: getLVal defvar deftypefn deftypefnx gotos msgfmt Corbett
+@c LocalWords: subdirectory Solaris nonassociativity
+
 @c Local Variables:
+@c ispell-dictionary: "american"
 @c fill-column: 76
 @c End:
-
-@c LocalWords: texinfo setfilename settitle setchapternewpage finalout
-@c LocalWords: ifinfo smallbook shorttitlepage titlepage GPL FIXME iftex
-@c LocalWords: akim fn cp syncodeindex vr tp synindex dircategory direntry
-@c LocalWords: ifset vskip pt filll insertcopying sp ISBN Etienne Suvasa
-@c LocalWords: ifnottex yyparse detailmenu GLR RPN Calc var Decls Rpcalc
-@c LocalWords: rpcalc Lexer Expr ltcalc mfcalc yylex
-@c LocalWords: yyerror pxref LR yylval cindex dfn LALR samp gpl BNF xref
-@c LocalWords: const int paren ifnotinfo AC noindent emph expr stmt findex
-@c LocalWords: glr YYSTYPE TYPENAME prog dprec printf decl init stmtMerge
-@c LocalWords: pre STDC GNUC endif yy YY alloca lf stddef stdlib YYDEBUG
-@c LocalWords: NUM exp subsubsection kbd Ctrl ctype EOF getchar isdigit
-@c LocalWords: ungetc stdin scanf sc calc ulator ls lm cc NEG prec yyerrok
-@c LocalWords: longjmp fprintf stderr yylloc YYLTYPE cos ln
-@c LocalWords: smallexample symrec val tptr FNCT fnctptr func struct sym
-@c LocalWords: fnct putsym getsym fname arith fncts atan ptr malloc sizeof
-@c LocalWords: strlen strcpy fctn strcmp isalpha symbuf realloc isalnum
-@c LocalWords: ptypes itype YYPRINT trigraphs yytname expseq vindex dtype
-@c LocalWords: Rhs YYRHSLOC LE nonassoc op deffn typeless yynerrs
-@c LocalWords: yychar yydebug msg YYNTOKENS YYNNTS YYNRULES YYNSTATES
-@c LocalWords: cparse clex deftypefun NE defmac YYACCEPT YYABORT param
-@c LocalWords: strncmp intval tindex lvalp locp llocp typealt YYBACKUP
-@c LocalWords: YYEMPTY YYEOF YYRECOVERING yyclearin GE def UMINUS maybeword
-@c LocalWords: Johnstone Shamsa Sadaf Hussain Tomita TR uref YYMAXDEPTH
-@c LocalWords: YYINITDEPTH stmnts ref stmnt initdcl maybeasm notype
-@c LocalWords: hexflag STR exdent itemset asis DYYDEBUG YYFPRINTF args
-@c LocalWords: infile ypp yxx outfile itemx tex leaderfill
-@c LocalWords: hbox hss hfill tt ly yyin fopen fclose ofirst gcc ll
-@c LocalWords: nbar yytext fst snd osplit ntwo strdup AST
-@c LocalWords: YYSTACK DVI fdl printindex

@@ -595,9 +595,9 @@ int skel__flex_debug = 1;
 
 static yyconst flex_int16_t yy_rule_linenum[23] =
     {   0,
-       73,   74,   75,   76,   77,   79,   80,   81,   83,   92,
-       93,   94,  106,  108,  109,  110,  111,  113,  115,  136,
-      140,  141
+       72,   73,   74,   75,   76,   78,   79,   80,   82,   91,
+       92,   93,  105,  107,  108,  109,  110,  112,  114,  135,
+      139,  140
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -611,8 +611,7 @@ char *skel_text;
 #line 1 "scan-skel.l"
 /* Scan Bison Skeletons.                                       -*- C -*-
 
-   Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2009, 2010
-   Free Software Foundation, Inc.
+   Copyright (C) 2001-2007, 2009-2011 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -629,7 +628,7 @@ char *skel_text;
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 #define YY_NO_INPUT 1
-#line 25 "scan-skel.l"
+#line 24 "scan-skel.l"
 /* Work around a bug in flex 2.5.31.  See Debian bug 333231
    <http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=333231>.  */
 #undef skel_wrap
@@ -661,7 +660,7 @@ static void fail_for_at_directive_too_few_args (char const *at_directive_name);
 static void fail_for_invalid_at (char const *at);
 
 
-#line 665 "scan-skel.c"
+#line 664 "scan-skel.c"
 
 #define INITIAL 0
 #define SC_AT_DIRECTIVE_ARGS 1
@@ -908,11 +907,11 @@ YY_DECL
 	register int yy_act;
     
 /* %% [7.0] user's declarations go here */
-#line 59 "scan-skel.l"
+#line 58 "scan-skel.l"
 
 
 
-  int out_lineno IF_LINT (= 0);
+  int out_lineno PACIFY_CC (= 0);
   char *outname = NULL;
 
   /* Currently, only the @warn, @complain, @fatal, @warn_at, @complain_at, and
@@ -923,7 +922,7 @@ YY_DECL
   char *at_directive_argv[AT_DIRECTIVE_ARGC_MAX];
 
 
-#line 927 "scan-skel.c"
+#line 926 "scan-skel.c"
 
 	if ( !(yy_init) )
 		{
@@ -1035,48 +1034,48 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 73 "scan-skel.l"
+#line 72 "scan-skel.l"
 fputc ('@', skel_out);
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 74 "scan-skel.l"
+#line 73 "scan-skel.l"
 fputc ('[', skel_out);
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 75 "scan-skel.l"
+#line 74 "scan-skel.l"
 fputc (']', skel_out);
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 76 "scan-skel.l"
+#line 75 "scan-skel.l"
 /* Emtpy.  Used by b4_cat in ../data/bison.m4.  */
 	YY_BREAK
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 77 "scan-skel.l"
+#line 76 "scan-skel.l"
 /* Likewise.  */
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 79 "scan-skel.l"
+#line 78 "scan-skel.l"
 fprintf (skel_out, "%d", out_lineno + 1);
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 80 "scan-skel.l"
+#line 79 "scan-skel.l"
 QPUTS (outname);
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 81 "scan-skel.l"
+#line 80 "scan-skel.l"
 QPUTS (dir_prefix);
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 83 "scan-skel.l"
+#line 82 "scan-skel.l"
 {
   skel_text[skel_leng-1] = '\0';
   obstack_grow (&obstack_for_string, skel_text, skel_leng);
@@ -1088,22 +1087,22 @@ YY_RULE_SETUP
 /* This pattern must not match more than the previous @ patterns. */
 case 10:
 YY_RULE_SETUP
-#line 92 "scan-skel.l"
+#line 91 "scan-skel.l"
 fail_for_invalid_at (skel_text);
 	YY_BREAK
 case 11:
 /* rule 11 can match eol */
 YY_RULE_SETUP
-#line 93 "scan-skel.l"
+#line 92 "scan-skel.l"
 out_lineno++; ECHO;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 94 "scan-skel.l"
+#line 93 "scan-skel.l"
 ECHO;
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 96 "scan-skel.l"
+#line 95 "scan-skel.l"
 {
   if (outname)
     {
@@ -1117,39 +1116,39 @@ case YY_STATE_EOF(INITIAL):
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 106 "scan-skel.l"
+#line 105 "scan-skel.l"
 { STRING_GROW; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 108 "scan-skel.l"
+#line 107 "scan-skel.l"
 { obstack_1grow (&obstack_for_string, '@'); }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 109 "scan-skel.l"
+#line 108 "scan-skel.l"
 { obstack_1grow (&obstack_for_string, '['); }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 110 "scan-skel.l"
+#line 109 "scan-skel.l"
 { obstack_1grow (&obstack_for_string, ']'); }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 111 "scan-skel.l"
+#line 110 "scan-skel.l"
 /* Empty.  Useful for starting an argument
           that begins with whitespace. */
 	YY_BREAK
 case 18:
 /* rule 18 can match eol */
 YY_RULE_SETUP
-#line 113 "scan-skel.l"
+#line 112 "scan-skel.l"
 /* Empty.  */
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 115 "scan-skel.l"
+#line 114 "scan-skel.l"
 {
     if (at_directive_argc >= AT_DIRECTIVE_ARGC_MAX)
       fail_for_at_directive_too_many_args (at_directive_argv[0]);
@@ -1173,7 +1172,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 136 "scan-skel.l"
+#line 135 "scan-skel.l"
 { fail_for_invalid_at (skel_text); }
 	YY_BREAK
 
@@ -1181,19 +1180,19 @@ YY_RULE_SETUP
 case 21:
 /* rule 21 can match eol */
 YY_RULE_SETUP
-#line 140 "scan-skel.l"
+#line 139 "scan-skel.l"
 
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 141 "scan-skel.l"
+#line 140 "scan-skel.l"
 { yyless (0); BEGIN SC_AT_DIRECTIVE_ARGS; }
 	YY_BREAK
 
 
 case YY_STATE_EOF(SC_AT_DIRECTIVE_ARGS):
 case YY_STATE_EOF(SC_AT_DIRECTIVE_SKIP_WS):
-#line 145 "scan-skel.l"
+#line 144 "scan-skel.l"
 {
     fatal (_("unclosed %s directive in skeleton"), at_directive_argv[0]);
   }
@@ -1201,10 +1200,10 @@ case YY_STATE_EOF(SC_AT_DIRECTIVE_SKIP_WS):
 
 case 23:
 YY_RULE_SETUP
-#line 150 "scan-skel.l"
+#line 149 "scan-skel.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 1208 "scan-skel.c"
+#line 1207 "scan-skel.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2291,7 +2290,7 @@ void skel_free (void * ptr )
 
 /* %ok-for-header */
 
-#line 150 "scan-skel.l"
+#line 149 "scan-skel.l"
 
 
 

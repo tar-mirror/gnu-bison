@@ -1,7 +1,7 @@
 /* Parse command line arguments for Bison.
 
-   Copyright (C) 1984, 1986, 1989, 1992, 2000, 2001, 2002, 2003, 2004,
-   2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1986, 1989, 1992, 2000-2011 Free Software
+   Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -26,6 +26,7 @@
 #include <c-strcase.h>
 #include <configmake.h>
 #include <error.h>
+#include <quotearg.h>
 
 /* Hack to get <getopt.h> to declare getopt with a prototype.  */
 #if lint && ! defined __GNU_LIBRARY__
@@ -43,6 +44,7 @@
 #include "complain.h"
 #include "files.h"
 #include "getargs.h"
+#include "muscle-tab.h"
 #include "uniqstr.h"
 
 bool debug_flag;
@@ -61,7 +63,8 @@ bool glr_parser = false;
 
 int report_flag = report_none;
 int trace_flag = trace_none;
-int warnings_flag = warnings_none;
+int warnings_flag = warnings_conflicts_sr | warnings_conflicts_rr
+                    | warnings_other;
 
 static struct bison_language const valid_languages[] = {
   { "c", "c-skel.m4", ".c", ".h", true },
@@ -84,32 +87,46 @@ char *program_name;
  *  \param option   option being decoded.
  *  \param keys     array of valid subarguments.
  *  \param values   array of corresponding (int) values.
+ *  \param all      the all value.
  *  \param flags    the flags to update
- *  \param args     colon separated list of effective subarguments to decode.
+ *  \param args     comma separated list of effective subarguments to decode.
  *                  If 0, then activate all the flags.
  *
- *  The special value 0 resets the flags to 0.
+ *  If VALUE != 0 then KEY sets flags and no-KEY clears them.
+ *  If VALUE == 0 then KEY clears all flags from \c all and no-KEY sets all
+ *  flags from \c all.  Thus no-none = all and no-all = none.
  */
 static void
 flags_argmatch (const char *option,
 		const char * const keys[], const int values[],
-		int *flags, char *args)
+		int all, int *flags, char *args)
 {
   if (args)
     {
       args = strtok (args, ",");
       while (args)
 	{
-	  int value = XARGMATCH (option, args, keys, values);
+	  int no = strncmp (args, "no-", 3) == 0 ? 3 : 0;
+	  int value = XARGMATCH (option, args + no, keys, values);
 	  if (value == 0)
-	    *flags = 0;
+	    {
+	      if (no)
+		*flags |= all;
+	      else
+		*flags &= ~all;
+	    }
 	  else
-	    *flags |= value;
+	    {
+	      if (no)
+		*flags &= ~value;
+	      else
+		*flags |= value;
+	    }
 	  args = strtok (NULL, ",");
 	}
     }
   else
-    *flags = ~0;
+    *flags |= all;
 }
 
 /** Decode a set of sub arguments.
@@ -119,11 +136,12 @@ flags_argmatch (const char *option,
  *
  *  \arg FlagName_args   the list of keys.
  *  \arg FlagName_types  the list of values.
+ *  \arg FlagName_all    the all value.
  *  \arg FlagName_flag   the flag to update.
  */
 #define FLAGS_ARGMATCH(FlagName, Args)					\
   flags_argmatch ("--" #FlagName, FlagName ## _args, FlagName ## _types, \
-		  &FlagName ## _flag, Args)
+		  FlagName ## _all, &FlagName ## _flag, Args)
 
 
 /*----------------------.
@@ -174,10 +192,12 @@ static const char * const trace_args[] =
   "grammar    - reading, reducing the grammar",
   "resource   - memory consumption (where available)",
   "sets       - grammar sets: firsts, nullable etc.",
+  "muscles    - m4 definitions passed to the skeleton",
   "tools      - m4 invocation",
   "m4         - m4 traces",
   "skeleton   - skeleton postprocessing",
   "time       - time consumption",
+  "ielr       - IELR conversion",
   "all        - all of the above",
   0
 };
@@ -192,10 +212,12 @@ static const int trace_types[] =
   trace_grammar,
   trace_resource,
   trace_sets,
+  trace_muscles,
   trace_tools,
   trace_m4,
   trace_skeleton,
   trace_time,
+  trace_ielr,
   trace_all
 };
 
@@ -212,7 +234,10 @@ static const char * const warnings_args[] =
      that argmatch_valid be more readable.  */
   "none            - no warnings",
   "midrule-values  - unset or unused midrule values",
-  "yacc            - incompatibilities with POSIX YACC",
+  "yacc            - incompatibilities with POSIX Yacc",
+  "conflicts-sr    - S/R conflicts",
+  "conflicts-rr    - R/R conflicts",
+  "other           - all other warnings",
   "all             - all of the above",
   "error           - warnings are errors",
   0
@@ -223,6 +248,9 @@ static const int warnings_types[] =
   warnings_none,
   warnings_midrule_values,
   warnings_yacc,
+  warnings_conflicts_sr,
+  warnings_conflicts_rr,
+  warnings_other,
   warnings_all,
   warnings_error
 };
@@ -244,9 +272,16 @@ usage (int status)
 	     program_name);
   else
     {
+      /* For ../build-aux/cross-options.pl to work, use the format:
+		^  -S, --long[=ARGS] (whitespace)
+	 A --long option is required.
+	 Otherwise, add exceptions to ../build-aux/cross-options.pl.  */
+
       printf (_("Usage: %s [OPTION]... FILE\n"), program_name);
       fputs (_("\
-Generate LALR(1) and GLR parsers.\n\
+Generate a deterministic LR or generalized LR (GLR) parser employing\n\
+LALR(1), IELR(1), or canonical LR(1) parser tables.  IELR(1) and\n\
+canonical LR(1) support is experimental.\n\
 \n\
 "), stdout);
 
@@ -271,14 +306,16 @@ Operation modes:\n\
 
       fputs (_("\
 Parser:\n\
-  -L, --language=LANGUAGE    specify the output programming language\n\
-                             (this is an experimental feature)\n\
-  -S, --skeleton=FILE        specify the skeleton to use\n\
-  -t, --debug                instrument the parser for debugging\n\
-      --locations            enable locations computation\n\
-  -p, --name-prefix=PREFIX   prepend PREFIX to the external symbols\n\
-  -l, --no-lines             don't generate `#line' directives\n\
-  -k, --token-table          include a table of token names\n\
+  -L, --language=LANGUAGE          specify the output programming language\n\
+                                   (this is an experimental feature)\n\
+  -S, --skeleton=FILE              specify the skeleton to use\n\
+  -t, --debug                      instrument the parser for debugging\n\
+      --locations                  enable location support\n\
+  -D, --define=NAME[=VALUE]        similar to `%define NAME \"VALUE\"'\n\
+  -F, --force-define=NAME[=VALUE]  override `%define NAME \"VALUE\"'\n\
+  -p, --name-prefix=PREFIX         prepend PREFIX to the external symbols\n\
+  -l, --no-lines                   don't generate `#line' directives\n\
+  -k, --token-table                include a table of token names\n\
 \n\
 "), stdout);
 
@@ -302,7 +339,10 @@ Output:\n\
       fputs (_("\
 Warning categories include:\n\
   `midrule-values'  unset or unused midrule values\n\
-  `yacc'            incompatibilities with POSIX YACC\n\
+  `yacc'            incompatibilities with POSIX Yacc\n\
+  `conflicts-sr'    S/R conflicts (enabled by default)\n\
+  `conflicts-rr'    R/R conflicts (enabled by default)\n\
+  `other'           all other warnings (enabled by default)\n\
   `all'             all the warnings\n\
   `no-CATEGORY'     turn off warnings in CATEGORY\n\
   `none'            turn off all the warnings\n\
@@ -358,7 +398,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\
 `--------------------------------------*/
 
 void
-skeleton_arg (char const *arg, int prio, location const *loc)
+skeleton_arg (char const *arg, int prio, location loc)
 {
   if (prio < skeleton_prio)
     {
@@ -366,18 +406,11 @@ skeleton_arg (char const *arg, int prio, location const *loc)
       skeleton = arg;
     }
   else if (prio == skeleton_prio)
-    {
-      char const *msg =
-	_("multiple skeleton declarations are invalid");
-      if (loc)
-	complain_at (*loc, "%s", msg);
-      else
-	complain ("%s", msg);
-    }
+    complain_at (loc, _("multiple skeleton declarations are invalid"));
 }
 
 void
-language_argmatch (char const *arg, int prio, location const *loc)
+language_argmatch (char const *arg, int prio, location loc)
 {
   char const *msg;
 
@@ -398,10 +431,7 @@ language_argmatch (char const *arg, int prio, location const *loc)
   else
     return;
 
-  if (loc)
-    complain_at (*loc, msg, arg);
-  else
-    complain (msg, arg);
+  complain_at (loc, msg, arg);
 }
 
 /*----------------------.
@@ -411,6 +441,8 @@ language_argmatch (char const *arg, int prio, location const *loc)
 /* Shorts options.
    Should be computed from long_options.  */
 static char const short_options[] =
+  "D:"
+  "F:"
   "L:"
   "S:"
   "T::"
@@ -477,6 +509,8 @@ static struct option const long_options[] =
 
   /* Parser.  */
   { "debug",	      no_argument,               0,   't' },
+  { "define",	      required_argument,         0,   'D' },
+  { "force-define",   required_argument,         0,   'F' },
   { "locations",      no_argument,		 0, LOCATIONS_OPTION },
   { "no-lines",       no_argument,               0,   'l' },
   { "raw",            no_argument,               0,     0 },
@@ -495,6 +529,19 @@ static struct option const long_options[] =
 # define AS_FILE_NAME(File) (File)
 #endif
 
+/* Build a location for the current command line argument. */
+static
+location
+command_line_location (void)
+{
+  location res;
+  /* "<command line>" is used in GCC's messages about -D. */
+  boundary_set (&res.start, uniqstr_new ("<command line>"), optind, -1);
+  res.end = res.start;
+  return res;
+}
+
+
 void
 getargs (int argc, char *argv[])
 {
@@ -504,15 +551,25 @@ getargs (int argc, char *argv[])
 	 != -1)
     switch (c)
       {
+        /* ASCII Sorting for short options (i.e., upper case then
+           lower case), and then long-only options.  */
+
       case 0:
 	/* Certain long options cause getopt_long to return 0.  */
 	break;
 
-      case 'd':
-	/* Here, the -d and --defines options are differentiated.  */
-	defines_flag = true;
-	if (optarg)
-	  spec_defines_file = xstrdup (AS_FILE_NAME (optarg));
+      case 'D': /* -DNAME[=VALUE]. */
+      case 'F': /* -FNAME[=VALUE]. */
+        {
+          char* name = optarg;
+          char* value = mbschr (optarg, '=');
+          if (value)
+            *value++ = 0;
+          muscle_percent_define_insert (name, command_line_location (),
+                                        value ? value : "",
+                                        c == 'D' ? MUSCLE_PERCENT_DEFINE_D
+                                                 : MUSCLE_PERCENT_DEFINE_F);
+        }
 	break;
 
       case 'I':
@@ -520,11 +577,13 @@ getargs (int argc, char *argv[])
 	break;
 
       case 'L':
-	language_argmatch (optarg, command_line_prio, NULL);
+	language_argmatch (optarg, command_line_prio,
+			   command_line_location ());
 	break;
 
       case 'S':
-	skeleton_arg (AS_FILE_NAME (optarg), command_line_prio, NULL);
+	skeleton_arg (AS_FILE_NAME (optarg), command_line_prio,
+		      command_line_location ());
 	break;
 
       case 'T':
@@ -536,15 +595,19 @@ getargs (int argc, char *argv[])
 	exit (EXIT_SUCCESS);
 
       case 'W':
-	if (optarg)
-	  FLAGS_ARGMATCH (warnings, optarg);
-	else
-	  warnings_flag |= warnings_all;
+	FLAGS_ARGMATCH (warnings, optarg);
 	break;
 
       case 'b':
 	spec_file_prefix = AS_FILE_NAME (optarg);
 	break;
+
+      case 'd':
+        /* Here, the -d and --defines options are differentiated.  */
+        defines_flag = true;
+        if (optarg)
+          spec_defines_file = xstrdup (AS_FILE_NAME (optarg));
+        break;
 
       case 'g':
 	graph_flag = true;
@@ -623,4 +686,13 @@ getargs (int argc, char *argv[])
     }
 
   current_file = grammar_file = uniqstr_new (argv[optind]);
+  MUSCLE_INSERT_C_STRING ("file_name", grammar_file);
+}
+
+void
+tr (char *s, char from, char to)
+{
+  for (; *s; s++)
+    if (*s == from)
+      *s = to;
 }

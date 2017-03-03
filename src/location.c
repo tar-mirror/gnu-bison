@@ -1,7 +1,6 @@
 /* Locations for Bison
 
-   Copyright (C) 2002, 2005, 2006, 2007, 2008, 2009, 2010 Free
-   Software Foundation, Inc.
+   Copyright (C) 2002, 2005-2011 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -99,40 +98,44 @@ location_compute (location *loc, boundary *cur, char const *token, size_t size)
 
 /* Output to OUT the location LOC.
    Warning: it uses quotearg's slot 3.  */
-void
+unsigned
 location_print (FILE *out, location loc)
 {
+  unsigned res = 0;
   int end_col = 0 != loc.end.column ? loc.end.column - 1 : 0;
-  fprintf (out, "%s",
-           quotearg_n_style (3, escape_quoting_style, loc.start.file));
+  res += fprintf (out, "%s",
+                  quotearg_n_style (3, escape_quoting_style, loc.start.file));
   if (0 <= loc.start.line)
     {
-      fprintf(out, ":%d", loc.start.line);
+      res += fprintf(out, ":%d", loc.start.line);
       if (0 <= loc.start.column)
-        fprintf (out, ".%d", loc.start.column);
+        res += fprintf (out, ".%d", loc.start.column);
     }
   if (loc.start.file != loc.end.file)
     {
-      fprintf (out, "-%s",
-               quotearg_n_style (3, escape_quoting_style, loc.end.file));
+      res += fprintf (out, "-%s",
+                      quotearg_n_style (3, escape_quoting_style,
+                                        loc.end.file));
       if (0 <= loc.end.line)
         {
-          fprintf(out, ":%d", loc.end.line);
+          res += fprintf(out, ":%d", loc.end.line);
           if (0 <= end_col)
-            fprintf (out, ".%d", end_col);
+            res += fprintf (out, ".%d", end_col);
         }
     }
   else if (0 <= loc.end.line)
     {
       if (loc.start.line < loc.end.line)
         {
-          fprintf (out, "-%d", loc.end.line);
+          res += fprintf (out, "-%d", loc.end.line);
           if (0 <= end_col)
-            fprintf (out, ".%d", end_col);
+            res += fprintf (out, ".%d", end_col);
         }
       else if (0 <= end_col && loc.start.column < end_col)
-        fprintf (out, "-%d", end_col);
+        res += fprintf (out, "-%d", end_col);
     }
+
+  return res;
 }
 
 void
@@ -140,11 +143,11 @@ boundary_set_from_string (boundary *bound, char *loc_str)
 {
   /* Must search in reverse since the file name field may
    * contain `.' or `:'.  */
-  char *delim = strrchr (loc_str, '.');
+  char *delim = mbsrchr (loc_str, '.');
   aver (delim);
   *delim = '\0';
   bound->column = atoi (delim+1);
-  delim = strrchr (loc_str, ':');
+  delim = mbsrchr (loc_str, ':');
   aver (delim);
   *delim = '\0';
   bound->line = atoi (delim+1);

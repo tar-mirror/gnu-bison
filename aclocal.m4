@@ -19,59 +19,6 @@ You have another version of autoconf.  It may work, but is not guaranteed to.
 If you have problems, you may need to regenerate the build system entirely.
 To do so, use the procedure documented by the package, typically `autoreconf'.])])
 
-# codeset.m4 serial 2 (gettext-0.16)
-dnl Copyright (C) 2000-2002, 2006 Free Software Foundation, Inc.
-dnl This file is free software; the Free Software Foundation
-dnl gives unlimited permission to copy and/or distribute it,
-dnl with or without modifications, as long as this notice is preserved.
-
-dnl From Bruno Haible.
-
-AC_DEFUN([AM_LANGINFO_CODESET],
-[
-  AC_CACHE_CHECK([for nl_langinfo and CODESET], am_cv_langinfo_codeset,
-    [AC_TRY_LINK([#include <langinfo.h>],
-      [char* cs = nl_langinfo(CODESET); return !cs;],
-      am_cv_langinfo_codeset=yes,
-      am_cv_langinfo_codeset=no)
-    ])
-  if test $am_cv_langinfo_codeset = yes; then
-    AC_DEFINE(HAVE_LANGINFO_CODESET, 1,
-      [Define if you have <langinfo.h> and nl_langinfo(CODESET).])
-  fi
-])
-
-# glibc21.m4 serial 3
-dnl Copyright (C) 2000-2002, 2004 Free Software Foundation, Inc.
-dnl This file is free software; the Free Software Foundation
-dnl gives unlimited permission to copy and/or distribute it,
-dnl with or without modifications, as long as this notice is preserved.
-
-# Test for the GNU C Library, version 2.1 or newer.
-# From Bruno Haible.
-
-AC_DEFUN([gl_GLIBC21],
-  [
-    AC_CACHE_CHECK(whether we are using the GNU C Library 2.1 or newer,
-      ac_cv_gnu_library_2_1,
-      [AC_EGREP_CPP([Lucky GNU user],
-	[
-#include <features.h>
-#ifdef __GNU_LIBRARY__
- #if (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1) || (__GLIBC__ > 2)
-  Lucky GNU user
- #endif
-#endif
-	],
-	ac_cv_gnu_library_2_1=yes,
-	ac_cv_gnu_library_2_1=no)
-      ]
-    )
-    AC_SUBST(GLIBC21)
-    GLIBC21="$ac_cv_gnu_library_2_1"
-  ]
-)
-
 # Copyright (C) 2002, 2003, 2005, 2006, 2007, 2008  Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
@@ -1044,26 +991,39 @@ m4_include([m4/asm-underscore.m4])
 m4_include([m4/assert.m4])
 m4_include([m4/bison-i18n.m4])
 m4_include([m4/c-working.m4])
+m4_include([m4/calloc.m4])
 m4_include([m4/cloexec.m4])
+m4_include([m4/close.m4])
+m4_include([m4/codeset.m4])
 m4_include([m4/config-h.m4])
+m4_include([m4/configmake.m4])
 m4_include([m4/cxx.m4])
 m4_include([m4/dirname.m4])
 m4_include([m4/dmalloc.m4])
-m4_include([m4/dos.m4])
 m4_include([m4/double-slash-root.m4])
 m4_include([m4/dup2.m4])
 m4_include([m4/environ.m4])
 m4_include([m4/errno_h.m4])
 m4_include([m4/error.m4])
+m4_include([m4/exponentd.m4])
+m4_include([m4/exponentf.m4])
+m4_include([m4/exponentl.m4])
 m4_include([m4/extensions.m4])
 m4_include([m4/fatal-signal.m4])
+m4_include([m4/fclose.m4])
 m4_include([m4/fcntl-o.m4])
 m4_include([m4/fcntl.m4])
 m4_include([m4/fcntl_h.m4])
+m4_include([m4/float_h.m4])
 m4_include([m4/fopen.m4])
+m4_include([m4/fpieee.m4])
+m4_include([m4/fprintf-posix.m4])
+m4_include([m4/frexp.m4])
+m4_include([m4/frexpl.m4])
 m4_include([m4/getdtablesize.m4])
 m4_include([m4/getopt.m4])
 m4_include([m4/gettext.m4])
+m4_include([m4/glibc21.m4])
 m4_include([m4/gnulib-common.m4])
 m4_include([m4/gnulib-comp.m4])
 m4_include([m4/hash.m4])
@@ -1071,10 +1031,19 @@ m4_include([m4/iconv.m4])
 m4_include([m4/include_next.m4])
 m4_include([m4/inline.m4])
 m4_include([m4/intlmacosx.m4])
+m4_include([m4/intmax_t.m4])
 m4_include([m4/inttypes-pri.m4])
 m4_include([m4/inttypes.m4])
+m4_include([m4/inttypes_h.m4])
+m4_include([m4/ioctl.m4])
+m4_include([m4/isnan.m4])
+m4_include([m4/isnand.m4])
+m4_include([m4/isnanf.m4])
+m4_include([m4/isnanl.m4])
+m4_include([m4/iswblank.m4])
 m4_include([m4/javacomp.m4])
 m4_include([m4/javaexec.m4])
+m4_include([m4/ldexpl.m4])
 m4_include([m4/lib-ld.m4])
 m4_include([m4/lib-link.m4])
 m4_include([m4/lib-prefix.m4])
@@ -1086,6 +1055,9 @@ m4_include([m4/locale-zh.m4])
 m4_include([m4/longlong.m4])
 m4_include([m4/m4.m4])
 m4_include([m4/malloc.m4])
+m4_include([m4/math_h.m4])
+m4_include([m4/mbchar.m4])
+m4_include([m4/mbiter.m4])
 m4_include([m4/mbrtowc.m4])
 m4_include([m4/mbsinit.m4])
 m4_include([m4/mbstate_t.m4])
@@ -1095,31 +1067,47 @@ m4_include([m4/mmap-anon.m4])
 m4_include([m4/mode_t.m4])
 m4_include([m4/multiarch.m4])
 m4_include([m4/nls.m4])
+m4_include([m4/nocrash.m4])
 m4_include([m4/open.m4])
+m4_include([m4/perror.m4])
 m4_include([m4/pipe.m4])
 m4_include([m4/pipe2.m4])
 m4_include([m4/po.m4])
 m4_include([m4/posix_spawn.m4])
+m4_include([m4/printf-frexp.m4])
+m4_include([m4/printf-frexpl.m4])
+m4_include([m4/printf-posix-rpl.m4])
+m4_include([m4/printf.m4])
 m4_include([m4/progtest.m4])
 m4_include([m4/quote.m4])
 m4_include([m4/quotearg.m4])
 m4_include([m4/rawmemchr.m4])
+m4_include([m4/realloc.m4])
 m4_include([m4/sched_h.m4])
 m4_include([m4/setenv.m4])
 m4_include([m4/sig_atomic_t.m4])
 m4_include([m4/sigaction.m4])
 m4_include([m4/signal_h.m4])
 m4_include([m4/signalblocking.m4])
+m4_include([m4/signbit.m4])
+m4_include([m4/size_max.m4])
+m4_include([m4/snprintf-posix.m4])
+m4_include([m4/snprintf.m4])
+m4_include([m4/socklen.m4])
+m4_include([m4/spawn-pipe.m4])
 m4_include([m4/spawn_h.m4])
+m4_include([m4/sprintf-posix.m4])
 m4_include([m4/stat.m4])
 m4_include([m4/stdbool.m4])
 m4_include([m4/stddef_h.m4])
 m4_include([m4/stdint.m4])
+m4_include([m4/stdint_h.m4])
 m4_include([m4/stdio-safer.m4])
 m4_include([m4/stdio_h.m4])
 m4_include([m4/stdlib_h.m4])
 m4_include([m4/stpcpy.m4])
 m4_include([m4/strchrnul.m4])
+m4_include([m4/strdup.m4])
 m4_include([m4/strerror.m4])
 m4_include([m4/string_h.m4])
 m4_include([m4/strndup.m4])
@@ -1128,6 +1116,8 @@ m4_include([m4/strtol.m4])
 m4_include([m4/strtoul.m4])
 m4_include([m4/strverscmp.m4])
 m4_include([m4/subpipe.m4])
+m4_include([m4/sys_ioctl_h.m4])
+m4_include([m4/sys_socket_h.m4])
 m4_include([m4/sys_stat_h.m4])
 m4_include([m4/sys_wait_h.m4])
 m4_include([m4/time_h.m4])
@@ -1135,7 +1125,13 @@ m4_include([m4/timevar.m4])
 m4_include([m4/unistd-safer.m4])
 m4_include([m4/unistd_h.m4])
 m4_include([m4/unlocked-io.m4])
+m4_include([m4/vasnprintf.m4])
+m4_include([m4/vfprintf-posix.m4])
+m4_include([m4/vsnprintf-posix.m4])
+m4_include([m4/vsnprintf.m4])
+m4_include([m4/vsprintf-posix.m4])
 m4_include([m4/wait-process.m4])
+m4_include([m4/waitpid.m4])
 m4_include([m4/warn-on-use.m4])
 m4_include([m4/warnings.m4])
 m4_include([m4/wchar_h.m4])
@@ -1144,4 +1140,5 @@ m4_include([m4/wctype_h.m4])
 m4_include([m4/wcwidth.m4])
 m4_include([m4/wint_t.m4])
 m4_include([m4/xalloc.m4])
+m4_include([m4/xsize.m4])
 m4_include([m4/xstrndup.m4])

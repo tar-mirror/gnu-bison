@@ -1,7 +1,6 @@
 # Checking the Bison scanner.                    -*- Autotest -*-
 
-# Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2009, 2010 Free
-# Software Foundation, Inc.
+# Copyright (C) 2002-2011 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -98,16 +97,16 @@ m4_ifval($1, [
 ], [_AT_UNUSED_VALUES_DECLARATIONS
 ])[[%%
 start:
-  'a' a { $]2[ } | 'b' b { $]2[ } | 'c' c { $]2[ } | 'd' d { $]2[ } | 'e' e { $]2[ }
-| 'f' f { $]2[ } | 'g' g { $]2[ } | 'h' h { $]2[ } | 'i' i { $]2[ } | 'j' j { $]2[ }
-| 'k' k { $]2[ } | 'l' l { $]2[ }
+  'a' a { $]2[; } | 'b' b { $]2[; } | 'c' c { $]2[; } | 'd' d { $]2[; }
+| 'e' e { $]2[; } | 'f' f { $]2[; } | 'g' g { $]2[; } | 'h' h { $]2[; }
+| 'i' i { $]2[; } | 'j' j { $]2[; } | 'k' k { $]2[; } | 'l' l { $]2[; }
 ;
 
 a: INT | INT { } INT { } INT { };
 b: INT | /* empty */;
-c: INT | INT { $]1[ } INT { $<integer>2 } INT { $<integer>4 };
-d: INT | INT { } INT { $]1[ } INT { $<integer>2 };
-e: INT | INT { } INT {  } INT { $]1[ };
+c: INT | INT { $]1[; } INT { $<integer>2; } INT { $<integer>4; };
+d: INT | INT { } INT { $]1[; } INT { $<integer>2; };
+e: INT | INT { } INT {  } INT { $]1[; };
 f: INT | INT { } INT {  } INT { $]$[ = $]1[ + $]3[ + $]5[; };
 g: INT | INT { $<integer>$; } INT { $<integer>$; } INT { };
 h: INT | INT { $<integer>$; } INT { $<integer>$ = $<integer>2; } INT { };
@@ -124,18 +123,18 @@ input.y:11.10-32: warning: unused value: $]1[
 input.y:11.10-32: warning: unused value: $]3[
 input.y:11.10-32: warning: unused value: $]5[
 input.y:12.9: warning: empty rule for typed nonterminal, and no action
-]]m4_ifval($2, [[[input.y:13.14-19: warning: unset value: $$
-input.y:13.25-39: warning: unset value: $$
-]]])[[input.y:13.10-59: warning: unset value: $]$[
-input.y:13.10-59: warning: unused value: $]3[
-input.y:13.10-59: warning: unused value: $]5[
+]]m4_ifval($2, [[[input.y:13.14-20: warning: unset value: $$
+input.y:13.26-41: warning: unset value: $$
+]]])[[input.y:13.10-62: warning: unset value: $]$[
+input.y:13.10-62: warning: unused value: $]3[
+input.y:13.10-62: warning: unused value: $]5[
 ]]m4_ifval($2, [[[input.y:14.14-16: warning: unset value: $$
-]]])[[input.y:14.10-47: warning: unset value: $]$[
-input.y:14.10-47: warning: unused value: $]3[
-input.y:14.10-47: warning: unused value: $]5[
-input.y:15.10-36: warning: unset value: $]$[
-input.y:15.10-36: warning: unused value: $]3[
-input.y:15.10-36: warning: unused value: $]5[
+]]])[[input.y:14.10-49: warning: unset value: $]$[
+input.y:14.10-49: warning: unused value: $]3[
+input.y:14.10-49: warning: unused value: $]5[
+input.y:15.10-37: warning: unset value: $]$[
+input.y:15.10-37: warning: unused value: $]3[
+input.y:15.10-37: warning: unused value: $]5[
 input.y:17.10-58: warning: unset value: $]$[
 input.y:17.10-58: warning: unused value: $]1[
 ]]m4_ifval($2, [[[input.y:17.10-58: warning: unused value: $]2[
@@ -616,6 +615,106 @@ AT_BISON_CHECK([-o input.c input.y])
 AT_CLEANUP
 
 
+## -------------- ##
+## Symbol names.  ##
+## -------------- ##
+
+AT_SETUP([Symbols])
+
+AT_DATA_GRAMMAR([input.y],
+[[%token WITH-DASH
+%token WITHOUT_DASH "WITHOUT-DASH"
+%token WITH.PERIOD
+%token WITHOUT_PERIOD "WITHOUT.PERIOD"
+%code {
+  void yyerror (char const *);
+  int yylex (void);
+}
+%%
+start: with-dash without_dash with.period without_period;
+with-dash: WITH-DASH;
+without_dash: "WITHOUT-DASH";
+with.period: WITH.PERIOD;
+without_period: "WITHOUT.PERIOD";
+%%
+]])
+
+# POSIX Yacc accept periods, but not dashes.
+AT_BISON_CHECK([--yacc input.y], [1], [],
+[[input.y:9.8-16: POSIX Yacc forbids dashes in symbol names: WITH-DASH
+input.y:18.8-16: POSIX Yacc forbids dashes in symbol names: with-dash
+]])
+
+# So warn about them.
+AT_BISON_CHECK([-Wyacc input.y], [], [],
+[[input.y:9.8-16: warning: POSIX Yacc forbids dashes in symbol names: WITH-DASH
+input.y:18.8-16: warning: POSIX Yacc forbids dashes in symbol names: with-dash
+]])
+
+# Dashes are fine for GNU Bison.
+AT_BISON_CHECK([-o input.c input.y])
+
+# Make sure we don't export silly token identifiers with periods or dashes.
+AT_COMPILE([input.o], [-c input.c])
+
+
+# Periods are genuine letters, they can start identifiers.
+# Digits and dashes cannot.
+AT_DATA_GRAMMAR([input.y],
+[[%token .GOOD
+         -GOOD
+         1NV4L1D
+         -123
+%%
+start: .GOOD GOOD
+]])
+AT_BISON_CHECK([-o input.c input.y], [1], [],
+[[input.y:10.10: invalid character: `-'
+input.y:11.10-16: invalid identifier: `1NV4L1D'
+input.y:12.10: invalid character: `-'
+]])
+
+AT_CLEANUP
+
+
+## ----------------- ##
+## Numbered tokens.  ##
+## ----------------- ##
+
+AT_SETUP([Numbered tokens])
+
+AT_DATA_GRAMMAR([redecl.y],
+[[%token DECIMAL_1     11259375
+         HEXADECIMAL_1 0xabcdef
+         HEXADECIMAL_2 0xFEDCBA
+         DECIMAL_2     16702650
+%%
+start: DECIMAL_1 HEXADECIMAL_2;
+]])
+
+AT_BISON_CHECK([redecl.y], [1], [],
+[[redecl.y:10.10-22: user token number 11259375 redeclaration for HEXADECIMAL_1
+redecl.y:9.8-16: previous declaration for DECIMAL_1
+redecl.y:12.10-18: user token number 16702650 redeclaration for DECIMAL_2
+redecl.y:11.10-22: previous declaration for HEXADECIMAL_2
+]])
+
+AT_DATA_GRAMMAR([too-large.y],
+[[%token TOO_LARGE_DEC 999999999999999999999
+         TOO_LARGE_HEX 0xFFFFFFFFFFFFFFFFFFF
+%%
+start: TOO_LARGE_DEC TOO_LARGE_HEX
+%%
+]])
+
+AT_BISON_CHECK([too-large.y], [1], [],
+[[too-large.y:9.22-42: integer out of range: `999999999999999999999'
+too-large.y:10.24-44: integer out of range: `0xFFFFFFFFFFFFFFFFFFF'
+]])
+
+AT_CLEANUP
+
+
 ## --------------------- ##
 ## Unclosed constructs.  ##
 ## --------------------- ##
@@ -737,11 +836,11 @@ AT_DATA([input-c.y],
 %%
 start: ;
 ]])
-AT_BISON_CHECK([[input-c.y]], [0], [],
-[[input-c.y:1.7: warning: %code qualifier `q' is not used
-input-c.y:2.7-9: warning: %code qualifier `bad' is not used
-input-c.y:3.7-9: warning: %code qualifier `bad' is not used
-input-c.y:4.7-12: warning: %code qualifier `format' is not used
+AT_BISON_CHECK([[input-c.y]], [[1]], [],
+[[input-c.y:1.7: %code qualifier `q' is not used
+input-c.y:2.7-9: %code qualifier `bad' is not used
+input-c.y:3.7-9: %code qualifier `bad' is not used
+input-c.y:4.7-12: %code qualifier `format' is not used
 ]])
 
 AT_DATA([input-c-glr.y],
@@ -751,10 +850,10 @@ AT_DATA([input-c-glr.y],
 %%
 start: ;
 ]])
-AT_BISON_CHECK([[input-c-glr.y]], [0], [],
-[[input-c-glr.y:1.7: warning: %code qualifier `q' is not used
-input-c-glr.y:2.7-9: warning: %code qualifier `bad' is not used
-input-c-glr.y:3.8-10: warning: %code qualifier `bad' is not used
+AT_BISON_CHECK([[input-c-glr.y]], [[1]], [],
+[[input-c-glr.y:1.7: %code qualifier `q' is not used
+input-c-glr.y:2.7-9: %code qualifier `bad' is not used
+input-c-glr.y:3.8-10: %code qualifier `bad' is not used
 ]])
 
 AT_DATA([input-c++.y],
@@ -764,10 +863,10 @@ AT_DATA([input-c++.y],
 %%
 start: ;
 ]])
-AT_BISON_CHECK([[input-c++.y]], [0], [],
-[[input-c++.y:1.7: warning: %code qualifier `q' is not used
-input-c++.y:2.7-9: warning: %code qualifier `bad' is not used
-input-c++.y:3.8: warning: %code qualifier `q' is not used
+AT_BISON_CHECK([[input-c++.y]], [[1]], [],
+[[input-c++.y:1.7: %code qualifier `q' is not used
+input-c++.y:2.7-9: %code qualifier `bad' is not used
+input-c++.y:3.8: %code qualifier `q' is not used
 ]])
 
 AT_DATA([input-c++-glr.y],
@@ -777,10 +876,10 @@ AT_DATA([input-c++-glr.y],
 %%
 start: ;
 ]])
-AT_BISON_CHECK([[input-c++-glr.y]], [0], [],
-[[input-c++-glr.y:1.7-9: warning: %code qualifier `bad' is not used
-input-c++-glr.y:2.7: warning: %code qualifier `q' is not used
-input-c++-glr.y:3.7: warning: %code qualifier `q' is not used
+AT_BISON_CHECK([[input-c++-glr.y]], [[1]], [],
+[[input-c++-glr.y:1.7-9: %code qualifier `bad' is not used
+input-c++-glr.y:2.7: %code qualifier `q' is not used
+input-c++-glr.y:3.7: %code qualifier `q' is not used
 ]])
 
 AT_DATA([special-char-@@.y],
@@ -790,10 +889,10 @@ AT_DATA([special-char-@@.y],
 %%
 start: ;
 ]])
-AT_BISON_CHECK([[special-char-@@.y]], [0], [],
-[[special-char-@@.y:1.7-9: warning: %code qualifier `bad' is not used
-special-char-@@.y:2.7: warning: %code qualifier `q' is not used
-special-char-@@.y:3.7: warning: %code qualifier `q' is not used
+AT_BISON_CHECK([[special-char-@@.y]], [[1]], [],
+[[special-char-@@.y:1.7-9: %code qualifier `bad' is not used
+special-char-@@.y:2.7: %code qualifier `q' is not used
+special-char-@@.y:3.7: %code qualifier `q' is not used
 ]])
 
 AT_DATA([special-char-@:>@.y],
@@ -803,10 +902,10 @@ AT_DATA([special-char-@:>@.y],
 %%
 start: ;
 ]])
-AT_BISON_CHECK([[special-char-@:>@.y]], [0], [],
-[[special-char-@:>@.y:1.7-9: warning: %code qualifier `bad' is not used
-special-char-@:>@.y:2.7: warning: %code qualifier `q' is not used
-special-char-@:>@.y:3.7: warning: %code qualifier `q' is not used
+AT_BISON_CHECK([[special-char-@:>@.y]], [[1]], [],
+[[special-char-@:>@.y:1.7-9: %code qualifier `bad' is not used
+special-char-@:>@.y:2.7: %code qualifier `q' is not used
+special-char-@:>@.y:3.7: %code qualifier `q' is not used
 ]])
 
 AT_CLEANUP
@@ -818,7 +917,7 @@ AT_CLEANUP
 
 AT_SETUP([%define errors])
 
-AT_DATA([input.y],
+AT_DATA([input-redefined.y],
 [[%define var "value1"
 %define var "value1"
  %define var "value2"
@@ -828,16 +927,75 @@ AT_DATA([input.y],
 start: ;
 ]])
 
-AT_BISON_CHECK([[input.y]], [0], [],
-[[input.y:2.9-11: warning: %define variable `var' redefined
-input.y:1.9-11: warning: previous definition
-input.y:3.10-12: warning: %define variable `var' redefined
-input.y:2.9-11: warning: previous definition
-input.y:1.9-11: warning: %define variable `var' is not used
-input.y:2.9-11: warning: %define variable `var' is not used
-input.y:3.10-12: warning: %define variable `var' is not used
-input.y:4.9-16: warning: %define variable `special1' is not used
-input.y:5.9-16: warning: %define variable `special2' is not used
+AT_BISON_CHECK([[input-redefined.y]], [[1]], [],
+[[input-redefined.y:2.9-11: %define variable `var' redefined
+input-redefined.y:1.9-11: previous definition
+input-redefined.y:3.10-12: %define variable `var' redefined
+input-redefined.y:2.9-11: previous definition
+]])
+
+AT_DATA([input-unused.y],
+[[%define var "value"
+%%
+start: ;
+]])
+
+AT_BISON_CHECK([[input-unused.y]], [[1]], [],
+[[input-unused.y:1.9-11: %define variable `var' is not used
+]])
+
+AT_CLEANUP
+
+
+## ----------------------------------- ##
+## %define, --define, --force-define.  ##
+## ----------------------------------- ##
+
+AT_SETUP([[%define, --define, --force-define]])
+
+AT_DATA([[skel.c]],
+[[m4@&t@_divert_push(0)@
+@output(b4_parser_file_name@)@
+[var-dd: ]b4_percent_define_get([[var-dd]])[
+var-ff: ]b4_percent_define_get([[var-ff]])[
+var-dfg: ]b4_percent_define_get([[var-dfg]])[
+var-fd: ]b4_percent_define_get([[var-fd]])
+m4@&t@_divert_pop(0)
+]])
+AT_DATA([[input.y]],
+[[%define var-dfg "gram"
+%%
+start: ;
+]])
+AT_BISON_CHECK([[-Dvar-dd=cmd-d1 -Dvar-dd=cmd-d2 \
+                 -Fvar-ff=cmd-f1 -Fvar-ff=cmd-f2 \
+                 -Dvar-dfg=cmd-d -Fvar-dfg=cmd-f \
+                 -Fvar-fd=cmd-f -Dvar-fd=cmd-d   \
+                 --skeleton ./skel.c input.y]])
+AT_CHECK([[cat input.tab.c]], [[0]],
+[[var-dd: cmd-d2
+var-ff: cmd-f2
+var-dfg: cmd-f
+var-fd: cmd-d
+]])
+
+AT_DATA([[input-dg.y]],
+[[%define var "gram"
+%%
+start: ;
+]])
+AT_BISON_CHECK([[-Dvar=cmd-d input-dg.y]], [[1]], [],
+[[input-dg.y:1.9-11: %define variable `var' redefined
+<command line>:2: previous definition
+]])
+
+AT_DATA([[input-unused.y]],
+[[%%
+start: ;
+]])
+AT_BISON_CHECK([[-Dunused-d -Funused-f input-unused.y]], [[1]], [],
+[[<command line>:2: %define variable `unused-d' is not used
+<command line>:3: %define variable `unused-f' is not used
 ]])
 
 AT_CLEANUP
@@ -868,14 +1026,71 @@ AT_CLEANUP
 
 AT_SETUP([[%define enum variables]])
 
+# Front-end.
+AT_DATA([[input.y]],
+[[%define lr.default-reductions bogus
+%%
+start: ;
+]])
+AT_BISON_CHECK([[input.y]], [[1]], [[]],
+[[input.y:1.9-29: invalid value for %define variable `lr.default-reductions': `bogus'
+input.y:1.9-29: accepted value: `most'
+input.y:1.9-29: accepted value: `consistent'
+input.y:1.9-29: accepted value: `accepting'
+]])
+
+# Back-end.
+AT_DATA([[input.y]],
+[[%define api.push-pull neither
+%%
+start: ;
+]])
+AT_BISON_CHECK([[input.y]], [1], [],
+[[input.y:1.9-21: invalid value for %define variable `api.push-pull': `neither'
+input.y:1.9-21: accepted value: `pull'
+input.y:1.9-21: accepted value: `push'
+input.y:1.9-21: accepted value: `both'
+]])
+
+AT_CLEANUP
+
+## -------------------------------- ##
+## %define backward compatibility.  ##
+## -------------------------------- ##
+
+AT_SETUP([[%define backward compatibility]])
+
+# The error messages tell us whether underscores in these variables are
+# being converted to dashes.
+
 AT_DATA([[input.y]],
 [[%define api.push_pull "neither"
 %%
 start: ;
 ]])
-
 AT_BISON_CHECK([[input.y]], [1], [],
-[[input.y:1.9-21: invalid value for %define variable `api.push_pull': `neither'
+[[input.y:1.9-21: invalid value for %define variable `api.push-pull': `neither'
+input.y:1.9-21: accepted value: `pull'
+input.y:1.9-21: accepted value: `push'
+input.y:1.9-21: accepted value: `both'
+]])
+
+AT_DATA([[input.y]],
+[[%define lr.keep_unreachable_states maybe
+%%
+start: ;
+]])
+AT_BISON_CHECK([[input.y]], [1], [],
+[[input.y:1.9-34: invalid value for %define Boolean variable `lr.keep-unreachable-states'
+]])
+
+AT_DATA([[input.y]],
+[[%define foo_bar "baz"
+%%
+start: ;
+]])
+AT_BISON_CHECK([[input.y]], [[1]], [],
+[[input.y:1.9-15: %define variable `foo_bar' is not used
 ]])
 
 AT_CLEANUP
@@ -899,17 +1114,17 @@ AT_DATA([[input.y]],
 start: ;
 ]])
 
-AT_BISON_CHECK([[input.y]], [0], [],
-[[input.y:1.9-16: warning: %define variable `api.pure' is not used
+AT_BISON_CHECK([[input.y]], [[1]], [],
+[[input.y:1.9-16: %define variable `api.pure' is not used
 ]])
 ])
 
 AT_CHECK_API_PURE([[%language "c++" %defines]], [[]])
-AT_CHECK_API_PURE([[%language "c++" %defines]], [["false"]])
+AT_CHECK_API_PURE([[%language "c++" %defines]], [[false]])
 AT_CHECK_API_PURE([[%language "c++" %defines %glr-parser]], [[""]])
-AT_CHECK_API_PURE([[%language "c++" %defines %glr-parser]], [["false"]])
-AT_CHECK_API_PURE([[%language "java"]], [["true"]])
-AT_CHECK_API_PURE([[%language "java"]], [["false"]])
+AT_CHECK_API_PURE([[%language "c++" %defines %glr-parser]], [[false]])
+AT_CHECK_API_PURE([[%language "java"]], [[true]])
+AT_CHECK_API_PURE([[%language "java"]], [[false]])
 
 AT_CLEANUP
 
@@ -962,6 +1177,66 @@ AT_CHECK_NAMESPACE_ERROR([[::]],
 
 AT_CLEANUP
 
+## ------------------------ ##
+## Bad character literals.  ##
+## ------------------------ ##
+
+# Bison used to accept character literals that were empty or contained
+# too many characters.
+
+# FIXME: AT_DATA or some variant of AT_DATA may eventually permit
+# the final newline to be omitted.  See the threads starting at
+# <http://lists.gnu.org/archive/html/bison-patches/2009-07/msg00019.html>.
+
+AT_SETUP([[Bad character literals]])
+
+AT_DATA([empty.y],
+[[%%
+start: '';
+start: '
+]])
+AT_CHECK([[perl -e "print 'start: \'';" >> empty.y || exit 77]])
+
+AT_BISON_CHECK([empty.y], [1], [],
+[[empty.y:2.8-9: warning: empty character literal
+empty.y:3.8-4.0: warning: empty character literal
+empty.y:3.8-4.0: missing `'' at end of line
+empty.y:4.8: warning: empty character literal
+empty.y:4.8: missing `'' at end of file
+]])
+
+AT_DATA([two.y],
+[[%%
+start: 'ab';
+start: 'ab
+]])
+AT_CHECK([[perl -e "print 'start: \'ab';" >> two.y || exit 77]])
+
+AT_BISON_CHECK([two.y], [1], [],
+[[two.y:2.8-11: warning: extra characters in character literal
+two.y:3.8-4.0: warning: extra characters in character literal
+two.y:3.8-4.0: missing `'' at end of line
+two.y:4.8-10: warning: extra characters in character literal
+two.y:4.8-10: missing `'' at end of file
+]])
+
+AT_DATA([three.y],
+[[%%
+start: 'abc';
+start: 'abc
+]])
+AT_CHECK([[perl -e "print 'start: \'abc';" >> three.y || exit 77]])
+
+AT_BISON_CHECK([three.y], [1], [],
+[[three.y:2.8-12: warning: extra characters in character literal
+three.y:3.8-4.0: warning: extra characters in character literal
+three.y:3.8-4.0: missing `'' at end of line
+three.y:4.8-11: warning: extra characters in character literal
+three.y:4.8-11: missing `'' at end of file
+]])
+
+AT_CLEANUP
+
 ## ------------------------- ##
 ## Bad escapes in literals.  ##
 ## ------------------------- ##
@@ -984,19 +1259,85 @@ AT_CHECK([[perl -e 'print "start: \"\\\t\\\f\\\0\\\1\" ;";' >> input.y \
 
 AT_BISON_CHECK([input.y], [1], [],
 [[input.y:2.9-12: invalid number after \-escape: 777
+input.y:2.8-13: warning: empty character literal
 input.y:2.16-17: invalid number after \-escape: 0
+input.y:2.15-18: warning: empty character literal
 input.y:2.21-25: invalid number after \-escape: xfff
+input.y:2.20-26: warning: empty character literal
 input.y:2.29-31: invalid number after \-escape: x0
+input.y:2.28-32: warning: empty character literal
 input.y:3.9-14: invalid number after \-escape: uffff
+input.y:3.8-15: warning: empty character literal
 input.y:3.18-23: invalid number after \-escape: u0000
+input.y:3.17-24: warning: empty character literal
 input.y:3.27-36: invalid number after \-escape: Uffffffff
+input.y:3.26-37: warning: empty character literal
 input.y:3.40-49: invalid number after \-escape: U00000000
+input.y:3.39-50: warning: empty character literal
 input.y:4.9-10: invalid character after \-escape: ` '
+input.y:4.8-11: warning: empty character literal
 input.y:4.14-15: invalid character after \-escape: A
+input.y:4.13-16: warning: empty character literal
 input.y:5.9-16: invalid character after \-escape: \t
 input.y:5.17: invalid character after \-escape: \f
 input.y:5.18: invalid character after \-escape: \0
 input.y:5.19: invalid character after \-escape: \001
 ]])
+
+AT_CLEANUP
+
+## ------------------------- ##
+## LAC: Errors for %define.  ##
+## ------------------------- ##
+
+AT_SETUP([[LAC: Errors for %define]])
+
+AT_DATA([[input.y]],
+[[%%
+start: ;
+]])
+
+# parse.lac.* options are useless if LAC isn't actually activated.
+AT_BISON_CHECK([[-Dparse.lac.es-capacity-initial=1 input.y]],
+               [[1]], [],
+[[<command line>:2: %define variable `parse.lac.es-capacity-initial' is not used
+]])
+AT_BISON_CHECK([[-Dparse.lac.memory-trace=full input.y]],
+               [[1]], [],
+[[<command line>:2: %define variable `parse.lac.memory-trace' is not used
+]])
+
+AT_CLEANUP
+
+## --------------------------------------------- ##
+## -Werror is not affected by -Wnone and -Wall.  ##
+## --------------------------------------------- ##
+
+AT_SETUP([[-Werror is not affected by -Wnone and -Wall]])
+
+AT_DATA([[input.y]],
+[[%%
+foo-bar: ;
+]])
+
+# -Werror is not enabled by -Wall or equivalent.
+AT_BISON_CHECK([[-Wall input.y]], [[0]], [[]],
+[[input.y:2.1-7: warning: POSIX Yacc forbids dashes in symbol names: foo-bar
+]])
+AT_BISON_CHECK([[-W input.y]], [[0]], [[]],
+[[input.y:2.1-7: warning: POSIX Yacc forbids dashes in symbol names: foo-bar
+]])
+AT_BISON_CHECK([[-Wno-none input.y]], [[0]], [[]],
+[[input.y:2.1-7: warning: POSIX Yacc forbids dashes in symbol names: foo-bar
+]])
+
+# -Werror is not disabled by -Wnone or equivalent.
+AT_BISON_CHECK([[-Werror,none,yacc input.y]], [[1]], [[]], [[stderr]])
+AT_CHECK([[sed 's/^.*bison:/bison:/' stderr]], [[0]],
+[[bison: warnings being treated as errors
+input.y:2.1-7: warning: POSIX Yacc forbids dashes in symbol names: foo-bar
+]])
+[mv stderr experr]
+AT_BISON_CHECK([[-Werror,no-all,yacc input.y]], [[1]], [[]], [[experr]])
 
 AT_CLEANUP

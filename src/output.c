@@ -1,7 +1,7 @@
 /* Output the generated parsing program for Bison.
 
-   Copyright (C) 1984, 1986, 1989, 1992, 2000, 2001, 2002, 2003, 2004,
-   2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1986, 1989, 1992, 2000-2011 Free Software
+   Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -21,12 +21,11 @@
 #include <config.h>
 #include "system.h"
 
-#include <assert.h>
 #include <configmake.h>
 #include <error.h>
 #include <get-errno.h>
-#include <pipe.h>
 #include <quotearg.h>
+#include <spawn-pipe.h>
 #include <timevar.h>
 #include <wait-process.h>
 
@@ -34,7 +33,7 @@
 #include "files.h"
 #include "getargs.h"
 #include "gram.h"
-#include "muscle_tab.h"
+#include "muscle-tab.h"
 #include "output.h"
 #include "reader.h"
 #include "scan-code.h"    /* max_left_semantic_context */
@@ -346,10 +345,10 @@ token_definitions_output (FILE *out)
       symbol *sym = symbols[i];
       int number = sym->user_token_number;
 
-      /* At this stage, if there are literal aliases, they are part of
-	 SYMBOLS, so we should not find symbols which are the aliases
-	 here.  */
-      aver (number != USER_NUMBER_ALIAS);
+      /* At this stage, if there are literal string aliases, they are
+         part of SYMBOLS, so we should not find their aliased symbols
+         here.  */
+      aver (number != USER_NUMBER_HAS_STRING_ALIAS);
 
       /* Skip error token.  */
       if (sym == errtoken)
@@ -366,9 +365,11 @@ token_definitions_output (FILE *out)
       if (sym->tag[0] == '\'' || sym->tag[0] == '\"')
 	continue;
 
-      /* Don't #define nonliteral tokens whose names contain periods
-	 or '$' (as does the default value of the EOF token).  */
-      if (strchr (sym->tag, '.') || strchr (sym->tag, '$'))
+      /* Don't #define nonliteral tokens whose names contain periods,
+         dashes or '$' (as does the default value of the EOF token).  */
+      if (mbschr (sym->tag, '.')
+          || mbschr (sym->tag, '-')
+          || mbschr (sym->tag, '$'))
 	continue;
 
       fprintf (out, "%s[[[%s]], %d]",
@@ -465,6 +466,23 @@ prepare_actions (void)
 				    0, 1, conflict_list_cnt);
 }
 
+/*--------------------------------------------.
+| Output the definitions of all the muscles.  |
+`--------------------------------------------*/
+
+static void
+muscles_output (FILE *out)
+{
+  fputs ("m4_init()\n", out);
+
+  user_actions_output (out);
+  merger_output (out);
+  token_definitions_output (out);
+  symbol_code_props_output (out, "destructors", &symbol_destructor_get);
+  symbol_code_props_output (out, "printers", &symbol_printer_get);
+
+  muscles_m4_output (out);
+}
 
 /*---------------------------.
 | Call the skeleton parser.  |
@@ -474,7 +492,6 @@ static void
 output_skeleton (void)
 {
   FILE *in;
-  FILE *out;
   int filter_fd[2];
   char const *argv[10];
   pid_t pid;
@@ -501,7 +518,7 @@ output_skeleton (void)
   full_m4sugar = xstrdup (full_skeleton);
   strcpy (full_skeleton + pkgdatadirlen + 1, m4bison);
   full_m4bison = xstrdup (full_skeleton);
-  if (strchr (skeleton, '/'))
+  if (mbschr (skeleton, '/'))
     strcpy (full_skeleton, skeleton);
   else
     strcpy (full_skeleton + pkgdatadirlen + 1, skeleton);
@@ -549,7 +566,7 @@ output_skeleton (void)
     argv[i++] = full_m4bison;
     argv[i++] = full_skeleton;
     argv[i++] = NULL;
-    assert (i <= ARRAY_CARDINALITY (argv));
+    aver (i <= ARRAY_CARDINALITY (argv));
   }
 
   /* The ugly cast is because gnulib gets the const-ness wrong.  */
@@ -559,22 +576,16 @@ output_skeleton (void)
   free (full_m4bison);
   free (full_skeleton);
 
-  out = fdopen (filter_fd[1], "w");
-  if (! out)
-    error (EXIT_FAILURE, get_errno (),
-	   "fdopen");
-
-  /* Output the definitions of all the muscles.  */
-  fputs ("m4_init()\n", out);
-
-  user_actions_output (out);
-  merger_output (out);
-  token_definitions_output (out);
-  symbol_code_props_output (out, "destructors", &symbol_destructor_get);
-  symbol_code_props_output (out, "printers", &symbol_printer_get);
-
-  muscles_m4_output (out);
-  xfclose (out);
+  if (trace_flag & trace_muscles)
+    muscles_output (stderr);
+  {
+    FILE *out = fdopen (filter_fd[1], "w");
+    if (! out)
+      error (EXIT_FAILURE, get_errno (),
+             "fdopen");
+    muscles_output (out);
+    xfclose (out);
+  }
 
   /* Read and process m4's output.  */
   timevar_push (TV_M4);

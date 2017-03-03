@@ -1,7 +1,7 @@
 /* Lists of symbols for Bison
 
-   Copyright (C) 2002, 2005, 2006, 2007, 2009, 2010 Free Software
-   Foundation, Inc.
+   Copyright (C) 2002, 2005-2007, 2009-2011 Free Software Foundation,
+   Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -24,6 +24,7 @@
 # include "location.h"
 # include "scan-code.h"
 # include "symtab.h"
+# include "named-ref.h"
 
 /* A list of symbols, used during the parsing to store the rules.  */
 typedef struct symbol_list
@@ -49,6 +50,9 @@ typedef struct symbol_list
   } content;
   location location;
 
+  /* Proper location of the symbol, not all the rule */
+  location sym_loc;
+
   /* If this symbol is the generated lhs for a midrule but this is the rule in
      whose rhs it appears, MIDRULE = a pointer to that midrule.  */
   struct symbol_list *midrule;
@@ -69,6 +73,9 @@ typedef struct symbol_list
   int dprec;
   int merger;
   location merger_declaration_location;
+
+  /* Named reference. */
+  named_ref *named_ref;
 
   /* The list.  */
   struct symbol_list *next;
@@ -107,6 +114,9 @@ symbol_list *symbol_list_n_get (symbol_list *l, int n);
 /* Get the data type (alternative in the union) of the value for
    symbol N in rule RULE.  */
 uniqstr symbol_list_n_type_name_get (symbol_list *l, location loc, int n);
+
+/* Check whether the node is a border element of a rule. */
+bool symbol_list_null (symbol_list *node);
 
 /** Set the \c \%destructor for \c node as \c code at \c loc.  */
 void symbol_list_destructor_set (symbol_list *node, char const *code,

@@ -1,7 +1,7 @@
 /* -*- buffer-read-only: t -*- vi: set ro: */
 /* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 /* Create a pipe, with specific opening flags.
-   Copyright (C) 2009, 2010 Free Software Foundation, Inc.
+   Copyright (C) 2009-2011 Free Software Foundation, Inc.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,18 +26,12 @@
 #include <fcntl.h>
 
 #include "binary-io.h"
+#include "nonblocking.h"
 
 #if (defined _WIN32 || defined __WIN32__) && ! defined __CYGWIN__
 /* Native Woe32 API.  */
 
 # include <io.h>
-
-#else
-/* Unix API.  */
-
-# ifndef O_CLOEXEC
-#  define O_CLOEXEC 0
-# endif
 
 #endif
 
@@ -64,34 +58,43 @@ pipe2 (int fd[2], int flags)
   }
 #endif
 
-#if (defined _WIN32 || defined __WIN32__) && ! defined __CYGWIN__
-/* Native Woe32 API.  */
-
   /* Check the supported flags.  */
-  if ((flags & ~(O_CLOEXEC | O_BINARY | O_TEXT)) != 0)
+  if ((flags & ~(O_CLOEXEC | O_NONBLOCK | O_BINARY | O_TEXT)) != 0)
     {
       errno = EINVAL;
       return -1;
     }
 
+#if (defined _WIN32 || defined __WIN32__) && ! defined __CYGWIN__
+/* Native Woe32 API.  */
+
+  if (flags & O_NONBLOCK)
+    {
+      int result = _pipe (fd, 4096, flags & ~O_NONBLOCK);
+      if (result != 0)
+        return result;
+      if (set_nonblocking_flag (fd[0], true) != 0
+          || set_nonblocking_flag (fd[1], true) != 0)
+        {
+          int saved_errno = errno;
+          close (fd[0]);
+          close (fd[1]);
+          result = -1;
+          errno = saved_errno;
+        }
+      return result;
+    }
   return _pipe (fd, 4096, flags);
 
 #else
 /* Unix API.  */
-
-  /* Check the supported flags.  */
-  if ((flags & ~(O_CLOEXEC | O_NONBLOCK | O_TEXT | O_BINARY)) != 0)
-    {
-      errno = EINVAL;
-      return -1;
-    }
 
   if (pipe (fd) < 0)
     return -1;
 
   /* POSIX <http://www.opengroup.org/onlinepubs/9699919799/functions/pipe.html>
      says that initially, the O_NONBLOCK and FD_CLOEXEC flags are cleared on
-     both fd[0] amd fd[1].  */
+     both fd[0] and fd[1].  */
 
   if (flags & O_NONBLOCK)
     {

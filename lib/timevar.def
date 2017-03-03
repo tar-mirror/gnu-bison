@@ -1,7 +1,7 @@
 /* This file contains the definitions for timing variables used to -*- C -*-
    measure run-time performance of the compiler.
 
-   Copyright (C) 2002, 2007, 2009, 2010 Free Software Foundation, Inc.
+   Copyright (C) 2002, 2007, 2009-2011 Free Software Foundation, Inc.
 
    Contributed by Akim Demaille <akim@freefriends.org>.
 
@@ -43,6 +43,10 @@ DEFTIMEVAR (TV_REDUCE                , "reducing the grammar")
 DEFTIMEVAR (TV_SETS                  , "computing the sets")
 DEFTIMEVAR (TV_LR0                   , "LR(0)")
 DEFTIMEVAR (TV_LALR                  , "LALR(1)")
+DEFTIMEVAR (TV_IELR_PHASE1           , "IELR(1) Phase 1")
+DEFTIMEVAR (TV_IELR_PHASE2           , "IELR(1) Phase 2")
+DEFTIMEVAR (TV_IELR_PHASE3           , "IELR(1) Phase 3")
+DEFTIMEVAR (TV_IELR_PHASE4           , "IELR(1) Phase 4")
 DEFTIMEVAR (TV_CONFLICTS             , "conflicts")
 
 /* Time spent outputing results.  */

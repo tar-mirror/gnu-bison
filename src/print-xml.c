@@ -1,23 +1,21 @@
 /* Print an xml on generated parser, for Bison,
 
-   Copyright (C) 2007, 2009, 2010 Free Software Foundation, Inc.
+   Copyright (C) 2007, 2009-2011 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
-   Bison is free software; you can redistribute it and/or modify
+   This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
-   any later version.
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
-   Bison is distributed in the hope that it will be useful,
+   This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with Bison; see the file COPYING.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.  */
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
 #include "system.h"
@@ -48,7 +46,7 @@ struct escape_buf
   char *ptr;
   size_t size;
 };
-static struct escape_buf escape_bufs[2];
+static struct escape_buf escape_bufs[3];
 
 
 /*--------------------------------.
@@ -244,17 +242,18 @@ print_reductions (FILE *out, int level, state *s)
 {
   transitions *trans = s->transitions;
   reductions *reds = s->reductions;
-  rule *default_rule = NULL;
+  rule *default_reduction = NULL;
   int report = false;
   int i, j;
 
-  if (reds->num == 0) {
-    xml_puts (out, level, "<reductions/>");
-    return;
-  }
+  if (reds->num == 0)
+    {
+      xml_puts (out, level, "<reductions/>");
+      return;
+    }
 
   if (yydefact[s->number] != 0)
-    default_rule = &rules[yydefact[s->number] - 1];
+    default_reduction = &rules[yydefact[s->number] - 1];
 
   bitset_zero (no_reduce_set);
   FOR_EACH_SHIFT (trans, i)
@@ -263,7 +262,7 @@ print_reductions (FILE *out, int level, state *s)
     if (s->errs->symbols[i])
       bitset_set (no_reduce_set, s->errs->symbols[i]->number);
 
-  if (default_rule)
+  if (default_reduction)
     report = true;
 
   if (reds->lookahead_tokens)
@@ -276,7 +275,7 @@ print_reductions (FILE *out, int level, state *s)
 	    {
 	      if (! count)
 		{
-		  if (reds->rules[j] != default_rule)
+		  if (reds->rules[j] != default_reduction)
 		    report = true;
 		  count = true;
 		}
@@ -307,7 +306,7 @@ print_reductions (FILE *out, int level, state *s)
 	    {
 	      if (! count)
 		{
-		  if (reds->rules[j] != default_rule)
+		  if (reds->rules[j] != default_reduction)
 		    print_reduction (out, level + 1, symbols[i]->tag,
 				     reds->rules[j], true);
 		  else
@@ -318,7 +317,7 @@ print_reductions (FILE *out, int level, state *s)
 		{
 		  if (defaulted)
 		    print_reduction (out, level + 1, symbols[i]->tag,
-				     default_rule, true);
+				     default_reduction, true);
 		  defaulted = false;
 		  print_reduction (out, level + 1, symbols[i]->tag,
 				   reds->rules[j], false);
@@ -326,9 +325,9 @@ print_reductions (FILE *out, int level, state *s)
 	    }
       }
 
-  if (default_rule)
+  if (default_reduction)
     print_reduction (out, level + 1,
-		     "$default", default_rule, true);
+		     "$default", default_reduction, true);
 
   xml_puts (out, level, "</reductions>");
 }
@@ -504,8 +503,12 @@ print_xml (void)
   FILE *out = xfopen (spec_xml_file, "w");
 
   fputs ("<?xml version=\"1.0\"?>\n\n", out);
-  xml_printf (out, level, "<bison-xml-report version=\"%s\">",
-	      xml_escape (VERSION));
+  xml_printf (out, level,
+              "<bison-xml-report version=\"%s\" bug-report=\"%s\""
+              " url=\"%s\">",
+              xml_escape_n (0, VERSION),
+              xml_escape_n (1, PACKAGE_BUGREPORT),
+              xml_escape_n (2, PACKAGE_URL));
 
   fputc ('\n', out);
   xml_printf (out, level + 1, "<filename>%s</filename>",

@@ -1,14 +1,14 @@
 # Finnish messages for bison.
-# Copyright © 2010 Free Software Foundation, Inc.
+# Copyright © 2010, 2011 Free Software Foundation, Inc.
 # This file is distributed under the same license as the bison package.
-# Jorma Karvonen <karvonen.jorma@gmail.com>, 2009, 2010.
+# Jorma Karvonen <karvonen.jorma@gmail.com>, 2009-2011.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bison 2.4.3-rc1\n"
+"Project-Id-Version: bison 2.5-rc1\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2010-08-05 21:01-0400\n"
-"PO-Revision-Date: 2010-07-30 14:52+0200\n"
+"POT-Creation-Date: 2011-05-14 18:25-0400\n"
+"PO-Revision-Date: 2011-05-05 10:31+0200\n"
 "Last-Translator: Jorma Karvonen <karvonen.jorma@gmail.com>\n"
 "Language-Team: Finnish <translation-team-fi@lists.sourceforge.net>\n"
 "Language: fi\n"
@@ -18,11 +18,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Bookmarks: 136,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
-#: src/complain.c:101 src/complain.c:108
+#: src/complain.c:115 src/complain.c:126 src/complain.c:135 src/complain.c:183
+#: src/complain.c:193
 msgid "warning"
 msgstr "varoitus"
 
-#: src/complain.c:138 src/complain.c:145
+#: src/complain.c:203 src/complain.c:210
 msgid "fatal error"
 msgstr "vakava virhe"
 
@@ -72,14 +73,14 @@ msgstr "Tila %d "
 msgid "%%expect-rr applies only to GLR parsers"
 msgstr "%%expect-rr soveltuu vain GLR-jäsentimiin"
 
-#: src/conflicts.c:607
+#: src/conflicts.c:616
 #, c-format
 msgid "expected %d shift/reduce conflict"
 msgid_plural "expected %d shift/reduce conflicts"
 msgstr[0] "odotettiin %d siirto/supistaminen -ristiriita"
 msgstr[1] "odotettiin %d siirto/supistaminen -ristiriitaa"
 
-#: src/conflicts.c:612
+#: src/conflicts.c:621
 #, c-format
 msgid "expected %d reduce/reduce conflict"
 msgid_plural "expected %d reduce/reduce conflicts"
@@ -101,46 +102,50 @@ msgstr "Siirräntävirhe"
 msgid "cannot close file"
 msgstr "tiedostoa ei voi sulkea"
 
-#: src/files.c:359
+#: src/files.c:350
 #, c-format
 msgid "refusing to overwrite the input file %s"
 msgstr "kieltäydytään korvaamasta syötetiedostoa %s"
 
-#: src/files.c:369
+#: src/files.c:360
 #, c-format
 msgid "conflicting outputs to file %s"
 msgstr "keskenään ristiriitaisia tulosteita tiedostoon %s"
 
-#: src/getargs.c:243
+#: src/getargs.c:271
 #, c-format
 msgid "Try `%s --help' for more information.\n"
 msgstr "Pyydä lisätietoja komennolla ”%s --help”.\n"
 
-#: src/getargs.c:247
+#: src/getargs.c:280
 #, c-format
 msgid "Usage: %s [OPTION]... FILE\n"
 msgstr "Käyttö: %s [VALITSIN]... TIEDOSTO\n"
 
-#: src/getargs.c:248
+#: src/getargs.c:281
 msgid ""
-"Generate LALR(1) and GLR parsers.\n"
+"Generate a deterministic LR or generalized LR (GLR) parser employing\n"
+"LALR(1), IELR(1), or canonical LR(1) parser tables.  IELR(1) and\n"
+"canonical LR(1) support is experimental.\n"
 "\n"
 msgstr ""
-"Tuota LALR(1) ja GLR -jäsentimet.\n"
+"Tuota deterministinen LR- tai yleistetty LR (GLR) -jäsennin, joka käyttää\n"
+"LALR(1)-, IELR(1)-, tai kanonisia LR(1)-jäsennintauluja.  IELR(1)- ja\n"
+"kanoninen LR(1) -tuki on kokeellinen.\n"
 "\n"
 
-#: src/getargs.c:253
+#: src/getargs.c:288
 msgid ""
 "Mandatory arguments to long options are mandatory for short options too.\n"
 msgstr ""
 "Pakolliset argumentit pitkille valitsimille ovat pakollisia myös lyhyille "
 "valitsimille.\n"
 
-#: src/getargs.c:256
+#: src/getargs.c:291
 msgid "The same is true for optional arguments.\n"
 msgstr "Sama pätee valinnaisille argumenteille.\n"
 
-#: src/getargs.c:260
+#: src/getargs.c:295
 msgid ""
 "\n"
 "Operation modes:\n"
@@ -166,31 +171,37 @@ msgstr ""
 "varoitukset\n"
 "\n"
 
-#: src/getargs.c:272
+#: src/getargs.c:307
+#, c-format
 msgid ""
 "Parser:\n"
-"  -L, --language=LANGUAGE    specify the output programming language\n"
-"                             (this is an experimental feature)\n"
-"  -S, --skeleton=FILE        specify the skeleton to use\n"
-"  -t, --debug                instrument the parser for debugging\n"
-"      --locations            enable locations computation\n"
-"  -p, --name-prefix=PREFIX   prepend PREFIX to the external symbols\n"
-"  -l, --no-lines             don't generate `#line' directives\n"
-"  -k, --token-table          include a table of token names\n"
+"  -L, --language=LANGUAGE          specify the output programming language\n"
+"                                   (this is an experimental feature)\n"
+"  -S, --skeleton=FILE              specify the skeleton to use\n"
+"  -t, --debug                      instrument the parser for debugging\n"
+"      --locations                  enable location support\n"
+"  -D, --define=NAME[=VALUE]        similar to `%define NAME \"VALUE\"'\n"
+"  -F, --force-define=NAME[=VALUE]  override `%define NAME \"VALUE\"'\n"
+"  -p, --name-prefix=PREFIX         prepend PREFIX to the external symbols\n"
+"  -l, --no-lines                   don't generate `#line' directives\n"
+"  -k, --token-table                include a table of token names\n"
 "\n"
 msgstr ""
 "Jäsennin:\n"
-"  -L, --language=KIELI       määrittele tulosteohjelmointikieli\n"
-"                             (tämä on kokeellinen ominaisuus)\n"
-"  -S, --skeleton=TIEDOSTO    määrittele käytettävä runko\n"
-"  -t, --debug                lisää jäsennin vianjäljitykseen\n"
-"      --locations            ota käyttöön paikkojen laskenta\n"
-"  -p, --name-prefix=ETULIITE lisää ETULIITE ulkoisiin symboleihin\n"
-"  -l, --no-lines             älä tuota ”#line”-direktiivejä\n"
-"  -k, --token-table          sisällytä merkkisymbolinimien taulu\n"
+"  -L, --language=KIELI           määrittele tulosteohjelmointikieli\n"
+"                                 (tämä on kokeellinen ominaisuus)\n"
+"  -S, --skeleton=TIEDOSTO        määrittele käytettävä runko\n"
+"  -t, --debug                    lisää jäsennin vianjäljitykseen\n"
+"      --locations                ota käyttöön paikkojen laskenta\n"
+"  -D, --define=NIMI[=ARVO]       samanlainen kuin ”%define NAME \"VALUE\"”\n"
+"  -F, --force-define=NIMI[=ARVO] korvaa määrittelyn ”%define NAME \"VALUE"
+"\"”\n"
+"  -p, --name-prefix=ETULIITE     lisää ETULIITE ulkoisiin symboleihin\n"
+"  -l, --no-lines                 älä tuota ”#line”-direktiivejä\n"
+"  -k, --token-table              sisällytä merkkisymbolinimien taulu\n"
 "\n"
 
-#: src/getargs.c:287
+#: src/getargs.c:324
 msgid ""
 "Output:\n"
 "      --defines[=FILE]       also produce a header file\n"
@@ -221,11 +232,14 @@ msgstr ""
 "\n"
 
 #  Koodissa midrule on keskellä oleva lohko, jota edeltää toprule ja jonka alla on bottomrule.
-#: src/getargs.c:302
+#: src/getargs.c:339
 msgid ""
 "Warning categories include:\n"
 "  `midrule-values'  unset or unused midrule values\n"
-"  `yacc'            incompatibilities with POSIX YACC\n"
+"  `yacc'            incompatibilities with POSIX Yacc\n"
+"  `conflicts-sr'    S/R conflicts (enabled by default)\n"
+"  `conflicts-rr'    R/R conflicts (enabled by default)\n"
+"  `other'           all other warnings (enabled by default)\n"
 "  `all'             all the warnings\n"
 "  `no-CATEGORY'     turn off warnings in CATEGORY\n"
 "  `none'            turn off all the warnings\n"
@@ -235,6 +249,9 @@ msgstr ""
 "Varoituskategoriat sisältävät:\n"
 "  `midrule-values'  asettaa ja poistaa midrule-arvoja\n"
 "  `yacc'            yhteensopimattomuudet POSIX YACC -ohjelman kanssa\n"
+"  `conflicts-sr'    S/R-ristiriidat (oletuksena otettu käyttöön)\n"
+"  `conflicts-rr'    R/R-ristiriidat (oletuksena otettu käyttöön)\n"
+"  `other'           kaikki muut varoitukset (oletuksena otettu käyttöön)\n"
 "  `all'             kaikki varoitukset\n"
 "  `no-CATEGORY'     käännä pois päältä kaikki varoitukset kategoriassa "
 "CATEGORY\n"
@@ -242,7 +259,7 @@ msgstr ""
 "  `error'           käsittele varoituksia virheinä\n"
 "\n"
 
-#: src/getargs.c:313
+#: src/getargs.c:353
 msgid ""
 "THINGS is a list of comma separated words that can include:\n"
 "  `state'        describe the states\n"
@@ -261,7 +278,7 @@ msgstr ""
 "  `all'          sisältää kaikki yllä mainitut tiedot\n"
 "  `none'         poistaa raportoinnin\n"
 
-#: src/getargs.c:323
+#: src/getargs.c:363
 #, c-format
 msgid ""
 "\n"
@@ -272,21 +289,21 @@ msgstr ""
 "Ilmoita käännösvirheistä osoitteeseen <translation-team-fi@lists.sourceforge."
 "net>.\n"
 
-#: src/getargs.c:339
+#: src/getargs.c:379
 #, c-format
 msgid "bison (GNU Bison) %s"
 msgstr "bison (GNU Bison) %s"
 
-#: src/getargs.c:341
+#: src/getargs.c:381
 msgid "Written by Robert Corbett and Richard Stallman.\n"
 msgstr "Kirjoittajat: Robert Corbett ja Richard Stallman.\n"
 
-#: src/getargs.c:345
+#: src/getargs.c:385
 #, c-format
 msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
 msgstr "Copyright © %d Free Software Foundation, Inc.\n"
 
-#: src/getargs.c:348
+#: src/getargs.c:388
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
@@ -295,63 +312,79 @@ msgstr ""
 "OLE MITÄÄN TAKUUTA; ei edes KAUPPAKELPOISUUDELLE tai SOPIVUUDELLE TIETTYYN "
 "TARKOITUKSEEN.\n"
 
-#: src/getargs.c:371
+#: src/getargs.c:409
+#, c-format
 msgid "multiple skeleton declarations are invalid"
 msgstr "monirunkoesittelyt ovat virheellisiä"
 
-#: src/getargs.c:394
+#: src/getargs.c:427
 #, c-format
 msgid "invalid language `%s'"
 msgstr "virheellinen kieli ”%s”"
 
-#: src/getargs.c:397
+#: src/getargs.c:430
 msgid "multiple language declarations are invalid"
 msgstr "monikieliesittelyt ovat virheellisiä"
 
 #  kohde voi olla komento "bison" tai jokin parametri kuten "--report"
-#: src/getargs.c:619
+#: src/getargs.c:682
 #, c-format
 msgid "missing operand after `%s'"
 msgstr "puuttuva operandi kohteen ”%s” jälkeen"
 
-#: src/getargs.c:621
+#: src/getargs.c:684
 #, c-format
 msgid "extra operand `%s'"
 msgstr "ylimääräinen operandi ”%s”"
 
-#: src/gram.c:113
+#: src/gram.c:114
 msgid "empty"
 msgstr "tyhjä"
 
-#: src/gram.c:202
+#: src/gram.c:203
 msgid "Grammar"
 msgstr "Kielioppi"
 
-#: src/location.c:94 src/scan-gram.l:734
+#: src/graphviz.c:43
+#, c-format
+msgid ""
+"// Generated by %s.\n"
+"// Report bugs to <%s>.\n"
+"// Home page: <%s>.\n"
+"\n"
+msgstr ""
+"// Tuottaja: %s.\n"
+"// Ilmoita vioista osoitteeseen <%s>.\n"
+"// Ilmoita käännösvirheistä osoitteeseen <translation-team-fi@lists."
+"sourceforge.net>.\n"
+"// Kotisivu: <%s>.\n"
+"\n"
+
+#: src/location.c:93 src/scan-gram.l:855
 #, c-format
 msgid "line number overflow"
 msgstr "rivinumeron ylivuoto"
 
-#: src/location.c:96
+#: src/location.c:95
 #, c-format
 msgid "column number overflow"
 msgstr "sarakenumeron ylivuoto"
 
-#: src/main.c:136
+#: src/main.c:134
 msgid "rule useless in parser due to conflicts"
 msgstr "sääntö on hyödytön jäsentimessä ristiriitojen vuoksi"
 
-#: src/muscle_tab.c:420
+#: src/muscle-tab.c:428
 #, c-format
-msgid "%s `%s' redefined"
-msgstr "symboli %s ”%s” on määritelty uudelleen"
+msgid "%%define variable `%s' redefined"
+msgstr "%%define-muuttuja ”%s” on määritelty uudelleen"
 
-#: src/muscle_tab.c:423
+#: src/muscle-tab.c:431
 #, c-format
 msgid "previous definition"
 msgstr "edellinen määrittely"
 
-#: src/muscle_tab.c:459
+#: src/muscle-tab.c:470
 #, c-format
 msgid ""
 "undefined %%define variable `%s' passed to muscle_percent_define_get_loc"
@@ -359,7 +392,7 @@ msgstr ""
 "määrittelemätön %%define-muuttuja ”%s” välitetty kohteelle "
 "muscle_percent_define_get_loc"
 
-#: src/muscle_tab.c:473
+#: src/muscle-tab.c:484
 #, c-format
 msgid ""
 "undefined %%define variable `%s' passed to muscle_percent_define_get_syncline"
@@ -367,12 +400,12 @@ msgstr ""
 "määrittelemätön %%define-muuttuja ”%s” välitetty kohteelle "
 "muscle_percent_define_get_syncline"
 
-#: src/muscle_tab.c:519
+#: src/muscle-tab.c:530
 #, c-format
 msgid "invalid value for %%define Boolean variable `%s'"
 msgstr "virheellinen arvo kohteelle %%define Boolean muuttuja ”%s”"
 
-#: src/muscle_tab.c:525
+#: src/muscle-tab.c:536
 #, c-format
 msgid ""
 "undefined %%define variable `%s' passed to muscle_percent_define_flag_if"
@@ -380,12 +413,17 @@ msgstr ""
 "määrittelemätön %%define-muuttuja ”%s” välitetty kohteelle "
 "muscle_percent_define_flag_if"
 
-#: src/muscle_tab.c:581
+#: src/muscle-tab.c:588
 #, c-format
 msgid "invalid value for %%define variable `%s': `%s'"
 msgstr "virheellinen arvo kohteelle %%define-muuttuja ”%s”: ”%s”"
 
-#: src/muscle_tab.c:586
+#: src/muscle-tab.c:591
+#, c-format
+msgid "accepted value: `%s'"
+msgstr "hyväksytty arvo: ”%s”"
+
+#: src/muscle-tab.c:601
 #, c-format
 msgid ""
 "undefined %%define variable `%s' passed to muscle_percent_define_check_values"
@@ -393,138 +431,142 @@ msgstr ""
 "määrittelemätön %%define-muuttuja ”%s” välitetty kohteelle "
 "muscle_percent_define_check_values"
 
-#: src/parse-gram.y:693
+#: src/parse-gram.y:733
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "puuttuva tunniste parametriesittelyssä"
 
-#: src/print.c:47
+#: src/print.c:48
 #, c-format
 msgid " type %d is %s\n"
 msgstr " tyyppi %d on %s\n"
 
-#: src/print.c:164
+#: src/print.c:165
 #, c-format
 msgid "shift, and go to state %d\n"
 msgstr "siirto, ja siirry tilaan %d\n"
 
-#: src/print.c:166
+#: src/print.c:167
 #, c-format
 msgid "go to state %d\n"
 msgstr "siirry tilaan %d\n"
 
-#: src/print.c:203
+#: src/print.c:204
 msgid "error (nonassociative)\n"
 msgstr "virhe (ei-assosiatiivinen)\n"
 
-#: src/print.c:226
+#: src/print.c:227
 #, c-format
 msgid "reduce using rule %d (%s)"
 msgstr "supistaminen käyttäen sääntöä %d (%s)"
 
-#: src/print.c:228
+#: src/print.c:229
 #, c-format
 msgid "accept"
 msgstr "accept"
 
-#: src/print.c:263 src/print.c:329
+#: src/print.c:265 src/print.c:339
 msgid "$default"
 msgstr "$default"
 
-#: src/print.c:358
+#: src/print.c:374
 #, c-format
 msgid "state %d"
 msgstr "tila %d"
 
-#: src/print.c:394
+#: src/print.c:410
 msgid "Terminals, with rules where they appear"
 msgstr "Päätteet, säännöillä missä niin tarvitaan"
 
-#: src/print.c:421
+#: src/print.c:437
 msgid "Nonterminals, with rules where they appear"
 msgstr "Ei-päätteet, säännöillä missä niitä tarvitaan"
 
-#: src/print.c:450
+#: src/print.c:466
 #, c-format
 msgid " on left:"
 msgstr " vasemmalla:"
 
-#: src/print.c:467
+#: src/print.c:483
 #, c-format
 msgid " on right:"
 msgstr " oikealla:"
 
-#: src/print.c:495
+#: src/print.c:511
 msgid "Rules useless in parser due to conflicts"
 msgstr "Säännöt ovat hyödyttömiä jäsentimessä ristiriitojen vuoksi"
 
-#: src/reader.c:61
+#: src/reader.c:63
 #, c-format
 msgid "multiple %s declarations"
 msgstr "useita %s esittelyjä"
 
-#: src/reader.c:131
+#: src/reader.c:133
 #, c-format
 msgid "result type clash on merge function `%s': <%s> != <%s>"
 msgstr "tulostyyppien yhteentörmäys merge-funktiossa ”%s”: <%s> != <%s>"
 
-#: src/reader.c:134 src/symtab.c:141 src/symtab.c:149 src/symtab.c:912
-#: src/symtab.c:925 src/symtab.c:938 src/symtab.c:951
+#: src/reader.c:136 src/symtab.c:155 src/symtab.c:163 src/symtab.c:930
+#: src/symtab.c:943 src/symtab.c:956 src/symtab.c:969
 #, c-format
 msgid "previous declaration"
 msgstr "edellinen esittely"
 
-#: src/reader.c:218
+#: src/reader.c:202
+#, c-format
+msgid "duplicated symbol name for %s ignored"
+msgstr "kaksoiskappalesymbolinimi kohteelle %s ohitettiin"
+
+#: src/reader.c:246
 #, c-format
 msgid "rule given for %s, which is a token"
 msgstr "sääntö annettu kohteelle %s, joka on merkkisymboli"
 
-#: src/reader.c:270
+#: src/reader.c:301
 #, c-format
 msgid "type clash on default action: <%s> != <%s>"
 msgstr "tyyppien törmäys vastakkain oletustoiminassa: <%s> != <%s>"
 
-#: src/reader.c:276
+#: src/reader.c:307
 #, c-format
 msgid "empty rule for typed nonterminal, and no action"
 msgstr "tyhjä sääntö tyypitetylle ei-päätteelle, ja ei toimintoa"
 
-#: src/reader.c:290
+#: src/reader.c:325
 #, c-format
 msgid "unused value: $%d"
 msgstr "käyttämätön arvo: $%d"
 
-#: src/reader.c:292
-#, c-format
+#: src/reader.c:327
 msgid "unset value: $$"
 msgstr "asettamaton arvo: $$"
 
-#: src/reader.c:302
+#: src/reader.c:338
 #, c-format
 msgid "token for %%prec is not defined: %s"
 msgstr "merkkisymbolia kohteelle %%prec ei ole määritelty: %s"
 
-#: src/reader.c:388 src/reader.c:402 src/reader.c:415
+#: src/reader.c:428 src/reader.c:442 src/reader.c:455
 #, c-format
 msgid "only one %s allowed per rule"
 msgstr "vain yksi %s on sallittu sääntöä kohden"
 
-#: src/reader.c:398 src/reader.c:413
+#: src/reader.c:438 src/reader.c:453
 #, c-format
 msgid "%s affects only GLR parsers"
 msgstr "%s vaikuttaa vain GLR-jäsentimiin"
 
-#: src/reader.c:400
+#: src/reader.c:440
 #, c-format
 msgid "%s must be followed by positive number"
 msgstr "kohdetta %s on seurattava postiivinen numero"
 
-#: src/reader.c:506
+#: src/reader.c:551
 #, c-format
 msgid "rule is too long"
 msgstr "sääntö on liian pitkä"
 
-#: src/reader.c:594
+#: src/reader.c:669
 #, c-format
 msgid "no rules in the input grammar"
 msgstr "ei sääntöjä syötekieliopissa"
@@ -569,179 +611,291 @@ msgstr[1] "%d sääntöä ovat hyödyttömiä kieliopissa"
 msgid "start symbol %s does not derive any sentence"
 msgstr "aloitussymboli %s ei johda lauseeseen"
 
-#: src/scan-code.l:164
+#: src/scan-code.l:200
 #, c-format
 msgid "stray `$'"
 msgstr "yksinäinen ”$”"
 
-#: src/scan-code.l:168
+#: src/scan-code.l:205
 #, c-format
 msgid "stray `@'"
 msgstr "yksinäinen ”@”"
 
-#: src/scan-code.l:281
+#: src/scan-code.l:230
 #, c-format
-msgid "explicit type given in untyped grammar"
-msgstr "eksplisiittinen tyyppi annettu tyypittömässä kieliopissa"
+msgid "a `;' might be needed at the end of action code"
+msgstr "merkkiä ”;” saatetaan tarvita toimintakoodin lopussa"
 
-#: src/scan-code.l:296
+#: src/scan-code.l:231
 #, c-format
-msgid "$$ for the midrule at $%d of `%s' has no declared type"
-msgstr "$$ midrule-lohkolle osoitteessa $%d/”%s” ei ole esiteltyä tyyppiä"
+msgid "future versions of Bison will not add the `;'"
+msgstr "tulevat Bison-versiot eivät lisää merkkiä ”;”"
 
-#: src/scan-code.l:301
+#: src/scan-code.l:253
 #, c-format
-msgid "$$ of `%s' has no declared type"
-msgstr "$$/”%s” ei ole esitelty tyyppi"
+msgid "use of YYFAIL, which is deprecated and will be removed"
+msgstr "YYFAIL-käyttö, joka on vanhentunut ja poistetaan"
 
-#: src/scan-code.l:329
+#: src/scan-code.l:438 src/scan-code.l:441
 #, c-format
-msgid "$%d of `%s' has no declared type"
-msgstr "$%d/”%s” ei ole esitelty tyyppi"
+msgid "refers to: %c%s at %s"
+msgstr "viittaa kohteeseen: %c%s at %s"
 
-#: src/scan-code.l:344 src/scan-code.l:379 src/scan-gram.l:656
+#: src/scan-code.l:457
+#, c-format
+msgid "possibly meant: %c"
+msgstr "mahdollisesti tarkoitti: %c"
+
+#: src/scan-code.l:466
+#, c-format
+msgid ", hiding %c"
+msgstr ", piilotetaan %c"
+
+#: src/scan-code.l:474
+#, c-format
+msgid " at %s"
+msgstr " osoitteessa %s"
+
+#: src/scan-code.l:479
+#, c-format
+msgid ", cannot be accessed from mid-rule action at $%d"
+msgstr ", ei kyetä käyttämään mid-rule -toimintoa osoitteessa $%d"
+
+#: src/scan-code.l:531 src/scan-gram.l:777
 #, c-format
 msgid "integer out of range: %s"
 msgstr "kokonaisluku on lukualueen ulkopuolella: %s"
 
-#: src/scan-gram.l:136
+#: src/scan-code.l:620
+#, c-format
+msgid "invalid reference: %s"
+msgstr "virheellinen viite: %s"
+
+#: src/scan-code.l:629
+#, c-format
+msgid "syntax error after `%c', expecting integer, letter, `_', `[', or `$'"
+msgstr ""
+"syntaksivirhe merkin ”%c” jälkeen, odotettiin kokonaislukua, kirjainta, tai "
+"merkkejä ”_”, ”[”, ”$”"
+
+#: src/scan-code.l:636
+#, c-format
+msgid "symbol not found in production before $%d: %.*s"
+msgstr "symbolia ei löytynyt tuotannosta ennen $%d: %.*s"
+
+#: src/scan-code.l:643
+#, c-format
+msgid "symbol not found in production: %.*s"
+msgstr "symbolia ei löytynyt tuotannosta: %.*s"
+
+#: src/scan-code.l:658
+#, c-format
+msgid "misleading reference: %s"
+msgstr "harhaanjohtava viite: %s"
+
+#: src/scan-code.l:673
+#, c-format
+msgid "ambiguous reference: %s"
+msgstr "ei-yksiselitteinen viite: %s"
+
+#: src/scan-code.l:732
+#, c-format
+msgid "explicit type given in untyped grammar"
+msgstr "eksplisiittinen tyyppi annettu tyypittömässä kieliopissa"
+
+#: src/scan-code.l:757
+#, c-format
+msgid "$$ for the midrule at $%d of `%s' has no declared type"
+msgstr "$$ midrule-lohkolle osoitteessa $%d/”%s” ei ole esiteltyä tyyppiä"
+
+#: src/scan-code.l:762
+#, c-format
+msgid "$$ of `%s' has no declared type"
+msgstr "$$/”%s” ei ole esitelty tyyppi"
+
+#: src/scan-code.l:784
+#, c-format
+msgid "$%s of `%s' has no declared type"
+msgstr "$%s/”%s” ei ole esitelty tyyppi"
+
+#: src/scan-gram.l:149
 #, c-format
 msgid "stray `,' treated as white space"
 msgstr "yksinäinen ”,” käsitellään tyhjemerkkinä"
 
-#: src/scan-gram.l:202
+#: src/scan-gram.l:222
 #, c-format
 msgid "invalid directive: %s"
 msgstr "virheellinen direktiivi: %s"
 
-#: src/scan-gram.l:260
+#: src/scan-gram.l:250
+#, c-format
+msgid "invalid identifier: %s"
+msgstr "virheellinen tunniste: %s"
+
+#: src/scan-gram.l:294
 #, c-format
 msgid "invalid character: %s"
 msgstr "virheellinen merkki: %s"
 
-#: src/scan-gram.l:391
+#: src/scan-gram.l:352
+#, c-format
+msgid "unexpected identifier in bracketed name: %s"
+msgstr "odottamaton tunniste sulkumerkillisessä nimessä: %s"
+
+#: src/scan-gram.l:374
+#, c-format
+msgid "an identifier expected"
+msgstr "odotettiin tunnistetta"
+
+#: src/scan-gram.l:377
+#, c-format
+msgid "invalid character in bracketed name: %s"
+msgstr "virheellinen merkki sulkeissa olevassa nimessä: %s"
+
+#: src/scan-gram.l:475 src/scan-gram.l:496
+#, c-format
+msgid "empty character literal"
+msgstr "tyhjä merkkiliteraali"
+
+#: src/scan-gram.l:480 src/scan-gram.l:501
+#, c-format
+msgid "extra characters in character literal"
+msgstr "ylimääräisiä merkkejä merkkiliteraalissa"
+
+#: src/scan-gram.l:512
 #, c-format
 msgid "invalid null character"
 msgstr "virheellinen null-merkki"
 
-#: src/scan-gram.l:404 src/scan-gram.l:414 src/scan-gram.l:434
+#: src/scan-gram.l:525 src/scan-gram.l:535 src/scan-gram.l:555
 #, c-format
 msgid "invalid number after \\-escape: %s"
 msgstr "virheellinen numero \\-koodinvaihtomerkin jälkeen: %s"
 
-#: src/scan-gram.l:446
+#: src/scan-gram.l:567
 #, c-format
 msgid "invalid character after \\-escape: %s"
 msgstr "virheellinen merkki \\-koodinvaihtomerkin jälkeen: %s"
 
-#: src/scan-gram.l:766
+#: src/scan-gram.l:887
 #, c-format
 msgid "missing `%s' at end of file"
 msgstr "puuttuva ”%s” tiedoston lopussa"
 
-#: src/scan-gram.l:777
+#: src/scan-gram.l:898
 #, c-format
 msgid "missing `%s' at end of line"
 msgstr "puuttuva ”%s” rivin lopussa"
 
-#: src/scan-skel.l:146
+#: src/scan-skel.l:145
 #, c-format
 msgid "unclosed %s directive in skeleton"
 msgstr "sulkematon %s-direktiivi rungossa"
 
-#: src/scan-skel.l:291
+#: src/scan-skel.l:290
 #, c-format
 msgid "too few arguments for %s directive in skeleton"
 msgstr "liian vähän argumentteja %s-direktiiville rungossa"
 
-#: src/scan-skel.l:298
+#: src/scan-skel.l:297
 #, c-format
 msgid "too many arguments for %s directive in skeleton"
 msgstr "liian monta argumenttia %s-direktiiville rungossa"
 
-#: src/symlist.c:200
+#: src/symlist.c:211
 #, c-format
 msgid "invalid $ value: $%d"
 msgstr "virheellinen $-arvo: $%d"
 
-#: src/symtab.c:78
+#: src/symtab.c:72
+#, c-format
+msgid "POSIX Yacc forbids dashes in symbol names: %s"
+msgstr "POSIX Yacc kieltää ajatusviivat symbolinimissä: %s"
+
+#: src/symtab.c:92
 #, c-format
 msgid "too many symbols in input grammar (limit is %d)"
 msgstr "liian monta symbolia syötekieliopissa (raja on %d)"
 
-#: src/symtab.c:140
+#: src/symtab.c:154
 #, c-format
 msgid "%s redeclaration for %s"
 msgstr "%s uudelleenesittely kohteelle %s"
 
-#: src/symtab.c:148
+#: src/symtab.c:162
 #, c-format
 msgid "%s redeclaration for <%s>"
 msgstr "%s uudelleenesittely kohteelle <%s>"
 
-#: src/symtab.c:332
+#: src/symtab.c:329
 #, c-format
 msgid "symbol %s redefined"
 msgstr "symboli %s on määritelty uudelleen"
 
-#: src/symtab.c:346
+#: src/symtab.c:343
 #, c-format
 msgid "symbol %s redeclared"
 msgstr "symboli %s on esitelty uudelleen"
 
-#: src/symtab.c:367
+#: src/symtab.c:364
 #, c-format
 msgid "redefining user token number of %s"
 msgstr "määritellään uudelleen kohteen %s käyttäjämerkkisymbolinumero"
 
-#: src/symtab.c:394
+#: src/symtab.c:392
 #, c-format
 msgid "symbol %s is used, but is not defined as a token and has no rules"
 msgstr ""
 "symbolia %s käytetään, mutta sitä ei ole määritelty merkkisymbolina eikä "
 "sillä ole sääntöjä"
 
-#: src/symtab.c:419
+#: src/symtab.c:412
 #, c-format
 msgid "symbol `%s' used more than once as a literal string"
 msgstr "symbolia ”%s” on käytetty useammin kuin kerran literaalimerkkijonona"
 
-#: src/symtab.c:422
+#: src/symtab.c:415
 #, c-format
 msgid "symbol `%s' given more than one literal string"
 msgstr "symboli ”%s” on annettu useammassa kuin yhdessä literaalimerkkijonossa"
 
-#: src/symtab.c:558
+#: src/symtab.c:531
 #, c-format
-msgid "tokens %s and %s both assigned number %d"
-msgstr "merkkisymboleille %s ja %s on annettu sama numero %d"
+msgid "user token number %d redeclaration for %s"
+msgstr "käyttäjämerkkijononumeron %d uudelleenesittely kohteelle %s"
 
-#: src/symtab.c:891
+#: src/symtab.c:533
+#, c-format
+msgid "previous declaration for %s"
+msgstr "edellinen esittely kohteelle %s"
+
+#: src/symtab.c:909
 #, c-format
 msgid "the start symbol %s is undefined"
 msgstr "aloitussymboli %s on määrittelemätön"
 
-#: src/symtab.c:895
+#: src/symtab.c:913
 #, c-format
 msgid "the start symbol %s is a token"
 msgstr "aloitussymboli %s on merkkisymboli"
 
-#: src/symtab.c:910
+#: src/symtab.c:928
 #, c-format
 msgid "redeclaration for default tagged %%destructor"
 msgstr "uudelleenesittely oletusmerkitylle %%destructor"
 
-#: src/symtab.c:923
+#: src/symtab.c:941
 #, c-format
 msgid "redeclaration for default tagless %%destructor"
 msgstr "uudelleenesittely oletus-ei-merkitylle %%destructor"
 
-#: src/symtab.c:936
+#: src/symtab.c:954
 #, c-format
 msgid "redeclaration for default tagged %%printer"
 msgstr "uudelleenesittely oletus-merkitylle %%printer"
 
-#: src/symtab.c:949
+#: src/symtab.c:967
 #, c-format
 msgid "redeclaration for default tagless %%printer"
 msgstr "uudelleenesittely oletus-ei-merkitylle %%printer"
@@ -761,44 +915,44 @@ msgstr "ei-yksiselitteinen argumentti %s valitsimelle %s"
 msgid "Valid arguments are:"
 msgstr "Mahdolliset argumentit ovat:"
 
-#: lib/bitset_stats.c:178
+#: lib/bitset_stats.c:177
 #, c-format
 msgid "%u bitset_allocs, %u freed (%.2f%%).\n"
 msgstr "%u bitset_allocs, %u vapautettu (%.2f%%).\n"
 
-#: lib/bitset_stats.c:181
+#: lib/bitset_stats.c:180
 #, c-format
 msgid "%u bitset_sets, %u cached (%.2f%%)\n"
 msgstr "%u bitset_sets, %u tallennettu välimuistiin (%.2f%%)\n"
 
-#: lib/bitset_stats.c:184
+#: lib/bitset_stats.c:183
 #, c-format
 msgid "%u bitset_resets, %u cached (%.2f%%)\n"
 msgstr "%u bitset_resets, %u tallennettu välimuistiin (%.2f%%)\n"
 
-#: lib/bitset_stats.c:187
+#: lib/bitset_stats.c:186
 #, c-format
 msgid "%u bitset_tests, %u cached (%.2f%%)\n"
 msgstr "%u bitset_tests, %u tallennettu välimuistiin (%.2f%%)\n"
 
-#: lib/bitset_stats.c:191
+#: lib/bitset_stats.c:190
 #, c-format
 msgid "%u bitset_lists\n"
 msgstr "%u bitset_lists\n"
 
-#: lib/bitset_stats.c:193
+#: lib/bitset_stats.c:192
 msgid "count log histogram\n"
 msgstr "lukumäärälokihistogrammi\n"
 
-#: lib/bitset_stats.c:196
+#: lib/bitset_stats.c:195
 msgid "size log histogram\n"
 msgstr "kokolokihistogrammi\n"
 
-#: lib/bitset_stats.c:199
+#: lib/bitset_stats.c:198
 msgid "density histogram\n"
 msgstr "tiheyshistogrammi\n"
 
-#: lib/bitset_stats.c:213
+#: lib/bitset_stats.c:212
 #, c-format
 msgid ""
 "Bitset statistics:\n"
@@ -807,25 +961,25 @@ msgstr ""
 "Bittivektoritilastot:\n"
 "\n"
 
-#: lib/bitset_stats.c:216
+#: lib/bitset_stats.c:215
 #, c-format
 msgid "Accumulated runs = %u\n"
 msgstr "Kumuloituneet ajot = %u\n"
 
-#: lib/bitset_stats.c:260 lib/bitset_stats.c:265
+#: lib/bitset_stats.c:259 lib/bitset_stats.c:264
 msgid "Could not read stats file."
 msgstr "Ei voitu lukea stats-tiedostoa."
 
-#: lib/bitset_stats.c:262
+#: lib/bitset_stats.c:261
 #, c-format
 msgid "Bad stats file size.\n"
 msgstr "Virheellinen stats-tiedostokoko.\n"
 
-#: lib/bitset_stats.c:288 lib/bitset_stats.c:290
+#: lib/bitset_stats.c:287 lib/bitset_stats.c:289
 msgid "Could not write stats file."
 msgstr "Ei voitu kirjoittaa stats-tiedostoa."
 
-#: lib/bitset_stats.c:293
+#: lib/bitset_stats.c:292
 msgid "Could not open stats file for writing."
 msgstr "Ei voitu avata stats-tiedostoa kirjoittamista varten."
 
@@ -888,16 +1042,18 @@ msgstr "%s: valitsin ’-W %s’ ei salli argumenttia\n"
 msgid "%s: option '-W %s' requires an argument\n"
 msgstr "%s: valitsin ’-W %s’ vaatii argumentin\n"
 
-#: lib/obstack.c:423 lib/obstack.c:425 lib/xalloc-die.c:34
+#: lib/obstack.c:421 lib/obstack.c:423 lib/xalloc-die.c:34
 msgid "memory exhausted"
 msgstr "muisti loppui"
 
-#: lib/pipe.c:138 lib/pipe.c:141 lib/pipe.c:262 lib/pipe.c:265
+#: lib/spawn-pipe.c:138 lib/spawn-pipe.c:141 lib/spawn-pipe.c:262
+#: lib/spawn-pipe.c:265
 #, c-format
 msgid "cannot create pipe"
 msgstr "putkea ei voida luoda"
 
-#: lib/pipe.c:232 lib/pipe.c:346 lib/wait-process.c:282 lib/wait-process.c:356
+#: lib/spawn-pipe.c:232 lib/spawn-pipe.c:346 lib/wait-process.c:282
+#: lib/wait-process.c:356
 #, c-format
 msgid "%s subprocess failed"
 msgstr "%s-aliprosessi epäonnistui"
@@ -921,11 +1077,11 @@ msgstr "%s-aliprosessi epäonnistui"
 #. If you don't know what to put here, please see
 #. <http://en.wikipedia.org/wiki/Quotation_mark#Glyphs>
 #. and use glyphs suitable for your language.
-#: lib/quotearg.c:272
+#: lib/quotearg.c:271
 msgid "`"
 msgstr "”"
 
-#: lib/quotearg.c:273
+#: lib/quotearg.c:272
 msgid "'"
 msgstr "”"
 
@@ -965,6 +1121,16 @@ msgstr "%s-aliprosessi"
 #, c-format
 msgid "%s subprocess got fatal signal %d"
 msgstr "%s-aliprosessi sai kohtalokkaan signaalin %d"
+
+#~ msgid ""
+#~ "Generate LALR(1) and GLR parsers.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Tuota LALR(1) ja GLR -jäsentimet.\n"
+#~ "\n"
+
+#~ msgid "tokens %s and %s both assigned number %d"
+#~ msgstr "merkkisymboleille %s ja %s on annettu sama numero %d"
 
 #~ msgid "subsidiary program `%s' could not be invoked"
 #~ msgstr "tytärohjelmaa ”%s” ei voitu kutsua"

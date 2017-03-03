@@ -1,7 +1,6 @@
 /* System-dependent definitions for Bison.
 
-   Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2009,
-   2010 Free Software Foundation, Inc.
+   Copyright (C) 2000-2007, 2009-2011 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -67,13 +66,19 @@ typedef size_t uintptr_t;
 | GCC extensions.  |
 `-----------------*/
 
-/* Use this to suppress gcc's `...may be used before initialized'
-   warnings.  */
-#ifdef lint
-# define IF_LINT(Code) Code
-#else
-# define IF_LINT(Code) /* empty */
-#endif
+/* Use PACIFY_CC to indicate that Code is unimportant to the logic of Bison
+   but that it is necessary for suppressing compiler warnings.  For example,
+   Code might be a variable initializer that's always overwritten before the
+   variable is used.
+
+   PACIFY_CC is intended to be useful only as a comment as it does not alter
+   Code.  It is tempting to redefine PACIFY_CC so that it will suppress Code
+   when configuring without --enable-gcc-warnings.  However, that would mean
+   that, for maintainers, Bison would compile with potentially less warnings
+   and safer logic than it would for users.  Due to the overhead of M4,
+   suppressing Code is unlikely to offer any significant improvement in
+   Bison's performance anyway.  */
+#define PACIFY_CC(Code) Code
 
 #ifndef __attribute__
 /* This feature is available in gcc versions 2.5 and later.  */
