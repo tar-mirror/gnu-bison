@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bison 2.6.2\n"
+"Project-Id-Version: bison 2.6.3\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-10-23 13:47+0200\n"
-"PO-Revision-Date: 2012-08-06 21:00+0300\n"
+"POT-Creation-Date: 2012-11-07 18:23+0100\n"
+"PO-Revision-Date: 2012-10-22 22:39+0300\n"
 "Last-Translator: Toomas Soome <Toomas.Soome@microlink.ee>\n"
 "Language-Team: Estonian <linux-ee@lists.eenet.ee>\n"
 "Language: et\n"
@@ -223,7 +223,6 @@ msgstr ""
 "                             (XML skeem on eksperimentaalne)\n"
 
 #: src/getargs.c:340
-#, fuzzy
 msgid ""
 "Warning categories include:\n"
 "  `midrule-values'  unset or unused midrule values\n"
@@ -268,20 +267,18 @@ msgstr ""
 "  `none'         blokeeri raport\n"
 
 #: src/getargs.c:365
-#, fuzzy, c-format
+#, c-format
 msgid "Report bugs to <%s>.\n"
-msgstr ""
-"\n"
-"Teatage palun vigadest aadressil <%s>.\n"
+msgstr "Teatage palun vigadest aadressil <%s>.\n"
 
 #: src/getargs.c:366
 #, c-format
 msgid "%s home page: <%s>.\n"
-msgstr ""
+msgstr "%s koduleht: <%s>.\n"
 
 #: src/getargs.c:367
 msgid "General help using GNU software: <http://www.gnu.org/gethelp/>.\n"
-msgstr ""
+msgstr "Üldine abiinfo GNU tarkvara kohta: <http://www.gnu.org/gethelp/>.\n"
 
 #. TRANSLATORS: Replace LANG_CODE in this URL with your language
 #. code <http://translationproject.org/team/LANG_CODE.html> to
@@ -291,10 +288,12 @@ msgstr ""
 #: src/getargs.c:380
 msgid "Report translation bugs to <http://translationproject.org/team/>.\n"
 msgstr ""
+"Tõlkevigadest teatage palun aadressil <http://translationproject.org/team/"
+">.\n"
 
 #: src/getargs.c:382
 msgid "For complete documentation, run: info bison.\n"
-msgstr ""
+msgstr "Täieliku dokumentatsiooni lugemiseks käivitage: info bison.\n"
 
 #: src/getargs.c:398
 #, c-format
@@ -1156,7 +1155,3 @@ msgstr "%s alamprotsess"
 #, c-format
 msgid "%s subprocess got fatal signal %d"
 msgstr "%s alamprotsess sai fataalse signaali %d"
-
-#, fuzzy
-#~ msgid "error"
-#~ msgstr "fataalne viga"

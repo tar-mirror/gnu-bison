@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 2.6.3.  */
+/* A Bison parser, made by GNU Bison 2.6.4.35-5a000.  */
 
 /* Skeleton implementation for Bison LALR(1) parsers in C++
    
@@ -335,17 +335,18 @@ namespace yy {
     int yychar = yyempty_;
     int yytoken = 0;
 
-    /* State.  */
+    // State.
     int yyn;
     int yylen = 0;
     int yystate = 0;
 
-    /* Error handling.  */
+    // Error handling.
     int yynerrs_ = 0;
     int yyerrstatus_ = 0;
 
     /// Semantic value of the lookahead.
-    semantic_type yylval;
+    static semantic_type yyval_default;
+    semantic_type yylval = yyval_default;
     /// Location of the lookahead.
     location_type yylloc;
     /// The locations where the error started and ended.
@@ -362,14 +363,14 @@ namespace yy {
 
 
 /* User initialization code.  */
-/* Line 538 of lalr1.cc  */
+/* Line 539 of lalr1.cc  */
 #line 9697 "../../doc/bison.texi"
 {
   // Initialize the initial location.
   yylloc.begin.filename = yylloc.end.filename = &driver.file;
 }
-/* Line 538 of lalr1.cc  */
-#line 373 "../../../../examples/calc++/calc++-parser.cc"
+/* Line 539 of lalr1.cc  */
+#line 374 "../../../../examples/calc++/calc++-parser.cc"
 
     /* Initialize the stacks.  The initial state will be pushed in
        yynewstate, since the latter expects the semantical and the
@@ -406,7 +407,6 @@ namespace yy {
 	YYCDEBUG << "Reading a token: ";
 	yychar = yylex (&yylval, &yylloc, driver);
       }
-
 
     /* Convert token to internal form.  */
     if (yychar <= yyeof_)

@@ -1794,7 +1794,7 @@ case 65:
 YY_RULE_SETUP
 #line 293 "scan-gram.l"
 {
-    complain_at (*loc, _("invalid character: %s"), quote (gram_text));
+    complain_at (*loc, _("invalid character: %s"), quote_mem (gram_text, gram_leng));
   }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
@@ -1902,7 +1902,7 @@ YY_RULE_SETUP
 #line 376 "scan-gram.l"
 {
     complain_at (*loc, _("invalid character in bracketed name: %s"),
-		 quote (gram_text));
+		 quote_mem (gram_text, gram_leng));
   }
 	YY_BREAK
 case YY_STATE_EOF(SC_BRACKETED_ID):

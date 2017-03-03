@@ -8,8 +8,8 @@
 // Tell Flex the lexer's prototype ...
 # define YY_DECL                                        \
   yy::calcxx_parser::token_type                         \
-  yylex (yy::calcxx_parser::semantic_type* yylval,      \
-         yy::calcxx_parser::location_type* yylloc,      \
+  yylex (yy::calcxx_parser::semantic_type *yylval,      \
+         yy::calcxx_parser::location_type *yylloc,      \
          calcxx_driver& driver)
 // ... and declare it for the parser's sake.
 YY_DECL;

@@ -73,7 +73,7 @@ DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(top_srcdir)/build-aux/javaexec.sh.in \
 	$(top_srcdir)/build-aux/missing $(top_srcdir)/configure \
 	ABOUT-NLS AUTHORS COPYING ChangeLog INSTALL NEWS README-alpha \
-	THANKS TODO texinfo.tex
+	THANKS TODO
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/00gnulib.m4 \
 	$(top_srcdir)/m4/alloca.m4 $(top_srcdir)/m4/asm-underscore.m4 \
@@ -318,6 +318,7 @@ CXX = @CXX@
 CXXDEPMODE = @CXXDEPMODE@
 CXXFLAGS = @CXXFLAGS@
 CYGPATH_W = @CYGPATH_W@
+C_COMPILER_POSIXLY_CORRECT = @C_COMPILER_POSIXLY_CORRECT@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 ECHO_C = @ECHO_C@

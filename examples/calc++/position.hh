@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 2.6.3.  */
+/* A Bison parser, made by GNU Bison 2.6.4.35-5a000.  */
 
 /* Positions for Bison parsers in C++
    
@@ -105,7 +105,7 @@ namespace yy {
   };
 
   /// Add and assign a position.
-  inline const position&
+  inline position&
   operator+= (position& res, const int width)
   {
     res.columns (width);
@@ -121,7 +121,7 @@ namespace yy {
   }
 
   /// Add and assign a position.
-  inline const position&
+  inline position&
   operator-= (position& res, const int width)
   {
     return res += -width;

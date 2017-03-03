@@ -1,3 +1,320 @@
+2012-11-07  Akim Demaille  <akim@lrde.epita.fr>
+
+	version 2.6.5
+	* NEWS: Record release date.
+
+2012-11-07  Akim Demaille  <akim@lrde.epita.fr>
+
+	regen
+
+2012-11-07  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: syntax-check
+	* tests/actions.at: Fix typo.
+
+2012-11-07  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: beware of compilers that do not support POSIXLY_CORRECT
+	Running "maintainer-release-check" on OS X with Clang 2.9 fails,
+	because "clang-mp-2.9 -o test -g test.c" launches "/usr/bin/dsymutil
+	test -o test.dSYM" which fails with "error: unable to open executable
+	'-o'".
+
+	* m4/c-working.m4 (BISON_CHECK_WITH_POSIXLY_CORRECT)
+	(BISON_C_COMPILER_POSIXLY_CORRECT): New.
+	* configure.ac: Use the latter.
+	* tests/atlocal.in (POSIXLY_CORRECT_IS_EXPORTED): New.
+	* tests/local.at (AT_BISON_CHECK_WARNINGS_): Use it instead of computing its
+	value each time.
+	(AT_QUELL_VALGRIND): Skip tests that cannot work because of compilers
+	that do not support POSIXLY_CORRECT.
+
+2012-11-07  Akim Demaille  <akim@lrde.epita.fr>
+
+	gnulib: update
+
+2012-11-06  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: calc: modernize the use of locations
+	* tests/calc.at: Don't initialize the location, let the parser
+	do it.
+	Use a $printer.
+	Change some testing input to be easier to distinguish (instead of always
+	"0 0" for instance).
+
+2012-11-06  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: remove useless location initializations
+	* tests/actions.at, tests/calc.at: here.
+
+2012-11-06  Akim Demaille  <akim@lrde.epita.fr>
+
+	lalr1.cc: always initialize yylval.
+	* data/lalr1.cc: here.
+
+2012-11-06  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: check that C and C++ objects can be linked together.
+	* tests/local.at (AT_SKIP_IF_CANNOT_LINK_C_AND_CXX): New.
+	* tests/headers.at (Several parsers): Use it.
+
+2012-11-06  Akim Demaille  <akim@lrde.epita.fr>
+
+	yacc.c: also disable -Wuninitialized.
+	* data/yacc.c (YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN): For some versions
+	of GCC, -Wmaybe-uninitialized alone does not suffice.
+
+2012-11-06  Akim Demaille  <akim@lrde.epita.fr>
+
+	glr.cc, yacc.c: initialize yylloc properly
+	There are several issues to address here.  One is that yylloc should
+	be initialized when possible.  Another is that the push parser needs
+	to update yypushed_loc when the user modified it.  And if the parser
+	starts by a reduction of an empty, it uses the first location on the
+	stack, which, therefore, must also be initialized to this initial
+	location.
+
+	This is getting complex, especially since because initializing a
+	global (impure interface) is different from initializing a local
+	variable.  To simplify, the local yylloc is not initialized during its
+	definition.
+
+	* data/c.m4 (b4_yyloc_default_define): Replace by...
+	(b4_yyloc_default): this.
+	Adjust dependencies.
+	* data/glr.cc: Initialize yylloc.
+	* data/yacc.c (b4_declare_scanner_communication_variables):
+	Initialize yylloc during its definition.
+	Don't define yyloc_default.
+	(yypush_parse): The location formal is not const, as we might
+	initialize it.
+	(yyparse): Define yyloc_default.
+	Use it before running the user initial action.
+	Possibly update the first location on the stack, and the pushed
+	location after the user initial action.
+	* tests/actions.at (Initial locations): Check that the initial
+	location is correct.
+
+2012-11-06  Akim Demaille  <akim@lrde.epita.fr>
+
+	yacc.c, glr.c: a better YY_LOCATION_PRINT
+	* data/c.m4 (b4_yy_location_print_define): New.
+	Now issues "short" locations, e.g., "1.1" instead of "1.1-1.1".
+	Was initially a function, but then we face "static but unused"
+	warnings.
+	Simpler as a macro.
+	* tests/local.at, data/glr.c, data/yacc.c: Use it instead of duplicating.
+	* tests/actions.at: Adjust expectations.
+
+2012-11-06  Akim Demaille  <akim@lrde.epita.fr>
+
+	yacc.c: simplify initialization
+	* data/yacc.c: Fuse the initializations of yyssp, yyss and the like.
+	Remove an obsolete comment: we do initialize these initial stack
+	members (in some cases).
+
+2012-11-05  Akim Demaille  <akim@lrde.epita.fr>
+
+	doc: formatting changes
+	* doc/bison.texi: In a pointer type.
+
+2012-11-05  Akim Demaille  <akim@lrde.epita.fr>
+
+	c++: fix position operator signatures
+	* data/location.cc (operator+=, operator-=): Remove const from return
+	type.
+
+2012-11-05  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: remove useless location initialization.
+	* tests/glr-regression.at: here.
+	glr.c does initialize yylloc.
+
+2012-11-05  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: fix locations in C
+	* tests/local.at (AT_YYERROR_DEFINE): Don't display the end of the location
+	if it is not after its beginning.
+	* tests/actions.at, tests/cxx-type.at: Adjust the expected output.
+
+2012-11-05  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: handle %parse-param in the generated yyerror
+	* tests/local.at (AT_PARSE_PARAMS): New.
+	(AT_YYERROR_FORMALS, AT_YYERROR_DEFINE): Use it to add the parse-param
+	to yyerror.
+	* tests/calc.at, tests/regression.at: Use AT_YYERROR_DEFINE and
+	AT_YYERROR_DECLARE, now that they handle properly the parse-params.
+	Be sure to let AT_BISON_OPTION_PUSHDEFS now what parse-params are used.
+
+2012-11-05  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: simplifications
+	* tests/actions.at (Exotic Dollars): Formatting changes.
+	Use AT_FULL_COMPILE.
+	(AT_CHECK_PRINTER_AND_DESTRUCTOR): Remove useless initialization of @$.
+
+2012-11-01  Akim Demaille  <akim@lrde.epita.fr>
+
+	grammars: fix display of nul character in error message
+	Reported by Marc Mendiola.
+	http://lists.gnu.org/archive/html/help-bison/2012-10/msg00017.html
+
+	* gnulib: Update to get quote_mem.
+	* src/scan-gram.l: Use it.
+	* tests/input.at (Invalid inputs): Additional checks.
+	* tests/named-refs.at: Likewise.
+
+2012-11-01  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: sort
+	* tests/regression.at (Invalid inputs, Invalid inputs with {}): Move to...
+	* tests/input.at: here, for consistency.
+
+2012-11-01  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: cosmetic changes
+	* tests/actions.at (AT_CHECK_PRINTER_AND_DESTRUCTOR): Improve the
+	displayed title.
+
+2012-11-01  Akim Demaille  <akim@lrde.epita.fr>
+
+	comment changes
+	* data/lalr1.cc: here.
+
+2012-11-01  Akim Demaille  <akim@lrde.epita.fr>
+
+	autoconf: update
+	There are comment changes only in the files we use.
+
+2012-11-01  Akim Demaille  <akim@lrde.epita.fr>
+
+	gnulib: update
+
+2012-10-28  Akim Demaille  <akim@lrde.epita.fr>
+
+	regen
+
+2012-10-28  Akim Demaille  <akim@lrde.epita.fr>
+
+	yacc.c: initialize yylval and yylloc.
+	When generating a pure push parser, the initialization of yylval and
+	yylloc may not be visible to the compiler.  With warnings enabled, GCC
+	4.3.6, 4.4.7, 4.5.4, and 4.6.3 report uninitialized uses of
+	yylval/yylloc.  Using local pragmas to disable these warnings is not
+	supported before 4.6, and 4.6 does not support it properly.  So
+	initialize yylval and yylloc at their definition.  Reported by Peter
+	Simons.  See
+	http://lists.gnu.org/archive/html/bison-patches/2012-10/msg00133.html
+
+	* data/c.m4 (b4_yyloc_default_define): New.
+	* data/yacc.c: Use it when locations are requested.
+	(YYLVAL_INITIALIZE): Replace by...
+	(YY_INITIAL_VALUE): this.
+	(yyparse): Initialize yylloc and yylval.
+	Therefore, remove the initialization of yylloc's field.
+	* data/glr.c: Likewise.
+
+2012-10-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	regen
+
+2012-10-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	yacc.c: don't use _Pragma GCC diagnostic with 4.6
+	Reported by Peter Simons.
+	http://lists.gnu.org/archive/html/bug-bison/2012-10/msg00033.html
+
+	* data/yacc.c (b4_declare_scanner_communication_variables): 4.7
+	seems fine though.
+
+2012-10-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	regen
+
+2012-10-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	yacc.c: do not define location support when not using locations
+	* data/yacc.c (YYLLOC_DEFAULT, YYRHSLOC): Don't define when not
+	using locations.
+
+2012-10-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	maint: be compilable with GCC 4.0
+	The "shadows a global declaration" warning in GCC 4.0 was a bit
+	annoying.  It does not like that a type name be used in a prototype of
+	a function (not the implementation, just the declaration):
+
+	  In file included from src/LR0.c:38:
+	  src/reader.h:56: warning: declaration of 'named_ref' shadows a
+	                            global declaration
+	  src/named-ref.h:35: warning: shadowed declaration is here
+
+	It does not like either when a global variable name is used in a
+	prototype.  Flex 2.5.37 generates this prototype:
+
+	  void gram_set_debug (int debug_flag  );
+
+	* src/getargs.h, src/getargs.c (debug_flag): Rename as...
+	(debug): this.
+	Adjust dependencies.
+	* src/reader.h: Don't use "named_ref" as a formal argument name.
+
+2012-10-25  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: address a warning from GCC 4.4
+	236. torture.at:465: testing Exploding the Stack Size with Alloca ...
+	../../../tests/torture.at:474: bison -o input.c input.y
+	../../../tests/torture.at:474: $CC $CFLAGS $CPPFLAGS $LDFLAGS -o input input.c $LIBS
+	stderr:
+	cc1: warnings being treated as errors
+	input.y: In function 'main':
+	input.y:60: error: 'status' may be used uninitialized in this function
+
+	* tests/torture.at (AT_DATA_STACK_TORTURE): Initial status to avoid
+	the previous error.
+
+2012-10-25  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: don't use options that Clang does not support
+	* configure.ac (WARN_CFLAGS, WARN_CXXFLAGS): Do not include options
+	that Clang does not support.
+
+2012-10-25  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: restore the tests on -Werror
+	When run as /bin/sh, Bash sets the shell variable POSIXLY_CORRECT to
+	y.  The test suite checks for the envvar POSIXLY_CORRECT to turn of
+	some tests not supported in POSIX mode.  Restore these tests.
+
+	Reported by the Hydra build farm, from Rob Vermaas.
+
+	* tests/local.at (AT_BISON_CHECK_WARNINGS_): Check the envvar
+	POSIXLY_CORRECT, not the shell variable.
+
+2012-10-25  Akim Demaille  <akim@lrde.epita.fr>
+
+	regen
+
+2012-10-25  Akim Demaille  <akim@lrde.epita.fr>
+
+	parse-gram: update the Bison interface
+	* src/parse-gram.y (%pure-parser, %name-prefix): Replace with...
+	(%define api.pure, %define api.prefix)
+	* src/location.h, src/scan-gram.h: Adjust to api.prefix.
+
+2012-10-25  Akim Demaille  <akim@lrde.epita.fr>
+
+	fix comment
+	* data/c.m4 (b4_YYDEBUG_define): here.
+
+2012-10-23  Akim Demaille  <akim@lrde.epita.fr>
+
+	maint: post-release administrivia
+	* NEWS: Add header line for next release.
+	* .prev-version: Record previous version.
+	* cfg.mk (old_NEWS_hash): Auto-update.
+
 2012-10-23  Akim Demaille  <akim@lrde.epita.fr>
 
 	version 2.6.4

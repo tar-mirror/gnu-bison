@@ -6,10 +6,10 @@
 # Yuri Chornoivan <yurchor@ukr.net>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: bison 2.6.2\n"
+"Project-Id-Version: bison 2.6.3\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-10-23 13:47+0200\n"
-"PO-Revision-Date: 2012-08-06 21:18+0300\n"
+"POT-Creation-Date: 2012-11-07 18:23+0100\n"
+"PO-Revision-Date: 2012-10-23 00:28+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <translation-team-uk@lists.sourceforge.net>\n"
 "Language: uk\n"
@@ -234,7 +234,6 @@ msgstr ""
 "\n"
 
 #: src/getargs.c:340
-#, fuzzy
 msgid ""
 "Warning categories include:\n"
 "  `midrule-values'  unset or unused midrule values\n"
@@ -279,20 +278,20 @@ msgstr ""
 "  `none'         вимкнути звіт\n"
 
 #: src/getargs.c:365
-#, fuzzy, c-format
+#, c-format
 msgid "Report bugs to <%s>.\n"
-msgstr ""
-"\n"
-"Сповіщайте про помилки за адресою <%s>.\n"
+msgstr "Сповіщайте про помилки за адресою <%s>.\n"
 
 #: src/getargs.c:366
 #, c-format
 msgid "%s home page: <%s>.\n"
-msgstr ""
+msgstr "Домашня сторінка %s: <%s>.\n"
 
 #: src/getargs.c:367
 msgid "General help using GNU software: <http://www.gnu.org/gethelp/>.\n"
 msgstr ""
+"Загальна довідка щодо використання програмного забезпечення GNU: <http://www."
+"gnu.org/gethelp/>.\n"
 
 #. TRANSLATORS: Replace LANG_CODE in this URL with your language
 #. code <http://translationproject.org/team/LANG_CODE.html> to
@@ -302,10 +301,13 @@ msgstr ""
 #: src/getargs.c:380
 msgid "Report translation bugs to <http://translationproject.org/team/>.\n"
 msgstr ""
+"Звіти щодо вад у перекладах слід надсилати за адресами, вказаними тут: "
+"<http://translationproject.org/team/>.\n"
 
 #: src/getargs.c:382
 msgid "For complete documentation, run: info bison.\n"
 msgstr ""
+"З повною документацією можна ознайомитися за допомогою команди info bison.\n"
 
 #: src/getargs.c:398
 #, c-format
@@ -1184,10 +1186,6 @@ msgstr "Підпроцес %s"
 #, c-format
 msgid "%s subprocess got fatal signal %d"
 msgstr "Підпроцесом %s отримано сигнал щодо аварійного завершення %d"
-
-#, fuzzy
-#~ msgid "error"
-#~ msgstr "критична помилка: "
 
 #~ msgid "stray '@'"
 #~ msgstr "зайвий символ '@'"

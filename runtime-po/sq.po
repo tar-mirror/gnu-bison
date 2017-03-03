@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison-runtime 2.6.2\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-10-23 13:47+0200\n"
+"POT-Creation-Date: 2012-11-07 18:23+0100\n"
 "PO-Revision-Date: 2012-10-08 21:35+0500\n"
 "Last-Translator: Agron Selimaj <linuxmaster@verizon.net>\n"
 "Language-Team: Albanian <translation-team-sq@lists.sourceforge.net>\n"
@@ -17,46 +17,46 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: data/glr.c:883 data/yacc.c:763
+#: data/glr.c:865 data/yacc.c:765
 msgid "syntax error: cannot back up"
 msgstr "gabim sintaksor: nuk mund të ruaj një kopje"
 
-#: data/glr.c:1757
+#: data/glr.c:1739
 msgid "syntax is ambiguous"
 msgstr "sintaksa është e ngjashme me të tjera"
 
-#: data/glr.c:2042 data/glr.c:2120 data/glr.c:2158 data/glr.c:2427
-#: data/lalr1.cc:912 data/lalr1.cc:932 data/yacc.c:1360 data/yacc.c:1877
-#: data/yacc.c:1883
+#: data/glr.c:2024 data/glr.c:2102 data/glr.c:2140 data/glr.c:2404
+#: data/lalr1.cc:912 data/lalr1.cc:932 data/yacc.c:1339 data/yacc.c:1842
+#: data/yacc.c:1848
 msgid "syntax error"
 msgstr "gabim sintaksor"
 
-#: data/glr.c:2121 data/lalr1.cc:913 data/yacc.c:1361
+#: data/glr.c:2103 data/lalr1.cc:913 data/yacc.c:1340
 #, c-format
 msgid "syntax error, unexpected %s"
 msgstr "gabim sintaksor, %s i papritur"
 
-#: data/glr.c:2122 data/lalr1.cc:914 data/yacc.c:1362
+#: data/glr.c:2104 data/lalr1.cc:914 data/yacc.c:1341
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s"
 msgstr "gabim sintaksor, %s i papritur, pritet %s"
 
-#: data/glr.c:2123 data/lalr1.cc:915 data/yacc.c:1363
+#: data/glr.c:2105 data/lalr1.cc:915 data/yacc.c:1342
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s"
 msgstr "gabim sintaksor, %s i papritur, pritet %s ose %s"
 
-#: data/glr.c:2124 data/lalr1.cc:916 data/yacc.c:1364
+#: data/glr.c:2106 data/lalr1.cc:916 data/yacc.c:1343
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s or %s"
 msgstr "gabim sintaksor, %s i papritur, pritet %s ose %s ose %s"
 
-#: data/glr.c:2125 data/lalr1.cc:917 data/yacc.c:1365
+#: data/glr.c:2107 data/lalr1.cc:917 data/yacc.c:1344
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s or %s or %s"
 msgstr "gabim sintaksor, %s i papritur, pritet %s ose %s ose %s ose %s"
 
-#: data/glr.c:2487 data/yacc.c:1442 data/yacc.c:1444 data/yacc.c:1637
-#: data/yacc.c:2034
+#: data/glr.c:2464 data/yacc.c:1421 data/yacc.c:1423 data/yacc.c:1602
+#: data/yacc.c:1999
 msgid "memory exhausted"
 msgstr "nuk mbeti kujtesë më"

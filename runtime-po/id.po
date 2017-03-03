@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison-runtime 2.0b.id\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-10-23 13:47+0200\n"
+"POT-Creation-Date: 2012-11-07 18:23+0100\n"
 "PO-Revision-Date: 2005-09-14 20:39+0700\n"
 "Last-Translator: Tedi Heriyanto <tedi_heriyanto@yahoo.com>\n"
 "Language-Team: Indonesian <translation-team-id@lists.sourceforge.net>\n"
@@ -19,49 +19,49 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: KBabel 1.10\n"
 
-#: data/glr.c:883 data/yacc.c:763
+#: data/glr.c:865 data/yacc.c:765
 msgid "syntax error: cannot back up"
 msgstr "kesalahan sintaks: tidak dapat membackup"
 
-#: data/glr.c:1757
+#: data/glr.c:1739
 msgid "syntax is ambiguous"
 msgstr "sintaks rancu"
 
-#: data/glr.c:2042 data/glr.c:2120 data/glr.c:2158 data/glr.c:2427
-#: data/lalr1.cc:912 data/lalr1.cc:932 data/yacc.c:1360 data/yacc.c:1877
-#: data/yacc.c:1883
+#: data/glr.c:2024 data/glr.c:2102 data/glr.c:2140 data/glr.c:2404
+#: data/lalr1.cc:912 data/lalr1.cc:932 data/yacc.c:1339 data/yacc.c:1842
+#: data/yacc.c:1848
 msgid "syntax error"
 msgstr "kesalahan sintaks"
 
-#: data/glr.c:2121 data/lalr1.cc:913 data/yacc.c:1361
+#: data/glr.c:2103 data/lalr1.cc:913 data/yacc.c:1340
 #, c-format
 msgid "syntax error, unexpected %s"
 msgstr "kesalahan sintaks, %s tidak diharapkan"
 
-#: data/glr.c:2122 data/lalr1.cc:914 data/yacc.c:1362
+#: data/glr.c:2104 data/lalr1.cc:914 data/yacc.c:1341
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s"
 msgstr "kesalahan sintaks, %s tidak diharapkan, mengharapkan %s"
 
-#: data/glr.c:2123 data/lalr1.cc:915 data/yacc.c:1363
+#: data/glr.c:2105 data/lalr1.cc:915 data/yacc.c:1342
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s"
 msgstr "kesalahan sintaks, %s tidak diharapkan, mengharapkan %s atau %s"
 
-#: data/glr.c:2124 data/lalr1.cc:916 data/yacc.c:1364
+#: data/glr.c:2106 data/lalr1.cc:916 data/yacc.c:1343
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s or %s"
 msgstr ""
 "kesalahan sintaks, %s tidak diharapkan, mengharapkan %s atau %s atau %s"
 
-#: data/glr.c:2125 data/lalr1.cc:917 data/yacc.c:1365
+#: data/glr.c:2107 data/lalr1.cc:917 data/yacc.c:1344
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s or %s or %s"
 msgstr ""
 "kesalahan sintaks, %s tidak diharapkan, mengharapkan %s atau %s atau %s atau "
 "%s"
 
-#: data/glr.c:2487 data/yacc.c:1442 data/yacc.c:1444 data/yacc.c:1637
-#: data/yacc.c:2034
+#: data/glr.c:2464 data/yacc.c:1421 data/yacc.c:1423 data/yacc.c:1602
+#: data/yacc.c:1999
 msgid "memory exhausted"
 msgstr "memori habis"

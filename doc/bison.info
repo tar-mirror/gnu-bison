@@ -1,7 +1,7 @@
 This is ../../../doc/bison.info, produced by makeinfo version 4.13 from
 ../../../doc/bison.texi.
 
-This manual (22 October 2012) is for GNU Bison (version 2.6.4), the GNU
+This manual (7 November 2012) is for GNU Bison (version 2.6.5), the GNU
 parser generator.
 
    Copyright (C) 1988-1993, 1995, 1998-2012 Free Software Foundation,
@@ -30,7 +30,7 @@ File: bison.info,  Node: Top,  Next: Introduction,  Up: (dir)
 Bison
 *****
 
-This manual (22 October 2012) is for GNU Bison (version 2.6.4), the GNU
+This manual (7 November 2012) is for GNU Bison (version 2.6.5), the GNU
 parser generator.
 
    Copyright (C) 1988-1993, 1995, 1998-2012 Free Software Foundation,
@@ -362,7 +362,7 @@ Bison has grown more robust and evolved many other new features thanks
 to the hard work of a long list of volunteers.  For details, see the
 `THANKS' and `ChangeLog' files included in the Bison distribution.
 
-   This edition corresponds to version 2.6.4 of Bison.
+   This edition corresponds to version 2.6.5 of Bison.
 
 
 File: bison.info,  Node: Conditions,  Next: Copying,  Prev: Introduction,  Up: Top
@@ -9010,8 +9010,8 @@ parser expects it to be declared.  We can factor both as follows.
      // Tell Flex the lexer's prototype ...
      # define YY_DECL                                        \
        yy::calcxx_parser::token_type                         \
-       yylex (yy::calcxx_parser::semantic_type* yylval,      \
-              yy::calcxx_parser::location_type* yylloc,      \
+       yylex (yy::calcxx_parser::semantic_type *yylval,      \
+              yy::calcxx_parser::location_type *yylloc,      \
               calcxx_driver& driver)
      // ... and declare it for the parser's sake.
      YY_DECL;
@@ -9112,7 +9112,7 @@ changed several times, it is safer to require the version you designed
 the grammar for.
 
      %skeleton "lalr1.cc" /* -*- C++ -*- */
-     %require "2.6.4"
+     %require "2.6.5"
      %defines
      %define parser_class_name "calcxx_parser"
 

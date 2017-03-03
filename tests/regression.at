@@ -383,58 +383,6 @@ AT_CLEANUP
 
 
 
-## ---------------- ##
-## Invalid inputs.  ##
-## ---------------- ##
-
-
-AT_SETUP([Invalid inputs])
-
-AT_DATA([input.y],
-[[%%
-?
-default: 'a' }
-%&
-%a-does-not-exist
-%-
-%{
-]])
-
-AT_BISON_CHECK([input.y], [1], [],
-[[input.y:2.1: invalid character: '?'
-input.y:3.14: invalid character: '}'
-input.y:4.1: invalid character: '%'
-input.y:4.2: invalid character: '&'
-input.y:5.1-17: invalid directive: '%a-does-not-exist'
-input.y:6.1: invalid character: '%'
-input.y:6.2: invalid character: '-'
-input.y:7.1-8.0: missing '%}' at end of file
-input.y:7.1-8.0: syntax error, unexpected %{...%}
-]])
-
-AT_CLEANUP
-
-
-AT_SETUP([Invalid inputs with {}])
-
-AT_DATA([input.y],
-[[
-%destructor
-%initial-action
-%lex-param
-%parse-param
-%printer
-%union
-]])
-
-AT_BISON_CHECK([input.y], [1], [],
-[[input.y:3.1-15: syntax error, unexpected %initial-action, expecting {...}
-]])
-
-AT_CLEANUP
-
-
-
 ## ------------------- ##
 ## Token definitions.  ##
 ## ------------------- ##
@@ -1597,14 +1545,14 @@ AT_CLEANUP
 m4_pushdef([AT_TEST],
 [AT_SETUP([[Lex and parse params: $1]])
 
-AT_BISON_OPTION_PUSHDEFS([%locations %skeleton $1])
+AT_BISON_OPTION_PUSHDEFS([%locations %skeleton "$1" %parse-param { int x } %parse-param { int y }])
 
 ## FIXME: Improve parsing of parse-param and use the generated
 ## yyerror.
 AT_DATA_GRAMMAR([input.y],
 [[%defines
 %locations
-%skeleton $1
+%skeleton "$1"
 %union { int ival; }
 %parse-param { int x }
 // Spaces, tabs, and new lines.
@@ -1618,26 +1566,18 @@ AT_DATA_GRAMMAR([input.y],
 #include <stdio.h>
 #include <stdlib.h>
 
-]AT_SKEL_CC_IF([], [[
-static
-void
-yyerror (int x, int y, const char *msg)
-{
-  fprintf (stderr, "x: %d, y: %d, %s\n", x, y, msg);
-}]])[
-
+  ]AT_YYERROR_DECLARE[
   ]AT_YYLEX_DECLARE[
 %}
 
 %%
 exp: 'a' { fprintf (stdout, "x: %d, y: %d\n", x, y); };
 %%
+]AT_YYERROR_DEFINE[
 ]AT_YYLEX_DEFINE(["a"])[
 
 ]AT_SKEL_CC_IF(
-[AT_YYERROR_DEFINE
-
-int
+[int
 yyparse (int x, int y)
 {
   yy::parser parser(x, y);
@@ -1661,9 +1601,9 @@ AT_CLEANUP
 ])
 
 ## FIXME: test Java, and iterate over skeletons.
-AT_TEST("yacc.c")
-AT_TEST("glr.c")
-AT_TEST("lalr1.cc")
-AT_TEST("glr.cc")
+AT_TEST([yacc.c])
+AT_TEST([glr.c])
+AT_TEST([lalr1.cc])
+AT_TEST([glr.cc])
 
 m4_popdef([AT_TEST])
