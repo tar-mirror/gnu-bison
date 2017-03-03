@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison-runtime-2.3a\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2008-12-11 17:06-0500\n"
+"POT-Creation-Date: 2010-03-20 13:15-0400\n"
 "PO-Revision-Date: 2008-05-14 02:10+0300\n"
 "Last-Translator: Gintautas Miliauskas <gintas@akl.lt>\n"
 "Language-Team: Lithuanian <komp_lt@konferencijos.lt>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%"
 "100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: data/glr.c:923 data/yacc.c:630
+#: data/glr.c:923 data/yacc.c:639
 msgid "syntax error: cannot back up"
 msgstr "sintaksės klaida: negalima grįžti"
 
@@ -26,37 +26,37 @@ msgstr "sintaksės klaida: negalima grįžti"
 msgid "syntax is ambiguous"
 msgstr "sintaksė dviprasmė"
 
-#: data/glr.c:2181 data/glr.c:2187 data/glr.c:2455 data/lalr1.cc:878
-#: data/yacc.c:1491 data/yacc.c:1519
+#: data/glr.c:2181 data/glr.c:2187 data/glr.c:2455 data/lalr1.cc:877
+#: data/yacc.c:1500 data/yacc.c:1528
 msgid "syntax error"
 msgstr "sintaksės klaida"
 
-#: data/glr.c:2515 data/yacc.c:1106 data/yacc.c:1108 data/yacc.c:1284
-#: data/yacc.c:1640
+#: data/glr.c:2515 data/yacc.c:1115 data/yacc.c:1117 data/yacc.c:1293
+#: data/yacc.c:1649
 msgid "memory exhausted"
 msgstr "baigėsi atmintis"
 
-#: data/yacc.c:918
+#: data/yacc.c:927
 #, c-format
 msgid "syntax error, unexpected %s"
 msgstr "sintaksės klaida, netikėtas %s"
 
-#: data/yacc.c:919
+#: data/yacc.c:928
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s"
 msgstr "sintaksės klaida, netikėtas %s, tikėtasi %s"
 
-#: data/yacc.c:920
+#: data/yacc.c:929
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s"
 msgstr "sintaksės klaida, netikėtas %s, tikėtasi %s arba %s"
 
-#: data/yacc.c:921
+#: data/yacc.c:930
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s or %s"
 msgstr "sintaksės klaida, netikėtas %s, tikėtasi %s arba %s arba %s"
 
-#: data/yacc.c:922
+#: data/yacc.c:931
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s or %s or %s"
 msgstr "sintaksės klaida, netikėtas %s, tikėtasi %s arba %s arba %s arba %s"

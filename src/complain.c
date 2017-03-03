@@ -1,7 +1,7 @@
 /* Declaration for error-reporting function for Bison.
 
-   Copyright (C) 2000, 2001, 2002, 2004, 2005, 2006
-   Free Software Foundation, Inc.
+   Copyright (C) 2000-2002, 2004-2006, 2009-2010 Free Software
+   Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -56,7 +56,6 @@ error_message (location *loc,
     fprintf (stderr, "%s: ", prefix);
 
   vfprintf (stderr, message, args);
-  va_end (args);
   putc ('\n', stderr);
   fflush (stderr);
 }
@@ -67,6 +66,7 @@ error_message (location *loc,
   va_list args;					\
   va_start (args, Message);			\
   error_message (Loc, Prefix, Message, args);	\
+  va_end (args);				\
 }
 
 

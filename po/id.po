@@ -1,23 +1,23 @@
-# translation of bison-2.3a.po to Indonesian
+# Pesan bahasa indonesia untuk bison
 # bison 1.875 (Indonesian)
 # Copyright (C) 2002, 2006 Free Software Foundation, Inc.
-# This file is distributed under the same license as the bison 1.50 package.
+# This file is distributed under the same license as the bison package.
 #
 # Tedi Heriyanto <tedi_h@gmx.net>, 2002, 2003.
 # Tedi Heriyanto <tedi_heriyanto@yahoo.com>, 2006.
+# Arif E. Nugroho <arif_endro@yahoo.com>, 2008, 2010.
 msgid ""
 msgstr ""
-"Project-Id-Version: bison-2.3a\n"
+"Project-Id-Version: bison-2.4.1b\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2008-12-11 17:06-0500\n"
-"PO-Revision-Date: 2006-09-27 20:02+0700\n"
-"Last-Translator: Tedi Heriyanto <tedi_heriyanto@yahoo.com>\n"
+"POT-Creation-Date: 2010-03-20 13:15-0400\n"
+"PO-Revision-Date: 2010-02-27 07:30+0700\n"
+"Last-Translator: Arif E. Nugroho <arif_endro@yahoo.com>\n"
 "Language-Team: Indonesian <translation-team-id@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: KBabel 1.11.2\n"
 
 #: src/complain.c:93 src/complain.c:100 src/gram.c:311 src/reduce.c:387
 #: src/reduce.c:396
@@ -96,12 +96,12 @@ msgstr "Kesalahan I/O"
 msgid "cannot close file"
 msgstr "tidak dapat menutup file"
 
-#: src/files.c:357
+#: src/files.c:359
 #, c-format
 msgid "refusing to overwrite the input file %s"
-msgstr ""
+msgstr "menolak untuk overwrite berkas masukan %s"
 
-#: src/files.c:362
+#: src/files.c:369
 #, c-format
 msgid "conflicting outputs to file %s"
 msgstr "output konflik ke file %s"
@@ -117,23 +117,23 @@ msgid "Usage: %s [OPTION]... FILE\n"
 msgstr "Penggunaan: %s [OPTION]... FILE\n"
 
 #: src/getargs.c:248
-#, fuzzy
 msgid ""
 "Generate LALR(1) and GLR parsers.\n"
 "\n"
-msgstr "GNU bison menghasilkan parser LALR(1) dan GLR.\n"
+msgstr ""
+"Hasilkan parser LALR(1) dan GLR.\n"
+"\n"
 
 #: src/getargs.c:253
 msgid ""
 "Mandatory arguments to long options are mandatory for short options too.\n"
-msgstr ""
+msgstr "Argumen wajib untuk opsi panjang juga wajib untuk opsi pendek juga.\n"
 
 #: src/getargs.c:256
 msgid "The same is true for optional arguments.\n"
-msgstr ""
+msgstr "Itu juga benar untuk opsional argumen.\n"
 
 #: src/getargs.c:260
-#, fuzzy
 msgid ""
 "\n"
 "Operation modes:\n"
@@ -143,18 +143,21 @@ msgid ""
 "data\n"
 "      --print-datadir        output directory containing skeletons and XSLT\n"
 "  -y, --yacc                 emulate POSIX Yacc\n"
-"  -W, --warnings=[CATEGORY]  report the warnings falling in CATEGORY\n"
+"  -W, --warnings[=CATEGORY]  report the warnings falling in CATEGORY\n"
 "\n"
 msgstr ""
+"\n"
 "Mode Operasi:\n"
-"  -h, --help      tampilkan bantuan ini dan keluar\n"
-"  -V, --version   tampilkan informasi versi dan keluar\n"
-"       --print-localedir      direktori hasil berisikan data locale-"
+"  -h, --help                 tampilkan bantuan ini dan keluar\n"
+"  -V, --version              tampilkan informasi versi dan keluar\n"
+"       --print-localedir     direktori hasil berisikan data locale-"
 "dependent\n"
-"  -y, --yacc      emulasikan POSIX yacc\n"
+"       --print-datadir       direktori hasil berisikan kerangka dan XSLT\n"
+"  -y, --yacc                 emulasikan POSIX yacc\n"
+"  -W, --warnings=[KATEGORI]  laporkan peringatan kegagalan dalam KATEGORI\n"
+"\n"
 
 #: src/getargs.c:272
-#, fuzzy
 msgid ""
 "Parser:\n"
 "  -L, --language=LANGUAGE    specify the output programming language\n"
@@ -168,6 +171,8 @@ msgid ""
 "\n"
 msgstr ""
 "Parser:\n"
+"  -L, --language=BAHASA      spesifikasikan bahasa keluaran pemrograman\n"
+"                             (ini adalah fitur uji coba)\n"
 "  -S, --skeleton=FILE        specifikasikan rangka yang akan digunakan\n"
 "  -t, --debug                instrumen parser untuk debugging\n"
 "      --locations            aktifkan lokasi perhitungan\n"
@@ -177,7 +182,6 @@ msgstr ""
 "  -k, --token-table          sertakan tabel nama token\n"
 
 #: src/getargs.c:287
-#, fuzzy
 msgid ""
 "Output:\n"
 "      --defines[=FILE]       also produce a header file\n"
@@ -194,8 +198,11 @@ msgid ""
 "\n"
 msgstr ""
 "Output:\n"
-"  -d, --defines              juga hasilkan file header\n"
+"      --defines              juga hasilkan file header\n"
+"  -d                         seperti itu tetapi tidak dapat "
+"menspesifikasikan BERKAS (untuk POSIX Yacc)\n"
 "  -r, --report=THINGS        juga hasilkan detil tentang otomaton\n"
+"      --report-file=BERKAS   tulis laporan ke BERKAS\n"
 "  -v, --verbose              sama seperti `--report=state'\n"
 "  -b, --file-prefix=PREFIX   spesifikasikan PREFIX untuk file output\n"
 "  -o, --output=FILE          simpan output ke FILE\n"
@@ -212,6 +219,14 @@ msgid ""
 "  `error'           treat warnings as errors\n"
 "\n"
 msgstr ""
+"Kategori peringatan termasuk:\n"
+"  `midrule-values'  unset atau tidak menggunakan aturan midrule\n"
+"  `yacc'            tidak kompatibel dengan POSIX YACC\n"
+"  `all'             seluruh peringatan\n"
+"  `no-CATEGORY'     non-aktifkan peringatan di KATEGORI\n"
+"  `none'            non-aktifkan seluruh peringatan\n"
+"  `error'           perlakukan peringatan sebagai errors\n"
+"\n"
 
 #: src/getargs.c:313
 msgid ""
@@ -232,11 +247,13 @@ msgstr ""
 "  `none'         tiadakan laporan\n"
 
 #: src/getargs.c:323
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Report bugs to <%s>.\n"
-msgstr "Laporkan kesalahan ke <"
+msgstr ""
+"\n"
+"Laporkan bugs ke <%s>.\n"
 
 #: src/getargs.c:339
 #, c-format
@@ -261,19 +278,17 @@ msgstr ""
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
 
 #: src/getargs.c:371
-#, fuzzy
 msgid "multiple skeleton declarations are invalid"
-msgstr "deklarasi ganda %s"
+msgstr "deklarasi kerangka ganda tidak valid"
 
 #: src/getargs.c:394
-#, fuzzy, c-format
+#, c-format
 msgid "invalid language `%s'"
-msgstr "karakter tidak valid: %s"
+msgstr "bahasa tidak valid: `%s'"
 
 #: src/getargs.c:397
-#, fuzzy
 msgid "multiple language declarations are invalid"
-msgstr "deklarasi ganda %s"
+msgstr "deklarasi bahasa ganda tidak valid"
 
 #: src/getargs.c:619
 #, c-format
@@ -293,22 +308,73 @@ msgstr "kosong"
 msgid "Grammar"
 msgstr "Grammar"
 
-#: src/location.c:92 src/scan-gram.l:731
+#: src/location.c:92 src/scan-gram.l:733
 #, c-format
 msgid "line number overflow"
 msgstr "overflow nomor baris"
 
 #: src/location.c:94
-#, fuzzy, c-format
+#, c-format
 msgid "column number overflow"
-msgstr "overflow nomor baris"
+msgstr "overflow jumlah kolom"
 
 #: src/main.c:136
-#, fuzzy
 msgid "rule useless in parser due to conflicts"
-msgstr "aturan tidak pernah dikurangi karena konflik"
+msgstr "aturan tidak berguna dalam parser karena konflik"
 
-#: src/parse-gram.y:693
+#: src/muscle_tab.c:419
+#, c-format
+msgid "%s `%s' redefined"
+msgstr "%s `%s' didefinisikan ulang"
+
+#: src/muscle_tab.c:422
+#, c-format
+msgid "previous definition"
+msgstr "definisi sebelumnya"
+
+#: src/muscle_tab.c:458
+#, c-format
+msgid ""
+"undefined %%define variable `%s' passed to muscle_percent_define_get_loc"
+msgstr ""
+"tidak terdefinisi %%define variabel `%s' dilewatkan ke "
+"muscle_percent_define_get_loc"
+
+#: src/muscle_tab.c:472
+#, c-format
+msgid ""
+"undefined %%define variable `%s' passed to muscle_percent_define_get_syncline"
+msgstr ""
+"tidak terdefinisi %%define variabel `%s' dilewatkan ke "
+"muscle_percent_define_get_syncline"
+
+#: src/muscle_tab.c:518
+#, c-format
+msgid "invalid value for %%define Boolean variable `%s'"
+msgstr "nilai tidak valid untuk %%define Boolean variable `%s'"
+
+#: src/muscle_tab.c:524
+#, c-format
+msgid ""
+"undefined %%define variable `%s' passed to muscle_percent_define_flag_if"
+msgstr ""
+"tidak terdefinisi %%define variable `%s' dilewatkan ke "
+"muscle_percent_define_flag_if"
+
+#: src/muscle_tab.c:580
+#, c-format
+msgid "invalid value for %%define variable `%s': `%s'"
+msgstr "nilai tidak valid untuk %%define variable `%s': `%s'"
+
+#: src/muscle_tab.c:585
+#, c-format
+msgid ""
+"undefined %%define variable `%s' passed to muscle_percent_define_check_values"
+msgstr ""
+"tidak terdefinisi %%define variabel `%s' dilewatkan ke "
+"muscle_percent_define_check_values"
+
+#: src/parse-gram.y:692
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "identifier tidak ada dalam deklarasi parameter"
@@ -370,9 +436,8 @@ msgid " on right:"
 msgstr " di kanan:"
 
 #: src/print.c:495
-#, fuzzy
 msgid "Rules useless in parser due to conflicts"
-msgstr "aturan tidak pernah dikurangi karena konflik"
+msgstr "aturan tidak berguna dalam parser karena konflik"
 
 #: src/reader.c:61
 #, c-format
@@ -384,8 +449,8 @@ msgstr "deklarasi ganda %s"
 msgid "result type clash on merge function `%s': <%s> != <%s>"
 msgstr "tipe hasil bentrok pada fungsi merge '%s': <%s> != <%s>"
 
-#: src/reader.c:134 src/symtab.c:141 src/symtab.c:149 src/symtab.c:910
-#: src/symtab.c:923 src/symtab.c:936 src/symtab.c:949
+#: src/reader.c:134 src/symtab.c:141 src/symtab.c:149 src/symtab.c:912
+#: src/symtab.c:925 src/symtab.c:938 src/symtab.c:951
 #, c-format
 msgid "previous declaration"
 msgstr "deklarasi sebelumnya"
@@ -415,67 +480,68 @@ msgstr "nilai tidak digunakan: $%d"
 msgid "unset value: $$"
 msgstr "nilai tidak diset: $$"
 
-#: src/reader.c:369 src/reader.c:383 src/reader.c:396
+#: src/reader.c:302
+#, c-format
+msgid "token for %%prec is not defined: %s"
+msgstr "tanda untuk %%prec belum didefinisikan: %s"
+
+#: src/reader.c:388 src/reader.c:402 src/reader.c:415
 #, c-format
 msgid "only one %s allowed per rule"
 msgstr "hanya satu %s yang dibolehkan per aturan"
 
-#: src/reader.c:379 src/reader.c:394
+#: src/reader.c:398 src/reader.c:413
 #, c-format
 msgid "%s affects only GLR parsers"
 msgstr "%s hanya mempengaruhi parser GLR"
 
-#: src/reader.c:381
+#: src/reader.c:400
 #, c-format
 msgid "%s must be followed by positive number"
 msgstr "%s harus diikuti angka positif"
 
-#: src/reader.c:487
+#: src/reader.c:506
 #, c-format
 msgid "rule is too long"
 msgstr "aturan terlalu panjang"
 
-#: src/reader.c:575
+#: src/reader.c:594
 #, c-format
 msgid "no rules in the input grammar"
-msgstr "tidak ada aturan dalam grammar input"
+msgstr "tidak ada aturan dalam tata bahasa masukan"
 
 #: src/reduce.c:242
-#, fuzzy
 msgid "rule useless in grammar"
-msgstr "tidak ada aturan dalam grammar input"
+msgstr "aturan tidak berguna dalam tata bahasa"
 
 #: src/reduce.c:303
 #, c-format
 msgid "nonterminal useless in grammar: %s"
-msgstr ""
+msgstr "bukan terminal tidak berguna dalam tata bahasa: %s"
 
 #: src/reduce.c:351
-#, fuzzy
 msgid "Nonterminals useless in grammar"
-msgstr "Nonterminal, dengan aturan tempat mereka muncul"
+msgstr "Bukan terminal, tidak berguna dalam tata bahasa"
 
 #: src/reduce.c:364
-#, fuzzy
 msgid "Terminals unused in grammar"
-msgstr "tidak ada aturan dalam grammar input"
+msgstr "Terminal tidak digunakan dalam tata bahasa"
 
 #: src/reduce.c:373
-#, fuzzy
 msgid "Rules useless in grammar"
-msgstr "tidak ada aturan dalam grammar input"
+msgstr "Aturan tidak berguna dalam tata bahasa"
 
 #: src/reduce.c:388
 #, c-format
 msgid "%d nonterminal useless in grammar"
 msgid_plural "%d nonterminals useless in grammar"
-msgstr[0] ""
+msgstr[0] "%d bukan terminal tidak berguna dalam tata bahasa"
 
 #: src/reduce.c:397
-#, fuzzy, c-format
+#, c-format
 msgid "%d rule useless in grammar"
 msgid_plural "%d rules useless in grammar"
-msgstr[0] "tidak ada aturan dalam grammar input"
+msgstr[0] "%d aturan tidak berguna dalam tata bahasa"
 
 #: src/reduce.c:428
 #, c-format
@@ -485,34 +551,35 @@ msgstr "simbol awal %s tidak melahirkan kalimat"
 #: src/scan-code.l:163
 #, c-format
 msgid "stray `$'"
-msgstr ""
+msgstr "kelebihan `$'"
 
 #: src/scan-code.l:167
 #, c-format
 msgid "stray `@'"
-msgstr ""
+msgstr "kelebihan `@'"
 
 #: src/scan-code.l:280
 #, c-format
 msgid "explicit type given in untyped grammar"
-msgstr ""
+msgstr "tipe eksplisit diberikan dalam tata bahasa yang tidak diketikan"
 
 #: src/scan-code.l:295
 #, c-format
 msgid "$$ for the midrule at $%d of `%s' has no declared type"
 msgstr ""
+"$$ untuk aturan tengah di $%d dari `%s' tidak memiliki tipe yang terdeklarasi"
 
 #: src/scan-code.l:300
 #, c-format
 msgid "$$ of `%s' has no declared type"
-msgstr ""
+msgstr "$$ dari `%s' tidak memiliki tipe yang terdeklarasi"
 
 #: src/scan-code.l:328
 #, c-format
 msgid "$%d of `%s' has no declared type"
-msgstr ""
+msgstr "$%d dari `%s' tidak memiliki tipe yang terdeklarasi"
 
-#: src/scan-code.l:343 src/scan-code.l:378 src/scan-gram.l:653
+#: src/scan-code.l:343 src/scan-code.l:378 src/scan-gram.l:655
 #, c-format
 msgid "integer out of range: %s"
 msgstr "integer ke luar batas: %s"
@@ -537,32 +604,42 @@ msgstr "karakter tidak valid: %s"
 msgid "invalid null character"
 msgstr "karakter null tidak valid"
 
-#: src/scan-gram.l:403 src/scan-gram.l:414 src/scan-gram.l:435
+#: src/scan-gram.l:403 src/scan-gram.l:413 src/scan-gram.l:433
 #, c-format
-msgid "invalid escape sequence: %s"
-msgstr "urutan escape tidak valid: %s"
+msgid "invalid number after \\-escape: %s"
+msgstr "nomor tidak valid setelah \\-escape: %s"
 
-#: src/scan-gram.l:405 src/scan-gram.l:416 src/scan-gram.l:437
+#: src/scan-gram.l:445
 #, c-format
-msgid "invalid null character: %s"
-msgstr "karakter null tidak valid: %s"
+msgid "invalid character after \\-escape: %s"
+msgstr "karakter tidak valid setelah \\-escape: %s"
 
-#: src/scan-gram.l:442
-#, c-format
-msgid "unrecognized escape sequence: %s"
-msgstr "urutan escape tidak dikenal: %s"
-
-#: src/scan-gram.l:763
+#: src/scan-gram.l:765
 #, c-format
 msgid "missing `%s' at end of file"
 msgstr "kehilangan `%s' di akhir file"
 
-#: src/scan-gram.l:774
+#: src/scan-gram.l:776
 #, c-format
 msgid "missing `%s' at end of line"
 msgstr "hilang `%s' di akhir baris"
 
-#: src/symlist.c:199
+#: src/scan-skel.l:145
+#, c-format
+msgid "unclosed %s directive in skeleton"
+msgstr "direktif %s tidak tertutup dalam kerangka"
+
+#: src/scan-skel.l:290
+#, c-format
+msgid "too few arguments for %s directive in skeleton"
+msgstr "terlalu sedikit argumen untuk direktif %s dalam skeleton"
+
+#: src/scan-skel.l:297
+#, c-format
+msgid "too many arguments for %s directive in skeleton"
+msgstr "terlalu banyak argumen untuk direktif %s dalam skeleton"
+
+#: src/symlist.c:200
 #, c-format
 msgid "invalid $ value: $%d"
 msgstr "nilai $ tidak valid: %d"
@@ -619,35 +696,35 @@ msgstr "simbol `%s' diberikan lebih dari satu string literal"
 msgid "tokens %s and %s both assigned number %d"
 msgstr "token %s dan %s keduanya memiliki angka %d"
 
-#: src/symtab.c:889
+#: src/symtab.c:891
 #, c-format
 msgid "the start symbol %s is undefined"
 msgstr "simbol awal %s tidak didefinisikan"
 
-#: src/symtab.c:893
+#: src/symtab.c:895
 #, c-format
 msgid "the start symbol %s is a token"
 msgstr "simbol awal %s adalah sebuah token"
 
-#: src/symtab.c:908
-#, fuzzy, c-format
+#: src/symtab.c:910
+#, c-format
 msgid "redeclaration for default tagged %%destructor"
-msgstr "deklarasi ulang untuk %%destructor baku"
+msgstr "deklarasi ulang untuk tagged %%destructor baku"
 
-#: src/symtab.c:921
-#, fuzzy, c-format
+#: src/symtab.c:923
+#, c-format
 msgid "redeclaration for default tagless %%destructor"
-msgstr "deklarasi ulang untuk %%destructor baku"
+msgstr "deklarasi ulang untuk tagless %%destructor baku"
 
-#: src/symtab.c:934
-#, fuzzy, c-format
+#: src/symtab.c:936
+#, c-format
 msgid "redeclaration for default tagged %%printer"
-msgstr "deklarasi ulang untuk %%printer baku"
+msgstr "deklarasi ulang untuk tagged %%printer baku"
 
-#: src/symtab.c:947
-#, fuzzy, c-format
+#: src/symtab.c:949
+#, c-format
 msgid "redeclaration for default tagless %%printer"
-msgstr "deklarasi ulang untuk %%printer baku"
+msgstr "deklarasi ulang untuk taggless %%printer baku"
 
 #: lib/argmatch.c:133
 #, c-format
@@ -732,64 +809,59 @@ msgstr "Tidak dapat menulis file stat."
 msgid "Could not open stats file for writing."
 msgstr "Tidak dapat membuka file stat untuk ditulisi."
 
-#: lib/error.c:125
+#: lib/error.c:153
 msgid "Unknown system error"
 msgstr "Kesalahan sistem tidak dikenal"
 
-#: lib/getopt.c:526 lib/getopt.c:542
+#: lib/getopt.c:529 lib/getopt.c:545
 #, c-format
-msgid "%s: option `%s' is ambiguous\n"
-msgstr "%s: option `%s' ambigu\n"
+msgid "%s: option '%s' is ambiguous\n"
+msgstr "%s: pilihan '%s' ambigu\n"
 
-#: lib/getopt.c:575 lib/getopt.c:579
+#: lib/getopt.c:578 lib/getopt.c:582
 #, c-format
-msgid "%s: option `--%s' doesn't allow an argument\n"
-msgstr "%s: option `--%s' tidak membolehkan sebuah argumen\n"
+msgid "%s: option '--%s' doesn't allow an argument\n"
+msgstr "%s: pilihan '--%s' tidak membolehkan sebuah argumen\n"
 
-#: lib/getopt.c:588 lib/getopt.c:593
+#: lib/getopt.c:591 lib/getopt.c:596
 #, c-format
-msgid "%s: option `%c%s' doesn't allow an argument\n"
-msgstr "%s: option `%c%s' tidak membolehkan sebuah argumen\n"
+msgid "%s: option '%c%s' doesn't allow an argument\n"
+msgstr "%s: pilihan '%c%s' tidak membolehkan sebuah argumen\n"
 
-#: lib/getopt.c:636 lib/getopt.c:655 lib/getopt.c:971 lib/getopt.c:990
+#: lib/getopt.c:639 lib/getopt.c:658 lib/getopt.c:961 lib/getopt.c:980
 #, c-format
-msgid "%s: option `%s' requires an argument\n"
-msgstr "%s: option `%s' membutuhkan sebuah argumen\n"
+msgid "%s: option '%s' requires an argument\n"
+msgstr "%s: pilihan '%s' membutuhkan sebuah argumen\n"
 
-#: lib/getopt.c:693 lib/getopt.c:696
+#: lib/getopt.c:696 lib/getopt.c:699
 #, c-format
-msgid "%s: unrecognized option `--%s'\n"
-msgstr "%s: option tidak dikenal `--%s'\n"
+msgid "%s: unrecognized option '--%s'\n"
+msgstr "%s: pilihan tidak dikenal '--%s'\n"
 
-#: lib/getopt.c:704 lib/getopt.c:707
+#: lib/getopt.c:707 lib/getopt.c:710
 #, c-format
-msgid "%s: unrecognized option `%c%s'\n"
-msgstr "%s: option tidak dikenal `%c%s'\n"
+msgid "%s: unrecognized option '%c%s'\n"
+msgstr "%s: pilihan tidak dikenal '%c%s'\n"
 
 #: lib/getopt.c:759 lib/getopt.c:762
 #, c-format
-msgid "%s: illegal option -- %c\n"
-msgstr "%s: option ilegal -- %c\n"
+msgid "%s: invalid option -- '%c'\n"
+msgstr "%s: pilihan tidak valid -- '%c'\n"
 
-#: lib/getopt.c:768 lib/getopt.c:771
+#: lib/getopt.c:812 lib/getopt.c:829 lib/getopt.c:1032 lib/getopt.c:1050
 #, c-format
-msgid "%s: invalid option -- %c\n"
-msgstr "%s: option tidak valid -- %c\n"
+msgid "%s: option requires an argument -- '%c'\n"
+msgstr "%s: pilihan membutuhkan sebuah argumen -- '%c'\n"
 
-#: lib/getopt.c:823 lib/getopt.c:839 lib/getopt.c:1043 lib/getopt.c:1061
+#: lib/getopt.c:882 lib/getopt.c:898
 #, c-format
-msgid "%s: option requires an argument -- %c\n"
-msgstr "%s: option membutuhkan sebuah argumen -- %c\n"
+msgid "%s: option '-W %s' is ambiguous\n"
+msgstr "%s: pilihan '-W %s' ambigu\n"
 
-#: lib/getopt.c:892 lib/getopt.c:908
+#: lib/getopt.c:922 lib/getopt.c:940
 #, c-format
-msgid "%s: option `-W %s' is ambiguous\n"
-msgstr "%s: option `-W %s' ambigu\n"
-
-#: lib/getopt.c:932 lib/getopt.c:950
-#, c-format
-msgid "%s: option `-W %s' doesn't allow an argument\n"
-msgstr "%s: option `-W %s' tidak membolehkan sebuah argumen\n"
+msgid "%s: option '-W %s' doesn't allow an argument\n"
+msgstr "%s: pilihan '-W %s' tidak membolehkan sebuah argumen\n"
 
 #: lib/obstack.c:423 lib/obstack.c:425 lib/xalloc-die.c:34
 msgid "memory exhausted"
@@ -808,26 +880,21 @@ msgstr "memori habis"
 #. translate "`" to U+201C (LEFT DOUBLE QUOTATION MARK), and
 #. should translate "'" to U+201D (RIGHT DOUBLE QUOTATION
 #. MARK).  A British English Unicode locale should instead
-#. translate these to U+2018 (LEFT SINGLE QUOTATION MARK) and
-#. U+2019 (RIGHT SINGLE QUOTATION MARK), respectively.
+#. translate these to U+2018 (LEFT SINGLE QUOTATION MARK)
+#. and U+2019 (RIGHT SINGLE QUOTATION MARK), respectively.
 #.
 #. If you don't know what to put here, please see
 #. <http://en.wikipedia.org/wiki/Quotation_mark#Glyphs>
 #. and use glyphs suitable for your language.
-#: lib/quotearg.c:266
+#: lib/quotearg.c:272
 msgid "`"
 msgstr "`"
 
-#: lib/quotearg.c:267
+#: lib/quotearg.c:273
 msgid "'"
 msgstr "'"
 
-#: lib/subpipe.c:161
-#, c-format
-msgid "subsidiary program `%s' could not be invoked"
-msgstr "program subsider `%s' tidak dapat dipanggil"
-
-#: lib/timevar.c:472
+#: lib/timevar.c:473
 msgid ""
 "\n"
 "Execution times (seconds)\n"
@@ -835,14 +902,26 @@ msgstr ""
 "\n"
 "Waktu eksekusi (detik)\n"
 
-#: lib/timevar.c:522
+#: lib/timevar.c:523
 msgid " TOTAL                 :"
 msgstr " TOTAL                 :"
 
-#: lib/timevar.c:558
+#: lib/timevar.c:559
 #, c-format
 msgid "time in %s: %ld.%06ld (%ld%%)\n"
 msgstr "waktu dalam %s: %ld.%06ld (%ld%%)\n"
+
+#~ msgid "subsidiary program `%s' could not be invoked"
+#~ msgstr "program subsider `%s' tidak dapat dipanggil"
+
+#~ msgid "invalid escape sequence: %s"
+#~ msgstr "urutan escape tidak valid: %s"
+
+#~ msgid "unrecognized escape sequence: %s"
+#~ msgstr "urutan escape tidak dikenal: %s"
+
+#~ msgid "%s: illegal option -- %c\n"
+#~ msgstr "%s: option ilegal -- %c\n"
 
 #~ msgid ""
 #~ "If a long option shows an argument as mandatory, then it is mandatory\n"

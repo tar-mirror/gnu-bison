@@ -30,7 +30,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU bison 2.2\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2008-12-11 17:06-0500\n"
+"POT-Creation-Date: 2010-03-20 13:15-0400\n"
 "PO-Revision-Date: 2006-06-05 13:51+0200\n"
 "Last-Translator: Nicolás García-Pedrajas <ngarcia-pedrajas@acm.org>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -155,12 +155,12 @@ msgstr "Error de E/S"
 msgid "cannot close file"
 msgstr "no se puede cerrar el fichero"
 
-#: src/files.c:357
+#: src/files.c:359
 #, c-format
 msgid "refusing to overwrite the input file %s"
 msgstr ""
 
-#: src/files.c:362
+#: src/files.c:369
 #, c-format
 msgid "conflicting outputs to file %s"
 msgstr "salidas en conflicto al fichero %s"
@@ -201,7 +201,7 @@ msgid ""
 "data\n"
 "      --print-datadir        output directory containing skeletons and XSLT\n"
 "  -y, --yacc                 emulate POSIX Yacc\n"
-"  -W, --warnings=[CATEGORY]  report the warnings falling in CATEGORY\n"
+"  -W, --warnings[=CATEGORY]  report the warnings falling in CATEGORY\n"
 "\n"
 msgstr ""
 "Modos de operación:\n"
@@ -358,7 +358,7 @@ msgstr "vacío"
 msgid "Grammar"
 msgstr "Gramática"
 
-#: src/location.c:92 src/scan-gram.l:731
+#: src/location.c:92 src/scan-gram.l:733
 #, c-format
 msgid "line number overflow"
 msgstr "desbordamiento del número de línea"
@@ -373,7 +373,51 @@ msgstr "desbordamiento del número de columna"
 msgid "rule useless in parser due to conflicts"
 msgstr "la regla nunca se redujo debido a los conflictos"
 
-#: src/parse-gram.y:693
+#: src/muscle_tab.c:419
+#, fuzzy, c-format
+msgid "%s `%s' redefined"
+msgstr "redefinido el símbolo %s"
+
+#: src/muscle_tab.c:422
+#, c-format
+msgid "previous definition"
+msgstr ""
+
+#: src/muscle_tab.c:458
+#, c-format
+msgid ""
+"undefined %%define variable `%s' passed to muscle_percent_define_get_loc"
+msgstr ""
+
+#: src/muscle_tab.c:472
+#, c-format
+msgid ""
+"undefined %%define variable `%s' passed to muscle_percent_define_get_syncline"
+msgstr ""
+
+#: src/muscle_tab.c:518
+#, c-format
+msgid "invalid value for %%define Boolean variable `%s'"
+msgstr ""
+
+#: src/muscle_tab.c:524
+#, c-format
+msgid ""
+"undefined %%define variable `%s' passed to muscle_percent_define_flag_if"
+msgstr ""
+
+#: src/muscle_tab.c:580
+#, c-format
+msgid "invalid value for %%define variable `%s': `%s'"
+msgstr ""
+
+#: src/muscle_tab.c:585
+#, c-format
+msgid ""
+"undefined %%define variable `%s' passed to muscle_percent_define_check_values"
+msgstr ""
+
+#: src/parse-gram.y:692
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "falta el identificador el la declaración del parámetro"
@@ -449,8 +493,8 @@ msgstr "múltiples declaraciones de %s"
 msgid "result type clash on merge function `%s': <%s> != <%s>"
 msgstr "tipo resultado incompatible en la función combinada %s: <%s> != <%s>"
 
-#: src/reader.c:134 src/symtab.c:141 src/symtab.c:149 src/symtab.c:910
-#: src/symtab.c:923 src/symtab.c:936 src/symtab.c:949
+#: src/reader.c:134 src/symtab.c:141 src/symtab.c:149 src/symtab.c:912
+#: src/symtab.c:925 src/symtab.c:938 src/symtab.c:951
 #, fuzzy, c-format
 msgid "previous declaration"
 msgstr "primera declaración"
@@ -480,27 +524,32 @@ msgstr "valor no usado: $%d"
 msgid "unset value: $$"
 msgstr "valor no fijado: $$"
 
-#: src/reader.c:369 src/reader.c:383 src/reader.c:396
+#: src/reader.c:302
+#, c-format
+msgid "token for %%prec is not defined: %s"
+msgstr ""
+
+#: src/reader.c:388 src/reader.c:402 src/reader.c:415
 #, c-format
 msgid "only one %s allowed per rule"
 msgstr "sólo se permite un %s por regla"
 
-#: src/reader.c:379 src/reader.c:394
+#: src/reader.c:398 src/reader.c:413
 #, c-format
 msgid "%s affects only GLR parsers"
 msgstr "%s afecta sólo a los analizadores GLR"
 
-#: src/reader.c:381
+#: src/reader.c:400
 #, c-format
 msgid "%s must be followed by positive number"
 msgstr "%s debe estar seguido por un número positivo"
 
-#: src/reader.c:487
+#: src/reader.c:506
 #, c-format
 msgid "rule is too long"
 msgstr "la regla es demasiado larga"
 
-#: src/reader.c:575
+#: src/reader.c:594
 #, c-format
 msgid "no rules in the input grammar"
 msgstr "no hay reglas en la gramática de entrada"
@@ -579,7 +628,7 @@ msgstr "$$ de `%s' no tiene tipo declarado"
 msgid "$%d of `%s' has no declared type"
 msgstr "$%d de `%s' no tiene tipo declarado"
 
-#: src/scan-code.l:343 src/scan-code.l:378 src/scan-gram.l:653
+#: src/scan-code.l:343 src/scan-code.l:378 src/scan-gram.l:655
 #, c-format
 msgid "integer out of range: %s"
 msgstr "entero fuera de rango: %s"
@@ -604,32 +653,42 @@ msgstr "carácter no válido: %s"
 msgid "invalid null character"
 msgstr "carácter nulo no válido"
 
-#: src/scan-gram.l:403 src/scan-gram.l:414 src/scan-gram.l:435
-#, c-format
-msgid "invalid escape sequence: %s"
-msgstr "secuencia de escape no válida: %s"
-
-#: src/scan-gram.l:405 src/scan-gram.l:416 src/scan-gram.l:437
-#, c-format
-msgid "invalid null character: %s"
+#: src/scan-gram.l:403 src/scan-gram.l:413 src/scan-gram.l:433
+#, fuzzy, c-format
+msgid "invalid number after \\-escape: %s"
 msgstr "carácter nulo no válido: %s"
 
-#: src/scan-gram.l:442
-#, c-format
-msgid "unrecognized escape sequence: %s"
-msgstr "secuencia de escape no reconocida: %s"
+#: src/scan-gram.l:445
+#, fuzzy, c-format
+msgid "invalid character after \\-escape: %s"
+msgstr "carácter no válido: %s"
 
-#: src/scan-gram.l:763
+#: src/scan-gram.l:765
 #, c-format
 msgid "missing `%s' at end of file"
 msgstr "falta cadena `%s' al final del fichero"
 
-#: src/scan-gram.l:774
+#: src/scan-gram.l:776
 #, c-format
 msgid "missing `%s' at end of line"
 msgstr "falta cadena `%s' al final del fichero"
 
-#: src/symlist.c:199
+#: src/scan-skel.l:145
+#, c-format
+msgid "unclosed %s directive in skeleton"
+msgstr ""
+
+#: src/scan-skel.l:290
+#, c-format
+msgid "too few arguments for %s directive in skeleton"
+msgstr ""
+
+#: src/scan-skel.l:297
+#, c-format
+msgid "too many arguments for %s directive in skeleton"
+msgstr ""
+
+#: src/symlist.c:200
 #, c-format
 msgid "invalid $ value: $%d"
 msgstr "valor $ no válido: $%d"
@@ -688,32 +747,32 @@ msgstr "al símbolo `%s' se le ha dado más de una cadena literal"
 msgid "tokens %s and %s both assigned number %d"
 msgstr "los terminales %s y %s tienen asignados ambos el número %d"
 
-#: src/symtab.c:889
+#: src/symtab.c:891
 #, c-format
 msgid "the start symbol %s is undefined"
 msgstr "el símbolo de inicio (axioma) %s no está definido"
 
-#: src/symtab.c:893
+#: src/symtab.c:895
 #, c-format
 msgid "the start symbol %s is a token"
 msgstr "el símbolo de inicio (axioma) %s es un terminal"
 
-#: src/symtab.c:908
+#: src/symtab.c:910
 #, c-format
 msgid "redeclaration for default tagged %%destructor"
 msgstr ""
 
-#: src/symtab.c:921
+#: src/symtab.c:923
 #, c-format
 msgid "redeclaration for default tagless %%destructor"
 msgstr ""
 
-#: src/symtab.c:934
+#: src/symtab.c:936
 #, c-format
 msgid "redeclaration for default tagged %%printer"
 msgstr ""
 
-#: src/symtab.c:947
+#: src/symtab.c:949
 #, c-format
 msgid "redeclaration for default tagless %%printer"
 msgstr ""
@@ -799,87 +858,65 @@ msgstr "No pude escribir el fichero de estadísticas."
 msgid "Could not open stats file for writing."
 msgstr "No pude abrir el fichero de estadísticas para escritura"
 
-#: lib/error.c:125
+#: lib/error.c:153
 msgid "Unknown system error"
 msgstr "Error del sistema desconocido"
 
-#: lib/getopt.c:526 lib/getopt.c:542
-#, c-format
-msgid "%s: option `%s' is ambiguous\n"
+#: lib/getopt.c:529 lib/getopt.c:545
+#, fuzzy, c-format
+msgid "%s: option '%s' is ambiguous\n"
 msgstr "%s: la opción `%s' es ambigua\n"
 
 # Pongo esto como en otros .po. sv
-#: lib/getopt.c:575 lib/getopt.c:579
-#, c-format
-msgid "%s: option `--%s' doesn't allow an argument\n"
+#: lib/getopt.c:578 lib/getopt.c:582
+#, fuzzy, c-format
+msgid "%s: option '--%s' doesn't allow an argument\n"
 msgstr "%s: la opción `--%s' no admite ningún argumento\n"
 
-#: lib/getopt.c:588 lib/getopt.c:593
-#, c-format
-msgid "%s: option `%c%s' doesn't allow an argument\n"
+#: lib/getopt.c:591 lib/getopt.c:596
+#, fuzzy, c-format
+msgid "%s: option '%c%s' doesn't allow an argument\n"
 msgstr "%s: la opción `%c%s' no admite ningún argumento\n"
 
-#: lib/getopt.c:636 lib/getopt.c:655 lib/getopt.c:971 lib/getopt.c:990
-#, c-format
-msgid "%s: option `%s' requires an argument\n"
+#: lib/getopt.c:639 lib/getopt.c:658 lib/getopt.c:961 lib/getopt.c:980
+#, fuzzy, c-format
+msgid "%s: option '%s' requires an argument\n"
 msgstr "%s: la opción `%s' requiere un argumento\n"
 
-#: lib/getopt.c:693 lib/getopt.c:696
-#, c-format
-msgid "%s: unrecognized option `--%s'\n"
+#: lib/getopt.c:696 lib/getopt.c:699
+#, fuzzy, c-format
+msgid "%s: unrecognized option '--%s'\n"
 msgstr "%s: opción `--%s' no reconocida\n"
 
-#: lib/getopt.c:704 lib/getopt.c:707
-#, c-format
-msgid "%s: unrecognized option `%c%s'\n"
+#: lib/getopt.c:707 lib/getopt.c:710
+#, fuzzy, c-format
+msgid "%s: unrecognized option '%c%s'\n"
 msgstr "%s: opción `%c%s' no reconocida\n"
-
-# ¿Qué encuentras de malo en traducir `illegal' como `ilegal'? Date
-# cuenta de que el mensaje "opción no válida" parece ambigua y hará
-# pensar al usuario de que tal vez la ha usado incorrectamente, sin
-# reparar, por lo tanto, en que la opción misma es ilegal. Esto es, ¡¡no
-# existe!! (porque imagino que es en este sentido como se ha programado)
-# - cll
-# Sobre esto hubo una discusión en la lista hace tiempo,
-# quizás ilegal queda un poco fuerte, alguien decía que parecía que
-# ibas a ir a la carcel por usar la opción.
-# ngp
-#
-# Sí, era Enrique a quien no le gustaba la palabra.
-# No creo que debamos dejar de decir algo por la "corrección política"
-# Yo creo que si el 386 tiene instrucciones *ilegales*, también puede
-# haber opciones ilegales, digo yo, y no por eso las CPUs van
-# a la cárcel (como mucho se cuelgan, je, je, 0ff0 :-). sv
-#
-#: lib/getopt.c:759 lib/getopt.c:762
-#, c-format
-msgid "%s: illegal option -- %c\n"
-msgstr "%s: opción -- %c ilegal\n"
 
 # ¡Muy bien traducido! En el grupo de traducción ha habido auténticas
 # batallas con el tema "invalid - inválido/a" :) - cll
 # Porque Enrique decía que le recordaba a disminuidos físicos.
 # Francamente, no creo que haya que andar con estas "fobias".
 # Pongo inválida. sv
-#: lib/getopt.c:768 lib/getopt.c:771
-#, c-format
-msgid "%s: invalid option -- %c\n"
+#: lib/getopt.c:759 lib/getopt.c:762
+#, fuzzy, c-format
+msgid "%s: invalid option -- '%c'\n"
 msgstr "%s: opción -- %c no válida\n"
 
-#: lib/getopt.c:823 lib/getopt.c:839 lib/getopt.c:1043 lib/getopt.c:1061
-#, c-format
-msgid "%s: option requires an argument -- %c\n"
+#: lib/getopt.c:812 lib/getopt.c:829 lib/getopt.c:1032 lib/getopt.c:1050
+#, fuzzy, c-format
+msgid "%s: option requires an argument -- '%c'\n"
 msgstr "%s: la opción -- %c requiere un argumento\n"
 
-#: lib/getopt.c:892 lib/getopt.c:908
-#, c-format
-msgid "%s: option `-W %s' is ambiguous\n"
+#: lib/getopt.c:882 lib/getopt.c:898
+#, fuzzy, c-format
+msgid "%s: option '-W %s' is ambiguous\n"
 msgstr "%s: la opción `-W %s' es ambigua\n"
 
 # Pongo esto como en otros .po. sv
-#: lib/getopt.c:932 lib/getopt.c:950
-#, c-format
-msgid "%s: option `-W %s' doesn't allow an argument\n"
+#: lib/getopt.c:922 lib/getopt.c:940
+#, fuzzy, c-format
+msgid "%s: option '-W %s' doesn't allow an argument\n"
 msgstr "%s: la opción `-W %s' no admite ningún argumento\n"
 
 #: lib/obstack.c:423 lib/obstack.c:425 lib/xalloc-die.c:34
@@ -899,26 +936,21 @@ msgstr "memoria agotada"
 #. translate "`" to U+201C (LEFT DOUBLE QUOTATION MARK), and
 #. should translate "'" to U+201D (RIGHT DOUBLE QUOTATION
 #. MARK).  A British English Unicode locale should instead
-#. translate these to U+2018 (LEFT SINGLE QUOTATION MARK) and
-#. U+2019 (RIGHT SINGLE QUOTATION MARK), respectively.
+#. translate these to U+2018 (LEFT SINGLE QUOTATION MARK)
+#. and U+2019 (RIGHT SINGLE QUOTATION MARK), respectively.
 #.
 #. If you don't know what to put here, please see
 #. <http://en.wikipedia.org/wiki/Quotation_mark#Glyphs>
 #. and use glyphs suitable for your language.
-#: lib/quotearg.c:266
+#: lib/quotearg.c:272
 msgid "`"
 msgstr "`"
 
-#: lib/quotearg.c:267
+#: lib/quotearg.c:273
 msgid "'"
 msgstr "'"
 
-#: lib/subpipe.c:161
-#, c-format
-msgid "subsidiary program `%s' could not be invoked"
-msgstr "no se pudo invocar el programa subsidiario `%s'"
-
-#: lib/timevar.c:472
+#: lib/timevar.c:473
 msgid ""
 "\n"
 "Execution times (seconds)\n"
@@ -926,11 +958,11 @@ msgstr ""
 "\n"
 "Tiempos de ejecución (segundo)\n"
 
-#: lib/timevar.c:522
+#: lib/timevar.c:523
 msgid " TOTAL                 :"
 msgstr " TOTAL                 :"
 
-#: lib/timevar.c:558
+#: lib/timevar.c:559
 #, c-format
 msgid "time in %s: %ld.%06ld (%ld%%)\n"
 msgstr "tiempo en %s: %ld.%06ld (%ld%%)\n"
@@ -986,8 +1018,37 @@ msgstr "tiempo en %s: %ld.%06ld (%ld%%)\n"
 #~ msgstr[0] "%d regla sin uso"
 #~ msgstr[1] "%d reglas sin uso"
 
+#~ msgid "invalid escape sequence: %s"
+#~ msgstr "secuencia de escape no válida: %s"
+
+#~ msgid "unrecognized escape sequence: %s"
+#~ msgstr "secuencia de escape no reconocida: %s"
+
 #~ msgid "missing `{' in %s"
 #~ msgstr "falta `{' en %s"
+
+# ¿Qué encuentras de malo en traducir `illegal' como `ilegal'? Date
+# cuenta de que el mensaje "opción no válida" parece ambigua y hará
+# pensar al usuario de que tal vez la ha usado incorrectamente, sin
+# reparar, por lo tanto, en que la opción misma es ilegal. Esto es, ¡¡no
+# existe!! (porque imagino que es en este sentido como se ha programado)
+# - cll
+# Sobre esto hubo una discusión en la lista hace tiempo,
+# quizás ilegal queda un poco fuerte, alguien decía que parecía que
+# ibas a ir a la carcel por usar la opción.
+# ngp
+#
+# Sí, era Enrique a quien no le gustaba la palabra.
+# No creo que debamos dejar de decir algo por la "corrección política"
+# Yo creo que si el 386 tiene instrucciones *ilegales*, también puede
+# haber opciones ilegales, digo yo, y no por eso las CPUs van
+# a la cárcel (como mucho se cuelgan, je, je, 0ff0 :-). sv
+#
+#~ msgid "%s: illegal option -- %c\n"
+#~ msgstr "%s: opción -- %c ilegal\n"
+
+#~ msgid "subsidiary program `%s' could not be invoked"
+#~ msgstr "no se pudo invocar el programa subsidiario `%s'"
 
 #~ msgid "subsidiary program `%s' not found"
 #~ msgstr "no se encontró el programa subsidiario `%s'"

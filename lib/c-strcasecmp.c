@@ -1,7 +1,7 @@
 /* -*- buffer-read-only: t -*- vi: set ro: */
 /* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 /* c-strcasecmp.c -- case insensitive string comparator in C locale
-   Copyright (C) 1998-1999, 2005-2006 Free Software Foundation, Inc.
+   Copyright (C) 1998-1999, 2005-2006, 2009-2010 Free Software Foundation, Inc.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ c_strcasecmp (const char *s1, const char *s2)
       c2 = c_tolower (*p2);
 
       if (c1 == '\0')
-	break;
+        break;
 
       ++p1;
       ++p2;

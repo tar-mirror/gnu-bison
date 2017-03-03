@@ -1,138 +1,144 @@
-# Перевод сообщений bison.
-# Copyright (C) 1999 Free Software Foundation, Inc.
-# Dmitry S. Sivachenko <dima@Chg.RU>, 1999,2000,2001,2002.
+# Translation of bison messages to Russian
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the bison package.
+#
+# Dmitry S. Sivachenko <dima@Chg.RU>, 1999, 2000, 2001, 2002.
+# Dimitriy Ryazantcev <DJm00n@mail.ru>, 2009.
+# Pavel Maryanov <acid_jack@ukr.net>, 2009.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bison 1.875\n"
+"Project-Id-Version: bison 2.4.1\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2008-12-11 17:06-0500\n"
-"PO-Revision-Date: 2003-01-01 20:35+0300\n"
-"Last-Translator: Dmitry S. Sivachenko <mitya@cavia.pp.ru>\n"
-"Language-Team: Russian <ru@li.org>\n"
+"POT-Creation-Date: 2010-03-20 13:15-0400\n"
+"PO-Revision-Date: 2009-02-04 19:44+0200\n"
+"Last-Translator: Pavel Maryanov <acid_jack@ukr.net>\n"
+"Language-Team: Russian <gnu@mx.ru>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=koi8-r\n"
-"Content-Transfer-Encoding: 8-bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: src/complain.c:93 src/complain.c:100 src/gram.c:311 src/reduce.c:387
 #: src/reduce.c:396
 msgid "warning"
-msgstr "предупреждение"
+msgstr "п©я─п╣п╢я┐п©я─п╣п╤п╢п╣п╫п╦п╣"
 
 #: src/complain.c:130 src/complain.c:137
-#, fuzzy
 msgid "fatal error"
-msgstr "фатальная ошибка: "
+msgstr "я└п╟я┌п╟п╩я▄п╫п╟я▐ п╬я┬п╦п╠п╨п╟"
 
 #: src/conflicts.c:77
 #, c-format
 msgid "    Conflict between rule %d and token %s resolved as shift"
-msgstr "    Конфликт между правилом %d и лексемой %s разрешен сдвигом"
+msgstr "    п п╬п╫я└п╩п╦п╨я┌ п╪п╣п╤п╢я┐ п©я─п╟п╡п╦п╩п╬п╪ %d п╦ п╩п╣п╨я│п╣п╪п╬п╧ %s я─п╟п╥я─п╣я┬п╣п╫ я│п╢п╡п╦пЁп╬п╪"
 
 #: src/conflicts.c:86
 #, c-format
 msgid "    Conflict between rule %d and token %s resolved as reduce"
-msgstr "    Конфликт между правилом %d и лексемой %s разрешен выводом"
+msgstr "    п п╬п╫я└п╩п╦п╨я┌ п╪п╣п╤п╢я┐ п©я─п╟п╡п╦п╩п╬п╪ %d п╦ п╩п╣п╨я│п╣п╪п╬п╧ %s я─п╟п╥я─п╣я┬п╣п╫ п╡я▀п╡п╬п╢п╬п╪"
 
 #: src/conflicts.c:94
 #, c-format
 msgid "    Conflict between rule %d and token %s resolved as an error"
-msgstr "    Конфликт между правилом %d и лексемой %s разрешен как ошибка"
+msgstr "    п п╬п╫я└п╩п╦п╨я┌ п╪п╣п╤п╢я┐ п©я─п╟п╡п╦п╩п╬п╪ %d п╦ п╩п╣п╨я│п╣п╪п╬п╧ %s я─п╟п╥я─п╣я┬п╣п╫ п╨п╟п╨ п╬я┬п╦п╠п╨п╟"
 
 #: src/conflicts.c:492
 #, c-format
 msgid "conflicts: %d shift/reduce, %d reduce/reduce\n"
-msgstr "конфликты: %d сдвига/вывода, %d вывода/вывода\n"
+msgstr "п╨п╬п╫я└п╩п╦п╨я┌я▀: %d я│п╢п╡п╦пЁп╟/п╡я▀п╡п╬п╢п╟, %d п╡я▀п╡п╬п╢п╟/п╡я▀п╡п╬п╢п╟\n"
 
 #: src/conflicts.c:495
 #, c-format
 msgid "conflicts: %d shift/reduce\n"
-msgstr "конфликты: %d сдвига/вывода\n"
+msgstr "п╨п╬п╫я└п╩п╦п╨я┌я▀: %d я│п╢п╡п╦пЁп╟/п╡я▀п╡п╬п╢п╟\n"
 
 #: src/conflicts.c:497
 #, c-format
 msgid "conflicts: %d reduce/reduce\n"
-msgstr "конфликты: %d вывода/вывода\n"
+msgstr "п╨п╬п╫я└п╩п╦п╨я┌я▀: %d п╡я▀п╡п╬п╢п╟/п╡я▀п╡п╬п╢п╟\n"
 
 #: src/conflicts.c:515
 #, c-format
 msgid "State %d "
-msgstr "Состояние %d "
+msgstr "п║п╬я│я┌п╬я▐п╫п╦п╣ %d "
 
 #: src/conflicts.c:582
 #, c-format
 msgid "%%expect-rr applies only to GLR parsers"
-msgstr ""
+msgstr "%%expect-rr п©я─п╦п╪п╣п╫п╦п╪п╬ я┌п╬п╩я▄п╨п╬ п╨ GLR п©п╟я─я│п╣я─п╟п╪"
 
 #: src/conflicts.c:607
 #, c-format
 msgid "expected %d shift/reduce conflict"
 msgid_plural "expected %d shift/reduce conflicts"
-msgstr[0] "ожидался %d конфликт сдвига/вывода"
-msgstr[1] "ожидалось %d конфликта сдвига/вывода"
-msgstr[2] "ожидалось %d конфликтов сдвига/вывода"
+msgstr[0] "п╬п╤п╦п╢п╟п╩я│я▐ %d п╨п╬п╫я└п╩п╦п╨я┌ я│п╢п╡п╦пЁп╟/п╡я▀п╡п╬п╢п╟"
+msgstr[1] "п╬п╤п╦п╢п╟п╩п╬я│я▄ %d п╨п╬п╫я└п╩п╦п╨я┌п╟ я│п╢п╡п╦пЁп╟/п╡я▀п╡п╬п╢п╟"
+msgstr[2] "п╬п╤п╦п╢п╟п╩п╬я│я▄ %d п╨п╬п╫я└п╩п╦п╨я┌п╬п╡ я│п╢п╡п╦пЁп╟/п╡я▀п╡п╬п╢п╟"
 
 #: src/conflicts.c:612
-#, fuzzy, c-format
+#, c-format
 msgid "expected %d reduce/reduce conflict"
 msgid_plural "expected %d reduce/reduce conflicts"
-msgstr[0] "ожидалось 0 конфликтов вывода/вывода"
-msgstr[1] "ожидалось 0 конфликтов вывода/вывода"
-msgstr[2] "ожидалось 0 конфликтов вывода/вывода"
+msgstr[0] "п╬п╤п╦п╢п╟п╩я│я▐ %d п╨п╬п╫я└п╩п╦п╨я┌ п╡я▀п╡п╬п╢п╟/п╡я▀п╡п╬п╢п╟"
+msgstr[1] "п╬п╤п╦п╢п╟п╩п╬я│я▄ %d п╨п╬п╫я└п╩п╦п╨я┌п╟ п╡я▀п╡п╬п╢п╟/п╡я▀п╡п╬п╢п╟"
+msgstr[2] "п╬п╤п╦п╢п╟п╩п╬я│я▄ %d п╨п╬п╫я└п╩п╦п╨я┌п╬п╡ п╡я▀п╡п╬п╢п╟/п╡я▀п╡п╬п╢п╟"
 
 #: src/files.c:112
 #, c-format
 msgid "cannot open file `%s'"
-msgstr "не удается открыть файл `%s'"
+msgstr "п╫п╣ я┐п╢п╟п╣я┌я│я▐ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ б╚%sб╩"
 
 #: src/files.c:128
 #, c-format
 msgid "I/O error"
-msgstr "ошибка ввода-вывода"
+msgstr "п╬я┬п╦п╠п╨п╟ п╡п╡п╬п╢п╟-п╡я▀п╡п╬п╢п╟"
 
 #: src/files.c:131
 #, c-format
 msgid "cannot close file"
-msgstr "не удается закрыть файл"
+msgstr "п╫п╣ я┐п╢п╟п╣я┌я│я▐ п╥п╟п╨я─я▀я┌я▄ я└п╟п╧п╩"
 
-#: src/files.c:357
+#: src/files.c:359
 #, c-format
 msgid "refusing to overwrite the input file %s"
-msgstr ""
+msgstr "п╬я┌п╨п╟п╥ п©п╣я─п╣п╥п╟п©п╦я│п╦ п╡я┘п╬п╢п╫п╬пЁп╬ я└п╟п╧п╩п╟ %s"
 
-#: src/files.c:362
-#, fuzzy, c-format
+#: src/files.c:369
+#, c-format
 msgid "conflicting outputs to file %s"
-msgstr "противоречивые значения ассоциативности для %s и %s"
+msgstr "п╨п╬п╫я└п╩п╦п╨я┌ п╡я▀п╡п╬п╢п╟ п╡ я└п╟п╧п╩ %s"
 
 #: src/getargs.c:243
 #, c-format
 msgid "Try `%s --help' for more information.\n"
-msgstr "Используйте `%s --help' для дополнительной информации.\n"
+msgstr "п≤я│п©п╬п╩я▄п╥я┐п╧я┌п╣ б╚%s --helpб╩ п╢п╩я▐ п╢п╬п©п╬п╩п╫п╦я┌п╣п╩я▄п╫п╬п╧ п╦п╫я└п╬я─п╪п╟я├п╦п╦.\n"
 
 #: src/getargs.c:247
 #, c-format
 msgid "Usage: %s [OPTION]... FILE\n"
-msgstr "Использование: %s [КЛЮЧИ]... ФАЙЛ\n"
+msgstr "п≤я│п©п╬п╩я▄п╥п╬п╡п╟п╫п╦п╣: %s [п п⌡п╝п╖п≤]... п╓п░п≥п⌡\n"
 
 #: src/getargs.c:248
 msgid ""
 "Generate LALR(1) and GLR parsers.\n"
 "\n"
 msgstr ""
+"п⌠п╣п╫п╣я─п╦я─я┐п╣я┌ LALR(1) п╦ GLR п©п╟я─я│п╣я─я▀.\n"
+"\n"
 
 #: src/getargs.c:253
 msgid ""
 "Mandatory arguments to long options are mandatory for short options too.\n"
-msgstr ""
+msgstr "п║п╬п╬я┌п╡п╣я┌я│я┌п╡я┐я▌я┴п╦п╣ п╢п╩я▐п╫п╫я▀п╣ п╬п©я├п╦п╦ я┌п╟п╨п╤п╣ я│п╬п╬я┌п╡п╣я┌я│я┌п╡я┐я▌я┌ п╦ п╨п╬я─п╬я┌п╨п╦п╪ п╬п©я├п╦я▐п╪.\n"
 
 #: src/getargs.c:256
 msgid "The same is true for optional arguments.\n"
-msgstr ""
+msgstr "п╒п╬-п╤п╣ п╢п╬п©я┐я│я┌п╦п╪п╬ п╢п╩я▐ п╬п©я├п╦п╬п╫п╟п╩я▄п╫я▀я┘ п©п╟я─п╟п╪п╣я┌я─п╬п╡.\n"
 
 #: src/getargs.c:260
+#, fuzzy
 msgid ""
 "\n"
 "Operation modes:\n"
@@ -142,12 +148,22 @@ msgid ""
 "data\n"
 "      --print-datadir        output directory containing skeletons and XSLT\n"
 "  -y, --yacc                 emulate POSIX Yacc\n"
-"  -W, --warnings=[CATEGORY]  report the warnings falling in CATEGORY\n"
+"  -W, --warnings[=CATEGORY]  report the warnings falling in CATEGORY\n"
 "\n"
 msgstr ""
+"\n"
+"п═п╣п╤п╦п╪я▀ я└я┐п╫п╨я├п╦п╬п╫п╦я─п╬п╡п╟п╫п╦я▐:\n"
+"  -h, --help                  п╡я▀п╡п╣я│я┌п╦ я█я┌я┐ я│п©я─п╟п╡п╨я┐ п╦ п╡я▀п╧я┌п╦\n"
+"  -V, --version               п╡я▀п╡п╣я│я┌п╦ п╦п╫я└п╬я─п╪п╟я├п╦я▌ п╬ п╡п╣я─я│п╦п╦ п╦ п╡я▀п╧я┌п╦\n"
+"      --print-localedir       п╡я▀п╡п╣я│я┌п╦ п╨п╟я┌п╟п╩п╬пЁ, я│п╬п╢п╣я─п╤п╟я┴п╦п╧ п╥п╟п╡п╦я│п╦п╪я▀п╣ п╬я┌ "
+"п╩п╬п╨п╟п╩п╦ п╢п╟п╫п╫я▀п╣\n"
+"      --print-datadir         п╡я▀п╡п╣я│я┌п╦ п╨п╟я┌п╟п╩п╬пЁ я│п╬п╢п╣я─п╤п╟я┴п╦п╧ п╥п╟пЁп╬я┌п╬п╡п╨п╦ п╦ XSLT\n"
+"  -y, --yacc                  п╦п╪п╦я┌п╦я─п╬п╡п╟я┌я▄ POSIX yacc\n"
+"  -W, --warnings=[п п░п╒п∙п⌠п·п═п≤п╞]  п╡я▀п╡п╬п╢п╦я┌я▄ п©я─п╣п╢я┐п©я─п╣п╤п╢п╣п╫п╦я▐ п╡ я│п╬п╬я┌п╡п╣я┌я│я┌п╡п╦п╦ я│ "
+"п п░п╒п∙п⌠п·п═п≤п∙п≥\n"
+"\n"
 
 #: src/getargs.c:272
-#, fuzzy
 msgid ""
 "Parser:\n"
 "  -L, --language=LANGUAGE    specify the output programming language\n"
@@ -160,17 +176,18 @@ msgid ""
 "  -k, --token-table          include a table of token names\n"
 "\n"
 msgstr ""
-"Анализатор:\n"
-"  -S, --skeleton=ФАЙЛ        указать файл шаблона\n"
-"  -t, --debug                настроить анализатор для отладки\n"
-"      --locations            включить вычисление местоположений\n"
-"  -p, --name-prefix=ПРЕФИКС  подставить ПРЕФИКС для внешних символов\n"
-"  -l, --no-lines             не генерировать директивы `#line'\n"
-"  -n, --no-parser            генерировать только таблицы\n"
-"  -k, --token-table          включить таблицу имен лексем\n"
+"п░п╫п╟п╩п╦п╥п╟я┌п╬я─:\n"
+"  -L, --language=п╞п≈п╚п         я┐п╨п╟п╥п╟я┌я▄ п╡я▀я┘п╬п╢п╫п╬п╧ я▐п╥я▀п╨ п©я─п╬пЁя─п╟п╪п╪п╦я─п╬п╡п╟п╫п╦я▐\n"
+"                             (я█п╨я│п©п╣я─п╣п╪п╣п╫я┌п╟п╩я▄п╫п╟я▐ я└я┐п╫п╨я├п╦я▐)\n"
+"  -S, --skeleton=п╓п░п≥п⌡        я┐п╨п╟п╥п╟я┌я▄ я└п╟п╧п╩ я┬п╟п╠п╩п╬п╫п╟\n"
+"  -t, --debug                п╫п╟я│я┌я─п╬п╦я┌я▄ п╟п╫п╟п╩п╦п╥п╟я┌п╬я─ п╢п╩я▐ п╬я┌п╩п╟п╢п╨п╦\n"
+"      --locations            п╡п╨п╩я▌я┤п╦я┌я▄ п╡я▀я┤п╦я│п╩п╣п╫п╦п╣ п╪п╣я│я┌п╬п©п╬п╩п╬п╤п╣п╫п╦п╧\n"
+"  -p, --name-prefix=п÷п═п∙п╓п≤п п║  п©п╬п╢я│я┌п╟п╡п╦я┌я▄ п÷п═п∙п╓п≤п п║ п╢п╩я▐ п╡п╫п╣я┬п╫п╦я┘ я│п╦п╪п╡п╬п╩п╬п╡\n"
+"  -l, --no-lines             п╫п╣ пЁп╣п╫п╣я─п╦я─п╬п╡п╟я┌я▄ п╢п╦я─п╣п╨я┌п╦п╡я▀ б╚#lineб╩\n"
+"  -k, --token-table          п╡п╨п╩я▌я┤п╦я┌я▄ я┌п╟п╠п╩п╦я├я┐ п╦п╪п╣п╫ п╩п╣п╨я│п╣п╪\n"
+"\n"
 
 #: src/getargs.c:287
-#, fuzzy
 msgid ""
 "Output:\n"
 "      --defines[=FILE]       also produce a header file\n"
@@ -186,14 +203,19 @@ msgid ""
 "                             (the XML schema is experimental)\n"
 "\n"
 msgstr ""
-"Вывод:\n"
-"  -d, --defines              создать также файл заголовков\n"
-"  -r, --report=THINGS        создать также пояснения в автомату\n"
-"  -v, --verbose              то же, что и `--report=state'\n"
-"  -b, --file-prefix=ПРЕФИКС  указать ПРЕФИКС для выходных файлов\n"
-"  -o, --output=ФАЙЛ          поместить результат в ФАЙЛ\n"
-"  -g, --graph                создать также пояснения к автомату в виде \n"
-"                             VCG-графа\n"
+"п▓я▀п╡п╬п╢:\n"
+"      --defines[=п╓п░п≥п⌡]       я│п╬п╥п╢п╟я┌я▄ я┌п╟п╨п╤п╣ я└п╟п╧п╩ п╥п╟пЁп╬п╩п╬п╡п╨п╬п╡\n"
+"  -d                         п╦п╩п╦ п╣я│п╩п╦ п╪я▀ п╫п╣ п╪п╬п╤п╣п╪ я┐п╨п╟п╥п╟я┌я▄ п╓п░п≥п⌡ "
+"(я│п╬п╡п╪п╣я│я┌п╦п╪п╬я│я┌я▄ я│ POSIX Yacc)\n"
+"  -r, --report=п▓п∙п╘п≤          я│п╬п╥п╢п╟я┌я▄ я┌п╟п╨п╤п╣ п©п╬я▐я│п╫п╣п╫п╦я▐ п╡ п╟п╡я┌п╬п╪п╟я┌я┐\n"
+"      --report-file=FILE     п╥п╟п©п╦я│п╟я┌я▄ п╬я┌я┤п╣я┌ п╡ п╓п░п≥п⌡\n"
+"  -v, --verbose              я┌п╬ п╤п╣, я┤я┌п╬ п╦ б╚--report=stateб╩\n"
+"  -b, --file-prefix=п÷п═п∙п╓п≤п п║  я┐п╨п╟п╥п╟я┌я▄ п÷п═п∙п╓п≤п п║ п╢п╩я▐ п╡я▀я┘п╬п╢п╫я▀я┘ я└п╟п╧п╩п╬п╡\n"
+"  -o, --output=п╓п░п≥п⌡          п©п╬п╪п╣я│я┌п╦я┌я▄ п╡я▀п╡п╬п╢ п╡ п╓п░п≥п⌡\n"
+"  -g, --graph[=п╓п░п≥п⌡]         я┌п╟п╨п╤п╣ п╡я▀п╡п╣я│я┌п╦ пЁя─п╟я└ п╟п╡я┌п╬п╪п╟я┌п╟\n"
+"  -x, --xml[=п╓п░п≥п⌡]           я┌п╟п╨п╤п╣ п╡я▀п╡п╣я│я┌п╦ XML п╬я┌я┤п╣я┌ п╟п╡я┌п╬п╪п╟я┌п╟\n"
+"                             (я│я├п╣п╫п╟я─п╦п╧ XML - я█п╨я│п©п╣я─п╣п╪п╣п╫я┌п╟п╩я▄п╫я▀п╧)\n"
+"\n"
 
 #: src/getargs.c:302
 msgid ""
@@ -206,6 +228,14 @@ msgid ""
 "  `error'           treat warnings as errors\n"
 "\n"
 msgstr ""
+"п п╟я┌п╣пЁп╬я─п╦п╦ п©я─п╣п╢я┐п©я─п╣п╤п╢п╣п╫п╦я▐ п╡п╨п╩я▌я┤п╟я▌я┌:\n"
+"  б╚midrule-valuesб╩  п╫п╣п╫п╟п╥п╫п╟я┤п╣п╫п╫я▀п╣ п╦п╩п╦ п╫п╣п╦я│п©п╬п╩я▄п╥я┐п╣п╪я▀п╣ п╥п╫п╟я┤п╣п╫п╦я▐ п╡ п©я─п╟п╡п╦п╩п╟я┘\n"
+"  б╚yaccб╩            п╫п╣я│п╬п╡п╪п╣я│я┌п╦п╪п╬я│я┌п╦ я│ POSIX YACC\n"
+"  б╚allб╩             п╡я│п╣ п©я─п╣п╢я┐п©я─п╣п╤п╢п╣п╫п╦я▐\n"
+"  б╚no-п п░п╒п∙п⌠п·п═п≤п╞б╩    п╡я▀п╨п╩я▌я┤п╦я┌я▄ п©я─п╣п╢я┐п©я─п╣п╤п╢п╣п╫п╦я▐ п╡ п п░п╒п∙п⌠п·п═п≤п╞\n"
+"  б╚noneб╩            п╡я▀п╨п╩я▌я┤п╦я┌я▄ п╡я│п╣ п©я─п╣п╢я┐п©я─п╣п╤п╢п╣п╫п╦я▐\n"
+"  б╚errorб╩           п╡п╬я│п©я─п╦п╫п╦п╪п╟я┌я▄ п╡я│п╣ п©я─п╣п╢я┐п©я─п╣п╤п╢п╣п╫п╦я▐ п╨п╟п╨ п╬я┬п╦п╠п╨п╦\n"
+"\n"
 
 #: src/getargs.c:313
 msgid ""
@@ -217,13 +247,22 @@ msgid ""
 "  `all'          include all the above information\n"
 "  `none'         disable the report\n"
 msgstr ""
+"п▓п∙п╘п≤ - я█я┌п╬ я│п©п╦я│п╬п╨ я─п╟п╥п╢п╣п╩п╣п╫п╫я▀я┘ п╥п╟п©я▐я┌п╬п╧ я│п╩п╬п╡, п╨п╬я┌п╬я─я▀п╧ п╪п╬п╤п╣я┌ п╡п╨п╩я▌я┤п╟я┌я▄:\n"
+"  б╚stateб╩        п╬п©п╦я│п╟я┌я▄ я│п╬я│я┌п╬я▐п╫п╦я▐\n"
+"  б╚itemsetб╩      п©п╬п╩п╫я▀п╧ п╫п╟п╠п╬я─ п╬я│п╫п╬п╡п╫я▀я┘ я█п╩п╣п╪п╣п╫я┌п╬п╡ п╡п╪п╣я│я┌п╣ я│ п╦я┘ я│п╬я│п╣п╢я▐п╪п╦\n"
+"  б╚look-aheadб╩   я┌п╬я┤п╫я▀п╣ я│п╬п╬я┌п╡п╣я┌я│я┌п╡п╦я▐ я│п╩п╣п╢я┐я▌я┴п╦я┘ я┌п╬п╨п╣п╫п╬п╡ я█п╩п╣п╪п╣п╫я┌п╟п╪\n"
+"  б╚solvedб╩       п╬п©п╦я│п╟п╫п╦п╣ я─п╣я┬п╣п╫п╦я▐ п╨п╬п╫я└п╩п╦п╨я┌п╬п╡ я│п╢п╡п╦пЁп╟/п╡я▀п╡п╬п╢п╟\n"
+"  б╚allб╩          п╡п╨п╩я▌я┤п╦я┌я▄ п╡я│я▌ я█я┌я┐ п╦п╫я└п╬я─п╪п╟я├п╦я▌\n"
+"  б╚noneб╩         п╬я┌п╨п╩я▌я┤п╦я┌я▄ п╬я┌я┤п╣я┌\n"
 
 #: src/getargs.c:323
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Report bugs to <%s>.\n"
-msgstr "Ошибки сообщайте по адресу <bug-bison@gnu.org>.\n"
+msgstr ""
+"\n"
+"п·я┬п╦п╠п╨п╦ я│п╬п╬п╠я┴п╟п╧я┌п╣ п©п╬ п╟п╢я─п╣я│я┐ <%s>.\n"
 
 #: src/getargs.c:339
 #, c-format
@@ -232,7 +271,7 @@ msgstr "bison (GNU Bison) %s"
 
 #: src/getargs.c:341
 msgid "Written by Robert Corbett and Richard Stallman.\n"
-msgstr "Авторы: Роберт Корбет и Ричард Столмен.\n"
+msgstr "п░п╡я┌п╬я─я▀: п═п╬п╠п╣я─я┌ п п╬я─п╠п╣я┌ п╦ п═п╦я┤п╟я─п╢ п║я┌п╬п╩п╪п╣п╫.\n"
 
 #: src/getargs.c:345
 #, c-format
@@ -244,93 +283,134 @@ msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
 msgstr ""
-"Это свободная программа; условия распространения смотрите в исходных "
-"текстах.\n"
-"НИКАКИХ гарантий не предоставляется, даже гарантии ПОЛЕЗНОСТИ или "
-"ПРИГОДНОСТИ\n"
-"ДЛЯ ОПРЕДЕЛЕННОЙ ЦЕЛИ.\n"
+"п╜я┌п╬ я│п╡п╬п╠п╬п╢п╫п╟я▐ п©я─п╬пЁя─п╟п╪п╪п╟; я┐я│п╩п╬п╡п╦я▐ я─п╟я│п©я─п╬я│я┌я─п╟п╫п╣п╫п╦я▐ я│п╪п╬я┌я─п╦я┌п╣ п╡ п╦я│я┘п╬п╢п╫я▀я┘ "
+"я┌п╣п╨я│я┌п╟я┘.\n"
+"п²п≤п п░п п≤п╔ пЁп╟я─п╟п╫я┌п╦п╧ п╫п╣ п©я─п╣п╢п╬я│я┌п╟п╡п╩я▐п╣я┌я│я▐, п╢п╟п╤п╣ пЁп╟я─п╟п╫я┌п╦п╦ п÷п·п⌡п∙п≈п²п·п║п╒п≤ п╦п╩п╦ "
+"п÷п═п≤п⌠п·п■п²п·п║п╒п≤\n"
+"п■п⌡п╞ п·п÷п═п∙п■п∙п⌡п∙п²п²п·п≥ п╕п∙п⌡п≤.\n"
 
 #: src/getargs.c:371
-#, fuzzy
 msgid "multiple skeleton declarations are invalid"
-msgstr "множественное описание %s"
+msgstr "п╪п╫п╬п╤п╣я│я┌п╡п╣п╫п╫я▀п╣ п╬п©п╦я│п╟п╫п╦я▐ я│п╨п╣п╩п╣я┌п╟ п╫п╣ п©я─п╦п╪п╣п╫п╦п╪п╬"
 
 #: src/getargs.c:394
-#, fuzzy, c-format
+#, c-format
 msgid "invalid language `%s'"
-msgstr "недопустимое значение: %s"
+msgstr "п╫п╣п╢п╬п©я┐я│я┌п╦п╪я▀п╧ я▐п╥я▀п╨ б╚%sб╩"
 
 #: src/getargs.c:397
-#, fuzzy
 msgid "multiple language declarations are invalid"
-msgstr "множественное описание %s"
+msgstr "п╪п╫п╬п╤п╣я│я┌п╡п╣п╫п╫я▀п╣ п╬п©п╦я│п╟п╫п╦я▐ я▐п╥я▀п╨п╟ п╫п╣ п©я─п╦п╪п╣п╫п╦п╪п╬"
 
 #: src/getargs.c:619
 #, c-format
 msgid "missing operand after `%s'"
-msgstr "после `%s' пропущен операнд"
+msgstr "п©п╬я│п╩п╣ б╚%sб╩ п©я─п╬п©я┐я┴п╣п╫ п╬п©п╣я─п╟п╫п╢"
 
 #: src/getargs.c:621
 #, c-format
 msgid "extra operand `%s'"
-msgstr "лишний операнд `%s'"
+msgstr "п╩п╦я┬п╫п╦п╧ п╬п©п╣я─п╟п╫п╢ б╚%sб╩"
 
 #: src/gram.c:112
 msgid "empty"
-msgstr "пусто"
+msgstr "п©я┐я│я┌п╬"
 
 #: src/gram.c:201
 msgid "Grammar"
-msgstr "Грамматика"
+msgstr "п⌠я─п╟п╪п╪п╟я┌п╦п╨п╟"
 
-#: src/location.c:92 src/scan-gram.l:731
+#: src/location.c:92 src/scan-gram.l:733
 #, c-format
 msgid "line number overflow"
-msgstr ""
+msgstr "п©п╣я─п╣п©п╬п╩п╫п╣п╫п╦п╣ п╫п╬п╪п╣я─п╟ я│я┌я─п╬п╨п╦"
 
 #: src/location.c:94
 #, c-format
 msgid "column number overflow"
-msgstr ""
+msgstr "п©п╣я─п╣п©п╬п╩п╫п╣п╫п╦п╣ п╫п╬п╪п╣я─п╟ я│я┌п╬п╩п╠я├п╟"
 
 #: src/main.c:136
-#, fuzzy
 msgid "rule useless in parser due to conflicts"
-msgstr "правило не сведено из-за конфликтов"
+msgstr "п©я─п╟п╡п╦п╩п╬ п╫п╣ п©я─п╦п╪п╣п╫п╦п╪п╬ п╡ п©п╟я─я│п╣я─п╣ п╦п╥-п╥п╟ п╨п╬п╫я└п╩п╦п╨я┌п╬п╡"
 
-#: src/parse-gram.y:693
+#: src/muscle_tab.c:419
+#, fuzzy, c-format
+msgid "%s `%s' redefined"
+msgstr "п©п╬п╡я┌п╬я─п╫п╬п╣ п╬п©я─п╣п╢п╣п╩п╣п╫п╦п╣ я│п╦п╪п╡п╬п╩п╟ %s"
+
+#: src/muscle_tab.c:422
+#, fuzzy, c-format
+msgid "previous definition"
+msgstr "п©я─п╣п╢я▀п╢я┐я┴п╣п╣ п╬п©п╦я│п╟п╫п╦п╣"
+
+#: src/muscle_tab.c:458
+#, c-format
+msgid ""
+"undefined %%define variable `%s' passed to muscle_percent_define_get_loc"
+msgstr ""
+
+#: src/muscle_tab.c:472
+#, c-format
+msgid ""
+"undefined %%define variable `%s' passed to muscle_percent_define_get_syncline"
+msgstr ""
+
+#: src/muscle_tab.c:518
+#, c-format
+msgid "invalid value for %%define Boolean variable `%s'"
+msgstr ""
+
+#: src/muscle_tab.c:524
+#, c-format
+msgid ""
+"undefined %%define variable `%s' passed to muscle_percent_define_flag_if"
+msgstr ""
+
+#: src/muscle_tab.c:580
+#, c-format
+msgid "invalid value for %%define variable `%s': `%s'"
+msgstr ""
+
+#: src/muscle_tab.c:585
+#, c-format
+msgid ""
+"undefined %%define variable `%s' passed to muscle_percent_define_check_values"
+msgstr ""
+
+#: src/parse-gram.y:692
 #, c-format
 msgid "missing identifier in parameter declaration"
-msgstr "в описании параметра отсутствует идентификатор"
+msgstr "п╡ п╬п©п╦я│п╟п╫п╦п╦ п©п╟я─п╟п╪п╣я┌я─п╟ п╬я┌я│я┐я┌я│я┌п╡я┐п╣я┌ п╦п╢п╣п╫я┌п╦я└п╦п╨п╟я┌п╬я─"
 
 #: src/print.c:47
 #, c-format
 msgid " type %d is %s\n"
-msgstr " тип %d является %s\n"
+msgstr " я┌п╦п© %d я▐п╡п╩я▐п╣я┌я│я▐ %s\n"
 
 #: src/print.c:164
 #, c-format
 msgid "shift, and go to state %d\n"
-msgstr "сдвиг, и переход в состояние %d\n"
+msgstr "я│п╢п╡п╦пЁ, п╦ п©п╣я─п╣я┘п╬п╢ п╡ я│п╬я│я┌п╬я▐п╫п╦п╣ %d\n"
 
 #: src/print.c:166
 #, c-format
 msgid "go to state %d\n"
-msgstr "переход в состояние %d\n"
+msgstr "п©п╣я─п╣я┘п╬п╢ п╡ я│п╬я│я┌п╬я▐п╫п╦п╣ %d\n"
 
 #: src/print.c:203
 msgid "error (nonassociative)\n"
-msgstr "ошибка (неассоциативная)\n"
+msgstr "п╬я┬п╦п╠п╨п╟ (п╫п╣п╟я│я│п╬я├п╦п╟я┌п╦п╡п╫п╟я▐)\n"
 
 #: src/print.c:226
 #, c-format
 msgid "reduce using rule %d (%s)"
-msgstr "вывод с использованием правила %d (%s)"
+msgstr "п╡я▀п╡п╬п╢ я│ п╦я│п©п╬п╩я▄п╥п╬п╡п╟п╫п╦п╣п╪ п©я─п╟п╡п╦п╩п╟ %d (%s)"
 
 #: src/print.c:228
 #, c-format
 msgid "accept"
-msgstr ""
+msgstr "п©я─п╦п╫я▐я┌я▄"
 
 #: src/print.c:263 src/print.c:329
 msgid "$default"
@@ -339,360 +419,370 @@ msgstr "$default"
 #: src/print.c:358
 #, c-format
 msgid "state %d"
-msgstr "состояние %d"
+msgstr "я│п╬я│я┌п╬я▐п╫п╦п╣ %d"
 
 #: src/print.c:394
 msgid "Terminals, with rules where they appear"
-msgstr "Терминальные символы с правилами, в которых они появляются"
+msgstr "п╒п╣я─п╪п╦п╫п╟п╩я▄п╫я▀п╣ я│п╦п╪п╡п╬п╩я▀ я│ п©я─п╟п╡п╦п╩п╟п╪п╦, п╡ п╨п╬я┌п╬я─я▀я┘ п╬п╫п╦ п©п╬я▐п╡п╩я▐я▌я┌я│я▐"
 
 #: src/print.c:421
 msgid "Nonterminals, with rules where they appear"
-msgstr "Нетерминальные символы с правилами, в которых они появляются"
+msgstr "п²п╣я┌п╣я─п╪п╦п╫п╟п╩я▄п╫я▀п╣ я│п╦п╪п╡п╬п╩я▀ я│ п©я─п╟п╡п╦п╩п╟п╪п╦, п╡ п╨п╬я┌п╬я─я▀я┘ п╬п╫п╦ п©п╬я▐п╡п╩я▐я▌я┌я│я▐"
 
 #: src/print.c:450
 #, c-format
 msgid " on left:"
-msgstr " налево:"
+msgstr " п╫п╟п╩п╣п╡п╬:"
 
 #: src/print.c:467
 #, c-format
 msgid " on right:"
-msgstr " направо:"
+msgstr " п╫п╟п©я─п╟п╡п╬:"
 
 #: src/print.c:495
-#, fuzzy
 msgid "Rules useless in parser due to conflicts"
-msgstr "правило не сведено из-за конфликтов"
+msgstr "п÷я─п╟п╡п╦п╩п╬ п╫п╣ п©я─п╦п╪п╣п╫п╦п╪п╬ п╡ п©п╟я─я│п╣я─п╣ п╦п╥-п╥п╟ п╨п╬п╫я└п╩п╦п╨я┌п╬п╡"
 
 #: src/reader.c:61
 #, c-format
 msgid "multiple %s declarations"
-msgstr "множественное описание %s"
+msgstr "п╪п╫п╬п╤п╣я│я┌п╡п╣п╫п╫п╬п╣ п╬п©п╦я│п╟п╫п╦п╣ %s"
 
 #: src/reader.c:131
-#, fuzzy, c-format
+#, c-format
 msgid "result type clash on merge function `%s': <%s> != <%s>"
-msgstr "конфликт типов на действии по умолчанию: <%s> != <%s>"
+msgstr "п╨п╬п╫я└п╩п╦п╨я┌ я┌п╦п©п╬п╡ я─п╣п╥я┐п╩я▄я┌п╟я┌п╟ п©я─п╦ я│п╩п╦я▐п╫п╦п╦ я└я┐п╫п╨я├п╦п╦ б╚%sб╩: <%s> != <%s>"
 
-#: src/reader.c:134 src/symtab.c:141 src/symtab.c:149 src/symtab.c:910
-#: src/symtab.c:923 src/symtab.c:936 src/symtab.c:949
-#, fuzzy, c-format
+#: src/reader.c:134 src/symtab.c:141 src/symtab.c:149 src/symtab.c:912
+#: src/symtab.c:925 src/symtab.c:938 src/symtab.c:951
+#, c-format
 msgid "previous declaration"
-msgstr "неверное описание %s"
+msgstr "п©я─п╣п╢я▀п╢я┐я┴п╣п╣ п╬п©п╦я│п╟п╫п╦п╣"
 
 #: src/reader.c:218
 #, c-format
 msgid "rule given for %s, which is a token"
-msgstr "правило задано для %s, который является лексемой"
+msgstr "п©я─п╟п╡п╦п╩п╬ п╥п╟п╢п╟п╫п╬ п╢п╩я▐ %s, п╨п╬я┌п╬я─я▀п╧ я▐п╡п╩я▐п╣я┌я│я▐ п╩п╣п╨я│п╣п╪п╬п╧"
 
 #: src/reader.c:270
 #, c-format
 msgid "type clash on default action: <%s> != <%s>"
-msgstr "конфликт типов на действии по умолчанию: <%s> != <%s>"
+msgstr "п╨п╬п╫я└п╩п╦п╨я┌ я┌п╦п©п╬п╡ п╫п╟ п╢п╣п╧я│я┌п╡п╦п╦ п©п╬ я┐п╪п╬п╩я┤п╟п╫п╦я▌: <%s> != <%s>"
 
 #: src/reader.c:276
 #, c-format
 msgid "empty rule for typed nonterminal, and no action"
 msgstr ""
-"пустое правило для типизированного нетерминального символа, и нет действия"
+"п©я┐я│я┌п╬п╣ п©я─п╟п╡п╦п╩п╬ п╢п╩я▐ я┌п╦п©п╦п╥п╦я─п╬п╡п╟п╫п╫п╬пЁп╬ п╫п╣я┌п╣я─п╪п╦п╫п╟п╩я▄п╫п╬пЁп╬ я│п╦п╪п╡п╬п╩п╟, п╦ п╫п╣я┌ п╢п╣п╧я│я┌п╡п╦я▐"
 
 #: src/reader.c:290
-#, fuzzy, c-format
+#, c-format
 msgid "unused value: $%d"
-msgstr "недопустимое значение: %s"
+msgstr "п╫п╣п╦я│п©п╬п╩я▄п╥я┐п╣п╪п╟я▐ п©п╣я─п╣п╪п╣п╫п╫п╟я▐: $%d"
 
 #: src/reader.c:292
 #, c-format
 msgid "unset value: $$"
+msgstr "п╫п╣я┐п╨п╟п╥п╟п╫п╫п╬п╣ п╥п╫п╟я┤п╣п╫п╦п╣: $$"
+
+#: src/reader.c:302
+#, c-format
+msgid "token for %%prec is not defined: %s"
 msgstr ""
 
-#: src/reader.c:369 src/reader.c:383 src/reader.c:396
+#: src/reader.c:388 src/reader.c:402 src/reader.c:415
 #, c-format
 msgid "only one %s allowed per rule"
-msgstr ""
+msgstr "я┌п╬п╩я▄п╨п╬ п╬п╢п╫п╬ %s я─п╟п╥я─п╣я┬п╣п╫п╬ п╫п╟ п©я─п╟п╡п╦п╩п╬"
 
-#: src/reader.c:379 src/reader.c:394
+#: src/reader.c:398 src/reader.c:413
 #, c-format
 msgid "%s affects only GLR parsers"
-msgstr ""
+msgstr "%s п╡п╩п╦я▐п╣я┌ я┌п╬п╩я▄п╨п╬ п╫п╟ GLR п©п╟я─я│п╣я─я▀"
 
-#: src/reader.c:381
+#: src/reader.c:400
 #, c-format
 msgid "%s must be followed by positive number"
-msgstr "за %s должно следовать положительное число"
+msgstr "п╥п╟ %s п╢п╬п╩п╤п╫п╬ я│п╩п╣п╢п╬п╡п╟я┌я▄ п©п╬п╩п╬п╤п╦я┌п╣п╩я▄п╫п╬п╣ я┤п╦я│п╩п╬"
 
-#: src/reader.c:487
+#: src/reader.c:506
 #, c-format
 msgid "rule is too long"
-msgstr ""
+msgstr "я│п╩п╦я┬п╨п╬п╪ п╢п╩п╦п╫п╫п╬п╣ п©я─п╟п╡п╦п╩п╬"
 
-#: src/reader.c:575
+#: src/reader.c:594
 #, c-format
 msgid "no rules in the input grammar"
-msgstr "отсутствуют правила во входной грамматике"
+msgstr "п╬я┌я│я┐я┌я│я┌п╡я┐я▌я┌ п©я─п╟п╡п╦п╩п╟ п╡п╬ п╡я┘п╬п╢п╫п╬п╧ пЁя─п╟п╪п╪п╟я┌п╦п╨п╣"
 
 #: src/reduce.c:242
-#, fuzzy
 msgid "rule useless in grammar"
-msgstr "отсутствуют правила во входной грамматике"
+msgstr "п╠п╣я│п©п╬п╩п╣п╥п╫п╬п╣ п©я─п╟п╡п╦п╩п╬ п╡ пЁя─п╟п╪п╪п╟я┌п╦п╨п╣"
 
 #: src/reduce.c:303
 #, c-format
 msgid "nonterminal useless in grammar: %s"
-msgstr ""
+msgstr "п╫п╣я┌п╣я─п╪п╦п╫п╟п╩ п╠п╣я│п©п╬п╩п╣п╥п╣п╫ п╡ пЁя─п╟п╪п╪п╟я┌п╦п╨п╣: %s"
 
 #: src/reduce.c:351
-#, fuzzy
 msgid "Nonterminals useless in grammar"
-msgstr "Нетерминальные символы с правилами, в которых они появляются"
+msgstr "п²п╣я┌п╣я─п╪п╦п╫п╟п╩ п╠п╣я│п©п╬п╩п╣п╥п╣п╫ п╡ пЁя─п╟п╪п╪п╟я┌п╦п╨п╣"
 
 #: src/reduce.c:364
-#, fuzzy
 msgid "Terminals unused in grammar"
-msgstr "отсутствуют правила во входной грамматике"
+msgstr "п╒п╣я─п╪п╦п╫п╟п╩я▀ п╫п╣ п╦я│п©п╬п╩я▄п╥я┐я▌я┌я│я▐ п╡ пЁя─п╟п╪п╪п╟я┌п╦п╨п╣"
 
 #: src/reduce.c:373
-#, fuzzy
 msgid "Rules useless in grammar"
-msgstr "отсутствуют правила во входной грамматике"
+msgstr "п÷я─п╟п╡п╦п╩п╟ п╫п╣ п╦я│п©п╬п╩я▄п╥я┐я▌я┌я│я▐ п╡ пЁя─п╟п╪п╪п╟я┌п╦п╨п╣"
 
 #: src/reduce.c:388
 #, c-format
 msgid "%d nonterminal useless in grammar"
 msgid_plural "%d nonterminals useless in grammar"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d п╫п╣я┌п╣я─п╪п╦п╫п╟п╩ п╠п╣я│п©п╬п╩п╣п╥п╣п╫ п╡ пЁя─п╟п╪п╪п╟я┌п╦п╨п╣"
+msgstr[1] "%d п╫п╣я┌п╣я─п╪п╦п╫п╟п╩п╟ п╠п╣я│п©п╬п╩п╣п╥п╫п╬ п╡ пЁя─п╟п╪п╪п╟я┌п╦п╨п╣"
+msgstr[2] "%d п╫п╣я┌п╣я─п╪п╦п╫п╟п╩п╬п╡ п╠п╣я│п©п╬п╩п╣п╥п╫п╬ п╡ пЁя─п╟п╪п╪п╟я┌п╦п╨п╣"
 
 #: src/reduce.c:397
-#, fuzzy, c-format
+#, c-format
 msgid "%d rule useless in grammar"
 msgid_plural "%d rules useless in grammar"
-msgstr[0] "отсутствуют правила во входной грамматике"
-msgstr[1] "отсутствуют правила во входной грамматике"
-msgstr[2] "отсутствуют правила во входной грамматике"
+msgstr[0] "%d п©я─п╟п╡п╦п╩п╬ п╠п╣я│п©п╬п╩п╣п╥п╫п╬ п╡ пЁя─п╟п╪п╪п╟я┌п╦п╨п╣"
+msgstr[1] "%d п©я─п╟п╡п╦п╩п╟ п╠п╣я│п©п╬п╩п╣п╥п╫п╬ п╡ пЁя─п╟п╪п╪п╟я┌п╦п╨п╣"
+msgstr[2] "%d п©я─п╟п╡п╦п╩п╟ п╠п╣я│п©п╬п╩п╣п╥п╫п╬ п╡ пЁя─п╟п╪п╪п╟я┌п╦п╨п╣"
 
 #: src/reduce.c:428
 #, c-format
 msgid "start symbol %s does not derive any sentence"
-msgstr "начальный символ %s не выводит ни одного предложения"
+msgstr "п╫п╟я┤п╟п╩я▄п╫я▀п╧ я│п╦п╪п╡п╬п╩ %s п╫п╣ п╡я▀п╡п╬п╢п╦я┌ п╫п╦ п╬п╢п╫п╬пЁп╬ п©я─п╣п╢п╩п╬п╤п╣п╫п╦я▐"
 
 #: src/scan-code.l:163
 #, c-format
 msgid "stray `$'"
-msgstr ""
+msgstr "п╫п╣п╨п╬я─я─п╣п╨я┌п╫я▀п╧ б╚$б╩"
 
 #: src/scan-code.l:167
 #, c-format
 msgid "stray `@'"
-msgstr ""
+msgstr "п╫п╣п╨п╬я─я─п╣п╨я┌п╫я▀п╧ б╚@б╩"
 
 #: src/scan-code.l:280
 #, c-format
 msgid "explicit type given in untyped grammar"
-msgstr ""
+msgstr "я┐п╨п╟п╥п╟п╫ я┌п╦п© п╡ п╫п╣я┌п╦п©п╦п╥п╦я─п╬п╡п╟п╫п╫п╬п╧ пЁя─п╟п╪п╪п╟я┌п╦п╨п╣"
 
 #: src/scan-code.l:295
-#, fuzzy, c-format
+#, c-format
 msgid "$$ for the midrule at $%d of `%s' has no declared type"
-msgstr "$%d из `%s' не имеет описанного типа"
+msgstr "$$ п╢п╩я▐ п©я─п╟п╡п╦п╩п╟ $%d п╦п╥ б╚%sб╩ п╫п╣ п╦п╪п╣п╣я┌ п╬п©п╦я│п╟п╫п╫п╬пЁп╬ я┌п╦п©п╟"
 
 #: src/scan-code.l:300
 #, c-format
 msgid "$$ of `%s' has no declared type"
-msgstr "$$ в `%s' не имеет описанного типа"
+msgstr "$$ п╡ б╚%sб╩ п╫п╣ п╦п╪п╣п╣я┌ п╬п©п╦я│п╟п╫п╫п╬пЁп╬ я┌п╦п©п╟"
 
 #: src/scan-code.l:328
 #, c-format
 msgid "$%d of `%s' has no declared type"
-msgstr "$%d из `%s' не имеет описанного типа"
+msgstr "$%d п╦п╥ б╚%sб╩ п╫п╣ п╦п╪п╣п╣я┌ п╬п©п╦я│п╟п╫п╫п╬пЁп╬ я┌п╦п©п╟"
 
-#: src/scan-code.l:343 src/scan-code.l:378 src/scan-gram.l:653
+#: src/scan-code.l:343 src/scan-code.l:378 src/scan-gram.l:655
 #, c-format
 msgid "integer out of range: %s"
-msgstr "выход за границы диапазона целого: %s"
+msgstr "п╡я▀я┘п╬п╢ п╥п╟ пЁя─п╟п╫п╦я├я▀ п╢п╦п╟п©п╟п╥п╬п╫п╟ я├п╣п╩п╬пЁп╬: %s"
 
 #: src/scan-gram.l:135
 #, c-format
 msgid "stray `,' treated as white space"
-msgstr "лишняя `,', считается пробелом"
+msgstr "п╩п╦я┬п╫я▐я▐ б╚,б╩ я│я┤п╦я┌п╟п╣я┌я│я▐ п©я─п╬п╠п╣п╩п╬п╪"
 
 #: src/scan-gram.l:201
 #, c-format
 msgid "invalid directive: %s"
-msgstr "неверная директива: %s"
+msgstr "п╫п╣п╡п╣я─п╫п╟я▐ п╢п╦я─п╣п╨я┌п╦п╡п╟: %s"
 
 #: src/scan-gram.l:259
 #, c-format
 msgid "invalid character: %s"
-msgstr "недопустимый символ: %s"
+msgstr "п╫п╣п╢п╬п©я┐я│я┌п╦п╪я▀п╧ я│п╦п╪п╡п╬п╩: %s"
 
 #: src/scan-gram.l:390
-#, fuzzy, c-format
+#, c-format
 msgid "invalid null character"
-msgstr "недопустимый символ: %s"
+msgstr "п╫п╣п╢п╬п©я┐я│я┌п╦п╪я▀п╧ п╫я┐п╩п╣п╡п╬п╧ я│п╦п╪п╡п╬п╩"
 
-#: src/scan-gram.l:403 src/scan-gram.l:414 src/scan-gram.l:435
-#, c-format
-msgid "invalid escape sequence: %s"
-msgstr "недопустимая экранирующая последовательность: %s"
-
-#: src/scan-gram.l:405 src/scan-gram.l:416 src/scan-gram.l:437
+#: src/scan-gram.l:403 src/scan-gram.l:413 src/scan-gram.l:433
 #, fuzzy, c-format
-msgid "invalid null character: %s"
-msgstr "недопустимый символ: %s"
+msgid "invalid number after \\-escape: %s"
+msgstr "п╫п╣п╢п╬п©я┐я│я┌п╦п╪я▀п╧ п╫я┐п╩п╣п╡п╬п╧ я│п╦п╪п╡п╬п╩: %s"
 
-#: src/scan-gram.l:442
-#, c-format
-msgid "unrecognized escape sequence: %s"
-msgstr "нераспознанная экранирующая последовательность: %s"
+#: src/scan-gram.l:445
+#, fuzzy, c-format
+msgid "invalid character after \\-escape: %s"
+msgstr "п╫п╣п╢п╬п©я┐я│я┌п╦п╪я▀п╧ я│п╦п╪п╡п╬п╩: %s"
 
-#: src/scan-gram.l:763
+#: src/scan-gram.l:765
 #, c-format
 msgid "missing `%s' at end of file"
-msgstr "отсутствует `%s' в конце файла"
+msgstr "п╬я┌я│я┐я┌я│я┌п╡я┐п╣я┌ б╚%sб╩ п╡ п╨п╬п╫я├п╣ я└п╟п╧п╩п╟"
 
-#: src/scan-gram.l:774
-#, fuzzy, c-format
+#: src/scan-gram.l:776
+#, c-format
 msgid "missing `%s' at end of line"
-msgstr "отсутствует `%s' в конце файла"
+msgstr "п╬я┌я│я┐я┌я│я┌п╡я┐п╣я┌ б╚%sб╩ п╡ п╨п╬п╫я├п╣ я│я┌я─п╬п╨п╦"
 
-#: src/symlist.c:199
-#, fuzzy, c-format
+#: src/scan-skel.l:145
+#, c-format
+msgid "unclosed %s directive in skeleton"
+msgstr ""
+
+#: src/scan-skel.l:290
+#, c-format
+msgid "too few arguments for %s directive in skeleton"
+msgstr ""
+
+#: src/scan-skel.l:297
+#, c-format
+msgid "too many arguments for %s directive in skeleton"
+msgstr ""
+
+#: src/symlist.c:200
+#, c-format
 msgid "invalid $ value: $%d"
-msgstr "недопустимое значение: %s"
+msgstr "п╫п╣п╢п╬п©я┐я│я┌п╦п╪п╬п╣ $ п╥п╫п╟я┤п╣п╫п╦п╣: $%d"
 
 #: src/symtab.c:78
-#, fuzzy, c-format
+#, c-format
 msgid "too many symbols in input grammar (limit is %d)"
-msgstr "слишком много символов (лексемы плюс нетерминалы); максимально %d"
+msgstr "я│п╩п╦я┬п╨п╬п╪ п╪п╫п╬пЁп╬ я│п╦п╪п╡п╬п╩п╬п╡ п╡п╬ п╡я┘п╬п╢я▐я┴п╣п╧ пЁя─п╟п╪п╪п╟я┌п╦п╨п╣ (п╪п╟п╨я│п╦п╪п╟п╩я▄п╫п╬ %d)"
 
 #: src/symtab.c:140
 #, c-format
 msgid "%s redeclaration for %s"
-msgstr "повторное описание %s для %s"
+msgstr "п©п╬п╡я┌п╬я─п╫п╬п╣ п╬п©п╦я│п╟п╫п╦п╣ %s п╢п╩я▐ %s"
 
 #: src/symtab.c:148
-#, fuzzy, c-format
+#, c-format
 msgid "%s redeclaration for <%s>"
-msgstr "повторное описание %s для %s"
+msgstr "%s п©п╬п╡я┌п╬я─п╫п╬ п╬п©п╦я│п╟п╫ п╢п╩я▐ <%s>"
 
 #: src/symtab.c:332
 #, c-format
 msgid "symbol %s redefined"
-msgstr "повторное определение символа %s"
+msgstr "п©п╬п╡я┌п╬я─п╫п╬п╣ п╬п©я─п╣п╢п╣п╩п╣п╫п╦п╣ я│п╦п╪п╡п╬п╩п╟ %s"
 
 #: src/symtab.c:346
-#, fuzzy, c-format
+#, c-format
 msgid "symbol %s redeclared"
-msgstr "повторное определение символа %s"
+msgstr "п©п╣я─п╣п╬п©я─п╣п╢п╣п╩п╣п╫п╦п╣ я│п╦п╪п╡п╬п╩п╟ %s"
 
 #: src/symtab.c:367
 #, c-format
 msgid "redefining user token number of %s"
-msgstr "переопределение номера лексемы пользователя для %s"
+msgstr "п©п╣я─п╣п╬п©я─п╣п╢п╣п╩п╣п╫п╦п╣ п╫п╬п╪п╣я─п╟ п╩п╣п╨я│п╣п╪я▀ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩я▐ п╢п╩я▐ %s"
 
 #: src/symtab.c:394
 #, c-format
 msgid "symbol %s is used, but is not defined as a token and has no rules"
-msgstr "символ %s используется, но не определен как лексема и не имеет правил"
+msgstr "я│п╦п╪п╡п╬п╩ %s п╦я│п©п╬п╩я▄п╥я┐п╣я┌я│я▐, п╫п╬ п╫п╣ п╬п©я─п╣п╢п╣п╩п╣п╫ п╨п╟п╨ п╩п╣п╨я│п╣п╪п╟ п╦ п╫п╣ п╦п╪п╣п╣я┌ п©я─п╟п╡п╦п╩"
 
 #: src/symtab.c:419
 #, c-format
 msgid "symbol `%s' used more than once as a literal string"
-msgstr ""
+msgstr "я│п╦п╪п╡п╬п╩ б╚%sб╩ п╦я│п©п╬п╩я▄п╥я┐п╣я┌я│я▐ п╠п╬п╩п╣п╣ п╬п╢п╫п╬пЁп╬ я─п╟п╥п╟ п╨п╟п╨ я│я┌я─п╬п╨п╟ п╩п╦я┌п╣я─п╟п╩п╟"
 
 #: src/symtab.c:422
 #, c-format
 msgid "symbol `%s' given more than one literal string"
-msgstr ""
+msgstr "я│п╦п╪п╡п╬п╩ б╚%sб╩ я┐п╨п╟п╥п╟п╫ п╠п╬п╩п╣п╣ п╬п╢п╫п╬п╧ я│я┌я─п╬п╨п╦ п╩п╦я┌п╣я─п╟п╩п╟"
 
 #: src/symtab.c:558
 #, c-format
 msgid "tokens %s and %s both assigned number %d"
-msgstr "обеим лексемам %s и %s присвоен номер %d"
+msgstr "п╬п╠п╣п╦п╪ п╩п╣п╨я│п╣п╪п╟п╪ %s п╦ %s п©я─п╦я│п╡п╬п╣п╫ п╫п╬п╪п╣я─ %d"
 
-#: src/symtab.c:889
+#: src/symtab.c:891
 #, c-format
 msgid "the start symbol %s is undefined"
-msgstr "начальный символ %s неопределен"
+msgstr "п╫п╟я┤п╟п╩я▄п╫я▀п╧ я│п╦п╪п╡п╬п╩ %s п╫п╣ п╬п©я─п╣п╢п╣п╩п╣п╫"
 
-#: src/symtab.c:893
+#: src/symtab.c:895
 #, c-format
 msgid "the start symbol %s is a token"
-msgstr "начальный символ %s является лексемой"
+msgstr "п╫п╟я┤п╟п╩я▄п╫я▀п╧ я│п╦п╪п╡п╬п╩ %s я▐п╡п╩я▐п╣я┌я│я▐ п╩п╣п╨я│п╣п╪п╬п╧"
 
-#: src/symtab.c:908
+#: src/symtab.c:910
 #, c-format
 msgid "redeclaration for default tagged %%destructor"
-msgstr ""
+msgstr "п©п╣я─п╣п╬п©я─п╣п╢п╣п╩п╣п╫п╦п╣ п╢п╩я▐ я│я┌п╟п╫п╢п╟я─я┌п╫п╬пЁп╬ п╫п╟п╥п╫п╟я┤п╣п╫п╫п╬пЁп╬ %%destructor"
 
-#: src/symtab.c:921
+#: src/symtab.c:923
 #, c-format
 msgid "redeclaration for default tagless %%destructor"
-msgstr ""
+msgstr "п©п╣я─п╣п╬п©я─п╣п╢п╣п╩п╣п╫п╦п╣ п╢п╩я▐ я│я┌п╟п╫п╢п╟я─я┌п╫п╬пЁп╬ п╫п╣п╫п╟п╥п╫п╟я┤п╣п╫п╫п╬пЁп╬ %%destructor"
 
-#: src/symtab.c:934
+#: src/symtab.c:936
 #, c-format
 msgid "redeclaration for default tagged %%printer"
-msgstr ""
+msgstr "п©п╣я─п╣п╬п©я─п╣п╢п╣п╩п╣п╫п╦п╣ п╢п╩я▐ я│я┌п╟п╫п╢п╟я─я┌п╫п╬пЁп╬ п╫п╟п╥п╫п╟я┤п╣п╫п╫п╬пЁп╬ %%printer"
 
-#: src/symtab.c:947
+#: src/symtab.c:949
 #, c-format
 msgid "redeclaration for default tagless %%printer"
-msgstr ""
+msgstr "п©п╣я─п╣п╬п©я─п╣п╢п╣п╩п╣п╫п╦п╣ п╢п╩я▐ я│я┌п╟п╫п╢п╟я─я┌п╫п╬пЁп╬ п╫п╣п╫п╟п╥п╫п╟я┤п╣п╫п╫п╬пЁп╬ %%printer"
 
 #: lib/argmatch.c:133
 #, c-format
 msgid "invalid argument %s for %s"
-msgstr "недопустимый аргумент %s для %s"
+msgstr "п╫п╣п╢п╬п©я┐я│я┌п╦п╪я▀п╧ п╟я─пЁя┐п╪п╣п╫я┌ %s п╢п╩я▐ %s"
 
 #: lib/argmatch.c:134
 #, c-format
 msgid "ambiguous argument %s for %s"
-msgstr "неоднозначный аргумент %s для %s"
+msgstr "п╫п╣п╬п╢п╫п╬п╥п╫п╟я┤п╫я▀п╧ п╟я─пЁя┐п╪п╣п╫я┌ %s п╢п╩я▐ %s"
 
 #: lib/argmatch.c:153
 #, c-format
 msgid "Valid arguments are:"
-msgstr "Допустимые аргументы:"
+msgstr "п■п╬п©я┐я│я┌п╦п╪я▀п╣ п╟я─пЁя┐п╪п╣п╫я┌я▀:"
 
 #: lib/bitset_stats.c:175
 #, c-format
 msgid "%u bitset_allocs, %u freed (%.2f%%).\n"
-msgstr ""
+msgstr "%u bitset_allocs, %u п╬я│п╡п╬п╠п╬п╤п╢п╣п╫п╬ (%.2f%%).\n"
 
 #: lib/bitset_stats.c:178
 #, c-format
 msgid "%u bitset_sets, %u cached (%.2f%%)\n"
-msgstr ""
+msgstr "%u bitset_sets, %u п╨я█я┬п╦я─п╬п╡п╟п╫п╬ (%.2f%%)\n"
 
 #: lib/bitset_stats.c:181
 #, c-format
 msgid "%u bitset_resets, %u cached (%.2f%%)\n"
-msgstr ""
+msgstr "%u bitset_resets, %u п╨я█я┬п╦я─п╬п╡п╟п╫п╬ (%.2f%%)\n"
 
 #: lib/bitset_stats.c:184
 #, c-format
 msgid "%u bitset_tests, %u cached (%.2f%%)\n"
-msgstr ""
+msgstr "%u bitset_tests, %u п╨я█я┬п╦я─п╬п╡п╟п╫п╬ (%.2f%%)\n"
 
 #: lib/bitset_stats.c:188
 #, c-format
 msgid "%u bitset_lists\n"
-msgstr ""
+msgstr "%u bitset_lists\n"
 
 #: lib/bitset_stats.c:190
 msgid "count log histogram\n"
-msgstr ""
+msgstr "п©п╬я│я┤п╦я┌п╟я┌я▄ пЁп╦я│я┌п╬пЁя─п╟п╪п╪я┐ п╤я┐я─п╫п╟п╩п╟\n"
 
 #: lib/bitset_stats.c:193
 msgid "size log histogram\n"
-msgstr ""
+msgstr "пЁп╦я│я┌п╬пЁя─п╟п╪п╪п╟ я─п╟п╥п╪п╣я─п╟ п╤я┐я─п╫п╟п╩п╟\n"
 
 #: lib/bitset_stats.c:196
 msgid "density histogram\n"
-msgstr ""
+msgstr "пЁп╦я│я┌п╬пЁя─п╟п╪п╪п╟ п©п╩п╬я┌п╫п╬я│я┌п╦\n"
 
 #: lib/bitset_stats.c:210
 #, c-format
@@ -700,91 +790,88 @@ msgid ""
 "Bitset statistics:\n"
 "\n"
 msgstr ""
+"п║я┌п╟я┌п╦я│я┌п╦п╨п╟ bitset:\n"
+"\n"
 
 #: lib/bitset_stats.c:213
 #, c-format
 msgid "Accumulated runs = %u\n"
-msgstr ""
+msgstr "п²п╟п╨п╬п©п╩п╣п╫п╬ п╥п╟п©я┐я│п╨п╬п╡ = %u\n"
 
 #: lib/bitset_stats.c:257 lib/bitset_stats.c:262
 msgid "Could not read stats file."
-msgstr "Не удается прочитать файл статистики."
+msgstr "п²п╣ я┐п╢п╟п╣я┌я│я▐ п©я─п╬я┤п╦я┌п╟я┌я▄ я└п╟п╧п╩ я│я┌п╟я┌п╦я│я┌п╦п╨п╦."
 
 #: lib/bitset_stats.c:259
 #, c-format
 msgid "Bad stats file size.\n"
-msgstr ""
+msgstr "п²п╣п╡п╣я─п╫я▀п╧ я─п╟п╥п╪п╣я─ я└п╟п╧п╩п╟ я│я┌п╟я┌п╦я│я┌п╦п╨п╦.\n"
 
 #: lib/bitset_stats.c:285 lib/bitset_stats.c:287
 msgid "Could not write stats file."
-msgstr "Не удается записать в файл статистики."
+msgstr "п²п╣ я┐п╢п╟п╣я┌я│я▐ п╥п╟п©п╦я│п╟я┌я▄ п╡ я└п╟п╧п╩ я│я┌п╟я┌п╦я│я┌п╦п╨п╦."
 
 #: lib/bitset_stats.c:290
 msgid "Could not open stats file for writing."
-msgstr "Не удается открыть файл статистики для записи."
+msgstr "п²п╣ я┐п╢п╟п╣я┌я│я▐ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ я│я┌п╟я┌п╦я│я┌п╦п╨п╦ п╢п╩я▐ п╥п╟п©п╦я│п╦."
 
-#: lib/error.c:125
+#: lib/error.c:153
 msgid "Unknown system error"
-msgstr "Неизвестная системная ошибка"
+msgstr "п²п╣п╦п╥п╡п╣я│я┌п╫п╟я▐ я│п╦я│я┌п╣п╪п╫п╟я▐ п╬я┬п╦п╠п╨п╟"
 
-#: lib/getopt.c:526 lib/getopt.c:542
-#, c-format
-msgid "%s: option `%s' is ambiguous\n"
-msgstr "%s: неоднозначный ключ `%s'\n"
+#: lib/getopt.c:529 lib/getopt.c:545
+#, fuzzy, c-format
+msgid "%s: option '%s' is ambiguous\n"
+msgstr "%s: п╫п╣п╬п╢п╫п╬п╥п╫п╟я┤п╫я▀п╧ п╨п╩я▌я┤ б╚%sб╩\n"
 
-#: lib/getopt.c:575 lib/getopt.c:579
-#, c-format
-msgid "%s: option `--%s' doesn't allow an argument\n"
-msgstr "%s: ключ `--%s' должен использоваться без аргумента\n"
+#: lib/getopt.c:578 lib/getopt.c:582
+#, fuzzy, c-format
+msgid "%s: option '--%s' doesn't allow an argument\n"
+msgstr "%s: п╨п╩я▌я┤ б╚--%sб╩ п╢п╬п╩п╤п╣п╫ п╦я│п©п╬п╩я▄п╥п╬п╡п╟я┌я▄я│я▐ п╠п╣п╥ п╟я─пЁя┐п╪п╣п╫я┌п╟\n"
 
-#: lib/getopt.c:588 lib/getopt.c:593
-#, c-format
-msgid "%s: option `%c%s' doesn't allow an argument\n"
-msgstr "%s: ключ `%c%s' должен использоваться без аргумента\n"
+#: lib/getopt.c:591 lib/getopt.c:596
+#, fuzzy, c-format
+msgid "%s: option '%c%s' doesn't allow an argument\n"
+msgstr "%s: п╨п╩я▌я┤ б╚%c%sб╩ п╢п╬п╩п╤п╣п╫ п╦я│п©п╬п╩я▄п╥п╬п╡п╟я┌я▄я│я▐ п╠п╣п╥ п╟я─пЁя┐п╪п╣п╫я┌п╟\n"
 
-#: lib/getopt.c:636 lib/getopt.c:655 lib/getopt.c:971 lib/getopt.c:990
-#, c-format
-msgid "%s: option `%s' requires an argument\n"
-msgstr "%s: ключ `%s' должен использоваться с аргументом\n"
+#: lib/getopt.c:639 lib/getopt.c:658 lib/getopt.c:961 lib/getopt.c:980
+#, fuzzy, c-format
+msgid "%s: option '%s' requires an argument\n"
+msgstr "%s: п╨п╩я▌я┤ б╚%sб╩ п╢п╬п╩п╤п╣п╫ п╦я│п©п╬п╩я▄п╥п╬п╡п╟я┌я▄я│я▐ я│ п╟я─пЁя┐п╪п╣п╫я┌п╬п╪\n"
 
-#: lib/getopt.c:693 lib/getopt.c:696
-#, c-format
-msgid "%s: unrecognized option `--%s'\n"
-msgstr "%s: неизвестный ключ `--%s'\n"
+#: lib/getopt.c:696 lib/getopt.c:699
+#, fuzzy, c-format
+msgid "%s: unrecognized option '--%s'\n"
+msgstr "%s: п╫п╣п╦п╥п╡п╣я│я┌п╫я▀п╧ п╨п╩я▌я┤ б╚--%sб╩\n"
 
-#: lib/getopt.c:704 lib/getopt.c:707
-#, c-format
-msgid "%s: unrecognized option `%c%s'\n"
-msgstr "%s: неизвестный ключ `%c%s'\n"
+#: lib/getopt.c:707 lib/getopt.c:710
+#, fuzzy, c-format
+msgid "%s: unrecognized option '%c%s'\n"
+msgstr "%s: п╫п╣п╦п╥п╡п╣я│я┌п╫я▀п╧ п╨п╩я▌я┤ б╚%c%sб╩\n"
 
 #: lib/getopt.c:759 lib/getopt.c:762
-#, c-format
-msgid "%s: illegal option -- %c\n"
-msgstr "%s: недопустимый ключ -- %c\n"
+#, fuzzy, c-format
+msgid "%s: invalid option -- '%c'\n"
+msgstr "%s: п╫п╣п╡п╣я─п╫я▀п╧ п╨п╩я▌я┤ -- %c\n"
 
-#: lib/getopt.c:768 lib/getopt.c:771
-#, c-format
-msgid "%s: invalid option -- %c\n"
-msgstr "%s: неверный ключ -- %c\n"
+#: lib/getopt.c:812 lib/getopt.c:829 lib/getopt.c:1032 lib/getopt.c:1050
+#, fuzzy, c-format
+msgid "%s: option requires an argument -- '%c'\n"
+msgstr "%s: п╨п╩я▌я┤ п╢п╬п╩п╤п╣п╫ п╦я│п©п╬п╩я▄п╥п╬п╡п╟я┌я▄я│я▐ я│ п╟я─пЁя┐п╪п╣п╫я┌п╬п╪ -- %c\n"
 
-#: lib/getopt.c:823 lib/getopt.c:839 lib/getopt.c:1043 lib/getopt.c:1061
-#, c-format
-msgid "%s: option requires an argument -- %c\n"
-msgstr "%s: ключ должен использоваться с аргументом -- %c\n"
+#: lib/getopt.c:882 lib/getopt.c:898
+#, fuzzy, c-format
+msgid "%s: option '-W %s' is ambiguous\n"
+msgstr "%s: п╫п╣п╬п╢п╫п╬п╥п╫п╟я┤п╫я▀п╧ п╨п╩я▌я┤ б╚-W %sб╩\n"
 
-#: lib/getopt.c:892 lib/getopt.c:908
-#, c-format
-msgid "%s: option `-W %s' is ambiguous\n"
-msgstr "%s: неоднозначный ключ `-W %s'\n"
-
-#: lib/getopt.c:932 lib/getopt.c:950
-#, c-format
-msgid "%s: option `-W %s' doesn't allow an argument\n"
-msgstr "%s: ключ `-W %s' должен использоваться без аргумента\n"
+#: lib/getopt.c:922 lib/getopt.c:940
+#, fuzzy, c-format
+msgid "%s: option '-W %s' doesn't allow an argument\n"
+msgstr "%s: п╨п╩я▌я┤ б╚-W %sб╩ п╢п╬п╩п╤п╣п╫ п╦я│п©п╬п╩я▄п╥п╬п╡п╟я┌я▄я│я▐ п╠п╣п╥ п╟я─пЁя┐п╪п╣п╫я┌п╟\n"
 
 #: lib/obstack.c:423 lib/obstack.c:425 lib/xalloc-die.c:34
 msgid "memory exhausted"
-msgstr "память исчерпана"
+msgstr "п©п╟п╪я▐я┌я▄ п╦я│я┤п╣я─п©п╟п╫п╟"
 
 #. TRANSLATORS:
 #. Get translations for open and closing quotation marks.
@@ -799,365 +886,378 @@ msgstr "память исчерпана"
 #. translate "`" to U+201C (LEFT DOUBLE QUOTATION MARK), and
 #. should translate "'" to U+201D (RIGHT DOUBLE QUOTATION
 #. MARK).  A British English Unicode locale should instead
-#. translate these to U+2018 (LEFT SINGLE QUOTATION MARK) and
-#. U+2019 (RIGHT SINGLE QUOTATION MARK), respectively.
+#. translate these to U+2018 (LEFT SINGLE QUOTATION MARK)
+#. and U+2019 (RIGHT SINGLE QUOTATION MARK), respectively.
 #.
 #. If you don't know what to put here, please see
 #. <http://en.wikipedia.org/wiki/Quotation_mark#Glyphs>
 #. and use glyphs suitable for your language.
-#: lib/quotearg.c:266
+#: lib/quotearg.c:272
 msgid "`"
-msgstr "`"
+msgstr "б╚"
 
-#: lib/quotearg.c:267
+#: lib/quotearg.c:273
 msgid "'"
-msgstr "'"
+msgstr "б╩"
 
-#: lib/subpipe.c:161
-#, c-format
-msgid "subsidiary program `%s' could not be invoked"
-msgstr "не удается выполнить вспомогательную программу `%s'"
-
-#: lib/timevar.c:472
+#: lib/timevar.c:473
 msgid ""
 "\n"
 "Execution times (seconds)\n"
 msgstr ""
+"\n"
+"п▓я─п╣п╪я▐ п╡я▀п©п╬п╩п╫п╣п╫п╦я▐ (я│п╣п╨.)\n"
 
-#: lib/timevar.c:522
+#: lib/timevar.c:523
 msgid " TOTAL                 :"
-msgstr ""
+msgstr " п║пёп°п°п░                 :"
 
-#: lib/timevar.c:558
+#: lib/timevar.c:559
 #, c-format
 msgid "time in %s: %ld.%06ld (%ld%%)\n"
-msgstr ""
+msgstr "п╡я─п╣п╪я▐ п╡ %s: %ld.%06ld (%ld%%)\n"
+
+#~ msgid "invalid escape sequence: %s"
+#~ msgstr "п╫п╣п╢п╬п©я┐я│я┌п╦п╪п╟я▐ я█п╨я─п╟п╫п╦я─я┐я▌я┴п╟я▐ п©п╬я│п╩п╣п╢п╬п╡п╟я┌п╣п╩я▄п╫п╬я│я┌я▄: %s"
+
+#~ msgid "unrecognized escape sequence: %s"
+#~ msgstr "п╫п╣я─п╟я│п©п╬п╥п╫п╟п╫п╫п╟я▐ я█п╨я─п╟п╫п╦я─я┐я▌я┴п╟я▐ п©п╬я│п╩п╣п╢п╬п╡п╟я┌п╣п╩я▄п╫п╬я│я┌я▄: %s"
+
+#~ msgid "%s: illegal option -- %c\n"
+#~ msgstr "%s: п╫п╣п╢п╬п©я┐я│я┌п╦п╪я▀п╧ п╨п╩я▌я┤ -- %c\n"
+
+#~ msgid "subsidiary program `%s' could not be invoked"
+#~ msgstr "п╫п╣ я┐п╢п╟п╣я┌я│я▐ п╡я▀п©п╬п╩п╫п╦я┌я▄ п╡я│п©п╬п╪п╬пЁп╟я┌п╣п╩я▄п╫я┐я▌ п©я─п╬пЁя─п╟п╪п╪я┐ б╚%sб╩"
 
 #~ msgid "warning: "
-#~ msgstr "предупреждение: "
+#~ msgstr "п©я─п╣п╢я┐п©я─п╣п╤п╢п╣п╫п╦п╣: "
 
 #~ msgid "GNU bison generates parsers for LALR(1) grammars.\n"
-#~ msgstr "GNU bison генерирует анализаторы для грамматик LALR(1).\n"
+#~ msgstr "GNU bison пЁп╣п╫п╣я─п╦я─я┐п╣я┌ п╟п╫п╟п╩п╦п╥п╟я┌п╬я─я▀ п╢п╩я▐ пЁя─п╟п╪п╪п╟я┌п╦п╨ LALR(1).\n"
 
 #~ msgid ""
 #~ "If a long option shows an argument as mandatory, then it is mandatory\n"
 #~ "for the equivalent short option also.  Similarly for optional arguments.\n"
 #~ msgstr ""
-#~ "Если длинная форма ключа определяет аргумент как обязательный, то он "
-#~ "также\n"
-#~ "является обязательным для короткой формы.  То же касается необязательных\n"
-#~ "аргументов.\n"
+#~ "п∙я│п╩п╦ п╢п╩п╦п╫п╫п╟я▐ я└п╬я─п╪п╟ п╨п╩я▌я┤п╟ п╬п©я─п╣п╢п╣п╩я▐п╣я┌ п╟я─пЁя┐п╪п╣п╫я┌ п╨п╟п╨ п╬п╠я▐п╥п╟я┌п╣п╩я▄п╫я▀п╧, я┌п╬ п╬п╫ "
+#~ "я┌п╟п╨п╤п╣\n"
+#~ "я▐п╡п╩я▐п╣я┌я│я▐ п╬п╠я▐п╥п╟я┌п╣п╩я▄п╫я▀п╪ п╢п╩я▐ п╨п╬я─п╬я┌п╨п╬п╧ я└п╬я─п╪я▀.  п╒п╬ п╤п╣ п╨п╟я│п╟п╣я┌я│я▐ п╫п╣п╬п╠я▐п╥п╟я┌п╣п╩я▄п╫я▀я┘\n"
+#~ "п╟я─пЁя┐п╪п╣п╫я┌п╬п╡.\n"
 
+#, fuzzy
 #~ msgid ""
 #~ "Operation modes:\n"
 #~ "  -h, --help      display this help and exit\n"
 #~ "  -V, --version   output version information and exit\n"
 #~ "  -y, --yacc      emulate POSIX yacc\n"
 #~ msgstr ""
-#~ "Режимы функционирования:\n"
-#~ "  -h, --help      вывести эту справку и выйти\n"
-#~ "  -V, --version   вывести информацию о версии и выйти\n"
-#~ "  -y, --yacc      эмулировать POSIX yacc\n"
+#~ "п═п╣п╤п╦п╪я▀ я└я┐п╫п╨я├п╦п╬п╫п╦я─п╬п╡п╟п╫п╦я▐:\n"
+#~ "  -h, --help             п╡я▀п╡п╣я│я┌п╦ я█я┌я┐ я│п©я─п╟п╡п╨я┐ п╦ п╡я▀п╧я┌п╦\n"
+#~ "  -V, --version          п╡я▀п╡п╣я│я┌п╦ п╦п╫я└п╬я─п╪п╟я├п╦я▌ п╬ п╡п╣я─я│п╦п╦ п╦ п╡я▀п╧я┌п╦\n"
+#~ "      --print-localedir  п╡я▀п╡п╣я│я┌п╦ п╨п╟я┌п╟п╩п╬пЁ, я│п╬п╢п╣я─п╤п╟я┴п╦п╧ п╥п╟п╡п╦я│п╦п╪я▀п╣ п╬я┌ п╩п╬п╨п╟п╩п╦ "
+#~ "п╢п╟п╫п╫я▀п╣\n"
+#~ "  -y, --yacc             п╦п╪п╦я┌п╦я─п╬п╡п╟я┌я▄ POSIX yacc\n"
 
 #~ msgid "POSIX forbids declarations in the grammar"
-#~ msgstr "POSIX запрещает помещать описания в грамматике"
+#~ msgstr "POSIX п╥п╟п©я─п╣я┴п╟п╣я┌ п©п╬п╪п╣я┴п╟я┌я▄ п╬п©п╦я│п╟п╫п╦я▐ п╡ пЁя─п╟п╪п╪п╟я┌п╦п╨п╣"
 
 #~ msgid "Rules never reduced"
-#~ msgstr "Правила не сведены"
+#~ msgstr "п÷я─п╟п╡п╦п╩п╟ п╫п╣ я│п╡п╣п╢п╣п╫я▀"
 
 #~ msgid "useless rule"
-#~ msgstr "бесполезное правило"
+#~ msgstr "п╠п╣я│п©п╬п╩п╣п╥п╫п╬п╣ п©я─п╟п╡п╦п╩п╬"
 
 #~ msgid "useless nonterminal: %s"
-#~ msgstr "бесполезные нетерминал: %s"
+#~ msgstr "п╠п╣я│п©п╬п╩п╣п╥п╫я▀п╣ п╫п╣я┌п╣я─п╪п╦п╫п╟п╩: %s"
 
 #~ msgid "Useless nonterminals"
-#~ msgstr "Бесполезные нетерминалы"
+#~ msgstr "п▒п╣я│п©п╬п╩п╣п╥п╫я▀п╣ п╫п╣я┌п╣я─п╪п╦п╫п╟п╩я▀"
 
 #~ msgid "Terminals which are not used"
-#~ msgstr "Неиспользованные терминалы"
+#~ msgstr "п²п╣п╦я│п©п╬п╩я▄п╥п╬п╡п╟п╫п╫я▀п╣ я┌п╣я─п╪п╦п╫п╟п╩я▀"
 
 #~ msgid "Useless rules"
-#~ msgstr "Бесполезные правила"
+#~ msgstr "п▒п╣я│п©п╬п╩п╣п╥п╫я▀п╣ п©я─п╟п╡п╦п╩п╟"
 
 #~ msgid "%d rule never reduced\n"
 #~ msgid_plural "%d rules never reduced\n"
-#~ msgstr[0] "%d правило не сведено\n"
-#~ msgstr[1] "%d правила не сведено\n"
-#~ msgstr[2] "%d правил не сведено\n"
+#~ msgstr[0] "%d п©я─п╟п╡п╦п╩п╬ п╫п╣ я│п╡п╣п╢п╣п╫п╬\n"
+#~ msgstr[1] "%d п©я─п╟п╡п╦п╩п╟ п╫п╣ я│п╡п╣п╢п╣п╫п╬\n"
+#~ msgstr[2] "%d п©я─п╟п╡п╦п╩ п╫п╣ я│п╡п╣п╢п╣п╫п╬\n"
 
 #~ msgid "%d useless nonterminal"
 #~ msgid_plural "%d useless nonterminals"
-#~ msgstr[0] "%d бесполезный нетерминал"
-#~ msgstr[1] "%d бесполезных нетерминала"
-#~ msgstr[2] "%d бесполезных нетерминалов"
+#~ msgstr[0] "%d п╠п╣я│п©п╬п╩п╣п╥п╫я▀п╧ п╫п╣я┌п╣я─п╪п╦п╫п╟п╩"
+#~ msgstr[1] "%d п╠п╣я│п©п╬п╩п╣п╥п╫я▀я┘ п╫п╣я┌п╣я─п╪п╦п╫п╟п╩п╟"
+#~ msgstr[2] "%d п╠п╣я│п©п╬п╩п╣п╥п╫я▀я┘ п╫п╣я┌п╣я─п╪п╦п╫п╟п╩п╬п╡"
 
 #~ msgid " and "
-#~ msgstr " и "
+#~ msgstr " п╦ "
 
 #~ msgid "%d useless rule"
 #~ msgid_plural "%d useless rules"
-#~ msgstr[0] "%d бесполезное правило"
-#~ msgstr[1] "%d бесполезных правила"
-#~ msgstr[2] "%d бесполезных правил"
+#~ msgstr[0] "%d п╠п╣я│п©п╬п╩п╣п╥п╫п╬п╣ п©я─п╟п╡п╦п╩п╬"
+#~ msgstr[1] "%d п╠п╣я│п©п╬п╩п╣п╥п╫я▀я┘ п©я─п╟п╡п╦п╩п╟"
+#~ msgstr[2] "%d п╠п╣я│п©п╬п╩п╣п╥п╫я▀я┘ п©я─п╟п╡п╦п╩"
 
+#, fuzzy
 #~ msgid "missing `{' in `%s'"
-#~ msgstr "в `%s' отсутствует `{'"
+#~ msgstr "п╬я┌я│я┐я┌я│я┌п╡я┐п╣я┌ `{' п╡ %s"
 
 #~ msgid "invalid $ value"
-#~ msgstr "неверное $ значение"
+#~ msgstr "п╫п╣п╡п╣я─п╫п╬п╣ $ п╥п╫п╟я┤п╣п╫п╦п╣"
 
 #~ msgid "type redeclaration for %s"
-#~ msgstr "повторное описание типа для %s"
+#~ msgstr "п©п╬п╡я┌п╬я─п╫п╬п╣ п╬п©п╦я│п╟п╫п╦п╣ я┌п╦п©п╟ п╢п╩я▐ %s"
 
 #~ msgid "redefining precedence of %s"
-#~ msgstr "переопределение приоритета для %s"
+#~ msgstr "п©п╣я─п╣п╬п©я─п╣п╢п╣п╩п╣п╫п╦п╣ п©я─п╦п╬я─п╦я┌п╣я┌п╟ п╢п╩я▐ %s"
 
 #~ msgid "conflicting precedences for %s and %s"
-#~ msgstr "противоречивые приоритеты для %s и %s"
+#~ msgstr "п©я─п╬я┌п╦п╡п╬я─п╣я┤п╦п╡я▀п╣ п©я─п╦п╬я─п╦я┌п╣я┌я▀ п╢п╩я▐ %s п╦ %s"
 
 #~ msgid "conflicting associativities for %s (%s) and %s (%s)"
-#~ msgstr "противоречивые значения ассоциативности для %s (%s) и %s (%s)"
+#~ msgstr "п©я─п╬я┌п╦п╡п╬я─п╣я┤п╦п╡я▀п╣ п╥п╫п╟я┤п╣п╫п╦я▐ п╟я│я│п╬я├п╦п╟я┌п╦п╡п╫п╬я│я┌п╦ п╢п╩я▐ %s (%s) п╦ %s (%s)"
 
 #~ msgid "subsidiary program `%s' not found"
-#~ msgstr "вспомогательная программа `%s' не найдена"
+#~ msgstr "п╡я│п©п╬п╪п╬пЁп╟я┌п╣п╩я▄п╫п╟я▐ п©я─п╬пЁя─п╟п╪п╪п╟ `%s' п╫п╣ п╫п╟п╧п╢п╣п╫п╟"
 
 #~ msgid "subsidiary program `%s' failed"
-#~ msgstr "вспомогательная программа `%s' завершилась неудачно"
+#~ msgstr "п╡я│п©п╬п╪п╬пЁп╟я┌п╣п╩я▄п╫п╟я▐ п©я─п╬пЁя─п╟п╪п╪п╟ `%s' п╥п╟п╡п╣я─я┬п╦п╩п╟я│я▄ п╫п╣я┐п╢п╟я┤п╫п╬"
 
 #~ msgid "subsidiary program `%s' failed (exit status %d)"
 #~ msgstr ""
-#~ "вспомогательная программа `%s' завершилась неудачно (код завершения %d)"
+#~ "п╡я│п©п╬п╪п╬пЁп╟я┌п╣п╩я▄п╫п╟я▐ п©я─п╬пЁя─п╟п╪п╪п╟ `%s' п╥п╟п╡п╣я─я┬п╦п╩п╟я│я▄ п╫п╣я┐п╢п╟я┤п╫п╬ (п╨п╬п╢ п╥п╟п╡п╣я─я┬п╣п╫п╦я▐ %d)"
 
 #~ msgid "too many states (max %d)"
-#~ msgstr "слишком много состояний (максимально %d)"
+#~ msgstr "я│п╩п╦я┬п╨п╬п╪ п╪п╫п╬пЁп╬ я│п╬я│я┌п╬я▐п╫п╦п╧ (п╪п╟п╨я│п╦п╪п╟п╩я▄п╫п╬ %d)"
 
 #~ msgid "reduce"
-#~ msgstr "вывод"
+#~ msgstr "п╡я▀п╡п╬п╢"
 
 #~ msgid "shift"
-#~ msgstr "сдвиг"
+#~ msgstr "я│п╢п╡п╦пЁ"
 
 #~ msgid "%d shift/reduce conflict"
 #~ msgid_plural "%d shift/reduce conflicts"
-#~ msgstr[0] "%d конфликт сдвига/вывода"
-#~ msgstr[1] "%d конфликта сдвига/вывода"
-#~ msgstr[2] "%d конфликтов сдвига/вывода"
+#~ msgstr[0] "%d п╨п╬п╫я└п╩п╦п╨я┌ я│п╢п╡п╦пЁп╟/п╡я▀п╡п╬п╢п╟"
+#~ msgstr[1] "%d п╨п╬п╫я└п╩п╦п╨я┌п╟ я│п╢п╡п╦пЁп╟/п╡я▀п╡п╬п╢п╟"
+#~ msgstr[2] "%d п╨п╬п╫я└п╩п╦п╨я┌п╬п╡ я│п╢п╡п╦пЁп╟/п╡я▀п╡п╬п╢п╟"
 
 #~ msgid "and"
-#~ msgstr "и"
+#~ msgstr "п╦"
 
 #~ msgid "State %d contains "
-#~ msgstr "Состояние %d содержит "
+#~ msgstr "п║п╬я│я┌п╬я▐п╫п╦п╣ %d я│п╬п╢п╣я─п╤п╦я┌ "
 
 #~ msgid "conflicts: "
-#~ msgstr "конфликты: "
+#~ msgstr "п╨п╬п╫я└п╩п╦п╨я┌я▀: "
 
 #~ msgid "%s contains "
-#~ msgstr "%s содержит "
+#~ msgstr "%s я│п╬п╢п╣я─п╤п╦я┌ "
 
 #~ msgid "`%s' is no longer supported"
-#~ msgstr "`%s' больше не поддерживается"
+#~ msgstr "`%s' п╠п╬п╩я▄я┬п╣ п╫п╣ п©п╬п╢п╢п╣я─п╤п╦п╡п╟п╣я┌я│я▐"
 
 #~ msgid "%s: no grammar file given\n"
-#~ msgstr "%s: не задан файл с грамматикой\n"
+#~ msgstr "%s: п╫п╣ п╥п╟п╢п╟п╫ я└п╟п╧п╩ я│ пЁя─п╟п╪п╪п╟я┌п╦п╨п╬п╧\n"
 
 #~ msgid "%s: extra arguments ignored after `%s'\n"
-#~ msgstr "%s: лишние аргументы после `%s' игнорированы\n"
+#~ msgstr "%s: п╩п╦я┬п╫п╦п╣ п╟я─пЁя┐п╪п╣п╫я┌я▀ п©п╬я│п╩п╣ `%s' п╦пЁп╫п╬я─п╦я─п╬п╡п╟п╫я▀\n"
 
 #~ msgid "too many gotos (max %d)"
-#~ msgstr "слишком много goto (максимально %d)"
+#~ msgstr "я│п╩п╦я┬п╨п╬п╪ п╪п╫п╬пЁп╬ goto (п╪п╟п╨я│п╦п╪п╟п╩я▄п╫п╬ %d)"
 
 #~ msgid "unexpected `/' found and ignored"
-#~ msgstr "встречен и проигнорирован неожиданный символ `/'"
+#~ msgstr "п╡я│я┌я─п╣я┤п╣п╫ п╦ п©я─п╬п╦пЁп╫п╬я─п╦я─п╬п╡п╟п╫ п╫п╣п╬п╤п╦п╢п╟п╫п╫я▀п╧ я│п╦п╪п╡п╬п╩ `/'"
 
 #~ msgid "unterminated comment"
-#~ msgstr "незаконченный комментарий"
+#~ msgstr "п╫п╣п╥п╟п╨п╬п╫я┤п╣п╫п╫я▀п╧ п╨п╬п╪п╪п╣п╫я┌п╟я─п╦п╧"
 
 #~ msgid "unexpected end of file"
-#~ msgstr "неожиданный конец файла"
+#~ msgstr "п╫п╣п╬п╤п╦п╢п╟п╫п╫я▀п╧ п╨п╬п╫п╣я├ я└п╟п╧п╩п╟"
 
 #~ msgid "unescaped newline in constant"
-#~ msgstr "неэкранированный перевод строки в константе"
+#~ msgstr "п╫п╣я█п╨я─п╟п╫п╦я─п╬п╡п╟п╫п╫я▀п╧ п©п╣я─п╣п╡п╬п╢ я│я┌я─п╬п╨п╦ п╡ п╨п╬п╫я│я┌п╟п╫я┌п╣"
 
 #~ msgid "octal value outside range 0...255: `\\%o'"
-#~ msgstr "восьмеричная величина за пределами диапазона 0...255: `\\%o'"
+#~ msgstr "п╡п╬я│я▄п╪п╣я─п╦я┤п╫п╟я▐ п╡п╣п╩п╦я┤п╦п╫п╟ п╥п╟ п©я─п╣п╢п╣п╩п╟п╪п╦ п╢п╦п╟п©п╟п╥п╬п╫п╟ 0...255: `\\%o'"
 
 #~ msgid "hexadecimal value above 255: `\\x%x'"
-#~ msgstr "шестнадцатеричная величина превышает 255: `\\x%x'"
+#~ msgstr "я┬п╣я│я┌п╫п╟п╢я├п╟я┌п╣я─п╦я┤п╫п╟я▐ п╡п╣п╩п╦я┤п╦п╫п╟ п©я─п╣п╡я▀я┬п╟п╣я┌ 255: `\\x%x'"
 
 #~ msgid "unknown escape sequence: `\\' followed by `%s'"
-#~ msgstr "неизвестная escape-последовательность: `%s' после `\\'"
+#~ msgstr "п╫п╣п╦п╥п╡п╣я│я┌п╫п╟я▐ escape-п©п╬я│п╩п╣п╢п╬п╡п╟я┌п╣п╩я▄п╫п╬я│я┌я▄: `%s' п©п╬я│п╩п╣ `\\'"
 
 #~ msgid "unterminated type name at end of file"
-#~ msgstr "незаконченное имя типа в конце файла"
+#~ msgstr "п╫п╣п╥п╟п╨п╬п╫я┤п╣п╫п╫п╬п╣ п╦п╪я▐ я┌п╦п©п╟ п╡ п╨п╬п╫я├п╣ я└п╟п╧п╩п╟"
 
 #~ msgid "unterminated type name"
-#~ msgstr "незаконченное имя типа"
+#~ msgstr "п╫п╣п╥п╟п╨п╬п╫я┤п╣п╫п╫п╬п╣ п╦п╪я▐ я┌п╦п©п╟"
 
 #~ msgid "use \"...\" for multi-character literal tokens"
-#~ msgstr "используйте \"...\" для многосимвольных литеральных лексем"
+#~ msgstr "п╦я│п©п╬п╩я▄п╥я┐п╧я┌п╣ \"...\" п╢п╩я▐ п╪п╫п╬пЁп╬я│п╦п╪п╡п╬п╩я▄п╫я▀я┘ п╩п╦я┌п╣я─п╟п╩я▄п╫я▀я┘ п╩п╣п╨я│п╣п╪"
 
 #~ msgid "`%s' supports no argument: %s"
-#~ msgstr "`%s' не поддерживает аргумента %s"
+#~ msgstr "`%s' п╫п╣ п©п╬п╢п╢п╣я─п╤п╦п╡п╟п╣я┌ п╟я─пЁя┐п╪п╣п╫я┌п╟ %s"
 
 #~ msgid "`%s' requires an argument"
-#~ msgstr "ключ `%s' должен использоваться с аргументом"
+#~ msgstr "п╨п╩я▌я┤ `%s' п╢п╬п╩п╤п╣п╫ п╦я│п©п╬п╩я▄п╥п╬п╡п╟я┌я▄я│я▐ я│ п╟я─пЁя┐п╪п╣п╫я┌п╬п╪"
 
 #~ msgid "   (rule %d)"
-#~ msgstr "   (правило %d)"
+#~ msgstr "   (п©я─п╟п╡п╦п╩п╬ %d)"
 
 #~ msgid "    %-4s\terror (nonassociative)\n"
-#~ msgstr "    %-4s\tошибка (неассоциативная)\n"
+#~ msgstr "    %-4s\tп╬я┬п╦п╠п╨п╟ (п╫п╣п╟я│я│п╬я├п╦п╟я┌п╦п╡п╫п╟я▐)\n"
 
 #~ msgid ""
 #~ "    $default\treduce using rule %d (%s)\n"
 #~ "\n"
 #~ msgstr ""
-#~ "    $default\tвывод с использованием правила %d (%s)\n"
+#~ "    $default\tп╡я▀п╡п╬п╢ я│ п╦я│п©п╬п╩я▄п╥п╬п╡п╟п╫п╦п╣п╪ п©я─п╟п╡п╦п╩п╟ %d (%s)\n"
 #~ "\n"
 
 #~ msgid "    %-4s\t[reduce using rule %d (%s)]\n"
-#~ msgstr "    %-4s\t[вывод с использованием правила %d (%s)]\n"
+#~ msgstr "    %-4s\t[п╡я▀п╡п╬п╢ я│ п╦я│п©п╬п╩я▄п╥п╬п╡п╟п╫п╦п╣п╪ п©я─п╟п╡п╦п╩п╟ %d (%s)]\n"
 
 #~ msgid "    %-4s\treduce using rule %d (%s)\n"
-#~ msgstr "    %-4s\tвывод с использованием правила %d (%s)\n"
+#~ msgstr "    %-4s\tп╡я▀п╡п╬п╢ я│ п╦я│п©п╬п╩я▄п╥п╬п╡п╟п╫п╦п╣п╪ п©я─п╟п╡п╦п╩п╟ %d (%s)\n"
 
 #~ msgid "    $default\treduce using rule %d (%s)\n"
-#~ msgstr "    $default\tвывод с использованием правила %d (%s)\n"
+#~ msgstr "    $default\tп╡я▀п╡п╬п╢ я│ п╦я│п©п╬п╩я▄п╥п╬п╡п╟п╫п╦п╣п╪ п©я─п╟п╡п╦п╩п╟ %d (%s)\n"
 
 #~ msgid "    $default\taccept\n"
-#~ msgstr "    $default\tпринятие\n"
+#~ msgstr "    $default\tп©я─п╦п╫я▐я┌п╦п╣\n"
 
 #~ msgid "    NO ACTIONS\n"
-#~ msgstr "    НЕТ ДЕЙСТВИЙ\n"
+#~ msgstr "    п²п∙п╒ п■п∙п≥п║п╒п▓п≤п≥\n"
 
 #~ msgid "Number, Line, Rule"
-#~ msgstr "Номер, Строка, Правило"
+#~ msgstr "п²п╬п╪п╣я─, п║я┌я─п╬п╨п╟, п÷я─п╟п╡п╦п╩п╬"
 
 #~ msgid "  %3d %3d %s ->"
 #~ msgstr "  %3d %3d %s ->"
 
 #~ msgid "   Skipping to next \\n"
-#~ msgstr "   Пропуск до следующего \\n"
+#~ msgstr "   п÷я─п╬п©я┐я│п╨ п╢п╬ я│п╩п╣п╢я┐я▌я┴п╣пЁп╬ \\n"
 
 #~ msgid "   Skipping to next %c"
-#~ msgstr "   Пропуск до следующего %c"
+#~ msgstr "   п÷я─п╬п©я┐я│п╨ п╢п╬ я│п╩п╣п╢я┐я▌я┴п╣пЁп╬ %c"
 
 #~ msgid "unterminated string"
-#~ msgstr "незаконченная строка"
+#~ msgstr "п╫п╣п╥п╟п╨п╬п╫я┤п╣п╫п╫п╟я▐ я│я┌я─п╬п╨п╟"
 
 #~ msgid "%s is invalid"
-#~ msgstr "неверный знак %s"
+#~ msgstr "п╫п╣п╡п╣я─п╫я▀п╧ п╥п╫п╟п╨ %s"
 
 #~ msgid "unterminated `%{' definition"
-#~ msgstr "незаконченное определение `%{'"
+#~ msgstr "п╫п╣п╥п╟п╨п╬п╫я┤п╣п╫п╫п╬п╣ п╬п©я─п╣п╢п╣п╩п╣п╫п╦п╣ `%{'"
 
 #~ msgid "Premature EOF after %s"
-#~ msgstr "Преждевременный конец файла после %s"
+#~ msgstr "п÷я─п╣п╤п╢п╣п╡я─п╣п╪п╣п╫п╫я▀п╧ п╨п╬п╫п╣я├ я└п╟п╧п╩п╟ п©п╬я│п╩п╣ %s"
 
 #~ msgid "`%s' is invalid in %s"
-#~ msgstr "`%s' неверно в %s"
+#~ msgstr "`%s' п╫п╣п╡п╣я─п╫п╬ п╡ %s"
 
 #~ msgid "%type declaration has no <typename>"
-#~ msgstr "описание %type не имеет <имя_типа>"
+#~ msgstr "п╬п©п╦я│п╟п╫п╦п╣ %type п╫п╣ п╦п╪п╣п╣я┌ <п╦п╪я▐_я┌п╦п©п╟>"
 
 #~ msgid "invalid %%type declaration due to item: %s"
-#~ msgstr "неверное описание %%type из-за элемента: %s"
+#~ msgstr "п╫п╣п╡п╣я─п╫п╬п╣ п╬п©п╦я│п╟п╫п╦п╣ %%type п╦п╥-п╥п╟ я█п╩п╣п╪п╣п╫я┌п╟: %s"
 
 #~ msgid "invalid text (%s) - number should be after identifier"
-#~ msgstr "неверный текст (%s) - число должно следовать за идентификатором"
+#~ msgstr "п╫п╣п╡п╣я─п╫я▀п╧ я┌п╣п╨я│я┌ (%s) - я┤п╦я│п╩п╬ п╢п╬п╩п╤п╫п╬ я│п╩п╣п╢п╬п╡п╟я┌я▄ п╥п╟ п╦п╢п╣п╫я┌п╦я└п╦п╨п╟я┌п╬я─п╬п╪"
 
 #~ msgid "unexpected item: %s"
-#~ msgstr "неожиданный элемент: %s"
+#~ msgstr "п╫п╣п╬п╤п╦п╢п╟п╫п╫я▀п╧ я█п╩п╣п╪п╣п╫я┌: %s"
 
 #~ msgid "unmatched %s"
-#~ msgstr "непарная %s"
+#~ msgstr "п╫п╣п©п╟я─п╫п╟я▐ %s"
 
 #~ msgid "argument of %%expect is not an integer"
-#~ msgstr "аргумент %%expect не является целым числом"
+#~ msgstr "п╟я─пЁя┐п╪п╣п╫я┌ %%expect п╫п╣ я▐п╡п╩я▐п╣я┌я│я▐ я├п╣п╩я▀п╪ я┤п╦я│п╩п╬п╪"
 
 #~ msgid "unrecognized item %s, expected an identifier"
-#~ msgstr "нераспознанный элемент %s, ожидался идентификатор"
+#~ msgstr "п╫п╣я─п╟я│п©п╬п╥п╫п╟п╫п╫я▀п╧ я█п╩п╣п╪п╣п╫я┌ %s, п╬п╤п╦п╢п╟п╩я│я▐ п╦п╢п╣п╫я┌п╦я└п╦п╨п╟я┌п╬я─"
 
 #~ msgid "expected string constant instead of %s"
-#~ msgstr "вместо %s ожидалась строковая постоянная"
+#~ msgstr "п╡п╪п╣я│я┌п╬ %s п╬п╤п╦п╢п╟п╩п╟я│я▄ я│я┌я─п╬п╨п╬п╡п╟я▐ п©п╬я│я┌п╬я▐п╫п╫п╟я▐"
 
 #~ msgid "no input grammar"
-#~ msgstr "нет входной грамматики"
+#~ msgstr "п╫п╣я┌ п╡я┘п╬п╢п╫п╬п╧ пЁя─п╟п╪п╪п╟я┌п╦п╨п╦"
 
 #~ msgid "ill-formed rule: initial symbol not followed by colon"
-#~ msgstr "неверное правило: двоеточие не следует за начальным символом"
+#~ msgstr "п╫п╣п╡п╣я─п╫п╬п╣ п©я─п╟п╡п╦п╩п╬: п╢п╡п╬п╣я┌п╬я┤п╦п╣ п╫п╣ я│п╩п╣п╢я┐п╣я┌ п╥п╟ п╫п╟я┤п╟п╩я▄п╫я▀п╪ я│п╦п╪п╡п╬п╩п╬п╪"
 
 #~ msgid "grammar starts with vertical bar"
-#~ msgstr "грамматика начинается с вертикальной черты"
+#~ msgstr "пЁя─п╟п╪п╪п╟я┌п╦п╨п╟ п╫п╟я┤п╦п╫п╟п╣я┌я│я▐ я│ п╡п╣я─я┌п╦п╨п╟п╩я▄п╫п╬п╧ я┤п╣я─я┌я▀"
 
 #~ msgid "previous rule lacks an ending `;'"
-#~ msgstr "в предыдущем правиле отсутствует завершающая `;'"
+#~ msgstr "п╡ п©я─п╣п╢я▀п╢я┐я┴п╣п╪ п©я─п╟п╡п╦п╩п╣ п╬я┌я│я┐я┌я│я┌п╡я┐п╣я┌ п╥п╟п╡п╣я─я┬п╟я▌я┴п╟я▐ `;'"
 
 #~ msgid "two @prec's in a row"
-#~ msgstr "два @prec подряд"
+#~ msgstr "п╢п╡п╟ @prec п©п╬п╢я─я▐п╢"
 
 #~ msgid "%%guard present but %%semantic_parser not specified"
-#~ msgstr "%%guard присутствует, а %%semantic_parser не задан"
+#~ msgstr "%%guard п©я─п╦я│я┐я┌я│я┌п╡я┐п╣я┌, п╟ %%semantic_parser п╫п╣ п╥п╟п╢п╟п╫"
 
 #~ msgid "two actions at end of one rule"
-#~ msgstr "два действия в конце одного правила"
+#~ msgstr "п╢п╡п╟ п╢п╣п╧я│я┌п╡п╦я▐ п╡ п╨п╬п╫я├п╣ п╬п╢п╫п╬пЁп╬ п©я─п╟п╡п╦п╩п╟"
 
 #~ msgid "maximum table size (%d) exceeded"
-#~ msgstr "превышен максимальный размер таблицы (%d)"
+#~ msgstr "п©я─п╣п╡я▀я┬п╣п╫ п╪п╟п╨я│п╦п╪п╟п╩я▄п╫я▀п╧ я─п╟п╥п╪п╣я─ я┌п╟п╠п╩п╦я├я▀ (%d)"
 
 #~ msgid "    $   \tgo to state %d\n"
-#~ msgstr "    $   \tпереход в состояние %d\n"
+#~ msgstr "    $   \tп©п╣я─п╣я┘п╬п╢ п╡ я│п╬я│я┌п╬я▐п╫п╦п╣ %d\n"
 
 #~ msgid "unterminated %guard clause"
-#~ msgstr "незаконченный оператор %guard"
+#~ msgstr "п╫п╣п╥п╟п╨п╬п╫я┤п╣п╫п╫я▀п╧ п╬п©п╣я─п╟я┌п╬я─ %guard"
 
 #~ msgid " 1 shift/reduce conflict"
-#~ msgstr " 1 конфликт сдвига/вывода"
+#~ msgstr " 1 п╨п╬п╫я└п╩п╦п╨я┌ я│п╢п╡п╦пЁп╟/п╡я▀п╡п╬п╢п╟"
 
 #~ msgid "%s contains"
-#~ msgstr "%s содержит"
+#~ msgstr "%s я│п╬п╢п╣я─п╤п╦я┌"
 
 #~ msgid "DERIVES"
 #~ msgstr "DERIVES"
 
 #~ msgid "%s derives"
-#~ msgstr "%s выводит"
+#~ msgstr "%s п╡я▀п╡п╬п╢п╦я┌"
 
 #~ msgid "%s: internal error: %s\n"
-#~ msgstr "%s: внутренняя ошибка: %s\n"
+#~ msgstr "%s: п╡п╫я┐я┌я─п╣п╫п╫я▐я▐ п╬я┬п╦п╠п╨п╟: %s\n"
 
 #~ msgid "Entering set_nullable"
-#~ msgstr "Вход в set_nullable"
+#~ msgstr "п▓я┘п╬п╢ п╡ set_nullable"
 
 #~ msgid "\t\t/* empty */"
-#~ msgstr "\t\t/* пусто */"
+#~ msgstr "\t\t/* п©я┐я│я┌п╬ */"
 
 #~ msgid "multiple %%header_extension declarations"
-#~ msgstr "множественные описания %%header_extension"
+#~ msgstr "п╪п╫п╬п╤п╣я│я┌п╡п╣п╫п╫я▀п╣ п╬п©п╦я│п╟п╫п╦я▐ %%header_extension"
 
 #~ msgid "multiple %%source_extension declarations"
-#~ msgstr "множественные описания %%source_extension"
+#~ msgstr "п╪п╫п╬п╤п╣я│я┌п╡п╣п╫п╫я▀п╣ п╬п©п╦я│п╟п╫п╦я▐ %%source_extension"
 
 #~ msgid ""
 #~ "Variables\n"
 #~ "---------\n"
 #~ "\n"
 #~ msgstr ""
-#~ "Переменные\n"
+#~ "п÷п╣я─п╣п╪п╣п╫п╫я▀п╣\n"
 #~ "----------\n"
 #~ "\n"
 
 #~ msgid "Value  Sprec    Sassoc    Tag\n"
-#~ msgstr "Знач   Приор    Ассоц     Тег\n"
+#~ msgstr "п≈п╫п╟я┤   п÷я─п╦п╬я─    п░я│я│п╬я├     п╒п╣пЁ\n"
 
 #~ msgid ""
 #~ "Rules\n"
 #~ "-----\n"
 #~ "\n"
 #~ msgstr ""
-#~ "Правила\n"
+#~ "п÷я─п╟п╡п╦п╩п╟\n"
 #~ "-------\n"
 #~ "\n"
 
@@ -1166,15 +1266,15 @@ msgstr ""
 #~ "-----------------\n"
 #~ "\n"
 #~ msgstr ""
-#~ "Интерпретированные правила\n"
+#~ "п≤п╫я┌п╣я─п©я─п╣я┌п╦я─п╬п╡п╟п╫п╫я▀п╣ п©я─п╟п╡п╦п╩п╟\n"
 #~ "--------------------------\n"
 #~ "\n"
 
 #~ msgid ""
 #~ "reduced %s defines %d terminal%s, %d nonterminal%s, and %d production%s.\n"
 #~ msgstr ""
-#~ "выведенный %s определяет %d терминалов%s, %d нетерминалов%s, и %d правил "
-#~ "вывода%s.\n"
+#~ "п╡я▀п╡п╣п╢п╣п╫п╫я▀п╧ %s п╬п©я─п╣п╢п╣п╩я▐п╣я┌ %d я┌п╣я─п╪п╦п╫п╟п╩п╬п╡%s, %d п╫п╣я┌п╣я─п╪п╦п╫п╟п╩п╬п╡%s, п╦ %d п©я─п╟п╡п╦п╩ "
+#~ "п╡я▀п╡п╬п╢п╟%s.\n"
 
 #~ msgid "@%s is invalid"
-#~ msgstr "неверный знак @%s"
+#~ msgstr "п╫п╣п╡п╣я─п╫я▀п╧ п╥п╫п╟п╨ @%s"

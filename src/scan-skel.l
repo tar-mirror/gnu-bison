@@ -1,7 +1,6 @@
 /* Scan Bison Skeletons.                                       -*- C -*-
 
-   Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007 Free Software
-   Foundation, Inc.
+   Copyright (C) 2001-2007, 2009-2010 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -18,7 +17,7 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
-%option nodefault noyywrap nounput never-interactive debug
+%option nodefault noyywrap noinput nounput never-interactive debug
 %option prefix="skel_" outfile="lex.yy.c"
 
 %{
@@ -108,7 +107,7 @@ static void fail_for_invalid_at (char const *at);
   "@@" { obstack_1grow (&obstack_for_string, '@'); }
   "@{" { obstack_1grow (&obstack_for_string, '['); }
   "@}" { obstack_1grow (&obstack_for_string, ']'); }
-  "@`" /* Emtpy.  Useful for starting an argument
+  "@`" /* Empty.  Useful for starting an argument
           that begins with whitespace. */
   @\n  /* Empty.  */
 
@@ -175,10 +174,10 @@ skel_scanner_free (void)
   yylex_destroy ();
 }
 
-static
-void at_directive_perform (int at_directive_argc,
-                           char *at_directive_argv[],
-                           char **outnamep, int *out_linenop)
+static void
+at_directive_perform (int at_directive_argc,
+                      char *at_directive_argv[],
+                      char **outnamep, int *out_linenop)
 {
   if (0 == strcmp (at_directive_argv[0], "@basename"))
     {
@@ -277,7 +276,7 @@ void at_directive_perform (int at_directive_argc,
           xfclose (yyout);
         }
       *outnamep = xstrdup (at_directive_argv[1]);
-      output_file_name_check (*outnamep);
+      output_file_name_check (outnamep);
       yyout = xfopen (*outnamep, "w");
       *out_linenop = 1;
     }

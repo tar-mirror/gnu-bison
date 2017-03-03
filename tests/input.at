@@ -1,6 +1,5 @@
 # Checking the Bison scanner.                    -*- Autotest -*-
-# Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007 Free Software Foundation,
-# Inc.
+# Copyright (C) 2002-2007, 2009-2010 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -702,6 +701,26 @@ AT_BISON_CHECK([input.y], [1], [],
 AT_CLEANUP
 
 
+## ------------------------------- ##
+## %prec's token must be defined.  ##
+## ------------------------------- ##
+
+AT_SETUP([[%prec's token must be defined]])
+
+# According to POSIX, a %prec token must be defined separately.
+
+AT_DATA([[input.y]],
+[[%%
+start: %prec PREC ;
+]])
+
+AT_BISON_CHECK([[input.y]], [[0]], [],
+[[input.y:2.8-17: warning: token for %prec is not defined: PREC
+]])
+
+AT_CLEANUP
+
+
 ## -------------------------------- ##
 ## Reject unused %code qualifiers.  ##
 ## -------------------------------- ##
@@ -938,5 +957,44 @@ AT_CHECK_NAMESPACE_ERROR([[foo::bar:: 	]],
                          [[namespace reference has a trailing "::"]])
 AT_CHECK_NAMESPACE_ERROR([[::]],
                          [[namespace reference has a trailing "::"]])
+
+AT_CLEANUP
+
+## ------------------------- ##
+## Bad escapes in literals.  ##
+## ------------------------- ##
+
+AT_SETUP([[Bad escapes in literals]])
+
+AT_DATA([input.y],
+[[%%
+start: '\777' '\0' '\xfff' '\x0'
+       '\uffff' '\u0000' '\Uffffffff' '\U00000000'
+       '\ ' '\A';
+]])
+
+# It is not easy to create special characters, we cannot even trust tr.
+# Beside we cannot even expect "echo '\0'" to output two characters
+# (well three with \n): at least Bash 3.2 converts the two-character
+# sequence "\0" into a single NUL character.
+AT_CHECK([[perl -e 'print "start: \"\\\t\\\f\\\0\\\1\" ;";' >> input.y \
+           || exit 77]])
+
+AT_BISON_CHECK([input.y], [1], [],
+[[input.y:2.9-12: invalid number after \-escape: 777
+input.y:2.16-17: invalid number after \-escape: 0
+input.y:2.21-25: invalid number after \-escape: xfff
+input.y:2.29-31: invalid number after \-escape: x0
+input.y:3.9-14: invalid number after \-escape: uffff
+input.y:3.18-23: invalid number after \-escape: u0000
+input.y:3.27-36: invalid number after \-escape: Uffffffff
+input.y:3.40-49: invalid number after \-escape: U00000000
+input.y:4.9-10: invalid character after \-escape: ` '
+input.y:4.14-15: invalid character after \-escape: A
+input.y:5.9-16: invalid character after \-escape: \t
+input.y:5.17: invalid character after \-escape: \f
+input.y:5.18: invalid character after \-escape: \0
+input.y:5.19: invalid character after \-escape: \001
+]])
 
 AT_CLEANUP

@@ -1,8 +1,7 @@
                                                                     -*- C -*-
 
 # GLR skeleton for Bison
-# Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008 Free Software
-# Foundation, Inc.
+# Copyright (C) 2002-2010 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -148,9 +147,9 @@ m4_define([b4_rhs_location],
 # We do want M4 expansion after # for CPP macros.
 m4_changecom()
 m4_divert_push(0)dnl
-@output(b4_parser_file_name@)
+@output(b4_parser_file_name@)@
 b4_copyright([Skeleton implementation for Bison GLR parsers in C],
-  [2002, 2003, 2004, 2005, 2006])
+             [2002-2006, 2009-2010])
 [
 /* C GLR parser skeleton written by Paul Hilfinger.  */
 
@@ -248,7 +247,7 @@ b4_percent_code_get[]dnl
 #include <string.h>
 
 #ifndef YY_
-# if YYENABLE_NLS
+# if defined YYENABLE_NLS && YYENABLE_NLS
 #  if ENABLE_NLS
 #   include <libintl.h> /* INFRINGES ON USER NAME SPACE */
 #   define YY_(msgid) dgettext ("bison-runtime", msgid)
@@ -310,7 +309,8 @@ b4_percent_code_get[]dnl
 #ifndef __attribute__
 /* This feature is available in gcc versions 2.5 and later.  */
 # if (! defined __GNUC__ || __GNUC__ < 2 \
-      || (__GNUC__ == 2 && __GNUC_MINOR__ < 5) || __STRICT_ANSI__)
+      || (__GNUC__ == 2 && __GNUC_MINOR__ < 5) \
+      || (defined __STRICT_ANSI__ && __STRICT_ANSI__))
 #  define __attribute__(Spec) /* empty */
 # endif
 #endif
@@ -2323,7 +2323,7 @@ yyrecoverSyntaxError (yyGLRStack* yystackp]b4_user_formals[)
   yychar = YYEMPTY;
   yylval = yyval_default;
 ]b4_locations_if([
-#if YYLTYPE_IS_TRIVIAL
+#if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
   yylloc.first_line   = yylloc.last_line   = ]b4_location_initial_line[;
   yylloc.first_column = yylloc.last_column = ]b4_location_initial_column[;
 #endif
@@ -2637,9 +2637,9 @@ dnl glr.cc produces its own header.
 dnl
 m4_if(b4_skeleton, ["glr.c"],
 [b4_defines_if(
-[@output(b4_spec_defines_file@)
+[@output(b4_spec_defines_file@)@
 b4_copyright([Skeleton interface for Bison GLR parsers in C],
-  [2002, 2003, 2004, 2005, 2006])
+             [2002-2006, 2009-2010])
 
 b4_shared_declarations
 

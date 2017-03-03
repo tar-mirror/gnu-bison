@@ -1,7 +1,6 @@
 /* Bison Grammar Scanner                             -*- C -*-
 
-   Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007 Free Software Foundation,
-   Inc.
+   Copyright (C) 2002-2007, 2009-2010 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -18,7 +17,7 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
-%option debug nodefault nounput noyywrap never-interactive
+%option debug nodefault noinput nounput noyywrap never-interactive
 %option prefix="gram_" outfile="lex.yy.c"
 
 %{
@@ -37,6 +36,7 @@
 #include "reader.h"
 #include "uniqstr.h"
 
+#include <ctype.h>
 #include <mbswidth.h>
 #include <quote.h>
 
@@ -399,10 +399,9 @@ splice	 (\\[ \f\t\v]*\n)*
 {
   \\[0-7]{1,3} {
     unsigned long int c = strtoul (yytext + 1, NULL, 8);
-    if (UCHAR_MAX < c)
-      complain_at (*loc, _("invalid escape sequence: %s"), quote (yytext));
-    else if (! c)
-      complain_at (*loc, _("invalid null character: %s"), quote (yytext));
+    if (!c || UCHAR_MAX < c)
+      complain_at (*loc, _("invalid number after \\-escape: %s"),
+                   yytext+1);
     else
       obstack_1grow (&obstack_for_string, c);
   }
@@ -410,10 +409,9 @@ splice	 (\\[ \f\t\v]*\n)*
   \\x[0-9abcdefABCDEF]+ {
     verify (UCHAR_MAX < ULONG_MAX);
     unsigned long int c = strtoul (yytext + 2, NULL, 16);
-    if (UCHAR_MAX < c)
-      complain_at (*loc, _("invalid escape sequence: %s"), quote (yytext));
-    else if (! c)
-      complain_at (*loc, _("invalid null character: %s"), quote (yytext));
+    if (!c || UCHAR_MAX < c)
+      complain_at (*loc, _("invalid number after \\-escape: %s"),
+                   yytext+1);
     else
       obstack_1grow (&obstack_for_string, c);
   }
@@ -431,16 +429,20 @@ splice	 (\\[ \f\t\v]*\n)*
 
   \\(u|U[0-9abcdefABCDEF]{4})[0-9abcdefABCDEF]{4} {
     int c = convert_ucn_to_byte (yytext);
-    if (c < 0)
-      complain_at (*loc, _("invalid escape sequence: %s"), quote (yytext));
-    else if (! c)
-      complain_at (*loc, _("invalid null character: %s"), quote (yytext));
+    if (c <= 0)
+      complain_at (*loc, _("invalid number after \\-escape: %s"),
+                   yytext+1);
     else
       obstack_1grow (&obstack_for_string, c);
   }
   \\(.|\n)	{
-    complain_at (*loc, _("unrecognized escape sequence: %s"), quote (yytext));
-    STRING_GROW;
+    char const *p = yytext + 1;
+    /* Quote only if escaping won't make the character visible.  */
+    if (isspace ((unsigned char) *p) && isprint ((unsigned char) *p))
+      p = quote (p);
+    else
+      p = quotearg_style_mem (escape_quoting_style, p, 1);
+    complain_at (*loc, _("invalid character after \\-escape: %s"), p);
   }
 }
 

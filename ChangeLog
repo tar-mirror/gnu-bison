@@ -1,3 +1,645 @@
+2010-03-20  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Version 2.4.2.
+	* NEWS (2.4.2): Set version and date.  For the recent test suite
+	portability fixes, don't be so optimistic about their success
+	given the lack of feedback on the affected platforms.
+
+2010-02-22  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Prepare for 2.4.2 release.
+	* NEWS (2.4.1b): Rename back to...
+	(2.4.2): ... this, and unset date.
+	* configure.ac (AM_INIT_AUTOMAKE): Re-enable gnits.
+
+2010-02-22  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Version 2.4.1b.
+	* NEWS (2.4.2): Rename to...
+	(2.4.1b): ... this for now.  Set date.
+	* configure.ac (AM_INIT_AUTOMAKE): Disable gnits for now because
+	it does not like this version name.
+
+2010-02-22  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	tests: fix maintainer-xml-check for recent changes.
+	* tests/output.at (AT_CHECK_CONFLICTING_OUTPUT): Use
+	AT_BISON_CHECK_NO_XML rather than AT_BISON_CHECK because an
+	output file whose name conflicts with a previous output file
+	is now never generated.
+
+2010-02-22  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	portability: fix several issues with M4 subprocess.
+
+	M4's output pipe was not being drained upon fatal errors during
+	scan_skel.  As a result, broken-pipe messages from M4 were seen
+	on at least AIX, HP-UX, Solaris, and RHEL4, and this caused a
+	failure in the test suite.  The problem was that, on platforms
+	where the default disposition for SIGPIPE is ignore instead of
+	terminate, M4 sometimes saw fwrite fail with errno=EPIPE and
+	then reported it.  However, there's some sort of race condition,
+	because the new test group occasionally succeeded.
+	Reported by Albert Chin at
+	<http://lists.gnu.org/archive/html/bug-bison/2010-02/msg00004.html>.
+
+	There were also problems with the test suite livelocking on
+	Tru64 5.1b.  Reported by Didier Godefroy at
+	<http://lists.gnu.org/archive/html/bug-bison/2009-05/msg00005.html>.
+	Switching to create_pipe_bidi suggested by Akim Demaille.
+
+	To attempt to solve both of these problems, switch to gnulib's
+	create_pipe_bidi and register M4 process as a slave.  Along the
+	way, clean up file name conflict handling, which was affected by
+	the broken-pipe problem before the switch.
+	* NEWS (2.4.2): Document.
+	* THANKS (Didier Godefroy): Add.
+	* bootstrap.conf (gnulib_modules): Add pipe.
+	* gnulib: Update to latest to make sure we have all the latest
+	fixes.
+	* lib/Makefile.am (libbison_a_SOURCES): Remove subpipe.h and
+	subpipe.c.
+	* po/POTFILES.in (lib/subpipe.c): Remove.
+	* src/files.c (compute_output_file_names): Update invocations
+	of output_file_name_check.
+	(output_file_name_check): In the case that the grammar file
+	would be overwritten, use complain instead of fatal, but replace
+	the output file name with /dev/null.  Use the /dev/null solution
+	for the case of two conflicting output files as well because it
+	seems safer in case Bison one day tries to open both files at
+	the same time.
+	* src/files.h (output_file_name_check): Update prototype.
+	* src/output.c (output_skeleton): Use create_pipe_bidi and
+	wait_subprocess.  Assert that scan_skel completely drains the
+	pipe.
+	* src/scan-skel.l (at_directive_perform): Update
+	output_file_name_check invocation.
+	* tests/output.at (AT_CHECK_CONFLICTING_OUTPUT): Check that the
+	grammar file actually isn't overwritten.
+	(Conflicting output files: -o foo.y): Update expected output.
+	* tests/skeletons.at (Fatal errors but M4 continues producing
+	output): New test group.
+
+2010-02-04  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Update POTFILES.
+	* HACKING (Release Procedure): Add reminder about keeping
+	POTFILES files up-to-date.
+	* po/POTFILES.in (src/muscle_tab.c, src/scan-skel.l): Add.
+
+2010-02-01  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	tests: link lib/libbison.a for gnulib.
+	This solves a problem on Solaris 2.7 where the testsuite needs
+	at least gnulib's rpl_fopen.  Reported by Albert Chin at
+	<http://lists.gnu.org/archive/html/bug-bison/2010-02/msg00001.html>.
+	* NEWS (2.4.2): Document.
+	* tests/atlocal.in (LIBS): As for LDADD in src/Makefile.am, add
+	lib/libbison.a.
+
+2010-01-22  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Prepare for 2.4.2 release.
+	* NEWS (2.4.1a): Rename back to...
+	(2.4.2): ... this, and unset date.
+	* configure.ac (AM_INIT_AUTOMAKE): Re-enable gnits.
+
+2010-01-22  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Version 2.4.1a delayed.
+	* NEWS (2.4.1a): Increment release date as there has been a
+	small delay in getting the announcements and tarballs out.
+
+2010-01-21  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Version 2.4.1a.
+	* NEWS (2.4.2): Rename to...
+	(2.4.1a): ... this for now.  Set date.
+	* configure.ac (AM_INIT_AUTOMAKE): Disable gnits for now because
+	it does not like this version name.
+
+2010-01-21  Joel E. Denny  <jdenny@clemson.edu>
+
+	* cfg.mk (gnulib_dir): Assume gnulib is a subdirectory.
+
+2010-01-21  Joel E. Denny  <jdenny@clemson.edu>
+
+	maint: automate PACKAGE_COPYRIGHT_YEAR update, and update it.
+	* HACKING (Release Procedure): Update notes on copyright years.
+	* Makefile.am (update-package-copyright-year): New target rule.
+	* build-aux/update-package-copyright-year: New file.
+	* cfg.mk (update-copyright): Add update-package-copyright-year
+	as a dependency.
+
+2010-01-19  Joel E. Denny  <jdenny@clemson.edu>
+
+	* bootstrap: Import improvements from latest gnulib.
+
+2010-01-19  Joel E. Denny  <jdenny@clemson.edu>
+
+	build: require Automake 1.11.1 to avoid a security flaw.
+	* HACKING (Release Procedure): Don't document Automake security
+	flaw here.
+	* configure.ac (AM_INIT_AUTOMAKE): Require 1.11.1, and explain
+	why here.
+
+2010-01-19  Joel E. Denny  <jdenny@clemson.edu>
+
+	gnulib: update to latest.
+
+2010-01-19  Joel E. Denny  <jdenny@clemson.edu>
+
+	ChangeLog (2006-09-15): add Odd Arild Olsen's role for push.c.
+
+2010-01-15  Joel E. Denny  <jdenny@clemson.edu>
+
+	Thank the developer of the initial push parser implementation.
+	This unfortunate oversight is several years old.
+	* THANKS (Odd Arild Olsen): Add.
+
+2010-01-04  Joel E. Denny  <jdenny@clemson.edu>
+
+	maint: run "make update-copyright"
+
+2009-12-30  Joel E. Denny  <jdenny@clemson.edu>
+
+	POSIX: warn if %prec's token was not defined.
+	Reported by Florian Krohm at
+	<http://lists.gnu.org/archive/html/bug-bison/2009-12/msg00005.html>.
+	* NEWS (2.4.2): Document.
+	* src/reader.c (grammar_rule_check): Implement.
+	(grammar_current_rule_prec_set): Add comments explaining that we
+	here assume a %prec identifier is a token, but we still manage
+	to support POSIX.
+	* tests/input.at (%prec's token must be defined): New test
+	group.
+
+2009-12-31  Joel E. Denny  <jdenny@clemson.edu>
+
+	* HACKING (Release Procedure): Recommend a secure automake.
+
+2009-12-21  Joel E. Denny  <jdenny@clemson.edu>
+
+	YYFAIL: deprecate.
+	* NEWS (2.4.2): Document deprecation and the phase-out plan.
+	* data/lalr1.java (parser::YYStack::YYFAIL): Add comment about
+	deprecation.
+	* data/yacc.c (YYFAIL): Likewise, and suppress warnings about
+	YYFAIL from GCC cpp's -Wunused-macros.
+	* doc/bison.texinfo (Java Action Features): Remove YYFAIL
+	documentation.
+
+2009-12-16  Joel E. Denny  <jdenny@clemson.edu>
+
+	Add gcc's -Wundef to test suite and fix another warning from it.
+	* NEWS (2.4.2): Update description of -Wundef fix.
+	* configure.ac (WARN_CXXFLAGS_TEST): New substitution.
+	(WARN_CFLAGS_TEST): New substitution.
+	* data/glr.c: Avoid warning about __STRICT_ANSI__.
+	* tests/atlocal.in (CFLAGS): Use WARN_CFLAGS_TEST instead of
+	WARN_CFLAGS.
+	(CXXFLAGS): Use WARN_CXXFLAGS_TEST instead of WARN_CXXFLAGS.
+
+2009-12-16  Joel E. Denny  <jdenny@clemson.edu>
+
+	Document gcc -Wundef fix.
+	* NEWS (2.4.2): Here.
+	* THANKS (Jonathan Nieder): Add.
+
+2009-12-15  Jonathan Nieder  <jrnieder@gmail.com>  (tiny change)
+
+	Avoid warnings from gcc -Wundef y.tab.c.
+	* data/glr.c: Check if YYENABLE_NLS and YYLTYPE_IS_TRIVIAL are
+	defined before using them.
+	* data/lalr1.cc: Likewise.
+	* data/yacc.c: Likewise.
+
+2009-12-15  Joel E. Denny  <jdenny@clemson.edu>
+
+	Import M4 detection fix from Autoconf.
+	Reported by Eric Blake.
+	* m4/m4.m4: Copy serial 10.
+
+2009-12-14  Joel E. Denny  <jdenny@clemson.edu>
+
+	Enable assertion output and --disable-assert for configure.
+	* bootstrap.conf (gnulib_modules): Add assert module.
+	* src/system.h (aver): Define as assert, and summarize the
+	discussion on this issue.
+
+2009-10-11  Joel E. Denny  <jdenny@clemson.edu>
+
+	portability: use va_start and va_end in the same function.
+	* src/complain.c (error_message): Move va_end from here...
+	(ERROR_MESSAGE): ... to here.
+
+2009-10-04  Joel E. Denny  <jdenny@clemson.edu>
+
+	tests: skip tests of file names that platform does not support.
+	Reported by Michael Raskin at
+	<http://lists.gnu.org/archive/html/bug-bison/2009-09/msg00001.html>.
+	* THANKS (Michael Raskin): Add.
+	* tests/output.at (AT_CHECK_OUTPUT_FILE_NAME): Fix.  Cygwin used
+	to fail at least for file names containing ":" or "\".
+
+2009-09-16  Akim Demaille  <demaille@gostai.com>
+
+	doc: spell checking.
+	* doc/bison.texinfo: here.
+
+2009-09-13  Joel E. Denny  <jdenny@clemson.edu>
+
+	tests: clean up push.at test group titles.
+	* tests/push.at: Remove "Push Parsing: " from test group titles
+	because these are already under the banner "Push Parsing Tests".
+
+2009-09-03  Akim Demaille  <demaille@gostai.com>
+
+	* NEWS (2.4.2): Add "Internationalization" item.
+
+2009-09-03  Akim Demaille  <demaille@gostai.com>
+
+	bootstrap: fix/improve find_tool.
+	* bootstrap (find_tool): Improve error messages.
+	Fix typo about find_tool_names.
+
+2009-08-27  Eric Blake  <ebb9@byu.net>
+
+	scan-gram: avoid portability trap with ctype usage.
+	* src/scan-gram.l (<SC_ESCAPED_STRING,SC_ESCAPED_CHARACTER>):
+	Avoid compiler warning.
+
+2009-08-27  Joel E. Denny  <jdenny@clemson.edu>
+
+	tests: use perl for printing special sequences to files.
+	And skip tests if perl is not available.  This is better than
+	playing tricks with shell portability.  Suggested by Akim
+	Demaille.
+	* tests/input.at (Bad character literals): Use it here for
+	omitting final newlines.
+	(Bad escapes in literals): Use it here for special characters.
+
+2009-08-21  Joel E. Denny  <jdenny@clemson.edu>
+
+	Use locale when quoting.
+	* src/scan-gram.l (SC_ESCAPED_STRING, SC_ESCAPED_CHARACTER): Use
+	quote rather than implementing quoting here.
+
+2009-08-20  Eric Blake  <ebb9@byu.net>
+
+	Make previous patch more robust.
+	* src/output.c (ARRAY_CARDINALITY): New macro, copied from
+	argmatch.h.
+	(output_skeleton): Use it.
+	Suggested by Akim Demaille.
+
+	Import latest m4/m4.m4.
+	* m4/m4.m4: Copy from autoconf 2.64.
+	* configure.ac (M4_GNU_OPTION): New define.
+	* src/output.c (output_skeleton): Use it to resolve FIXME.
+	* NEWS: Mention this.
+
+2009-08-19  Joel E. Denny  <jdenny@clemson.edu>
+
+	Fix complaints about escape sequences.
+	Discussed starting at
+	<http://lists.gnu.org/archive/html/bison-patches/2009-08/msg00036.html>.
+	* src/scan-gram.l (SC_ESCAPED_STRING, SC_ESCAPED_CHARACTER):
+	For a \0 and similar escape sequences meaning the null
+	character, report an invalid escape sequence instead of an
+	invalid null character because the latter does not actually
+	appear in the user's input.
+	In all escape sequence complaints, don't escape the initial
+	backslash, and don't quote when the sequence appears at the end
+	of the complaint line unless there's whitespace that quotearg
+	won't escape.
+	Consistently say "invalid" not "unrecognized".
+	* tests/input.at (Bad escapes in literals): New.
+
+2009-08-19  Akim Demaille  <demaille@gostai.com>
+
+	doc: %initial-action to initialize yylloc.
+	Reported by Bill Allombert.
+	* doc/bison.texinfo: Set fill-column to 76.
+	(Location Type): Document the use of %initial-action to initialize
+	yylloc.
+
+2009-08-18  Joel E. Denny  <jdenny@clemson.edu>
+
+	maint: update for gnulib's recent update-copyright changes
+	* gnulib: Update.
+	* .x-update-copyright (COPYING): Add as it's no longer implied
+	when .x-update-copyright is present.
+	* cfg.mk (update-copyright-local): Remove, now ignored.
+	(update-copyright): Declare update-b4-copyright as a dependency.
+
+2009-08-17  Akim Demaille  <demaille@gostai.com>
+
+	build: lower gettext requirements.
+
+	Bison was uselessly requiring the formatstring macros from
+	gettext, which resulted in mo files not being installed on systems
+	that perfectly supported Bison mo files.  Lower the requirement.
+	http://lists.gnu.org/archive/html/bug-bison/2009-08/msg00006.html
+
+	* configure.ac: Require need-ngettext instead of
+	need-formatstring-macros.
+	Reported by Martin Jabocs.
+	Suggested by Bruno Haible.
+	* INSTALL: Restructure.
+	(Internationalization): New.
+
+2009-08-14  Joel E. Denny  <jdenny@clemson.edu>
+
+	maint: fix use of copyright year intervals.
+	* gnulib: Update.
+	* bootstrap.conf (gnulib_modules): Update getopt to getopt-gnu
+	as now recommended in gnulib/NEWS.
+	* build-aux/update-b4-copyright: Fix.
+	* cfg.mk (update-copyright-env): Configure update-copyright.
+
+2009-08-12  Akim Demaille  <demaille@gostai.com>
+
+	distcheck: fix.
+
+	* examples/calc++/Makefile.am: (EXTRA_DIST): Ship calc.stamp.
+
+2009-08-06  Joel E. Denny  <jdenny@clemson.edu>
+
+	maint: run "make update-copyright"
+	But first...
+	* .x-update-copyright (^data/m4sugar/): Add, because these
+	files are from Autoconf.
+
+2009-08-06  Joel E. Denny  <jdenny@clemson.edu>
+
+	maint: make update-b4-copyright easier to use
+	* build-aux/update-b4-copyright: In warnings, report line
+	numbers rather than character positions.
+	* cfg.mk (update-copyright-local): Set to update-b4-copyright so
+	that update-copyright runs it.
+	* gnulib: Update.
+
+2009-08-05  Joel E. Denny  <jdenny@clemson.edu>
+
+	maint: clean up update-b4-copyright code
+	* build-aux/update-b4-copyright: Do not accept 2-digit
+	UPDATE_COPYRIGHT_YEAR, which was not handled correctly.
+	Don't accept a `[' in a b4_copyright argument.
+	Format code more consistently.
+	Don't assume b4*copyright never occurs.
+
+2009-08-04  Joel E. Denny  <jdenny@clemson.edu>
+
+	maint: automate b4_copyright updates.
+	* Makefile.am (update-b4-copyright): New target rule.
+	* build-aux/Makefile.am (EXTRA_DIST): Add update-b4-copyright.
+	* build-aux/update-b4-copyright: New.
+	* data/yacc.c: Remove stray characters around b4_copyright
+	invocations.
+
+2009-08-04  Joel E. Denny  <jdenny@clemson.edu>
+
+	maint: automate annual package-wide copyright-year update.
+	* .x-update-copyright: New.
+	* Makefile.am (EXTRA_DIST): Remove maint.mk.
+	* bootstrap.conf (gnulib_modules): Add maintainer-makefile and
+	update-copyright.  Remove gnumakefile, which is implied by
+	maintainer-makefile.
+	* cfg.mk (bootstrap-tools): Copy from old maint.mk.
+	* gnulib: Update.
+	* maint.mk: Remove, now copied from gnulib.
+	* examples/extexi: Add missing "(C)" in copyright statement so
+	update-copyright can recognize it.
+	* src/LR0.h: Likewise.
+	* src/print.h: Likewise.
+	* src/print_graph.h: Likewise.
+	* src/gram.c: Add missing comma in copyright statement.
+	* src/gram.h: Likewise.
+
+2009-08-04  Joel E. Denny  <jdenny@clemson.edu>
+
+	Fix "make distcheck".
+	* examples/calc++/Makefile.am: Say $(srcdir)/calc.stamp instead
+	of just calc.stamp.
+
+2009-08-01  Joel E. Denny  <jdenny@clemson.edu>
+
+	Pacify "gcc -Wunused" for the input function from Flex.
+	Reported by Alex Rozenman.  This warning shows up with gcc-4.3.0
+	and later.
+	* src/scan-code.l: Add "%option noinput", which I cannot find in
+	the Flex manual, but which Flex has supported since at least as
+	far back as 2.5.4.  However, if any of our developers still use
+	Flex 2.5.4, they'll need to stop configuring with
+	--enable-gcc-warnings because "%option noinput" didn't work
+	correctly until Flex 2.5.6.
+	* src/scan-gram.l: Likewise.
+	* src/scan-skel.l: Likewise.
+
+2009-06-29  Akim Demaille  <demaille@gostai.com>
+
+	build: avoid concurrent extraction of calc++.
+	* examples/calc++/Makefile.am (calc.stamp): New.
+	Depend on it to create the sources of calc++ so that concurrent
+	builds don't launch several "extexi" in parallel.
+	Not only this is inefficient, this also builds incorrect sources
+	with several extractions mixed together.
+
+2009-06-25  Akim Demaille  <demaille@gostai.com>
+
+	hash: check insertion for memory exhaustion.
+	* src/uniqstr.c (uniqstr_new): New.
+
+2009-06-11  Akim Demaille  <demaille@gostai.com>
+
+	hash: check insertion for memory exhaustion.
+	* src/muscle-tab.c (muscle_insert, muscle_grow)
+	* src/state.c (state_hash_insert): Check the return value of
+	hash_insert.
+
+2009-06-10  Akim Demaille  <demaille@gostai.com>
+
+	gnulib: update.
+	* gnulib: Update to latest.
+	* lib/.cvsignore, lib/.gitignore, m4/.cvsignore,
+	* m4/.gitignore: Regen.
+	* src/symtab.c (symbol_from_uniqstr, semantic_type_from_uniqstr):
+	Call xalloc_die on hash_insert failures.
+	Requested by the new __warn_unused_result__ attribute of
+	hash_insert.
+
+2009-05-22  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	* data/c++.m4: Update copyright year.
+
+2009-05-19  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Handle a trailing `:' in a user-supplied C++ namespace better.
+	* data/c++.m4 (b4_namespace_close): Don't let it be printed
+	among the closing braces here.  This fix might make the
+	generated code easier to debug, but otherwise it should be
+	insignificant because a trailing `:' is a C++ error already.
+
+2009-05-11  Akim Demaille  <demaille@gostai.com>
+
+	doc: use C++ headers.
+	* doc/bison.texinfo (Calc++ Scanner): Prefer C++ headers to C
+	headers.
+
+2009-05-01  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Declare %code to be a permanent feature.
+	* NEWS (2.4.2): Here.
+	* doc/bison.texinfo (Prologue Alternatives): Don't say it's
+	experimental.
+	(Decl Summary): Likewise.
+
+2009-04-14  Akim Demaille  <demaille@gostai.com>
+
+	doc: minor fixes.
+	* doc/bison.texinfo (Decl Summary): Fix entry about %debug.
+	(Table of Symbols): Remove duplicate entry for %debug.
+
+2009-04-06  Eric Blake  <ebb9@byu.net>
+
+	Work around autoconf 2.63b bug in testsuite.
+	* tests/output.at (AT_CHECK_OUTPUT_FILE_NAME): Avoid tripping
+	autoconf bug related to # in test.
+
+2009-04-06  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Fix options documentation.
+	* build-aux/cross-options.pl: As in --help output, write optional
+	arguments as [=ARG] not =[ARG].
+	* doc/bison.texinfo (Bison Options): Add -W/--warnings argument.
+
+2008-11-07  Akim Demaille  <demaille@gostai.com>
+
+	Fix --help.
+	* src/getargs.c (usage): Fix help string for -W.
+
+2008-11-07  Akim Demaille  <demaille@gostai.com>
+
+	Handle more general types of option arguments.
+	* build-aux/cross-options.pl: The argument ends at the first
+	space, not the first non-symbol character.
+	Use @var for each word appearing the argument description.
+
+2009-04-04  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Remove spurious initial empty lines.
+	* data/location.cc: End the @output lines with an @.
+
+2008-11-04  Akim Demaille  <demaille@gostai.com>
+
+	Remove spurious initial empty lines.
+	* data/glr.c, data/glr.cc, data/lalr1.cc, data/lalr1.java,
+	* data/yacc.c: End the @output lines with an @.
+
+2009-04-04  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Replace BISON_PROG_GNU_M4 with Autoconf's AC_PROG_GNU_M4.
+	If the first m4 in $PATH is wrong, it keeps looking.  Moreover, its
+	requirements for a correct m4 are stricter.
+	* m4/m4.m4: Replace with Autoconf 2.63's m4/m4.m4.
+	* configure.ac: Update to use AC_PROG_GNU_M4.
+	Reported by Eric Blake.
+
+2009-04-03  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Help with updating web manual.
+	* HACKING: Incorporate instructions from gnulib/doc/README.
+	* bootstrap.conf (gnulib_modules): Add gendocs.
+
+2009-04-03  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Fix strange %define locations for default values.
+	Reported by Akim Demaille at
+	<http://lists.gnu.org/archive/html/bug-bison/2007-12/msg00001.html>
+	and discussed again starting at
+	<http://lists.gnu.org/archive/html/bison-patches/2008-11/msg00102.html>.
+	* data/bison.m4 (b4_percent_define_default): Leave syncline blank
+	because location information is bogus.
+	Use angle brackets to delimit fake file name because square brackets
+	look like underexpanded m4.  Choose a better fake file name.
+	Use negative line numbers.
+	* src/muscle_tab.c (muscle_percent_define_default): Likewise.
+	* src/location.c (location_print): If line for a boundary is negative,
+	only print that boundary's file name.
+	* src/location.h: Document that.
+	* tests/skeletons.at (%define Boolean variables: invalid skeleton
+	defaults): Update output.
+
+2008-11-07  Akim Demaille  <demaille@gostai.com>
+
+	Locations without columns for command line arguments.
+	* src/location.c (location_print): Don't display negative columns.
+	* src/location.h: Document this.
+
+2009-02-03  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Add reminder about uploading public key to keys.gnupg.net.
+	* HACKING (Release Procedure): Here.
+
+2009-03-31  Akim Demaille  <demaille@gostai.com>
+
+	bootstrap: --help to stdout.
+	* bootstrap (usage): Don't send --help to stderr.
+	Use a here doc instead of a long string.
+
+2009-03-31  Akim Demaille  <demaille@gostai.com>
+
+	bootstrap: README-hacking no longer exists
+	* bootstrap (checkout_only_file): Set to HACKING.
+
+2009-03-26  Akim Demaille  <demaille@gostai.com>
+
+	doc: merge HACKING and README-hacking.
+	Two files is confusing.
+	Reported by Alexandre Duret-Lutz.
+
+	* README-hacking: Merge into...
+	* HACKING (Working from the repository): here.
+
+2009-03-26  Akim Demaille  <demaille@gostai.com>
+
+	doc: update README-hacking.
+	* README-hacking: We now use git and git submodules.
+	Reported by Ralf Wildenhues and Alexandre Duret-Lutz.
+
+2009-03-26  Akim Demaille  <demaille@gostai.com>
+
+	lalr1.cc: avoid GCC 4.3 warnings.
+	GCC 4.3 now warns about "a || b && c" and asks for explicit
+	parentheses.
+	Reported by Alexandre Duret-Lutz.
+	* data/location.cc: Update copyright years.
+	(Position::operator==): Use parens to make precedence explicit.
+	Compare lines and columns first, as they are more likely to be
+	different, and they are faster to compare.
+
+2009-03-26  Akim Demaille  <demaille@gostai.com>
+
+	gnulib: update.
+	* gnulib: Update to latest.
+	* lib/Makefile.am (AM_CPPFLAGS): It is now defined by gnulib, so
+	use +=.
+
+2009-01-08  Akim Demaille  <demaille@gostai.com>
+
+	Fix grep portability issues.
+	Grep on Solaris does not support -q.
+	Reported by Summum Bonum.
+
+	* NEWS: Add a stub for 2.4.2.
+	* THANKS: Add Summum Bonum.
+	* tests/atlocal.in (EGREP): New.
+	(CC, CXX, XSLTPROC): Make it possible to override them via
+	envvars.
+	* tests/java.at: Use $EGREP instead of egrep.
+	Use AT_CHECK's ignore instead of grep's -q.
+
 2008-12-11  Joel E. Denny  <jdenny@ces.clemson.edu>
 
 	Version 2.4.1.
@@ -3931,9 +4573,12 @@
 
 2006-09-15  Bob Rossi  <bob@brasko.net>
 
+	Add support for push parsing.  Based on the original work of
+	Odd Arild Olsen <oao@fibula.no>.
 	* data/Makefile.am (dist_pkgdata_DATA): Add push.c.
 	* data/c.m4 (YYPUSH): New.
 	(b4_push_if): New macro.  Use it instead of #ifdef YYPUSH.
+	* data/push.c: New file.
 	* src/getargs.c (push_parser): New var.
 	* src/getargs.h (push_parser): New declaration.
 	* src/output.c (prepare): Add macro insertion of `push_flag'.
@@ -21106,9 +21751,8 @@
 
 	-----
 
-	Copyright (C) 1987, 1988, 1991, 1992, 1993, 1994, 1995, 1996,
-	1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
-	Free Software Foundation, Inc.
+	Copyright (C) 1987-1988, 1991-2010 Free Software Foundation,
+	Inc.
 
 	Copying and distribution of this file, with or without
 	modification, are permitted provided the copyright notice and this

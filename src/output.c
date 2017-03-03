@@ -1,7 +1,7 @@
 /* Output the generated parsing program for Bison.
 
-   Copyright (C) 1984, 1986, 1989, 1992, 2000, 2001, 2002, 2003, 2004,
-   2005, 2006, 2007, 2008 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1986, 1989, 1992, 2000-2010 Free Software
+   Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -21,12 +21,14 @@
 #include <config.h>
 #include "system.h"
 
+#include <assert.h>
 #include <configmake.h>
 #include <error.h>
 #include <get-errno.h>
+#include <pipe.h>
 #include <quotearg.h>
-#include <subpipe.h>
 #include <timevar.h>
+#include <wait-process.h>
 
 #include "complain.h"
 #include "files.h"
@@ -40,6 +42,7 @@
 #include "symtab.h"
 #include "tables.h"
 
+# define ARRAY_CARDINALITY(Array) (sizeof (Array) / sizeof *(Array))
 
 static struct obstack format_obstack;
 
@@ -473,7 +476,7 @@ output_skeleton (void)
   FILE *in;
   FILE *out;
   int filter_fd[2];
-  char const *argv[9];
+  char const *argv[10];
   pid_t pid;
 
   /* Compute the names of the package data dir and skeleton files.  */
@@ -524,6 +527,19 @@ output_skeleton (void)
   {
     int i = 0;
     argv[i++] = m4;
+
+    /* When POSIXLY_CORRECT is set, GNU M4 1.6 and later disable GNU
+       extensions, which Bison's skeletons depend on.  With older M4,
+       it has no effect.  M4 1.4.12 added a -g/--gnu command-line
+       option to make it explicit that a program wants GNU M4
+       extensions even when POSIXLY_CORRECT is set.
+
+       See the thread starting at
+       <http://lists.gnu.org/archive/html/bug-bison/2008-07/msg00000.html>
+       for details.  */
+    if (*M4_GNU_OPTION)
+      argv[i++] = M4_GNU_OPTION;
+
     argv[i++] = "-I";
     argv[i++] = pkgdatadir;
     if (trace_flag & trace_m4)
@@ -533,33 +549,17 @@ output_skeleton (void)
     argv[i++] = full_m4bison;
     argv[i++] = full_skeleton;
     argv[i++] = NULL;
+    assert (i <= ARRAY_CARDINALITY (argv));
   }
-  /* When POSIXLY_CORRECT is set, some future versions of GNU M4 (most likely
-     2.0) may drop some of the GNU extensions that Bison's skeletons depend
-     upon.  So that the next release of Bison is forward compatible with those
-     future versions of GNU M4, we unset POSIXLY_CORRECT here.
 
-     FIXME: A user might set POSIXLY_CORRECT to affect processes run from
-     macros like m4_syscmd in a custom skeleton.  For now, Bison makes no
-     promises about the behavior of custom skeletons, so this scenario is not a
-     concern.  However, we eventually want to eliminate this shortcoming.  The
-     next release of GNU M4 (1.4.12 or 1.6) will accept the -g command-line
-     option as a no-op, and later releases will accept it to indicate that
-     POSIXLY_CORRECT should be ignored.  Once the GNU M4 versions that accept
-     -g are pervasive, Bison should use -g instead of unsetting
-     POSIXLY_CORRECT.
-
-     See the thread starting at
-     <http://lists.gnu.org/archive/html/bug-bison/2008-07/msg00000.html>
-     for details.  */
-  unsetenv ("POSIXLY_CORRECT");
-  init_subpipe ();
-  pid = create_subpipe (argv, filter_fd);
+  /* The ugly cast is because gnulib gets the const-ness wrong.  */
+  pid = create_pipe_bidi ("m4", m4, (char **)(void*)argv, false, true,
+                          true, filter_fd);
   free (full_m4sugar);
   free (full_m4bison);
   free (full_skeleton);
 
-  out = fdopen (filter_fd[0], "w");
+  out = fdopen (filter_fd[1], "w");
   if (! out)
     error (EXIT_FAILURE, get_errno (),
 	   "fdopen");
@@ -578,14 +578,17 @@ output_skeleton (void)
 
   /* Read and process m4's output.  */
   timevar_push (TV_M4);
-  end_of_output_subpipe (pid, filter_fd);
-  in = fdopen (filter_fd[1], "r");
+  in = fdopen (filter_fd[0], "r");
   if (! in)
     error (EXIT_FAILURE, get_errno (),
 	   "fdopen");
   scan_skel (in);
+  /* scan_skel should have read all of M4's output.  Otherwise, when we
+     close the pipe, we risk letting M4 report a broken-pipe to the
+     Bison user.  */
+  aver (feof (in));
   xfclose (in);
-  reap_subpipe (pid, m4);
+  wait_subprocess (pid, "m4", false, false, true, true, NULL);
   timevar_pop (TV_M4);
 }
 

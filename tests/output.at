@@ -1,6 +1,5 @@
 # Checking the output filenames.                    -*- Autotest -*-
-# Copyright (C) 2000, 2001, 2002, 2005, 2006, 2007, 2008 Free Software
-# Foundation, Inc.
+# Copyright (C) 2000-2002, 2005-2010 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -138,7 +137,13 @@ AT_DATA([$1],
 foo: {};
 ]])
 
-AT_BISON_CHECK([$3 $1], $5, [], [$4])
+[cp ]$1[ expout]
+# Because an output file name conflict is still a warning, Bison exits
+# with status 0, so AT_BISON_CHECK does not realize that there may be no
+# output file against which to check the XML.  AT_BISON_CHECK_NO_XML
+# avoids that problem.
+AT_BISON_CHECK_NO_XML([$3 $1], $5, [], [$4])
+AT_CHECK([[cat $1]], [[0]], [expout])
 AT_CLEANUP
 ])
 
@@ -158,7 +163,7 @@ AT_CHECK_CONFLICTING_OUTPUT([foo.y],
 ])
 
 AT_CHECK_CONFLICTING_OUTPUT([foo.y], [], [-o foo.y],
-[foo.y: fatal error: refusing to overwrite the input file `foo.y'
+[foo.y: refusing to overwrite the input file `foo.y'
 ], 1)
 
 
@@ -166,6 +171,10 @@ AT_CHECK_CONFLICTING_OUTPUT([foo.y], [], [-o foo.y],
 # -----------------------------------------------------------------------------
 m4_define([AT_CHECK_OUTPUT_FILE_NAME],
 [AT_SETUP([Output file name: $1])
+
+# Skip if platform doesn't support file name.  For example, Cygwin
+# doesn't support file names containing ":" or "\".
+AT_CHECK([[touch "]AS_ESCAPE([$1[.tmp]])[" || exit 77]])
 
 AT_DATA_GRAMMAR([glr.y],
 [[%glr-parser
@@ -206,7 +215,7 @@ m4_define([_m4_expand],
 [m4_changequote([-=<{(], [)}>=-])$1m4_changequote([, ])])])
 AT_CHECK_OUTPUT_FILE_NAME([[(]])
 AT_CHECK_OUTPUT_FILE_NAME([[)]])
-AT_CHECK_OUTPUT_FILE_NAME([[#]])
+AT_CHECK_OUTPUT_FILE_NAME([[@%:@]])
 AT_CHECK_OUTPUT_FILE_NAME([[@@]])
 AT_CHECK_OUTPUT_FILE_NAME([[@{]])
 AT_CHECK_OUTPUT_FILE_NAME([[@}]])

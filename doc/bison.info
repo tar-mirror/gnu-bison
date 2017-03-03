@@ -1,12 +1,11 @@
 This is bison.info, produced by makeinfo version 4.11 from
 bison.texinfo.
 
-This manual (19 November 2008) is for GNU Bison (version 2.4.1), the
+This manual (24 February 2010) is for GNU Bison (version 2.4.2), the
 GNU parser generator.
 
-   Copyright (C) 1988, 1989, 1990, 1991, 1992, 1993, 1995, 1998, 1999,
-2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Free Software
-Foundation, Inc.
+   Copyright (C) 1988-1993, 1995, 1998-2010 Free Software Foundation,
+Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -31,12 +30,11 @@ File: bison.info,  Node: Top,  Next: Introduction,  Up: (dir)
 Bison
 *****
 
-This manual (19 November 2008) is for GNU Bison (version 2.4.1), the
+This manual (24 February 2010) is for GNU Bison (version 2.4.2), the
 GNU parser generator.
 
-   Copyright (C) 1988, 1989, 1990, 1991, 1992, 1993, 1995, 1998, 1999,
-2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Free Software
-Foundation, Inc.
+   Copyright (C) 1988-1993, 1995, 1998-2010 Free Software Foundation,
+Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -335,7 +333,7 @@ Bison in detail.
 it Yacc-compatible.  Wilfred Hansen of Carnegie Mellon University added
 multi-character string literals and other features.
 
-   This edition corresponds to version 2.4.1 of Bison.
+   This edition corresponds to version 2.4.2 of Bison.
 
 
 File: bison.info,  Node: Conditions,  Next: Copying,  Prev: Introduction,  Up: Top
@@ -3135,11 +3133,7 @@ File: bison.info,  Node: Prologue Alternatives,  Next: Bison Declarations,  Prev
 3.1.2 Prologue Alternatives
 ---------------------------
 
-(The prologue alternatives described here are experimental.  More user
-feedback will help to determine whether they should become permanent
-features.)
-
-   The functionality of PROLOGUE sections can often be subtle and
+The functionality of PROLOGUE sections can often be subtle and
 inflexible.  As an alternative, Bison provides a %code directive with
 an explicit qualifier field, which identifies the purpose of the code
 and thus the location(s) where Bison should generate it.  For C/C++,
@@ -4069,8 +4063,11 @@ Bison uses a default structure type with four members:
        int last_column;
      } YYLTYPE;
 
-   At the beginning of the parsing, Bison initializes all these fields
-to 1 for `yylloc'.
+   When `YYLTYPE' is not defined, at the beginning of the parsing, Bison
+initializes all these fields to 1 for `yylloc'.  To initialize `yylloc'
+with a custom location type (or to chose a different initialization),
+use the `%initial-action' directive.  *Note Performing Actions before
+Parsing: Initial Action Decl.
 
 
 File: bison.info,  Node: Actions and Locations,  Next: Location Default Action,  Prev: Location Type,  Up: Locations
@@ -4848,10 +4845,6 @@ directives:
 
      For Java, the default location is inside the parser class.
 
-     (Like all the Yacc prologue alternatives, this directive is
-     experimental.  More user feedback will help to determine whether
-     it should become a permanent feature.)
-
  -- Directive: %code QUALIFIER {CODE}
      This is the qualified form of the `%code' directive.  If you need
      to specify location-sensitive verbatim CODE that does not belong
@@ -4915,10 +4908,6 @@ directives:
              * Location(s): The parser Java file after any Java package
                directive and before any class definitions.
 
-     (Like all the Yacc prologue alternatives, this directive is
-     experimental.  More user feedback will help to determine whether
-     it should become a permanent feature.)
-
      For a detailed discussion of how to use `%code' in place of the
      traditional Yacc prologue for C/C++, see *note Prologue
      Alternatives::.
@@ -4926,7 +4915,7 @@ directives:
  -- Directive: %debug
      In the parser file, define the macro `YYDEBUG' to 1 if it is not
      already defined, so that the debugging facilities are compiled.
-   *Note Tracing Your Parser: Tracing.
+     *Note Tracing Your Parser: Tracing.
 
  -- Directive: %define VARIABLE
  -- Directive: %define VARIABLE "VALUE"
@@ -5388,7 +5377,7 @@ or `%define api.push_pull "both"' declaration is used.  *Note A Push
 Parser: Push Decl.
 
  -- Function: yypstate *yypstate_new (void)
-     The fuction will return a valid parser instance if there was
+     The function will return a valid parser instance if there was
      memory available or 0 if no memory was available.  In impure mode,
      it will also return 0 if a parser instance is currently allocated.
 
@@ -6604,7 +6593,7 @@ arrays.  The default is 200.
 
    Do not allow `YYINITDEPTH' to be greater than `YYMAXDEPTH'.
 
-   Because of semantical differences between C and C++, the LALR(1)
+   Because of semantic differences between C and C++, the LALR(1)
 parsers in C produced by Bison cannot grow when compiled by C++
 compilers.  In this precise case (compiling a C parser as C++) you are
 suggested to grow `YYINITDEPTH'.  The Bison maintainers hope to fix
@@ -7471,8 +7460,8 @@ Operations modes:
      `%glr-parser', Bison might not be Yacc-compatible even if this
      option is specified.
 
-`-W'
-`--warnings'
+`-W [CATEGORY]'
+`--warnings[=CATEGORY]'
      Output warnings falling in CATEGORY.  CATEGORY can be one of:
     `midrule-values'
           Warn about mid-rule values that are set but not used within
@@ -7636,9 +7625,9 @@ the corresponding short option.
 Long Option                Short Option
 ------------------------------------------------- 
 `--debug'                  `-t'
-`--defines=[FILE]'         
+`--defines[=FILE]'         
 `--file-prefix=PREFIX'     `-b' PREFIX
-`--graph=[FILE]'           `-g' [FILE]
+`--graph[=FILE]'           `-g' [FILE]
 `--help'                   `-h'
 `--language=LANGUAGE'      `-L' LANGUAGE
 `--locations'              
@@ -7653,8 +7642,8 @@ Long Option                Short Option
 `--token-table'            `-k'
 `--verbose'                `-v'
 `--version'                `-V'
-`--warnings'               `-W'
-`--xml=[FILE]'             `-x' [FILE]
+`--warnings[=CATEGORY]'    `-W' [CATEGORY]
+`--xml[=FILE]'             `-x' [FILE]
 `--yacc'                   `-y'
 
 
@@ -8061,7 +8050,7 @@ changed several times, it is safer to require the version you designed
 the grammar for.
 
      %skeleton "lalr1.cc"                          /*  -*- C++ -*- */
-     %require "2.4.1"
+     %require "2.4.2"
      %defines
      %define parser_class_name "calcxx_parser"
 
@@ -8086,7 +8075,7 @@ global variables.
      %lex-param   { calcxx_driver& driver }
 
 Then we request the location tracking feature, and initialize the first
-location's file name.  Afterwards new locations are computed relatively
+location's file name.  Afterward new locations are computed relatively
 to the previous locations: the file name will be automatically
 propagated.
 
@@ -8181,8 +8170,8 @@ parser's to get the set of defined tokens.
 
      %{                                            /* -*- C++ -*- */
      # include <cstdlib>
-     # include <errno.h>
-     # include <limits.h>
+     # include <cerrno>
+     # include <climits>
      # include <string>
      # include "calc++-driver.hh"
      # include "calc++-parser.hh"
@@ -8537,7 +8526,7 @@ in this case.
 
  -- Method on Lexer: int yylex ()
      Return the next token.  Its type is the return value, its semantic
-     value and location are saved and returned by the ther methods in
+     value and location are saved and returned by the their methods in
      the interface.
 
      Use `%define lex_throws' to specify any uncaught exceptions.
@@ -8553,7 +8542,7 @@ in this case.
      "CLASS-NAME".'
 
  -- Method on Lexer: Object getLVal ()
-     Return the semantical value of the last token that yylex returned.
+     Return the semantic value of the last token that yylex returned.
 
      The return type can be changed using `%define stype "CLASS-NAME".'
 
@@ -8611,10 +8600,6 @@ actions, and initial actions specified by `%initial-action'.
      Start error recovery without printing an error message.  *Note
      Error Recovery::.
 
- -- Statement: return YYFAIL;
-     Print an error message and start error recovery.  *Note Error
-     Recovery::.
-
  -- Function: boolean recovering ()
      Return whether error recovery is being done. In this state, the
      parser reads token until it reaches a known state, and then
@@ -8649,14 +8634,14 @@ section summarizes these differences.
 
    * Java lacks unions, so `%union' has no effect.  Instead, semantic
      values have a common base type: `Object' or as specified by
-     `%define stype'.  Angle backets on `%token', `type', `$N' and `$$'
-     specify subtypes rather than fields of an union.  The type of
+     `%define stype'.  Angle brackets on `%token', `type', `$N' and
+     `$$' specify subtypes rather than fields of an union.  The type of
      `$$', even with angle brackets, is the base type since Java casts
      are not allow on the left-hand side of assignments.  Also, `$N'
      and `@N' are not allowed on the left-hand side of assignments. See
      *note Java Semantic Values:: and *note Java Action Features::.
 
-   * The prolog declarations have a different meaning than in C/C++
+   * The prologue declarations have a different meaning than in C/C++
      code.
     `%code imports'
           blocks are placed at the beginning of the Java source code.
@@ -9238,9 +9223,6 @@ Appendix A Bison Symbols
  -- Directive: %code QUALIFIER {CODE}
      Insert CODE verbatim into output parser source.  *Note %code: Decl
      Summary.
-
- -- Directive: %debug
-     Equip the parser for debugging.  *Note Decl Summary::.
 
  -- Directive: %debug
      Equip the parser for debugging.  *Note Decl Summary::.
@@ -10190,9 +10172,9 @@ Index
                                                               (line  17)
 * $<:                                    Action Features.     (line  18)
 * $accept:                               Table of Symbols.    (line  65)
-* $end:                                  Table of Symbols.    (line 104)
+* $end:                                  Table of Symbols.    (line 101)
 * $N:                                    Actions.             (line   6)
-* $undefined:                            Table of Symbols.    (line 212)
+* $undefined:                            Table of Symbols.    (line 209)
 * % <1>:                                 Table of Symbols.    (line  28)
 * %:                                     Java Declarations Summary.
                                                               (line  53)
@@ -10208,29 +10190,29 @@ Index
                                                               (line   6)
 * %code imports <1>:                     Java Declarations Summary.
                                                               (line  41)
-* %code imports:                         Decl Summary.        (line 115)
+* %code imports:                         Decl Summary.        (line 111)
 * %code lexer:                           Java Declarations Summary.
                                                               (line  45)
-* %code provides <1>:                    Decl Summary.        (line  86)
+* %code provides <1>:                    Decl Summary.        (line  82)
 * %code provides:                        Prologue Alternatives.
                                                               (line   6)
 * %code requires <1>:                    Calc++ Parser.       (line  17)
-* %code requires <2>:                    Decl Summary.        (line  72)
+* %code requires <2>:                    Decl Summary.        (line  68)
 * %code requires:                        Prologue Alternatives.
                                                               (line   6)
-* %code top <1>:                         Decl Summary.        (line  98)
+* %code top <1>:                         Decl Summary.        (line  94)
 * %code top:                             Prologue Alternatives.
                                                               (line   6)
 * %debug <1>:                            Table of Symbols.    (line  75)
 * %debug <2>:                            Tracing.             (line  23)
-* %debug:                                Decl Summary.        (line 134)
-* %define <1>:                           Table of Symbols.    (line  81)
-* %define:                               Decl Summary.        (line 139)
+* %debug:                                Decl Summary.        (line 126)
+* %define <1>:                           Table of Symbols.    (line  78)
+* %define:                               Decl Summary.        (line 131)
 * %define abstract:                      Java Declarations Summary.
                                                               (line  57)
-* %define api.pure <1>:                  Decl Summary.        (line 166)
+* %define api.pure <1>:                  Decl Summary.        (line 158)
 * %define api.pure:                      Pure Decl.           (line   6)
-* %define api.push_pull <1>:             Decl Summary.        (line 177)
+* %define api.push_pull <1>:             Decl Summary.        (line 169)
 * %define api.push_pull:                 Push Decl.           (line   6)
 * %define extends:                       Java Declarations Summary.
                                                               (line  61)
@@ -10242,9 +10224,9 @@ Index
                                                               (line  73)
 * %define location_type:                 Java Declarations Summary.
                                                               (line  78)
-* %define lr.keep_unreachable_states:    Decl Summary.        (line 190)
+* %define lr.keep_unreachable_states:    Decl Summary.        (line 182)
 * %define namespace <1>:                 C++ Bison Interface. (line  10)
-* %define namespace:                     Decl Summary.        (line 232)
+* %define namespace:                     Decl Summary.        (line 224)
 * %define package:                       Java Declarations Summary.
                                                               (line  84)
 * %define parser_class_name:             Java Declarations Summary.
@@ -10259,89 +10241,89 @@ Index
                                                               (line 101)
 * %define throws:                        Java Declarations Summary.
                                                               (line 109)
-* %defines <1>:                          Table of Symbols.    (line  86)
-* %defines:                              Decl Summary.        (line 274)
-* %destructor <1>:                       Table of Symbols.    (line  94)
-* %destructor <2>:                       Decl Summary.        (line 310)
+* %defines <1>:                          Table of Symbols.    (line  83)
+* %defines:                              Decl Summary.        (line 266)
+* %destructor <1>:                       Table of Symbols.    (line  91)
+* %destructor <2>:                       Decl Summary.        (line 302)
 * %destructor <3>:                       Destructor Decl.     (line   6)
 * %destructor:                           Mid-Rule Actions.    (line  59)
-* %dprec <1>:                            Table of Symbols.    (line  99)
+* %dprec <1>:                            Table of Symbols.    (line  96)
 * %dprec:                                Merging GLR Parses.  (line   6)
-* %error-verbose <1>:                    Table of Symbols.    (line 118)
+* %error-verbose <1>:                    Table of Symbols.    (line 115)
 * %error-verbose:                        Error Reporting.     (line  17)
 * %expect <1>:                           Decl Summary.        (line  38)
 * %expect:                               Expect Decl.         (line   6)
 * %expect-rr <1>:                        Expect Decl.         (line   6)
 * %expect-rr:                            Simple GLR Parsers.  (line   6)
-* %file-prefix <1>:                      Table of Symbols.    (line 122)
-* %file-prefix:                          Decl Summary.        (line 315)
-* %glr-parser <1>:                       Table of Symbols.    (line 126)
+* %file-prefix <1>:                      Table of Symbols.    (line 119)
+* %file-prefix:                          Decl Summary.        (line 307)
+* %glr-parser <1>:                       Table of Symbols.    (line 123)
 * %glr-parser <2>:                       Simple GLR Parsers.  (line   6)
 * %glr-parser:                           GLR Parsers.         (line   6)
-* %initial-action <1>:                   Table of Symbols.    (line 130)
+* %initial-action <1>:                   Table of Symbols.    (line 127)
 * %initial-action:                       Initial Action Decl. (line   6)
-* %language <1>:                         Table of Symbols.    (line 134)
-* %language:                             Decl Summary.        (line 319)
+* %language <1>:                         Table of Symbols.    (line 131)
+* %language:                             Decl Summary.        (line 311)
 * %language "Java":                      Java Declarations Summary.
                                                               (line  10)
-* %left <1>:                             Table of Symbols.    (line 138)
+* %left <1>:                             Table of Symbols.    (line 135)
 * %left <2>:                             Using Precedence.    (line   6)
 * %left:                                 Decl Summary.        (line  21)
-* %lex-param <1>:                        Table of Symbols.    (line 142)
+* %lex-param <1>:                        Table of Symbols.    (line 139)
 * %lex-param <2>:                        Java Declarations Summary.
                                                               (line  13)
 * %lex-param:                            Pure Calling.        (line  31)
-* %locations:                            Decl Summary.        (line 327)
-* %merge <1>:                            Table of Symbols.    (line 147)
+* %locations:                            Decl Summary.        (line 319)
+* %merge <1>:                            Table of Symbols.    (line 144)
 * %merge:                                Merging GLR Parses.  (line   6)
-* %name-prefix <1>:                      Table of Symbols.    (line 154)
+* %name-prefix <1>:                      Table of Symbols.    (line 151)
 * %name-prefix <2>:                      Java Declarations Summary.
                                                               (line  19)
-* %name-prefix:                          Decl Summary.        (line 334)
-* %no-lines <1>:                         Table of Symbols.    (line 158)
-* %no-lines:                             Decl Summary.        (line 346)
-* %nonassoc <1>:                         Table of Symbols.    (line 162)
+* %name-prefix:                          Decl Summary.        (line 326)
+* %no-lines <1>:                         Table of Symbols.    (line 155)
+* %no-lines:                             Decl Summary.        (line 338)
+* %nonassoc <1>:                         Table of Symbols.    (line 159)
 * %nonassoc <2>:                         Using Precedence.    (line   6)
 * %nonassoc:                             Decl Summary.        (line  25)
-* %output <1>:                           Table of Symbols.    (line 166)
-* %output:                               Decl Summary.        (line 354)
-* %parse-param <1>:                      Table of Symbols.    (line 170)
+* %output <1>:                           Table of Symbols.    (line 163)
+* %output:                               Decl Summary.        (line 346)
+* %parse-param <1>:                      Table of Symbols.    (line 167)
 * %parse-param <2>:                      Java Declarations Summary.
                                                               (line  24)
 * %parse-param:                          Parser Function.     (line  36)
-* %prec <1>:                             Table of Symbols.    (line 175)
+* %prec <1>:                             Table of Symbols.    (line 172)
 * %prec:                                 Contextual Precedence.
                                                               (line   6)
-* %pure-parser <1>:                      Table of Symbols.    (line 179)
-* %pure-parser:                          Decl Summary.        (line 357)
-* %require <1>:                          Table of Symbols.    (line 184)
-* %require <2>:                          Decl Summary.        (line 362)
+* %pure-parser <1>:                      Table of Symbols.    (line 176)
+* %pure-parser:                          Decl Summary.        (line 349)
+* %require <1>:                          Table of Symbols.    (line 181)
+* %require <2>:                          Decl Summary.        (line 354)
 * %require:                              Require Decl.        (line   6)
-* %right <1>:                            Table of Symbols.    (line 188)
+* %right <1>:                            Table of Symbols.    (line 185)
 * %right <2>:                            Using Precedence.    (line   6)
 * %right:                                Decl Summary.        (line  17)
-* %skeleton <1>:                         Table of Symbols.    (line 192)
-* %skeleton:                             Decl Summary.        (line 366)
-* %start <1>:                            Table of Symbols.    (line 196)
+* %skeleton <1>:                         Table of Symbols.    (line 189)
+* %skeleton:                             Decl Summary.        (line 358)
+* %start <1>:                            Table of Symbols.    (line 193)
 * %start <2>:                            Decl Summary.        (line  34)
 * %start:                                Start Decl.          (line   6)
-* %token <1>:                            Table of Symbols.    (line 200)
+* %token <1>:                            Table of Symbols.    (line 197)
 * %token <2>:                            Java Declarations Summary.
                                                               (line  29)
 * %token <3>:                            Decl Summary.        (line  13)
 * %token:                                Token Decl.          (line   6)
-* %token-table <1>:                      Table of Symbols.    (line 204)
-* %token-table:                          Decl Summary.        (line 374)
-* %type <1>:                             Table of Symbols.    (line 208)
+* %token-table <1>:                      Table of Symbols.    (line 201)
+* %token-table:                          Decl Summary.        (line 366)
+* %type <1>:                             Table of Symbols.    (line 205)
 * %type <2>:                             Java Declarations Summary.
                                                               (line  33)
 * %type <3>:                             Decl Summary.        (line  30)
 * %type:                                 Type Decl.           (line   6)
-* %union <1>:                            Table of Symbols.    (line 217)
+* %union <1>:                            Table of Symbols.    (line 214)
 * %union <2>:                            Decl Summary.        (line   9)
 * %union:                                Union Decl.          (line   6)
-* %verbose:                              Decl Summary.        (line 407)
-* %yacc:                                 Decl Summary.        (line 413)
+* %verbose:                              Decl Summary.        (line 399)
+* %yacc:                                 Decl Summary.        (line 405)
 * *yypstate_new:                         Parser Create Function.
                                                               (line  15)
 * /*:                                    Table of Symbols.    (line  33)
@@ -10467,7 +10449,7 @@ Index
                                                               (line  22)
 * end on location:                       C++ Location Values. (line  45)
 * epilogue:                              Epilogue.            (line   6)
-* error <1>:                             Table of Symbols.    (line 108)
+* error <1>:                             Table of Symbols.    (line 105)
 * error:                                 Error Recovery.      (line  20)
 * error on parser:                       C++ Parser Interface.
                                                               (line  37)
@@ -10640,7 +10622,7 @@ Index
 * push parser:                           Push Decl.           (line   6)
 * questions:                             FAQ.                 (line   6)
 * recovering:                            Java Action Features.
-                                                              (line  59)
+                                                              (line  55)
 * recovering on YYParser:                Java Parser Interface.
                                                               (line  58)
 * recovery from errors:                  Error Recovery.      (line   6)
@@ -10658,8 +10640,6 @@ Index
                                                               (line  47)
 * return YYERROR;:                       Java Action Features.
                                                               (line  51)
-* return YYFAIL;:                        Java Action Features.
-                                                              (line  55)
 * reverse polish notation:               RPN Calc.            (line   6)
 * right recursion:                       Recursion.           (line  16)
 * rpcalc:                                RPN Calc.            (line   6)
@@ -10732,39 +10712,39 @@ Index
 * version requirement:                   Require Decl.        (line   6)
 * warnings, preventing:                  Expect Decl.         (line   6)
 * writing a lexical analyzer:            Rpcalc Lexer.        (line   6)
-* YYABORT <1>:                           Table of Symbols.    (line 221)
+* YYABORT <1>:                           Table of Symbols.    (line 218)
 * YYABORT:                               Parser Function.     (line  29)
 * YYABORT;:                              Action Features.     (line  28)
-* YYACCEPT <1>:                          Table of Symbols.    (line 230)
+* YYACCEPT <1>:                          Table of Symbols.    (line 227)
 * YYACCEPT:                              Parser Function.     (line  26)
 * YYACCEPT;:                             Action Features.     (line  32)
-* YYBACKUP <1>:                          Table of Symbols.    (line 238)
+* YYBACKUP <1>:                          Table of Symbols.    (line 235)
 * YYBACKUP:                              Action Features.     (line  36)
-* yychar <1>:                            Table of Symbols.    (line 242)
+* yychar <1>:                            Table of Symbols.    (line 239)
 * yychar <2>:                            Lookahead.           (line  47)
 * yychar <3>:                            Action Features.     (line  69)
 * yychar:                                GLR Semantic Actions.
                                                               (line  10)
-* yyclearin <1>:                         Table of Symbols.    (line 248)
+* yyclearin <1>:                         Table of Symbols.    (line 245)
 * yyclearin <2>:                         Error Recovery.      (line  97)
 * yyclearin:                             GLR Semantic Actions.
                                                               (line  18)
 * yyclearin;:                            Action Features.     (line  76)
-* yydebug:                               Table of Symbols.    (line 256)
-* YYDEBUG <1>:                           Table of Symbols.    (line 252)
+* yydebug:                               Table of Symbols.    (line 253)
+* YYDEBUG <1>:                           Table of Symbols.    (line 249)
 * YYDEBUG:                               Tracing.             (line  12)
 * yydebug:                               Tracing.             (line   6)
 * YYEMPTY:                               Action Features.     (line  49)
 * YYENABLE_NLS:                          Internationalization.
                                                               (line  27)
 * YYEOF:                                 Action Features.     (line  52)
-* yyerrok <1>:                           Table of Symbols.    (line 261)
+* yyerrok <1>:                           Table of Symbols.    (line 258)
 * yyerrok:                               Error Recovery.      (line  92)
 * yyerrok;:                              Action Features.     (line  81)
-* yyerror:                               Table of Symbols.    (line 274)
-* YYERROR:                               Table of Symbols.    (line 265)
+* yyerror:                               Table of Symbols.    (line 271)
+* YYERROR:                               Table of Symbols.    (line 262)
 * yyerror:                               Java Action Features.
-                                                              (line  64)
+                                                              (line  60)
 * YYERROR:                               Action Features.     (line  56)
 * yyerror:                               Error Reporting.     (line   6)
 * YYERROR:                               GLR Semantic Actions.
@@ -10772,17 +10752,17 @@ Index
 * yyerror on Lexer:                      Java Scanner Interface.
                                                               (line  25)
 * YYERROR;:                              Action Features.     (line  56)
-* YYERROR_VERBOSE:                       Table of Symbols.    (line 278)
-* YYINITDEPTH <1>:                       Table of Symbols.    (line 285)
+* YYERROR_VERBOSE:                       Table of Symbols.    (line 275)
+* YYINITDEPTH <1>:                       Table of Symbols.    (line 282)
 * YYINITDEPTH:                           Memory Management.   (line  32)
-* yylex <1>:                             Table of Symbols.    (line 289)
+* yylex <1>:                             Table of Symbols.    (line 286)
 * yylex:                                 Lexical.             (line   6)
 * yylex on Lexer:                        Java Scanner Interface.
                                                               (line  30)
 * yylex on parser:                       C++ Scanner Interface.
                                                               (line  12)
-* YYLEX_PARAM:                           Table of Symbols.    (line 294)
-* yylloc <1>:                            Table of Symbols.    (line 300)
+* YYLEX_PARAM:                           Table of Symbols.    (line 291)
+* yylloc <1>:                            Table of Symbols.    (line 297)
 * yylloc <2>:                            Lookahead.           (line  47)
 * yylloc <3>:                            Action Features.     (line  86)
 * yylloc <4>:                            Token Locations.     (line   6)
@@ -10792,204 +10772,204 @@ Index
                                                               (line  10)
 * YYLLOC_DEFAULT:                        Location Default Action.
                                                               (line   6)
-* YYLTYPE <1>:                           Table of Symbols.    (line 310)
+* YYLTYPE <1>:                           Table of Symbols.    (line 307)
 * YYLTYPE:                               Token Locations.     (line  19)
-* yylval <1>:                            Table of Symbols.    (line 314)
+* yylval <1>:                            Table of Symbols.    (line 311)
 * yylval <2>:                            Lookahead.           (line  47)
 * yylval <3>:                            Action Features.     (line  92)
 * yylval <4>:                            Token Values.        (line   6)
 * yylval <5>:                            Actions.             (line  74)
 * yylval:                                GLR Semantic Actions.
                                                               (line  10)
-* YYMAXDEPTH <1>:                        Table of Symbols.    (line 322)
+* YYMAXDEPTH <1>:                        Table of Symbols.    (line 319)
 * YYMAXDEPTH:                            Memory Management.   (line  14)
-* yynerrs <1>:                           Table of Symbols.    (line 326)
+* yynerrs <1>:                           Table of Symbols.    (line 323)
 * yynerrs:                               Error Reporting.     (line  92)
-* yyparse <1>:                           Table of Symbols.    (line 332)
+* yyparse <1>:                           Table of Symbols.    (line 329)
 * yyparse:                               Parser Function.     (line   6)
-* YYPARSE_PARAM:                         Table of Symbols.    (line 365)
+* YYPARSE_PARAM:                         Table of Symbols.    (line 362)
 * YYParser on YYParser:                  Java Parser Interface.
                                                               (line  41)
 * YYPRINT:                               Tracing.             (line  71)
-* yypstate_delete <1>:                   Table of Symbols.    (line 336)
+* yypstate_delete <1>:                   Table of Symbols.    (line 333)
 * yypstate_delete:                       Parser Delete Function.
                                                               (line   6)
-* yypstate_new <1>:                      Table of Symbols.    (line 344)
+* yypstate_new <1>:                      Table of Symbols.    (line 341)
 * yypstate_new:                          Parser Create Function.
                                                               (line   6)
-* yypull_parse <1>:                      Table of Symbols.    (line 351)
+* yypull_parse <1>:                      Table of Symbols.    (line 348)
 * yypull_parse:                          Pull Parser Function.
                                                               (line   6)
-* yypush_parse <1>:                      Table of Symbols.    (line 358)
+* yypush_parse <1>:                      Table of Symbols.    (line 355)
 * yypush_parse:                          Push Parser Function.
                                                               (line   6)
-* YYRECOVERING <1>:                      Table of Symbols.    (line 371)
+* YYRECOVERING <1>:                      Table of Symbols.    (line 368)
 * YYRECOVERING <2>:                      Error Recovery.      (line 109)
 * YYRECOVERING:                          Action Features.     (line  64)
-* YYSTACK_USE_ALLOCA:                    Table of Symbols.    (line 376)
-* YYSTYPE:                               Table of Symbols.    (line 392)
+* YYSTACK_USE_ALLOCA:                    Table of Symbols.    (line 373)
+* YYSTYPE:                               Table of Symbols.    (line 389)
 * | <1>:                                 Table of Symbols.    (line  43)
 * |:                                     Rules.               (line  49)
 
 
 
 Tag Table:
-Node: Top1120
-Node: Introduction13685
-Node: Conditions14948
-Node: Copying16839
-Node: Concepts54377
-Node: Language and Grammar55558
-Node: Grammar in Bison61447
-Node: Semantic Values63376
-Node: Semantic Actions65482
-Node: GLR Parsers66669
-Node: Simple GLR Parsers69416
-Node: Merging GLR Parses76068
-Node: GLR Semantic Actions80637
-Node: Compiler Requirements82527
-Node: Locations Overview83263
-Node: Bison Parser84716
-Node: Stages87656
-Node: Grammar Layout88944
-Node: Examples90276
-Node: RPN Calc91479
-Node: Rpcalc Declarations92479
-Node: Rpcalc Rules94407
-Node: Rpcalc Input96223
-Node: Rpcalc Line97698
-Node: Rpcalc Expr98826
-Node: Rpcalc Lexer100793
-Node: Rpcalc Main103387
-Node: Rpcalc Error103794
-Node: Rpcalc Generate104827
-Node: Rpcalc Compile105962
-Node: Infix Calc106841
-Node: Simple Error Recovery109604
-Node: Location Tracking Calc111499
-Node: Ltcalc Declarations112195
-Node: Ltcalc Rules113284
-Node: Ltcalc Lexer115300
-Node: Multi-function Calc117623
-Node: Mfcalc Declarations119199
-Node: Mfcalc Rules121246
-Node: Mfcalc Symbol Table122641
-Node: Exercises128817
-Node: Grammar File129331
-Node: Grammar Outline130180
-Node: Prologue131030
-Node: Prologue Alternatives132819
-Node: Bison Declarations142504
-Node: Grammar Rules142932
-Node: Epilogue143403
-Node: Symbols144419
-Node: Rules151122
-Node: Recursion153601
-Node: Semantics155319
-Node: Value Type156418
-Node: Multiple Types157253
-Node: Actions158420
-Node: Action Types161835
-Node: Mid-Rule Actions163147
-Node: Locations169612
-Node: Location Type170263
-Node: Actions and Locations171049
-Node: Location Default Action173510
-Node: Declarations177230
-Node: Require Decl178757
-Node: Token Decl179076
-Node: Precedence Decl181502
-Node: Union Decl183512
-Node: Type Decl185286
-Node: Initial Action Decl186212
-Node: Destructor Decl186983
-Node: Expect Decl192447
-Node: Start Decl194440
-Node: Pure Decl194828
-Node: Push Decl196578
-Node: Decl Summary201077
-Ref: Decl Summary-Footnote-1217963
-Node: Multiple Parsers218167
-Node: Interface219806
-Node: Parser Function221124
-Node: Push Parser Function223140
-Node: Pull Parser Function223950
-Node: Parser Create Function224601
-Node: Parser Delete Function225424
-Node: Lexical226195
-Node: Calling Convention227627
-Node: Token Values230587
-Node: Token Locations231751
-Node: Pure Calling232645
-Node: Error Reporting234526
-Node: Action Features238656
-Node: Internationalization242958
-Node: Algorithm245499
-Node: Lookahead247865
-Node: Shift/Reduce250074
-Node: Precedence252969
-Node: Why Precedence253625
-Node: Using Precedence255498
-Node: Precedence Examples256475
-Node: How Precedence257185
-Node: Contextual Precedence258342
-Node: Parser States260138
-Node: Reduce/Reduce261382
-Node: Mystery Conflicts264923
-Node: Generalized LR Parsing268630
-Node: Memory Management273249
-Node: Error Recovery275462
-Node: Context Dependency280765
-Node: Semantic Tokens281614
-Node: Lexical Tie-ins284684
-Node: Tie-in Recovery286261
-Node: Debugging288438
-Node: Understanding289104
-Node: Tracing300263
-Node: Invocation304365
-Node: Bison Options305764
-Node: Option Cross Key312768
-Node: Yacc Library313820
-Node: Other Languages314645
-Node: C++ Parsers314972
-Node: C++ Bison Interface315469
-Node: C++ Semantic Values316737
-Ref: C++ Semantic Values-Footnote-1317679
-Node: C++ Location Values317832
-Node: C++ Parser Interface320205
-Node: C++ Scanner Interface321922
-Node: A Complete C++ Example322624
-Node: Calc++ --- C++ Calculator323566
-Node: Calc++ Parsing Driver324080
-Node: Calc++ Parser327861
-Node: Calc++ Scanner331651
-Node: Calc++ Top Level335077
-Node: Java Parsers335726
-Node: Java Bison Interface336403
-Node: Java Semantic Values338366
-Node: Java Location Values339980
-Node: Java Parser Interface341536
-Node: Java Scanner Interface344774
-Node: Java Action Features346959
-Node: Java Differences349686
-Ref: Java Differences-Footnote-1352261
-Node: Java Declarations Summary352411
-Node: FAQ356659
-Node: Memory Exhausted357606
-Node: How Can I Reset the Parser357916
-Node: Strings are Destroyed360185
-Node: Implementing Gotos/Loops361774
-Node: Multiple start-symbols363057
-Node: Secure? Conform?364602
-Node: I can't build Bison365050
-Node: Where can I find help?365768
-Node: Bug Reports366561
-Node: More Languages368022
-Node: Beta Testing368380
-Node: Mailing Lists369254
-Node: Table of Symbols369465
-Node: Glossary384847
-Node: Copying This Manual391744
-Node: Index414137
+Node: Top1040
+Node: Introduction13525
+Node: Conditions14788
+Node: Copying16679
+Node: Concepts54217
+Node: Language and Grammar55398
+Node: Grammar in Bison61287
+Node: Semantic Values63216
+Node: Semantic Actions65322
+Node: GLR Parsers66509
+Node: Simple GLR Parsers69256
+Node: Merging GLR Parses75908
+Node: GLR Semantic Actions80477
+Node: Compiler Requirements82367
+Node: Locations Overview83103
+Node: Bison Parser84556
+Node: Stages87496
+Node: Grammar Layout88784
+Node: Examples90116
+Node: RPN Calc91319
+Node: Rpcalc Declarations92319
+Node: Rpcalc Rules94247
+Node: Rpcalc Input96063
+Node: Rpcalc Line97538
+Node: Rpcalc Expr98666
+Node: Rpcalc Lexer100633
+Node: Rpcalc Main103227
+Node: Rpcalc Error103634
+Node: Rpcalc Generate104667
+Node: Rpcalc Compile105802
+Node: Infix Calc106681
+Node: Simple Error Recovery109444
+Node: Location Tracking Calc111339
+Node: Ltcalc Declarations112035
+Node: Ltcalc Rules113124
+Node: Ltcalc Lexer115140
+Node: Multi-function Calc117463
+Node: Mfcalc Declarations119039
+Node: Mfcalc Rules121086
+Node: Mfcalc Symbol Table122481
+Node: Exercises128657
+Node: Grammar File129171
+Node: Grammar Outline130020
+Node: Prologue130870
+Node: Prologue Alternatives132659
+Node: Bison Declarations142189
+Node: Grammar Rules142617
+Node: Epilogue143088
+Node: Symbols144104
+Node: Rules150807
+Node: Recursion153286
+Node: Semantics155004
+Node: Value Type156103
+Node: Multiple Types156938
+Node: Actions158105
+Node: Action Types161520
+Node: Mid-Rule Actions162832
+Node: Locations169297
+Node: Location Type169948
+Node: Actions and Locations170959
+Node: Location Default Action173420
+Node: Declarations177140
+Node: Require Decl178667
+Node: Token Decl178986
+Node: Precedence Decl181412
+Node: Union Decl183422
+Node: Type Decl185196
+Node: Initial Action Decl186122
+Node: Destructor Decl186893
+Node: Expect Decl192357
+Node: Start Decl194350
+Node: Pure Decl194738
+Node: Push Decl196488
+Node: Decl Summary200987
+Ref: Decl Summary-Footnote-1217515
+Node: Multiple Parsers217719
+Node: Interface219358
+Node: Parser Function220676
+Node: Push Parser Function222692
+Node: Pull Parser Function223502
+Node: Parser Create Function224153
+Node: Parser Delete Function224977
+Node: Lexical225748
+Node: Calling Convention227180
+Node: Token Values230140
+Node: Token Locations231304
+Node: Pure Calling232198
+Node: Error Reporting234079
+Node: Action Features238209
+Node: Internationalization242511
+Node: Algorithm245052
+Node: Lookahead247418
+Node: Shift/Reduce249627
+Node: Precedence252522
+Node: Why Precedence253178
+Node: Using Precedence255051
+Node: Precedence Examples256028
+Node: How Precedence256738
+Node: Contextual Precedence257895
+Node: Parser States259691
+Node: Reduce/Reduce260935
+Node: Mystery Conflicts264476
+Node: Generalized LR Parsing268183
+Node: Memory Management272802
+Node: Error Recovery275013
+Node: Context Dependency280316
+Node: Semantic Tokens281165
+Node: Lexical Tie-ins284235
+Node: Tie-in Recovery285812
+Node: Debugging287989
+Node: Understanding288655
+Node: Tracing299814
+Node: Invocation303916
+Node: Bison Options305315
+Node: Option Cross Key312341
+Node: Yacc Library313404
+Node: Other Languages314229
+Node: C++ Parsers314556
+Node: C++ Bison Interface315053
+Node: C++ Semantic Values316321
+Ref: C++ Semantic Values-Footnote-1317263
+Node: C++ Location Values317416
+Node: C++ Parser Interface319789
+Node: C++ Scanner Interface321506
+Node: A Complete C++ Example322208
+Node: Calc++ --- C++ Calculator323150
+Node: Calc++ Parsing Driver323664
+Node: Calc++ Parser327445
+Node: Calc++ Scanner331234
+Node: Calc++ Top Level334658
+Node: Java Parsers335307
+Node: Java Bison Interface335984
+Node: Java Semantic Values337947
+Node: Java Location Values339561
+Node: Java Parser Interface341117
+Node: Java Scanner Interface344355
+Node: Java Action Features346539
+Node: Java Differences349151
+Ref: Java Differences-Footnote-1351729
+Node: Java Declarations Summary351879
+Node: FAQ356127
+Node: Memory Exhausted357074
+Node: How Can I Reset the Parser357384
+Node: Strings are Destroyed359653
+Node: Implementing Gotos/Loops361242
+Node: Multiple start-symbols362525
+Node: Secure? Conform?364070
+Node: I can't build Bison364518
+Node: Where can I find help?365236
+Node: Bug Reports366029
+Node: More Languages367490
+Node: Beta Testing367848
+Node: Mailing Lists368722
+Node: Table of Symbols368933
+Node: Glossary384232
+Node: Copying This Manual391129
+Node: Index413522
 
 End Tag Table

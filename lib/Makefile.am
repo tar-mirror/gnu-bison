@@ -1,6 +1,6 @@
 # Make bison/lib.
 
-# Copyright (C) 2001, 2002, 2003, 2004, 2006, 2008 Free Software Foundation,
+# Copyright (C) 2001-2004, 2006, 2008-2010 Free Software Foundation,
 # Inc.
 
 # This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 
 include gnulib.mk
 
-AM_CFLAGS = $(WARN_CFLAGS)
+AM_CFLAGS += $(WARN_CFLAGS)
 
 # Implementation of bitsets.
 bitsets_sources = \
@@ -37,7 +37,6 @@ timevars_sources = \
 # Non-gnulib sources in Bison's internal library.
 libbison_a_SOURCES += \
   get-errno.h get-errno.c \
-  subpipe.h subpipe.c \
   $(bitsets_sources) $(additional_bitsets_sources) $(timevars_sources)
 
 # The Yacc compatibility library.

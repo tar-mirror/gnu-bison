@@ -1,7 +1,6 @@
 # Configure template for GNU Bison.                   -*-Autoconf-*-
 #
-# Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Free Software
-# Foundation, Inc.
+# Copyright (C) 2001-2010 Free Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,18 +21,23 @@ AC_PREREQ(2.61)
 AC_INIT([GNU Bison],
         m4_esyscmd([build-aux/git-version-gen .tarball-version]),
         [bug-bison@gnu.org])
-AC_DEFINE([PACKAGE_COPYRIGHT_YEAR], [2008],
+AC_DEFINE([PACKAGE_COPYRIGHT_YEAR], [2010],
           [The copyright year for this package])
-AC_SUBST([PACKAGE_COPYRIGHT_YEAR], [2008])
+AC_SUBST([PACKAGE_COPYRIGHT_YEAR], [2010])
 
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
 
-# We don't have a file m4/Makefile.am, so we need Automake 1.8 or later.
+# Automake 1.10.3 and 1.11.1 fix a security flaw discussed here:
+#
+#   http://thread.gmane.org/gmane.comp.sysutils.autotools.announce/131
+#
+# To avoid 1.11, we make 1.11.1 the minimum version.
+#
 # We want gnits strictness only when rolling a formal release so that we can,
 # for example, run make dist at other times without being required to add a
 # bogus NEWS entry.
-AM_INIT_AUTOMAKE([1.8 dist-bzip2]
+AM_INIT_AUTOMAKE([1.11.1 dist-bzip2]
                  m4_bmatch(m4_defn([AC_PACKAGE_VERSION]), [-], [gnu], [gnits]))
 AC_CONFIG_HEADERS([lib/config.h:lib/config.hin])
 
@@ -68,6 +72,12 @@ if test "${enableval}" = yes; then
   gl_WARN_ADD([-Wshadow])
   gl_WARN_ADD([-Wstrict-prototypes])
   AC_SUBST([WARN_CFLAGS])
+  # Warnings for the test suite only.
+  gl_WARN_ADD([-Wundef], [WARN_CFLAGS_TEST])
+  WARN_CXXFLAGS_TEST="$WARN_CXXFLAGS $WARN_CFLAGS_TEST"
+  WARN_CFLAGS_TEST="$WARN_CFLAGS $WARN_CFLAGS_TEST"
+  AC_SUBST([WARN_CXXFLAGS_TEST])
+  AC_SUBST([WARN_CFLAGS_TEST])
   AC_DEFINE([lint], 1, [Define to 1 if the compiler is checking for lint.])
 fi
 
@@ -92,11 +102,10 @@ AC_SUBST([YACC_LIBRARY])
 AC_PROG_LEX
 AC_PROG_YACC
 AC_PROG_RANLIB
-BISON_PROG_GNU_M4
-if test x"$ac_cv_prog_gnu_m4" != xyes; then
-  AC_MSG_ERROR([GNU M4 1.4 is required])
-fi
+AC_PROG_GNU_M4
 AC_DEFINE_UNQUOTED([M4], ["$M4"], [Define to the GNU M4 executable name.])
+AC_DEFINE_UNQUOTED([M4_GNU_OPTION], ["$M4_GNU"], [Define to "-g" if GNU M4
+supports -g, otherwise to "".])
 AM_MISSING_PROG([HELP2MAN], [help2man])
 AC_PATH_PROG([XSLTPROC], [xsltproc])
 AC_SUBST([XSLTPROC])
@@ -119,7 +128,7 @@ BISON_PREREQ_TIMEVAR
 
 # Gettext.
 # We've never tested with gettext versions before 0.15, so play it safe.
-AM_GNU_GETTEXT([external], [need-formatstring-macros])
+AM_GNU_GETTEXT([external], [need-ngettext])
 AM_GNU_GETTEXT_VERSION([0.15])
 BISON_I18N
 

@@ -17,7 +17,7 @@
 #define FLEX_SCANNER
 #define YY_FLEX_MAJOR_VERSION 2
 #define YY_FLEX_MINOR_VERSION 5
-#define YY_FLEX_SUBMINOR_VERSION 35
+#define YY_FLEX_SUBMINOR_VERSION 34
 #if YY_FLEX_SUBMINOR_VERSION > 0
 #define FLEX_BETA
 #endif
@@ -226,6 +226,13 @@ extern FILE *yyin, *yyout;
 	while ( 0 )
 
 #define unput(c) yyunput( c, (yytext_ptr)  )
+
+/* The following is because we cannot portably get our hands on size_t
+ * (without autoconf's help, which isn't available because we want
+ * flex-generated scanners to compile on their own).
+ * Given that the standard has decreed that size_t exists since 1989,
+ * I guess we can afford to depend on it. Manoj.
+ */
 
 #ifndef YY_TYPEDEF_YY_SIZE_T
 #define YY_TYPEDEF_YY_SIZE_T
@@ -545,8 +552,8 @@ char *yytext;
 #line 1 "calc++-scanner.ll"
 #line 2 "calc++-scanner.ll"
 # include <cstdlib>
-# include <errno.h>
-# include <limits.h>
+# include <cerrno>
+# include <climits>
 # include <string>
 # include "calc++-driver.hh"
 # include "calc++-parser.hh"
@@ -564,7 +571,7 @@ char *yytext;
 #define yyterminate() return token::END
 #line 29 "calc++-scanner.ll"
 # define YY_USER_ACTION  yylloc->columns (yyleng);
-#line 568 "calc++-scanner.cc"
+#line 575 "calc++-scanner.cc"
 
 #define INITIAL 0
 
@@ -593,39 +600,9 @@ static int yy_init_globals (void );
 /* %endif */
 /* %if-reentrant */
 /* %endif */
-/* %endif End reentrant structures and macros. */
-
-/* Accessor methods to globals.
-   These are made visible to non-reentrant scanners for convenience. */
-
-int yylex_destroy (void );
-
-int yyget_debug (void );
-
-void yyset_debug (int debug_flag  );
-
-YY_EXTRA_TYPE yyget_extra (void );
-
-void yyset_extra (YY_EXTRA_TYPE user_defined  );
-
-FILE *yyget_in (void );
-
-void yyset_in  (FILE * in_str  );
-
-FILE *yyget_out (void );
-
-void yyset_out  (FILE * out_str  );
-
-int yyget_leng (void );
-
-char *yyget_text (void );
-
-int yyget_lineno (void );
-
-void yyset_lineno (int line_number  );
-
 /* %if-bison-bridge */
 /* %endif */
+/* %endif End reentrant structures and macros. */
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -809,7 +786,7 @@ YY_DECL
 
   yylloc->step ();
 
-#line 813 "calc++-scanner.cc"
+#line 790 "calc++-scanner.cc"
 
 	if ( !(yy_init) )
 		{
@@ -971,7 +948,7 @@ YY_RULE_SETUP
 #line 54 "calc++-scanner.ll"
 ECHO;
 	YY_BREAK
-#line 975 "calc++-scanner.cc"
+#line 952 "calc++-scanner.cc"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 

@@ -33,8 +33,7 @@
 This manual (@value{UPDATED}) is for @acronym{GNU} Bison (version
 @value{VERSION}), the @acronym{GNU} parser generator.
 
-Copyright @copyright{} 1988, 1989, 1990, 1991, 1992, 1993, 1995, 1998,
-1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Free Software
+Copyright @copyright{} 1988-1993, 1995, 1998-2010 Free Software
 Foundation, Inc.
 
 @quotation
@@ -2704,9 +2703,6 @@ feature test macros can affect the behavior of Bison-generated
 @findex %code requires
 @findex %code provides
 @findex %code top
-(The prologue alternatives described here are experimental.
-More user feedback will help to determine whether they should become permanent
-features.)
 
 The functionality of @var{Prologue} sections can often be subtle and
 inflexible.
@@ -3803,8 +3799,11 @@ typedef struct YYLTYPE
 @} YYLTYPE;
 @end example
 
-At the beginning of the parsing, Bison initializes all these fields to 1
-for @code{yylloc}.
+When @code{YYLTYPE} is not defined, at the beginning of the parsing, Bison
+initializes all these fields to 1 for @code{yylloc}.  To initialize
+@code{yylloc} with a custom location type (or to chose a different
+initialization), use the @code{%initial-action} directive.  @xref{Initial
+Action Decl, , Performing Actions before Parsing}.
 
 @node Actions and Locations
 @subsection Actions and Locations
@@ -4741,10 +4740,6 @@ Thus, @code{%code} replaces the traditional Yacc prologue,
 For a detailed discussion, see @ref{Prologue Alternatives}.
 
 For Java, the default location is inside the parser class.
-
-(Like all the Yacc prologue alternatives, this directive is experimental.
-More user feedback will help to determine whether it should become a permanent
-feature.)
 @end deffn
 
 @deffn {Directive} %code @var{qualifier} @{@var{code}@}
@@ -4822,10 +4817,6 @@ before any class definitions.
 @end itemize
 @end itemize
 
-(Like all the Yacc prologue alternatives, this directive is experimental.
-More user feedback will help to determine whether it should become a permanent
-feature.)
-
 @cindex Prologue
 For a detailed discussion of how to use @code{%code} in place of the
 traditional Yacc prologue for C/C++, see @ref{Prologue Alternatives}.
@@ -4834,8 +4825,8 @@ traditional Yacc prologue for C/C++, see @ref{Prologue Alternatives}.
 @deffn {Directive} %debug
 In the parser file, define the macro @code{YYDEBUG} to 1 if it is not
 already defined, so that the debugging facilities are compiled.
-@end deffn
 @xref{Tracing, ,Tracing Your Parser}.
+@end deffn
 
 @deffn {Directive} %define @var{variable}
 @deffnx {Directive} %define @var{variable} "@var{value}"
@@ -5359,7 +5350,7 @@ This function is available if either the @code{%define api.push_pull "push"} or
 @xref{Push Decl, ,A Push Parser}.
 
 @deftypefun yypstate *yypstate_new (void)
-The fuction will return a valid parser instance if there was memory available
+The function will return a valid parser instance if there was memory available
 or 0 if no memory was available.
 In impure mode, it will also return 0 if a parser instance is currently
 allocated.
@@ -6816,7 +6807,7 @@ that allows variable-length arrays.  The default is 200.
 Do not allow @code{YYINITDEPTH} to be greater than @code{YYMAXDEPTH}.
 
 @c FIXME: C++ output.
-Because of semantical differences between C and C++, the
+Because of semantic differences between C and C++, the
 @acronym{LALR}(1) parsers in C produced by Bison cannot grow when compiled
 by C++ compilers.  In this precise case (compiling a C parser as C++) you are
 suggested to grow @code{YYINITDEPTH}.  The Bison maintainers hope to fix
@@ -7783,8 +7774,8 @@ traditional Yacc grammars.  If your grammar uses a Bison extension
 like @samp{%glr-parser}, Bison might not be Yacc-compatible even if
 this option is specified.
 
-@item -W
-@itemx --warnings
+@item -W [@var{category}]
+@itemx --warnings[=@var{category}]
 Output warnings falling in @var{category}.  @var{category} can be one
 of:
 @table @code
@@ -8455,7 +8446,7 @@ global variables.
 
 @noindent
 Then we request the location tracking feature, and initialize the
-first location's file name.  Afterwards new locations are computed
+first location's file name.  Afterward new locations are computed
 relatively to the previous locations: the file name will be
 automatically propagated.
 
@@ -8586,8 +8577,8 @@ parser's to get the set of defined tokens.
 @example
 %@{                                            /* -*- C++ -*- */
 # include <cstdlib>
-# include <errno.h>
-# include <limits.h>
+# include <cerrno>
+# include <climits>
 # include <string>
 # include "calc++-driver.hh"
 # include "calc++-parser.hh"
@@ -8989,7 +8980,7 @@ changed using @code{%define location_type "@var{class-name}".}
 
 @deftypemethod {Lexer} {int} yylex ()
 Return the next token.  Its type is the return value, its semantic
-value and location are saved and returned by the ther methods in the
+value and location are saved and returned by the their methods in the
 interface.
 
 Use @code{%define lex_throws} to specify any uncaught exceptions.
@@ -9007,7 +8998,7 @@ The return type can be changed using @code{%define position_type
 @end deftypemethod
 
 @deftypemethod {Lexer} {Object} getLVal ()
-Return the semantical value of the last token that yylex returned.
+Return the semantic value of the last token that yylex returned.
 
 The return type can be changed using @code{%define stype
 "@var{class-name}".}
@@ -9077,11 +9068,6 @@ Start error recovery without printing an error message.
 @xref{Error Recovery}.
 @end deffn
 
-@deffn {Statement} {return YYFAIL;}
-Print an error message and start error recovery. 
-@xref{Error Recovery}.
-@end deffn
-
 @deftypefn {Function} {boolean} recovering ()
 Return whether error recovery is being done. In this state, the parser
 reads token until it reaches a known state, and then restarts normal
@@ -9123,7 +9109,7 @@ corresponds to these C macros.}.
 @item
 Java lacks unions, so @code{%union} has no effect.  Instead, semantic
 values have a common base type: @code{Object} or as specified by
-@code{%define stype}.  Angle backets on @code{%token}, @code{type},
+@samp{%define stype}.  Angle brackets on @code{%token}, @code{type},
 @code{$@var{n}} and @code{$$} specify subtypes rather than fields of
 an union.  The type of @code{$$}, even with angle brackets, is the base
 type since Java casts are not allow on the left-hand side of assignments.
@@ -9132,7 +9118,7 @@ left-hand side of assignments. See @pxref{Java Semantic Values} and
 @pxref{Java Action Features}.
 
 @item
-The prolog declarations have a different meaning than in C/C++ code.
+The prologue declarations have a different meaning than in C/C++ code.
 @table @asis
 @item @code{%code imports}
 blocks are placed at the beginning of the Java source code.  They may
@@ -9778,10 +9764,6 @@ Insert @var{code} verbatim into output parser source.
 Equip the parser for debugging.  @xref{Decl Summary}.
 @end deffn
 
-@deffn {Directive} %debug
-Equip the parser for debugging.  @xref{Decl Summary}.
-@end deffn
-
 @ifset defaultprec
 @deffn {Directive} %default-prec
 Assign a precedence to rules that lack an explicit @samp{%prec}
@@ -10353,6 +10335,10 @@ grammatically indivisible.  The piece of text it represents is a token.
 @printindex cp
 
 @bye
+
+@c Local Variables:
+@c fill-column: 76
+@c End:
 
 @c LocalWords: texinfo setfilename settitle setchapternewpage finalout
 @c LocalWords: ifinfo smallbook shorttitlepage titlepage GPL FIXME iftex

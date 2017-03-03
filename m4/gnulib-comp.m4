@@ -1,7 +1,7 @@
 # -*- buffer-read-only: t -*- vi: set ro:
 # DO NOT EDIT! GENERATED AUTOMATICALLY!
 # DO NOT EDIT! GENERATED AUTOMATICALLY!
-# Copyright (C) 2002-2008 Free Software Foundation, Inc.
+# Copyright (C) 2002-2010 Free Software Foundation, Inc.
 #
 # This file is free software, distributed under the terms of the GNU
 # General Public License.  As a special exception to the GNU General
@@ -28,7 +28,6 @@ AC_DEFUN([gl_EARLY],
   m4_pattern_allow([^gl_LTLIBOBJS$])dnl a variable
   AC_REQUIRE([AC_PROG_RANLIB])
   AC_REQUIRE([AM_PROG_CC_C_O])
-  AC_REQUIRE([AC_GNU_SOURCE])
   AC_REQUIRE([gl_USE_SYSTEM_EXTENSIONS])
 ])
 
@@ -47,21 +46,41 @@ AC_DEFUN([gl_INIT],
   m4_pushdef([gl_LIBSOURCES_DIR], [])
   gl_COMMON
   gl_source_base='lib'
+  gl_FUNC_ALLOCA
   gl_ARGMATCH
+  gl_ASSERT
+  AC_REQUIRE([AC_C_INLINE])
+  gl_CLOEXEC
+  gl_MODULE_INDICATOR([cloexec])
   gl_CONFIG_H
   gl_DIRNAME
+  gl_MODULE_INDICATOR([dirname])
+  gl_DIRNAME_LGPL
   gl_DOUBLE_SLASH_ROOT
+  gl_FUNC_DUP2
+  gl_UNISTD_MODULE_INDICATOR([dup2])
   gl_ENVIRON
   gl_UNISTD_MODULE_INDICATOR([environ])
   gl_HEADER_ERRNO_H
   gl_ERROR
   m4_ifdef([AM_XGETTEXT_OPTION],
-    [AM_XGETTEXT_OPTION([--flag=error:3:c-format])
-     AM_XGETTEXT_OPTION([--flag=error_at_line:5:c-format])])
+    [AM_][XGETTEXT_OPTION([--flag=error:3:c-format])
+     AM_][XGETTEXT_OPTION([--flag=error_at_line:5:c-format])])
   gl_EXITFAIL
+  gl_FATAL_SIGNAL
+  gl_FUNC_FCNTL
+  gl_FCNTL_MODULE_INDICATOR([fcntl])
+  gl_FCNTL_H
+  gl_MODULE_INDICATOR([fd-safer-flag])
+  gl_FUNC_FOPEN
+  gl_STDIO_MODULE_INDICATOR([fopen])
   gl_FOPEN_SAFER
   gl_MODULE_INDICATOR([fopen-safer])
-  gl_GETOPT
+  gl_FUNC_GETDTABLESIZE
+  gl_UNISTD_MODULE_INDICATOR([getdtablesize])
+  gl_FUNC_GETOPT_GNU
+  gl_MODULE_INDICATOR([getopt-gnu])
+  gl_FUNC_GETOPT_POSIX
   dnl you must add AM_GNU_GETTEXT([external]) or similar to configure.ac.
   AM_GNU_GETTEXT_VERSION([0.17])
   AC_SUBST([LIBINTL])
@@ -86,20 +105,112 @@ AC_DEFUN([gl_INIT],
   gl_LOCALCHARSET
   LOCALCHARSET_TESTS_ENVIRONMENT="CHARSETALIASDIR=\"\$(top_builddir)/$gl_source_base\""
   AC_SUBST([LOCALCHARSET_TESTS_ENVIRONMENT])
+  AC_CONFIG_COMMANDS_PRE([m4_ifdef([AH_HEADER],
+    [AC_SUBST([CONFIG_INCLUDE], m4_defn([AH_HEADER]))])])
   AC_FUNC_MALLOC
   AC_DEFINE([GNULIB_MALLOC_GNU], 1, [Define to indicate the 'malloc' module.])
   gl_FUNC_MALLOC_POSIX
   gl_STDLIB_MODULE_INDICATOR([malloc-posix])
+  gl_FUNC_MBRTOWC
+  gl_WCHAR_MODULE_INDICATOR([mbrtowc])
+  gl_FUNC_MBSINIT
+  gl_WCHAR_MODULE_INDICATOR([mbsinit])
   gl_MBSWIDTH
+  gl_FUNC_MEMCHR
+  gl_STRING_MODULE_INDICATOR([memchr])
+  gl_MULTIARCH
   AC_FUNC_OBSTACK
   dnl Note: AC_FUNC_OBSTACK does AC_LIBSOURCES([obstack.h, obstack.c]).
+  gl_FUNC_OPEN
+  gl_MODULE_INDICATOR([open])
+  gl_FCNTL_MODULE_INDICATOR([open])
+  gl_PIPE
+  gl_FUNC_PIPE2
+  gl_UNISTD_MODULE_INDICATOR([pipe2])
+  gl_MODULE_INDICATOR([pipe2-safer])
+  gl_POSIX_SPAWN
+  if test $HAVE_POSIX_SPAWN = 0 || test $REPLACE_POSIX_SPAWN = 1; then
+    gl_REPLACE_SPAWN_H
+    AC_LIBOBJ([spawn_faction_addclose])
+  fi
+  gl_SPAWN_MODULE_INDICATOR([posix_spawn_file_actions_addclose])
+  gl_POSIX_SPAWN
+  if test $HAVE_POSIX_SPAWN = 0 || test $REPLACE_POSIX_SPAWN = 1; then
+    gl_REPLACE_SPAWN_H
+    AC_LIBOBJ([spawn_faction_adddup2])
+  fi
+  gl_SPAWN_MODULE_INDICATOR([posix_spawn_file_actions_adddup2])
+  gl_POSIX_SPAWN
+  if test $HAVE_POSIX_SPAWN = 0 || test $REPLACE_POSIX_SPAWN = 1; then
+    gl_REPLACE_SPAWN_H
+    AC_LIBOBJ([spawn_faction_addopen])
+  fi
+  gl_SPAWN_MODULE_INDICATOR([posix_spawn_file_actions_addopen])
+  gl_POSIX_SPAWN
+  if test $HAVE_POSIX_SPAWN = 0 || test $REPLACE_POSIX_SPAWN = 1; then
+    gl_REPLACE_SPAWN_H
+    AC_LIBOBJ([spawn_faction_destroy])
+  fi
+  gl_SPAWN_MODULE_INDICATOR([posix_spawn_file_actions_destroy])
+  gl_POSIX_SPAWN
+  if test $HAVE_POSIX_SPAWN = 0 || test $REPLACE_POSIX_SPAWN = 1; then
+    gl_REPLACE_SPAWN_H
+    AC_LIBOBJ([spawn_faction_init])
+  fi
+  gl_SPAWN_MODULE_INDICATOR([posix_spawn_file_actions_init])
+  gl_POSIX_SPAWN
+  if test $HAVE_POSIX_SPAWN = 0 || test $REPLACE_POSIX_SPAWN = 1; then
+    gl_REPLACE_SPAWN_H
+    AC_LIBOBJ([spawnattr_destroy])
+  fi
+  gl_SPAWN_MODULE_INDICATOR([posix_spawnattr_destroy])
+  gl_POSIX_SPAWN
+  if test $HAVE_POSIX_SPAWN = 0 || test $REPLACE_POSIX_SPAWN = 1; then
+    gl_REPLACE_SPAWN_H
+    AC_LIBOBJ([spawnattr_init])
+  fi
+  gl_SPAWN_MODULE_INDICATOR([posix_spawnattr_init])
+  gl_POSIX_SPAWN
+  if test $HAVE_POSIX_SPAWN = 0 || test $REPLACE_POSIX_SPAWN = 1; then
+    gl_REPLACE_SPAWN_H
+    AC_LIBOBJ([spawnattr_setflags])
+  fi
+  gl_SPAWN_MODULE_INDICATOR([posix_spawnattr_setflags])
+  gl_POSIX_SPAWN
+  if test $HAVE_POSIX_SPAWN = 0 || test $REPLACE_POSIX_SPAWN = 1; then
+    gl_REPLACE_SPAWN_H
+    AC_LIBOBJ([spawnattr_setsigmask])
+  fi
+  gl_SPAWN_MODULE_INDICATOR([posix_spawnattr_setsigmask])
+  gl_POSIX_SPAWN
+  if test $HAVE_POSIX_SPAWN = 0 || test $REPLACE_POSIX_SPAWN = 1; then
+    gl_REPLACE_SPAWN_H
+    AC_LIBOBJ([spawnp])
+    gl_POSIX_SPAWN_INTERNAL
+  fi
+  gl_SPAWN_MODULE_INDICATOR([posix_spawnp])
   gl_QUOTE
   gl_QUOTEARG
+  gl_FUNC_RAWMEMCHR
+  gl_STRING_MODULE_INDICATOR([rawmemchr])
+  gl_SCHED_H
+  gl_SIGACTION
+  gl_SIGNAL_MODULE_INDICATOR([sigaction])
+  gl_SIGNAL_H
+  gl_SIGNALBLOCKING
+  gl_SIGNAL_MODULE_INDICATOR([sigprocmask])
+  gl_SPAWN_H
+  gl_FUNC_STAT
+  gl_SYS_STAT_MODULE_INDICATOR([stat])
   AM_STDBOOL_H
+  gl_STDDEF_H
   gl_STDINT_H
+  gl_STDIO_H
   gl_STDLIB_H
   gl_FUNC_STPCPY
   gl_STRING_MODULE_INDICATOR([stpcpy])
+  gl_FUNC_STRCHRNUL
+  gl_STRING_MODULE_INDICATOR([strchrnul])
   gl_FUNC_STRERROR
   gl_STRING_MODULE_INDICATOR([strerror])
   gl_HEADER_STRING_H
@@ -111,11 +222,17 @@ AC_DEFUN([gl_INIT],
   gl_FUNC_STRTOUL
   gl_FUNC_STRVERSCMP
   gl_STRING_MODULE_INDICATOR([strverscmp])
+  gl_HEADER_SYS_STAT_H
+  AC_PROG_MKDIR_P
+  gl_SYS_WAIT_H
+  AC_PROG_MKDIR_P
+  gl_HEADER_TIME_H
   gl_UNISTD_H
   gl_UNISTD_SAFER
   gl_FUNC_GLIBC_UNLOCKED_IO
   gl_FUNC_UNSETENV
   gl_STDLIB_MODULE_INDICATOR([unsetenv])
+  gl_WAIT_PROCESS
   AC_SUBST([WARN_CFLAGS])
   gl_WCHAR_H
   gl_WCTYPE_H
@@ -145,7 +262,7 @@ AC_DEFUN([gl_INIT],
     if test -n "$gl_LIBOBJS"; then
       # Remove the extension.
       sed_drop_objext='s/\.o$//;s/\.obj$//'
-      for i in `for i in $gl_LIBOBJS; do echo "$i"; done | sed "$sed_drop_objext" | sort | uniq`; do
+      for i in `for i in $gl_LIBOBJS; do echo "$i"; done | sed -e "$sed_drop_objext" | sort | uniq`; do
         gl_libobjs="$gl_libobjs $i.$ac_objext"
         gl_ltlibobjs="$gl_ltlibobjs $i.lo"
       done
@@ -184,7 +301,7 @@ AC_DEFUN([gl_INIT],
     if test -n "$gltests_LIBOBJS"; then
       # Remove the extension.
       sed_drop_objext='s/\.o$//;s/\.obj$//'
-      for i in `for i in $gltests_LIBOBJS; do echo "$i"; done | sed "$sed_drop_objext" | sort | uniq`; do
+      for i in `for i in $gltests_LIBOBJS; do echo "$i"; done | sed -e "$sed_drop_objext" | sort | uniq`; do
         gltests_libobjs="$gltests_libobjs $i.$ac_objext"
         gltests_ltlibobjs="$gltests_ltlibobjs $i.lo"
       done
@@ -256,30 +373,52 @@ AC_DEFUN([gltests_LIBSOURCES], [
 # gnulib-tool and may be removed by future gnulib-tool invocations.
 AC_DEFUN([gl_FILE_LIST], [
   build-aux/announce-gen
+  build-aux/arg-nonnull.h
   build-aux/config.rpath
+  build-aux/gendocs.sh
   build-aux/git-version-gen
   build-aux/javacomp.sh.in
   build-aux/javaexec.sh.in
-  build-aux/link-warning.h
+  build-aux/update-copyright
+  build-aux/useless-if-before-free
+  build-aux/vc-list-files
+  build-aux/warn-on-use.h
+  doc/gendocs_template
+  lib/alloca.in.h
   lib/argmatch.c
   lib/argmatch.h
+  lib/basename-lgpl.c
   lib/basename.c
+  lib/binary-io.h
+  lib/bitrotate.h
   lib/c-ctype.c
   lib/c-ctype.h
   lib/c-strcase.h
   lib/c-strcasecmp.c
   lib/c-strncasecmp.c
+  lib/cloexec.c
+  lib/cloexec.h
   lib/config.charset
+  lib/dirname-lgpl.c
   lib/dirname.c
   lib/dirname.h
+  lib/dup-safer-flag.c
   lib/dup-safer.c
+  lib/dup2.c
   lib/errno.in.h
   lib/error.c
   lib/error.h
   lib/exitfail.c
   lib/exitfail.h
+  lib/fatal-signal.c
+  lib/fatal-signal.h
+  lib/fcntl.c
+  lib/fcntl.in.h
+  lib/fd-safer-flag.c
   lib/fd-safer.c
   lib/fopen-safer.c
+  lib/fopen.c
+  lib/getdtablesize.c
   lib/getopt.c
   lib/getopt.in.h
   lib/getopt1.c
@@ -292,23 +431,58 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/localcharset.c
   lib/localcharset.h
   lib/malloc.c
+  lib/mbrtowc.c
+  lib/mbsinit.c
   lib/mbswidth.c
   lib/mbswidth.h
+  lib/memchr.c
+  lib/memchr.valgrind
   lib/obstack.c
   lib/obstack.h
+  lib/open.c
   lib/pipe-safer.c
+  lib/pipe.c
+  lib/pipe.h
+  lib/pipe2-safer.c
+  lib/pipe2.c
   lib/quote.c
   lib/quote.h
   lib/quotearg.c
   lib/quotearg.h
+  lib/rawmemchr.c
+  lib/rawmemchr.valgrind
   lib/ref-add.sin
   lib/ref-del.sin
+  lib/sched.in.h
+  lib/sig-handler.h
+  lib/sigaction.c
+  lib/signal.in.h
+  lib/sigprocmask.c
+  lib/spawn.in.h
+  lib/spawn_faction_addclose.c
+  lib/spawn_faction_adddup2.c
+  lib/spawn_faction_addopen.c
+  lib/spawn_faction_destroy.c
+  lib/spawn_faction_init.c
+  lib/spawn_int.h
+  lib/spawnattr_destroy.c
+  lib/spawnattr_init.c
+  lib/spawnattr_setflags.c
+  lib/spawnattr_setsigmask.c
+  lib/spawni.c
+  lib/spawnp.c
+  lib/stat.c
   lib/stdbool.in.h
+  lib/stddef.in.h
   lib/stdint.in.h
   lib/stdio--.h
   lib/stdio-safer.h
+  lib/stdio-write.c
+  lib/stdio.in.h
   lib/stdlib.in.h
   lib/stpcpy.c
+  lib/strchrnul.c
+  lib/strchrnul.valgrind
   lib/streq.h
   lib/strerror.c
   lib/string.in.h
@@ -318,6 +492,9 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/strtol.c
   lib/strtoul.c
   lib/strverscmp.c
+  lib/sys_stat.in.h
+  lib/sys_wait.in.h
+  lib/time.in.h
   lib/unistd--.h
   lib/unistd-safer.h
   lib/unistd.in.h
@@ -328,6 +505,9 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/unlocked-io.h
   lib/unsetenv.c
   lib/verify.h
+  lib/w32spawn.h
+  lib/wait-process.c
+  lib/wait-process.h
   lib/wchar.in.h
   lib/wctype.in.h
   lib/wcwidth.c
@@ -336,17 +516,28 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/xmalloc.c
   lib/xstrndup.c
   lib/xstrndup.h
+  m4/00gnulib.m4
+  m4/alloca.m4
   m4/argmatch.m4
+  m4/assert.m4
+  m4/cloexec.m4
   m4/codeset.m4
   m4/config-h.m4
   m4/dirname.m4
   m4/dos.m4
   m4/double-slash-root.m4
+  m4/dup2.m4
   m4/environ.m4
   m4/errno_h.m4
   m4/error.m4
   m4/exitfail.m4
   m4/extensions.m4
+  m4/fatal-signal.m4
+  m4/fcntl-o.m4
+  m4/fcntl.m4
+  m4/fcntl_h.m4
+  m4/fopen.m4
+  m4/getdtablesize.m4
   m4/getopt.m4
   m4/gettext.m4
   m4/glibc2.m4
@@ -371,26 +562,49 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/lib-link.m4
   m4/lib-prefix.m4
   m4/localcharset.m4
+  m4/locale-fr.m4
+  m4/locale-ja.m4
+  m4/locale-zh.m4
   m4/lock.m4
   m4/longlong.m4
   m4/malloc.m4
   m4/mbrtowc.m4
+  m4/mbsinit.m4
   m4/mbstate_t.m4
   m4/mbswidth.m4
+  m4/memchr.m4
+  m4/mmap-anon.m4
+  m4/mode_t.m4
+  m4/multiarch.m4
   m4/nls.m4
+  m4/open.m4
+  m4/pipe.m4
+  m4/pipe2.m4
   m4/po.m4
+  m4/posix_spawn.m4
   m4/printf-posix.m4
   m4/progtest.m4
   m4/quote.m4
   m4/quotearg.m4
+  m4/rawmemchr.m4
+  m4/sched_h.m4
   m4/setenv.m4
+  m4/sig_atomic_t.m4
+  m4/sigaction.m4
+  m4/signal_h.m4
+  m4/signalblocking.m4
   m4/size_max.m4
+  m4/spawn_h.m4
+  m4/stat.m4
   m4/stdbool.m4
+  m4/stddef_h.m4
   m4/stdint.m4
   m4/stdint_h.m4
   m4/stdio-safer.m4
+  m4/stdio_h.m4
   m4/stdlib_h.m4
   m4/stpcpy.m4
+  m4/strchrnul.m4
   m4/strerror.m4
   m4/string_h.m4
   m4/strndup.m4
@@ -398,12 +612,17 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/strtol.m4
   m4/strtoul.m4
   m4/strverscmp.m4
+  m4/sys_stat_h.m4
+  m4/sys_wait_h.m4
   m4/threadlib.m4
+  m4/time_h.m4
   m4/uintmax_t.m4
   m4/unistd-safer.m4
   m4/unistd_h.m4
   m4/unlocked-io.m4
   m4/visibility.m4
+  m4/wait-process.m4
+  m4/warn-on-use.m4
   m4/warnings.m4
   m4/wchar.m4
   m4/wchar_t.m4
@@ -414,4 +633,5 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/xsize.m4
   m4/xstrndup.m4
   top/GNUmakefile
+  top/maint.mk
 ])

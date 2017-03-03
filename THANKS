@@ -14,6 +14,7 @@ Art Haas                  ahaas@neosoft.com
 Baron Schwartz            baron@sequent.org
 Benoit Perrot             benoit.perrot@epita.fr
 Bert Deknuydt             Bert.Deknuydt@esat.kuleuven.ac.be
+Bill Allombert            Bill.Allombert@math.u-bordeaux1.fr
 Bob Rossi                 bob@brasko.net
 Brandon Lucia             blucia@gmail.com
 Bruce Lilly               blilly@erols.com
@@ -28,6 +29,7 @@ David J. MacKenzie        djm@gnu.org
 Derek M. Jones            derek@knosof.co.uk
 Di-an Jan                 dianj@freeshell.org
 Dick Streefland           dick.streefland@altium.nl
+Didier Godefroy           dg@ulysium.net
 Enrico Scholz             enrico.scholz@informatik.tu-chemnitz.de
 Eric Blake                ebb9@byu.net
 Evgeny Stambulchik        fnevgeny@plasma-gate.weizmann.ac.il
@@ -45,17 +47,20 @@ Jesse Thilo               jthilo@gnu.org
 Jim Kent                  jkent@arch.sel.sony.com
 Jim Meyering              jim@meyering.net
 Joel E. Denny             jdenny@ces.clemson.edu
+Jonathan Nieder           jrnieder@gmail.com
 Juan Manuel Guerrero      juan.guerrero@gmx.de
 Kees Zeelenberg           kzlg@users.sourceforge.net
 Keith Browne              kbrowne@legato.com
 Laurent Mascherpa         laurent.mascherpa@epita.fr
 Magnus Fromreide          magfr@lysator.liu.se
 Marc Autret               autret_m@epita.fr
+Martin Jacobs             martin.jacobs@arcor.de
 Martin Mokrejs            mmokrejs@natur.cuni.cz
 Martin Nylin              martin.nylin@linuxmail.org
 Matt Kraai                kraai@alumni.cmu.edu
 Matt Rosing               rosing@peakfive.com
 Michael Hayes             m.hayes@elec.canterbury.ac.nz
+Michael Raskin            7c6f434c@mail.ru
 Mickael Labau             labau_m@epita.fr
 Mike Castle               dalgoda@ix.netcom.com
 Neil Booth                NeilB@earthling.net
@@ -63,6 +68,7 @@ Nelson H. F. Beebe        beebe@math.utah.edu
 Nicolas Burrus            nicolas.burrus@epita.fr
 Nicolas Tisserand         nicolas.tisserand@epita.fr
 Noah Friedman             friedman@gnu.org
+Odd Arild Olsen           oao@fibula.no
 Oleg Smolsky              oleg.smolsky@pacific-simulators.co.nz
 Paolo Bonzini             bonzini@gnu.org
 Pascal Bart               pascal.bart@epita.fr
@@ -75,14 +81,16 @@ Piotr Gackiewicz          gacek@intertel.com.pl
 Quoc Peyrot               chojin@lrde.epita.fr
 R Blake                   blakers@mac.com
 Raja R Harinath           harinath@cs.umn.edu
+Ralf Wildenhues           Ralf.Wildenhues@gmx.de
 Richard Stallman          rms@gnu.org
 Robert Anisko             anisko_r@epita.fr
 Satya Kiran Popuri        satyakiran@gmail.com
-Sebastien Fricker         sebastien.fricker@gmail.com
 Sebastian Setzer          sebastian.setzer.ext@siemens.com
+Sebastien Fricker         sebastien.fricker@gmail.com
 Sergei Steshenko          sergstesh@yahoo.com
 Shura                     debil_urod@ngs.ru
 Steve Murphy              murf@parsetree.com
+Summum Bonum              sum@geekhouse.org
 Tim Josling               tej@melbpc.org.au
 Tim Van Holder            tim.van.holder@pandora.be
 Tom Lane                  tgl@sss.pgh.pa.us

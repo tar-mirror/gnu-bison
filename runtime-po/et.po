@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison-runtime 2.0b\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2008-12-11 17:06-0500\n"
+"POT-Creation-Date: 2010-03-20 13:15-0400\n"
 "PO-Revision-Date: 2005-08-02 08:28+0300\n"
 "Last-Translator: Toomas Soome <Toomas.Soome@microlink.ee>\n"
 "Language-Team: Estonian <et@li.org>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: data/glr.c:923 data/yacc.c:630
+#: data/glr.c:923 data/yacc.c:639
 msgid "syntax error: cannot back up"
 msgstr "süntaksi viga: ei saa toetada"
 
@@ -23,37 +23,37 @@ msgstr "süntaksi viga: ei saa toetada"
 msgid "syntax is ambiguous"
 msgstr "süntaks on segane"
 
-#: data/glr.c:2181 data/glr.c:2187 data/glr.c:2455 data/lalr1.cc:878
-#: data/yacc.c:1491 data/yacc.c:1519
+#: data/glr.c:2181 data/glr.c:2187 data/glr.c:2455 data/lalr1.cc:877
+#: data/yacc.c:1500 data/yacc.c:1528
 msgid "syntax error"
 msgstr "süntaksi viga"
 
-#: data/glr.c:2515 data/yacc.c:1106 data/yacc.c:1108 data/yacc.c:1284
-#: data/yacc.c:1640
+#: data/glr.c:2515 data/yacc.c:1115 data/yacc.c:1117 data/yacc.c:1293
+#: data/yacc.c:1649
 msgid "memory exhausted"
 msgstr "mälu on otsas"
 
-#: data/yacc.c:918
+#: data/yacc.c:927
 #, c-format
 msgid "syntax error, unexpected %s"
 msgstr "süntaksi viga, ootamatu %s"
 
-#: data/yacc.c:919
+#: data/yacc.c:928
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s"
 msgstr "süntaksi viga, ootamatu %s, ootasin %s"
 
-#: data/yacc.c:920
+#: data/yacc.c:929
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s"
 msgstr "süntaksi viga, ootamatu %s, ootasin %s või %s"
 
-#: data/yacc.c:921
+#: data/yacc.c:930
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s or %s"
 msgstr "süntaksi viga, ootamatu %s, ootasin %s või %s või %s"
 
-#: data/yacc.c:922
+#: data/yacc.c:931
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s or %s or %s"
 msgstr "süntaksi viga, ootamatu %s, ootasin %s või %s või %s või %s"

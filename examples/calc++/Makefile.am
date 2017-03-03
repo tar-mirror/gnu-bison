@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in -*-Makefile-*-
-## Copyright (C) 2005, 2006 Free Software Foundation, Inc.
+## Copyright (C) 2005-2006, 2009-2010 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,12 +31,16 @@ $(BISON): $(BISON_IN)
 doc = $(top_srcdir)/doc/bison.texinfo
 extexi = $(top_srcdir)/examples/extexi
 # Extract in src.
-$(calc_extracted): $(doc) $(extexi)
+$(srcdir)/calc.stamp: $(doc) $(extexi)
+	rm -f $@ $@.tmp
+	touch $@.tmp
 	cd $(srcdir) && \
 	   $(AWK) -f ../extexi -v VERSION="$(VERSION)" \
 	     ../../doc/bison.texinfo -- calc++-parser.yy \
 	     calc++-scanner.ll calc++.cc calc++-driver.hh calc++-driver.cc
+	mv $@.tmp $@
 
+$(calc_extracted): $(srcdir)/calc.stamp
 
 ## ------------------- ##
 ## Parser generation.  ##
@@ -50,7 +54,10 @@ MAINTAINERCLEANFILES = $(srcdir)/*.stamp $(BUILT_SOURCES)
 # Compile the parser and save cycles.
 # This code comes from "Handling Tools that Produce Many Outputs",
 # from the Automake documentation.
-EXTRA_DIST = $(srcdir)/calc++-parser.stamp $(srcdir)/calc++-parser.yy
+EXTRA_DIST =					\
+  $(srcdir)/calc++-parser.stamp			\
+  $(srcdir)/calc++-parser.yy			\
+  $(srcdir)/calc.stamp
 # Don't depend on $(BISON) otherwise we would rebuild these files
 # in srcdir, including during distcheck, which is forbidden.
 $(srcdir)/calc++-parser.stamp: $(srcdir)/calc++-parser.yy $(BISON_IN)

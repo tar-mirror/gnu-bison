@@ -1,7 +1,7 @@
 %{                                            /* -*- C++ -*- */
 # include <cstdlib>
-# include <errno.h>
-# include <limits.h>
+# include <cerrno>
+# include <climits>
 # include <string>
 # include "calc++-driver.hh"
 # include "calc++-parser.hh"

@@ -36,7 +36,7 @@
 #define FLEX_SCANNER
 #define YY_FLEX_MAJOR_VERSION 2
 #define YY_FLEX_MINOR_VERSION 5
-#define YY_FLEX_SUBMINOR_VERSION 35
+#define YY_FLEX_SUBMINOR_VERSION 34
 #if YY_FLEX_SUBMINOR_VERSION > 0
 #define FLEX_BETA
 #endif
@@ -245,6 +245,13 @@ extern FILE *gram_in, *gram_out;
 	while ( 0 )
 
 #define unput(c) yyunput( c, (yytext_ptr)  )
+
+/* The following is because we cannot portably get our hands on size_t
+ * (without autoconf's help, which isn't available because we want
+ * flex-generated scanners to compile on their own).
+ * Given that the standard has decreed that size_t exists since 1989,
+ * I guess we can afford to depend on it. Manoj.
+ */
 
 #ifndef YY_TYPEDEF_YY_SIZE_T
 #define YY_TYPEDEF_YY_SIZE_T
@@ -862,11 +869,11 @@ static yyconst flex_int16_t yy_rule_linenum[102] =
       192,  193,  194,  195,  196,  197,  198,  200,  204,  205,
       206,  207,  208,  210,  216,  220,  226,  229,  232,  235,
       243,  251,  258,  275,  280,  301,  302,  313,  324,  325,
-      337,  363,  390,  400,  410,  421,  422,  423,  424,  425,
-      426,  427,  430,  432,  441,  453,  458,  459,  465,  466,
-      477,  483,  489,  495,  511,  512,  513,  529,  548,  588,
+      337,  363,  390,  400,  409,  419,  420,  421,  422,  423,
+      424,  425,  428,  430,  438,  455,  460,  461,  467,  468,
+      479,  485,  491,  497,  513,  514,  515,  531,  550,  590,
 
-      589
+      591
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -880,8 +887,7 @@ char *gram_text;
 #line 1 "scan-gram.l"
 /* Bison Grammar Scanner                             -*- C -*-
 
-   Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007 Free Software Foundation,
-   Inc.
+   Copyright (C) 2002-2007, 2009-2010 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -897,7 +903,8 @@ char *gram_text;
 
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-#line 25 "scan-gram.l"
+#define YY_NO_INPUT 1
+#line 24 "scan-gram.l"
 /* Work around a bug in flex 2.5.31.  See Debian bug 333231
    <http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=333231>.  */
 #undef gram_wrap
@@ -913,6 +920,7 @@ char *gram_text;
 #include "reader.h"
 #include "uniqstr.h"
 
+#include <ctype.h>
 #include <mbswidth.h>
 #include <quote.h>
 
@@ -967,7 +975,7 @@ to capture the sequence `identifier :'. */
    NUL and newline, as this simplifies our implementation.  */
 /* Zero or more instances of backslash-newline.  Following GCC, allow
    white space between the backslash and the newline.  */
-#line 971 "scan-gram.c"
+#line 979 "scan-gram.c"
 
 #define INITIAL 0
 #define SC_YACC_COMMENT 1
@@ -1007,39 +1015,9 @@ static int yy_init_globals (void );
 /* %endif */
 /* %if-reentrant */
 /* %endif */
-/* %endif End reentrant structures and macros. */
-
-/* Accessor methods to globals.
-   These are made visible to non-reentrant scanners for convenience. */
-
-int gram_lex_destroy (void );
-
-int gram_get_debug (void );
-
-void gram_set_debug (int debug_flag  );
-
-YY_EXTRA_TYPE gram_get_extra (void );
-
-void gram_set_extra (YY_EXTRA_TYPE user_defined  );
-
-FILE *gram_get_in (void );
-
-void gram_set_in  (FILE * in_str  );
-
-FILE *gram_get_out (void );
-
-void gram_set_out  (FILE * out_str  );
-
-int gram_get_leng (void );
-
-char *gram_get_text (void );
-
-int gram_get_lineno (void );
-
-void gram_set_lineno (int line_number  );
-
 /* %if-bison-bridge */
 /* %endif */
+/* %endif End reentrant structures and macros. */
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -1248,7 +1226,7 @@ YY_DECL
   | Scanning white space.  |
   `-----------------------*/
 
-#line 1252 "scan-gram.c"
+#line 1230 "scan-gram.c"
 
 	if ( !(yy_init) )
 		{
@@ -1913,78 +1891,75 @@ YY_RULE_SETUP
 #line 400 "scan-gram.l"
 {
     unsigned long int c = strtoul (gram_text + 1, NULL, 8);
-    if (UCHAR_MAX < c)
-      complain_at (*loc, _("invalid escape sequence: %s"), quote (gram_text));
-    else if (! c)
-      complain_at (*loc, _("invalid null character: %s"), quote (gram_text));
+    if (!c || UCHAR_MAX < c)
+      complain_at (*loc, _("invalid number after \\-escape: %s"),
+                   gram_text+1);
     else
       obstack_1grow (&obstack_for_string, c);
   }
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 410 "scan-gram.l"
+#line 409 "scan-gram.l"
 {
     verify (UCHAR_MAX < ULONG_MAX);
     unsigned long int c = strtoul (gram_text + 2, NULL, 16);
-    if (UCHAR_MAX < c)
-      complain_at (*loc, _("invalid escape sequence: %s"), quote (gram_text));
-    else if (! c)
-      complain_at (*loc, _("invalid null character: %s"), quote (gram_text));
+    if (!c || UCHAR_MAX < c)
+      complain_at (*loc, _("invalid number after \\-escape: %s"),
+                   gram_text+1);
     else
       obstack_1grow (&obstack_for_string, c);
   }
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 421 "scan-gram.l"
+#line 419 "scan-gram.l"
 obstack_1grow (&obstack_for_string, '\a');
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
-#line 422 "scan-gram.l"
+#line 420 "scan-gram.l"
 obstack_1grow (&obstack_for_string, '\b');
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 423 "scan-gram.l"
+#line 421 "scan-gram.l"
 obstack_1grow (&obstack_for_string, '\f');
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 424 "scan-gram.l"
+#line 422 "scan-gram.l"
 obstack_1grow (&obstack_for_string, '\n');
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
-#line 425 "scan-gram.l"
+#line 423 "scan-gram.l"
 obstack_1grow (&obstack_for_string, '\r');
 	YY_BREAK
 case 81:
 YY_RULE_SETUP
-#line 426 "scan-gram.l"
+#line 424 "scan-gram.l"
 obstack_1grow (&obstack_for_string, '\t');
 	YY_BREAK
 case 82:
 YY_RULE_SETUP
-#line 427 "scan-gram.l"
+#line 425 "scan-gram.l"
 obstack_1grow (&obstack_for_string, '\v');
 	YY_BREAK
 /* \\[\"\'?\\] would be shorter, but it confuses xgettext.  */
 case 83:
 YY_RULE_SETUP
-#line 430 "scan-gram.l"
+#line 428 "scan-gram.l"
 obstack_1grow (&obstack_for_string, gram_text[1]);
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
-#line 432 "scan-gram.l"
+#line 430 "scan-gram.l"
 {
     int c = convert_ucn_to_byte (gram_text);
-    if (c < 0)
-      complain_at (*loc, _("invalid escape sequence: %s"), quote (gram_text));
-    else if (! c)
-      complain_at (*loc, _("invalid null character: %s"), quote (gram_text));
+    if (c <= 0)
+      complain_at (*loc, _("invalid number after \\-escape: %s"),
+                   gram_text+1);
     else
       obstack_1grow (&obstack_for_string, c);
   }
@@ -1992,10 +1967,15 @@ YY_RULE_SETUP
 case 85:
 /* rule 85 can match eol */
 YY_RULE_SETUP
-#line 441 "scan-gram.l"
+#line 438 "scan-gram.l"
 {
-    complain_at (*loc, _("unrecognized escape sequence: %s"), quote (gram_text));
-    STRING_GROW;
+    char const *p = gram_text + 1;
+    /* Quote only if escaping won't make the character visible.  */
+    if (isspace ((unsigned char) *p) && isprint ((unsigned char) *p))
+      p = quote (p);
+    else
+      p = quotearg_style_mem (escape_quoting_style, p, 1);
+    complain_at (*loc, _("invalid character after \\-escape: %s"), p);
   }
 	YY_BREAK
 
@@ -2007,7 +1987,7 @@ YY_RULE_SETUP
 case 86:
 /* rule 86 can match eol */
 YY_RULE_SETUP
-#line 453 "scan-gram.l"
+#line 455 "scan-gram.l"
 STRING_GROW;
 	YY_BREAK
 
@@ -2015,17 +1995,17 @@ STRING_GROW;
 
 case 87:
 YY_RULE_SETUP
-#line 458 "scan-gram.l"
+#line 460 "scan-gram.l"
 STRING_GROW; BEGIN context_state;
 	YY_BREAK
 case 88:
 /* rule 88 can match eol */
 YY_RULE_SETUP
-#line 459 "scan-gram.l"
+#line 461 "scan-gram.l"
 unexpected_newline (token_start, "'"); BEGIN context_state;
 	YY_BREAK
 case YY_STATE_EOF(SC_CHARACTER):
-#line 460 "scan-gram.l"
+#line 462 "scan-gram.l"
 unexpected_eof (token_start, "'"); BEGIN context_state;
 	YY_BREAK
 
@@ -2033,17 +2013,17 @@ unexpected_eof (token_start, "'"); BEGIN context_state;
 
 case 89:
 YY_RULE_SETUP
-#line 465 "scan-gram.l"
+#line 467 "scan-gram.l"
 STRING_GROW; BEGIN context_state;
 	YY_BREAK
 case 90:
 /* rule 90 can match eol */
 YY_RULE_SETUP
-#line 466 "scan-gram.l"
+#line 468 "scan-gram.l"
 unexpected_newline (token_start, "\""); BEGIN context_state;
 	YY_BREAK
 case YY_STATE_EOF(SC_STRING):
-#line 467 "scan-gram.l"
+#line 469 "scan-gram.l"
 unexpected_eof (token_start, "\""); BEGIN context_state;
 	YY_BREAK
 
@@ -2054,7 +2034,7 @@ unexpected_eof (token_start, "\""); BEGIN context_state;
 
 case 91:
 YY_RULE_SETUP
-#line 477 "scan-gram.l"
+#line 479 "scan-gram.l"
 {
     STRING_GROW;
     context_state = YY_START;
@@ -2064,7 +2044,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 92:
 YY_RULE_SETUP
-#line 483 "scan-gram.l"
+#line 485 "scan-gram.l"
 {
     STRING_GROW;
     context_state = YY_START;
@@ -2075,7 +2055,7 @@ YY_RULE_SETUP
 case 93:
 /* rule 93 can match eol */
 YY_RULE_SETUP
-#line 489 "scan-gram.l"
+#line 491 "scan-gram.l"
 {
     STRING_GROW;
     context_state = YY_START;
@@ -2086,7 +2066,7 @@ YY_RULE_SETUP
 case 94:
 /* rule 94 can match eol */
 YY_RULE_SETUP
-#line 495 "scan-gram.l"
+#line 497 "scan-gram.l"
 {
     STRING_GROW;
     context_state = YY_START;
@@ -2103,18 +2083,18 @@ YY_RULE_SETUP
 case 95:
 /* rule 95 can match eol */
 YY_RULE_SETUP
-#line 511 "scan-gram.l"
+#line 513 "scan-gram.l"
 STRING_GROW; braces_level++;
 	YY_BREAK
 case 96:
 /* rule 96 can match eol */
 YY_RULE_SETUP
-#line 512 "scan-gram.l"
+#line 514 "scan-gram.l"
 STRING_GROW; braces_level--;
 	YY_BREAK
 case 97:
 YY_RULE_SETUP
-#line 513 "scan-gram.l"
+#line 515 "scan-gram.l"
 {
     obstack_1grow (&obstack_for_string, '}');
 
@@ -2134,11 +2114,11 @@ YY_RULE_SETUP
 case 98:
 /* rule 98 can match eol */
 YY_RULE_SETUP
-#line 529 "scan-gram.l"
+#line 531 "scan-gram.l"
 STRING_GROW;
 	YY_BREAK
 case YY_STATE_EOF(SC_BRACED_CODE):
-#line 531 "scan-gram.l"
+#line 533 "scan-gram.l"
 {
     unexpected_eof (code_start, "}");
     STRING_FINISH;
@@ -2156,7 +2136,7 @@ case YY_STATE_EOF(SC_BRACED_CODE):
 
 case 99:
 YY_RULE_SETUP
-#line 548 "scan-gram.l"
+#line 550 "scan-gram.l"
 {
     STRING_FINISH;
     loc->start = code_start;
@@ -2166,7 +2146,7 @@ YY_RULE_SETUP
   }
 	YY_BREAK
 case YY_STATE_EOF(SC_PROLOGUE):
-#line 556 "scan-gram.l"
+#line 558 "scan-gram.l"
 {
     unexpected_eof (code_start, "%}");
     STRING_FINISH;
@@ -2184,7 +2164,7 @@ case YY_STATE_EOF(SC_PROLOGUE):
 
 
 case YY_STATE_EOF(SC_EPILOGUE):
-#line 574 "scan-gram.l"
+#line 576 "scan-gram.l"
 {
     STRING_FINISH;
     loc->start = code_start;
@@ -2198,19 +2178,19 @@ case YY_STATE_EOF(SC_EPILOGUE):
   | By default, grow the string obstack with the input.  |
   `-----------------------------------------------------*/
 case 100:
-#line 589 "scan-gram.l"
+#line 591 "scan-gram.l"
 case 101:
 /* rule 101 can match eol */
 YY_RULE_SETUP
-#line 589 "scan-gram.l"
+#line 591 "scan-gram.l"
 STRING_GROW;
 	YY_BREAK
 case 102:
 YY_RULE_SETUP
-#line 591 "scan-gram.l"
+#line 593 "scan-gram.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 2214 "scan-gram.c"
+#line 2194 "scan-gram.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -3299,7 +3279,7 @@ void gram_free (void * ptr )
 
 /* %ok-for-header */
 
-#line 591 "scan-gram.l"
+#line 593 "scan-gram.l"
 
 
 

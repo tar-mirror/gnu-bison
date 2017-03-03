@@ -1,19 +1,19 @@
 # Dutch messages for GNU bison.
 # This file is distributed under the same license as the bison package.
-# Copyright (C) 1996, 2002, 2003, 2004, 2005, 2006, 2008 Free Software Foundation, Inc.
-# Tim Van Holder <tim.van.holder@telenet.be>, 2002, 2003, 2004, 2005, 2006, 2008.
+# Copyright (C) 1996, 2002, 2003, 2004, 2005, 2006, 2008, 2010 Free Software Foundation, Inc.
+# Tim Van Holder <tim.van.holder@telenet.be>, 2002, 2003, 2004, 2005, 2006, 2008, 2010.
 # Erick Branderhorst <branderh@debian.org>, 1996.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bison 2.4\n"
+"Project-Id-Version: bison 2.4.1a\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2008-12-11 17:06-0500\n"
-"PO-Revision-Date: 2008-11-05 10:00+0100\n"
+"POT-Creation-Date: 2010-03-20 13:15-0400\n"
+"PO-Revision-Date: 2010-01-29 20:54+0100\n"
 "Last-Translator: Tim Van Holder <tim.van.holder@telenet.be>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -96,12 +96,12 @@ msgid "cannot close file"
 msgstr "kan bestand niet sluiten"
 
 # Betere formulering (ik-vorm vermijden)?
-#: src/files.c:357
+#: src/files.c:359
 #, c-format
 msgid "refusing to overwrite the input file %s"
 msgstr "ik weiger om invoerbestand %s te overschrijven"
 
-#: src/files.c:362
+#: src/files.c:369
 #, c-format
 msgid "conflicting outputs to file %s"
 msgstr "conflicterende uitvoer naar bestand %s"
@@ -147,7 +147,7 @@ msgid ""
 "data\n"
 "      --print-datadir        output directory containing skeletons and XSLT\n"
 "  -y, --yacc                 emulate POSIX Yacc\n"
-"  -W, --warnings=[CATEGORY]  report the warnings falling in CATEGORY\n"
+"  -W, --warnings[=CATEGORY]  report the warnings falling in CATEGORY\n"
 "\n"
 msgstr ""
 "\n"
@@ -155,8 +155,8 @@ msgstr ""
 "  -h, --help                 toon deze hulptekst en beëindig het programma\n"
 "  -V, --version              toon versie-informatie en beëindig het "
 "programma\n"
-"      --print-datadir        toon de folder met skeletten en XSLT-bestanden\n"
 "      --print-localedir      toon de folder met regio-afhankelijke gegevens\n"
+"      --print-datadir        toon de folder met skeletten en XSLT-bestanden\n"
 "  -y, --yacc                 emuleer POSIX Yacc\n"
 "  -W, --warnings[=SOORT]     waarschuw over problemen (van het type SOORT)\n"
 
@@ -177,7 +177,6 @@ msgid ""
 msgstr ""
 "Parser:\n"
 "  -L, --language=TAAL        geef de te gebruiken programmeertaal op\n"
-"                             (dit is een experimenteel feature)\n"
 "  -S, --skeleton=BESTAND     geef het te gebruiken skeletbestand op\n"
 "  -t, --debug                maak de parser geschikt voor debugging\n"
 "      --locations            houd symboollokaties bij\n"
@@ -320,7 +319,7 @@ msgstr "leeg"
 msgid "Grammar"
 msgstr "Grammatica"
 
-#: src/location.c:92 src/scan-gram.l:731
+#: src/location.c:92 src/scan-gram.l:733
 #, c-format
 msgid "line number overflow"
 msgstr "overflow van lijnnummers"
@@ -334,7 +333,51 @@ msgstr "overflow van kolomnummers"
 msgid "rule useless in parser due to conflicts"
 msgstr "regel is nutteloos in de grammatica omwille van conflicten"
 
-#: src/parse-gram.y:693
+#: src/muscle_tab.c:419
+#, fuzzy, c-format
+msgid "%s `%s' redefined"
+msgstr "symbool %s opnieuw gedefinieerd"
+
+#: src/muscle_tab.c:422
+#, fuzzy, c-format
+msgid "previous definition"
+msgstr "eerdere declaratie"
+
+#: src/muscle_tab.c:458
+#, c-format
+msgid ""
+"undefined %%define variable `%s' passed to muscle_percent_define_get_loc"
+msgstr ""
+
+#: src/muscle_tab.c:472
+#, c-format
+msgid ""
+"undefined %%define variable `%s' passed to muscle_percent_define_get_syncline"
+msgstr ""
+
+#: src/muscle_tab.c:518
+#, c-format
+msgid "invalid value for %%define Boolean variable `%s'"
+msgstr ""
+
+#: src/muscle_tab.c:524
+#, c-format
+msgid ""
+"undefined %%define variable `%s' passed to muscle_percent_define_flag_if"
+msgstr ""
+
+#: src/muscle_tab.c:580
+#, c-format
+msgid "invalid value for %%define variable `%s': `%s'"
+msgstr ""
+
+#: src/muscle_tab.c:585
+#, c-format
+msgid ""
+"undefined %%define variable `%s' passed to muscle_percent_define_check_values"
+msgstr ""
+
+#: src/parse-gram.y:692
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "naam ontbreekt in parameterdeclaratie"
@@ -410,8 +453,8 @@ msgstr "meerdere %s declaraties"
 msgid "result type clash on merge function `%s': <%s> != <%s>"
 msgstr "conflict tussen resultaattypes bij merge-functie `%s': <%s> != <%s>"
 
-#: src/reader.c:134 src/symtab.c:141 src/symtab.c:149 src/symtab.c:910
-#: src/symtab.c:923 src/symtab.c:936 src/symtab.c:949
+#: src/reader.c:134 src/symtab.c:141 src/symtab.c:149 src/symtab.c:912
+#: src/symtab.c:925 src/symtab.c:938 src/symtab.c:951
 #, c-format
 msgid "previous declaration"
 msgstr "eerdere declaratie"
@@ -441,27 +484,32 @@ msgstr "waarde niet gebruikt: $%d"
 msgid "unset value: $$"
 msgstr "waarde niet gezet: $$"
 
-#: src/reader.c:369 src/reader.c:383 src/reader.c:396
+#: src/reader.c:302
+#, c-format
+msgid "token for %%prec is not defined: %s"
+msgstr "token voor %%prec is niet gedefinieerd: %s"
+
+#: src/reader.c:388 src/reader.c:402 src/reader.c:415
 #, c-format
 msgid "only one %s allowed per rule"
 msgstr "slechts één %s toegestaan per regel"
 
-#: src/reader.c:379 src/reader.c:394
+#: src/reader.c:398 src/reader.c:413
 #, c-format
 msgid "%s affects only GLR parsers"
 msgstr "%s is enkel van toepassing op GLR-parsers"
 
-#: src/reader.c:381
+#: src/reader.c:400
 #, c-format
 msgid "%s must be followed by positive number"
 msgstr "%s moet gevolgd worden door een positief getal"
 
-#: src/reader.c:487
+#: src/reader.c:506
 #, c-format
 msgid "rule is too long"
 msgstr "regel is te lang"
 
-#: src/reader.c:575
+#: src/reader.c:594
 #, c-format
 msgid "no rules in the input grammar"
 msgstr "invoergrammatica bevat geen regels"
@@ -539,7 +587,7 @@ msgid "$%d of `%s' has no declared type"
 msgstr "$%d van `%s' heeft geen gedeclareerd type"
 
 # Hier zou wel het bereik bij vermeld mogen worden...
-#: src/scan-code.l:343 src/scan-code.l:378 src/scan-gram.l:653
+#: src/scan-code.l:343 src/scan-code.l:378 src/scan-gram.l:655
 #, c-format
 msgid "integer out of range: %s"
 msgstr "integer buiten bereik: %s"
@@ -564,32 +612,42 @@ msgstr "ongeldig teken: %s"
 msgid "invalid null character"
 msgstr "ongeldig null-teken"
 
-#: src/scan-gram.l:403 src/scan-gram.l:414 src/scan-gram.l:435
+#: src/scan-gram.l:403 src/scan-gram.l:413 src/scan-gram.l:433
 #, c-format
-msgid "invalid escape sequence: %s"
-msgstr "ongeldige escape: %s"
+msgid "invalid number after \\-escape: %s"
+msgstr "ongeldig getal na \\-escape: %s"
 
-#: src/scan-gram.l:405 src/scan-gram.l:416 src/scan-gram.l:437
+#: src/scan-gram.l:445
 #, c-format
-msgid "invalid null character: %s"
-msgstr "ongeldig null-teken: %s"
+msgid "invalid character after \\-escape: %s"
+msgstr "ongeldig teken na \\-escape: %s"
 
-#: src/scan-gram.l:442
-#, c-format
-msgid "unrecognized escape sequence: %s"
-msgstr "onbekende escape: %s"
-
-#: src/scan-gram.l:763
+#: src/scan-gram.l:765
 #, c-format
 msgid "missing `%s' at end of file"
 msgstr "`%s' ontbreekt aan einde van bestand"
 
-#: src/scan-gram.l:774
+#: src/scan-gram.l:776
 #, c-format
 msgid "missing `%s' at end of line"
 msgstr "`%s' ontbreekt aan einde van regel"
 
-#: src/symlist.c:199
+#: src/scan-skel.l:145
+#, c-format
+msgid "unclosed %s directive in skeleton"
+msgstr ""
+
+#: src/scan-skel.l:290
+#, c-format
+msgid "too few arguments for %s directive in skeleton"
+msgstr ""
+
+#: src/scan-skel.l:297
+#, c-format
+msgid "too many arguments for %s directive in skeleton"
+msgstr ""
+
+#: src/symlist.c:200
 #, c-format
 msgid "invalid $ value: $%d"
 msgstr "ongeldige $-waarde: $%d"
@@ -648,33 +706,33 @@ msgstr "symbool `%s' krijgt meer dan één letterlijke string toegewezen"
 msgid "tokens %s and %s both assigned number %d"
 msgstr "tokens %s en %s hebben beide nummer %d toegewezen gekregen"
 
-#: src/symtab.c:889
+#: src/symtab.c:891
 #, c-format
 msgid "the start symbol %s is undefined"
 msgstr "het startsymbool %s is niet gedefinieerd"
 
-#: src/symtab.c:893
+#: src/symtab.c:895
 #, c-format
 msgid "the start symbol %s is a token"
 msgstr "het startsymbool %s is een token"
 
 # tagged en tagless? wasdavooriet?
-#: src/symtab.c:908
+#: src/symtab.c:910
 #, c-format
 msgid "redeclaration for default tagged %%destructor"
 msgstr "herdeclaratie van standaard \"tagged\" %%destructor"
 
-#: src/symtab.c:921
+#: src/symtab.c:923
 #, c-format
 msgid "redeclaration for default tagless %%destructor"
 msgstr "herdeclaratie van standaard \"tagless\" %%destructor"
 
-#: src/symtab.c:934
+#: src/symtab.c:936
 #, c-format
 msgid "redeclaration for default tagged %%printer"
 msgstr "herdeclaratie van standaard \"tagged\" %%printer"
 
-#: src/symtab.c:947
+#: src/symtab.c:949
 #, c-format
 msgid "redeclaration for default tagless %%printer"
 msgstr "herdeclaratie van standaard \"tagless\" %%printer"
@@ -762,64 +820,59 @@ msgstr "Kon niet schrijven naar het statistiekenbestand."
 msgid "Could not open stats file for writing."
 msgstr "Kon het statistiekenbestand niet openen voor schrijven."
 
-#: lib/error.c:125
+#: lib/error.c:153
 msgid "Unknown system error"
 msgstr "Onbekende systeemfout"
 
-#: lib/getopt.c:526 lib/getopt.c:542
+#: lib/getopt.c:529 lib/getopt.c:545
 #, c-format
-msgid "%s: option `%s' is ambiguous\n"
-msgstr "%s: optie `%s' is niet eenduidig\n"
+msgid "%s: option '%s' is ambiguous\n"
+msgstr "%s: optie '%s' is niet eenduidig\n"
 
-#: lib/getopt.c:575 lib/getopt.c:579
+#: lib/getopt.c:578 lib/getopt.c:582
 #, c-format
-msgid "%s: option `--%s' doesn't allow an argument\n"
-msgstr "%s: optie `--%s' staat geen argument toe\n"
+msgid "%s: option '--%s' doesn't allow an argument\n"
+msgstr "%s: optie '--%s' staat geen argument toe\n"
 
-#: lib/getopt.c:588 lib/getopt.c:593
+#: lib/getopt.c:591 lib/getopt.c:596
 #, c-format
-msgid "%s: option `%c%s' doesn't allow an argument\n"
-msgstr "%s: optie `%c%s' staat geen argument toe\n"
+msgid "%s: option '%c%s' doesn't allow an argument\n"
+msgstr "%s: optie '%c%s' staat geen argument toe\n"
 
-#: lib/getopt.c:636 lib/getopt.c:655 lib/getopt.c:971 lib/getopt.c:990
+#: lib/getopt.c:639 lib/getopt.c:658 lib/getopt.c:961 lib/getopt.c:980
 #, c-format
-msgid "%s: option `%s' requires an argument\n"
-msgstr "%s: optie `%s' vereist een argument\n"
+msgid "%s: option '%s' requires an argument\n"
+msgstr "%s: optie '%s' vereist een argument\n"
 
-#: lib/getopt.c:693 lib/getopt.c:696
+#: lib/getopt.c:696 lib/getopt.c:699
 #, c-format
-msgid "%s: unrecognized option `--%s'\n"
-msgstr "%s: onbekende optie `--%s'\n"
+msgid "%s: unrecognized option '--%s'\n"
+msgstr "%s: onbekende optie '--%s'\n"
 
-#: lib/getopt.c:704 lib/getopt.c:707
+#: lib/getopt.c:707 lib/getopt.c:710
 #, c-format
-msgid "%s: unrecognized option `%c%s'\n"
-msgstr "%s: onbekende optie `%c%s'\n"
+msgid "%s: unrecognized option '%c%s'\n"
+msgstr "%s: onbekende optie '%c%s'\n"
 
 #: lib/getopt.c:759 lib/getopt.c:762
 #, c-format
-msgid "%s: illegal option -- %c\n"
-msgstr "%s: ongeldige optie -- %c\n"
+msgid "%s: invalid option -- '%c'\n"
+msgstr "%s: ongeldige optie -- '%c'\n"
 
-#: lib/getopt.c:768 lib/getopt.c:771
+#: lib/getopt.c:812 lib/getopt.c:829 lib/getopt.c:1032 lib/getopt.c:1050
 #, c-format
-msgid "%s: invalid option -- %c\n"
-msgstr "%s: ongeldige optie -- %c\n"
+msgid "%s: option requires an argument -- '%c'\n"
+msgstr "%s: optie vereist een argument -- '%c'\n"
 
-#: lib/getopt.c:823 lib/getopt.c:839 lib/getopt.c:1043 lib/getopt.c:1061
+#: lib/getopt.c:882 lib/getopt.c:898
 #, c-format
-msgid "%s: option requires an argument -- %c\n"
-msgstr "%s: optie vereist een argument -- %c\n"
+msgid "%s: option '-W %s' is ambiguous\n"
+msgstr "%s: optie '-W %s' is niet eenduidig\n"
 
-#: lib/getopt.c:892 lib/getopt.c:908
+#: lib/getopt.c:922 lib/getopt.c:940
 #, c-format
-msgid "%s: option `-W %s' is ambiguous\n"
-msgstr "%s: optie `-W %s' is niet eenduidig\n"
-
-#: lib/getopt.c:932 lib/getopt.c:950
-#, c-format
-msgid "%s: option `-W %s' doesn't allow an argument\n"
-msgstr "%s: optie `-W %s' staat geen argument toe\n"
+msgid "%s: option '-W %s' doesn't allow an argument\n"
+msgstr "%s: optie '-W %s' staat geen argument toe\n"
 
 #: lib/obstack.c:423 lib/obstack.c:425 lib/xalloc-die.c:34
 msgid "memory exhausted"
@@ -838,26 +891,21 @@ msgstr "geen geheugen meer beschikbaar"
 #. translate "`" to U+201C (LEFT DOUBLE QUOTATION MARK), and
 #. should translate "'" to U+201D (RIGHT DOUBLE QUOTATION
 #. MARK).  A British English Unicode locale should instead
-#. translate these to U+2018 (LEFT SINGLE QUOTATION MARK) and
-#. U+2019 (RIGHT SINGLE QUOTATION MARK), respectively.
+#. translate these to U+2018 (LEFT SINGLE QUOTATION MARK)
+#. and U+2019 (RIGHT SINGLE QUOTATION MARK), respectively.
 #.
 #. If you don't know what to put here, please see
 #. <http://en.wikipedia.org/wiki/Quotation_mark#Glyphs>
 #. and use glyphs suitable for your language.
-#: lib/quotearg.c:266
+#: lib/quotearg.c:272
 msgid "`"
 msgstr "`"
 
-#: lib/quotearg.c:267
+#: lib/quotearg.c:273
 msgid "'"
 msgstr "'"
 
-#: lib/subpipe.c:161
-#, c-format
-msgid "subsidiary program `%s' could not be invoked"
-msgstr "hulpprogramma `%s' kon niet opgeroepen worden"
-
-#: lib/timevar.c:472
+#: lib/timevar.c:473
 msgid ""
 "\n"
 "Execution times (seconds)\n"
@@ -865,11 +913,14 @@ msgstr ""
 "\n"
 "Uitvoeringstijden (in seconden)\n"
 
-#: lib/timevar.c:522
+#: lib/timevar.c:523
 msgid " TOTAL                 :"
 msgstr " TOTAAL                :"
 
-#: lib/timevar.c:558
+#: lib/timevar.c:559
 #, c-format
 msgid "time in %s: %ld.%06ld (%ld%%)\n"
 msgstr "tijd in %s: %ld.%06ld (%ld%%)\n"
+
+#~ msgid "subsidiary program `%s' could not be invoked"
+#~ msgstr "hulpprogramma `%s' kon niet opgeroepen worden"

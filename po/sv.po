@@ -1,16 +1,16 @@
 # Swedish messages for bison.
-# Copyright © 2001-2006, 2008 Free Software Foundation, Inc.
+# Copyright © 2001-2006, 2008, 2010 Free Software Foundation, Inc.
 # This file is distributed under the same license as the bison package.
-# Göran Uddeborg <goeran@uddeborg.se>, 2001-2006, 2008.
+# Göran Uddeborg <goeran@uddeborg.se>, 2001-2006, 2008, 2010.
 #
-# $Revision: 1.62 $
+# $Revision: 1.68 $
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bison 2.4\n"
+"Project-Id-Version: bison 2.4.1b\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2008-12-11 17:06-0500\n"
-"PO-Revision-Date: 2008-11-11 14:53+0100\n"
+"POT-Creation-Date: 2010-03-20 13:15-0400\n"
+"PO-Revision-Date: 2010-03-01 22:24+0100\n"
 "Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -96,12 +96,12 @@ msgstr "I/O-fel"
 msgid "cannot close file"
 msgstr "kan inte stänga fil"
 
-#: src/files.c:357
+#: src/files.c:359
 #, c-format
 msgid "refusing to overwrite the input file %s"
 msgstr "vägrar att skriva över indatafilen %s"
 
-#: src/files.c:362
+#: src/files.c:369
 #, c-format
 msgid "conflicting outputs to file %s"
 msgstr "motstridiga utmatningar till filen %s"
@@ -145,7 +145,7 @@ msgid ""
 "data\n"
 "      --print-datadir        output directory containing skeletons and XSLT\n"
 "  -y, --yacc                 emulate POSIX Yacc\n"
-"  -W, --warnings=[CATEGORY]  report the warnings falling in CATEGORY\n"
+"  -W, --warnings[=CATEGORY]  report the warnings falling in CATEGORY\n"
 "\n"
 msgstr ""
 "\n"
@@ -157,7 +157,7 @@ msgstr ""
 "      --print-datadir        skriv katalogen som innehåller skelett och "
 "XSLT\n"
 "  -y, --yacc                 emulera POSIX-Yacc\n"
-"  -W, --warnings=[KATEGORI]  rapportera varningarna som faller inom "
+"  -W, --warnings[=KATEGORI]  rapportera varningarna som faller inom "
 "KATEGORI\n"
 "\n"
 
@@ -317,7 +317,7 @@ msgstr "tom"
 msgid "Grammar"
 msgstr "Grammatik"
 
-#: src/location.c:92 src/scan-gram.l:731
+#: src/location.c:92 src/scan-gram.l:733
 #, c-format
 msgid "line number overflow"
 msgstr "radnummerspill"
@@ -331,7 +331,59 @@ msgstr "kolumnnummerspill"
 msgid "rule useless in parser due to conflicts"
 msgstr "oanvändbar regel i parsern på grund av konflikter"
 
-#: src/parse-gram.y:693
+#: src/muscle_tab.c:419
+#, c-format
+msgid "%s `%s' redefined"
+msgstr "%s \"%s\" omdefinierad"
+
+#: src/muscle_tab.c:422
+#, c-format
+msgid "previous definition"
+msgstr "föregående definition"
+
+#: src/muscle_tab.c:458
+#, c-format
+msgid ""
+"undefined %%define variable `%s' passed to muscle_percent_define_get_loc"
+msgstr ""
+"odefinierad %%define-variabel \"%s\" skickad till "
+"muscle_percent_define_get_loc"
+
+#: src/muscle_tab.c:472
+#, c-format
+msgid ""
+"undefined %%define variable `%s' passed to muscle_percent_define_get_syncline"
+msgstr ""
+"odefinierad %%define-variabel \"%s\" skickad till "
+"muscle_percent_define_get_syncline"
+
+#: src/muscle_tab.c:518
+#, c-format
+msgid "invalid value for %%define Boolean variable `%s'"
+msgstr "ogiltigt värde för boolesk %%define-variabel \"%s\""
+
+#: src/muscle_tab.c:524
+#, c-format
+msgid ""
+"undefined %%define variable `%s' passed to muscle_percent_define_flag_if"
+msgstr ""
+"odefinierad %%define-variabel \"%s\" skickad till "
+"muscle_percent_define_flag_if"
+
+#: src/muscle_tab.c:580
+#, c-format
+msgid "invalid value for %%define variable `%s': `%s'"
+msgstr "ogiltigt värde för %%define-variabel \"%s\": \"%s\""
+
+#: src/muscle_tab.c:585
+#, c-format
+msgid ""
+"undefined %%define variable `%s' passed to muscle_percent_define_check_values"
+msgstr ""
+"odefinierad %%define-variabel \"%s\" skickad till "
+"muscle_percent_define_check_values"
+
+#: src/parse-gram.y:692
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "identiferare saknas i parameterdeklaration"
@@ -406,8 +458,8 @@ msgstr "flera %s-deklarationer"
 msgid "result type clash on merge function `%s': <%s> != <%s>"
 msgstr "resultattypskonflikt vid sammanslagningsfunktion \"%s\": <%s> != <%s>"
 
-#: src/reader.c:134 src/symtab.c:141 src/symtab.c:149 src/symtab.c:910
-#: src/symtab.c:923 src/symtab.c:936 src/symtab.c:949
+#: src/reader.c:134 src/symtab.c:141 src/symtab.c:149 src/symtab.c:912
+#: src/symtab.c:925 src/symtab.c:938 src/symtab.c:951
 #, c-format
 msgid "previous declaration"
 msgstr "föregående deklaration"
@@ -437,27 +489,32 @@ msgstr "oanvänt värde: $%d"
 msgid "unset value: $$"
 msgstr "ej satt värde: $$"
 
-#: src/reader.c:369 src/reader.c:383 src/reader.c:396
+#: src/reader.c:302
+#, c-format
+msgid "token for %%prec is not defined: %s"
+msgstr "elementet för %%prec är inte definierat: %s"
+
+#: src/reader.c:388 src/reader.c:402 src/reader.c:415
 #, c-format
 msgid "only one %s allowed per rule"
 msgstr "endast en %s tillåts per regel"
 
-#: src/reader.c:379 src/reader.c:394
+#: src/reader.c:398 src/reader.c:413
 #, c-format
 msgid "%s affects only GLR parsers"
 msgstr "%s påverkar endast GLR-parsrar"
 
-#: src/reader.c:381
+#: src/reader.c:400
 #, c-format
 msgid "%s must be followed by positive number"
 msgstr "%s måste följas av ett positivt tal"
 
-#: src/reader.c:487
+#: src/reader.c:506
 #, c-format
 msgid "rule is too long"
 msgstr "regeln är för lång"
 
-#: src/reader.c:575
+#: src/reader.c:594
 #, c-format
 msgid "no rules in the input grammar"
 msgstr "inga regler i ingrammatiken"
@@ -532,7 +589,7 @@ msgstr "$$ för \"%s\" har ingen deklarerad typ"
 msgid "$%d of `%s' has no declared type"
 msgstr "$%d för \"%s\" har ingen deklarerad typ"
 
-#: src/scan-code.l:343 src/scan-code.l:378 src/scan-gram.l:653
+#: src/scan-code.l:343 src/scan-code.l:378 src/scan-gram.l:655
 #, c-format
 msgid "integer out of range: %s"
 msgstr "heltal utanför intervall: %s"
@@ -557,32 +614,42 @@ msgstr "ogiltigt tecken: %s"
 msgid "invalid null character"
 msgstr "ogiltigt nolltecken"
 
-#: src/scan-gram.l:403 src/scan-gram.l:414 src/scan-gram.l:435
+#: src/scan-gram.l:403 src/scan-gram.l:413 src/scan-gram.l:433
 #, c-format
-msgid "invalid escape sequence: %s"
-msgstr "ogiltig specialsekvens: %s"
+msgid "invalid number after \\-escape: %s"
+msgstr "ogiltigt tal efter \\-specialsekvens: %s"
 
-#: src/scan-gram.l:405 src/scan-gram.l:416 src/scan-gram.l:437
+#: src/scan-gram.l:445
 #, c-format
-msgid "invalid null character: %s"
-msgstr "ogiltigt nolltecken: %s"
+msgid "invalid character after \\-escape: %s"
+msgstr "ogiltigt tecken efter \\-specialsekvens: %s"
 
-#: src/scan-gram.l:442
-#, c-format
-msgid "unrecognized escape sequence: %s"
-msgstr "okänd specialsekvens: %s"
-
-#: src/scan-gram.l:763
+#: src/scan-gram.l:765
 #, c-format
 msgid "missing `%s' at end of file"
 msgstr "saknat \"%s\" vid filslut"
 
-#: src/scan-gram.l:774
+#: src/scan-gram.l:776
 #, c-format
 msgid "missing `%s' at end of line"
 msgstr "saknat \"%s\" vid radslut"
 
-#: src/symlist.c:199
+#: src/scan-skel.l:145
+#, c-format
+msgid "unclosed %s directive in skeleton"
+msgstr "oavslutat %s-direktiv i skelettet"
+
+#: src/scan-skel.l:290
+#, c-format
+msgid "too few arguments for %s directive in skeleton"
+msgstr "för få argument till %s-direktiv i skelettet"
+
+#: src/scan-skel.l:297
+#, c-format
+msgid "too many arguments for %s directive in skeleton"
+msgstr "för många argument till %s-direktiv i skelettet"
+
+#: src/symlist.c:200
 #, c-format
 msgid "invalid $ value: $%d"
 msgstr "felaktigt $-värde: $%d"
@@ -639,32 +706,32 @@ msgstr "symbolen \"%s\" har fått mer än en bokstavlig sträng"
 msgid "tokens %s and %s both assigned number %d"
 msgstr "elementen %s och %s har båda fått nummer %d"
 
-#: src/symtab.c:889
+#: src/symtab.c:891
 #, c-format
 msgid "the start symbol %s is undefined"
 msgstr "startsymbolen %s är odefinierad"
 
-#: src/symtab.c:893
+#: src/symtab.c:895
 #, c-format
 msgid "the start symbol %s is a token"
 msgstr "startsymbolen %s är ett element"
 
-#: src/symtab.c:908
+#: src/symtab.c:910
 #, c-format
 msgid "redeclaration for default tagged %%destructor"
 msgstr "omdeklaration av standard-%%destructor med tagg"
 
-#: src/symtab.c:921
+#: src/symtab.c:923
 #, c-format
 msgid "redeclaration for default tagless %%destructor"
 msgstr "omdeklaration av standard-%%destructor utan tagg"
 
-#: src/symtab.c:934
+#: src/symtab.c:936
 #, c-format
 msgid "redeclaration for default tagged %%printer"
 msgstr "omdeklaration av standard-%%printer med tagg"
 
-#: src/symtab.c:947
+#: src/symtab.c:949
 #, c-format
 msgid "redeclaration for default tagless %%printer"
 msgstr "omdeklaration av standard-%%printer utan tagg"
@@ -752,63 +819,58 @@ msgstr "Kunde inte skriva statistikfil."
 msgid "Could not open stats file for writing."
 msgstr "Kunde inte öppna statistikfil för skrivning."
 
-#: lib/error.c:125
+#: lib/error.c:153
 msgid "Unknown system error"
 msgstr "Okänt systemfel"
 
-#: lib/getopt.c:526 lib/getopt.c:542
+#: lib/getopt.c:529 lib/getopt.c:545
 #, c-format
-msgid "%s: option `%s' is ambiguous\n"
+msgid "%s: option '%s' is ambiguous\n"
 msgstr "%s: flaggan \"%s\" är tvetydig\n"
 
-#: lib/getopt.c:575 lib/getopt.c:579
+#: lib/getopt.c:578 lib/getopt.c:582
 #, c-format
-msgid "%s: option `--%s' doesn't allow an argument\n"
+msgid "%s: option '--%s' doesn't allow an argument\n"
 msgstr "%s: flaggan \"--%s\" tar inget argument\n"
 
-#: lib/getopt.c:588 lib/getopt.c:593
+#: lib/getopt.c:591 lib/getopt.c:596
 #, c-format
-msgid "%s: option `%c%s' doesn't allow an argument\n"
+msgid "%s: option '%c%s' doesn't allow an argument\n"
 msgstr "%s: flaggan \"%c%s\" tar inget argument\n"
 
-#: lib/getopt.c:636 lib/getopt.c:655 lib/getopt.c:971 lib/getopt.c:990
+#: lib/getopt.c:639 lib/getopt.c:658 lib/getopt.c:961 lib/getopt.c:980
 #, c-format
-msgid "%s: option `%s' requires an argument\n"
+msgid "%s: option '%s' requires an argument\n"
 msgstr "%s: flaggan \"%s\" behöver ett argument\n"
 
-#: lib/getopt.c:693 lib/getopt.c:696
+#: lib/getopt.c:696 lib/getopt.c:699
 #, c-format
-msgid "%s: unrecognized option `--%s'\n"
+msgid "%s: unrecognized option '--%s'\n"
 msgstr "%s: okänd flagga \"--%s\"\n"
 
-#: lib/getopt.c:704 lib/getopt.c:707
+#: lib/getopt.c:707 lib/getopt.c:710
 #, c-format
-msgid "%s: unrecognized option `%c%s'\n"
+msgid "%s: unrecognized option '%c%s'\n"
 msgstr "%s: okänd flagga \"%c%s\"\n"
 
 #: lib/getopt.c:759 lib/getopt.c:762
 #, c-format
-msgid "%s: illegal option -- %c\n"
-msgstr "%s: otillåten flagga -- %c\n"
+msgid "%s: invalid option -- '%c'\n"
+msgstr "%s: ogiltig flagga --\"%c\"\n"
 
-#: lib/getopt.c:768 lib/getopt.c:771
+#: lib/getopt.c:812 lib/getopt.c:829 lib/getopt.c:1032 lib/getopt.c:1050
 #, c-format
-msgid "%s: invalid option -- %c\n"
-msgstr "%s: ogiltig flagga --%c\n"
+msgid "%s: option requires an argument -- '%c'\n"
+msgstr "%s: flaggan behöver ett argument -- \"%c\"\n"
 
-#: lib/getopt.c:823 lib/getopt.c:839 lib/getopt.c:1043 lib/getopt.c:1061
+#: lib/getopt.c:882 lib/getopt.c:898
 #, c-format
-msgid "%s: option requires an argument -- %c\n"
-msgstr "%s: flaggan behöver ett argument -- %c\n"
-
-#: lib/getopt.c:892 lib/getopt.c:908
-#, c-format
-msgid "%s: option `-W %s' is ambiguous\n"
+msgid "%s: option '-W %s' is ambiguous\n"
 msgstr "%s: flaggan \"-W %s\" är tvetydig\n"
 
-#: lib/getopt.c:932 lib/getopt.c:950
+#: lib/getopt.c:922 lib/getopt.c:940
 #, c-format
-msgid "%s: option `-W %s' doesn't allow an argument\n"
+msgid "%s: option '-W %s' doesn't allow an argument\n"
 msgstr "%s: flaggan \"-W %s\" tar inget argument\n"
 
 #: lib/obstack.c:423 lib/obstack.c:425 lib/xalloc-die.c:34
@@ -831,26 +893,21 @@ msgstr "minnet slut"
 #. translate "`" to U+201C (LEFT DOUBLE QUOTATION MARK), and
 #. should translate "'" to U+201D (RIGHT DOUBLE QUOTATION
 #. MARK).  A British English Unicode locale should instead
-#. translate these to U+2018 (LEFT SINGLE QUOTATION MARK) and
-#. U+2019 (RIGHT SINGLE QUOTATION MARK), respectively.
+#. translate these to U+2018 (LEFT SINGLE QUOTATION MARK)
+#. and U+2019 (RIGHT SINGLE QUOTATION MARK), respectively.
 #.
 #. If you don't know what to put here, please see
 #. <http://en.wikipedia.org/wiki/Quotation_mark#Glyphs>
 #. and use glyphs suitable for your language.
-#: lib/quotearg.c:266
+#: lib/quotearg.c:272
 msgid "`"
 msgstr "\""
 
-#: lib/quotearg.c:267
+#: lib/quotearg.c:273
 msgid "'"
 msgstr "\""
 
-#: lib/subpipe.c:161
-#, c-format
-msgid "subsidiary program `%s' could not be invoked"
-msgstr "underprogram \"%s\" kunde inte köras"
-
-#: lib/timevar.c:472
+#: lib/timevar.c:473
 msgid ""
 "\n"
 "Execution times (seconds)\n"
@@ -858,11 +915,11 @@ msgstr ""
 "\n"
 "Exekveringstider (sekunder)\n"
 
-#: lib/timevar.c:522
+#: lib/timevar.c:523
 msgid " TOTAL                 :"
 msgstr " TOTALT                :"
 
-#: lib/timevar.c:558
+#: lib/timevar.c:559
 #, c-format
 msgid "time in %s: %ld.%06ld (%ld%%)\n"
 msgstr "tid i %s: %ld.%06ld (%ld%%)\n"

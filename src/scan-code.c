@@ -36,7 +36,7 @@
 #define FLEX_SCANNER
 #define YY_FLEX_MAJOR_VERSION 2
 #define YY_FLEX_MINOR_VERSION 5
-#define YY_FLEX_SUBMINOR_VERSION 35
+#define YY_FLEX_SUBMINOR_VERSION 34
 #if YY_FLEX_SUBMINOR_VERSION > 0
 #define FLEX_BETA
 #endif
@@ -245,6 +245,13 @@ extern FILE *code_in, *code_out;
 	while ( 0 )
 
 #define unput(c) yyunput( c, (yytext_ptr)  )
+
+/* The following is because we cannot portably get our hands on size_t
+ * (without autoconf's help, which isn't available because we want
+ * flex-generated scanners to compile on their own).
+ * Given that the standard has decreed that size_t exists since 1989,
+ * I guess we can afford to depend on it. Manoj.
+ */
 
 #ifndef YY_TYPEDEF_YY_SIZE_T
 #define YY_TYPEDEF_YY_SIZE_T
@@ -602,7 +609,7 @@ char *code_text;
 #line 1 "scan-code.l"
 /* Bison Action Scanner                             -*- C -*-
 
-   Copyright (C) 2006, 2007, 2008 Free Software Foundation, Inc.
+   Copyright (C) 2006-2010 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -618,6 +625,7 @@ char *code_text;
 
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+#define YY_NO_INPUT 1
 #line 24 "scan-code.l"
 /* Work around a bug in flex 2.5.31.  See Debian bug 333231
    <http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=333231>.  */
@@ -666,7 +674,7 @@ of $ and @.  */
    NUL and newline, as this simplifies our implementation.  */
 /* Zero or more instances of backslash-newline.  Following GCC, allow
    white space between the backslash and the newline.  */
-#line 670 "scan-code.c"
+#line 678 "scan-code.c"
 
 #define INITIAL 0
 #define SC_COMMENT 1
@@ -701,39 +709,9 @@ static int yy_init_globals (void );
 /* %endif */
 /* %if-reentrant */
 /* %endif */
-/* %endif End reentrant structures and macros. */
-
-/* Accessor methods to globals.
-   These are made visible to non-reentrant scanners for convenience. */
-
-int code_lex_destroy (void );
-
-int code_get_debug (void );
-
-void code_set_debug (int debug_flag  );
-
-YY_EXTRA_TYPE code_get_extra (void );
-
-void code_set_extra (YY_EXTRA_TYPE user_defined  );
-
-FILE *code_get_in (void );
-
-void code_set_in  (FILE * in_str  );
-
-FILE *code_get_out (void );
-
-void code_set_out  (FILE * out_str  );
-
-int code_get_leng (void );
-
-char *code_get_text (void );
-
-int code_get_lineno (void );
-
-void code_set_lineno (int line_number  );
-
 /* %if-bison-bridge */
 /* %endif */
+/* %endif End reentrant structures and macros. */
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -932,7 +910,7 @@ YY_DECL
   | Scanning a C comment.  The initial `/ *' is already eaten.  |
   `------------------------------------------------------------*/
 
-#line 936 "scan-code.c"
+#line 914 "scan-code.c"
 
 	if ( !(yy_init) )
 		{
@@ -1271,7 +1249,7 @@ YY_RULE_SETUP
 #line 236 "scan-code.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 1275 "scan-code.c"
+#line 1253 "scan-code.c"
 
 	case YY_END_OF_BUFFER:
 		{

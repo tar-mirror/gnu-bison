@@ -1,7 +1,6 @@
 # C++ skeleton for Bison
 
-# Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007 Free Software Foundation,
-# Inc.
+# Copyright (C) 2002-2007, 2009-2010 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,9 +18,9 @@
 # We do want M4 expansion after # for CPP macros.
 m4_changecom()
 m4_divert_push(0)dnl
-@output(b4_dir_prefix[]position.hh@)
+@output(b4_dir_prefix[]position.hh@)@
 b4_copyright([Positions for Bison parsers in C++],
-  [2002, 2003, 2004, 2005, 2006])[
+             [2002-2007, 2009-2010])[
 
 /**
  ** \file position.hh
@@ -116,10 +115,11 @@ b4_copyright([Positions for Bison parsers in C++],
   inline bool
   operator== (const position& pos1, const position& pos2)
   {
-    return
-      (pos1.filename == pos2.filename
-       || pos1.filename && pos2.filename && *pos1.filename == *pos2.filename)
-      && pos1.line == pos2.line && pos1.column == pos2.column;
+    return (pos1.line == pos2.line
+            && pos1.column == pos2.column
+            && (pos1.filename == pos2.filename
+                || (pos1.filename && pos2.filename
+                    && *pos1.filename == *pos2.filename)));
   }
 
   /// Compare two position objects.
@@ -143,9 +143,9 @@ b4_copyright([Positions for Bison parsers in C++],
 
 ]b4_namespace_close[
 #endif // not BISON_POSITION_HH]
-@output(b4_dir_prefix[]location.hh@)
+@output(b4_dir_prefix[]location.hh@)@
 b4_copyright([Locations for Bison parsers in C++],
-  [2002, 2003, 2004, 2005, 2006])[
+             [2002-2007, 2009-2010])[
 
 /**
  ** \file location.hh
