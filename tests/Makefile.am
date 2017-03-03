@@ -2,7 +2,7 @@
 
 ## Makefile for Bison testsuite.
 
-## Copyright (C) 2000-2011 Free Software Foundation, Inc.
+## Copyright (C) 2000-2012 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,14 +27,15 @@ MAINTAINERCLEANFILES = Makefile.in $(TESTSUITE)
 ## ------------ ##
 
 $(srcdir)/package.m4: $(top_srcdir)/configure
-	{ \
+	$(AM_V_GEN) { \
 	  echo '# Signature of the current package.'; \
 	  echo 'm4_define([AT_PACKAGE_NAME],      [$(PACKAGE_NAME)])'; \
 	  echo 'm4_define([AT_PACKAGE_TARNAME],   [$(PACKAGE_TARNAME)])'; \
 	  echo 'm4_define([AT_PACKAGE_VERSION],   [$(PACKAGE_VERSION)])'; \
 	  echo 'm4_define([AT_PACKAGE_STRING],    [$(PACKAGE_STRING)])'; \
 	  echo 'm4_define([AT_PACKAGE_BUGREPORT], [$(PACKAGE_BUGREPORT)])'; \
-	} >$(srcdir)/package.m4
+	} >$@.tmp
+	$(AM_V_at) mv $@.tmp $@
 
 ## ------------ ##
 ## Test suite.  ##
@@ -57,8 +58,8 @@ TESTSUITE = $(srcdir)/testsuite
 
 AUTOTEST = $(AUTOM4TE) --language=autotest
 $(TESTSUITE): $(srcdir)/package.m4 $(TESTSUITE_AT)
-	$(AUTOTEST) -I $(srcdir) testsuite.at -o $@.tmp
-	mv $@.tmp $@
+	$(AM_V_GEN) $(AUTOTEST) -I $(srcdir) testsuite.at -o $@.tmp
+	$(AM_V_at) mv $@.tmp $@
 
 atconfig: $(top_builddir)/config.status
 	cd $(top_builddir) && ./config.status tests/$@
@@ -73,22 +74,23 @@ check_SCRIPTS = bison
 
 # Run the test suite on the *installed* tree.
 installcheck-local:
-	$(SHELL) $(TESTSUITE) AUTOTEST_PATH="$(bindir)" $(TESTSUITEFLAGS)
+	$(TESTSUITE) AUTOTEST_PATH="$(bindir)" $(TESTSUITEFLAGS)
 
 # Be real mean with it.
 .PHONY: maintainer-check-g++
 maintainer-check-g++: $(TESTSUITE)
-	$(TESTSUITE) CC='$(CXX)'
+	$(TESTSUITE) $(TESTSUITEFLAGS) --compile-c-with-cxx
 
 .PHONY: maintainer-check-posix
 maintainer-check-posix: $(TESTSUITE)
-	$(TESTSUITE) POSIXLY_CORRECT=1 _POSIX2_VERSION=200112
+	$(TESTSUITE) $(TESTSUITEFLAGS) POSIXLY_CORRECT=1 _POSIX2_VERSION=200112
 
 .PHONY: maintainer-check-valgrind
 maintainer-check-valgrind: $(TESTSUITE)
-	test -z '$(VALGRIND)' || \
-	   VALGRIND_OPTS='--leak-check=full --show-reachable=yes' \
-	   $(TESTSUITE) PREBISON='$(VALGRIND) -q' PREPARSER='$(VALGRIND) -q'
+	test -z '$(VALGRIND)' ||					\
+	  $(TESTSUITE) $(TESTSUITEFLAGS)				\
+	  PREBISON='$(VALGRIND) -q' PREPARSER='$(VALGRIND) -q'		\
+	  VALGRIND_OPTS='--leak-check=full --show-reachable=yes'
 
 .PHONY: maintainer-check
 maintainer-check: maintainer-check-posix maintainer-check-valgrind maintainer-check-g++
@@ -100,3 +102,6 @@ maintainer-push-check:
 .PHONY: maintainer-xml-check
 maintainer-xml-check:
 	BISON_TEST_XML=1 $(MAKE) $(AM_MAKEFLAGS) maintainer-check
+
+.PHONY: maintainer-release-check
+maintainer-release-check: maintainer-check maintainer-push-check maintainer-xml-check

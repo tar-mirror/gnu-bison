@@ -391,7 +391,7 @@ EXCLUDE                = @top_srcdir@/src/scan-gram.c \
 	                 @top_builddir@/src/parse-*.[ch]
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or
-# directories that are symbolic links (a Unix filesystem feature) are
+# directories that are symbolic links (a Unix file system feature) are
 # excluded from the input.
 
 EXCLUDE_SYMLINKS       = YES
@@ -982,7 +982,7 @@ CLASS_GRAPH            = YES
 COLLABORATION_GRAPH    = YES
 
 # If the UML_LOOK tag is set to YES doxygen will generate inheritance and
-# collaboration diagrams in a style similiar to the OMG's Unified Modeling
+# collaboration diagrams in a style similar to the OMG's Unified Modeling
 # Language.
 
 UML_LOOK               = NO

@@ -1,6 +1,6 @@
 # Make bison/src.
 
-# Copyright (C) 2001-2011 Free Software Foundation, Inc.
+# Copyright (C) 2001-2012 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,75 +17,73 @@
 
 AM_CFLAGS = $(WARN_CFLAGS) $(WERROR_CFLAGS)
 AM_CPPFLAGS = -I$(top_srcdir)/lib
-AM_YFLAGS = "-dv"
-
-LDADD = ../lib/libbison.a $(LIBINTL)
-
+BISON = ../tests/bison
 # Use our own Bison to build the parser.  Of course, you ought to
 # keep a sane version of Bison nearby...
-YACC = ../tests/bison -y --warnings=all,error --report=all
+YACC = $(BISON) -y
+AM_YFLAGS = -d -v --warnings=all,error --report=all
+
+LDADD = ../lib/libbison.a $(LIBINTL)
 
 bin_PROGRAMS = bison
 bin_SCRIPTS = $(YACC_SCRIPT)
 EXTRA_SCRIPTS = yacc
 
-bison_SOURCES =					  \
-	AnnotationList.c AnnotationList.h	  \
-	InadequacyList.c InadequacyList.h	  \
-	LR0.c LR0.h				  \
-	Sbitset.c Sbitset.h			  \
-	assoc.c assoc.h				  \
-	closure.c closure.h			  \
-	complain.c complain.h			  \
-	conflicts.c conflicts.h			  \
-	derives.c derives.h			  \
-	files.c files.h				  \
-	flex-scanner.h				  \
-	getargs.c getargs.h			  \
-	gram.c gram.h				  \
-	lalr.h lalr.c				  \
-	ielr.h ielr.c				  \
-	location.c location.h			  \
-	main.c					  \
-	muscle-tab.c muscle-tab.h		  \
-	named-ref.c named-ref.h			  \
-	nullable.c nullable.h			  \
-	output.c output.h			  \
-	parse-gram.h parse-gram.y		  \
-	print.c print.h				  \
-	print_graph.c print_graph.h		  \
-	print-xml.c print-xml.h			  \
-	reader.c reader.h			  \
-	reduce.c reduce.h			  \
-	relation.c relation.h			  \
-	scan-code.h scan-code-c.c		  \
-	scan-gram.h scan-gram-c.c		  \
-	scan-skel.h scan-skel-c.c		  \
-	state.c state.h				  \
-	symlist.c symlist.h			  \
-	symtab.c symtab.h			  \
-	system.h				  \
-	tables.h tables.c			  \
-	uniqstr.c uniqstr.h			  \
-	graphviz.c graphviz.h
+bison_SOURCES =                                 \
+  AnnotationList.c AnnotationList.h             \
+  InadequacyList.c InadequacyList.h             \
+  LR0.c LR0.h                                   \
+  Sbitset.c Sbitset.h                           \
+  assoc.c assoc.h                               \
+  closure.c closure.h                           \
+  complain.c complain.h                         \
+  conflicts.c conflicts.h                       \
+  derives.c derives.h                           \
+  files.c files.h                               \
+  flex-scanner.h                                \
+  getargs.c getargs.h                           \
+  gram.c gram.h                                 \
+  lalr.h lalr.c                                 \
+  ielr.h ielr.c                                 \
+  location.c location.h                         \
+  main.c                                        \
+  muscle-tab.c muscle-tab.h                     \
+  named-ref.c named-ref.h                       \
+  nullable.c nullable.h                         \
+  output.c output.h                             \
+  parse-gram.y                                  \
+  print.c print.h                               \
+  print_graph.c print_graph.h                   \
+  print-xml.c print-xml.h                       \
+  reader.c reader.h                             \
+  reduce.c reduce.h                             \
+  relation.c relation.h                         \
+  scan-code.h scan-code-c.c                     \
+  scan-gram.h scan-gram-c.c                     \
+  scan-skel.h scan-skel-c.c                     \
+  state.c state.h                               \
+  symlist.c symlist.h                           \
+  symtab.c symtab.h                             \
+  system.h                                      \
+  tables.h tables.c                             \
+  uniqstr.c uniqstr.h                           \
+  graphviz.c graphviz.h
 
 EXTRA_bison_SOURCES = scan-code.l scan-skel.l scan-gram.l
 
-BUILT_SOURCES =					\
-parse-gram.c parse-gram.h			\
-scan-code.c					\
-scan-skel.c					\
-scan-gram.c
+BUILT_SOURCES =                                 \
+  parse-gram.c parse-gram.h                     \
+  scan-code.c                                   \
+  scan-skel.c                                   \
+  scan-gram.c
 
 MOSTLYCLEANFILES = yacc
 
 yacc:
-	echo '#! /bin/sh' >$@
-	echo "exec '$(bindir)/bison' -y "'"$$@"' >>$@
-	chmod a+x $@
+	$(AM_V_GEN)echo '#! /bin/sh' >$@
+	$(AM_V_at)echo "exec '$(bindir)/bison' -y "'"$$@"' >>$@
+	$(AM_V_at)chmod a+x $@
 
-echo:
-	echo $(bison_SOURCES) $(noinst_HEADERS)
 
 # The following rule is not designed to be portable,
 # and relies on tools that not everyone has.

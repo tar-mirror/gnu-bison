@@ -1,6 +1,6 @@
 # Executing Actions.                               -*- Autotest -*-
 
-# Copyright (C) 2002, 2004-2005, 2007, 2009-2011 Free Software
+# Copyright (C) 2002, 2004-2005, 2007, 2009-2012 Free Software
 # Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
@@ -88,6 +88,7 @@ m4_define([AT_TEST_SYNCLINE],
 
 AT_DATA([syncline.c],
 [[#error "1"
+int i; // avoids -pedantic warning about an empty translation unit
 ]])
 
 AT_SYNCLINES_COMPILE([syncline.c])

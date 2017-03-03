@@ -1,6 +1,6 @@
 # Java tests for simple calculator.           -*- Autotest -*-
 
-# Copyright (C) 2007-2011 Free Software Foundation, Inc.
+# Copyright (C) 2007-2012 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -417,8 +417,8 @@ AT_JAVA_COMPILE([[YYParser.java]])
 
 
 # AT_CHECK_JAVA_MINIMAL_W_LEXER([1:DIRECTIVES], [2:LEX_THROWS],
-# 	[3:YYLEX_ACTION], [4:LEXER_BODY], [5:PARSER_ACTION], [6:STYPE],
-#	[7:POSITION_TYPE], [8:LOCATION_TYPE])
+#       [3:YYLEX_ACTION], [4:LEXER_BODY], [5:PARSER_ACTION], [6:STYPE],
+#       [7:POSITION_TYPE], [8:LOCATION_TYPE])
 # ---------------------------------------------------------------------
 # Check that a mininal parser with DIRECTIVES and a "%code lexer".
 # YYLEX is the body of yylex () which throws LEX_THROW.
@@ -569,7 +569,7 @@ AT_CHECK_JAVA_GREP([[ *public YYParser (Lexer yylexer) {]])
 AT_CHECK_JAVA_MINIMAL([[%parse-param {int parse_param1}]])
 AT_CHECK_JAVA_GREP([[ *protected final int parse_param1;]])
 AT_CHECK_JAVA_GREP([[ *public YYParser (Lexer yylexer, *int parse_param1) {]])
-AT_CHECK_JAVA_GREP([[[ 	]*this.parse_param1 = parse_param1;]])
+AT_CHECK_JAVA_GREP([[[	 ]*this.parse_param1 = parse_param1;]])
 
 AT_CHECK_JAVA_MINIMAL([[
 %parse-param {int parse_param1}
@@ -577,8 +577,8 @@ AT_CHECK_JAVA_MINIMAL([[
 AT_CHECK_JAVA_GREP([[ *protected final int parse_param1;]])
 AT_CHECK_JAVA_GREP([[ *protected final long parse_param2;]])
 AT_CHECK_JAVA_GREP([[ *public YYParser (Lexer yylexer, *int parse_param1, *long parse_param2) {]])
-AT_CHECK_JAVA_GREP([[[ 	]*this.parse_param1 = parse_param1;]])
-AT_CHECK_JAVA_GREP([[[ 	]*this.parse_param2 = parse_param2;]])
+AT_CHECK_JAVA_GREP([[[	 ]*this.parse_param1 = parse_param1;]])
+AT_CHECK_JAVA_GREP([[[	 ]*this.parse_param2 = parse_param2;]])
 
 AT_CHECK_JAVA_MINIMAL_W_LEXER([], [], [[return EOF;]])
 AT_CHECK_JAVA_GREP([[ *public YYParser () {]])
@@ -589,7 +589,7 @@ AT_CHECK_JAVA_MINIMAL_W_LEXER([[%parse-param {int parse_param1}]],
 AT_CHECK_JAVA_GREP([[ *protected final int parse_param1;]])
 AT_CHECK_JAVA_GREP([[ *public YYParser (int parse_param1) {]])
 AT_CHECK_JAVA_GREP([[ *protected YYParser (Lexer yylexer, *int parse_param1) {]])
-AT_CHECK_JAVA_GREP([[[ 	]*this.parse_param1 = parse_param1;]], [2])
+AT_CHECK_JAVA_GREP([[[	 ]*this.parse_param1 = parse_param1;]], [2])
 
 AT_CHECK_JAVA_MINIMAL_W_LEXER([[
 %parse-param {int parse_param1}
@@ -599,8 +599,8 @@ AT_CHECK_JAVA_GREP([[ *protected final int parse_param1;]])
 AT_CHECK_JAVA_GREP([[ *protected final long parse_param2;]])
 AT_CHECK_JAVA_GREP([[ *public YYParser (int parse_param1, *long parse_param2) {]])
 AT_CHECK_JAVA_GREP([[ *protected YYParser (Lexer yylexer, *int parse_param1, *long parse_param2) {]])
-AT_CHECK_JAVA_GREP([[[ 	]*this.parse_param1 = parse_param1;]], [2])
-AT_CHECK_JAVA_GREP([[[ 	]*this.parse_param2 = parse_param2;]], [2])
+AT_CHECK_JAVA_GREP([[[	 ]*this.parse_param1 = parse_param1;]], [2])
+AT_CHECK_JAVA_GREP([[[	 ]*this.parse_param2 = parse_param2;]], [2])
 
 AT_CHECK_JAVA_MINIMAL_W_LEXER([[%lex-param {char lex_param1}]],
 	[], [[return EOF;]], [[YYLexer (char lex_param1) {}]])
@@ -625,8 +625,8 @@ AT_CHECK_JAVA_GREP([[ *protected final long parse_param2;]])
 AT_CHECK_JAVA_GREP([[ *public YYParser (char lex_param1, *short lex_param2, *int parse_param1, *long parse_param2) {]])
 AT_CHECK_JAVA_GREP([[.* = new YYLexer *(lex_param1, *lex_param2);]])
 AT_CHECK_JAVA_GREP([[ *protected YYParser (Lexer yylexer, *int parse_param1, *long parse_param2) {]])
-AT_CHECK_JAVA_GREP([[[ 	]*this.parse_param1 = parse_param1;]], [2])
-AT_CHECK_JAVA_GREP([[[ 	]*this.parse_param2 = parse_param2;]], [2])
+AT_CHECK_JAVA_GREP([[[	 ]*this.parse_param1 = parse_param1;]], [2])
+AT_CHECK_JAVA_GREP([[[	 ]*this.parse_param2 = parse_param2;]], [2])
 
 AT_CLEANUP
 
@@ -747,5 +747,71 @@ AT_CHECK_JAVA_MINIMAL_W_LEXER([[
 AT_CHECK([[grep 'java.awt.Color' YYParser.java]], [0], [ignore])
 AT_CHECK([[$EGREP -v ' */?\*' YYParser.java | grep 'Position']], [1], [ignore])
 AT_CHECK([[$EGREP -v ' */?\*' YYParser.java | grep 'Location']], [1], [ignore])
+
+AT_CLEANUP
+
+
+# ----------------------------------------------- #
+# Java syntax error handling without error token. #
+# ----------------------------------------------- #
+
+AT_SETUP([Java syntax error handling without error token])
+
+AT_DATA([[YYParser.y]], [[%language "Java"
+
+%lex-param { String s }
+
+%code imports {
+  import java.io.IOException;
+}
+
+%code lexer {
+  String Input;
+  int Position;
+
+  public YYLexer (String s)
+  {
+    Input    = s;
+    Position = 0;
+  }
+
+  public void yyerror (String s)
+  {
+    System.err.println (s);
+  }
+
+  public Object getLVal ()
+  {
+    return null;
+  }
+
+  public int yylex () throws IOException
+  {
+    if (Position >= Input.length ())
+      return EOF;
+    else
+      return Input.charAt (Position++);
+  }
+}
+
+%code {
+  public static void main (String args []) throws IOException
+  {
+    YYParser p = new YYParser (args [0]);
+    p.parse ();
+  }
+}
+%%
+input:
+  'a' 'a'
+;
+]])
+AT_BISON_CHECK([[YYParser.y]])
+AT_JAVA_COMPILE([[YYParser.java]])
+AT_JAVA_PARSER_CHECK([[YYParser aa]], [[0]], [[]], [[]])
+AT_JAVA_PARSER_CHECK([[YYParser ab]], [[0]], [[]], [[syntax error
+]])
+AT_JAVA_PARSER_CHECK([[YYParser ba]], [[0]], [[]], [[syntax error
+]])
 
 AT_CLEANUP

@@ -1,6 +1,6 @@
 %{/* Bison Grammar Parser                             -*- C -*-
 
-   Copyright (C) 2002-2011 Free Software Foundation, Inc.
+   Copyright (C) 2002-2012 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -32,6 +32,7 @@
 #include "symlist.h"
 #include "scan-gram.h"
 #include "scan-code.h"
+#include "xmemdup0.h"
 
 #define YYLLOC_DEFAULT(Current, Rhs, N)  (Current) = lloc_default (Rhs, N)
 static YYLTYPE lloc_default (YYLTYPE const *, int);
@@ -322,7 +323,7 @@ prologue_declaration:
             xmalloc (dir_length + 1 + strlen (skeleton_user) + 1);
           if (dir_length > 0)
             {
-              strncpy (skeleton_build, current_file, dir_length);
+              memcpy (skeleton_build, current_file, dir_length);
               skeleton_build[dir_length++] = '/';
             }
           strcpy (skeleton_build + dir_length, skeleton_user);
@@ -686,7 +687,7 @@ lloc_default (YYLTYPE const *rhs, int n)
   loc.start = rhs[n].end;
   loc.end = rhs[n].end;
 
-  /* Ignore empty nonterminals the start of the the right-hand side.
+  /* Ignore empty nonterminals the start of the right-hand side.
      Do not bother to ignore them at the end of the right-hand side,
      since empty nonterminals have the same end as their predecessors.  */
   for (i = 1; i <= n; i++)
@@ -733,17 +734,7 @@ add_param (char const *type, char *decl, location loc)
     complain_at (loc, _("missing identifier in parameter declaration"));
   else
     {
-      char *name;
-      size_t name_len;
-
-      for (name_len = 1;
-	   memchr (alphanum, name_start[name_len], sizeof alphanum);
-	   name_len++)
-	continue;
-
-      name = xmalloc (name_len + 1);
-      memcpy (name, name_start, name_len);
-      name[name_len] = '\0';
+      char *name = xmemdup0 (name_start, strspn (name_start, alphanum));
       muscle_pair_list_grow (type, decl, name);
       free (name);
     }
@@ -758,8 +749,8 @@ version_check (location const *loc, char const *version)
   if (strverscmp (version, PACKAGE_VERSION) > 0)
     {
       complain_at (*loc, "require bison %s, but have %s",
-		   version, PACKAGE_VERSION);
-      exit (63);
+                   version, PACKAGE_VERSION);
+      exit (EX_MISMATCH);
     }
 }
 

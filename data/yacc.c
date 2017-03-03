@@ -2,7 +2,7 @@
 
 # Yacc compatible skeleton for Bison
 
-# Copyright (C) 1984, 1989-1990, 2000-2011 Free Software Foundation,
+# Copyright (C) 1984, 1989-1990, 2000-2012 Free Software Foundation,
 # Inc.
 
 # This program is free software: you can redistribute it and/or modify
@@ -197,7 +197,7 @@ m4_define([b4_declare_parser_state_variables], [b4_pure_if([[
        `yyvs': related to semantic values.]b4_locations_if([[
        `yyls': related to locations.]])[
 
-       Refer to the stacks thru separate pointers, to allow yyoverflow
+       Refer to the stacks through separate pointers, to allow yyoverflow
        to reallocate them elsewhere.  */
 
     /* The state stack.  */
@@ -234,7 +234,7 @@ m4_changecom()
 m4_divert_push(0)dnl
 @output(b4_parser_file_name@)@
 b4_copyright([Bison implementation for Yacc-like parsers in C],
-             [1984, 1989-1990, 2000-2011])[
+             [1984, 1989-1990, 2000-2012])[
 
 /* C LALR(1) parser skeleton written by Richard Stallman, by
    simplifying the original so-called "semantic" parser.  */
@@ -266,6 +266,8 @@ m4_if(b4_prefix, [yy], [],
 
 /* Copy the first part of user declarations.  */
 ]b4_user_pre_prologue[
+
+]b4_null_define[
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -437,6 +439,7 @@ b4_push_if([], [b4_lac_if([], [[
 #    define YYSTACK_ALLOC alloca
 #    if ! defined _ALLOCA_H && ! defined EXIT_SUCCESS && ]b4_c_modern[
 #     include <stdlib.h> /* INFRINGES ON USER NAME SPACE */
+      /* Use EXIT_SUCCESS as a witness for stdlib.h.  */
 #     ifndef EXIT_SUCCESS
 #      define EXIT_SUCCESS 0
 #     endif
@@ -533,20 +536,20 @@ union yyalloc
 #endif
 
 #if defined YYCOPY_NEEDED && YYCOPY_NEEDED
-/* Copy COUNT objects from FROM to TO.  The source and destination do
+/* Copy COUNT objects from SRC to DST.  The source and destination do
    not overlap.  */
 # ifndef YYCOPY
 #  if defined __GNUC__ && 1 < __GNUC__
-#   define YYCOPY(To, From, Count) \
-      __builtin_memcpy (To, From, (Count) * sizeof (*(From)))
+#   define YYCOPY(Dst, Src, Count) \
+      __builtin_memcpy (Dst, Src, (Count) * sizeof (*(Src)))
 #  else
-#   define YYCOPY(To, From, Count)		\
-      do					\
-	{					\
-	  YYSIZE_T yyi;				\
-	  for (yyi = 0; yyi < (Count); yyi++)	\
-	    (To)[yyi] = (From)[yyi];		\
-	}					\
+#   define YYCOPY(Dst, Src, Count)              \
+      do                                        \
+        {                                       \
+          YYSIZE_T yyi;                         \
+          for (yyi = 0; yyi < (Count); yyi++)   \
+            (Dst)[yyi] = (Src)[yyi];            \
+        }                                       \
       while (YYID (0))
 #  endif
 # endif
@@ -712,18 +715,19 @@ static const ]b4_int_type_for([b4_stos])[ yystos[] =
 
 #define YYRECOVERING()  (!!yyerrstatus)
 
-#define YYBACKUP(Token, Value)					\
-do								\
-  if (yychar == YYEMPTY && yylen == 1)				\
-    {								\
-      yychar = (Token);						\
-      yylval = (Value);						\
-      YYPOPSTACK (1);						\]b4_lac_if([[
-      YY_LAC_DISCARD ("YYBACKUP");				\]])[
-      goto yybackup;						\
-    }								\
-  else								\
-    {								\
+#define YYBACKUP(Token, Value)                                  \
+do                                                              \
+  if (yychar == YYEMPTY)                                        \
+    {                                                           \
+      yychar = (Token);                                         \
+      yylval = (Value);                                         \
+      YYPOPSTACK (yylen);                                       \
+      yystate = *yyssp;                                         \]b4_lac_if([[
+      YY_LAC_DISCARD ("YYBACKUP");                              \]])[
+      goto yybackup;                                            \
+    }                                                           \
+  else                                                          \
+    {                                                           \
       yyerror (]b4_yyerror_args[YY_("syntax error: cannot back up")); \
       YYERROR;							\
     }								\
@@ -1241,12 +1245,12 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
                 ]b4_lac_if([[yytype_int16 *yyesa, yytype_int16 **yyes,
                 YYSIZE_T *yyes_capacity, ]])[yytype_int16 *yyssp, int yytoken)
 {
-  YYSIZE_T yysize0 = yytnamerr (0, yytname[yytoken]);
+  YYSIZE_T yysize0 = yytnamerr (YY_NULL, yytname[yytoken]);
   YYSIZE_T yysize = yysize0;
   YYSIZE_T yysize1;
   enum { YYERROR_VERBOSE_ARGS_MAXIMUM = 5 };
   /* Internationalized format string. */
-  const char *yyformat = 0;
+  const char *yyformat = YY_NULL;
   /* Arguments of yyformat. */
   char const *yyarg[YYERROR_VERBOSE_ARGS_MAXIMUM];
   /* Number of reported tokens (one for the "unexpected", one per
@@ -1324,7 +1328,7 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
                     break;
                   }
                 yyarg[yycount++] = yytname[yyx];
-                yysize1 = yysize + yytnamerr (0, yytname[yyx]);
+                yysize1 = yysize + yytnamerr (YY_NULL, yytname[yyx]);
                 if (! (yysize <= yysize1
                        && yysize1 <= YYSTACK_ALLOC_MAXIMUM))
                   return 2;
@@ -1413,7 +1417,7 @@ static char yypstate_allocated = 0;]])b4_pull_if([
 
 b4_c_function_def([[yyparse]], [[int]], b4_parse_param)[
 {
-  return yypull_parse (0]m4_ifset([b4_parse_param],
+  return yypull_parse (YY_NULL]m4_ifset([b4_parse_param],
                                   [[, ]b4_c_args(b4_parse_param)])[);
 }
 
@@ -1426,7 +1430,9 @@ b4_c_function_def([[yyparse]], [[int]], b4_parse_param)[
   int yychar;
   YYSTYPE yylval;]b4_locations_if([[
   YYLTYPE yylloc;]])])[
-  if (yyps == 0)
+  if (yyps)
+    yyps_local = yyps;
+  else
     {
       yyps_local = yypstate_new ();
       if (!yyps_local)
@@ -1437,14 +1443,12 @@ b4_c_function_def([[yyparse]], [[int]], b4_parse_param)[
           return 2;
         }
     }
-  else
-    yyps_local = yyps;
   do {
     yychar = YYLEX;
     yystatus =
       yypush_parse (yyps_local]b4_pure_if([[, yychar, &yylval]b4_locations_if([[, &yylloc]])])m4_ifset([b4_parse_param], [, b4_c_args(b4_parse_param)])[);
   } while (yystatus == YYPUSH_MORE);
-  if (yyps == 0)
+  if (!yyps)
     yypstate_delete (yyps_local);
   return yystatus;
 }]])[
@@ -1454,10 +1458,10 @@ b4_c_function_def([[yyparse]], [[int]], b4_parse_param)[
 {
   yypstate *yyps;]b4_pure_if([], [[
   if (yypstate_allocated)
-    return 0;]])[
+    return YY_NULL;]])[
   yyps = (yypstate *) malloc (sizeof *yyps);
   if (!yyps)
-    return 0;
+    return YY_NULL;
   yyps->yynew = 1;]b4_pure_if([], [[
   yypstate_allocated = 1;]])[
   return yyps;
@@ -2017,7 +2021,7 @@ yyabortlab:
   yyresult = 1;
   goto yyreturn;
 
-#if ]b4_lac_if([[1]], [[!defined(yyoverflow) || YYERROR_VERBOSE]])[
+#if ]b4_lac_if([[1]], [[!defined yyoverflow || YYERROR_VERBOSE]])[
 /*-------------------------------------------------.
 | yyexhaustedlab -- memory exhaustion comes here.  |
 `-------------------------------------------------*/
@@ -2068,7 +2072,7 @@ yypushreturn:]])[
 b4_defines_if(
 [@output(b4_spec_defines_file@)@
 b4_copyright([Bison interface for Yacc-like parsers in C],
-             [1984, 1989-1990, 2000-2011])
+             [1984, 1989-1990, 2000-2012])
 
 b4_percent_code_get([[requires]])[]dnl
 

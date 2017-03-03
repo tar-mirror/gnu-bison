@@ -29,6 +29,7 @@ Csaba Raduly              csaba_22@yahoo.co.uk
 Dagobert Michelsen        dam@baltic-online.de
 Daniel Hagerty            hag@gnu.org
 David J. MacKenzie        djm@gnu.org
+David Kastrup             dak@gnu.org
 Derek M. Jones            derek@knosof.co.uk
 Di-an Jan                 dianj@freeshell.org
 Dick Streefland           dick.streefland@altium.nl
@@ -58,6 +59,7 @@ Juan Manuel Guerrero      juan.guerrero@gmx.de
 Kees Zeelenberg           kzlg@users.sourceforge.net
 Keith Browne              kbrowne@legato.com
 Laurent Mascherpa         laurent.mascherpa@epita.fr
+Lie Yan                   lie.yan@kaust.edu.sa
 Magnus Fromreide          magfr@lysator.liu.se
 Marc Autret               autret_m@epita.fr
 Martin Jacobs             martin.jacobs@arcor.de
@@ -95,17 +97,23 @@ Sebastian Setzer          sebastian.setzer.ext@siemens.com
 Sebastien Fricker         sebastien.fricker@gmail.com
 Sergei Steshenko          sergstesh@yahoo.com
 Shura                     debil_urod@ngs.ru
+Stefano Lattarini         stefano.lattarini@gmail.com
 Steve Murphy              murf@parsetree.com
 Summum Bonum              sum@geekhouse.org
+Thiru Ramakrishnan        thiru.ramakrishnan@gmail.com
 Tim Josling               tej@melbpc.org.au
+Tim Landscheidt           tim@tim-landscheidt.de
 Tim Van Holder            tim.van.holder@pandora.be
 Tom Lane                  tgl@sss.pgh.pa.us
 Tom Tromey                tromey@cygnus.com
 Tommy Nordgren            tommy.nordgren@chello.se
 Troy A. Johnson           troyj@ecn.purdue.edu
-Tys Lefering              twlevo@gmail.com
+Tys Lefering              gccbison@gmail.com
 Vin Shelton               acs@alumni.princeton.edu
+W.C.A. Wijngaards         wouter@NLnetLabs.nl
 Wayne Green               wayne@infosavvy.com
+Wei Song                  wsong83@gmail.com
+Wolfgang S. Kechel        wolfgang.kechel@prs.de
 Wolfram Wagner            ww@mpi-sb.mpg.de
 Wwp                       subscript@free.fr
 Zack Weinberg             zack@codesourcery.com
@@ -116,3 +124,22 @@ thank them!  Please, help us keeping this list up to date.
 Local Variables:
 mode: text
 End:
+
+-----
+
+Copyright (C) 2000-2012 Free Software Foundation, Inc.
+
+This file is part of Bison, the GNU Parser Generator.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.

@@ -1,6 +1,6 @@
 # Configure template for GNU Bison.                   -*-Autoconf-*-
 #
-# Copyright (C) 2001-2011 Free Software Foundation, Inc.
+# Copyright (C) 2001-2012 Free Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,15 +17,18 @@
 
 # In order for some versions of Sun Studio to compile our C++ test cases
 # correctly, we need Autoconf 2.64 or better to handle the restrict
-# keyword in at least string.h from gnulib.
-AC_PREREQ(2.64)
+# keyword in at least string.h from gnulib.  We need Autoconf 2.68 or
+# better to avoid a typo in the `configure --help' entry for the YACC
+# environment variable.
+AC_PREREQ([2.68])
+m4_pattern_forbid([^gl_[A-Z]])
 
 AC_INIT([GNU Bison],
         m4_esyscmd([build-aux/git-version-gen .tarball-version]),
         [bug-bison@gnu.org])
-AC_DEFINE([PACKAGE_COPYRIGHT_YEAR], [2011],
-          [The copyright year for this package])
-AC_SUBST([PACKAGE_COPYRIGHT_YEAR], [2011])
+AC_SUBST([PACKAGE_COPYRIGHT_YEAR], [2012])
+AC_DEFINE_UNQUOTED([PACKAGE_COPYRIGHT_YEAR], [$PACKAGE_COPYRIGHT_YEAR],
+                   [The copyright year for this package])
 
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
@@ -42,51 +45,59 @@ AC_CONFIG_MACRO_DIR([m4])
 # releases, we want to be able run make dist without being required to
 # add a bogus NEWS entry.  In that case, the version string
 # automatically contains a dash, which we also let disable gnits.
-AM_INIT_AUTOMAKE([1.11.1 dist-bzip2]
+AM_INIT_AUTOMAKE([1.11.1 dist-xz silent-rules]
                  m4_bmatch(m4_defn([AC_PACKAGE_VERSION]), [[-_]],
                            [gnu], [gnits]))
-AC_CONFIG_HEADERS([lib/config.h:lib/config.hin])
+AM_SILENT_RULES([yes])
+AC_CONFIG_HEADERS([lib/config.h:lib/config.in.h])
 
 # Checks for the compiler.
 AC_PROG_CC_STDC
+AC_PROG_CXX
 
 # Gnulib (early checks).
 gl_EARLY
 
-AC_ARG_ENABLE(gcc-warnings,
+AC_ARG_ENABLE([gcc-warnings],
 [  --enable-gcc-warnings   turn on lots of GCC warnings (not recommended)],
-[case "${enableval}" in
+[case $enable_gcc_warnings in
    yes|no) ;;
-   *)      AC_MSG_ERROR([bad value ${enableval} for gcc-warnings option]) ;;
+   *)  AC_MSG_ERROR([invalid value for --gcc-warnings: $enable_gcc_warnings]);;
  esac],
-	      [enableval=no])
-if test "${enableval}" = yes; then
+              [enable_gcc_warnings=no])
+if test "$enable_gcc_warnings" = yes; then
+  warn_common='-Wall -Wextra -Wno-sign-compare -Wcast-align
+    -Wcast-qual -Wformat -Wpointer-arith -Wwrite-strings'
+  warn_c='-Wbad-function-cast -Wmissing-declarations -Wmissing-prototypes
+    -Wshadow -Wstrict-prototypes'
+  warn_cxx='-Wnoexcept'
+  AC_LANG_PUSH([C])
+  for i in $warn_common $warn_c;
+  do
+    gl_WARN_ADD([$i], [WARN_CFLAGS])
+  done
   gl_WARN_ADD([-Werror], [WERROR_CFLAGS])
-  AC_SUBST([WERROR_CFLAGS])
-  gl_WARN_ADD([-Wall])
-  gl_WARN_ADD([-Wextra -Wno-sign-compare])
-  gl_WARN_ADD([-Wcast-align])
-  gl_WARN_ADD([-Wcast-qual])
-  gl_WARN_ADD([-Wformat])
-  gl_WARN_ADD([-Wpointer-arith])
-  gl_WARN_ADD([-Wwrite-strings])
-  AC_SUBST([WARN_CXXFLAGS], [$WARN_CFLAGS])
-  # The following warnings are not suitable for C++.
-  gl_WARN_ADD([-Wbad-function-cast])
-  gl_WARN_ADD([-Wmissing-declarations])
-  gl_WARN_ADD([-Wmissing-prototypes])
-  gl_WARN_ADD([-Wshadow])
-  gl_WARN_ADD([-Wstrict-prototypes])
-  AC_SUBST([WARN_CFLAGS])
   # Warnings for the test suite only.
   gl_WARN_ADD([-Wundef], [WARN_CFLAGS_TEST])
-  WARN_CXXFLAGS_TEST="$WARN_CXXFLAGS $WARN_CFLAGS_TEST"
-  WARN_CFLAGS_TEST="$WARN_CFLAGS $WARN_CFLAGS_TEST"
-  AC_SUBST([WARN_CXXFLAGS_TEST])
-  AC_SUBST([WARN_CFLAGS_TEST])
+  gl_WARN_ADD([-pedantic], [WARN_CFLAGS_TEST])
+  AC_LANG_POP([C])
+
+  AC_LANG_PUSH([C++])
+  for i in $warn_common $warn_cxx;
+  do
+    gl_WARN_ADD([$i], [WARN_CXXFLAGS])
+  done
+  gl_WARN_ADD([ -Wzero-as-null-pointer-constant], [WARN_CXXFLAGS],
+              [AC_LANG_PROGRAM([], [nullptr])])
+  gl_WARN_ADD([-Werror], [WERROR_CXXFLAGS])
+  # Warnings for the test suite only.
+  gl_WARN_ADD([-Wundef], [WARN_CXXFLAGS_TEST])
+  gl_WARN_ADD([-pedantic], [WARN_CXXFLAGS_TEST])
+  AC_LANG_POP([C++])
 fi
 
 BISON_TEST_FOR_WORKING_C_COMPILER
+BISON_TEST_FOR_WORKING_CXX_COMPILER
 
 AC_ARG_ENABLE([yacc],
   [AC_HELP_STRING([--disable-yacc],
@@ -105,6 +116,7 @@ AC_SUBST([YACC_LIBRARY])
 
 # Checks for programs.
 AC_PROG_LEX
+$LEX_IS_FLEX || AC_MSG_ERROR([Flex is required])
 AC_PROG_YACC
 AC_PROG_RANLIB
 AC_PROG_GNU_M4
@@ -128,7 +140,6 @@ gl_INIT
 # Checks for library functions.
 AC_CHECK_FUNCS_ONCE([setlocale])
 AM_WITH_DMALLOC
-BISON_PREREQ_SUBPIPE
 BISON_PREREQ_TIMEVAR
 
 # Gettext.
@@ -152,13 +163,9 @@ AC_CONFIG_TESTDIR(tests)
 AC_CONFIG_FILES([tests/Makefile tests/atlocal])
 AC_CONFIG_FILES([tests/bison], [chmod +x tests/bison])
 AC_CHECK_PROGS([VALGRIND], [valgrind])
-AC_PROG_CXX
-BISON_TEST_FOR_WORKING_CXX_COMPILER
 AM_MISSING_PROG([AUTOM4TE], [autom4te])
 # Needed by tests/atlocal.in.
 AC_SUBST([GCC])
-AC_SUBST([O0CFLAGS],   [`echo $CFLAGS   | sed 's/-O[[0-9]] *//'`])
-AC_SUBST([O0CXXFLAGS], [`echo $CXXFLAGS | sed 's/-O[[0-9]] *//'`])
 
 gt_JAVACOMP([1.3])
 gt_JAVAEXEC

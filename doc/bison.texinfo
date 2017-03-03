@@ -33,7 +33,7 @@
 This manual (@value{UPDATED}) is for GNU Bison (version
 @value{VERSION}), the GNU parser generator.
 
-Copyright @copyright{} 1988-1993, 1995, 1998-2011 Free Software
+Copyright @copyright{} 1988-1993, 1995, 1998-2012 Free Software
 Foundation, Inc.
 
 @quotation
@@ -125,7 +125,7 @@ The Concepts of Bison
                            the name of an identifier, etc.).
 * Semantic Actions::     Each rule can have an action containing C code.
 * GLR Parsers::          Writing parsers for general context-free languages.
-* Locations Overview::   Tracking Locations.
+* Locations::            Overview of location tracking.
 * Bison Parser::         What are Bison's input and output,
                            how is the output used?
 * Stages::               Stages in writing and running Bison grammars.
@@ -180,14 +180,15 @@ Multi-Function Calculator: @code{mfcalc}
 
 Bison Grammar Files
 
-* Grammar Outline::   Overall layout of the grammar file.
-* Symbols::           Terminal and nonterminal symbols.
-* Rules::             How to write grammar rules.
-* Recursion::         Writing recursive rules.
-* Semantics::         Semantic values and actions.
-* Locations::         Locations and actions.
-* Declarations::      All kinds of Bison declarations are described here.
-* Multiple Parsers::  Putting more than one Bison parser in one program.
+* Grammar Outline::    Overall layout of the grammar file.
+* Symbols::            Terminal and nonterminal symbols.
+* Rules::              How to write grammar rules.
+* Recursion::          Writing recursive rules.
+* Semantics::          Semantic values and actions.
+* Tracking Locations:: Locations and actions.
+* Named References::   Using named references in actions.
+* Declarations::       All kinds of Bison declarations are described here.
+* Multiple Parsers::   Putting more than one Bison parser in one program.
 
 Outline of a Bison Grammar
 
@@ -206,7 +207,6 @@ Defining Language Semantics
 * Mid-Rule Actions::  Most actions go at the end of a rule.
                       This says when, why and how to use the exceptional
                         action in the middle of a rule.
-* Named References::  Using named references in actions.
 
 Tracking Locations
 
@@ -223,6 +223,7 @@ Bison Declarations
 * Type Decl::         Declaring the choice of type for a nonterminal symbol.
 * Initial Action Decl::  Code run before parsing starts.
 * Destructor Decl::   Declaring how symbols are freed.
+* Printer Decl::      Declaring how symbol values are displayed.
 * Expect Decl::       Suppressing warnings about parsing conflicts.
 * Start Decl::        Specifying the start symbol.
 * Pure Decl::         Requesting a reentrant parser.
@@ -295,6 +296,12 @@ Debugging Your Parser
 * Understanding::     Understanding the structure of your parser.
 * Tracing::           Tracing the execution of your parser.
 
+Tracing Your Parser
+
+* Enabling Traces::             Activating run-time trace support
+* Mfcalc Traces::               Extending @code{mfcalc} to support traces
+* The YYPRINT Macro::           Obsolete interface for semantic value reports
+
 Invoking Bison
 
 * Bison Options::     All the options described in detail,
@@ -315,6 +322,11 @@ C++ Parsers
 * C++ Parser Interface::        Instantiating and running the parser
 * C++ Scanner Interface::       Exchanges between yylex and parse
 * A Complete C++ Example::      Demonstrating their use
+
+C++ Location Values
+
+* C++ position::                One point in the source file
+* C++ location::                Two points in the source file
 
 A Complete C++ Example
 
@@ -449,7 +461,7 @@ use Bison or Yacc, we suggest you start by reading this chapter carefully.
                            the name of an identifier, etc.).
 * Semantic Actions::     Each rule can have an action containing C code.
 * GLR Parsers::          Writing parsers for general context-free languages.
-* Locations Overview::   Tracking Locations.
+* Locations::            Overview of location tracking.
 * Bison Parser::         What are Bison's input and output,
                            how is the output used?
 * Stages::               Stages in writing and running Bison grammars.
@@ -536,7 +548,6 @@ lexicography, not grammar.)
 
 Here is a simple C function subdivided into tokens:
 
-@ifinfo
 @example
 int             /* @r{keyword `int'} */
 square (int x)  /* @r{identifier, open-paren, keyword `int',}
@@ -546,16 +557,6 @@ square (int x)  /* @r{identifier, open-paren, keyword `int',}
                    @r{identifier, semicolon} */
 @}               /* @r{close-brace} */
 @end example
-@end ifinfo
-@ifnotinfo
-@example
-int             /* @r{keyword `int'} */
-square (int x)  /* @r{identifier, open-paren, keyword `int', identifier, close-paren} */
-@{               /* @r{open-brace} */
-  return x * x; /* @r{keyword `return', identifier, asterisk, identifier, semicolon} */
-@}               /* @r{close-brace} */
-@end example
-@end ifnotinfo
 
 The syntactic groupings of C include the expression, the statement, the
 declaration, and the function definition.  These are represented in the
@@ -637,8 +638,7 @@ the statement; the naked semicolon, and the colon, are Bison punctuation
 used in every rule.
 
 @example
-stmt:   RETURN expr ';'
-        ;
+stmt: RETURN expr ';' ;
 @end example
 
 @noindent
@@ -710,8 +710,7 @@ For example, here is a rule that says an expression can be the sum of
 two subexpressions:
 
 @example
-expr: expr '+' expr   @{ $$ = $1 + $3; @}
-        ;
+expr: expr '+' expr   @{ $$ = $1 + $3; @} ;
 @end example
 
 @noindent
@@ -890,30 +889,32 @@ parses a vastly simplified form of Pascal type declarations.
 %%
 
 @group
-type_decl : TYPE ID '=' type ';'
-     ;
+type_decl: TYPE ID '=' type ';' ;
 @end group
 
 @group
-type : '(' id_list ')'
-     | expr DOTDOT expr
-     ;
+type:
+  '(' id_list ')'
+| expr DOTDOT expr
+;
 @end group
 
 @group
-id_list : ID
-     | id_list ',' ID
-     ;
+id_list:
+  ID
+| id_list ',' ID
+;
 @end group
 
 @group
-expr : '(' expr ')'
-     | expr '+' expr
-     | expr '-' expr
-     | expr '*' expr
-     | expr '/' expr
-     | ID
-     ;
+expr:
+  '(' expr ')'
+| expr '+' expr
+| expr '-' expr
+| expr '*' expr
+| expr '/' expr
+| ID
+;
 @end group
 @end example
 
@@ -993,30 +994,35 @@ Let's consider an example, vastly simplified from a C++ grammar.
 
 %%
 
-prog :
-     | prog stmt   @{ printf ("\n"); @}
-     ;
+prog:
+  /* Nothing.  */
+| prog stmt   @{ printf ("\n"); @}
+;
 
-stmt : expr ';'  %dprec 1
-     | decl      %dprec 2
-     ;
+stmt:
+  expr ';'  %dprec 1
+| decl      %dprec 2
+;
 
-expr : ID               @{ printf ("%s ", $$); @}
-     | TYPENAME '(' expr ')'
-                        @{ printf ("%s <cast> ", $1); @}
-     | expr '+' expr    @{ printf ("+ "); @}
-     | expr '=' expr    @{ printf ("= "); @}
-     ;
+expr:
+  ID               @{ printf ("%s ", $$); @}
+| TYPENAME '(' expr ')'
+                   @{ printf ("%s <cast> ", $1); @}
+| expr '+' expr    @{ printf ("+ "); @}
+| expr '=' expr    @{ printf ("= "); @}
+;
 
-decl : TYPENAME declarator ';'
-                        @{ printf ("%s <declare> ", $1); @}
-     | TYPENAME declarator '=' expr ';'
-                        @{ printf ("%s <init-declare> ", $1); @}
-     ;
+decl:
+  TYPENAME declarator ';'
+                   @{ printf ("%s <declare> ", $1); @}
+| TYPENAME declarator '=' expr ';'
+                   @{ printf ("%s <init-declare> ", $1); @}
+;
 
-declarator : ID         @{ printf ("\"%s\" ", $1); @}
-     | '(' declarator ')'
-     ;
+declarator:
+  ID               @{ printf ("\"%s\" ", $1); @}
+| '(' declarator ')'
+;
 @end example
 
 @noindent
@@ -1085,9 +1091,10 @@ other.  To do so, you could change the declaration of @code{stmt} as
 follows:
 
 @example
-stmt : expr ';'  %merge <stmtMerge>
-     | decl      %merge <stmtMerge>
-     ;
+stmt:
+  expr ';'  %merge <stmtMerge>
+| decl      %merge <stmtMerge>
+;
 @end example
 
 @noindent
@@ -1199,13 +1206,14 @@ will suffice.  Otherwise, we suggest
 
 @example
 %@{
-  #if __STDC_VERSION__ < 199901 && ! defined __GNUC__ && ! defined inline
-   #define inline
+  #if (__STDC_VERSION__ < 199901 && ! defined __GNUC__ \
+       && ! defined inline)
+  # define inline
   #endif
 %@}
 @end example
 
-@node Locations Overview
+@node Locations
 @section Locations
 @cindex location
 @cindex textual location
@@ -1217,9 +1225,10 @@ the @dfn{textual location}, or @dfn{location}, of each syntactic construct.
 Bison provides a mechanism for handling these locations.
 
 Each token has a semantic value.  In a similar fashion, each token has an
-associated location, but the type of locations is the same for all tokens and
-groupings.  Moreover, the output parser is equipped with a default data
-structure for storing locations (@pxref{Locations}, for more details).
+associated location, but the type of locations is the same for all tokens
+and groupings.  Moreover, the output parser is equipped with a default data
+structure for storing locations (@pxref{Tracking Locations}, for more
+details).
 
 Like semantic values, locations can be reached in actions using a dedicated
 set of constructs.  In the example above, the location of the whole grouping
@@ -1388,11 +1397,11 @@ simple program, all the rest of the program can go here.
 @cindex simple examples
 @cindex examples, simple
 
-Now we show and explain three sample programs written using Bison: a
+Now we show and explain several sample programs written using Bison: a
 reverse polish notation calculator, an algebraic (infix) notation
-calculator, and a multi-function calculator.  All three have been tested
-under BSD Unix 4.3; each produces a usable, though limited, interactive
-desk-top calculator.
+calculator --- later extended to track ``locations'' ---
+and a multi-function calculator.  All
+produce usable, though limited, interactive desk-top calculators.
 
 These examples are simple, but Bison grammars for real programming
 languages are written the same way.  You can copy these examples into a
@@ -1491,24 +1500,31 @@ type for numeric constants.
 Here are the grammar rules for the reverse polish notation calculator.
 
 @example
-input:    /* empty */
-        | input line
+@group
+input:
+  /* empty */
+| input line
 ;
+@end group
 
-line:     '\n'
-        | exp '\n'      @{ printf ("\t%.10g\n", $1); @}
+@group
+line:
+  '\n'
+| exp '\n'      @{ printf ("%.10g\n", $1); @}
 ;
+@end group
 
-exp:      NUM           @{ $$ = $1;           @}
-        | exp exp '+'   @{ $$ = $1 + $2;      @}
-        | exp exp '-'   @{ $$ = $1 - $2;      @}
-        | exp exp '*'   @{ $$ = $1 * $2;      @}
-        | exp exp '/'   @{ $$ = $1 / $2;      @}
-         /* Exponentiation */
-        | exp exp '^'   @{ $$ = pow ($1, $2); @}
-         /* Unary minus    */
-        | exp 'n'       @{ $$ = -$1;          @}
+@group
+exp:
+  NUM           @{ $$ = $1;           @}
+| exp exp '+'   @{ $$ = $1 + $2;      @}
+| exp exp '-'   @{ $$ = $1 - $2;      @}
+| exp exp '*'   @{ $$ = $1 * $2;      @}
+| exp exp '/'   @{ $$ = $1 / $2;      @}
+| exp exp '^'   @{ $$ = pow ($1, $2); @}  /* Exponentiation */
+| exp 'n'       @{ $$ = -$1;          @}  /* Unary minus    */
 ;
+@end group
 %%
 @end example
 
@@ -1542,8 +1558,9 @@ rule are referred to as @code{$1}, @code{$2}, and so on.
 Consider the definition of @code{input}:
 
 @example
-input:    /* empty */
-        | input line
+input:
+  /* empty */
+| input line
 ;
 @end example
 
@@ -1576,8 +1593,9 @@ input tokens; we will arrange for the latter to happen at end-of-input.
 Now consider the definition of @code{line}:
 
 @example
-line:     '\n'
-        | exp '\n'  @{ printf ("\t%.10g\n", $1); @}
+line:
+  '\n'
+| exp '\n'  @{ printf ("%.10g\n", $1); @}
 ;
 @end example
 
@@ -1604,21 +1622,22 @@ The second handles an addition-expression, which looks like two expressions
 followed by a plus-sign.  The third handles subtraction, and so on.
 
 @example
-exp:      NUM
-        | exp exp '+'     @{ $$ = $1 + $2;    @}
-        | exp exp '-'     @{ $$ = $1 - $2;    @}
-        @dots{}
-        ;
+exp:
+  NUM
+| exp exp '+'     @{ $$ = $1 + $2;    @}
+| exp exp '-'     @{ $$ = $1 - $2;    @}
+@dots{}
+;
 @end example
 
 We have used @samp{|} to join all the rules for @code{exp}, but we could
 equally well have written them separately:
 
 @example
-exp:      NUM ;
-exp:      exp exp '+'     @{ $$ = $1 + $2;    @} ;
-exp:      exp exp '-'     @{ $$ = $1 - $2;    @} ;
-        @dots{}
+exp: NUM ;
+exp: exp exp '+'     @{ $$ = $1 + $2; @};
+exp: exp exp '-'     @{ $$ = $1 - $2; @};
+@dots{}
 @end example
 
 Most of the rules have actions that compute the value of the expression in
@@ -1639,16 +1658,17 @@ not require it.  You can add or change white space as much as you wish.
 For example, this:
 
 @example
-exp   : NUM | exp exp '+' @{$$ = $1 + $2; @} | @dots{} ;
+exp: NUM | exp exp '+' @{$$ = $1 + $2; @} | @dots{} ;
 @end example
 
 @noindent
 means the same thing as this:
 
 @example
-exp:      NUM
-        | exp exp '+'    @{ $$ = $1 + $2; @}
-        | @dots{}
+exp:
+  NUM
+| exp exp '+'    @{ $$ = $1 + $2; @}
+| @dots{}
 ;
 @end example
 
@@ -1711,7 +1731,7 @@ yylex (void)
 
   /* Skip white space.  */
   while ((c = getchar ()) == ' ' || c == '\t')
-    ;
+    continue;
 @end group
 @group
   /* Process numbers.  */
@@ -1764,7 +1784,9 @@ here is the definition we will use:
 @example
 @group
 #include <stdio.h>
+@end group
 
+@group
 /* Called by yyparse on error.  */
 void
 yyerror (char const *s)
@@ -1870,6 +1892,7 @@ parentheses nested to arbitrary depth.  Here is the Bison code for
 @example
 /* Infix notation calculator.  */
 
+@group
 %@{
   #define YYSTYPE double
   #include <math.h>
@@ -1877,32 +1900,44 @@ parentheses nested to arbitrary depth.  Here is the Bison code for
   int yylex (void);
   void yyerror (char const *);
 %@}
+@end group
 
+@group
 /* Bison declarations.  */
 %token NUM
 %left '-' '+'
 %left '*' '/'
 %left NEG     /* negation--unary minus */
 %right '^'    /* exponentiation */
+@end group
 
 %% /* The grammar follows.  */
-input:    /* empty */
-        | input line
+@group
+input:
+  /* empty */
+| input line
 ;
+@end group
 
-line:     '\n'
-        | exp '\n'  @{ printf ("\t%.10g\n", $1); @}
+@group
+line:
+  '\n'
+| exp '\n'  @{ printf ("\t%.10g\n", $1); @}
 ;
+@end group
 
-exp:      NUM                @{ $$ = $1;         @}
-        | exp '+' exp        @{ $$ = $1 + $3;    @}
-        | exp '-' exp        @{ $$ = $1 - $3;    @}
-        | exp '*' exp        @{ $$ = $1 * $3;    @}
-        | exp '/' exp        @{ $$ = $1 / $3;    @}
-        | '-' exp  %prec NEG @{ $$ = -$2;        @}
-        | exp '^' exp        @{ $$ = pow ($1, $3); @}
-        | '(' exp ')'        @{ $$ = $2;         @}
+@group
+exp:
+  NUM                @{ $$ = $1;           @}
+| exp '+' exp        @{ $$ = $1 + $3;      @}
+| exp '-' exp        @{ $$ = $1 - $3;      @}
+| exp '*' exp        @{ $$ = $1 * $3;      @}
+| exp '/' exp        @{ $$ = $1 / $3;      @}
+| '-' exp  %prec NEG @{ $$ = -$2;          @}
+| exp '^' exp        @{ $$ = pow ($1, $3); @}
+| '(' exp ')'        @{ $$ = $2;           @}
 ;
+@end group
 %%
 @end example
 
@@ -1963,9 +1998,10 @@ been added to one of the alternatives for @code{line}:
 
 @example
 @group
-line:     '\n'
-        | exp '\n'   @{ printf ("\t%.10g\n", $1); @}
-        | error '\n' @{ yyerrok;                  @}
+line:
+  '\n'
+| exp '\n'   @{ printf ("\t%.10g\n", $1); @}
+| error '\n' @{ yyerrok;                  @}
 ;
 @end group
 @end example
@@ -2056,41 +2092,44 @@ wrong expressions or subexpressions.
 
 @example
 @group
-input   : /* empty */
-        | input line
+input:
+  /* empty */
+| input line
 ;
 @end group
 
 @group
-line    : '\n'
-        | exp '\n' @{ printf ("%d\n", $1); @}
+line:
+  '\n'
+| exp '\n' @{ printf ("%d\n", $1); @}
 ;
 @end group
 
 @group
-exp     : NUM           @{ $$ = $1; @}
-        | exp '+' exp   @{ $$ = $1 + $3; @}
-        | exp '-' exp   @{ $$ = $1 - $3; @}
-        | exp '*' exp   @{ $$ = $1 * $3; @}
+exp:
+  NUM           @{ $$ = $1; @}
+| exp '+' exp   @{ $$ = $1 + $3; @}
+| exp '-' exp   @{ $$ = $1 - $3; @}
+| exp '*' exp   @{ $$ = $1 * $3; @}
 @end group
 @group
-        | exp '/' exp
-            @{
-              if ($3)
-                $$ = $1 / $3;
-              else
-                @{
-                  $$ = 1;
-                  fprintf (stderr, "%d.%d-%d.%d: division by zero",
-                           @@3.first_line, @@3.first_column,
-                           @@3.last_line, @@3.last_column);
-                @}
-            @}
+| exp '/' exp
+    @{
+      if ($3)
+        $$ = $1 / $3;
+      else
+        @{
+          $$ = 1;
+          fprintf (stderr, "%d.%d-%d.%d: division by zero",
+                   @@3.first_line, @@3.first_column,
+                   @@3.last_line, @@3.last_column);
+        @}
+    @}
 @end group
 @group
-        | '-' exp %prec NEG     @{ $$ = -$2; @}
-        | exp '^' exp           @{ $$ = pow ($1, $3); @}
-        | '(' exp ')'           @{ $$ = $2; @}
+| '-' exp %prec NEG     @{ $$ = -$2; @}
+| exp '^' exp           @{ $$ = pow ($1, $3); @}
+| '(' exp ')'           @{ $$ = $2; @}
 @end group
 @end example
 
@@ -2157,6 +2196,7 @@ yylex (void)
   if (c == EOF)
     return 0;
 
+@group
   /* Return a single char, and update location.  */
   if (c == '\n')
     @{
@@ -2167,6 +2207,7 @@ yylex (void)
     ++yylloc.last_column;
   return c;
 @}
+@end group
 @end example
 
 Basically, the lexical analyzer performs the same processing as before:
@@ -2252,7 +2293,8 @@ Note that multiple assignment and nested function calls are permitted.
 
 Here are the C and Bison declarations for the multi-function calculator.
 
-@smallexample
+@comment file: mfcalc.y: 1
+@example
 @group
 %@{
   #include <math.h>  /* For math functions, cos(), sin(), etc.  */
@@ -2261,6 +2303,7 @@ Here are the C and Bison declarations for the multi-function calculator.
   void yyerror (char const *);
 %@}
 @end group
+
 @group
 %union @{
   double    val;   /* For returning numbers.  */
@@ -2268,7 +2311,7 @@ Here are the C and Bison declarations for the multi-function calculator.
 @}
 @end group
 %token <val>  NUM        /* Simple double precision number.  */
-%token <tptr> VAR FNCT   /* Variable and Function.  */
+%token <tptr> VAR FNCT   /* Variable and function.  */
 %type  <val>  exp
 
 @group
@@ -2278,8 +2321,7 @@ Here are the C and Bison declarations for the multi-function calculator.
 %left NEG     /* negation--unary minus */
 %right '^'    /* exponentiation */
 @end group
-%% /* The grammar follows.  */
-@end smallexample
+@end example
 
 The above grammar introduces only two new features of the Bison language.
 These features allow semantic values to have various data types
@@ -2310,38 +2352,42 @@ Here are the grammar rules for the multi-function calculator.
 Most of them are copied directly from @code{calc}; three rules,
 those which mention @code{VAR} or @code{FNCT}, are new.
 
-@smallexample
+@comment file: mfcalc.y: 3
+@example
+%% /* The grammar follows.  */
 @group
-input:   /* empty */
-        | input line
+input:
+  /* empty */
+| input line
 ;
 @end group
 
 @group
 line:
-          '\n'
-        | exp '\n'   @{ printf ("\t%.10g\n", $1); @}
-        | error '\n' @{ yyerrok;                  @}
+  '\n'
+| exp '\n'   @{ printf ("%.10g\n", $1); @}
+| error '\n' @{ yyerrok;                @}
 ;
 @end group
 
 @group
-exp:      NUM                @{ $$ = $1;                         @}
-        | VAR                @{ $$ = $1->value.var;              @}
-        | VAR '=' exp        @{ $$ = $3; $1->value.var = $3;     @}
-        | FNCT '(' exp ')'   @{ $$ = (*($1->value.fnctptr))($3); @}
-        | exp '+' exp        @{ $$ = $1 + $3;                    @}
-        | exp '-' exp        @{ $$ = $1 - $3;                    @}
-        | exp '*' exp        @{ $$ = $1 * $3;                    @}
-        | exp '/' exp        @{ $$ = $1 / $3;                    @}
-        | '-' exp  %prec NEG @{ $$ = -$2;                        @}
-        | exp '^' exp        @{ $$ = pow ($1, $3);               @}
-        | '(' exp ')'        @{ $$ = $2;                         @}
+exp:
+  NUM                @{ $$ = $1;                         @}
+| VAR                @{ $$ = $1->value.var;              @}
+| VAR '=' exp        @{ $$ = $3; $1->value.var = $3;     @}
+| FNCT '(' exp ')'   @{ $$ = (*($1->value.fnctptr))($3); @}
+| exp '+' exp        @{ $$ = $1 + $3;                    @}
+| exp '-' exp        @{ $$ = $1 - $3;                    @}
+| exp '*' exp        @{ $$ = $1 * $3;                    @}
+| exp '/' exp        @{ $$ = $1 / $3;                    @}
+| '-' exp  %prec NEG @{ $$ = -$2;                        @}
+| exp '^' exp        @{ $$ = pow ($1, $3);               @}
+| '(' exp ')'        @{ $$ = $2;                         @}
 ;
 @end group
 /* End of grammar.  */
 %%
-@end smallexample
+@end example
 
 @node Mfcalc Symbol Table
 @subsection The @code{mfcalc} Symbol Table
@@ -2356,7 +2402,8 @@ The symbol table itself consists of a linked list of records.  Its
 definition, which is kept in the header @file{calc.h}, is as follows.  It
 provides for either functions or variables to be placed in the table.
 
-@smallexample
+@comment file: calc.h
+@example
 @group
 /* Function type.  */
 typedef double (*func_t) (double);
@@ -2386,13 +2433,14 @@ extern symrec *sym_table;
 symrec *putsym (char const *, int);
 symrec *getsym (char const *);
 @end group
-@end smallexample
+@end example
 
 The new version of @code{main} includes a call to @code{init_table}, a
 function that initializes the symbol table.  Here it is, and
 @code{init_table} as well:
 
-@smallexample
+@comment file: mfcalc.y: 3
+@example
 #include <stdio.h>
 
 @group
@@ -2436,10 +2484,9 @@ void
 init_table (void)
 @{
   int i;
-  symrec *ptr;
   for (i = 0; arith_fncts[i].fname != 0; i++)
     @{
-      ptr = putsym (arith_fncts[i].fname, FNCT);
+      symrec *ptr = putsym (arith_fncts[i].fname, FNCT);
       ptr->value.fnctptr = arith_fncts[i].fnct;
     @}
 @}
@@ -2453,7 +2500,7 @@ main (void)
   return yyparse ();
 @}
 @end group
-@end smallexample
+@end example
 
 By simply editing the initialization list and adding the necessary include
 files, you can add additional functions to the calculator.
@@ -2465,12 +2512,16 @@ linked to the front of the list, and a pointer to the object is returned.
 The function @code{getsym} is passed the name of the symbol to look up.  If
 found, a pointer to that symbol is returned; otherwise zero is returned.
 
-@smallexample
+@comment file: mfcalc.y: 3
+@example
+#include <stdlib.h> /* malloc. */
+#include <string.h> /* strlen. */
+
+@group
 symrec *
 putsym (char const *sym_name, int sym_type)
 @{
-  symrec *ptr;
-  ptr = (symrec *) malloc (sizeof (symrec));
+  symrec *ptr = (symrec *) malloc (sizeof (symrec));
   ptr->name = (char *) malloc (strlen (sym_name) + 1);
   strcpy (ptr->name,sym_name);
   ptr->type = sym_type;
@@ -2479,7 +2530,9 @@ putsym (char const *sym_name, int sym_type)
   sym_table = ptr;
   return ptr;
 @}
+@end group
 
+@group
 symrec *
 getsym (char const *sym_name)
 @{
@@ -2490,7 +2543,8 @@ getsym (char const *sym_name)
       return ptr;
   return 0;
 @}
-@end smallexample
+@end group
+@end example
 
 The function @code{yylex} must now recognize variables, numeric values, and
 the single-character arithmetic operators.  Strings of alphanumeric
@@ -2507,7 +2561,8 @@ returned to @code{yyparse}.
 No change is needed in the handling of numeric values and arithmetic
 operators in @code{yylex}.
 
-@smallexample
+@comment file: mfcalc.y: 3
+@example
 @group
 #include <ctype.h>
 @end group
@@ -2519,7 +2574,8 @@ yylex (void)
   int c;
 
   /* Ignore white space, get first nonwhite character.  */
-  while ((c = getchar ()) == ' ' || c == '\t');
+  while ((c = getchar ()) == ' ' || c == '\t')
+    continue;
 
   if (c == EOF)
     return 0;
@@ -2539,21 +2595,19 @@ yylex (void)
   /* Char starts an identifier => read the name.       */
   if (isalpha (c))
     @{
-      symrec *s;
+      /* Initially make the buffer long enough
+         for a 40-character symbol name.  */
+      static size_t length = 40;
       static char *symbuf = 0;
-      static int length = 0;
+      symrec *s;
       int i;
 @end group
 
-@group
-      /* Initially make the buffer long enough
-         for a 40-character symbol name.  */
-      if (length == 0)
-        length = 40, symbuf = (char *)malloc (length + 1);
+      if (!symbuf)
+        symbuf = (char *) malloc (length + 1);
 
       i = 0;
       do
-@end group
 @group
         @{
           /* If buffer is full, make it bigger.        */
@@ -2587,7 +2641,37 @@ yylex (void)
   return c;
 @}
 @end group
-@end smallexample
+@end example
+
+The error reporting function is unchanged, and the new version of
+@code{main} includes a call to @code{init_table} and sets the @code{yydebug}
+on user demand (@xref{Tracing, , Tracing Your Parser}, for details):
+
+@comment file: mfcalc.y: 3
+@example
+@group
+/* Called by yyparse on error.  */
+void
+yyerror (char const *s)
+@{
+  fprintf (stderr, "%s\n", s);
+@}
+@end group
+
+@group
+int
+main (int argc, char const* argv[])
+@{
+  int i;
+  /* Enable parse traces on option -p.  */
+  for (i = 1; i < argc; ++i)
+    if (!strcmp(argv[i], "-p"))
+      yydebug = 1;
+  init_table ();
+  return yyparse ();
+@}
+@end group
+@end example
 
 This program is both powerful and flexible.  You may easily add new
 functions, and it is a simple job to modify this code to install
@@ -2621,14 +2705,15 @@ The Bison grammar file conventionally has a name ending in @samp{.y}.
 @xref{Invocation, ,Invoking Bison}.
 
 @menu
-* Grammar Outline::   Overall layout of the grammar file.
-* Symbols::           Terminal and nonterminal symbols.
-* Rules::             How to write grammar rules.
-* Recursion::         Writing recursive rules.
-* Semantics::         Semantic values and actions.
-* Locations::         Locations and actions.
-* Declarations::      All kinds of Bison declarations are described here.
-* Multiple Parsers::  Putting more than one Bison parser in one program.
+* Grammar Outline::    Overall layout of the grammar file.
+* Symbols::            Terminal and nonterminal symbols.
+* Rules::              How to write grammar rules.
+* Recursion::          Writing recursive rules.
+* Semantics::          Semantic values and actions.
+* Tracking Locations:: Locations and actions.
+* Named References::   Using named references in actions.
+* Declarations::       All kinds of Bison declarations are described here.
+* Multiple Parsers::   Putting more than one Bison parser in one program.
 @end menu
 
 @node Grammar Outline
@@ -2689,7 +2774,7 @@ prototype functions that take arguments of type @code{YYSTYPE}.  This
 can be done with two @var{Prologue} blocks, one before and one after the
 @code{%union} declaration.
 
-@smallexample
+@example
 %@{
   #define _GNU_SOURCE
   #include <stdio.h>
@@ -2707,7 +2792,7 @@ can be done with two @var{Prologue} blocks, one before and one after the
 %@}
 
 @dots{}
-@end smallexample
+@end example
 
 When in doubt, it is usually safer to put prologue code before all
 Bison declarations, rather than after.  For example, any definitions
@@ -2735,7 +2820,7 @@ location, or it can be one of @code{requires}, @code{provides},
 
 Look again at the example of the previous section:
 
-@smallexample
+@example
 %@{
   #define _GNU_SOURCE
   #include <stdio.h>
@@ -2753,7 +2838,7 @@ Look again at the example of the previous section:
 %@}
 
 @dots{}
-@end smallexample
+@end example
 
 @noindent
 Notice that there are two @var{Prologue} sections here, but there's a
@@ -2782,7 +2867,7 @@ To avoid this subtle @code{%union} dependency, rewrite the example using a
 Let's go ahead and add the new @code{YYLTYPE} definition and the
 @code{trace_token} prototype at the same time:
 
-@smallexample
+@example
 %code top @{
   #define _GNU_SOURCE
   #include <stdio.h>
@@ -2814,7 +2899,7 @@ Let's go ahead and add the new @code{YYLTYPE} definition and the
 @}
 
 @dots{}
-@end smallexample
+@end example
 
 @noindent
 In this way, @code{%code top} and the unqualified @code{%code} achieve the same
@@ -2838,20 +2923,27 @@ lines are dependency code required by the @code{YYSTYPE} and @code{YYLTYPE}
 definitions.
 Thus, they belong in one or more @code{%code requires}:
 
-@smallexample
+@example
+@group
 %code top @{
   #define _GNU_SOURCE
   #include <stdio.h>
 @}
+@end group
 
+@group
 %code requires @{
   #include "ptypes.h"
 @}
+@end group
+@group
 %union @{
   long int n;
   tree t;  /* @r{@code{tree} is defined in @file{ptypes.h}.} */
 @}
+@end group
 
+@group
 %code requires @{
   #define YYLTYPE YYLTYPE
   typedef struct YYLTYPE
@@ -2863,15 +2955,18 @@ Thus, they belong in one or more @code{%code requires}:
     char *filename;
   @} YYLTYPE;
 @}
+@end group
 
+@group
 %code @{
   static void print_token_value (FILE *, int, YYSTYPE);
   #define YYPRINT(F, N, L) print_token_value (F, N, L)
   static void trace_token (enum yytokentype token, YYLTYPE loc);
 @}
+@end group
 
 @dots{}
-@end smallexample
+@end example
 
 @noindent
 Now Bison will insert @code{#include "ptypes.h"} and the new
@@ -2905,20 +3000,27 @@ this function is not a dependency required by @code{YYSTYPE} or
 sufficient.  Instead, move its prototype from the unqualified
 @code{%code} to a @code{%code provides}:
 
-@smallexample
+@example
+@group
 %code top @{
   #define _GNU_SOURCE
   #include <stdio.h>
 @}
+@end group
 
+@group
 %code requires @{
   #include "ptypes.h"
 @}
+@end group
+@group
 %union @{
   long int n;
   tree t;  /* @r{@code{tree} is defined in @file{ptypes.h}.} */
 @}
+@end group
 
+@group
 %code requires @{
   #define YYLTYPE YYLTYPE
   typedef struct YYLTYPE
@@ -2930,18 +3032,23 @@ sufficient.  Instead, move its prototype from the unqualified
     char *filename;
   @} YYLTYPE;
 @}
+@end group
 
+@group
 %code provides @{
   void trace_token (enum yytokentype token, YYLTYPE loc);
 @}
+@end group
 
+@group
 %code @{
   static void print_token_value (FILE *, int, YYSTYPE);
   #define YYPRINT(F, N, L) print_token_value (F, N, L)
 @}
+@end group
 
 @dots{}
-@end smallexample
+@end example
 
 @noindent
 Bison will insert the @code{trace_token} prototype into both the
@@ -2967,17 +3074,21 @@ organize your grammar file.
 For example, you may organize semantic-type-related directives by semantic
 type:
 
-@smallexample
+@example
+@group
 %code requires @{ #include "type1.h" @}
 %union @{ type1 field1; @}
 %destructor @{ type1_free ($$); @} <field1>
-%printer @{ type1_print ($$); @} <field1>
+%printer @{ type1_print (yyoutput, $$); @} <field1>
+@end group
 
+@group
 %code requires @{ #include "type2.h" @}
 %union @{ type2 field2; @}
 %destructor @{ type2_free ($$); @} <field2>
-%printer @{ type2_print ($$); @} <field2>
-@end smallexample
+%printer @{ type2_print (yyoutput, $$); @} <field2>
+@end group
+@end example
 
 @noindent
 You could even place each of the above directive groups in the rules section of
@@ -3205,8 +3316,7 @@ A Bison grammar rule has the following general form:
 
 @example
 @group
-@var{result}: @var{components}@dots{}
-        ;
+@var{result}: @var{components}@dots{};
 @end group
 @end example
 
@@ -3219,8 +3329,7 @@ For example,
 
 @example
 @group
-exp:      exp '+' exp
-        ;
+exp: exp '+' exp;
 @end group
 @end example
 
@@ -3265,10 +3374,11 @@ be joined with the vertical-bar character @samp{|} as follows:
 
 @example
 @group
-@var{result}:    @var{rule1-components}@dots{}
-        | @var{rule2-components}@dots{}
-        @dots{}
-        ;
+@var{result}:
+  @var{rule1-components}@dots{}
+| @var{rule2-components}@dots{}
+@dots{}
+;
 @end group
 @end example
 
@@ -3281,15 +3391,17 @@ comma-separated sequence of zero or more @code{exp} groupings:
 
 @example
 @group
-expseq:   /* empty */
-        | expseq1
-        ;
+expseq:
+  /* empty */
+| expseq1
+;
 @end group
 
 @group
-expseq1:  exp
-        | expseq1 ',' exp
-        ;
+expseq1:
+  exp
+| expseq1 ',' exp
+;
 @end group
 @end example
 
@@ -3309,9 +3421,10 @@ comma-separated sequence of one or more expressions:
 
 @example
 @group
-expseq1:  exp
-        | expseq1 ',' exp
-        ;
+expseq1:
+  exp
+| expseq1 ',' exp
+;
 @end group
 @end example
 
@@ -3324,9 +3437,10 @@ the same construct is defined using @dfn{right recursion}:
 
 @example
 @group
-expseq1:  exp
-        | exp ',' expseq1
-        ;
+expseq1:
+  exp
+| exp ',' expseq1
+;
 @end group
 @end example
 
@@ -3350,15 +3464,17 @@ For example:
 
 @example
 @group
-expr:     primary
-        | primary '+' primary
-        ;
+expr:
+  primary
+| primary '+' primary
+;
 @end group
 
 @group
-primary:  constant
-        | '(' expr ')'
-        ;
+primary:
+  constant
+| '(' expr ')'
+;
 @end group
 @end example
 
@@ -3388,7 +3504,6 @@ the numbers associated with @var{x} and @var{y}.
 * Mid-Rule Actions::  Most actions go at the end of a rule.
                       This says when, why and how to use the exceptional
                         action in the middle of a rule.
-* Named References::  Using named references in actions.
 @end menu
 
 @node Value Type
@@ -3481,9 +3596,9 @@ Here is a typical example:
 
 @example
 @group
-exp:    @dots{}
-        | exp '+' exp
-            @{ $$ = $1 + $3; @}
+exp:
+@dots{}
+| exp '+' exp     @{ $$ = $1 + $3; @}
 @end group
 @end example
 
@@ -3491,9 +3606,9 @@ Or, in terms of named references:
 
 @example
 @group
-exp[result]:    @dots{}
-        | exp[left] '+' exp[right]
-            @{ $result = $left + $right; @}
+exp[result]:
+@dots{}
+| exp[left] '+' exp[right]  @{ $result = $left + $right; @}
 @end group
 @end example
 
@@ -3509,8 +3624,8 @@ the addition-expression just recognized by the rule.  If there were a
 useful semantic value associated with the @samp{+} token, it could be
 referred to as @code{$2}.
 
-@xref{Named References,,Using Named References}, for more information
-about using the named references construct.
+@xref{Named References}, for more information about using the named
+references construct.
 
 Note that the vertical-bar character @samp{|} is really a rule
 separator, and actions are attached to a single rule.  This is a
@@ -3540,15 +3655,16 @@ is a case in which you can use this reliably:
 
 @example
 @group
-foo:      expr bar '+' expr  @{ @dots{} @}
-        | expr bar '-' expr  @{ @dots{} @}
-        ;
+foo:
+  expr bar '+' expr  @{ @dots{} @}
+| expr bar '-' expr  @{ @dots{} @}
+;
 @end group
 
 @group
-bar:      /* empty */
-        @{ previous_expr = $0; @}
-        ;
+bar:
+  /* empty */    @{ previous_expr = $0; @}
+;
 @end group
 @end example
 
@@ -3578,9 +3694,9 @@ in the rule.  In this example,
 
 @example
 @group
-exp:    @dots{}
-        | exp '+' exp
-            @{ $$ = $1 + $3; @}
+exp:
+  @dots{}
+| exp '+' exp    @{ $$ = $1 + $3; @}
 @end group
 @end example
 
@@ -3647,11 +3763,11 @@ remove it afterward.  Here is how it is done:
 
 @example
 @group
-stmt:   LET '(' var ')'
-                @{ $<context>$ = push_context ();
-                  declare_variable ($3); @}
-        stmt    @{ $$ = $6;
-                  pop_context ($<context>5); @}
+stmt:
+  LET '(' var ')'
+    @{ $<context>$ = push_context (); declare_variable ($3); @}
+  stmt
+    @{ $$ = $6; pop_context ($<context>5); @}
 @end group
 @end example
 
@@ -3693,15 +3809,19 @@ declare a destructor for that symbol:
 
 %%
 
-stmt:  let stmt
-               @{ $$ = $2;
-                 pop_context ($1); @}
-       ;
+stmt:
+  let stmt
+    @{
+      $$ = $2;
+      pop_context ($1);
+    @};
 
-let:   LET '(' var ')'
-               @{ $$ = push_context ();
-                 declare_variable ($3); @}
-       ;
+let:
+  LET '(' var ')'
+    @{
+      $$ = push_context ();
+      declare_variable ($3);
+    @};
 
 @end group
 @end example
@@ -3720,9 +3840,10 @@ declaration or not:
 
 @example
 @group
-compound: '@{' declarations statements '@}'
-        | '@{' statements '@}'
-        ;
+compound:
+  '@{' declarations statements '@}'
+| '@{' statements '@}'
+;
 @end group
 @end example
 
@@ -3731,12 +3852,13 @@ But when we add a mid-rule action as follows, the rules become nonfunctional:
 
 @example
 @group
-compound: @{ prepare_for_local_variables (); @}
-          '@{' declarations statements '@}'
+compound:
+  @{ prepare_for_local_variables (); @}
+     '@{' declarations statements '@}'
 @end group
 @group
-        | '@{' statements '@}'
-        ;
+|    '@{' statements '@}'
+;
 @end group
 @end example
 
@@ -3753,11 +3875,12 @@ actions into the two rules, like this:
 
 @example
 @group
-compound: @{ prepare_for_local_variables (); @}
-          '@{' declarations statements '@}'
-        | @{ prepare_for_local_variables (); @}
-          '@{' statements '@}'
-        ;
+compound:
+  @{ prepare_for_local_variables (); @}
+    '@{' declarations statements '@}'
+| @{ prepare_for_local_variables (); @}
+    '@{' statements '@}'
+;
 @end group
 @end example
 
@@ -3771,10 +3894,11 @@ does work is to put the action after the open-brace, like this:
 
 @example
 @group
-compound: '@{' @{ prepare_for_local_variables (); @}
-          declarations statements '@}'
-        | '@{' statements '@}'
-        ;
+compound:
+  '@{' @{ prepare_for_local_variables (); @}
+    declarations statements '@}'
+| '@{' statements '@}'
+;
 @end group
 @end example
 
@@ -3787,18 +3911,16 @@ serves as a subroutine:
 
 @example
 @group
-subroutine: /* empty */
-          @{ prepare_for_local_variables (); @}
-        ;
-
+subroutine:
+  /* empty */  @{ prepare_for_local_variables (); @}
+;
 @end group
 
 @group
-compound: subroutine
-          '@{' declarations statements '@}'
-        | subroutine
-          '@{' statements '@}'
-        ;
+compound:
+  subroutine '@{' declarations statements '@}'
+| subroutine '@{' statements '@}'
+;
 @end group
 @end example
 
@@ -3806,94 +3928,7 @@ compound: subroutine
 Now Bison can execute the action in the rule for @code{subroutine} without
 deciding which rule for @code{compound} it will eventually use.
 
-@node Named References
-@subsection Using Named References
-@cindex named references
-
-While every semantic value can be accessed with positional references
-@code{$@var{n}} and @code{$$}, it's often much more convenient to refer to
-them by name.  First of all, original symbol names may be used as named
-references.  For example:
-
-@example
-@group
-invocation: op '(' args ')'
-  @{ $invocation = new_invocation ($op, $args, @@invocation); @}
-@end group
-@end example
-
-@noindent
-The positional @code{$$}, @code{@@$}, @code{$n}, and @code{@@n} can be
-mixed with @code{$name} and @code{@@name} arbitrarily.  For example:
-
-@example
-@group
-invocation: op '(' args ')'
-  @{ $$ = new_invocation ($op, $args, @@$); @}
-@end group
-@end example
-
-@noindent
-However, sometimes regular symbol names are not sufficient due to
-ambiguities:
-
-@example
-@group
-exp: exp '/' exp
-  @{ $exp = $exp / $exp; @} // $exp is ambiguous.
-
-exp: exp '/' exp
-  @{ $$ = $1 / $exp; @} // One usage is ambiguous.
-
-exp: exp '/' exp
-  @{ $$ = $1 / $3; @} // No error.
-@end group
-@end example
-
-@noindent
-When ambiguity occurs, explicitly declared names may be used for values and
-locations.  Explicit names are declared as a bracketed name after a symbol
-appearance in rule definitions.  For example:
-@example
-@group
-exp[result]: exp[left] '/' exp[right]
-  @{ $result = $left / $right; @}
-@end group
-@end example
-
-@noindent
-Explicit names may be declared for RHS and for LHS symbols as well.  In order
-to access a semantic value generated by a mid-rule action, an explicit name
-may also be declared by putting a bracketed name after the closing brace of
-the mid-rule action code:
-@example
-@group
-exp[res]: exp[x] '+' @{$left = $x;@}[left] exp[right]
-  @{ $res = $left + $right; @}
-@end group
-@end example
-
-@noindent
-
-In references, in order to specify names containing dots and dashes, an explicit
-bracketed syntax @code{$[name]} and @code{@@[name]} must be used:
-@example
-@group
-if-stmt: IF '(' expr ')' THEN then.stmt ';'
-  @{ $[if-stmt] = new_if_stmt ($expr, $[then.stmt]); @}
-@end group
-@end example
-
-It often happens that named references are followed by a dot, dash or other
-C punctuation marks and operators.  By default, Bison will read
-@code{$name.suffix} as a reference to symbol value @code{$name} followed by
-@samp{.suffix}, i.e., an access to the @samp{suffix} field of the semantic
-value.  In order to force Bison to recognize @code{name.suffix} in its entirety
-as the name of a semantic value, bracketed syntax @code{$[name.suffix]}
-must be used.
-
-
-@node Locations
+@node Tracking Locations
 @section Tracking Locations
 @cindex location
 @cindex textual location
@@ -3963,31 +3998,32 @@ The location of the @var{n}th component of the right hand side is
 
 In addition, the named references construct @code{@@@var{name}} and
 @code{@@[@var{name}]} may also be used to address the symbol locations.
-@xref{Named References,,Using Named References}, for more information
-about using the named references construct.
+@xref{Named References}, for more information about using the named
+references construct.
 
 Here is a basic example using the default data type for locations:
 
 @example
 @group
-exp:    @dots{}
-        | exp '/' exp
-            @{
-              @@$.first_column = @@1.first_column;
-              @@$.first_line = @@1.first_line;
-              @@$.last_column = @@3.last_column;
-              @@$.last_line = @@3.last_line;
-              if ($3)
-                $$ = $1 / $3;
-              else
-                @{
-                  $$ = 1;
-                  fprintf (stderr,
-                           "Division by zero, l%d,c%d-l%d,c%d",
-                           @@3.first_line, @@3.first_column,
-                           @@3.last_line, @@3.last_column);
-                @}
-            @}
+exp:
+  @dots{}
+| exp '/' exp
+    @{
+      @@$.first_column = @@1.first_column;
+      @@$.first_line = @@1.first_line;
+      @@$.last_column = @@3.last_column;
+      @@$.last_line = @@3.last_line;
+      if ($3)
+        $$ = $1 / $3;
+      else
+        @{
+          $$ = 1;
+          fprintf (stderr,
+                   "Division by zero, l%d,c%d-l%d,c%d",
+                   @@3.first_line, @@3.first_column,
+                   @@3.last_line, @@3.last_column);
+        @}
+    @}
 @end group
 @end example
 
@@ -4001,20 +4037,21 @@ example above simply rewrites this way:
 
 @example
 @group
-exp:    @dots{}
-        | exp '/' exp
-            @{
-              if ($3)
-                $$ = $1 / $3;
-              else
-                @{
-                  $$ = 1;
-                  fprintf (stderr,
-                           "Division by zero, l%d,c%d-l%d,c%d",
-                           @@3.first_line, @@3.first_column,
-                           @@3.last_line, @@3.last_column);
-                @}
-            @}
+exp:
+  @dots{}
+| exp '/' exp
+    @{
+      if ($3)
+        $$ = $1 / $3;
+      else
+        @{
+          $$ = 1;
+          fprintf (stderr,
+                   "Division by zero, l%d,c%d-l%d,c%d",
+                   @@3.first_line, @@3.first_column,
+                   @@3.last_line, @@3.last_column);
+        @}
+    @}
 @end group
 @end example
 
@@ -4055,28 +4092,29 @@ parameter is the number of discarded symbols.
 
 By default, @code{YYLLOC_DEFAULT} is defined this way:
 
-@smallexample
+@example
 @group
-# define YYLLOC_DEFAULT(Current, Rhs, N)                                \
-    do                                                                  \
-      if (N)                                                            \
-        @{                                                               \
-          (Current).first_line   = YYRHSLOC(Rhs, 1).first_line;         \
-          (Current).first_column = YYRHSLOC(Rhs, 1).first_column;       \
-          (Current).last_line    = YYRHSLOC(Rhs, N).last_line;          \
-          (Current).last_column  = YYRHSLOC(Rhs, N).last_column;        \
-        @}                                                               \
-      else                                                              \
-        @{                                                               \
-          (Current).first_line   = (Current).last_line   =              \
-            YYRHSLOC(Rhs, 0).last_line;                                 \
-          (Current).first_column = (Current).last_column =              \
-            YYRHSLOC(Rhs, 0).last_column;                               \
-        @}                                                               \
-    while (0)
+# define YYLLOC_DEFAULT(Cur, Rhs, N)                      \
+do                                                        \
+  if (N)                                                  \
+    @{                                                     \
+      (Cur).first_line   = YYRHSLOC(Rhs, 1).first_line;   \
+      (Cur).first_column = YYRHSLOC(Rhs, 1).first_column; \
+      (Cur).last_line    = YYRHSLOC(Rhs, N).last_line;    \
+      (Cur).last_column  = YYRHSLOC(Rhs, N).last_column;  \
+    @}                                                     \
+  else                                                    \
+    @{                                                     \
+      (Cur).first_line   = (Cur).last_line   =            \
+        YYRHSLOC(Rhs, 0).last_line;                       \
+      (Cur).first_column = (Cur).last_column =            \
+        YYRHSLOC(Rhs, 0).last_column;                     \
+    @}                                                     \
+while (0)
 @end group
-@end smallexample
+@end example
 
+@noindent
 where @code{YYRHSLOC (rhs, k)} is the location of the @var{k}th symbol
 in @var{rhs} when @var{k} is positive, and the location of the symbol
 just before the reduction when @var{k} and @var{n} are both zero.
@@ -4100,6 +4138,99 @@ actual arguments may not be surrounded by parentheses.  Also, your
 macro should expand to something that can be used as a single
 statement when it is followed by a semicolon.
 @end itemize
+
+@node Named References
+@section Named References
+@cindex named references
+
+As described in the preceding sections, the traditional way to refer to any
+semantic value or location is a @dfn{positional reference}, which takes the
+form @code{$@var{n}}, @code{$$}, @code{@@@var{n}}, and @code{@@$}.  However,
+such a reference is not very descriptive.  Moreover, if you later decide to
+insert or remove symbols in the right-hand side of a grammar rule, the need
+to renumber such references can be tedious and error-prone.
+
+To avoid these issues, you can also refer to a semantic value or location
+using a @dfn{named reference}.  First of all, original symbol names may be
+used as named references.  For example:
+
+@example
+@group
+invocation: op '(' args ')'
+  @{ $invocation = new_invocation ($op, $args, @@invocation); @}
+@end group
+@end example
+
+@noindent
+Positional and named references can be mixed arbitrarily.  For example:
+
+@example
+@group
+invocation: op '(' args ')'
+  @{ $$ = new_invocation ($op, $args, @@$); @}
+@end group
+@end example
+
+@noindent
+However, sometimes regular symbol names are not sufficient due to
+ambiguities:
+
+@example
+@group
+exp: exp '/' exp
+  @{ $exp = $exp / $exp; @} // $exp is ambiguous.
+
+exp: exp '/' exp
+  @{ $$ = $1 / $exp; @} // One usage is ambiguous.
+
+exp: exp '/' exp
+  @{ $$ = $1 / $3; @} // No error.
+@end group
+@end example
+
+@noindent
+When ambiguity occurs, explicitly declared names may be used for values and
+locations.  Explicit names are declared as a bracketed name after a symbol
+appearance in rule definitions.  For example:
+@example
+@group
+exp[result]: exp[left] '/' exp[right]
+  @{ $result = $left / $right; @}
+@end group
+@end example
+
+@noindent
+In order to access a semantic value generated by a mid-rule action, an
+explicit name may also be declared by putting a bracketed name after the
+closing brace of the mid-rule action code:
+@example
+@group
+exp[res]: exp[x] '+' @{$left = $x;@}[left] exp[right]
+  @{ $res = $left + $right; @}
+@end group
+@end example
+
+@noindent
+
+In references, in order to specify names containing dots and dashes, an explicit
+bracketed syntax @code{$[name]} and @code{@@[name]} must be used:
+@example
+@group
+if-stmt: "if" '(' expr ')' "then" then.stmt ';'
+  @{ $[if-stmt] = new_if_stmt ($expr, $[then.stmt]); @}
+@end group
+@end example
+
+It often happens that named references are followed by a dot, dash or other
+C punctuation marks and operators.  By default, Bison will read
+@samp{$name.suffix} as a reference to symbol value @code{$name} followed by
+@samp{.suffix}, i.e., an access to the @code{suffix} field of the semantic
+value.  In order to force Bison to recognize @samp{name.suffix} in its
+entirety as the name of a semantic value, the bracketed syntax
+@samp{$[name.suffix]} must be used.
+
+The named references feature is experimental.  More user feedback will help
+to stabilize it.
 
 @node Declarations
 @section Bison Declarations
@@ -4128,6 +4259,7 @@ and Context-Free Grammars}).
 * Type Decl::         Declaring the choice of type for a nonterminal symbol.
 * Initial Action Decl::  Code run before parsing starts.
 * Destructor Decl::   Declaring how symbols are freed.
+* Printer Decl::      Declaring how symbol values are displayed.
 * Expect Decl::       Suppressing warnings about parsing conflicts.
 * Start Decl::        Specifying the start symbol.
 * Pure Decl::         Requesting a reentrant parser.
@@ -4493,7 +4625,7 @@ symbol that has no declared semantic type tag.
 @noindent
 For example:
 
-@smallexample
+@example
 %union @{ char *string; @}
 %token <string> STRING1
 %token <string> STRING2
@@ -4508,7 +4640,7 @@ For example:
 %destructor @{ free ($$); @} <*>
 %destructor @{ free ($$); printf ("%d", @@$.first_line); @} STRING1 string1
 %destructor @{ printf ("Discarding tagless symbol.\n"); @} <>
-@end smallexample
+@end example
 
 @noindent
 guarantees that, when the parser discards any user-defined symbol that has a
@@ -4533,20 +4665,20 @@ reference it in your grammar.
 However, it may invoke one of them for the end token (token 0) if you
 redefine it from @code{$end} to, for example, @code{END}:
 
-@smallexample
+@example
 %token END 0
-@end smallexample
+@end example
 
 @cindex actions in mid-rule
 @cindex mid-rule actions
 Finally, Bison will never invoke a @code{%destructor} for an unreferenced
 mid-rule semantic value (@pxref{Mid-Rule Actions,,Actions in Mid-Rule}).
-That is, Bison does not consider a mid-rule to have a semantic value if you do
-not reference @code{$$} in the mid-rule's action or @code{$@var{n}} (where
-@var{n} is the RHS symbol position of the mid-rule) in any later action in that
-rule.
-However, if you do reference either, the Bison-generated parser will invoke the
-@code{<>} @code{%destructor} whenever it discards the mid-rule symbol.
+That is, Bison does not consider a mid-rule to have a semantic value if you
+do not reference @code{$$} in the mid-rule's action or @code{$@var{n}}
+(where @var{n} is the right-hand side symbol position of the mid-rule) in
+any later action in that rule.  However, if you do reference either, the
+Bison-generated parser will invoke the @code{<>} @code{%destructor} whenever
+it discards the mid-rule symbol.
 
 @ignore
 @noindent
@@ -4580,6 +4712,69 @@ Right-hand side symbols of a rule that explicitly triggers a syntax
 error via @code{YYERROR} are not discarded automatically.  As a rule
 of thumb, destructors are invoked only when user actions cannot manage
 the memory.
+
+@node Printer Decl
+@subsection Printing Semantic Values
+@cindex printing semantic values
+@findex %printer
+@findex <*>
+@findex <>
+When run-time traces are enabled (@pxref{Tracing, ,Tracing Your Parser}),
+the parser reports its actions, such as reductions.  When a symbol involved
+in an action is reported, only its kind is displayed, as the parser cannot
+know how semantic values should be formatted.
+
+The @code{%printer} directive defines code that is called when a symbol is
+reported.  Its syntax is the same as @code{%destructor} (@pxref{Destructor
+Decl, , Freeing Discarded Symbols}).
+
+@deffn {Directive} %printer @{ @var{code} @} @var{symbols}
+@findex %printer
+@vindex yyoutput
+@c This is the same text as for %destructor.
+Invoke the braced @var{code} whenever the parser displays one of the
+@var{symbols}.  Within @var{code}, @code{yyoutput} denotes the output stream
+(a @code{FILE*} in C, and an @code{std::ostream&} in C++),
+@code{$$} designates the semantic value associated with the symbol, and
+@code{@@$} its location.  The additional parser parameters are also
+available (@pxref{Parser Function, , The Parser Function @code{yyparse}}).
+
+The @var{symbols} are defined as for @code{%destructor} (@pxref{Destructor
+Decl, , Freeing Discarded Symbols}.): they can be per-type (e.g.,
+@samp{<ival>}), per-symbol (e.g., @samp{exp}, @samp{NUM}, @samp{"float"}),
+typed per-default (i.e., @samp{<*>}, or untyped per-default (i.e.,
+@samp{<>}).
+@end deffn
+
+@noindent
+For example:
+
+@example
+%union @{ char *string; @}
+%token <string> STRING1
+%token <string> STRING2
+%type  <string> string1
+%type  <string> string2
+%union @{ char character; @}
+%token <character> CHR
+%type  <character> chr
+%token TAGLESS
+
+%printer @{ fprintf (yyoutput, "'%c'", $$); @} <character>
+%printer @{ fprintf (yyoutput, "&%p", $$); @} <*>
+%printer @{ fprintf (yyoutput, "\"%s\"", $$); @} STRING1 string1
+%printer @{ fprintf (yyoutput, "<>"); @} <>
+@end example
+
+@noindent
+guarantees that, when the parser print any symbol that has a semantic type
+tag other than @code{<character>}, it display the address of the semantic
+value by default.  However, when the parser displays a @code{STRING1} or a
+@code{string1}, it formats it as a string in double quotes.  It performs
+only the second @code{%printer} in this case, so it prints only once.
+Finally, the parser print @samp{<>} for any symbol, such as @code{TAGLESS},
+that has no semantic type tag.  See also
+
 
 @node Expect Decl
 @subsection Suppressing Conflict Warnings
@@ -4912,9 +5107,8 @@ Unless your parser is pure, the parser header file declares
 (Reentrant) Parser}.
 
 If you have also used locations, the parser header file declares
-@code{YYLTYPE} and @code{yylloc} using a protocol similar to that of
-the @code{YYSTYPE} macro and @code{yylval}.  @xref{Locations,
-,Tracking Locations}.
+@code{YYLTYPE} and @code{yylloc} using a protocol similar to that of the
+@code{YYSTYPE} macro and @code{yylval}.  @xref{Tracking Locations}.
 
 This parser header file is normally essential if you wish to put the
 definition of @code{yylex} in a separate source file, because
@@ -5123,6 +5317,7 @@ Unaccepted @var{variable}s produce an error.
 Some of the accepted @var{variable}s are:
 
 @itemize @bullet
+@c ================================================== api.pure
 @item api.pure
 @findex %define api.pure
 
@@ -5357,12 +5552,12 @@ should usually be more appropriate than @code{%code top}.  However,
 occasionally it is necessary to insert code much nearer the top of the
 parser implementation file.  For example:
 
-@smallexample
+@example
 %code top @{
   #define _GNU_SOURCE
   #include <stdio.h>
 @}
-@end smallexample
+@end example
 
 @item Location(s): Near the top of the parser implementation file.
 @end itemize
@@ -5567,7 +5762,7 @@ This function is available if either the @code{%define api.push-pull push} or
 @code{%define api.push-pull both} declaration is used.
 @xref{Push Decl, ,A Push Parser}.
 
-@deftypefun yypstate *yypstate_new (void)
+@deftypefun {yypstate*} yypstate_new (void)
 The function will return a valid parser instance if there was memory available
 or 0 if no memory was available.
 In impure mode, it will also return 0 if a parser instance is currently
@@ -5685,7 +5880,7 @@ assuming that the characters of the token are stored in
 @code{token_buffer}, and assuming that the token does not contain any
 characters like @samp{"} that require escaping.
 
-@smallexample
+@example
 for (i = 0; i < YYNTOKENS; i++)
   @{
     if (yytname[i] != 0
@@ -5696,7 +5891,7 @@ for (i = 0; i < YYNTOKENS; i++)
         && yytname[i][strlen (token_buffer) + 2] == 0)
       break;
   @}
-@end smallexample
+@end example
 
 The @code{yytname} table is generated only if you use the
 @code{%token-table} declaration.  @xref{Decl Summary}.
@@ -5753,12 +5948,12 @@ then the code in @code{yylex} might look like this:
 @subsection Textual Locations of Tokens
 
 @vindex yylloc
-If you are using the @samp{@@@var{n}}-feature (@pxref{Locations, ,
-Tracking Locations}) in actions to keep track of the textual locations
-of tokens and groupings, then you must provide this information in
-@code{yylex}.  The function @code{yyparse} expects to find the textual
-location of a token just parsed in the global variable @code{yylloc}.
-So @code{yylex} must store the proper data in that variable.
+If you are using the @samp{@@@var{n}}-feature (@pxref{Tracking Locations})
+in actions to keep track of the textual locations of tokens and groupings,
+then you must provide this information in @code{yylex}.  The function
+@code{yyparse} expects to find the textual location of a token just parsed
+in the global variable @code{yylloc}.  So @code{yylex} must store the proper
+data in that variable.
 
 By default, the value of @code{yylloc} is a structure and you need only
 initialize the members that are going to be used by the actions.  The
@@ -5989,17 +6184,17 @@ union specified by the @code{%union} declaration.
 @xref{Action Types, ,Data Types of Values in Actions}.
 @end deffn
 
-@deffn {Macro} YYABORT;
+@deffn {Macro} YYABORT @code{;}
 Return immediately from @code{yyparse}, indicating failure.
 @xref{Parser Function, ,The Parser Function @code{yyparse}}.
 @end deffn
 
-@deffn {Macro} YYACCEPT;
+@deffn {Macro} YYACCEPT @code{;}
 Return immediately from @code{yyparse}, indicating success.
 @xref{Parser Function, ,The Parser Function @code{yyparse}}.
 @end deffn
 
-@deffn {Macro} YYBACKUP (@var{token}, @var{value});
+@deffn {Macro} YYBACKUP (@var{token}, @var{value})@code{;}
 @findex YYBACKUP
 Unshift a token.  This macro is allowed only for rules that reduce
 a single value, and only when there is no lookahead token.
@@ -6017,18 +6212,15 @@ In either case, the rest of the action is not executed.
 @end deffn
 
 @deffn {Macro} YYEMPTY
-@vindex YYEMPTY
 Value stored in @code{yychar} when there is no lookahead token.
 @end deffn
 
 @deffn {Macro} YYEOF
-@vindex YYEOF
 Value stored in @code{yychar} when the lookahead is the end of the input
 stream.
 @end deffn
 
-@deffn {Macro} YYERROR;
-@findex YYERROR
+@deffn {Macro} YYERROR @code{;}
 Cause an immediate syntax error.  This statement initiates error
 recovery just as if the parser itself had detected an error; however, it
 does not call @code{yyerror}, and does not print any message.  If you
@@ -6052,7 +6244,7 @@ Actions}).
 @xref{Lookahead, ,Lookahead Tokens}.
 @end deffn
 
-@deffn {Macro} yyclearin;
+@deffn {Macro} yyclearin @code{;}
 Discard the current lookahead token.  This is useful primarily in
 error rules.
 Do not invoke @code{yyclearin} in a deferred semantic action (@pxref{GLR
@@ -6060,7 +6252,7 @@ Semantic Actions}).
 @xref{Error Recovery}.
 @end deffn
 
-@deffn {Macro} yyerrok;
+@deffn {Macro} yyerrok @code{;}
 Resume generating error messages immediately for subsequent syntax
 errors.  This is useful primarily in error rules.
 @xref{Error Recovery}.
@@ -6084,9 +6276,9 @@ Actions}).
 
 @deffn {Value} @@$
 @findex @@$
-Acts like a structure variable containing information on the textual location
-of the grouping made by the current rule.  @xref{Locations, ,
-Tracking Locations}.
+Acts like a structure variable containing information on the textual
+location of the grouping made by the current rule.  @xref{Tracking
+Locations}.
 
 @c Check if those paragraphs are still useful or not.
 
@@ -6110,9 +6302,9 @@ Tracking Locations}.
 
 @deffn {Value} @@@var{n}
 @findex @@@var{n}
-Acts like a structure variable containing information on the textual location
-of the @var{n}th component of the current rule.  @xref{Locations, ,
-Tracking Locations}.
+Acts like a structure variable containing information on the textual
+location of the @var{n}th component of the current rule.  @xref{Tracking
+Locations}.
 @end deffn
 
 @node Internationalization
@@ -6293,16 +6485,18 @@ factorial operators (@samp{!}), and allow parentheses for grouping.
 
 @example
 @group
-expr:     term '+' expr
-        | term
-        ;
+expr:
+  term '+' expr
+| term
+;
 @end group
 
 @group
-term:     '(' expr ')'
-        | term '!'
-        | NUMBER
-        ;
+term:
+  '(' expr ')'
+| term '!'
+| NUMBER
+;
 @end group
 @end example
 
@@ -6340,9 +6534,9 @@ statements, with a pair of rules like this:
 @example
 @group
 if_stmt:
-          IF expr THEN stmt
-        | IF expr THEN stmt ELSE stmt
-        ;
+  IF expr THEN stmt
+| IF expr THEN stmt ELSE stmt
+;
 @end group
 @end example
 
@@ -6409,20 +6603,22 @@ the conflict:
 %%
 @end group
 @group
-stmt:     expr
-        | if_stmt
-        ;
+stmt:
+  expr
+| if_stmt
+;
 @end group
 
 @group
 if_stmt:
-          IF expr THEN stmt
-        | IF expr THEN stmt ELSE stmt
-        ;
+  IF expr THEN stmt
+| IF expr THEN stmt ELSE stmt
+;
 @end group
 
-expr:     variable
-        ;
+expr:
+  variable
+;
 @end example
 
 @node Precedence
@@ -6450,12 +6646,13 @@ input @w{@samp{1 - 2 * 3}} can be parsed in two different ways):
 
 @example
 @group
-expr:     expr '-' expr
-        | expr '*' expr
-        | expr '<' expr
-        | '(' expr ')'
-        @dots{}
-        ;
+expr:
+  expr '-' expr
+| expr '*' expr
+| expr '<' expr
+| '(' expr ')'
+@dots{}
+;
 @end group
 @end example
 
@@ -6609,10 +6806,11 @@ Now the precedence of @code{UMINUS} can be used in specific rules:
 
 @example
 @group
-exp:    @dots{}
-        | exp '-' exp
-        @dots{}
-        | '-' exp %prec UMINUS
+exp:
+  @dots{}
+| exp '-' exp
+  @dots{}
+| '-' exp %prec UMINUS
 @end group
 @end example
 
@@ -6677,18 +6875,20 @@ For example, here is an erroneous attempt to define a sequence
 of zero or more @code{word} groupings.
 
 @example
-sequence: /* empty */
-                @{ printf ("empty sequence\n"); @}
-        | maybeword
-        | sequence word
-                @{ printf ("added word %s\n", $2); @}
-        ;
+@group
+sequence:
+  /* empty */    @{ printf ("empty sequence\n"); @}
+| maybeword
+| sequence word  @{ printf ("added word %s\n", $2); @}
+;
+@end group
 
-maybeword: /* empty */
-                @{ printf ("empty maybeword\n"); @}
-        | word
-                @{ printf ("single word %s\n", $1); @}
-        ;
+@group
+maybeword:
+  /* empty */   @{ printf ("empty maybeword\n"); @}
+| word          @{ printf ("single word %s\n", $1); @}
+;
+@end group
 @end example
 
 @noindent
@@ -6715,28 +6915,30 @@ reduce/reduce conflict must be studied and usually eliminated.  Here is the
 proper way to define @code{sequence}:
 
 @example
-sequence: /* empty */
-                @{ printf ("empty sequence\n"); @}
-        | sequence word
-                @{ printf ("added word %s\n", $2); @}
-        ;
+sequence:
+  /* empty */    @{ printf ("empty sequence\n"); @}
+| sequence word  @{ printf ("added word %s\n", $2); @}
+;
 @end example
 
 Here is another common error that yields a reduce/reduce conflict:
 
 @example
-sequence: /* empty */
-        | sequence words
-        | sequence redirects
-        ;
+sequence:
+  /* empty */
+| sequence words
+| sequence redirects
+;
 
-words:    /* empty */
-        | words word
-        ;
+words:
+  /* empty */
+| words word
+;
 
-redirects:/* empty */
-        | redirects redirect
-        ;
+redirects:
+  /* empty */
+| redirects redirect
+;
 @end example
 
 @noindent
@@ -6755,28 +6957,38 @@ Here are two ways to correct these rules.  First, to make it a single level
 of sequence:
 
 @example
-sequence: /* empty */
-        | sequence word
-        | sequence redirect
-        ;
+sequence:
+  /* empty */
+| sequence word
+| sequence redirect
+;
 @end example
 
 Second, to prevent either a @code{words} or a @code{redirects}
 from being empty:
 
 @example
-sequence: /* empty */
-        | sequence words
-        | sequence redirects
-        ;
+@group
+sequence:
+  /* empty */
+| sequence words
+| sequence redirects
+;
+@end group
 
-words:    word
-        | words word
-        ;
+@group
+words:
+  word
+| words word
+;
+@end group
 
-redirects:redirect
-        | redirects redirect
-        ;
+@group
+redirects:
+  redirect
+| redirects redirect
+;
+@end group
 @end example
 
 @node Mysterious Conflicts
@@ -6791,30 +7003,27 @@ Here is an example:
 %token ID
 
 %%
-def:    param_spec return_spec ','
-        ;
+def: param_spec return_spec ',';
 param_spec:
-             type
-        |    name_list ':' type
-        ;
+  type
+| name_list ':' type
+;
 @end group
 @group
 return_spec:
-             type
-        |    name ':' type
-        ;
+  type
+| name ':' type
+;
 @end group
 @group
-type:        ID
-        ;
+type: ID;
 @end group
 @group
-name:        ID
-        ;
+name: ID;
 name_list:
-             name
-        |    name ',' name_list
-        ;
+  name
+| name ',' name_list
+;
 @end group
 @end example
 
@@ -6863,11 +7072,10 @@ distinct.  In the above example, adding one rule to
 %%
 @dots{}
 return_spec:
-             type
-        |    name ':' type
-        /* This rule is never used.  */
-        |    ID BOGUS
-        ;
+  type
+| name ':' type
+| ID BOGUS       /* This rule is never used.  */
+;
 @end group
 @end example
 
@@ -6887,13 +7095,13 @@ rather than the one for @code{name}.
 
 @example
 param_spec:
-             type
-        |    name_list ':' type
-        ;
+  type
+| name_list ':' type
+;
 return_spec:
-             type
-        |    ID ':' type
-        ;
+  type
+| ID ':' type
+;
 @end example
 
 For a more detailed exposition of LALR(1) parsers and parser
@@ -7253,7 +7461,7 @@ semantic actions, but none of these are performed during the exploratory
 parse.  Finally, the base of the temporary stack used during an exploratory
 parse is a pointer into the normal parser state stack so that the stack is
 never physically copied.  In our experience, the performance penalty of LAC
-has proven insignificant for practical grammars.
+has proved insignificant for practical grammars.
 @end itemize
 
 While the LAC algorithm shares techniques that have been recognized in the
@@ -7399,7 +7607,7 @@ calls @code{yyerror} and then returns 2.
 
 Because Bison parsers have growing stacks, hitting the upper limit
 usually results from using a right recursion instead of a left
-recursion, @xref{Recursion, ,Recursive Rules}.
+recursion, see @ref{Recursion, ,Recursive Rules}.
 
 @vindex YYMAXDEPTH
 By defining the macro @code{YYMAXDEPTH}, you can control how deep the
@@ -7468,20 +7676,21 @@ in the current context, the parse can continue.
 For example:
 
 @example
-stmnts:  /* empty string */
-        | stmnts '\n'
-        | stmnts exp '\n'
-        | stmnts error '\n'
+stmts:
+  /* empty string */
+| stmts '\n'
+| stmts exp '\n'
+| stmts error '\n'
 @end example
 
 The fourth rule in this example says that an error followed by a newline
-makes a valid addition to any @code{stmnts}.
+makes a valid addition to any @code{stmts}.
 
 What happens if a syntax error occurs in the middle of an @code{exp}?  The
 error recovery rule, interpreted strictly, applies to the precise sequence
-of a @code{stmnts}, an @code{error} and a newline.  If an error occurs in
+of a @code{stmts}, an @code{error} and a newline.  If an error occurs in
 the middle of an @code{exp}, there will probably be some additional tokens
-and subexpressions on the stack after the last @code{stmnts}, and there
+and subexpressions on the stack after the last @code{stmts}, and there
 will be tokens to read before the next newline.  So the rule is not
 applicable in the ordinary way.
 
@@ -7489,7 +7698,7 @@ But Bison can force the situation to fit the rule, by discarding part of
 the semantic context and part of the input.  First it discards states
 and objects from the stack until it gets back to a state in which the
 @code{error} token is acceptable.  (This means that the subexpressions
-already parsed are discarded, back to the last complete @code{stmnts}.)
+already parsed are discarded, back to the last complete @code{stmts}.)
 At this point the @code{error} token can be shifted.  Then, if the old
 lookahead token is not acceptable to be shifted next, the parser reads
 tokens and discards them until it finds a token which is acceptable.  In
@@ -7503,7 +7712,7 @@ error recovery.  A simple and useful strategy is simply to skip the rest of
 the current input line or current statement if an error is detected:
 
 @example
-stmnt: error ';'  /* On error, skip until ';' is read.  */
+stmt: error ';'  /* On error, skip until ';' is read.  */
 @end example
 
 It is also useful to recover to the matching close-delimiter of an
@@ -7512,20 +7721,21 @@ close-delimiter will probably appear to be unmatched, and generate another,
 spurious error message:
 
 @example
-primary:  '(' expr ')'
-        | '(' error ')'
-        @dots{}
-        ;
+primary:
+  '(' expr ')'
+| '(' error ')'
+@dots{}
+;
 @end example
 
 Error recovery strategies are necessarily guesses.  When they guess wrong,
 one syntax error often leads to another.  In the above example, the error
 recovery rule guesses that an error is due to bad input within one
-@code{stmnt}.  Suppose that instead a spurious semicolon is inserted in the
-middle of a valid @code{stmnt}.  After the error recovery rule recovers
+@code{stmt}.  Suppose that instead a spurious semicolon is inserted in the
+middle of a valid @code{stmt}.  After the error recovery rule recovers
 from the first error, another syntax error will be found straightaway,
 since the text following the spurious semicolon is also an invalid
-@code{stmnt}.
+@code{stmt}.
 
 To prevent an outpouring of error messages, the parser will output no error
 message for another syntax error that happens shortly after the first; only
@@ -7616,11 +7826,13 @@ earlier:
 @example
 typedef int foo, bar;
 int baz (void)
+@group
 @{
   static bar (bar);      /* @r{redeclare @code{bar} as static variable} */
   extern foo foo (foo);  /* @r{redeclare @code{foo} as function} */
   return foo (bar);
 @}
+@end group
 @end example
 
 Unfortunately, the name being declared is separated from the declaration
@@ -7633,17 +7845,19 @@ declaration in which that can't be done.  Here is a part of the
 duplication, with actions omitted for brevity:
 
 @example
+@group
 initdcl:
-          declarator maybeasm '='
-          init
-        | declarator maybeasm
-        ;
+  declarator maybeasm '=' init
+| declarator maybeasm
+;
+@end group
 
+@group
 notype_initdcl:
-          notype_declarator maybeasm '='
-          init
-        | notype_declarator maybeasm
-        ;
+  notype_declarator maybeasm '=' init
+| notype_declarator maybeasm
+;
+@end group
 @end example
 
 @noindent
@@ -7683,24 +7897,21 @@ as an identifier if it appears in that context.  Here is how you can do it:
 @dots{}
 @end group
 @group
-expr:   IDENTIFIER
-        | constant
-        | HEX '('
-                @{ hexflag = 1; @}
-          expr ')'
-                @{ hexflag = 0;
-                   $$ = $4; @}
-        | expr '+' expr
-                @{ $$ = make_sum ($1, $3); @}
-        @dots{}
-        ;
+expr:
+  IDENTIFIER
+| constant
+| HEX '('        @{ hexflag = 1; @}
+    expr ')'     @{ hexflag = 0; $$ = $4; @}
+| expr '+' expr  @{ $$ = make_sum ($1, $3); @}
+@dots{}
+;
 @end group
 
 @group
 constant:
-          INTEGER
-        | STRING
-        ;
+  INTEGER
+| STRING
+;
 @end group
 @end example
 
@@ -7726,12 +7937,12 @@ For example, in C-like languages, a typical error recovery rule is to skip
 tokens until the next semicolon, and then start a new statement, like this:
 
 @example
-stmt:   expr ';'
-        | IF '(' expr ')' stmt @{ @dots{} @}
-        @dots{}
-        error ';'
-                @{ hexflag = 0; @}
-        ;
+stmt:
+  expr ';'
+| IF '(' expr ')' stmt @{ @dots{} @}
+@dots{}
+| error ';'  @{ hexflag = 0; @}
+;
 @end example
 
 If there is a syntax error in the middle of a @samp{hex (@var{expr})}
@@ -7748,11 +7959,11 @@ and skips to the close-parenthesis:
 
 @example
 @group
-expr:   @dots{}
-        | '(' expr ')'
-                @{ $$ = $2; @}
-        | '(' error ')'
-        @dots{}
+expr:
+  @dots{}
+| '(' expr ')'   @{ $$ = $2; @}
+| '(' error ')'
+@dots{}
 @end group
 @end example
 
@@ -7774,12 +7985,10 @@ clear the flag.
 @node Debugging
 @chapter Debugging Your Parser
 
-Developing a parser can be a challenge, especially if you don't
-understand the algorithm (@pxref{Algorithm, ,The Bison Parser
-Algorithm}).  Even so, sometimes a detailed description of the automaton
-can help (@pxref{Understanding, , Understanding Your Parser}), or
-tracing the execution of the parser can give some insight on why it
-behaves improperly (@pxref{Tracing, , Tracing Your Parser}).
+Developing a parser can be a challenge, especially if you don't understand
+the algorithm (@pxref{Algorithm, ,The Bison Parser Algorithm}).  This
+chapter explains how to generate and read the detailed description of the
+automaton, and how to enable and understand the parser run-time traces.
 
 @menu
 * Understanding::     Understanding the structure of your parser.
@@ -7796,7 +8005,7 @@ tune or simply fix a parser.  Bison provides two different
 representation of it, either textually or graphically (as a DOT file).
 
 The textual file is generated when the options @option{--report} or
-@option{--verbose} are specified, see @xref{Invocation, , Invoking
+@option{--verbose} are specified, see @ref{Invocation, , Invoking
 Bison}.  Its name is made by removing @samp{.tab.c} or @samp{.c} from
 the parser implementation file name, and adding @samp{.output}
 instead.  Therefore, if the grammar file is @file{foo.y}, then the
@@ -7810,12 +8019,13 @@ The following grammar file, @file{calc.y}, will be used in the sequel:
 %left '+' '-'
 %left '*'
 %%
-exp: exp '+' exp
-   | exp '-' exp
-   | exp '*' exp
-   | exp '/' exp
-   | NUM
-   ;
+exp:
+  exp '+' exp
+| exp '-' exp
+| exp '*' exp
+| exp '/' exp
+| NUM
+;
 useless: STR;
 %%
 @end example
@@ -7835,14 +8045,27 @@ creates a file @file{calc.output} with contents detailed below.  The
 order of the output and the exact presentation might vary, but the
 interpretation is the same.
 
-The first section includes details on conflicts that were solved thanks
-to precedence and/or associativity:
+@noindent
+@cindex token, useless
+@cindex useless token
+@cindex nonterminal, useless
+@cindex useless nonterminal
+@cindex rule, useless
+@cindex useless rule
+The first section reports useless tokens, nonterminals and rules.  Useless
+nonterminals and rules are removed in order to produce a smaller parser, but
+useless tokens are preserved, since they might be used by the scanner (note
+the difference between ``useless'' and ``unused'' below):
 
 @example
-Conflict in state 8 between rule 2 and token '+' resolved as reduce.
-Conflict in state 8 between rule 2 and token '-' resolved as reduce.
-Conflict in state 8 between rule 2 and token '*' resolved as shift.
-@exdent @dots{}
+Nonterminals useless in grammar
+   useless
+
+Terminals unused in grammar
+   STR
+
+Rules useless in grammar
+    6 useless: STR
 @end example
 
 @noindent
@@ -7856,48 +8079,25 @@ State 11 conflicts: 4 shift/reduce
 @end example
 
 @noindent
-@cindex token, useless
-@cindex useless token
-@cindex nonterminal, useless
-@cindex useless nonterminal
-@cindex rule, useless
-@cindex useless rule
-The next section reports useless tokens, nonterminal and rules.  Useless
-nonterminals and rules are removed in order to produce a smaller parser,
-but useless tokens are preserved, since they might be used by the
-scanner (note the difference between ``useless'' and ``unused''
-below):
-
-@example
-Nonterminals useless in grammar:
-   useless
-
-Terminals unused in grammar:
-   STR
-
-Rules useless in grammar:
-#6     useless: STR;
-@end example
-
-@noindent
-The next section reproduces the exact grammar that Bison used:
+Then Bison reproduces the exact grammar it used:
 
 @example
 Grammar
 
-  Number, Line, Rule
-    0   5 $accept -> exp $end
-    1   5 exp -> exp '+' exp
-    2   6 exp -> exp '-' exp
-    3   7 exp -> exp '*' exp
-    4   8 exp -> exp '/' exp
-    5   9 exp -> NUM
+    0 $accept: exp $end
+
+    1 exp: exp '+' exp
+    2    | exp '-' exp
+    3    | exp '*' exp
+    4    | exp '/' exp
+    5    | NUM
 @end example
 
 @noindent
 and reports the uses of the symbols:
 
 @example
+@group
 Terminals, with rules where they appear
 
 $end (0) 0
@@ -7907,13 +8107,17 @@ $end (0) 0
 '/' (47) 4
 error (256)
 NUM (258) 5
+STR (259)
+@end group
 
+@group
 Nonterminals, with rules where they appear
 
-$accept (8)
+$accept (9)
     on left: 0
-exp (9)
+exp (10)
     on left: 1 2 3 4 5, on right: 0 1 2 3 4
+@end group
 @end example
 
 @noindent
@@ -7921,18 +8125,18 @@ exp (9)
 @cindex pointed rule
 @cindex rule, pointed
 Bison then proceeds onto the automaton itself, describing each state
-with it set of @dfn{items}, also known as @dfn{pointed rules}.  Each
-item is a production rule together with a point (marked by @samp{.})
-that the input cursor.
+with its set of @dfn{items}, also known as @dfn{pointed rules}.  Each
+item is a production rule together with a point (@samp{.}) marking
+the location of the input cursor.
 
 @example
 state 0
 
-    $accept  ->  . exp $   (rule 0)
+    0 $accept: . exp $end
 
-    NUM         shift, and go to state 1
+    NUM  shift, and go to state 1
 
-    exp         go to state 2
+    exp  go to state 2
 @end example
 
 This reads as follows: ``state 0 corresponds to being at the very
@@ -7940,7 +8144,7 @@ beginning of the parsing, in the initial rule, right before the start
 symbol (here, @code{exp}).  When the parser returns to this state right
 after having reduced a rule that produced an @code{exp}, the control
 flow jumps to state 2.  If there is no such transition on a nonterminal
-symbol, and the lookahead is a @code{NUM}, then this token is shifted on
+symbol, and the lookahead is a @code{NUM}, then this token is shifted onto
 the parse stack, and the control flow jumps to state 1.  Any other
 lookahead triggers a syntax error.''
 
@@ -7953,33 +8157,32 @@ report lists @code{NUM} as a lookahead token because @code{NUM} can be
 at the beginning of any rule deriving an @code{exp}.  By default Bison
 reports the so-called @dfn{core} or @dfn{kernel} of the item set, but if
 you want to see more detail you can invoke @command{bison} with
-@option{--report=itemset} to list all the items, include those that can
-be derived:
+@option{--report=itemset} to list the derived items as well:
 
 @example
 state 0
 
-    $accept  ->  . exp $   (rule 0)
-    exp  ->  . exp '+' exp   (rule 1)
-    exp  ->  . exp '-' exp   (rule 2)
-    exp  ->  . exp '*' exp   (rule 3)
-    exp  ->  . exp '/' exp   (rule 4)
-    exp  ->  . NUM   (rule 5)
+    0 $accept: . exp $end
+    1 exp: . exp '+' exp
+    2    | . exp '-' exp
+    3    | . exp '*' exp
+    4    | . exp '/' exp
+    5    | . NUM
 
-    NUM         shift, and go to state 1
+    NUM  shift, and go to state 1
 
-    exp         go to state 2
+    exp  go to state 2
 @end example
 
 @noindent
-In the state 1...
+In the state 1@dots{}
 
 @example
 state 1
 
-    exp  ->  NUM .   (rule 5)
+    5 exp: NUM .
 
-    $default    reduce using rule 5 (exp)
+    $default  reduce using rule 5 (exp)
 @end example
 
 @noindent
@@ -7991,26 +8194,26 @@ jump to state 2 (@samp{exp: go to state 2}).
 @example
 state 2
 
-    $accept  ->  exp . $   (rule 0)
-    exp  ->  exp . '+' exp   (rule 1)
-    exp  ->  exp . '-' exp   (rule 2)
-    exp  ->  exp . '*' exp   (rule 3)
-    exp  ->  exp . '/' exp   (rule 4)
+    0 $accept: exp . $end
+    1 exp: exp . '+' exp
+    2    | exp . '-' exp
+    3    | exp . '*' exp
+    4    | exp . '/' exp
 
-    $           shift, and go to state 3
-    '+'         shift, and go to state 4
-    '-'         shift, and go to state 5
-    '*'         shift, and go to state 6
-    '/'         shift, and go to state 7
+    $end  shift, and go to state 3
+    '+'   shift, and go to state 4
+    '-'   shift, and go to state 5
+    '*'   shift, and go to state 6
+    '/'   shift, and go to state 7
 @end example
 
 @noindent
 In state 2, the automaton can only shift a symbol.  For instance,
-because of the item @samp{exp -> exp . '+' exp}, if the lookahead if
-@samp{+}, it will be shifted on the parse stack, and the automaton
-control will jump to state 4, corresponding to the item @samp{exp -> exp
-'+' . exp}.  Since there is no default action, any other token than
-those listed above will trigger a syntax error.
+because of the item @samp{exp: exp . '+' exp}, if the lookahead is
+@samp{+} it is shifted onto the parse stack, and the automaton
+jumps to state 4, corresponding to the item @samp{exp: exp '+' . exp}.
+Since there is no default action, any lookahead not listed triggers a syntax
+error.
 
 @cindex accepting state
 The state 3 is named the @dfn{final state}, or the @dfn{accepting
@@ -8019,14 +8222,14 @@ state}:
 @example
 state 3
 
-    $accept  ->  exp $ .   (rule 0)
+    0 $accept: exp $end .
 
-    $default    accept
+    $default  accept
 @end example
 
 @noindent
-the initial rule is completed (the start symbol and the end
-of input were read), the parsing exits successfully.
+the initial rule is completed (the start symbol and the end-of-input were
+read), the parsing exits successfully.
 
 The interpretation of states 4 to 7 is straightforward, and is left to
 the reader.
@@ -8034,35 +8237,38 @@ the reader.
 @example
 state 4
 
-    exp  ->  exp '+' . exp   (rule 1)
+    1 exp: exp '+' . exp
 
-    NUM         shift, and go to state 1
+    NUM  shift, and go to state 1
 
-    exp         go to state 8
+    exp  go to state 8
+
 
 state 5
 
-    exp  ->  exp '-' . exp   (rule 2)
+    2 exp: exp '-' . exp
 
-    NUM         shift, and go to state 1
+    NUM  shift, and go to state 1
 
-    exp         go to state 9
+    exp  go to state 9
+
 
 state 6
 
-    exp  ->  exp '*' . exp   (rule 3)
+    3 exp: exp '*' . exp
 
-    NUM         shift, and go to state 1
+    NUM  shift, and go to state 1
 
-    exp         go to state 10
+    exp  go to state 10
+
 
 state 7
 
-    exp  ->  exp '/' . exp   (rule 4)
+    4 exp: exp '/' . exp
 
-    NUM         shift, and go to state 1
+    NUM  shift, and go to state 1
 
-    exp         go to state 11
+    exp  go to state 11
 @end example
 
 As was announced in beginning of the report, @samp{State 8 conflicts:
@@ -8071,17 +8277,17 @@ As was announced in beginning of the report, @samp{State 8 conflicts:
 @example
 state 8
 
-    exp  ->  exp . '+' exp   (rule 1)
-    exp  ->  exp '+' exp .   (rule 1)
-    exp  ->  exp . '-' exp   (rule 2)
-    exp  ->  exp . '*' exp   (rule 3)
-    exp  ->  exp . '/' exp   (rule 4)
+    1 exp: exp . '+' exp
+    1    | exp '+' exp .
+    2    | exp . '-' exp
+    3    | exp . '*' exp
+    4    | exp . '/' exp
 
-    '*'         shift, and go to state 6
-    '/'         shift, and go to state 7
+    '*'  shift, and go to state 6
+    '/'  shift, and go to state 7
 
-    '/'         [reduce using rule 1 (exp)]
-    $default    reduce using rule 1 (exp)
+    '/'       [reduce using rule 1 (exp)]
+    $default  reduce using rule 1 (exp)
 @end example
 
 Indeed, there are two actions associated to the lookahead @samp{/}:
@@ -8095,7 +8301,7 @@ NUM}, which corresponds to reducing rule 1.
 
 Because in deterministic parsing a single decision can be made, Bison
 arbitrarily chose to disable the reduction, see @ref{Shift/Reduce, ,
-Shift/Reduce Conflicts}.  Discarded actions are reported in between
+Shift/Reduce Conflicts}.  Discarded actions are reported between
 square brackets.
 
 Note that all the previous states had a single possible action: either
@@ -8114,67 +8320,86 @@ with some set of possible lookahead tokens.  When run with
 @example
 state 8
 
-    exp  ->  exp . '+' exp   (rule 1)
-    exp  ->  exp '+' exp .  [$, '+', '-', '/']   (rule 1)
-    exp  ->  exp . '-' exp   (rule 2)
-    exp  ->  exp . '*' exp   (rule 3)
-    exp  ->  exp . '/' exp   (rule 4)
+    1 exp: exp . '+' exp
+    1    | exp '+' exp .  [$end, '+', '-', '/']
+    2    | exp . '-' exp
+    3    | exp . '*' exp
+    4    | exp . '/' exp
 
-    '*'         shift, and go to state 6
-    '/'         shift, and go to state 7
+    '*'  shift, and go to state 6
+    '/'  shift, and go to state 7
 
-    '/'         [reduce using rule 1 (exp)]
-    $default    reduce using rule 1 (exp)
+    '/'       [reduce using rule 1 (exp)]
+    $default  reduce using rule 1 (exp)
 @end example
+
+Note however that while @samp{NUM + NUM / NUM} is ambiguous (which results in
+the conflicts on @samp{/}), @samp{NUM + NUM * NUM} is not: the conflict was
+solved thanks to associativity and precedence directives.  If invoked with
+@option{--report=solved}, Bison includes information about the solved
+conflicts in the report:
+
+@example
+Conflict between rule 1 and token '+' resolved as reduce (%left '+').
+Conflict between rule 1 and token '-' resolved as reduce (%left '-').
+Conflict between rule 1 and token '*' resolved as shift ('+' < '*').
+@end example
+
 
 The remaining states are similar:
 
 @example
+@group
 state 9
 
-    exp  ->  exp . '+' exp   (rule 1)
-    exp  ->  exp . '-' exp   (rule 2)
-    exp  ->  exp '-' exp .   (rule 2)
-    exp  ->  exp . '*' exp   (rule 3)
-    exp  ->  exp . '/' exp   (rule 4)
+    1 exp: exp . '+' exp
+    2    | exp . '-' exp
+    2    | exp '-' exp .
+    3    | exp . '*' exp
+    4    | exp . '/' exp
 
-    '*'         shift, and go to state 6
-    '/'         shift, and go to state 7
+    '*'  shift, and go to state 6
+    '/'  shift, and go to state 7
 
-    '/'         [reduce using rule 2 (exp)]
-    $default    reduce using rule 2 (exp)
+    '/'       [reduce using rule 2 (exp)]
+    $default  reduce using rule 2 (exp)
+@end group
 
+@group
 state 10
 
-    exp  ->  exp . '+' exp   (rule 1)
-    exp  ->  exp . '-' exp   (rule 2)
-    exp  ->  exp . '*' exp   (rule 3)
-    exp  ->  exp '*' exp .   (rule 3)
-    exp  ->  exp . '/' exp   (rule 4)
+    1 exp: exp . '+' exp
+    2    | exp . '-' exp
+    3    | exp . '*' exp
+    3    | exp '*' exp .
+    4    | exp . '/' exp
 
-    '/'         shift, and go to state 7
+    '/'  shift, and go to state 7
 
-    '/'         [reduce using rule 3 (exp)]
-    $default    reduce using rule 3 (exp)
+    '/'       [reduce using rule 3 (exp)]
+    $default  reduce using rule 3 (exp)
+@end group
 
+@group
 state 11
 
-    exp  ->  exp . '+' exp   (rule 1)
-    exp  ->  exp . '-' exp   (rule 2)
-    exp  ->  exp . '*' exp   (rule 3)
-    exp  ->  exp . '/' exp   (rule 4)
-    exp  ->  exp '/' exp .   (rule 4)
+    1 exp: exp . '+' exp
+    2    | exp . '-' exp
+    3    | exp . '*' exp
+    4    | exp . '/' exp
+    4    | exp '/' exp .
 
-    '+'         shift, and go to state 4
-    '-'         shift, and go to state 5
-    '*'         shift, and go to state 6
-    '/'         shift, and go to state 7
+    '+'  shift, and go to state 4
+    '-'  shift, and go to state 5
+    '*'  shift, and go to state 6
+    '/'  shift, and go to state 7
 
-    '+'         [reduce using rule 4 (exp)]
-    '-'         [reduce using rule 4 (exp)]
-    '*'         [reduce using rule 4 (exp)]
-    '/'         [reduce using rule 4 (exp)]
-    $default    reduce using rule 4 (exp)
+    '+'       [reduce using rule 4 (exp)]
+    '-'       [reduce using rule 4 (exp)]
+    '*'       [reduce using rule 4 (exp)]
+    '/'       [reduce using rule 4 (exp)]
+    $default  reduce using rule 4 (exp)
+@end group
 @end example
 
 @noindent
@@ -8190,9 +8415,17 @@ associativity of @samp{/} is not specified.
 @cindex debugging
 @cindex tracing the parser
 
-If a Bison grammar compiles properly but doesn't do what you want when it
-runs, the @code{yydebug} parser-trace feature can help you figure out why.
+When a Bison grammar compiles properly but parses ``incorrectly'', the
+@code{yydebug} parser-trace feature helps figuring out why.
 
+@menu
+* Enabling Traces::    Activating run-time trace support
+* Mfcalc Traces::      Extending @code{mfcalc} to support traces
+* The YYPRINT Macro::  Obsolete interface for semantic value reports
+@end menu
+
+@node Enabling Traces
+@subsection  Enabling Traces
 There are several means to enable compilation of trace facilities:
 
 @table @asis
@@ -8221,6 +8454,7 @@ the preferred solution.
 We suggest that you always enable the debug option so that debugging is
 always possible.
 
+@findex YYFPRINTF
 The trace facility outputs messages with macro calls of the form
 @code{YYFPRINTF (stderr, @var{format}, @var{args})} where
 @var{format} and @var{args} are the usual @code{printf} format and variadic
@@ -8250,9 +8484,9 @@ Each time a rule is reduced, which rule it is, and the complete contents
 of the state stack afterward.
 @end itemize
 
-To make sense of this information, it helps to refer to the listing file
-produced by the Bison @samp{-v} option (@pxref{Invocation, ,Invoking
-Bison}).  This file shows the meaning of each state in terms of
+To make sense of this information, it helps to refer to the automaton
+description file (@pxref{Understanding, ,Understanding Your Parser}).
+This file shows the meaning of each state in terms of
 positions in various rules, and also what each state will do with each
 possible input token.  As you read the successive trace messages, you
 can see that the parser is functioning according to its specification in
@@ -8260,27 +8494,206 @@ the listing file.  Eventually you will arrive at the place where
 something undesirable happens, and you will see which parts of the
 grammar are to blame.
 
-The parser implementation file is a C program and you can use C
+The parser implementation file is a C/C++/Java program and you can use
 debuggers on it, but it's not easy to interpret what it is doing.  The
 parser function is a finite-state machine interpreter, and aside from
 the actions it executes the same code over and over.  Only the values
 of variables show where in the grammar it is working.
 
+@node Mfcalc Traces
+@subsection Enabling Debug Traces for @code{mfcalc}
+
+The debugging information normally gives the token type of each token read,
+but not its semantic value.  The @code{%printer} directive allows specify
+how semantic values are reported, see @ref{Printer Decl, , Printing
+Semantic Values}.  For backward compatibility, Yacc like C parsers may also
+use the @code{YYPRINT} (@pxref{The YYPRINT Macro, , The @code{YYPRINT}
+Macro}), but its use is discouraged.
+
+As a demonstration of @code{%printer}, consider the multi-function
+calculator, @code{mfcalc} (@pxref{Multi-function Calc}).  To enable run-time
+traces, and semantic value reports, insert the following directives in its
+prologue:
+
+@comment file: mfcalc.y: 2
+@example
+/* Generate the parser description file.  */
+%verbose
+/* Enable run-time traces (yydebug).  */
+%define parse.trace
+
+/* Formatting semantic values.  */
+%printer @{ fprintf (yyoutput, "%s", $$->name); @} VAR;
+%printer @{ fprintf (yyoutput, "%s()", $$->name); @} FNCT;
+%printer @{ fprintf (yyoutput, "%g", $$); @} <val>;
+@end example
+
+The @code{%define} directive instructs Bison to generate run-time trace
+support.  Then, activation of these traces is controlled at run-time by the
+@code{yydebug} variable, which is disabled by default.  Because these traces
+will refer to the ``states'' of the parser, it is helpful to ask for the
+creation of a description of that parser; this is the purpose of (admittedly
+ill-named) @code{%verbose} directive.
+
+The set of @code{%printer} directives demonstrates how to format the
+semantic value in the traces.  Note that the specification can be done
+either on the symbol type (e.g., @code{VAR} or @code{FNCT}), or on the type
+tag: since @code{<val>} is the type for both @code{NUM} and @code{exp}, this
+printer will be used for them.
+
+Here is a sample of the information provided by run-time traces.  The traces
+are sent onto standard error.
+
+@example
+$ @kbd{echo 'sin(1-1)' | ./mfcalc -p}
+Starting parse
+Entering state 0
+Reducing stack by rule 1 (line 34):
+-> $$ = nterm input ()
+Stack now 0
+Entering state 1
+@end example
+
+@noindent
+This first batch shows a specific feature of this grammar: the first rule
+(which is in line 34 of @file{mfcalc.y} can be reduced without even having
+to look for the first token.  The resulting left-hand symbol (@code{$$}) is
+a valueless (@samp{()}) @code{input} non terminal (@code{nterm}).
+
+Then the parser calls the scanner.
+@example
+Reading a token: Next token is token FNCT (sin())
+Shifting token FNCT (sin())
+Entering state 6
+@end example
+
+@noindent
+That token (@code{token}) is a function (@code{FNCT}) whose value is
+@samp{sin} as formatted per our @code{%printer} specification: @samp{sin()}.
+The parser stores (@code{Shifting}) that token, and others, until it can do
+something about it.
+
+@example
+Reading a token: Next token is token '(' ()
+Shifting token '(' ()
+Entering state 14
+Reading a token: Next token is token NUM (1.000000)
+Shifting token NUM (1.000000)
+Entering state 4
+Reducing stack by rule 6 (line 44):
+   $1 = token NUM (1.000000)
+-> $$ = nterm exp (1.000000)
+Stack now 0 1 6 14
+Entering state 24
+@end example
+
+@noindent
+The previous reduction demonstrates the @code{%printer} directive for
+@code{<val>}: both the token @code{NUM} and the resulting non-terminal
+@code{exp} have @samp{1} as value.
+
+@example
+Reading a token: Next token is token '-' ()
+Shifting token '-' ()
+Entering state 17
+Reading a token: Next token is token NUM (1.000000)
+Shifting token NUM (1.000000)
+Entering state 4
+Reducing stack by rule 6 (line 44):
+   $1 = token NUM (1.000000)
+-> $$ = nterm exp (1.000000)
+Stack now 0 1 6 14 24 17
+Entering state 26
+Reading a token: Next token is token ')' ()
+Reducing stack by rule 11 (line 49):
+   $1 = nterm exp (1.000000)
+   $2 = token '-' ()
+   $3 = nterm exp (1.000000)
+-> $$ = nterm exp (0.000000)
+Stack now 0 1 6 14
+Entering state 24
+@end example
+
+@noindent
+The rule for the subtraction was just reduced.  The parser is about to
+discover the end of the call to @code{sin}.
+
+@example
+Next token is token ')' ()
+Shifting token ')' ()
+Entering state 31
+Reducing stack by rule 9 (line 47):
+   $1 = token FNCT (sin())
+   $2 = token '(' ()
+   $3 = nterm exp (0.000000)
+   $4 = token ')' ()
+-> $$ = nterm exp (0.000000)
+Stack now 0 1
+Entering state 11
+@end example
+
+@noindent
+Finally, the end-of-line allow the parser to complete the computation, and
+display its result.
+
+@example
+Reading a token: Next token is token '\n' ()
+Shifting token '\n' ()
+Entering state 22
+Reducing stack by rule 4 (line 40):
+   $1 = nterm exp (0.000000)
+   $2 = token '\n' ()
+@result{} 0
+-> $$ = nterm line ()
+Stack now 0 1
+Entering state 10
+Reducing stack by rule 2 (line 35):
+   $1 = nterm input ()
+   $2 = nterm line ()
+-> $$ = nterm input ()
+Stack now 0
+Entering state 1
+@end example
+
+The parser has returned into state 1, in which it is waiting for the next
+expression to evaluate, or for the end-of-file token, which causes the
+completion of the parsing.
+
+@example
+Reading a token: Now at end of input.
+Shifting token $end ()
+Entering state 2
+Stack now 0 1 2
+Cleanup: popping token $end ()
+Cleanup: popping nterm input ()
+@end example
+
+
+@node The YYPRINT Macro
+@subsection The @code{YYPRINT} Macro
+
 @findex YYPRINT
-The debugging information normally gives the token type of each token
-read, but not its semantic value.  You can optionally define a macro
-named @code{YYPRINT} to provide a way to print the value.  If you define
-@code{YYPRINT}, it should take three arguments.  The parser will pass a
-standard I/O stream, the numeric code for the token type, and the token
-value (from @code{yylval}).
+Before @code{%printer} support, semantic values could be displayed using the
+@code{YYPRINT} macro, which works only for terminal symbols and only with
+the @file{yacc.c} skeleton.
+
+@deffn {Macro} YYPRINT (@var{stream}, @var{token}, @var{value});
+@findex YYPRINT
+If you define @code{YYPRINT}, it should take three arguments.  The parser
+will pass a standard I/O stream, the numeric code for the token type, and
+the token value (from @code{yylval}).
+
+For @file{yacc.c} only.  Obsoleted by @code{%printer}.
+@end deffn
 
 Here is an example of @code{YYPRINT} suitable for the multi-function
 calculator (@pxref{Mfcalc Declarations, ,Declarations for @code{mfcalc}}):
 
-@smallexample
+@example
 %@{
   static void print_token_value (FILE *, int, YYSTYPE);
-  #define YYPRINT(file, type, value) print_token_value (file, type, value)
+  #define YYPRINT(File, Type, Value)            \
+    print_token_value (File, Type, Value)
 %@}
 
 @dots{} %% @dots{} %% @dots{}
@@ -8293,7 +8706,7 @@ print_token_value (FILE *file, int type, YYSTYPE value)
   else if (type == NUM)
     fprintf (file, "%d", value.val);
 @}
-@end smallexample
+@end example
 
 @c ================================================= Invoking Bison
 
@@ -8419,7 +8832,7 @@ Also warn about mid-rule values that are used but not set.
 For example, warn about unset @code{$$} in the mid-rule action in:
 
 @example
- exp: '1' @{ $1 = 1; @} '+' exp @{ $$ = $2 + $4; @};
+exp: '1' @{ $1 = 1; @} '+' exp @{ $$ = $2 + $4; @};
 @end example
 
 These warnings are not enabled by default since they sometimes prove to
@@ -8754,60 +9167,103 @@ Symbols}.
 @c - %define filename_type "const symbol::Symbol"
 
 When the directive @code{%locations} is used, the C++ parser supports
-location tracking, see @ref{Locations, , Locations Overview}.  Two
-auxiliary classes define a @code{position}, a single point in a file,
-and a @code{location}, a range composed of a pair of
-@code{position}s (possibly spanning several files).
+location tracking, see @ref{Tracking Locations}.  Two auxiliary classes
+define a @code{position}, a single point in a file, and a @code{location}, a
+range composed of a pair of @code{position}s (possibly spanning several
+files).
 
-@deftypemethod {position} {std::string*} file
+@tindex uint
+In this section @code{uint} is an abbreviation for @code{unsigned int}: in
+genuine code only the latter is used.
+
+@menu
+* C++ position::         One point in the source file
+* C++ location::         Two points in the source file
+@end menu
+
+@node C++ position
+@subsubsection C++ @code{position}
+
+@deftypeop {Constructor} {position} {} position (std::string* @var{file} = 0, uint @var{line} = 1, uint @var{col} = 1)
+Create a @code{position} denoting a given point.  Note that @code{file} is
+not reclaimed when the @code{position} is destroyed: memory managed must be
+handled elsewhere.
+@end deftypeop
+
+@deftypemethod {position} {void} initialize (std::string* @var{file} = 0, uint @var{line} = 1, uint @var{col} = 1)
+Reset the position to the given values.
+@end deftypemethod
+
+@deftypeivar {position} {std::string*} file
 The name of the file.  It will always be handled as a pointer, the
 parser will never duplicate nor deallocate it.  As an experimental
 feature you may change it to @samp{@var{type}*} using @samp{%define
 filename_type "@var{type}"}.
-@end deftypemethod
+@end deftypeivar
 
-@deftypemethod {position} {unsigned int} line
+@deftypeivar {position} {uint} line
 The line, starting at 1.
-@end deftypemethod
+@end deftypeivar
 
-@deftypemethod {position} {unsigned int} lines (int @var{height} = 1)
+@deftypemethod {position} {uint} lines (int @var{height} = 1)
 Advance by @var{height} lines, resetting the column number.
 @end deftypemethod
 
-@deftypemethod {position} {unsigned int} column
-The column, starting at 0.
-@end deftypemethod
+@deftypeivar {position} {uint} column
+The column, starting at 1.
+@end deftypeivar
 
-@deftypemethod {position} {unsigned int} columns (int @var{width} = 1)
+@deftypemethod {position} {uint} columns (int @var{width} = 1)
 Advance by @var{width} columns, without changing the line number.
 @end deftypemethod
 
-@deftypemethod {position} {position&} operator+= (position& @var{pos}, int @var{width})
-@deftypemethodx {position} {position} operator+ (const position& @var{pos}, int @var{width})
-@deftypemethodx {position} {position&} operator-= (const position& @var{pos}, int @var{width})
-@deftypemethodx {position} {position} operator- (position& @var{pos}, int @var{width})
+@deftypemethod {position} {position&} operator+= (int @var{width})
+@deftypemethodx {position} {position} operator+ (int @var{width})
+@deftypemethodx {position} {position&} operator-= (int @var{width})
+@deftypemethodx {position} {position} operator- (int @var{width})
 Various forms of syntactic sugar for @code{columns}.
 @end deftypemethod
 
-@deftypemethod {position} {position} operator<< (std::ostream @var{o}, const position& @var{p})
+@deftypemethod {position} {bool} operator== (const position& @var{that})
+@deftypemethodx {position} {bool} operator!= (const position& @var{that})
+Whether @code{*this} and @code{that} denote equal/different positions.
+@end deftypemethod
+
+@deftypefun {std::ostream&} operator<< (std::ostream& @var{o}, const position& @var{p})
 Report @var{p} on @var{o} like this:
 @samp{@var{file}:@var{line}.@var{column}}, or
 @samp{@var{line}.@var{column}} if @var{file} is null.
+@end deftypefun
+
+@node C++ location
+@subsubsection C++ @code{location}
+
+@deftypeop {Constructor} {location} {} location (const position& @var{begin}, const position& @var{end})
+Create a @code{Location} from the endpoints of the range.
+@end deftypeop
+
+@deftypeop {Constructor} {location} {} location (const position& @var{pos} = position())
+@deftypeopx {Constructor} {location} {} location (std::string* @var{file}, uint @var{line}, uint @var{col})
+Create a @code{Location} denoting an empty range located at a given point.
+@end deftypeop
+
+@deftypemethod {location} {void} initialize (std::string* @var{file} = 0, uint @var{line} = 1, uint @var{col} = 1)
+Reset the location to an empty range at the given values.
 @end deftypemethod
 
-@deftypemethod {location} {position} begin
-@deftypemethodx {location} {position} end
+@deftypeivar {location} {position} begin
+@deftypeivarx {location} {position} end
 The first, inclusive, position of the range, and the first beyond.
-@end deftypemethod
+@end deftypeivar
 
-@deftypemethod {location} {unsigned int} columns (int @var{width} = 1)
-@deftypemethodx {location} {unsigned int} lines (int @var{height} = 1)
+@deftypemethod {location} {uint} columns (int @var{width} = 1)
+@deftypemethodx {location} {uint} lines (int @var{height} = 1)
 Advance the @code{end} position.
 @end deftypemethod
 
-@deftypemethod {location} {location} operator+ (const location& @var{begin}, const location& @var{end})
-@deftypemethodx {location} {location} operator+ (const location& @var{begin}, int @var{width})
-@deftypemethodx {location} {location} operator+= (const location& @var{loc}, int @var{width})
+@deftypemethod {location} {location} operator+ (const location& @var{end})
+@deftypemethodx {location} {location} operator+ (int @var{width})
+@deftypemethodx {location} {location} operator+= (int @var{width})
 Various forms of syntactic sugar.
 @end deftypemethod
 
@@ -8815,6 +9271,16 @@ Various forms of syntactic sugar.
 Move @code{begin} onto @code{end}.
 @end deftypemethod
 
+@deftypemethod {location} {bool} operator== (const location& @var{that})
+@deftypemethodx {location} {bool} operator!= (const location& @var{that})
+Whether @code{*this} and @code{that} denote equal/different ranges of
+positions.
+@end deftypemethod
+
+@deftypefun {std::ostream&} operator<< (std::ostream& @var{o}, const location& @var{p})
+Report @var{p} on @var{o}, taking care of special cases such as: no
+@code{filename} defined, or equal filename/line or column.
+@end deftypefun
 
 @node C++ Parser Interface
 @subsection C++ Parser Interface
@@ -8839,9 +9305,9 @@ The types for semantics value and locations.
 @end defcv
 
 @defcv {Type} {parser} {token}
-A structure that contains (only) the definition of the tokens as the
-@code{yytokentype} enumeration.  To refer to the token @code{FOO}, the
-scanner should use @code{yy::parser::token::FOO}.  The scanner can use
+A structure that contains (only) the @code{yytokentype} enumeration, which
+defines the tokens.  To refer to the token @code{FOO},
+use @code{yy::parser::token::FOO}.  The scanner can use
 @samp{typedef yy::parser::token token;} to ``import'' the token enumeration
 (@pxref{Calc++ Scanner}).
 @end defcv
@@ -9086,7 +9552,7 @@ the grammar for.
 
 @comment file: calc++-parser.yy
 @example
-%skeleton "lalr1.cc"                          /*  -*- C++ -*- */
+%skeleton "lalr1.cc" /* -*- C++ -*- */
 %require "@value{VERSION}"
 %defines
 %define parser_class_name "calcxx_parser"
@@ -9199,10 +9665,10 @@ To enable memory deallocation during error recovery, use
 @c FIXME: Document %printer, and mention that it takes a braced-code operand.
 @comment file: calc++-parser.yy
 @example
-%printer    @{ debug_stream () << *$$; @} "identifier"
+%printer    @{ yyoutput << *$$; @} "identifier"
 %destructor @{ delete $$; @} "identifier"
 
-%printer    @{ debug_stream () << $$; @} <ival>
+%printer    @{ yyoutput << $$; @} <ival>
 @end example
 
 @noindent
@@ -9214,8 +9680,9 @@ The grammar itself is straightforward.
 %start unit;
 unit: assignments exp  @{ driver.result = $2; @};
 
-assignments: assignments assignment @{@}
-           | /* Nothing.  */        @{@};
+assignments:
+  /* Nothing.  */        @{@}
+| assignments assignment @{@};
 
 assignment:
      "identifier" ":=" exp
@@ -9254,7 +9721,7 @@ parser's to get the set of defined tokens.
 
 @comment file: calc++-scanner.ll
 @example
-%@{                                            /* -*- C++ -*- */
+%@{ /* -*- C++ -*- */
 # include <cstdlib>
 # include <cerrno>
 # include <climits>
@@ -9308,9 +9775,11 @@ preceding tokens.  Comments would be treated equally.
 
 @comment file: calc++-scanner.ll
 @example
+@group
 %@{
 # define YY_USER_ACTION  yylloc->columns (yyleng);
 %@}
+@end group
 %%
 %@{
   yylloc->step ();
@@ -9352,24 +9821,28 @@ on the scanner's data, it is simpler to implement them in this file.
 
 @comment file: calc++-scanner.ll
 @example
+@group
 void
 calcxx_driver::scan_begin ()
 @{
   yy_flex_debug = trace_scanning;
-  if (file == "-")
+  if (file.empty () || file == "-")
     yyin = stdin;
   else if (!(yyin = fopen (file.c_str (), "r")))
     @{
-      error (std::string ("cannot open ") + file);
-      exit (1);
+      error ("cannot open " + file + ": " + strerror(errno));
+      exit (EXIT_FAILURE);
     @}
 @}
+@end group
 
+@group
 void
 calcxx_driver::scan_end ()
 @{
   fclose (yyin);
 @}
+@end group
 @end example
 
 @node Calc++ Top Level
@@ -9382,18 +9855,20 @@ The top level file, @file{calc++.cc}, poses no problem.
 #include <iostream>
 #include "calc++-driver.hh"
 
+@group
 int
 main (int argc, char *argv[])
 @{
   calcxx_driver driver;
-  for (++argv; argv[0]; ++argv)
-    if (*argv == std::string ("-p"))
+  for (int i = 1; i < argc; ++i)
+    if (argv[i] == std::string ("-p"))
       driver.trace_parsing = true;
-    else if (*argv == std::string ("-s"))
+    else if (argv[i] == std::string ("-s"))
       driver.trace_scanning = true;
-    else if (!driver.parse (*argv))
+    else if (!driver.parse (argv[i]))
       std::cout << driver.result << std::endl;
 @}
+@end group
 @end example
 
 @node Java Parsers
@@ -9509,14 +9984,13 @@ can be used to print the semantic values.  This however may change
 @c - class Position
 @c - class Location
 
-When the directive @code{%locations} is used, the Java parser
-supports location tracking, see @ref{Locations, , Locations Overview}.
-An auxiliary user-defined class defines a @dfn{position}, a single point
-in a file; Bison itself defines a class representing a @dfn{location},
-a range composed of a pair of positions (possibly spanning several
-files).  The location class is an inner class of the parser; the name
-is @code{Location} by default, and may also be renamed using
-@code{%define location_type "@var{class-name}"}.
+When the directive @code{%locations} is used, the Java parser supports
+location tracking, see @ref{Tracking Locations}.  An auxiliary user-defined
+class defines a @dfn{position}, a single point in a file; Bison itself
+defines a class representing a @dfn{location}, a range composed of a pair of
+positions (possibly spanning several files).  The location class is an inner
+class of the parser; the name is @code{Location} by default, and may also be
+renamed using @code{%define location_type "@var{class-name}"}.
 
 The location class treats the position as a completely opaque value.
 By default, the class name is @code{Position}, but this can be changed
@@ -9733,20 +10207,20 @@ The location information of the grouping made by the current rule.
 @xref{Java Location Values}.
 @end defvar
 
-@deffn {Statement} {return YYABORT;}
+@deftypefn {Statement} return YYABORT @code{;}
 Return immediately from the parser, indicating failure.
 @xref{Java Parser Interface}.
-@end deffn
+@end deftypefn
 
-@deffn {Statement} {return YYACCEPT;}
+@deftypefn {Statement} return YYACCEPT @code{;}
 Return immediately from the parser, indicating success.
 @xref{Java Parser Interface}.
-@end deffn
+@end deftypefn
 
-@deffn {Statement} {return YYERROR;}
-Start error recovery without printing an error message.
+@deftypefn {Statement} {return} YYERROR @code{;}
+Start error recovery (without printing an error message).
 @xref{Error Recovery}.
-@end deffn
+@end deftypefn
 
 @deftypefn {Function} {boolean} recovering ()
 Return whether error recovery is being done. In this state, the parser
@@ -9778,7 +10252,7 @@ macros.  Instead, they should be preceded by @code{return} when they
 appear in an action.  The actual definition of these symbols is
 opaque to the Bison grammar, and it might change in the future.  The
 only meaningful operation that you can do, is to return them.
-See @pxref{Java Action Features}.
+@xref{Java Action Features}.
 
 Note that of these three symbols, only @code{YYACCEPT} and
 @code{YYABORT} will cause a return from the @code{yyparse}
@@ -9794,8 +10268,8 @@ values have a common base type: @code{Object} or as specified by
 an union.  The type of @code{$$}, even with angle brackets, is the base
 type since Java casts are not allow on the left-hand side of assignments.
 Also, @code{$@var{n}} and @code{@@@var{n}} are not allowed on the
-left-hand side of assignments. See @pxref{Java Semantic Values} and
-@pxref{Java Action Features}.
+left-hand side of assignments. @xref{Java Semantic Values}, and
+@ref{Java Action Features}.
 
 @item
 The prologue declarations have a different meaning than in C/C++ code.
@@ -9811,7 +10285,7 @@ blocks are placed inside the parser class.
 @item @code{%code lexer}
 blocks, if specified, should include the implementation of the
 scanner.  If there is no such block, the scanner can be any class
-that implements the appropriate interface (see @pxref{Java Scanner
+that implements the appropriate interface (@pxref{Java Scanner
 Interface}).
 @end table
 
@@ -9992,13 +10466,13 @@ are addressed.
 @node Memory Exhausted
 @section Memory Exhausted
 
-@display
+@quotation
 My parser returns with error with a @samp{memory exhausted}
 message.  What can I do?
-@end display
+@end quotation
 
-This question is already addressed elsewhere, @xref{Recursion,
-,Recursive Rules}.
+This question is already addressed elsewhere, see @ref{Recursion, ,Recursive
+Rules}.
 
 @node How Can I Reset the Parser
 @section How Can I Reset the Parser
@@ -10006,20 +10480,20 @@ This question is already addressed elsewhere, @xref{Recursion,
 The following phenomenon has several symptoms, resulting in the
 following typical questions:
 
-@display
+@quotation
 I invoke @code{yyparse} several times, and on correct input it works
 properly; but when a parse error is found, all the other calls fail
 too.  How can I reset the error flag of @code{yyparse}?
-@end display
+@end quotation
 
 @noindent
 or
 
-@display
+@quotation
 My parser includes support for an @samp{#include}-like feature, in
 which case I run @code{yyparse} from @code{yyparse}.  This fails
-although I did specify @code{%define api.pure}.
-@end display
+although I did specify @samp{%define api.pure}.
+@end quotation
 
 These problems typically come not from Bison itself, but from
 Lex-generated scanners.  Because these scanners use large buffers for
@@ -10027,43 +10501,57 @@ speed, they might not notice a change of input file.  As a
 demonstration, consider the following source file,
 @file{first-line.l}:
 
-@verbatim
-%{
+@example
+@group
+%@{
 #include <stdio.h>
 #include <stdlib.h>
-%}
+%@}
+@end group
 %%
 .*\n    ECHO; return 1;
 %%
+@group
 int
 yyparse (char const *file)
-{
+@{
   yyin = fopen (file, "r");
   if (!yyin)
-    exit (2);
+    @{
+      perror ("fopen");
+      exit (EXIT_FAILURE);
+    @}
+@end group
+@group
   /* One token only.  */
   yylex ();
   if (fclose (yyin) != 0)
-    exit (3);
+    @{
+      perror ("fclose");
+      exit (EXIT_FAILURE);
+    @}
   return 0;
-}
+@}
+@end group
 
+@group
 int
 main (void)
-{
+@{
   yyparse ("input");
   yyparse ("input");
   return 0;
-}
-@end verbatim
+@}
+@end group
+@end example
 
 @noindent
 If the file @file{input} contains
 
-@verbatim
+@example
 input:1: Hello,
 input:2: World!
-@end verbatim
+@end example
 
 @noindent
 then instead of getting the first line twice, you get:
@@ -10094,35 +10582,41 @@ start condition, through a call to @samp{BEGIN (0)}.
 @node Strings are Destroyed
 @section Strings are Destroyed
 
-@display
+@quotation
 My parser seems to destroy old strings, or maybe it loses track of
 them.  Instead of reporting @samp{"foo", "bar"}, it reports
 @samp{"bar", "bar"}, or even @samp{"foo\nbar", "bar"}.
-@end display
+@end quotation
 
 This error is probably the single most frequent ``bug report'' sent to
 Bison lists, but is only concerned with a misunderstanding of the role
 of the scanner.  Consider the following Lex code:
 
-@verbatim
-%{
+@example
+@group
+%@{
 #include <stdio.h>
 char *yylval = NULL;
-%}
+%@}
+@end group
+@group
 %%
 .*    yylval = yytext; return 1;
 \n    /* IGNORE */
 %%
+@end group
+@group
 int
 main ()
-{
+@{
   /* Similar to using $1, $2 in a Bison action.  */
   char *fst = (yylex (), yylval);
   char *snd = (yylex (), yylval);
   printf ("\"%s\", \"%s\"\n", fst, snd);
   return 0;
-}
-@end verbatim
+@}
+@end group
+@end example
 
 If you compile and run this code, you get:
 
@@ -10153,10 +10647,10 @@ $ @kbd{printf 'one\ntwo\n' | ./split-lines}
 @node Implementing Gotos/Loops
 @section Implementing Gotos/Loops
 
-@display
+@quotation
 My simple calculator supports variables, assignments, and functions,
 but how can I implement gotos, or loops?
-@end display
+@end quotation
 
 Although very pedagogical, the examples included in the document blur
 the distinction to make between the parser---whose job is to recover
@@ -10183,11 +10677,11 @@ invited to consult the dedicated literature.
 @node Multiple start-symbols
 @section Multiple start-symbols
 
-@display
+@quotation
 I have several closely related grammars, and I would like to share their
 implementations.  In fact, I could use a single grammar but with
 multiple entry points.
-@end display
+@end quotation
 
 Bison does not support multiple start-symbols, but there is a very
 simple means to simulate them.  If @code{foo} and @code{bar} are the two
@@ -10198,8 +10692,9 @@ real start-symbol:
 @example
 %token START_FOO START_BAR;
 %start start;
-start: START_FOO foo
-     | START_BAR bar;
+start:
+  START_FOO foo
+| START_BAR bar;
 @end example
 
 These tokens prevents the introduction of new conflicts.  As far as the
@@ -10232,9 +10727,9 @@ available in the scanner (e.g., a global variable or using
 @node Secure?  Conform?
 @section Secure?  Conform?
 
-@display
+@quotation
 Is Bison secure?  Does it conform to POSIX?
-@end display
+@end quotation
 
 If you're looking for a guarantee or certification, we don't provide it.
 However, Bison is intended to be a reliable program that conforms to the
@@ -10244,11 +10739,11 @@ please send us a bug report.
 @node I can't build Bison
 @section I can't build Bison
 
-@display
+@quotation
 I can't build Bison because @command{make} complains that
 @code{msgfmt} is not found.
 What should I do?
-@end display
+@end quotation
 
 Like most GNU packages with internationalization support, that feature
 is turned on by default.  If you have problems building in the @file{po}
@@ -10262,9 +10757,9 @@ Bison.  See the file @file{ABOUT-NLS} for more information.
 @node Where can I find help?
 @section Where can I find help?
 
-@display
+@quotation
 I'm having trouble using Bison.  Where can I find help?
-@end display
+@end quotation
 
 First, read this fine manual.  Beyond that, you can send mail to
 @email{help-bison@@gnu.org}.  This mailing list is intended to be
@@ -10279,9 +10774,9 @@ hearts.
 @node Bug Reports
 @section Bug Reports
 
-@display
+@quotation
 I found a bug.  What should I include in the bug report?
-@end display
+@end quotation
 
 Before you send a bug report, make sure you are using the latest
 version.  Check @url{ftp://ftp.gnu.org/pub/gnu/bison/} or one of its
@@ -10303,17 +10798,17 @@ transcript of the build session, starting with the invocation of
 send additional files as well (such as `config.h' or `config.cache').
 
 Patches are most welcome, but not required.  That is, do not hesitate to
-send a bug report just because you can not provide a fix.
+send a bug report just because you cannot provide a fix.
 
 Send bug reports to @email{bug-bison@@gnu.org}.
 
 @node More Languages
 @section More Languages
 
-@display
+@quotation
 Will Bison ever have C++ and Java support?  How about @var{insert your
 favorite language here}?
-@end display
+@end quotation
 
 C++ and Java support is there now, and is documented.  We'd love to add other
 languages; contributions are welcome.
@@ -10321,9 +10816,9 @@ languages; contributions are welcome.
 @node Beta Testing
 @section Beta Testing
 
-@display
+@quotation
 What is involved in being a beta tester?
-@end display
+@end quotation
 
 It's not terribly involved.  Basically, you would download a test
 release, compile it, and use it to build and run a parser or two.  After
@@ -10341,9 +10836,9 @@ systems are especially welcome.
 @node Mailing Lists
 @section Mailing Lists
 
-@display
+@quotation
 How do I join the help-bison and bug-bison mailing lists?
-@end display
+@end quotation
 
 See @url{http://lists.gnu.org/}.
 
@@ -10356,22 +10851,22 @@ See @url{http://lists.gnu.org/}.
 
 @deffn {Variable} @@$
 In an action, the location of the left-hand side of the rule.
-@xref{Locations, , Locations Overview}.
+@xref{Tracking Locations}.
 @end deffn
 
 @deffn {Variable} @@@var{n}
-In an action, the location of the @var{n}-th symbol of the right-hand
-side of the rule.  @xref{Locations, , Locations Overview}.
+In an action, the location of the @var{n}-th symbol of the right-hand side
+of the rule.  @xref{Tracking Locations}.
 @end deffn
 
 @deffn {Variable} @@@var{name}
-In an action, the location of a symbol addressed by name.
-@xref{Locations, , Locations Overview}.
+In an action, the location of a symbol addressed by name.  @xref{Tracking
+Locations}.
 @end deffn
 
 @deffn {Variable} @@[@var{name}]
-In an action, the location of a symbol addressed by name.
-@xref{Locations, , Locations Overview}.
+In an action, the location of a symbol addressed by name.  @xref{Tracking
+Locations}.
 @end deffn
 
 @deffn {Variable} $$
@@ -10701,10 +11196,11 @@ after a syntax error.  @xref{Error Recovery}.
 @end deffn
 
 @deffn {Macro} YYERROR
-Macro to pretend that a syntax error has just been detected: call
-@code{yyerror} and then perform normal error recovery if possible
-(@pxref{Error Recovery}), or (if recovery is impossible) make
-@code{yyparse} return 1.  @xref{Error Recovery}.
+Cause an immediate syntax error.  This statement initiates error
+recovery just as if the parser itself had detected an error; however, it
+does not call @code{yyerror}, and does not print any message.  If you
+want to print an error message, call @code{yyerror} explicitly before
+the @samp{YYERROR;} statement.  @xref{Error Recovery}.
 
 For Java parsers, this functionality is invoked using @code{return YYERROR;}
 instead.
@@ -10722,6 +11218,11 @@ to request verbose, specific error message strings
 when @code{yyerror} is called.  It doesn't matter what definition you
 use for @code{YYERROR_VERBOSE}, just whether you define it.  Using
 @code{%error-verbose} is preferred.  @xref{Error Reporting}.
+@end deffn
+
+@deffn {Macro} YYFPRINTF
+Macro used to output run-time traces.
+@xref{Enabling Traces}.
 @end deffn
 
 @deffn {Macro} YYINITDEPTH
@@ -10784,6 +11285,12 @@ pure push parser, it is a member of yypstate.)
 @deffn {Function} yyparse
 The parser function produced by Bison; call this function to start
 parsing.  @xref{Parser Function, ,The Parser Function @code{yyparse}}.
+@end deffn
+
+@deffn {Macro} YYPRINT
+Macro used to output token semantic values.  For @file{yacc.c} only.
+Obsoleted by @code{%printer}.
+@xref{The YYPRINT Macro, , The @code{YYPRINT} Macro}.
 @end deffn
 
 @deffn {Function} yypstate_delete
@@ -11133,7 +11640,7 @@ London, Department of Computer Science, TR-00-12 (December 2000).
 @c LocalWords: NUM exp subsubsection kbd Ctrl ctype EOF getchar isdigit nonfree
 @c LocalWords: ungetc stdin scanf sc calc ulator ls lm cc NEG prec yyerrok rr
 @c LocalWords: longjmp fprintf stderr yylloc YYLTYPE cos ln Stallman Destructor
-@c LocalWords: smallexample symrec val tptr FNCT fnctptr func struct sym enum
+@c LocalWords: symrec val tptr FNCT fnctptr func struct sym enum IEC syntaxes
 @c LocalWords: fnct putsym getsym fname arith fncts atan ptr malloc sizeof Lex
 @c LocalWords: strlen strcpy fctn strcmp isalpha symbuf realloc isalnum DOTDOT
 @c LocalWords: ptypes itype YYPRINT trigraphs yytname expseq vindex dtype Unary
@@ -11143,35 +11650,36 @@ London, Department of Computer Science, TR-00-12 (December 2000).
 @c LocalWords: strncmp intval tindex lvalp locp llocp typealt YYBACKUP subrange
 @c LocalWords: YYEMPTY YYEOF YYRECOVERING yyclearin GE def UMINUS maybeword loc
 @c LocalWords: Johnstone Shamsa Sadaf Hussain Tomita TR uref YYMAXDEPTH inline
-@c LocalWords: YYINITDEPTH stmnts ref stmnt initdcl maybeasm notype Lookahead
+@c LocalWords: YYINITDEPTH stmts ref initdcl maybeasm notype Lookahead yyoutput
 @c LocalWords: hexflag STR exdent itemset asis DYYDEBUG YYFPRINTF args Autoconf
 @c LocalWords: infile ypp yxx outfile itemx tex leaderfill Troubleshouting sqrt
 @c LocalWords: hbox hss hfill tt ly yyin fopen fclose ofirst gcc ll lookahead
 @c LocalWords: nbar yytext fst snd osplit ntwo strdup AST Troublereporting th
 @c LocalWords: YYSTACK DVI fdl printindex IELR nondeterministic nonterminals ps
 @c LocalWords: subexpressions declarator nondeferred config libintl postfix LAC
-@c LocalWords: preprocessor nonpositive unary nonnumeric typedef extern rhs
-@c LocalWords: yytokentype destructor multicharacter nonnull EBCDIC
+@c LocalWords: preprocessor nonpositive unary nonnumeric typedef extern rhs sr
+@c LocalWords: yytokentype destructor multicharacter nonnull EBCDIC nterm LR's
 @c LocalWords: lvalue nonnegative XNUM CHR chr TAGLESS tagless stdout api TOK
-@c LocalWords: destructors Reentrancy nonreentrant subgrammar nonassociative
+@c LocalWords: destructors Reentrancy nonreentrant subgrammar nonassociative Ph
 @c LocalWords: deffnx namespace xml goto lalr ielr runtime lex yacc yyps env
 @c LocalWords: yystate variadic Unshift NLS gettext po UTF Automake LOCALEDIR
 @c LocalWords: YYENABLE bindtextdomain Makefile DEFS CPPFLAGS DBISON DeRemer
-@c LocalWords: autoreconf Pennello multisets nondeterminism Generalised baz
+@c LocalWords: autoreconf Pennello multisets nondeterminism Generalised baz ACM
 @c LocalWords: redeclare automata Dparse localedir datadir XSLT midrule Wno
-@c LocalWords: Graphviz multitable headitem hh basename Doxygen fno
+@c LocalWords: Graphviz multitable headitem hh basename Doxygen fno filename
 @c LocalWords: doxygen ival sval deftypemethod deallocate pos deftypemethodx
 @c LocalWords: Ctor defcv defcvx arg accessors arithmetics CPP ifndef CALCXX
 @c LocalWords: lexer's calcxx bool LPAREN RPAREN deallocation cerrno climits
 @c LocalWords: cstdlib Debian undef yywrap unput noyywrap nounput zA yyleng
-@c LocalWords: errno strtol ERANGE str strerror iostream argc argv Javadoc
+@c LocalWords: errno strtol ERANGE str strerror iostream argc argv Javadoc PSLR
 @c LocalWords: bytecode initializers superclass stype ASTNode autoboxing nls
 @c LocalWords: toString deftypeivar deftypeivarx deftypeop YYParser strictfp
 @c LocalWords: superclasses boolean getErrorVerbose setErrorVerbose deftypecv
 @c LocalWords: getDebugStream setDebugStream getDebugLevel setDebugLevel url
 @c LocalWords: bisonVersion deftypecvx bisonSkeleton getStartPos getEndPos
-@c LocalWords: getLVal defvar deftypefn deftypefnx gotos msgfmt Corbett
-@c LocalWords: subdirectory Solaris nonassociativity
+@c LocalWords: getLVal defvar deftypefn deftypefnx gotos msgfmt Corbett LALR's
+@c LocalWords: subdirectory Solaris nonassociativity perror schemas Malloy
+@c LocalWords: Scannerless ispell american
 
 @c Local Variables:
 @c ispell-dictionary: "american"

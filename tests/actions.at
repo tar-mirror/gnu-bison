@@ -1,6 +1,6 @@
 # Executing Actions.                               -*- Autotest -*-
 
-# Copyright (C) 2001-2011 Free Software Foundation, Inc.
+# Copyright (C) 2001-2012 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -345,7 +345,7 @@ thing:
 ;
 %%
 /* Alias to ARGV[1]. */
-const char *source = 0;
+const char *source = YY_NULL;
 
 static int
 yylex (]AT_LEX_FORMALS[)
@@ -889,7 +889,7 @@ AT_CLEANUP
 AT_SETUP([Default %printer and %destructor for user-defined end token])
 
 # _AT_CHECK_DEFAULT_PRINTER_AND_DESTRUCTOR_FOR_END_TOKEN(TYPED)
-# -----------------------------------------------------------------------------
+# -------------------------------------------------------------
 m4_define([_AT_CHECK_DEFAULT_PRINTER_AND_DESTRUCTOR_FOR_END_TOKEN],
 [m4_if($1, 0,
   [m4_pushdef([kind], []) m4_pushdef([not_kind], [*])],
@@ -1409,42 +1409,42 @@ string;"}
 ]])
 
 AT_BISON_CHECK([[-o input.c input.y]], [0], [],
-[[input.y:8.48: warning: a `;' might be needed at the end of action code
-input.y:8.48: warning: future versions of Bison will not add the `;'
-input.y:9.48: warning: a `;' might be needed at the end of action code
-input.y:9.48: warning: future versions of Bison will not add the `;'
-input.y:10.48: warning: a `;' might be needed at the end of action code
-input.y:10.48: warning: future versions of Bison will not add the `;'
-input.y:11.48: warning: a `;' might be needed at the end of action code
-input.y:11.48: warning: future versions of Bison will not add the `;'
-input.y:12.48: warning: a `;' might be needed at the end of action code
-input.y:12.48: warning: future versions of Bison will not add the `;'
-input.y:13.48: warning: a `;' might be needed at the end of action code
-input.y:13.48: warning: future versions of Bison will not add the `;'
-input.y:20.1: warning: a `;' might be needed at the end of action code
-input.y:20.1: warning: future versions of Bison will not add the `;'
-input.y:21.1: warning: a `;' might be needed at the end of action code
-input.y:21.1: warning: future versions of Bison will not add the `;'
-input.y:22.1: warning: a `;' might be needed at the end of action code
-input.y:22.1: warning: future versions of Bison will not add the `;'
-input.y:23.1: warning: a `;' might be needed at the end of action code
-input.y:23.1: warning: future versions of Bison will not add the `;'
-input.y:24.1: warning: a `;' might be needed at the end of action code
-input.y:24.1: warning: future versions of Bison will not add the `;'
-input.y:25.1: warning: a `;' might be needed at the end of action code
-input.y:25.1: warning: future versions of Bison will not add the `;'
-input.y:31.1: warning: a `;' might be needed at the end of action code
-input.y:31.1: warning: future versions of Bison will not add the `;'
-input.y:32.1: warning: a `;' might be needed at the end of action code
-input.y:32.1: warning: future versions of Bison will not add the `;'
-input.y:33.1: warning: a `;' might be needed at the end of action code
-input.y:33.1: warning: future versions of Bison will not add the `;'
-input.y:34.1: warning: a `;' might be needed at the end of action code
-input.y:34.1: warning: future versions of Bison will not add the `;'
-input.y:35.1: warning: a `;' might be needed at the end of action code
-input.y:35.1: warning: future versions of Bison will not add the `;'
-input.y:36.1: warning: a `;' might be needed at the end of action code
-input.y:36.1: warning: future versions of Bison will not add the `;'
+[[input.y:8.48: warning: a ';' might be needed at the end of action code
+input.y:8.48: warning: future versions of Bison will not add the ';'
+input.y:9.48: warning: a ';' might be needed at the end of action code
+input.y:9.48: warning: future versions of Bison will not add the ';'
+input.y:10.48: warning: a ';' might be needed at the end of action code
+input.y:10.48: warning: future versions of Bison will not add the ';'
+input.y:11.48: warning: a ';' might be needed at the end of action code
+input.y:11.48: warning: future versions of Bison will not add the ';'
+input.y:12.48: warning: a ';' might be needed at the end of action code
+input.y:12.48: warning: future versions of Bison will not add the ';'
+input.y:13.48: warning: a ';' might be needed at the end of action code
+input.y:13.48: warning: future versions of Bison will not add the ';'
+input.y:20.1: warning: a ';' might be needed at the end of action code
+input.y:20.1: warning: future versions of Bison will not add the ';'
+input.y:21.1: warning: a ';' might be needed at the end of action code
+input.y:21.1: warning: future versions of Bison will not add the ';'
+input.y:22.1: warning: a ';' might be needed at the end of action code
+input.y:22.1: warning: future versions of Bison will not add the ';'
+input.y:23.1: warning: a ';' might be needed at the end of action code
+input.y:23.1: warning: future versions of Bison will not add the ';'
+input.y:24.1: warning: a ';' might be needed at the end of action code
+input.y:24.1: warning: future versions of Bison will not add the ';'
+input.y:25.1: warning: a ';' might be needed at the end of action code
+input.y:25.1: warning: future versions of Bison will not add the ';'
+input.y:31.1: warning: a ';' might be needed at the end of action code
+input.y:31.1: warning: future versions of Bison will not add the ';'
+input.y:32.1: warning: a ';' might be needed at the end of action code
+input.y:32.1: warning: future versions of Bison will not add the ';'
+input.y:33.1: warning: a ';' might be needed at the end of action code
+input.y:33.1: warning: future versions of Bison will not add the ';'
+input.y:34.1: warning: a ';' might be needed at the end of action code
+input.y:34.1: warning: future versions of Bison will not add the ';'
+input.y:35.1: warning: a ';' might be needed at the end of action code
+input.y:35.1: warning: future versions of Bison will not add the ';'
+input.y:36.1: warning: a ';' might be needed at the end of action code
+input.y:36.1: warning: future versions of Bison will not add the ';'
 ]])
 
 AT_MATCHES_CHECK([input.c], [[/\* TEST:N:2 \*/ \}$]],       [[3]])
@@ -1522,6 +1522,70 @@ AT_COMPILE([[input]])
 AT_PARSER_CHECK([[./input]], [[0]], [],
 [['b' destructor
 'a' destructor
+]])
+
+AT_CLEANUP
+
+## ---------- ##
+## YYBACKUP.  ##
+## ---------- ##
+
+AT_SETUP([[YYBACKUP]])
+
+AT_DATA_GRAMMAR([input.y],
+[[
+%error-verbose
+%debug
+%pure-parser
+%code {
+# include <stdio.h>
+# include <stdlib.h>
+# include <assert.h>
+
+  static void yyerror (const char *msg);
+  static int yylex (YYSTYPE *yylval);
+}
+%%
+input:
+  exp exp {}
+;
+
+exp:
+  'a'     { printf ("a: %d\n", $1); }
+| 'b'     { YYBACKUP('a', 123); }
+| 'c' 'd' { YYBACKUP('a', 456); }
+;
+
+%%
+static int
+yylex (YYSTYPE *yylval)
+{
+  static char const input[] = "bcd";
+  static size_t toknum;
+  assert (toknum < sizeof input);
+  *yylval = (toknum + 1) * 10;
+  return input[toknum++];
+}
+
+static void
+yyerror (const char *msg)
+{
+  fprintf (stderr, "%s\n", msg);
+}
+
+int
+main (void)
+{
+  yydebug = !!getenv("YYDEBUG");
+  return yyparse ();
+}
+]])
+
+AT_BISON_CHECK([[-o input.c input.y]])
+AT_COMPILE([[input]])
+AT_PARSER_CHECK([[./input]], [[0]],
+[[a: 123
+a: 456
 ]])
 
 AT_CLEANUP

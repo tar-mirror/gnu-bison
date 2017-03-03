@@ -1,6 +1,6 @@
 # Exercising Bison on conflicts.                         -*- Autotest -*-
 
-# Copyright (C) 2002-2005, 2007, 2009-2011 Free Software Foundation,
+# Copyright (C) 2002-2005, 2007, 2009-2012 Free Software Foundation,
 # Inc.
 
 # This program is free software: you can redistribute it and/or modify
@@ -1343,7 +1343,7 @@ AT_CHECK([[cat input.output | sed -n '/^state 0$/,/^state 1$/p']], 0,
    13 empty_c3: .  ['c']
 
     'b'  shift, and go to state 1
- 
+
     'c'       reduce using rule 13 (empty_c3)
     $default  reduce using rule 9 (empty_a)
 

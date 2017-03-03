@@ -1,4 +1,4 @@
-%{                                            /* -*- C++ -*- */
+%{ /* -*- C++ -*- */
 # include <cstdlib>
 # include <cerrno>
 # include <climits>
@@ -25,9 +25,11 @@ id    [a-zA-Z][a-zA-Z_0-9]*
 int   [0-9]+
 blank [ \t]
 
+
 %{
 # define YY_USER_ACTION  yylloc->columns (yyleng);
 %}
+
 %%
 %{
   yylloc->step ();
@@ -53,21 +55,25 @@ blank [ \t]
 .          driver.error (*yylloc, "invalid character");
 %%
 
+
 void
 calcxx_driver::scan_begin ()
 {
   yy_flex_debug = trace_scanning;
-  if (file == "-")
+  if (file.empty () || file == "-")
     yyin = stdin;
   else if (!(yyin = fopen (file.c_str (), "r")))
     {
-      error (std::string ("cannot open ") + file);
-      exit (1);
+      error ("cannot open " + file + ": " + strerror(errno));
+      exit (EXIT_FAILURE);
     }
 }
+
+
 
 void
 calcxx_driver::scan_end ()
 {
   fclose (yyin);
 }
+

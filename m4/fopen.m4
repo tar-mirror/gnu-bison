@@ -1,5 +1,5 @@
-# fopen.m4 serial 7
-dnl Copyright (C) 2007-2011 Free Software Foundation, Inc.
+# fopen.m4 serial 8
+dnl Copyright (C) 2007-2012 Free Software Foundation, Inc.
 dnl This file is free software; the Free Software Foundation
 dnl gives unlimited permission to copy and/or distribute it,
 dnl with or without modifications, as long as this notice is preserved.
@@ -52,10 +52,6 @@ changequote([,])dnl
       REPLACE_FOPEN=1
       ;;
   esac
-  if test $REPLACE_FOPEN = 1; then
-    AC_LIBOBJ([fopen])
-    gl_PREREQ_FOPEN
-  fi
 ])
 
 # Prerequisites of lib/fopen.c.

@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 2.5.  */
+/* A Bison parser, made by GNU Bison 2.5.1_rc2.2-9fbd.  */
 
 /* Stack handling for Bison parsers in C++
    
-      Copyright (C) 2002-2011 Free Software Foundation, Inc.
+      Copyright (C) 2002-2012 Free Software Foundation, Inc.
    
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,21 +30,25 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef BISON_STACK_HH
-# define BISON_STACK_HH
+/**
+ ** \file ../../../../examples/calc++/stack.hh
+ ** Define the yy::stack class.
+ */
 
-#include <deque>
+#ifndef YY_EXAMPLES_CALC_STACK_HH
+# define YY_EXAMPLES_CALC_STACK_HH
+
+# include <deque>
 
 
 namespace yy {
 
-/* Line 1149 of lalr1.cc  */
-#line 43 "./stack.hh"
+/* Line 37 of stack.hh  */
+#line 48 "../../../../examples/calc++/stack.hh"
   template <class T, class S = std::deque<T> >
   class stack
   {
   public:
-
     // Hide our reversed order.
     typedef typename S::reverse_iterator iterator;
     typedef typename S::const_reverse_iterator const_iterator;
@@ -83,7 +87,7 @@ namespace yy {
     pop (unsigned int n = 1)
     {
       for (; n; --n)
-	seq_.pop_front ();
+        seq_.pop_front ();
     }
 
     inline
@@ -97,7 +101,6 @@ namespace yy {
     inline const_iterator end () const { return seq_.rend (); }
 
   private:
-
     S seq_;
   };
 
@@ -106,10 +109,9 @@ namespace yy {
   class slice
   {
   public:
-
-    slice (const S& stack,
-	   unsigned int range) : stack_ (stack),
-				 range_ (range)
+    slice (const S& stack, unsigned int range)
+      : stack_ (stack)
+      , range_ (range)
     {
     }
 
@@ -121,15 +123,13 @@ namespace yy {
     }
 
   private:
-
     const S& stack_;
     unsigned int range_;
   };
 
 } // yy
 
-/* Line 1235 of lalr1.cc  */
-#line 133 "./stack.hh"
+/* Line 119 of stack.hh  */
+#line 134 "../../../../examples/calc++/stack.hh"
 
-#endif // not BISON_STACK_HH[]dnl
-
+#endif /* !YY_EXAMPLES_CALC_STACK_HH  */

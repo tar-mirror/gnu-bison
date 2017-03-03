@@ -1,6 +1,6 @@
 /* Output a graph of the generated parser, for Bison.
 
-   Copyright (C) 2001-2007, 2009-2011 Free Software Foundation, Inc.
+   Copyright (C) 2001-2007, 2009-2012 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -19,8 +19,6 @@
 
 #include <config.h>
 #include "system.h"
-
-#include <quotearg.h>
 
 #include "LR0.h"
 #include "closure.h"

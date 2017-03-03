@@ -97,6 +97,7 @@ typedef int flex_int32_t;
 typedef unsigned char flex_uint8_t; 
 typedef unsigned short int flex_uint16_t;
 typedef unsigned int flex_uint32_t;
+#endif /* ! C99 */
 
 /* Limits of integral types. */
 #ifndef INT8_MIN
@@ -126,8 +127,6 @@ typedef unsigned int flex_uint32_t;
 #ifndef UINT32_MAX
 #define UINT32_MAX             (4294967295U)
 #endif
-
-#endif /* ! C99 */
 
 #endif /* ! FLEXINT_H */
 
@@ -203,15 +202,7 @@ typedef unsigned int flex_uint32_t;
 
 /* Size of default input buffer. */
 #ifndef YY_BUF_SIZE
-#ifdef __ia64__
-/* On IA-64, the buffer size is 16k, not 8k.
- * Moreover, YY_BUF_SIZE is 2*YY_READ_BUF_SIZE in the general case.
- * Ditto for the __ia64__ case accordingly.
- */
-#define YY_BUF_SIZE 32768
-#else
 #define YY_BUF_SIZE 16384
-#endif /* __ia64__ */
 #endif
 
 /* The state buf must be large enough to hold one state per character in the main buffer.
@@ -473,8 +464,8 @@ static void yy_fatal_error (yyconst char msg[]  );
 	(yy_c_buf_p) = yy_cp;
 
 /* %% [4.0] data tables for the DFA and the user's section 1 definitions go here */
-#define YY_NUM_RULES 23
-#define YY_END_OF_BUFFER 24
+#define YY_NUM_RULES 22
+#define YY_END_OF_BUFFER 23
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -482,14 +473,13 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static yyconst flex_int16_t yy_accept[56] =
+static yyconst flex_int16_t yy_accept[45] =
     {   0,
-        0,    0,    0,    0,    0,    0,   24,   12,   11,   10,
-       13,   20,   22,   21,   21,   12,   10,    5,    1,   10,
-        4,   10,   10,    2,    3,   13,   20,   18,   19,   14,
-       17,   15,   16,    9,   10,   10,   10,   10,   10,   10,
-       10,   10,   10,   10,   10,   10,   10,    7,    6,   10,
-       10,   10,   10,    8,    0
+        0,    0,    0,    0,    0,    0,   23,   11,   10,    9,
+       12,   19,   21,   20,   20,   11,    9,    5,    1,    9,
+        4,    9,    2,    3,   12,   19,   17,   18,   13,   16,
+       14,   15,    8,    9,    9,    9,    9,    9,    9,    9,
+        9,    7,    6,    0
     } ;
 
 static yyconst flex_int32_t yy_ec[256] =
@@ -503,11 +493,11 @@ static yyconst flex_int32_t yy_ec[256] =
         1,    1,    1,    6,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    7,    8,    9,    9,    9,   10,
+        1,    1,    1,    1,    7,    8,    7,    7,    7,    7,
 
-       11,   12,    9,    9,   13,    9,    9,   14,    9,   15,
-       16,   17,    9,   18,    9,    9,    9,    9,    9,   19,
-        9,    9,   20,    1,   21,    1,    1,    1,    1,    1,
+        9,   10,    7,    7,   11,    7,    7,   12,    7,   13,
+       14,    7,    7,    7,    7,    7,    7,    7,    7,    7,
+        7,    7,   15,    1,   16,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -524,67 +514,66 @@ static yyconst flex_int32_t yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static yyconst flex_int32_t yy_meta[22] =
+static yyconst flex_int32_t yy_meta[17] =
     {   0,
-        1,    1,    2,    3,    1,    4,    1,    3,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    3,
-        3
+        1,    1,    2,    3,    1,    4,    1,    5,    1,    1,
+        1,    1,    1,    1,    5,    5
     } ;
 
-static yyconst flex_int16_t yy_base[63] =
+static yyconst flex_int16_t yy_base[53] =
     {   0,
-        0,    1,   60,   58,    6,    8,   63,    0,   93,   11,
-        0,   30,   93,   93,   93,    0,    0,   93,   93,   49,
-       93,   49,   25,   93,   93,    0,   93,   93,   93,   93,
-       93,   93,   93,   93,   43,   47,   45,   49,   40,   34,
-       31,   36,   35,   27,   38,   37,   31,   93,   93,   29,
-       27,   15,    9,   93,   93,   70,   74,   78,   82,   85,
-       88,    0
+        0,    1,   60,   26,    6,    8,   29,    0,  105,   11,
+        0,   25,  105,  105,  105,    0,    0,  105,  105,   41,
+      105,   46,  105,  105,    0,  105,  105,  105,  105,  105,
+      105,  105,  105,   60,    4,   23,   25,   28,   43,   38,
+       57,  105,  105,  105,   71,   76,   81,   86,   91,   96,
+        0,  101
     } ;
 
-static yyconst flex_int16_t yy_def[63] =
+static yyconst flex_int16_t yy_def[53] =
     {   0,
-       56,   56,   57,   57,   58,   58,   55,   59,   55,   55,
-       60,   61,   55,   55,   55,   59,   62,   55,   55,   10,
-       55,   20,   20,   55,   55,   60,   55,   55,   55,   55,
-       55,   55,   55,   55,   20,   20,   20,   20,   20,   20,
-       20,   20,   20,   20,   20,   20,   20,   55,   55,   20,
-       20,   20,   20,   55,    0,   55,   55,   55,   55,   55,
-       55,   55
+       45,   45,   46,   46,   47,   47,   44,   48,   44,   44,
+       49,   50,   44,   44,   44,   48,   51,   44,   44,   52,
+       44,   44,   44,   44,   49,   44,   44,   44,   44,   44,
+       44,   44,   44,   52,   34,   34,   34,   34,   34,   34,
+       34,   44,   44,    0,   44,   44,   44,   44,   44,   44,
+       44,   44
     } ;
 
-static yyconst flex_int16_t yy_nxt[115] =
+static yyconst flex_int16_t yy_nxt[122] =
     {   0,
-       17,   55,    9,    9,   55,   10,   10,   14,   15,   14,
-       15,   17,   17,   18,   54,   17,   19,   20,   21,   20,
-       22,   20,   20,   20,   20,   20,   23,   20,   20,   20,
-       24,   25,   28,   53,   29,   30,   36,   31,   37,   52,
-       51,   50,   49,   48,   47,   46,   45,   44,   43,   32,
-       33,   55,   34,   42,   55,   41,   55,   40,   20,   39,
-       38,   35,   55,   12,   20,   12,   55,   55,   55,   55,
-        8,    8,    8,    8,   11,   11,   11,   11,   13,   13,
-       13,   13,   16,   55,   16,   26,   26,   26,   27,   27,
-       27,   27,    7,   55,   55,   55,   55,   55,   55,   55,
+       17,   44,    9,    9,   44,   10,   10,   14,   15,   14,
+       15,   17,   17,   18,   37,   17,   19,   20,   21,   20,
+       20,   20,   20,   20,   22,   23,   24,   27,   44,   28,
+       29,   12,   30,   20,   38,   20,   40,   39,   20,   31,
+       32,   17,   17,   42,   33,   17,   17,   17,   20,   33,
+       17,   41,   20,   20,   20,   34,   20,   35,   20,   20,
+       17,   17,   43,   33,   17,   12,   44,   20,   44,   44,
+       36,    8,    8,    8,    8,    8,   11,   11,   11,   11,
+       11,   13,   13,   13,   13,   13,   16,   44,   16,   44,
+       16,   25,   25,   25,   44,   25,   26,   26,   26,   26,
 
-       55,   55,   55,   55,   55,   55,   55,   55,   55,   55,
-       55,   55,   55,   55
+       26,   20,   44,   20,    7,   44,   44,   44,   44,   44,
+       44,   44,   44,   44,   44,   44,   44,   44,   44,   44,
+       44
     } ;
 
-static yyconst flex_int16_t yy_chk[115] =
+static yyconst flex_int16_t yy_chk[122] =
     {   0,
-       62,    0,    1,    2,    0,    1,    2,    5,    5,    6,
-        6,   10,   10,   10,   53,   10,   10,   10,   10,   10,
-       10,   10,   10,   10,   10,   10,   10,   10,   10,   10,
-       10,   10,   12,   52,   12,   12,   23,   12,   23,   51,
-       50,   47,   46,   45,   44,   43,   42,   41,   40,   12,
-       12,   20,   20,   39,   20,   38,   20,   37,   20,   36,
-       35,   22,    7,    4,   20,    3,    0,    0,   20,   20,
-       56,   56,   56,   56,   57,   57,   57,   57,   58,   58,
-       58,   58,   59,    0,   59,   60,   60,   60,   61,   61,
-       61,   61,   55,   55,   55,   55,   55,   55,   55,   55,
+       51,    0,    1,    2,    0,    1,    2,    5,    5,    6,
+        6,   10,   10,   10,   35,   10,   10,   10,   10,   10,
+       10,   10,   10,   10,   10,   10,   10,   12,    7,   12,
+       12,    4,   12,   36,   36,   37,   38,   37,   38,   12,
+       12,   20,   20,   40,   20,   20,   22,   22,   40,   22,
+       22,   39,   22,   39,   22,   22,   22,   22,   22,   22,
+       34,   34,   41,   34,   34,    3,    0,   41,    0,    0,
+       34,   45,   45,   45,   45,   45,   46,   46,   46,   46,
+       46,   47,   47,   47,   47,   47,   48,    0,   48,    0,
+       48,   49,   49,   49,    0,   49,   50,   50,   50,   50,
 
-       55,   55,   55,   55,   55,   55,   55,   55,   55,   55,
-       55,   55,   55,   55
+       50,   52,    0,   52,   44,   44,   44,   44,   44,   44,
+       44,   44,   44,   44,   44,   44,   44,   44,   44,   44,
+       44
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -593,11 +582,11 @@ static char *yy_last_accepting_cpos;
 extern int skel__flex_debug;
 int skel__flex_debug = 1;
 
-static yyconst flex_int16_t yy_rule_linenum[23] =
+static yyconst flex_int16_t yy_rule_linenum[22] =
     {   0,
-       72,   73,   74,   75,   76,   78,   79,   80,   82,   91,
-       92,   93,  105,  107,  108,  109,  110,  112,  114,  135,
-      139,  140
+       72,   73,   74,   75,   76,   78,   79,   81,   90,   91,
+       92,  104,  106,  107,  108,  109,  111,  113,  134,  138,
+      139
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -611,7 +600,7 @@ char *skel_text;
 #line 1 "scan-skel.l"
 /* Scan Bison Skeletons.                                       -*- C -*-
 
-   Copyright (C) 2001-2007, 2009-2011 Free Software Foundation, Inc.
+   Copyright (C) 2001-2007, 2009-2012 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -660,7 +649,7 @@ static void fail_for_at_directive_too_few_args (char const *at_directive_name);
 static void fail_for_invalid_at (char const *at);
 
 
-#line 664 "scan-skel.c"
+#line 653 "scan-skel.c"
 
 #define INITIAL 0
 #define SC_AT_DIRECTIVE_ARGS 1
@@ -771,12 +760,7 @@ static int input (void );
 
 /* Amount of stuff to slurp up with each read. */
 #ifndef YY_READ_BUF_SIZE
-#ifdef __ia64__
-/* On IA-64, the buffer size is 16k, not 8k */
-#define YY_READ_BUF_SIZE 16384
-#else
 #define YY_READ_BUF_SIZE 8192
-#endif /* __ia64__ */
 #endif
 
 /* Copy whatever the last rule matched to the standard output. */
@@ -785,7 +769,7 @@ static int input (void );
 /* This used to be an fputs(), but since the string might contain NUL's,
  * we now use fwrite().
  */
-#define ECHO do { if (fwrite( skel_text, skel_leng, 1, skel_out )) {} } while (0)
+#define ECHO fwrite( skel_text, skel_leng, 1, skel_out )
 /* %endif */
 /* %if-c++-only C++ definition */
 /* %endif */
@@ -800,7 +784,7 @@ static int input (void );
 	if ( YY_CURRENT_BUFFER_LVALUE->yy_is_interactive ) \
 		{ \
 		int c = '*'; \
-		size_t n; \
+		int n; \
 		for ( n = 0; n < max_size && \
 			     (c = getc( skel_in )) != EOF && c != '\n'; ++n ) \
 			buf[n] = (char) c; \
@@ -922,7 +906,7 @@ YY_DECL
   char *at_directive_argv[AT_DIRECTIVE_ARGC_MAX];
 
 
-#line 926 "scan-skel.c"
+#line 910 "scan-skel.c"
 
 	if ( !(yy_init) )
 		{
@@ -985,13 +969,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 56 )
+				if ( yy_current_state >= 45 )
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			++yy_cp;
 			}
-		while ( yy_current_state != 55 );
+		while ( yy_current_state != 44 );
 		yy_cp = (yy_last_accepting_cpos);
 		yy_current_state = (yy_last_accepting_state);
 
@@ -1010,13 +994,13 @@ do_action:	/* This label is used only to access EOF actions. */
 			{
 			if ( yy_act == 0 )
 				fprintf( stderr, "--scanner backing up\n" );
-			else if ( yy_act < 23 )
+			else if ( yy_act < 22 )
 				fprintf( stderr, "--accepting rule at line %ld (\"%s\")\n",
 				         (long)yy_rule_linenum[yy_act], skel_text );
-			else if ( yy_act == 23 )
+			else if ( yy_act == 22 )
 				fprintf( stderr, "--accepting default rule (\"%s\")\n",
 				         skel_text );
-			else if ( yy_act == 24 )
+			else if ( yy_act == 23 )
 				fprintf( stderr, "--(end of buffer or a NUL)\n" );
 			else
 				fprintf( stderr, "--EOF (start condition %d)\n", YY_START );
@@ -1050,7 +1034,7 @@ fputc (']', skel_out);
 case 4:
 YY_RULE_SETUP
 #line 75 "scan-skel.l"
-/* Emtpy.  Used by b4_cat in ../data/bison.m4.  */
+/* Empty.  Used by b4_cat in ../data/bison.m4.  */
 	YY_BREAK
 case 5:
 /* rule 5 can match eol */
@@ -1070,12 +1054,7 @@ QPUTS (outname);
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 80 "scan-skel.l"
-QPUTS (dir_prefix);
-	YY_BREAK
-case 9:
-YY_RULE_SETUP
-#line 82 "scan-skel.l"
+#line 81 "scan-skel.l"
 {
   skel_text[skel_leng-1] = '\0';
   obstack_grow (&obstack_for_string, skel_text, skel_leng);
@@ -1085,24 +1064,24 @@ YY_RULE_SETUP
 }
 	YY_BREAK
 /* This pattern must not match more than the previous @ patterns. */
-case 10:
+case 9:
 YY_RULE_SETUP
-#line 91 "scan-skel.l"
+#line 90 "scan-skel.l"
 fail_for_invalid_at (skel_text);
 	YY_BREAK
-case 11:
-/* rule 11 can match eol */
+case 10:
+/* rule 10 can match eol */
 YY_RULE_SETUP
-#line 92 "scan-skel.l"
+#line 91 "scan-skel.l"
 out_lineno++; ECHO;
 	YY_BREAK
-case 12:
+case 11:
 YY_RULE_SETUP
-#line 93 "scan-skel.l"
+#line 92 "scan-skel.l"
 ECHO;
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 95 "scan-skel.l"
+#line 94 "scan-skel.l"
 {
   if (outname)
     {
@@ -1113,42 +1092,42 @@ case YY_STATE_EOF(INITIAL):
 }
 	YY_BREAK
 
-case 13:
-/* rule 13 can match eol */
+case 12:
+/* rule 12 can match eol */
 YY_RULE_SETUP
-#line 105 "scan-skel.l"
+#line 104 "scan-skel.l"
 { STRING_GROW; }
+	YY_BREAK
+case 13:
+YY_RULE_SETUP
+#line 106 "scan-skel.l"
+{ obstack_1grow (&obstack_for_string, '@'); }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
 #line 107 "scan-skel.l"
-{ obstack_1grow (&obstack_for_string, '@'); }
+{ obstack_1grow (&obstack_for_string, '['); }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
 #line 108 "scan-skel.l"
-{ obstack_1grow (&obstack_for_string, '['); }
+{ obstack_1grow (&obstack_for_string, ']'); }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
 #line 109 "scan-skel.l"
-{ obstack_1grow (&obstack_for_string, ']'); }
-	YY_BREAK
-case 17:
-YY_RULE_SETUP
-#line 110 "scan-skel.l"
 /* Empty.  Useful for starting an argument
           that begins with whitespace. */
 	YY_BREAK
-case 18:
-/* rule 18 can match eol */
+case 17:
+/* rule 17 can match eol */
 YY_RULE_SETUP
-#line 112 "scan-skel.l"
+#line 111 "scan-skel.l"
 /* Empty.  */
 	YY_BREAK
-case 19:
+case 18:
 YY_RULE_SETUP
-#line 114 "scan-skel.l"
+#line 113 "scan-skel.l"
 {
     if (at_directive_argc >= AT_DIRECTIVE_ARGC_MAX)
       fail_for_at_directive_too_many_args (at_directive_argv[0]);
@@ -1170,40 +1149,40 @@ YY_RULE_SETUP
       }
   }
 	YY_BREAK
-case 20:
+case 19:
 YY_RULE_SETUP
-#line 135 "scan-skel.l"
+#line 134 "scan-skel.l"
 { fail_for_invalid_at (skel_text); }
 	YY_BREAK
 
 
-case 21:
-/* rule 21 can match eol */
+case 20:
+/* rule 20 can match eol */
 YY_RULE_SETUP
-#line 139 "scan-skel.l"
+#line 138 "scan-skel.l"
 
 	YY_BREAK
-case 22:
+case 21:
 YY_RULE_SETUP
-#line 140 "scan-skel.l"
+#line 139 "scan-skel.l"
 { yyless (0); BEGIN SC_AT_DIRECTIVE_ARGS; }
 	YY_BREAK
 
 
 case YY_STATE_EOF(SC_AT_DIRECTIVE_ARGS):
 case YY_STATE_EOF(SC_AT_DIRECTIVE_SKIP_WS):
-#line 144 "scan-skel.l"
+#line 143 "scan-skel.l"
 {
     fatal (_("unclosed %s directive in skeleton"), at_directive_argv[0]);
   }
 	YY_BREAK
 
-case 23:
+case 22:
 YY_RULE_SETUP
-#line 149 "scan-skel.l"
+#line 148 "scan-skel.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 1207 "scan-skel.c"
+#line 1186 "scan-skel.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1515,7 +1494,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 56 )
+			if ( yy_current_state >= 45 )
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
@@ -1548,11 +1527,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 56 )
+		if ( yy_current_state >= 45 )
 			yy_c = yy_meta[(unsigned int) yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
-	yy_is_jam = (yy_current_state == 55);
+	yy_is_jam = (yy_current_state == 44);
 
 	return yy_is_jam ? 0 : yy_current_state;
 }
@@ -2020,8 +1999,8 @@ YY_BUFFER_STATE skel__scan_string (yyconst char * yystr )
 /* %if-c-only */
 /** Setup the input buffer state to scan the given bytes. The next call to skel_lex() will
  * scan from a @e copy of @a bytes.
- * @param yybytes the byte buffer to scan
- * @param _yybytes_len the number of bytes in the buffer pointed to by @a bytes.
+ * @param bytes the byte buffer to scan
+ * @param len the number of bytes in the buffer pointed to by @a bytes.
  * 
  * @return the newly allocated buffer state object.
  */
@@ -2290,7 +2269,7 @@ void skel_free (void * ptr )
 
 /* %ok-for-header */
 
-#line 149 "scan-skel.l"
+#line 148 "scan-skel.l"
 
 
 

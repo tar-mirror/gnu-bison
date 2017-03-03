@@ -1,5 +1,5 @@
 /* Set the error indicator of a stream.
-   Copyright (C) 2007-2011 Free Software Foundation, Inc.
+   Copyright (C) 2007-2012 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,6 +35,8 @@ fseterr (FILE *fp)
   fp_->_flags |= __SERR;
 #elif defined __EMX__               /* emx+gcc */
   fp->_flags |= _IOERR;
+#elif defined __minix               /* Minix */
+  fp->_flags |= _IOERR;
 #elif defined _IOERR                /* AIX, HP-UX, IRIX, OSF/1, Solaris, OpenServer, mingw, NonStop Kernel */
   fp_->_flag |= _IOERR;
 #elif defined __UCLIBC__            /* uClibc */
@@ -43,6 +45,9 @@ fseterr (FILE *fp)
   fp->_Mode |= 0x200 /* _MERR */;
 #elif defined __MINT__              /* Atari FreeMiNT */
   fp->__error = 1;
+#elif defined EPLAN9                /* Plan9 */
+  if (fp->state != 0 /* CLOSED */)
+    fp->state = 5 /* ERR */;
 #elif 0                             /* unknown  */
   /* Portable fallback, based on an idea by Rich Felker.
      Wow! 6 system calls for something that is just a bit operation!

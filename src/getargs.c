@@ -1,6 +1,6 @@
 /* Parse command line arguments for Bison.
 
-   Copyright (C) 1984, 1986, 1989, 1992, 2000-2011 Free Software
+   Copyright (C) 1984, 1986, 1989, 1992, 2000-2012 Free Software
    Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
@@ -26,7 +26,6 @@
 #include <c-strcase.h>
 #include <configmake.h>
 #include <error.h>
-#include <quotearg.h>
 
 /* Hack to get <getopt.h> to declare getopt with a prototype.  */
 #if lint && ! defined __GNU_LIBRARY__
@@ -41,10 +40,13 @@
 # undef HACK_FOR___GNU_LIBRARY___PROTOTYPE
 #endif
 
+#include <progname.h>
+
 #include "complain.h"
 #include "files.h"
 #include "getargs.h"
 #include "muscle-tab.h"
+#include "quote.h"
 #include "uniqstr.h"
 
 bool debug_flag;
@@ -78,8 +80,6 @@ const char *skeleton = NULL;
 int language_prio = default_prio;
 struct bison_language const *language = &valid_languages[0];
 const char *include = NULL;
-
-char *program_name;
 
 
 /** Decode an option's set of keys.
@@ -418,20 +418,20 @@ language_argmatch (char const *arg, int prio, location loc)
     {
       int i;
       for (i = 0; valid_languages[i].language[0]; i++)
-	if (c_strcasecmp (arg, valid_languages[i].language) == 0)
-	  {
-	    language_prio = prio;
-	    language = &valid_languages[i];
-	    return;
-	  }
-      msg = _("invalid language `%s'");
+        if (c_strcasecmp (arg, valid_languages[i].language) == 0)
+          {
+            language_prio = prio;
+            language = &valid_languages[i];
+            return;
+          }
+      msg = _("%s: invalid language");
     }
   else if (language_prio == prio)
     msg = _("multiple language declarations are invalid");
   else
     return;
 
-  complain_at (loc, msg, arg);
+  complain_at (loc, msg, quotearg_colon (arg));
 }
 
 /*----------------------.
@@ -606,13 +606,19 @@ getargs (int argc, char *argv[])
         /* Here, the -d and --defines options are differentiated.  */
         defines_flag = true;
         if (optarg)
-          spec_defines_file = xstrdup (AS_FILE_NAME (optarg));
+          {
+            free (spec_defines_file);
+            spec_defines_file = xstrdup (AS_FILE_NAME (optarg));
+          }
         break;
 
       case 'g':
 	graph_flag = true;
 	if (optarg)
-	  spec_graph_file = xstrdup (AS_FILE_NAME (optarg));
+          {
+            free (spec_graph_file);
+            spec_graph_file = xstrdup (AS_FILE_NAME (optarg));
+          }
 	break;
 
       case 'h':
@@ -649,7 +655,10 @@ getargs (int argc, char *argv[])
       case 'x':
 	xml_flag = true;
 	if (optarg)
-	  spec_xml_file = xstrdup (AS_FILE_NAME (optarg));
+          {
+            free (spec_xml_file);
+            spec_xml_file = xstrdup (AS_FILE_NAME (optarg));
+          }
 	break;
 
       case 'y':
@@ -669,6 +678,7 @@ getargs (int argc, char *argv[])
 	exit (EXIT_SUCCESS);
 
       case REPORT_FILE_OPTION:
+        free (spec_verbose_file);
 	spec_verbose_file = xstrdup (AS_FILE_NAME (optarg));
 	break;
 
@@ -679,9 +689,9 @@ getargs (int argc, char *argv[])
   if (argc - optind != 1)
     {
       if (argc - optind < 1)
-	error (0, 0, _("missing operand after `%s'"), argv[argc - 1]);
+        error (0, 0, _("%s: missing operand"), quotearg_colon (argv[argc - 1]));
       else
-	error (0, 0, _("extra operand `%s'"), argv[optind + 1]);
+        error (0, 0, _("extra operand %s"), quote (argv[optind + 1]));
       usage (EXIT_FAILURE);
     }
 

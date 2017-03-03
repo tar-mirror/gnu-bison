@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 1.875\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2011-05-14 18:25-0400\n"
+"POT-Creation-Date: 2012-06-05 10:07+0200\n"
 "PO-Revision-Date: 2003-01-06 02:30-0300\n"
 "Last-Translator: Alexandre Folle de Menezes <afmenez@terra.com.br>\n"
 "Language-Team: Brazilian Portuguese <ldp-br@bazar.conectiva.com.br>\n"
@@ -16,12 +16,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: src/complain.c:115 src/complain.c:126 src/complain.c:135 src/complain.c:183
-#: src/complain.c:193
+#: src/complain.c:116 src/complain.c:127 src/complain.c:136 src/complain.c:184
+#: src/complain.c:194
 msgid "warning"
 msgstr "aviso"
 
-#: src/complain.c:203 src/complain.c:210
+#: src/complain.c:204 src/complain.c:211
 #, fuzzy
 msgid "fatal error"
 msgstr "erro fatal: "
@@ -80,27 +80,27 @@ msgid_plural "expected %d reduce/reduce conflicts"
 msgstr[0] "esperados 0 conflitos de redução/redução"
 msgstr[1] "esperados 0 conflitos de redução/redução"
 
-#: src/files.c:112
-#, c-format
-msgid "cannot open file `%s'"
+#: src/files.c:114
+#, fuzzy, c-format
+msgid "%s: cannot open"
 msgstr "impossível abrir o arquivo `%s'"
 
-#: src/files.c:128
+#: src/files.c:130
 #, c-format
-msgid "I/O error"
-msgstr "Erro de E/S"
+msgid "input/output error"
+msgstr ""
 
-#: src/files.c:131
+#: src/files.c:133
 #, c-format
 msgid "cannot close file"
 msgstr "impossível fechar o arquivo"
 
-#: src/files.c:350
+#: src/files.c:352
 #, c-format
 msgid "refusing to overwrite the input file %s"
 msgstr ""
 
-#: src/files.c:360
+#: src/files.c:362
 #, c-format
 msgid "conflicting outputs to file %s"
 msgstr "saídas conflitantes para o arquivo %s"
@@ -270,7 +270,7 @@ msgstr "declarações de %s múltiplas"
 
 #: src/getargs.c:427
 #, fuzzy, c-format
-msgid "invalid language `%s'"
+msgid "%s: invalid language"
 msgstr "valor inválido: %s"
 
 #: src/getargs.c:430
@@ -278,21 +278,21 @@ msgstr "valor inválido: %s"
 msgid "multiple language declarations are invalid"
 msgstr "declarações de %s múltiplas"
 
-#: src/getargs.c:682
-#, c-format
-msgid "missing operand after `%s'"
+#: src/getargs.c:692
+#, fuzzy, c-format
+msgid "%s: missing operand"
 msgstr "falta operando depois de `%s'"
 
-#: src/getargs.c:684
-#, c-format
-msgid "extra operand `%s'"
+#: src/getargs.c:694
+#, fuzzy, c-format
+msgid "extra operand %s"
 msgstr "operando `%s' sobrando"
 
-#: src/gram.c:114
+#: src/gram.c:112
 msgid "empty"
 msgstr "vazio"
 
-#: src/gram.c:203
+#: src/gram.c:201
 msgid "Grammar"
 msgstr "Gramática"
 
@@ -315,263 +315,245 @@ msgstr ""
 msgid "column number overflow"
 msgstr ""
 
-#: src/main.c:134
+#: src/main.c:146
 #, fuzzy
 msgid "rule useless in parser due to conflicts"
 msgstr "regra não reduzida por causa de conflitos"
 
 #: src/muscle-tab.c:428
-#, c-format
-msgid "%%define variable `%s' redefined"
-msgstr ""
+#, fuzzy, c-format
+msgid "%%define variable %s redefined"
+msgstr "símbolo %s redefinido"
 
 #: src/muscle-tab.c:431
 #, c-format
 msgid "previous definition"
 msgstr ""
 
-#: src/muscle-tab.c:470
+#: src/muscle-tab.c:470 src/muscle-tab.c:484 src/muscle-tab.c:536
+#: src/muscle-tab.c:601
 #, c-format
-msgid ""
-"undefined %%define variable `%s' passed to muscle_percent_define_get_loc"
-msgstr ""
-
-#: src/muscle-tab.c:484
-#, c-format
-msgid ""
-"undefined %%define variable `%s' passed to muscle_percent_define_get_syncline"
+msgid "%s: undefined %%define variable %s"
 msgstr ""
 
 #: src/muscle-tab.c:530
 #, c-format
-msgid "invalid value for %%define Boolean variable `%s'"
-msgstr ""
-
-#: src/muscle-tab.c:536
-#, c-format
-msgid ""
-"undefined %%define variable `%s' passed to muscle_percent_define_flag_if"
+msgid "invalid value for %%define Boolean variable %s"
 msgstr ""
 
 #: src/muscle-tab.c:588
 #, c-format
-msgid "invalid value for %%define variable `%s': `%s'"
+msgid "invalid value for %%define variable %s: %s"
 msgstr ""
 
 #: src/muscle-tab.c:591
 #, fuzzy, c-format
-msgid "accepted value: `%s'"
+msgid "accepted value: %s"
 msgstr "valor inválido: %s"
 
-#: src/muscle-tab.c:601
-#, c-format
-msgid ""
-"undefined %%define variable `%s' passed to muscle_percent_define_check_values"
-msgstr ""
-
-#: src/parse-gram.y:733
+#: src/parse-gram.y:734
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "identificador faltando na declaração do parâmetro"
 
-#: src/print.c:48
+#: src/print.c:47
 #, c-format
 msgid " type %d is %s\n"
 msgstr " tipo %d é %s\n"
 
-#: src/print.c:165
+#: src/print.c:164
 #, c-format
 msgid "shift, and go to state %d\n"
 msgstr "deslocar, e ir ao estado %d\n"
 
-#: src/print.c:167
+#: src/print.c:166
 #, c-format
 msgid "go to state %d\n"
 msgstr "ir ao estado %d\n"
 
-#: src/print.c:204
+#: src/print.c:203
 msgid "error (nonassociative)\n"
 msgstr "erro (não associativo)\n"
 
-#: src/print.c:227
+#: src/print.c:226
 #, c-format
 msgid "reduce using rule %d (%s)"
 msgstr "reduzir usando a regra %d (%s)"
 
-#: src/print.c:229
+#: src/print.c:228
 #, c-format
 msgid "accept"
 msgstr "aceitar"
 
-#: src/print.c:265 src/print.c:339
+#: src/print.c:264 src/print.c:338
 msgid "$default"
 msgstr "$padrão"
 
-#: src/print.c:374
+#: src/print.c:373
 #, c-format
 msgid "state %d"
 msgstr "estado %d"
 
-#: src/print.c:410
+#: src/print.c:409
 msgid "Terminals, with rules where they appear"
 msgstr "Terminais, com as regras onde eles aparecem"
 
-#: src/print.c:437
+#: src/print.c:436
 msgid "Nonterminals, with rules where they appear"
 msgstr "Não-terminais com as regras onde eles aparecem"
 
-#: src/print.c:466
+#: src/print.c:465
 #, c-format
 msgid " on left:"
 msgstr " à esquerda:"
 
-#: src/print.c:483
+#: src/print.c:482
 #, c-format
 msgid " on right:"
 msgstr " à direita:"
 
-#: src/print.c:511
+#: src/print.c:510
 #, fuzzy
 msgid "Rules useless in parser due to conflicts"
 msgstr "regra não reduzida por causa de conflitos"
 
-#: src/reader.c:63
+#: src/reader.c:62
 #, c-format
 msgid "multiple %s declarations"
 msgstr "declarações de %s múltiplas"
 
-#: src/reader.c:133
+#: src/reader.c:132
 #, fuzzy, c-format
-msgid "result type clash on merge function `%s': <%s> != <%s>"
+msgid "result type clash on merge function %s: <%s> != <%s>"
 msgstr "tipo de resultado conflita na fução de mescla %s: <%s> != <%s>"
 
-#: src/reader.c:136 src/symtab.c:155 src/symtab.c:163 src/symtab.c:930
-#: src/symtab.c:943 src/symtab.c:956 src/symtab.c:969
+#: src/reader.c:135 src/symtab.c:154 src/symtab.c:162 src/symtab.c:929
+#: src/symtab.c:942 src/symtab.c:955 src/symtab.c:968
 #, fuzzy, c-format
 msgid "previous declaration"
 msgstr "declarações de %s múltiplas"
 
-#: src/reader.c:202
+#: src/reader.c:201
 #, c-format
 msgid "duplicated symbol name for %s ignored"
 msgstr ""
 
-#: src/reader.c:246
+#: src/reader.c:245
 #, c-format
 msgid "rule given for %s, which is a token"
 msgstr "regra fornecida para %s, que é um token"
 
-#: src/reader.c:301
+#: src/reader.c:300
 #, c-format
 msgid "type clash on default action: <%s> != <%s>"
 msgstr "conflito de tipos na ação padrão: <%s> != <%s>"
 
-#: src/reader.c:307
+#: src/reader.c:306
 #, c-format
 msgid "empty rule for typed nonterminal, and no action"
 msgstr "regra vazia para um não-terminal com tipo, e não há ações"
 
-#: src/reader.c:325
+#: src/reader.c:324
 #, fuzzy, c-format
 msgid "unused value: $%d"
 msgstr "valor inválido: %s"
 
-#: src/reader.c:327
+#: src/reader.c:326
 msgid "unset value: $$"
 msgstr ""
 
-#: src/reader.c:338
+#: src/reader.c:337
 #, c-format
 msgid "token for %%prec is not defined: %s"
 msgstr ""
 
-#: src/reader.c:428 src/reader.c:442 src/reader.c:455
+#: src/reader.c:427 src/reader.c:441 src/reader.c:454
 #, c-format
 msgid "only one %s allowed per rule"
 msgstr "apenas um %s é permitido por regra"
 
-#: src/reader.c:438 src/reader.c:453
+#: src/reader.c:437 src/reader.c:452
 #, c-format
 msgid "%s affects only GLR parsers"
 msgstr "%s afeta apenas analisadores GLR"
 
-#: src/reader.c:440
+#: src/reader.c:439
 #, c-format
 msgid "%s must be followed by positive number"
 msgstr "%s deve ser seguido por um número positivo"
 
-#: src/reader.c:551
+#: src/reader.c:550
 #, c-format
 msgid "rule is too long"
 msgstr ""
 
-#: src/reader.c:669
+#: src/reader.c:668
 #, c-format
 msgid "no rules in the input grammar"
 msgstr "não há regras na gramática de entrada"
 
-#: src/reduce.c:242
+#: src/reduce.c:241
 #, fuzzy
 msgid "rule useless in grammar"
 msgstr "não há regras na gramática de entrada"
 
-#: src/reduce.c:303
+#: src/reduce.c:302
 #, c-format
 msgid "nonterminal useless in grammar: %s"
 msgstr ""
 
-#: src/reduce.c:351
+#: src/reduce.c:350
 #, fuzzy
 msgid "Nonterminals useless in grammar"
 msgstr "Não-terminais com as regras onde eles aparecem"
 
-#: src/reduce.c:364
+#: src/reduce.c:363
 #, fuzzy
 msgid "Terminals unused in grammar"
 msgstr "não há regras na gramática de entrada"
 
-#: src/reduce.c:373
+#: src/reduce.c:372
 #, fuzzy
 msgid "Rules useless in grammar"
 msgstr "não há regras na gramática de entrada"
 
-#: src/reduce.c:386
+#: src/reduce.c:385
 #, c-format
 msgid "%d nonterminal useless in grammar"
 msgid_plural "%d nonterminals useless in grammar"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/reduce.c:391
+#: src/reduce.c:390
 #, fuzzy, c-format
 msgid "%d rule useless in grammar"
 msgid_plural "%d rules useless in grammar"
 msgstr[0] "não há regras na gramática de entrada"
 msgstr[1] "não há regras na gramática de entrada"
 
-#: src/reduce.c:420
+#: src/reduce.c:419
 #, c-format
 msgid "start symbol %s does not derive any sentence"
 msgstr "símbolo de início %s não deriva nenhuma sentença"
 
 #: src/scan-code.l:200
 #, c-format
-msgid "stray `$'"
+msgid "stray '$'"
 msgstr ""
 
 #: src/scan-code.l:205
 #, c-format
-msgid "stray `@'"
+msgid "stray '@'"
 msgstr ""
 
 #: src/scan-code.l:230
 #, c-format
-msgid "a `;' might be needed at the end of action code"
+msgid "a ';' might be needed at the end of action code"
 msgstr ""
 
 #: src/scan-code.l:231
 #, c-format
-msgid "future versions of Bison will not add the `;'"
+msgid "future versions of Bison will not add the ';'"
 msgstr ""
 
 #: src/scan-code.l:253
@@ -616,7 +598,7 @@ msgstr "diretiva inválida: %s"
 
 #: src/scan-code.l:629
 #, c-format
-msgid "syntax error after `%c', expecting integer, letter, `_', `[', or `$'"
+msgid "syntax error after '%c', expecting integer, letter, '_', '[', or '$'"
 msgstr ""
 
 #: src/scan-code.l:636
@@ -646,22 +628,22 @@ msgstr ""
 
 #: src/scan-code.l:757
 #, fuzzy, c-format
-msgid "$$ for the midrule at $%d of `%s' has no declared type"
+msgid "$$ for the midrule at $%d of %s has no declared type"
 msgstr "$%d de `%s' não tem tipo declarado"
 
 #: src/scan-code.l:762
-#, c-format
-msgid "$$ of `%s' has no declared type"
+#, fuzzy, c-format
+msgid "$$ of %s has no declared type"
 msgstr "$$ de `%s' não tem tipo declarado"
 
 #: src/scan-code.l:784
 #, fuzzy, c-format
-msgid "$%s of `%s' has no declared type"
+msgid "$%s of %s has no declared type"
 msgstr "$%d de `%s' não tem tipo declarado"
 
 #: src/scan-gram.l:149
-#, c-format
-msgid "stray `,' treated as white space"
+#, fuzzy, c-format
+msgid "stray ',' treated as white space"
 msgstr "`,' perdida tratada como branco"
 
 #: src/scan-gram.l:222
@@ -719,27 +701,27 @@ msgstr "seqüência de escape inválida: %s"
 msgid "invalid character after \\-escape: %s"
 msgstr "caractere inválido: %s"
 
-#: src/scan-gram.l:887
-#, c-format
-msgid "missing `%s' at end of file"
-msgstr "`%s' faltando no final do arquivo"
-
-#: src/scan-gram.l:898
+#: src/scan-gram.l:891
 #, fuzzy, c-format
-msgid "missing `%s' at end of line"
+msgid "missing %s at end of file"
 msgstr "`%s' faltando no final do arquivo"
 
-#: src/scan-skel.l:145
+#: src/scan-gram.l:902
+#, fuzzy, c-format
+msgid "missing %s at end of line"
+msgstr "`%s' faltando no final do arquivo"
+
+#: src/scan-skel.l:144
 #, c-format
 msgid "unclosed %s directive in skeleton"
 msgstr ""
 
-#: src/scan-skel.l:290
+#: src/scan-skel.l:289
 #, c-format
 msgid "too few arguments for %s directive in skeleton"
 msgstr ""
 
-#: src/scan-skel.l:297
+#: src/scan-skel.l:296
 #, c-format
 msgid "too many arguments for %s directive in skeleton"
 msgstr ""
@@ -749,94 +731,154 @@ msgstr ""
 msgid "invalid $ value: $%d"
 msgstr "valor inválido: %s"
 
-#: src/symtab.c:72
+#: src/symtab.c:71
 #, c-format
 msgid "POSIX Yacc forbids dashes in symbol names: %s"
 msgstr ""
 
-#: src/symtab.c:92
+#: src/symtab.c:91
 #, c-format
 msgid "too many symbols in input grammar (limit is %d)"
 msgstr ""
 
-#: src/symtab.c:154
+#: src/symtab.c:153
 #, c-format
 msgid "%s redeclaration for %s"
 msgstr "redeclaração de %s para %s"
 
-#: src/symtab.c:162
+#: src/symtab.c:161
 #, fuzzy, c-format
 msgid "%s redeclaration for <%s>"
 msgstr "redeclaração de %s para %s"
 
-#: src/symtab.c:329
+#: src/symtab.c:328
 #, c-format
 msgid "symbol %s redefined"
 msgstr "símbolo %s redefinido"
 
-#: src/symtab.c:343
+#: src/symtab.c:342
 #, fuzzy, c-format
 msgid "symbol %s redeclared"
 msgstr "símbolo %s redefinido"
 
-#: src/symtab.c:364
+#: src/symtab.c:363
 #, c-format
 msgid "redefining user token number of %s"
 msgstr "redefinindo número de token de usuário de %s"
 
-#: src/symtab.c:392
+#: src/symtab.c:391
 #, c-format
 msgid "symbol %s is used, but is not defined as a token and has no rules"
 msgstr "símbolo %s usado, mas não definido como uma token e não tem regras"
 
-#: src/symtab.c:412
-#, c-format
-msgid "symbol `%s' used more than once as a literal string"
+#: src/symtab.c:411
+#, fuzzy, c-format
+msgid "symbol %s used more than once as a literal string"
 msgstr "símbolo `%s' usado mais the uma vez como uma string literal"
 
-#: src/symtab.c:415
-#, c-format
-msgid "symbol `%s' given more than one literal string"
+#: src/symtab.c:414
+#, fuzzy, c-format
+msgid "symbol %s given more than one literal string"
 msgstr "símbolo `%s' associado a mais de uma string literal"
 
-#: src/symtab.c:531
+#: src/symtab.c:530
 #, fuzzy, c-format
 msgid "user token number %d redeclaration for %s"
 msgstr "redeclaração de tipo para %s"
 
-#: src/symtab.c:533
+#: src/symtab.c:532
 #, fuzzy, c-format
 msgid "previous declaration for %s"
 msgstr "redeclaração de tipo para %s"
 
-#: src/symtab.c:909
+#: src/symtab.c:908
 #, c-format
 msgid "the start symbol %s is undefined"
 msgstr "o símbolo de início %s não está definido"
 
-#: src/symtab.c:913
+#: src/symtab.c:912
 #, c-format
 msgid "the start symbol %s is a token"
 msgstr "o símbolo de início %s é um terminal"
 
-#: src/symtab.c:928
+#: src/symtab.c:927
 #, c-format
 msgid "redeclaration for default tagged %%destructor"
 msgstr ""
 
-#: src/symtab.c:941
+#: src/symtab.c:940
 #, c-format
 msgid "redeclaration for default tagless %%destructor"
 msgstr ""
 
-#: src/symtab.c:954
+#: src/symtab.c:953
 #, c-format
 msgid "redeclaration for default tagged %%printer"
 msgstr ""
 
-#: src/symtab.c:967
+#: src/symtab.c:966
 #, c-format
 msgid "redeclaration for default tagless %%printer"
+msgstr ""
+
+#: djgpp/subpipe.c:63 djgpp/subpipe.c:286 djgpp/subpipe.c:288
+#, c-format
+msgid "removing of '%s' failed"
+msgstr ""
+
+#: djgpp/subpipe.c:85 djgpp/subpipe.c:92
+#, c-format
+msgid "creation of a temporary file failed"
+msgstr ""
+
+#: djgpp/subpipe.c:127
+#, c-format
+msgid "saving stdin failed"
+msgstr ""
+
+#: djgpp/subpipe.c:131
+#, c-format
+msgid "saving stdout failed"
+msgstr ""
+
+#: djgpp/subpipe.c:153 djgpp/subpipe.c:197 djgpp/subpipe.c:258
+#, c-format
+msgid "opening of tmpfile failed"
+msgstr ""
+
+#: djgpp/subpipe.c:157
+#, c-format
+msgid "redirecting bison's stdout to the temporary file failed"
+msgstr ""
+
+#: djgpp/subpipe.c:201
+#, c-format
+msgid "redirecting m4's stdin from the temporary file failed"
+msgstr ""
+
+#: djgpp/subpipe.c:212
+#, c-format
+msgid "opening of a temporary file failed"
+msgstr ""
+
+#: djgpp/subpipe.c:218
+#, c-format
+msgid "redirecting m4's stdout to a temporary file failed"
+msgstr ""
+
+#: djgpp/subpipe.c:234
+#, fuzzy, c-format
+msgid "subsidiary program '%s' interrupted"
+msgstr "programa subsidiário `%s' falhou"
+
+#: djgpp/subpipe.c:241
+#, fuzzy, c-format
+msgid "subsidiary program '%s' not found"
+msgstr "programa subsidiário `%s' não foi encontrado"
+
+#: djgpp/subpipe.c:265
+#, c-format
+msgid "redirecting bison's stdin from the temporary file failed"
 msgstr ""
 
 #: lib/argmatch.c:133
@@ -850,7 +892,6 @@ msgid "ambiguous argument %s for %s"
 msgstr "argumento %s ambíguo para %s"
 
 #: lib/argmatch.c:153
-#, c-format
 msgid "Valid arguments are:"
 msgstr "Argumentos válidos são:"
 
@@ -906,82 +947,90 @@ msgid "Accumulated runs = %u\n"
 msgstr "Execuções acumuladas = %u\n"
 
 #: lib/bitset_stats.c:259 lib/bitset_stats.c:264
-msgid "Could not read stats file."
+#, fuzzy
+msgid "cannot read stats file"
 msgstr "Impossível ler o arquivo de estatísticas."
 
 #: lib/bitset_stats.c:261
-#, c-format
-msgid "Bad stats file size.\n"
+#, fuzzy, c-format
+msgid "bad stats file size\n"
 msgstr "Tamanho do arquivo de estatísticas com erro.\n"
 
 #: lib/bitset_stats.c:287 lib/bitset_stats.c:289
-msgid "Could not write stats file."
+#, fuzzy
+msgid "cannot write stats file"
 msgstr "Impossível de escrever no arquivo de estatísticas."
 
 #: lib/bitset_stats.c:292
-msgid "Could not open stats file for writing."
+#, fuzzy
+msgid "cannot open stats file for writing"
 msgstr "Impossível abrir arquivo de estatísticas para escrita."
 
-#: lib/error.c:181
+#: lib/closeout.c:112
+#, fuzzy
+msgid "write error"
+msgstr "erro fatal: "
+
+#: lib/error.c:188
 msgid "Unknown system error"
 msgstr "Erro de sistema desconhecido"
 
-#: lib/getopt.c:527 lib/getopt.c:543
+#: lib/getopt.c:547 lib/getopt.c:576
 #, fuzzy, c-format
-msgid "%s: option '%s' is ambiguous\n"
+msgid "%s: option '%s' is ambiguous; possibilities:"
 msgstr "%s: a opção `%s' é ambígua\n"
 
-#: lib/getopt.c:576 lib/getopt.c:580
+#: lib/getopt.c:624 lib/getopt.c:628
 #, fuzzy, c-format
 msgid "%s: option '--%s' doesn't allow an argument\n"
 msgstr "%s: a opção `--%s' no admite nenhum argumento\n"
 
-#: lib/getopt.c:589 lib/getopt.c:594
+#: lib/getopt.c:637 lib/getopt.c:642
 #, fuzzy, c-format
 msgid "%s: option '%c%s' doesn't allow an argument\n"
 msgstr "%s: a opção `%c%s' não admite nenhum argumento\n"
 
-#: lib/getopt.c:637 lib/getopt.c:656
+#: lib/getopt.c:685 lib/getopt.c:704
 #, fuzzy, c-format
 msgid "%s: option '--%s' requires an argument\n"
 msgstr "%s: a opção `%s' exige um argumento\n"
 
-#: lib/getopt.c:694 lib/getopt.c:697
+#: lib/getopt.c:742 lib/getopt.c:745
 #, fuzzy, c-format
 msgid "%s: unrecognized option '--%s'\n"
 msgstr "%s: opção `--%s' não reconhecida\n"
 
-#: lib/getopt.c:705 lib/getopt.c:708
+#: lib/getopt.c:753 lib/getopt.c:756
 #, fuzzy, c-format
 msgid "%s: unrecognized option '%c%s'\n"
 msgstr "%s: opção `%c%s' não reconhecida\n"
 
-#: lib/getopt.c:757 lib/getopt.c:760
+#: lib/getopt.c:805 lib/getopt.c:808
 #, fuzzy, c-format
 msgid "%s: invalid option -- '%c'\n"
 msgstr "%s: opção -- %c inválida\n"
 
-#: lib/getopt.c:810 lib/getopt.c:827 lib/getopt.c:1035 lib/getopt.c:1053
+#: lib/getopt.c:861 lib/getopt.c:878 lib/getopt.c:1088 lib/getopt.c:1106
 #, fuzzy, c-format
 msgid "%s: option requires an argument -- '%c'\n"
 msgstr "%s: a opção -- %c exige um argumento\n"
 
-#: lib/getopt.c:883 lib/getopt.c:899
+#: lib/getopt.c:934 lib/getopt.c:950
 #, fuzzy, c-format
 msgid "%s: option '-W %s' is ambiguous\n"
 msgstr "%s: a opção `-W %s' é ambígua\n"
 
-#: lib/getopt.c:923 lib/getopt.c:941
+#: lib/getopt.c:974 lib/getopt.c:992
 #, fuzzy, c-format
 msgid "%s: option '-W %s' doesn't allow an argument\n"
 msgstr "%s: a opção `-W %s' não admite nenhum argumento\n"
 
-#: lib/getopt.c:962 lib/getopt.c:980
+#: lib/getopt.c:1013 lib/getopt.c:1031
 #, fuzzy, c-format
 msgid "%s: option '-W %s' requires an argument\n"
 msgstr "%s: a opção `%s' exige um argumento\n"
 
-#: lib/obstack.c:421 lib/obstack.c:423 lib/xalloc-die.c:34
+#: lib/obstack.c:413 lib/obstack.c:415 lib/xalloc-die.c:34
 msgid "memory exhausted"
 msgstr "memória esgotada"
 
@@ -999,28 +1048,30 @@ msgstr ""
 
 #. TRANSLATORS:
 #. Get translations for open and closing quotation marks.
-#.
 #. The message catalog should translate "`" to a left
 #. quotation mark suitable for the locale, and similarly for
-#. "'".  If the catalog has no translation,
-#. locale_quoting_style quotes `like this', and
-#. clocale_quoting_style quotes "like this".
+#. "'".  For example, a French Unicode local should translate
+#. these to U+00AB (LEFT-POINTING DOUBLE ANGLE
+#. QUOTATION MARK), and U+00BB (RIGHT-POINTING DOUBLE ANGLE
+#. QUOTATION MARK), respectively.
 #.
-#. For example, an American English Unicode locale should
-#. translate "`" to U+201C (LEFT DOUBLE QUOTATION MARK), and
-#. should translate "'" to U+201D (RIGHT DOUBLE QUOTATION
-#. MARK).  A British English Unicode locale should instead
-#. translate these to U+2018 (LEFT SINGLE QUOTATION MARK)
-#. and U+2019 (RIGHT SINGLE QUOTATION MARK), respectively.
+#. If the catalog has no translation, we will try to
+#. use Unicode U+2018 (LEFT SINGLE QUOTATION MARK) and
+#. Unicode U+2019 (RIGHT SINGLE QUOTATION MARK).  If the
+#. current locale is not Unicode, locale_quoting_style
+#. will quote 'like this', and clocale_quoting_style will
+#. quote "like this".  You should always include translations
+#. for "`" and "'" even if U+2018 and U+2019 are appropriate
+#. for your locale.
 #.
 #. If you don't know what to put here, please see
-#. <http://en.wikipedia.org/wiki/Quotation_mark#Glyphs>
+#. <http://en.wikipedia.org/wiki/Quotation_marks_in_other_languages>
 #. and use glyphs suitable for your language.
-#: lib/quotearg.c:271
+#: lib/quotearg.c:312
 msgid "`"
 msgstr "`"
 
-#: lib/quotearg.c:272
+#: lib/quotearg.c:313
 msgid "'"
 msgstr "'"
 
@@ -1041,12 +1092,12 @@ msgstr " TOTAL                 :"
 msgid "time in %s: %ld.%06ld (%ld%%)\n"
 msgstr "tempo em  %s: %ld.%06ld (%ld%%)\n"
 
-#: lib/w32spawn.h:40
+#: lib/w32spawn.h:43
 #, c-format
 msgid "_open_osfhandle failed"
 msgstr ""
 
-#: lib/w32spawn.h:81
+#: lib/w32spawn.h:84
 #, c-format
 msgid "cannot restore fd %d: dup2 failed"
 msgstr ""
@@ -1060,6 +1111,9 @@ msgstr ""
 #, c-format
 msgid "%s subprocess got fatal signal %d"
 msgstr ""
+
+#~ msgid "I/O error"
+#~ msgstr "Erro de E/S"
 
 #~ msgid "warning: "
 #~ msgstr "aviso: "
@@ -1148,12 +1202,6 @@ msgstr ""
 
 #~ msgid "subsidiary program `%s' could not be invoked"
 #~ msgstr "programa subsidiário `%s' não pôde ser invocado"
-
-#~ msgid "subsidiary program `%s' not found"
-#~ msgstr "programa subsidiário `%s' não foi encontrado"
-
-#~ msgid "subsidiary program `%s' failed"
-#~ msgstr "programa subsidiário `%s' falhou"
 
 #~ msgid "subsidiary program `%s' failed (exit status %d)"
 #~ msgstr "programa subsidiário `%s' falhou (estado de saída %d)"

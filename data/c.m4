@@ -2,7 +2,7 @@
 
 # C M4 Macros for Bison.
 
-# Copyright (C) 2002, 2004-2011 Free Software Foundation, Inc.
+# Copyright (C) 2002, 2004-2012 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,6 +16,33 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+# b4_tocpp(STRING)
+# ----------------
+# Convert STRING into a valid C macro name.
+m4_define([b4_tocpp],
+[m4_toupper(m4_bpatsubst(m4_quote($1), [[^a-zA-Z0-9]+], [_]))])
+
+
+# b4_cpp_guard(FILE)
+# ------------------
+# A valid C macro name to use as a CPP header guard for FILE.
+m4_define([b4_cpp_guard],
+[b4_tocpp(m4_defn([b4_prefix])/[$1])])
+
+
+# b4_cpp_guard_open(FILE)
+# b4_cpp_guard_close(FILE)
+# ------------------------
+# Open/close CPP inclusion guards for FILE.
+m4_define([b4_cpp_guard_open],
+[#ifndef b4_cpp_guard([$1])
+# define b4_cpp_guard([$1])])
+
+m4_define([b4_cpp_guard_close],
+[#endif b4_comment([!b4_cpp_guard([$1])])])
+
 
 ## ---------------- ##
 ## Identification.  ##
@@ -146,16 +173,31 @@ m4_define([b4_table_value_equals],
        [[YYID (0)]],
        [[((]$2[) == (]$3[))]])])
 
+
 ## ---------##
 ## Values.  ##
 ## ---------##
 
-# b4_null
----------
-# Return a null pointer constant.  NULL infringes on the user name
-# space in C, so use 0 rather than NULL.
-m4_define([b4_null], [0])
 
+# b4_null_define
+# --------------
+# Portability issues: define a YY_NULL appropriate for the current
+# language (C, C++98, or C++11).
+m4_define([b4_null_define],
+[# ifndef YY_NULL
+#  if defined __cplusplus && 201103L <= __cplusplus
+#   define YY_NULL nullptr
+#  else
+#   define YY_NULL 0
+#  endif
+# endif[]dnl
+])
+
+
+# b4_null
+# -------
+# Return a null pointer constant.
+m4_define([b4_null], [YY_NULL])
 
 
 
@@ -441,6 +483,8 @@ m4_define_default([b4_yy_symbol_print_generate],
 b4_locations_if([, [[YYLTYPE const * const yylocationp], [yylocationp]]])[]dnl
 m4_ifset([b4_parse_param], [, b4_parse_param]))[
 {
+  FILE *yyo = yyoutput;
+  YYUSE (yyo);
   if (!yyvaluep)
     return;
 ]b4_locations_if([  YYUSE (yylocationp);

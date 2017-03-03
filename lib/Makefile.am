@@ -1,6 +1,6 @@
 # Make bison/lib.
 
-# Copyright (C) 2001-2004, 2006, 2008-2011 Free Software Foundation,
+# Copyright (C) 2001-2004, 2006, 2008-2012 Free Software Foundation,
 # Inc.
 
 # This program is free software: you can redistribute it and/or modify
@@ -15,6 +15,16 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+AM_CFLAGS =
+AM_CPPFLAGS =
+BUILT_SOURCES =
+CLEANFILES =
+EXTRA_DIST =
+MOSTLYCLEANDIRS =
+MOSTLYCLEANFILES =
+SUFFIXES =
+noinst_LIBRARIES =
 
 include gnulib.mk
 

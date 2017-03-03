@@ -1,6 +1,6 @@
 /* Muscle table manager for Bison,
 
-   Copyright (C) 2001-2003, 2006-2007, 2009-2011 Free Software
+   Copyright (C) 2001-2003, 2006-2007, 2009-2012 Free Software
    Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
@@ -20,6 +20,8 @@
 
 #ifndef MUSCLE_TAB_H_
 # define MUSCLE_TAB_H_
+
+# include <quotearg.h>
 
 # include "location.h"
 

@@ -1,6 +1,6 @@
 # Customize maint.mk                           -*- makefile -*-
 
-# Copyright (C) 2008-2011 Free Software Foundation, Inc.
+# Copyright (C) 2008-2012 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -36,7 +36,12 @@ url_dir_list = \
 # Exclude changelog-check here so that there's less churn in ChangeLog
 # files -- otherwise, you'd need to have the upcoming version number
 # at the top of the file for each `make distcheck' run.
-local-checks-to-skip = changelog-check
+local-checks-to-skip = \
+  changelog-check \
+  sc_immutable_NEWS			\
+  sc_prohibit_always_true_header_tests	\
+  sc_prohibit_atoi_atof			\
+  sc_prohibit_strcmp
 
 # The local directory containing the checked-out copy of gnulib used in
 # this release.  Used solely to get a date for the "announcement" target.
@@ -51,3 +56,18 @@ announcement_Cc_ = \
 update-copyright: update-b4-copyright update-package-copyright-year
 update-copyright-env = \
   UPDATE_COPYRIGHT_FORCE=1 UPDATE_COPYRIGHT_USE_INTERVALS=1
+
+exclude = $(foreach a,$(1),$(eval exclude_file_name_regexp--sc_$(a)))
+$(call exclude,								\
+  bindtextdomain=^lib/main.c$$						\
+  program_name=^lib/main.c$$						\
+  prohibit_always-defined_macros=^data/yacc.c|^djgpp/			\
+  prohibit_always-defined_macros+=?|^lib/timevar.c$$			\
+  prohibit_always-defined_macros+=?|^src/(parse-gram.c|system.h)$$	\
+  prohibit_always-defined_macros+=?|^tests/regression.at$$		\
+  prohibit_empty_lines_at_EOF=^src/parse-gram.[ch]$$			\
+  require_config_h_first=^(lib/yyerror|data/(glr|yacc))\.c$$		\
+  space_tab=^tests/(input|c\+\+)\.at$$					\
+  trailing_blank=^src/parse-gram.[ch]$$					\
+  unmarked_diagnostics=^djgpp/						\
+)

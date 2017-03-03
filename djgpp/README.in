@@ -1,6 +1,6 @@
 This is a port of GNU Bison @VERSION@ to MSDOS/DJGPP.
 
-Copyright (C) 2005-2011 Free Software Foundation, Inc.
+Copyright (C) 2005-2012 Free Software Foundation, Inc.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -84,7 +84,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	some more work to unpack, if LFN support is not available.  If LFN is
 	available then you can extract the source files from the archive with
 	any unzip program and proceed to the paragraph 3.3, below.  Any file
-	name issue will be handled by the the DJGPP configuration files.
+	name issue will be handled by the DJGPP configuration files.
 	To unpack the source distribution on SFN systems, first, you MUST use
 	the `djunpack' batch file to unzip the package.  That is because some
 	file names in the official distributions need to be changed to avoid
@@ -179,7 +179,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 	This will install the products into your DJGPP installation tree given
 	by the default prefix "/dev/env/DJDIR".  If you prefer to install them
-	into some other directory you will have to set prefix to the appropiate
+	into some other directory you will have to set prefix to the appropriate
 	value:
 	  make install prefix=z:/some/other/place
 

@@ -1,6 +1,6 @@
 #! /usr/bin/perl -w
 
-# Copyright (C) 2006, 2008-2011 Free Software Foundation, Inc.
+# Copyright (C) 2006, 2008-2012 Free Software Foundation, Inc.
 #
 # This file is part of Bison, the GNU Compiler Compiler.
 #
@@ -134,8 +134,8 @@ sub calc_grammar ($$$)
     or die;
   print $out <<EOF;
 %{
+#include <assert.h>
 #include <stdio.h>
-
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -291,9 +291,8 @@ yylex (void)
 static int
 power (int base, int exponent)
 {
+  assert (0 <= exponent);
   int res = 1;
-  if (exponent < 0)
-    exit (3);
   for (/* Niente */; exponent; --exponent)
     res *= base;
   return res;

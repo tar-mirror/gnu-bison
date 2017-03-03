@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in -*-Makefile-*-
 
-## Copyright (C) 2001-2011 Free Software Foundation, Inc.
+## Copyright (C) 2001-2012 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,25 +23,21 @@ SUBDIRS = build-aux po runtime-po lib data src doc examples tests etc
 aclocaldir = @aclocaldir@
 aclocal_DATA = m4/bison-i18n.m4
 
-EXTRA_DIST = .prev-version .version cfg.mk \
-  OChangeLog PACKAGING \
+EXTRA_DIST = .prev-version .version \
+  cfg.mk ChangeLog-1998 ChangeLog-2012 PACKAGING \
   djgpp/Makefile.maint djgpp/README.in djgpp/config.bat \
   djgpp/config.sed djgpp/config.site djgpp/config_h.sed \
   djgpp/subpipe.c djgpp/subpipe.h djgpp/djunpack.bat \
   djgpp/fnchange.lst djgpp/testsuite.sed
 
-
-.PHONY: maintainer-check
-maintainer-check:
-	cd tests && $(MAKE) $(AM_MAKEFLAGS) $@
-
-.PHONY: maintainer-push-check
-maintainer-push-check:
-	cd tests && $(MAKE) $(AM_MAKEFLAGS) $@
-
-.PHONY: maintainer-xml-check
-maintainer-xml-check:
-	cd tests && $(MAKE) $(AM_MAKEFLAGS) $@
+MAINTAINER_CHECKS =				\
+  maintainer-check				\
+  maintainer-push-check				\
+  maintainer-xml-check				\
+  maintainer-release-check
+.PHONY: $(MAINTAINER_CHECKS)
+$(MAINTAINER_CHECKS):
+	$(AM_V_GEN)cd tests && $(MAKE) $(AM_MAKEFLAGS) $@
 
 # See comments in build-aux/git-version-gen.  However, we make .version depend
 # on configure so that .version and VERSION/PACKAGE_VERSION stay in sync in the
@@ -54,15 +50,29 @@ maintainer-xml-check:
 # pass incorrectly.
 BUILT_SOURCES = $(top_srcdir)/.version
 $(top_srcdir)/.version: configure
-	echo $(VERSION) > $@-t && mv $@-t $@
-dist-hook:
-	echo $(VERSION) > $(distdir)/.tarball-version
+	$(AM_V_GEN)echo $(VERSION) > $@-t && mv $@-t $@
+dist-hook: gen-ChangeLog
+	$(AM_V_GEN)echo $(VERSION) > $(distdir)/.tarball-version
 
 .PHONY: update-b4-copyright update-package-copyright-year
 update-b4-copyright:
-	find data -type f                    \
-	  | grep -v -E '^data/bison.m4$$'    \
+	$(AM_V_GEN) find data -type f		\
+	  | grep -v -E '^data/bison.m4$$'	\
 	  | xargs $(build_aux)/$@
 	@echo 'warning: src/parse-gram.[hc] may need to be regenerated.'
 update-package-copyright-year:
-	$(build_aux)/$@ configure.ac
+	$(AM_V_GEN)$(build_aux)/$@ configure.ac
+
+gen_start_date = 2012-01-16
+.PHONY: gen-ChangeLog
+gen-ChangeLog:
+	$(AM_V_GEN)if test -d $(srcdir)/.git; then		\
+	  $(top_srcdir)/build-aux/gitlog-to-changelog		\
+	    --strip-tab						\
+	    --strip-cherry-picked				\
+	    --no-cluster					\
+	    --amend=$(srcdir)/build-aux/git-log-fix		\
+	    --since=$(gen_start_date) > $(distdir)/cl-t;	\
+	  rm -f $(distdir)/ChangeLog;				\
+	  mv $(distdir)/cl-t $(distdir)/ChangeLog;		\
+	fi

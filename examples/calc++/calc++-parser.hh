@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 2.5.  */
+/* A Bison parser, made by GNU Bison 2.5.1_rc2.2-9fbd.  */
 
 /* Skeleton interface for Bison LALR(1) parsers in C++
    
-      Copyright (C) 2002-2011 Free Software Foundation, Inc.
+      Copyright (C) 2002-2012 Free Software Foundation, Inc.
    
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,29 +30,42 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
+/**
+ ** \file ../../../../examples/calc++/calc++-parser.hh
+ ** Define the yy::parser class.
+ */
+
 /* C++ LALR(1) parser skeleton written by Akim Demaille.  */
 
-#ifndef PARSER_HEADER_H
-# define PARSER_HEADER_H
+#ifndef YY_EXAMPLES_CALC_CALC_PARSER_HH
+# define YY_EXAMPLES_CALC_CALC_PARSER_HH
 
 /* "%code requires" blocks.  */
 
-/* Line 35 of lalr1.cc  */
-#line 9107 "../../doc/bison.texinfo"
+/* Line 36 of lalr1.cc  */
+#line 9573 "../../doc/bison.texinfo"
 
 # include <string>
 class calcxx_driver;
 
 
 
-/* Line 35 of lalr1.cc  */
-#line 50 "./calc++-parser.hh"
+/* Line 36 of lalr1.cc  */
+#line 55 "../../../../examples/calc++/calc++-parser.hh"
 
 
 #include <string>
 #include <iostream>
 #include "stack.hh"
 #include "location.hh"
+
+# ifndef YY_NULL
+#  if defined __cplusplus && 201103L <= __cplusplus
+#   define YY_NULL nullptr
+#  else
+#   define YY_NULL 0
+#  endif
+# endif
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -75,8 +88,8 @@ class calcxx_driver;
 
 namespace yy {
 
-/* Line 35 of lalr1.cc  */
-#line 80 "./calc++-parser.hh"
+/* Line 36 of lalr1.cc  */
+#line 93 "../../../../examples/calc++/calc++-parser.hh"
 
   /// A Bison parser.
   class calcxx_parser
@@ -87,16 +100,16 @@ namespace yy {
     union semantic_type
     {
 
-/* Line 35 of lalr1.cc  */
-#line 9160 "../../doc/bison.texinfo"
+/* Line 36 of lalr1.cc  */
+#line 9626 "../../doc/bison.texinfo"
 
   int          ival;
   std::string *sval;
 
 
 
-/* Line 35 of lalr1.cc  */
-#line 100 "./calc++-parser.hh"
+/* Line 36 of lalr1.cc  */
+#line 113 "../../../../examples/calc++/calc++-parser.hh"
     };
 #else
     typedef YYSTYPE semantic_type;
@@ -290,9 +303,9 @@ namespace yy {
 
 } // yy
 
-/* Line 35 of lalr1.cc  */
-#line 295 "./calc++-parser.hh"
+/* Line 36 of lalr1.cc  */
+#line 308 "../../../../examples/calc++/calc++-parser.hh"
 
 
 
-#endif /* ! defined PARSER_HEADER_H */
+#endif /* !YY_EXAMPLES_CALC_CALC_PARSER_HH  */

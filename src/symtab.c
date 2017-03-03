@@ -1,6 +1,6 @@
 /* Symbol table manager for Bison.
 
-   Copyright (C) 1984, 1989, 2000-2002, 2004-2011 Free Software
+   Copyright (C) 1984, 1989, 2000-2002, 2004-2012 Free Software
    Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
@@ -22,7 +22,6 @@
 #include "system.h"
 
 #include <hash.h>
-#include <quotearg.h>
 
 #include "complain.h"
 #include "gram.h"
@@ -409,11 +408,11 @@ void
 symbol_make_alias (symbol *sym, symbol *str, location loc)
 {
   if (str->alias)
-    warn_at (loc, _("symbol `%s' used more than once as a literal string"),
-	     str->tag);
+    warn_at (loc, _("symbol %s used more than once as a literal string"),
+             str->tag);
   else if (sym->alias)
-    warn_at (loc, _("symbol `%s' given more than one literal string"),
-	     sym->tag);
+    warn_at (loc, _("symbol %s given more than one literal string"),
+             sym->tag);
   else
     {
       str->class = token_sym;

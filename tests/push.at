@@ -1,6 +1,6 @@
 # Checking Push Parsing.                            -*- Autotest -*-
 
-# Copyright (C) 2007, 2009-2011 Free Software Foundation, Inc.
+# Copyright (C) 2007, 2009-2012 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -60,12 +60,12 @@ main (void)
   /* yypstate_delete used to leak ps->yyss if the stack was reallocated but the
      parse did not return on success, syntax error, or memory exhaustion.  */
   ps = yypstate_new ();
-  assert (yypush_parse (ps, 'a', NULL) == YYPUSH_MORE);
+  assert (yypush_parse (ps, 'a', YY_NULL) == YYPUSH_MORE);
   yypstate_delete (ps);
 
   ps = yypstate_new ();
-  assert (yypush_parse (ps, 'a', NULL) == YYPUSH_MORE);
-  assert (yypush_parse (ps, 'b', NULL) == YYPUSH_MORE);
+  assert (yypush_parse (ps, 'a', YY_NULL) == YYPUSH_MORE);
+  assert (yypush_parse (ps, 'b', YY_NULL) == YYPUSH_MORE);
   yypstate_delete (ps);
 
   return 0;
@@ -124,11 +124,11 @@ main (void)
     {
       ps = yypstate_new ();
       assert (ps);
-      assert (yypstate_new () == NULL);
+      assert (yypstate_new () == YY_NULL);
       ]m4_if([$1], [[both]], [[assert (yyparse () == 2)]])[;
       yychar = 0;
       assert (yypush_parse (ps) == 0);
-      assert (yypstate_new () == NULL);
+      assert (yypstate_new () == YY_NULL);
       ]m4_if([$1], [[both]], [[assert (yyparse () == 2)]])[;
       yypstate_delete (ps);
     }
@@ -163,7 +163,7 @@ start: ;
 ]])
 
 AT_BISON_CHECK([[input.y]], [[1]], [],
-[[input.y:2.9-21: %define variable `api.push-pull' is not used
+[[input.y:2.9-21: %define variable 'api.push-pull' is not used
 ]])
 
 AT_CLEANUP

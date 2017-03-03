@@ -1,6 +1,6 @@
 # C++ skeleton for Bison
 
-# Copyright (C) 2002-2011 Free Software Foundation, Inc.
+# Copyright (C) 2002-2012 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ b4_percent_define_ifdef([[location_type]], [],
   [# Backward compatibility.
   m4_define([b4_location_constructors])
   m4_include(b4_pkgdatadir/[location.cc])])
+m4_include(b4_pkgdatadir/[stack.hh])
 
 # We do want M4 expansion after # for CPP macros.
 m4_changecom()
@@ -35,13 +36,16 @@ m4_divert_push(0)dnl
 b4_defines_if(
 [@output(b4_spec_defines_file@)@
 b4_copyright([Skeleton interface for Bison LALR(1) parsers in C++],
-             [2002-2011])
-dnl FIXME: This is wrong, we want computed header guards.
+             [2002-2012])
 [
+/**
+ ** \file ]b4_spec_defines_file[
+ ** Define the ]b4_namespace_ref[::parser class.
+ */
+
 /* C++ LALR(1) parser skeleton written by Akim Demaille.  */
 
-#ifndef PARSER_HEADER_H
-# define PARSER_HEADER_H
+]b4_cpp_guard_open([b4_spec_defines_file])[
 
 ]b4_percent_code_get([[requires]])[
 
@@ -50,6 +54,8 @@ dnl FIXME: This is wrong, we want computed header guards.
 #include "stack.hh"
 ]b4_percent_define_ifdef([[location_type]], [],
                          [[#include "location.hh"]])[
+
+]b4_null_define[
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -275,14 +281,13 @@ b4_user_stype
  /* Redirection for backward compatibility.  */
 # define YYSTYPE b4_namespace_ref::b4_parser_class_name::semantic_type
 #endif
-])
-b4_percent_code_get([[provides]])[]dnl
-
-[#endif /* ! defined PARSER_HEADER_H */]
+])[
+]b4_percent_code_get([[provides]])[
+]b4_cpp_guard_close([b4_spec_defines_file])
 ])dnl
 @output(b4_parser_file_name@)@
 b4_copyright([Skeleton implementation for Bison LALR(1) parsers in C++],
-             [2002-2011])
+             [2002-2012])
 b4_percent_code_get([[top]])[]dnl
 m4_if(b4_prefix, [yy], [],
 [
@@ -444,6 +449,9 @@ do {					\
   {
     YYUSE (yylocationp);
     YYUSE (yyvaluep);
+    std::ostream& yyo = debug_stream ();
+    std::ostream& yyoutput = yyo;
+    YYUSE (yyoutput);
     switch (yytype)
       {
   ]m4_map([b4_symbol_actions], m4_defn([b4_symbol_printers]))dnl
@@ -931,7 +939,7 @@ b4_error_verbose_if([int yystate, int yytoken],
           }
       }
 
-    char const* yyformat = 0;
+    char const* yyformat = YY_NULL;
     switch (yycount)
       {
 #define YYCASE_(N, S)                         \
@@ -1134,106 +1142,5 @@ b4_error_verbose_if([int yystate, int yytoken],
   const ]b4_parser_class_name[::token_number_type ]b4_parser_class_name[::yyundef_token_ = ]b4_undef_token_number[;
 
 ]b4_namespace_close[
-
 ]b4_epilogue
-dnl
-@output(b4_dir_prefix[]stack.hh@)@
-b4_copyright([Stack handling for Bison parsers in C++],
-             [2002-2011])[
-
-#ifndef BISON_STACK_HH
-# define BISON_STACK_HH
-
-#include <deque>
-
-]b4_namespace_open[
-  template <class T, class S = std::deque<T> >
-  class stack
-  {
-  public:
-
-    // Hide our reversed order.
-    typedef typename S::reverse_iterator iterator;
-    typedef typename S::const_reverse_iterator const_iterator;
-
-    stack () : seq_ ()
-    {
-    }
-
-    stack (unsigned int n) : seq_ (n)
-    {
-    }
-
-    inline
-    T&
-    operator [] (unsigned int i)
-    {
-      return seq_[i];
-    }
-
-    inline
-    const T&
-    operator [] (unsigned int i) const
-    {
-      return seq_[i];
-    }
-
-    inline
-    void
-    push (const T& t)
-    {
-      seq_.push_front (t);
-    }
-
-    inline
-    void
-    pop (unsigned int n = 1)
-    {
-      for (; n; --n)
-	seq_.pop_front ();
-    }
-
-    inline
-    unsigned int
-    height () const
-    {
-      return seq_.size ();
-    }
-
-    inline const_iterator begin () const { return seq_.rbegin (); }
-    inline const_iterator end () const { return seq_.rend (); }
-
-  private:
-
-    S seq_;
-  };
-
-  /// Present a slice of the top of a stack.
-  template <class T, class S = stack<T> >
-  class slice
-  {
-  public:
-
-    slice (const S& stack,
-	   unsigned int range) : stack_ (stack),
-				 range_ (range)
-    {
-    }
-
-    inline
-    const T&
-    operator [] (unsigned int i) const
-    {
-      return stack_[range_ - i];
-    }
-
-  private:
-
-    const S& stack_;
-    unsigned int range_;
-  };
-]b4_namespace_close[
-
-#endif // not BISON_STACK_HH[]dnl
-]
 m4_divert_pop(0)

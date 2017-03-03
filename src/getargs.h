@@ -1,6 +1,6 @@
 /* Parse command line arguments for bison.
 
-   Copyright (C) 1984, 1986, 1989, 1992, 2000-2011 Free Software
+   Copyright (C) 1984, 1986, 1989, 1992, 2000-2012 Free Software
    Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
@@ -23,7 +23,6 @@
 
 #include "location.h"
 
-extern char *program_name;
 enum { command_line_prio, grammar_prio, default_prio };
 
 /* flags set by % directives */

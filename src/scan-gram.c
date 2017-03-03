@@ -97,6 +97,7 @@ typedef int flex_int32_t;
 typedef unsigned char flex_uint8_t; 
 typedef unsigned short int flex_uint16_t;
 typedef unsigned int flex_uint32_t;
+#endif /* ! C99 */
 
 /* Limits of integral types. */
 #ifndef INT8_MIN
@@ -126,8 +127,6 @@ typedef unsigned int flex_uint32_t;
 #ifndef UINT32_MAX
 #define UINT32_MAX             (4294967295U)
 #endif
-
-#endif /* ! C99 */
 
 #endif /* ! FLEXINT_H */
 
@@ -203,15 +202,7 @@ typedef unsigned int flex_uint32_t;
 
 /* Size of default input buffer. */
 #ifndef YY_BUF_SIZE
-#ifdef __ia64__
-/* On IA-64, the buffer size is 16k, not 8k.
- * Moreover, YY_BUF_SIZE is 2*YY_READ_BUF_SIZE in the general case.
- * Ditto for the __ia64__ case accordingly.
- */
-#define YY_BUF_SIZE 32768
-#else
 #define YY_BUF_SIZE 16384
-#endif /* __ia64__ */
 #endif
 
 /* The state buf must be large enough to hold one state per character in the main buffer.
@@ -919,7 +910,7 @@ char *gram_text;
 #line 1 "scan-gram.l"
 /* Bison Grammar Scanner                             -*- C -*-
 
-   Copyright (C) 2002-2011 Free Software Foundation, Inc.
+   Copyright (C) 2002-2012 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -1003,10 +994,10 @@ static void unexpected_newline (boundary, char const *);
 /* Strings and characters in directives/rules. */
 
 /* A identifier was just read in directives/rules.  Special state
-to capture the sequence `identifier :'. */
+to capture the sequence 'identifier :'. */
 
 /* Three types of user code:
-- prologue (code between `%{' `%}' in the first section, before %%);
+- prologue (code between '%{' '%}' in the first section, before %%);
 - actions, printers, union, etc, (between braced in the middle section);
 - epilogue (everything after the second %%). */
 
@@ -1021,7 +1012,7 @@ to capture the sequence `identifier :'. */
    NUL and newline, as this simplifies our implementation.  */
 /* Zero or more instances of backslash-newline.  Following GCC, allow
    white space between the backslash and the newline.  */
-#line 1025 "scan-gram.c"
+#line 1016 "scan-gram.c"
 
 #define INITIAL 0
 #define SC_YACC_COMMENT 1
@@ -1143,12 +1134,7 @@ static int input (void );
 
 /* Amount of stuff to slurp up with each read. */
 #ifndef YY_READ_BUF_SIZE
-#ifdef __ia64__
-/* On IA-64, the buffer size is 16k, not 8k */
-#define YY_READ_BUF_SIZE 16384
-#else
 #define YY_READ_BUF_SIZE 8192
-#endif /* __ia64__ */
 #endif
 
 /* Copy whatever the last rule matched to the standard output. */
@@ -1157,7 +1143,7 @@ static int input (void );
 /* This used to be an fputs(), but since the string might contain NUL's,
  * we now use fwrite().
  */
-#define ECHO do { if (fwrite( gram_text, gram_leng, 1, gram_out )) {} } while (0)
+#define ECHO fwrite( gram_text, gram_leng, 1, gram_out )
 /* %endif */
 /* %if-c++-only C++ definition */
 /* %endif */
@@ -1172,7 +1158,7 @@ static int input (void );
 	if ( YY_CURRENT_BUFFER_LVALUE->yy_is_interactive ) \
 		{ \
 		int c = '*'; \
-		size_t n; \
+		int n; \
 		for ( n = 0; n < max_size && \
 			     (c = getc( gram_in )) != EOF && c != '\n'; ++n ) \
 			buf[n] = (char) c; \
@@ -1309,7 +1295,7 @@ YY_DECL
   | Scanning white space.  |
   `-----------------------*/
 
-#line 1313 "scan-gram.c"
+#line 1299 "scan-gram.c"
 
 	if ( !(yy_init) )
 		{
@@ -1424,7 +1410,7 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 YY_RULE_SETUP
 #line 149 "scan-gram.l"
-warn_at (*loc, _("stray `,' treated as white space"));
+warn_at (*loc, _("stray ',' treated as white space"));
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
@@ -1942,7 +1928,7 @@ YY_RULE_SETUP
 	YY_BREAK
 
 /*---------------------------------------------------------------.
-  | Scanning a Yacc comment.  The initial `/ *' is already eaten.  |
+  | Scanning a Yacc comment.  The initial '/ *' is already eaten.  |
   `---------------------------------------------------------------*/
 
 
@@ -1963,7 +1949,7 @@ unexpected_eof (token_start, "*/"); BEGIN context_state;
 	YY_BREAK
 
 /*------------------------------------------------------------.
-  | Scanning a C comment.  The initial `/ *' is already eaten.  |
+  | Scanning a C comment.  The initial '/ *' is already eaten.  |
   `------------------------------------------------------------*/
 
 
@@ -1979,7 +1965,7 @@ unexpected_eof (token_start, "*/"); BEGIN context_state;
 	YY_BREAK
 
 /*--------------------------------------------------------------.
-  | Scanning a line comment.  The initial `//' is already eaten.  |
+  | Scanning a line comment.  The initial '//' is already eaten.  |
   `--------------------------------------------------------------*/
 
 
@@ -2324,8 +2310,8 @@ YY_RULE_SETUP
       }
   }
 	YY_BREAK
-/* Tokenize `<<%' correctly (as `<<' `%') rather than incorrrectly
-     (as `<' `<%').  */
+/* Tokenize '<<%' correctly (as '<<' '%') rather than incorrrectly
+     (as '<' '<%').  */
 case 105:
 /* rule 105 can match eol */
 YY_RULE_SETUP
@@ -2405,7 +2391,7 @@ YY_RULE_SETUP
 #line 715 "scan-gram.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 2409 "scan-gram.c"
+#line 2395 "scan-gram.c"
 case YY_STATE_EOF(SC_RETURN_BRACKETED_ID):
 	yyterminate();
 
@@ -3226,8 +3212,8 @@ YY_BUFFER_STATE gram__scan_string (yyconst char * yystr )
 /* %if-c-only */
 /** Setup the input buffer state to scan the given bytes. The next call to gram_lex() will
  * scan from a @e copy of @a bytes.
- * @param yybytes the byte buffer to scan
- * @param _yybytes_len the number of bytes in the buffer pointed to by @a bytes.
+ * @param bytes the byte buffer to scan
+ * @param len the number of bytes in the buffer pointed to by @a bytes.
  * 
  * @return the newly allocated buffer state object.
  */
@@ -3626,7 +3612,7 @@ convert_ucn_to_byte (char const *ucn)
 
 
 /*----------------------------------------------------------------.
-| Handle `#line INT "FILE"'.  ARGS has already skipped `#line '.  |
+| Handle '#line INT "FILE"'.  ARGS has already skipped '#line '.  |
 `----------------------------------------------------------------*/
 
 static void
@@ -3658,6 +3644,10 @@ unexpected_end (boundary start, char const *msgid, char const *token_end)
   location loc;
   loc.start = start;
   loc.end = scanner_cursor;
+  token_end = quote (token_end);
+  // Instead of '\'', display "'".
+  if (!strcmp (token_end, "'\\''"))
+    token_end = "\"'\"";
   complain_at (loc, _(msgid), token_end);
 }
 
@@ -3670,7 +3660,7 @@ unexpected_end (boundary start, char const *msgid, char const *token_end)
 static void
 unexpected_eof (boundary start, char const *token_end)
 {
-  unexpected_end (start, N_("missing `%s' at end of file"), token_end);
+  unexpected_end (start, N_("missing %s at end of file"), token_end);
 }
 
 
@@ -3681,7 +3671,7 @@ unexpected_eof (boundary start, char const *token_end)
 static void
 unexpected_newline (boundary start, char const *token_end)
 {
-  unexpected_end (start, N_("missing `%s' at end of line"), token_end);
+  unexpected_end (start, N_("missing %s at end of line"), token_end);
 }
 
 

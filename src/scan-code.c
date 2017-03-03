@@ -97,6 +97,7 @@ typedef int flex_int32_t;
 typedef unsigned char flex_uint8_t; 
 typedef unsigned short int flex_uint16_t;
 typedef unsigned int flex_uint32_t;
+#endif /* ! C99 */
 
 /* Limits of integral types. */
 #ifndef INT8_MIN
@@ -126,8 +127,6 @@ typedef unsigned int flex_uint32_t;
 #ifndef UINT32_MAX
 #define UINT32_MAX             (4294967295U)
 #endif
-
-#endif /* ! C99 */
 
 #endif /* ! FLEXINT_H */
 
@@ -203,15 +202,7 @@ typedef unsigned int flex_uint32_t;
 
 /* Size of default input buffer. */
 #ifndef YY_BUF_SIZE
-#ifdef __ia64__
-/* On IA-64, the buffer size is 16k, not 8k.
- * Moreover, YY_BUF_SIZE is 2*YY_READ_BUF_SIZE in the general case.
- * Ditto for the __ia64__ case accordingly.
- */
-#define YY_BUF_SIZE 32768
-#else
 #define YY_BUF_SIZE 16384
-#endif /* __ia64__ */
 #endif
 
 /* The state buf must be large enough to hold one state per character in the main buffer.
@@ -661,7 +652,7 @@ char *code_text;
 #line 1 "scan-code.l"
 /* Bison Action Scanner                             -*- C -*-
 
-   Copyright (C) 2006-2011 Free Software Foundation, Inc.
+   Copyright (C) 2006-2012 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -735,7 +726,7 @@ of $ and @.  */
 /* C style identifier. Must start with letter. Will be used for
    named symbol references. Shall be kept synchronized with
    scan-gram.l "letter" and "id". */
-#line 739 "scan-code.c"
+#line 730 "scan-code.c"
 
 #define INITIAL 0
 #define SC_COMMENT 1
@@ -850,12 +841,7 @@ static int input (void );
 
 /* Amount of stuff to slurp up with each read. */
 #ifndef YY_READ_BUF_SIZE
-#ifdef __ia64__
-/* On IA-64, the buffer size is 16k, not 8k */
-#define YY_READ_BUF_SIZE 16384
-#else
 #define YY_READ_BUF_SIZE 8192
-#endif /* __ia64__ */
 #endif
 
 /* Copy whatever the last rule matched to the standard output. */
@@ -864,7 +850,7 @@ static int input (void );
 /* This used to be an fputs(), but since the string might contain NUL's,
  * we now use fwrite().
  */
-#define ECHO do { if (fwrite( code_text, code_leng, 1, code_out )) {} } while (0)
+#define ECHO fwrite( code_text, code_leng, 1, code_out )
 /* %endif */
 /* %if-c++-only C++ definition */
 /* %endif */
@@ -879,7 +865,7 @@ static int input (void );
 	if ( YY_CURRENT_BUFFER_LVALUE->yy_is_interactive ) \
 		{ \
 		int c = '*'; \
-		size_t n; \
+		int n; \
 		for ( n = 0; n < max_size && \
 			     (c = getc( code_in )) != EOF && c != '\n'; ++n ) \
 			buf[n] = (char) c; \
@@ -994,10 +980,10 @@ YY_DECL
   int braces_level = 0;
 
   /* Whether a semicolon is probably needed.
-     The heuristic is that a semicolon is not needed after `{', `}', `;',
+     The heuristic is that a semicolon is not needed after '{', '}', ';',
      or a C preprocessor directive, and that whitespaces and comments
      do not affect this flag.
-     Note that `{' does not need a semicolon because of `{}'.
+     Note that '{' does not need a semicolon because of '{}'.
      A semicolon may be needed before a cpp direcive, but don't bother.  */
   bool need_semicolon = false;
 
@@ -1016,10 +1002,10 @@ YY_DECL
 
 
   /*------------------------------------------------------------.
-  | Scanning a C comment.  The initial `/ *' is already eaten.  |
+  | Scanning a C comment.  The initial '/ *' is already eaten.  |
   `------------------------------------------------------------*/
 
-#line 1023 "scan-code.c"
+#line 1009 "scan-code.c"
 
 	if ( !(yy_init) )
 		{
@@ -1137,7 +1123,7 @@ STRING_GROW; BEGIN sc_context;
 	YY_BREAK
 
 /*--------------------------------------------------------------.
-  | Scanning a line comment.  The initial `//' is already eaten.  |
+  | Scanning a line comment.  The initial '//' is already eaten.  |
   `--------------------------------------------------------------*/
 
 
@@ -1250,7 +1236,7 @@ case 13:
 YY_RULE_SETUP
 #line 199 "scan-code.l"
 {
-    warn_at (*loc, _("stray `$'"));
+    warn_at (*loc, _("stray '$'"));
     obstack_sgrow (&obstack_for_string, "$][");
     need_semicolon = true;
   }
@@ -1259,7 +1245,7 @@ case 14:
 YY_RULE_SETUP
 #line 204 "scan-code.l"
 {
-    warn_at (*loc, _("stray `@'"));
+    warn_at (*loc, _("stray '@'"));
     obstack_sgrow (&obstack_for_string, "@@");
     need_semicolon = true;
   }
@@ -1296,16 +1282,16 @@ YY_RULE_SETUP
 {
     bool outer_brace = --braces_level == 0;
 
-    /* As an undocumented Bison extension, append `;' before the last
+    /* As an undocumented Bison extension, append ';' before the last
        brace in braced code, so that the user code can omit trailing
-       `;'.  But do not append `;' if emulating Yacc, since Yacc does
+       ';'.  But do not append ';' if emulating Yacc, since Yacc does
        not append one.  */
     if (outer_brace && !yacc_flag && language_prio == default_prio
         && skeleton_prio == default_prio && need_semicolon && ! in_cpp)
       {
-	warn_at (*loc, _("a `;' might be needed at the end of action code"));
-	warn_at (*loc, _("future versions of Bison will not add the `;'"));
-	obstack_1grow (&obstack_for_string, ';');
+        warn_at (*loc, _("a ';' might be needed at the end of action code"));
+        warn_at (*loc, _("future versions of Bison will not add the ';'"));
+        obstack_1grow (&obstack_for_string, ';');
       }
 
     STRING_GROW;
@@ -1314,8 +1300,8 @@ YY_RULE_SETUP
 	YY_BREAK
 /* Preprocessing directives should only be recognized at the beginning
      of lines, allowing whitespace including comments, but in C/C++,
-     `#' can only be the start of preprocessor directives or within
-     `#define' directives anyway, so don't bother with begin of line.  */
+     '#' can only be the start of preprocessor directives or within
+     '#define' directives anyway, so don't bother with begin of line.  */
 case 20:
 YY_RULE_SETUP
 #line 243 "scan-code.l"
@@ -1331,7 +1317,7 @@ case 22:
 /* rule 22 can match eol */
 YY_RULE_SETUP
 #line 246 "scan-code.l"
-STRING_GROW; if (in_cpp) in_cpp = need_semicolon = false; 
+STRING_GROW; if (in_cpp) in_cpp = need_semicolon = false;
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
@@ -1435,7 +1421,7 @@ YY_RULE_SETUP
 #line 301 "scan-code.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 1439 "scan-code.c"
+#line 1425 "scan-code.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2252,8 +2238,8 @@ YY_BUFFER_STATE code__scan_string (yyconst char * yystr )
 /* %if-c-only */
 /** Setup the input buffer state to scan the given bytes. The next call to code_lex() will
  * scan from a @e copy of @a bytes.
- * @param yybytes the byte buffer to scan
- * @param _yybytes_len the number of bytes in the buffer pointed to by @a bytes.
+ * @param bytes the byte buffer to scan
+ * @param len the number of bytes in the buffer pointed to by @a bytes.
  * 
  * @return the newly allocated buffer state object.
  */
@@ -2852,8 +2838,8 @@ parse_ref (char *cp, symbol_list *rule, int rule_length,
             sym_loc.start.column += 1;
             sym_loc.end = sym_loc.start;
             const char *format =
-              _("syntax error after `%c', expecting integer, letter,"
-                " `_', `[', or `$'");
+              _("syntax error after '%c', expecting integer, letter,"
+                " '_', '[', or '$'");
             complain_at_indent (sym_loc, &indent, format, dollar_or_at);
           }
         else if (midrule_rhs_index)
@@ -2915,7 +2901,7 @@ int max_left_semantic_context = 0;
 
 
 /*------------------------------------------------------------------.
-| TEXT is pointing to a wannabee semantic value (i.e., a `$').      |
+| TEXT is pointing to a wannabee semantic value (i.e., a '$').      |
 |                                                                   |
 | Possible inputs: $[<TYPENAME>]($|integer)                         |
 |                                                                   |
@@ -2975,23 +2961,23 @@ handle_action_dollar (symbol_list *rule, char *text, location dollar_loc)
 	type_name = symbol_list_n_type_name_get (rule, dollar_loc, 0);
 
       if (!type_name)
-	{
-	  if (union_seen | tag_seen)
-	    {
-	      if (rule->midrule_parent_rule)
-		complain_at (dollar_loc,
-			     _("$$ for the midrule at $%d of `%s'"
-			       " has no declared type"),
-			     rule->midrule_parent_rhs_index,
-			     effective_rule->content.sym->tag);
-	      else
-		complain_at (dollar_loc, _("$$ of `%s' has no declared type"),
-			     rule->content.sym->tag);
-	    }
-	  else
-	    untyped_var_seen = true;
-	  type_name = "";
-	}
+        {
+          if (union_seen | tag_seen)
+            {
+              if (rule->midrule_parent_rule)
+                complain_at (dollar_loc,
+                             _("$$ for the midrule at $%d of %s"
+                               " has no declared type"),
+                             rule->midrule_parent_rhs_index,
+                             quote (effective_rule->content.sym->tag));
+              else
+                complain_at (dollar_loc, _("$$ of %s has no declared type"),
+                             quote (rule->content.sym->tag));
+            }
+          else
+            untyped_var_seen = true;
+          type_name = "";
+        }
 
       obstack_fgrow1 (&obstack_for_string,
 		      "]b4_lhs_value([%s])[", type_name);
@@ -3005,14 +2991,14 @@ handle_action_dollar (symbol_list *rule, char *text, location dollar_loc)
 	type_name =
 	  symbol_list_n_type_name_get (effective_rule, dollar_loc, n);
       if (!type_name)
-	{
-	  if (union_seen | tag_seen)
-	    complain_at (dollar_loc, _("$%s of `%s' has no declared type"),
-			 cp, effective_rule->content.sym->tag);
-	  else
-	    untyped_var_seen = true;
-	  type_name = "";
-	}
+        {
+          if (union_seen | tag_seen)
+            complain_at (dollar_loc, _("$%s of %s has no declared type"),
+                         cp, quote (effective_rule->content.sym->tag));
+          else
+            untyped_var_seen = true;
+          type_name = "";
+        }
 
       obstack_fgrow3 (&obstack_for_string,
 		      "]b4_rhs_value(%d, %d, [%s])[",
@@ -3026,7 +3012,7 @@ handle_action_dollar (symbol_list *rule, char *text, location dollar_loc)
 
 
 /*------------------------------------------------------.
-| TEXT is a location token (i.e., a `@...').  Output to |
+| TEXT is a location token (i.e., a '@...').  Output to |
 | OBSTACK_FOR_STRING a reference to this location.      |
 `------------------------------------------------------*/
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison-runtime 2.3a\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2011-05-14 18:25-0400\n"
+"POT-Creation-Date: 2012-06-05 10:07+0200\n"
 "PO-Revision-Date: 2007-11-16 19:37+0200\n"
 "Last-Translator: Jorma Karvonen <karvjorm@users.sf.net>\n"
 "Language-Team: Finnish <translation-team-fi@lists.sourceforge.net>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.2\n"
 
-#: data/glr.c:923 data/yacc.c:727
+#: data/glr.c:929 data/yacc.c:731
 msgid "syntax error: cannot back up"
 msgstr "syntaksivirhe: ei voida tehdä varmuuskopiota"
 
@@ -25,38 +25,38 @@ msgstr "syntaksivirhe: ei voida tehdä varmuuskopiota"
 msgid "syntax is ambiguous"
 msgstr "syntaksi on moniselitteinen"
 
-#: data/glr.c:2094 data/glr.c:2172 data/glr.c:2210 data/glr.c:2480
-#: data/lalr1.cc:941 data/lalr1.cc:961 data/yacc.c:1346 data/yacc.c:1870
-#: data/yacc.c:1876
+#: data/glr.c:2088 data/glr.c:2166 data/glr.c:2204 data/glr.c:2475
+#: data/lalr1.cc:949 data/lalr1.cc:969 data/yacc.c:1350 data/yacc.c:1874
+#: data/yacc.c:1880
 msgid "syntax error"
 msgstr "syntaksivirhe"
 
-#: data/glr.c:2173 data/lalr1.cc:942 data/yacc.c:1347
+#: data/glr.c:2167 data/lalr1.cc:950 data/yacc.c:1351
 #, c-format
 msgid "syntax error, unexpected %s"
 msgstr "syntaksivirhe, odottamaton %s"
 
-#: data/glr.c:2174 data/lalr1.cc:943 data/yacc.c:1348
+#: data/glr.c:2168 data/lalr1.cc:951 data/yacc.c:1352
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s"
 msgstr "syntaksivirhe, odottamaton %s, odotetaan %s"
 
-#: data/glr.c:2175 data/lalr1.cc:944 data/yacc.c:1349
+#: data/glr.c:2169 data/lalr1.cc:952 data/yacc.c:1353
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s"
 msgstr "syntaksivirhe, odottamaton %s, odotetaan %s tai %s"
 
-#: data/glr.c:2176 data/lalr1.cc:945 data/yacc.c:1350
+#: data/glr.c:2170 data/lalr1.cc:953 data/yacc.c:1354
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s or %s"
 msgstr "syntaksivirhe, odottamaton %s, odotetaan %s tai %s tai %s"
 
-#: data/glr.c:2177 data/lalr1.cc:946 data/yacc.c:1351
+#: data/glr.c:2171 data/lalr1.cc:954 data/yacc.c:1355
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s or %s or %s"
 msgstr "syntaksivirhe, odottamaton %s, odotetaan %s tai %s tai %s tai %s"
 
-#: data/glr.c:2540 data/yacc.c:1434 data/yacc.c:1436 data/yacc.c:1632
-#: data/yacc.c:2025
+#: data/glr.c:2535 data/yacc.c:1440 data/yacc.c:1442 data/yacc.c:1636
+#: data/yacc.c:2029
 msgid "memory exhausted"
 msgstr "muisti loppui"
