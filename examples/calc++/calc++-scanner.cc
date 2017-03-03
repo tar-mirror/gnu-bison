@@ -514,7 +514,7 @@ int yy_flex_debug = 1;
 
 static yyconst flex_int16_t yy_rule_linenum[8] =
     {   0,
-       23,   24,   26,   27,   28,   36,   37
+       35,   36,   42,   43,   44,   52,   53
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -533,9 +533,21 @@ char *yytext;
 # include <string>
 # include "calc++-driver.hh"
 # include "calc++-parser.hh"
-#line 17 "./calc++-scanner.ll"
+
+/* Work around an incompatibility in flex (at least versions
+   2.5.31 through 2.5.33): it generates code that does
+   not conform to C89.  See Debian bug 333231
+   <http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=333231>.  */
+# undef yywrap
+# define yywrap() 1
+
+/* By default yylex returns int, we use token_type.
+   Unfortunately yyterminate by default returns 0, which is
+   not of token_type.  */
+#define yyterminate() return token::END
+#line 29 "./calc++-scanner.ll"
 # define YY_USER_ACTION  yylloc->columns (yyleng);
-#line 539 "calc++-scanner.cc"
+#line 551 "calc++-scanner.cc"
 
 #define INITIAL 0
 
@@ -740,12 +752,12 @@ YY_DECL
 	register int yy_act;
     
 /* %% [7.0] user's declarations go here */
-#line 19 "./calc++-scanner.ll"
+#line 31 "./calc++-scanner.ll"
 
 
   yylloc->step ();
 
-#line 749 "calc++-scanner.cc"
+#line 761 "calc++-scanner.cc"
 
 	if ( (yy_init) )
 		{
@@ -857,53 +869,57 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 23 "./calc++-scanner.ll"
+#line 35 "./calc++-scanner.ll"
 yylloc->step ();
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 24 "./calc++-scanner.ll"
+#line 36 "./calc++-scanner.ll"
 yylloc->lines (yyleng); yylloc->step ();
 	YY_BREAK
+
+  typedef yy::calcxx_parser::token token;
+
+/* Convert ints to the actual type of tokens.  */
 case 3:
 YY_RULE_SETUP
-#line 26 "./calc++-scanner.ll"
-return yytext[0];
+#line 42 "./calc++-scanner.ll"
+return yy::calcxx_parser::token_type (yytext[0]);
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 27 "./calc++-scanner.ll"
-return TOKEN_ASSIGN;
+#line 43 "./calc++-scanner.ll"
+return token::ASSIGN;
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 28 "./calc++-scanner.ll"
+#line 44 "./calc++-scanner.ll"
 {
   errno = 0;
   long n = strtol (yytext, NULL, 10);
   if (! (INT_MIN <= n && n <= INT_MAX && errno != ERANGE))
     driver.error (*yylloc, "integer is out of range");
   yylval->ival = n;
-  return TOKEN_NUMBER;
+  return token::NUMBER;
 }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 36 "./calc++-scanner.ll"
-yylval->sval = new std::string (yytext); return TOKEN_IDENTIFIER;
+#line 52 "./calc++-scanner.ll"
+yylval->sval = new std::string (yytext); return token::IDENTIFIER;
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 37 "./calc++-scanner.ll"
+#line 53 "./calc++-scanner.ll"
 driver.error (*yylloc, "invalid character");
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 38 "./calc++-scanner.ll"
+#line 54 "./calc++-scanner.ll"
 ECHO;
 	YY_BREAK
-#line 907 "calc++-scanner.cc"
+#line 923 "calc++-scanner.cc"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1962,7 +1978,7 @@ void yyfree (void * ptr )
 #undef YY_DECL_IS_OURS
 #undef YY_DECL
 #endif
-#line 38 "./calc++-scanner.ll"
+#line 54 "./calc++-scanner.ll"
 
 
 

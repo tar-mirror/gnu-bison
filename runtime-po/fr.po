@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GNU bison 2.0a\n"
+"Project-Id-Version: GNU bison-runtime 2.1\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2005-09-16 15:58-0700\n"
-"PO-Revision-Date: 2005-06-12 08:00-0500\n"
+"POT-Creation-Date: 2006-05-19 14:49-0700\n"
+"PO-Revision-Date: 2005-09-21 08:00-0500\n"
 "Last-Translator: Michel Robitaille <robitail@IRO.UMontreal.CA>\n"
 "Language-Team: French <traduc@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,44 +16,44 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: data/glr.c:847 data/yacc.c:533
+#: data/glr.c:916 data/yacc.c:581
 msgid "syntax error: cannot back up"
-msgstr "ereur de syntaxe: ne peut reculer"
+msgstr "erreur de syntaxe: ne peut reculer"
 
-#: data/glr.c:1636
+#: data/glr.c:1801
 msgid "syntax is ambiguous"
-msgstr ""
+msgstr "syntaxe ambiguë"
 
-#: data/glr.c:1930 data/glr.c:1936 data/glr.c:2180 data/lalr1.cc:867
-#: data/yacc.c:1258 data/yacc.c:1264
+#: data/glr.c:2162 data/glr.c:2168 data/glr.c:2422 data/lalr1.cc:878
+#: data/yacc.c:1304 data/yacc.c:1332
 msgid "syntax error"
 msgstr "erreur de syntaxe"
 
-#: data/glr.c:2214 data/yacc.c:967 data/yacc.c:1379
+#: data/glr.c:2482 data/yacc.c:1114 data/yacc.c:1456
 msgid "memory exhausted"
 msgstr "mémoire épuisée"
 
-#: data/yacc.c:1179
+#: data/yacc.c:866
 #, c-format
 msgid "syntax error, unexpected %s"
 msgstr "erreur de syntaxe, %s inattendu"
 
-#: data/yacc.c:1180
+#: data/yacc.c:867
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s"
 msgstr "erreur de syntaxe, %s inattendu, attendait %s"
 
-#: data/yacc.c:1181
+#: data/yacc.c:868
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s"
 msgstr "erreur de syntaxe, %s inattendu, attendait %s ou %s"
 
-#: data/yacc.c:1182
+#: data/yacc.c:869
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s or %s"
 msgstr "erreur de syntaxe, %s inattendu, attendait %s ou %s ou %s"
 
-#: data/yacc.c:1183
+#: data/yacc.c:870
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s or %s or %s"
 msgstr "erreur de syntaxe, %s inattendu, attendait %s ou %s ou %s ou %s"

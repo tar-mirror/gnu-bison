@@ -1,5 +1,5 @@
 # Executing Actions.                               -*- Autotest -*-
-# Copyright (C) 2001, 2002, 2003, 2004, 2005 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,13 +30,13 @@ AT_SETUP([Mid-rule actions])
 # action.
 
 AT_DATA_GRAMMAR([[input.y]],
-[[%{
+[[%error-verbose
+%debug
+%{
 # include <stdio.h>
 # include <stdlib.h>
   static void yyerror (const char *msg);
   static int yylex (void);
-# define YYDEBUG         1
-# define YYERROR_VERBOSE 1
 %}
 %%
 exp:     { putchar ('0'); }
@@ -91,13 +91,14 @@ AT_CLEANUP
 AT_SETUP([Exotic Dollars])
 
 AT_DATA_GRAMMAR([[input.y]],
-[[%{
+[[%error-verbose
+%debug
+%{
 # include <stdio.h>
 # include <stdlib.h>
   static void yyerror (const char *msg);
   static int yylex (void);
-# define YYDEBUG         1
-# define YYERROR_VERBOSE 1
+# define USE(Var)
 %}
 
 %union
@@ -112,6 +113,7 @@ AT_DATA_GRAMMAR([[input.y]],
 exp: a_1 a_2 { $<val>$ = 3; } { $<val>$ = $<val>3 + 1; } a_5
      sum_of_the_five_previous_values
     {
+       USE (($1, $2, $<foo>3, $<foo>4, $5));
        printf ("%d\n", $6);
     }
 ;
@@ -145,7 +147,7 @@ main (void)
 }
 ]])
 
-AT_CHECK([bison -d -v -o input.c input.y])
+AT_CHECK([bison -d -v -o input.c input.y], 0)
 AT_COMPILE([input])
 AT_PARSER_CHECK([./input], 0,
 [[15
@@ -187,6 +189,7 @@ m4_ifval([$6], [%union
 {
   int ival;
 }])
+AT_LALR1_CC_IF([%define "global_tokens_and_yystype"])
 [
 %{
 ]AT_LALR1_CC_IF([typedef yy::location YYLTYPE;
@@ -286,7 +289,7 @@ thing:
 ;
 %%
 /* Alias to ARGV[1]. */
-const char *yysource = 0;
+const char *source = 0;
 
 static int
 yylex (]AT_LEX_FORMALS[)
@@ -303,12 +306,12 @@ yylex (]AT_LEX_FORMALS[)
   AT_LOC.last_line = AT_LOC.last_column = AT_LOC.first_line + 9;
 ])[
 
-  if (yysource[c])
-    printf ("sending: '%c'", yysource[c]);
+  if (source[c])
+    printf ("sending: '%c'", source[c]);
   else
     printf ("sending: EOF");
   printf (" (%d@%d-%d)\n", c, RANGE (]AT_LOC[));
-  return yysource[c];
+  return source[c];
 }
 
 ]AT_LALR1_CC_IF(
@@ -340,7 +343,7 @@ main (int argc, const char *argv[])
   int status;
   yydebug = !!getenv ("YYDEBUG");
   assert (argc == 2);
-  yysource = argv[1];
+  source = argv[1];
   status = yyparse ();
   switch (status)
     {

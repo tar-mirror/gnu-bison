@@ -1,9 +1,6 @@
 # This file is generated automatically by "bootstrap".
 AC_DEFUN([GNULIB_AUTOCONF_SNIPPET],[
 
-gl_FUNC_ALLOCA
-
-
 gl_DIRNAME
 
 gl_ERROR
@@ -16,6 +13,7 @@ dnl gl_USE_SYSTEM_EXTENSIONS must be added quite early to configure.ac.
 gl_GETOPT
 
 AM_GNU_GETTEXT([external])
+AM_GNU_GETTEXT_VERSION([0.14.5])
 
 
 gl_HARD_LOCALE
@@ -41,11 +39,24 @@ gl_FUNC_STPCPY
 
 gl_FUNC_STRDUP
 
+gl_FUNC_STRERROR
+
 gl_FUNC_STRNDUP
 
 gl_FUNC_STRNLEN
 
+gl_FUNC_STRTOL
+
+gl_FUNC_STRTOUL
+
+gl_FUNC_STRVERSCMP
+
+gl_HEADER_UNISTD
+
 gl_UNISTD_SAFER
+
+gl_FUNC_GLIBC_UNLOCKED_IO
+
 
 gl_XALLOC
 
