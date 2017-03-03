@@ -1,5 +1,7 @@
 /* Compute look-ahead criteria for bison,
-   Copyright (C) 1984, 1986, 1989, 2000, 2002 Free Software Foundation, Inc.
+
+   Copyright (C) 1984, 1986, 1989, 2000, 2002, 2004 Free Software
+   Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -31,12 +33,12 @@
 # include "state.h"
 
 /* Compute how to make the finite state machine deterministic; find
-   which rules need lookahead in each state, and which lookahead
+   which rules need look-ahead in each state, and which look-ahead
    tokens they accept.  */
 
 void lalr (void);
 
-/* Release the information related to lookaheads.  Can be performed
+/* Release the information related to look-ahead tokens.  Can be performed
    once the action tables are computed.  */
 
 void lalr_free (void);
@@ -54,8 +56,8 @@ void lalr_free (void);
    together and GOTO_MAP[I - NTOKENS] is the index in FROM_STATE and
    TO_STATE of the first of them.  */
 
-typedef short goto_number;
-# define GOTO_NUMBER_MAXIMUM SHRT_MAX
+typedef size_t goto_number;
+# define GOTO_NUMBER_MAXIMUM ((goto_number) -1)
 
 extern goto_number *goto_map;
 extern state_number *from_state;

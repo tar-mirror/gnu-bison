@@ -1,5 +1,5 @@
 # Bison Regressions.                               -*- Autotest -*-
-# Copyright (C) 2001, 2002 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -298,7 +298,6 @@ input.y:5.1-17: invalid directive: `%a-does-not-exist'
 input.y:6.1: invalid character: `%'
 input.y:6.2: invalid character: `-'
 input.y:7.1-8.0: missing `%}' at end of file
-input.y:7.1-8.0: syntax error, unexpected "%{...%}"
 ]])
 
 AT_CLEANUP
@@ -536,7 +535,7 @@ AT_CLEANUP
 #
 # It used to be wrong on yydefact only:
 #
-# static const short yydefact[] =
+# static const short int yydefact[] =
 #  {
 # -       2,     0,     1,     0,     0,     2,     3,     2,     5,     4,
 # +       2,     0,     1,     0,     0,     0,     3,     2,     5,     4,
@@ -614,7 +613,7 @@ static const char *const yytname[] =
   "$end", "error", "$undefined", "\"if\"", "\"const\"", "\"then\"",
   "\"else\"", "$accept", "statement", "struct_stat", "if", "else", 0
 };
-static const unsigned short yytoknum[] =
+static const unsigned short int yytoknum[] =
 {
        0,   256,   257,   258,   259,   260,   261
 };
@@ -660,3 +659,134 @@ static const unsigned char yystos[] =
 ]])
 
 AT_CLEANUP
+
+
+## ------------------------- ##
+## yycheck Bound Violation.  ##
+## ------------------------- ##
+
+
+# _AT_DATA_DANCER_Y(BISON-OPTIONS)
+# --------------------------------
+# The following grammar, taken from Andrew Suffield's GPL'd implementation
+# of DGMTP, the Dancer Generic Message Transport Protocol, used to violate
+# yycheck's bounds where issuing a verbose error message.  Keep this test
+# so that possible bound checking compilers could check all the skeletons.
+m4_define([_AT_DATA_DANCER_Y],
+[AT_DATA_GRAMMAR([dancer.y],
+[%{
+static int yylex (AT_LALR1_CC_IF([int *], [void]));
+AT_LALR1_CC_IF([],
+[#include <stdio.h>
+static void yyerror (const char *);])
+%}
+$1
+%token ARROW INVALID NUMBER STRING DATA
+%defines
+%verbose
+%error-verbose
+/* Grammar follows */
+%%
+line: header body
+   ;
+
+header: '<' from ARROW to '>' type ':'
+   | '<' ARROW to '>' type ':'
+   | ARROW to type ':'
+   | type ':'
+   | '<' '>'
+   ;
+
+from: DATA
+   | STRING
+   | INVALID
+   ;
+
+to: DATA
+   | STRING
+   | INVALID
+   ;
+
+type: DATA
+   | STRING
+   | INVALID
+   ;
+
+body: /* empty */
+   | body member
+   ;
+
+member: STRING
+   | DATA
+   | '+' NUMBER
+   | '-' NUMBER
+   | NUMBER
+   | INVALID
+   ;
+%%
+AT_LALR1_CC_IF(
+[/* A C++ error reporting function. */
+void
+yy::parser::error (const location&, const std::string& m)
+{
+  std::cerr << m << std::endl;
+}
+
+int
+yyparse ()
+{
+  yy::parser parser;
+  parser.set_debug_level (!!YYDEBUG);
+  return parser.parse ();
+}
+],
+[static void
+yyerror (const char *s)
+{
+  fprintf (stderr, "%s\n", s);
+}])
+
+static int
+yylex (AT_LALR1_CC_IF([int *lval], [void]))
+[{
+  static int toknum = 0;
+  int tokens[] =
+    {
+      ':', -1
+    };
+  ]AT_LALR1_CC_IF([*lval = 0; /* Pacify GCC.  */])[
+  return tokens[toknum++];
+}]
+
+int
+main (void)
+{
+  return yyparse ();
+}
+])
+])# _AT_DATA_DANCER_Y
+
+
+# AT_CHECK_DANCER(BISON-OPTIONS)
+# ------------------------------
+# Generate the grammar, compile it, run it.
+m4_define([AT_CHECK_DANCER],
+[AT_SETUP([Dancer $1])
+AT_BISON_OPTION_PUSHDEFS([$1])
+_AT_DATA_DANCER_Y([$1])
+AT_CHECK([bison -o dancer.c dancer.y])
+AT_LALR1_CC_IF(
+  [AT_CHECK([bison -o dancer.cc dancer.y])
+   AT_COMPILE_CXX([dancer])],
+  [AT_CHECK([bison -o dancer.c dancer.y])
+   AT_COMPILE([dancer])])
+AT_PARSER_CHECK([./dancer], 1, [],
+[syntax error, unexpected ':'
+])
+AT_BISON_OPTION_POPDEFS
+AT_CLEANUP
+])
+
+AT_CHECK_DANCER()
+AT_CHECK_DANCER([%glr-parser])
+AT_CHECK_DANCER([%skeleton "lalr1.cc"])

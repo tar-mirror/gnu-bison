@@ -1,4 +1,4 @@
-## Copyright (C) 2001, 2002 Free Software Foundation, Inc.
+## Copyright (C) 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -20,16 +20,18 @@ DEFS = @DEFS@ \
   -DLOCALEDIR=\"$(datadir)/locale\"
 
 AM_CFLAGS = $(WARNING_CFLAGS) $(WERROR_CFLAGS)
+AM_CPPFLAGS = -I$(top_srcdir)/lib -I../lib
 AM_YFLAGS = "-dv"
-
-# config.h is in build/.
-INCLUDES = -I$(top_builddir)      \
-           -I$(top_srcdir)/lib
 
 LDADD = ../lib/libbison.a $(LIBINTL)
 
+# Use our own Bison to build the parser.  Of course, you ought to
+# keep a sane version of Bison nearby...
+YACC = ../tests/bison -y
+
 bin_PROGRAMS = bison
-bin_SCRIPTS = yacc
+bin_SCRIPTS = $(YACC_SCRIPT)
+EXTRA_SCRIPTS = yacc
 
 bison_SOURCES = 				  \
 	LR0.c LR0.h				  \

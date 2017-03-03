@@ -1,6 +1,6 @@
 /* Muscle table manager for Bison.
 
-   Copyright (C) 2001, 2002 Free Software Foundation, Inc.
+   Copyright (C) 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -50,8 +50,8 @@ hash_compare_muscles (void const *x, void const *y)
   return strcmp (m1->key, m2->key) == 0;
 }
 
-static unsigned int
-hash_muscle (const void *x, unsigned int tablesize)
+static size_t
+hash_muscle (const void *x, size_t tablesize)
 {
   muscle_entry const *m = x;
   return hash_string (m->key, tablesize);
@@ -99,7 +99,7 @@ void
 muscle_insert (const char *key, char *value)
 {
   muscle_entry probe;
-  muscle_entry *entry = NULL;
+  muscle_entry *entry;
 
   probe.key = key;
   entry = hash_lookup (muscle_table, &probe);
@@ -107,7 +107,7 @@ muscle_insert (const char *key, char *value)
   if (!entry)
     {
       /* First insertion in the hash. */
-      MALLOC (entry, 1);
+      entry = xmalloc (sizeof *entry);
       entry->key = key;
       hash_insert (muscle_table, entry);
     }
@@ -133,7 +133,7 @@ muscle_grow (const char *key, const char *val, const char *separator)
   if (!entry)
     {
       /* First insertion in the hash. */
-      MALLOC (entry, 1);
+      entry = xmalloc (sizeof *entry);
       entry->key = key;
       hash_insert (muscle_table, entry);
       entry->value = xstrdup (val);
@@ -151,6 +151,26 @@ muscle_grow (const char *key, const char *val, const char *separator)
       entry->value = xstrdup (new_val);
       obstack_free (&muscle_obstack, new_val);
     }
+}
+
+
+/*------------------------------------------------------------------.
+| Append VALUE to the current value of KEY, using muscle_grow.  But |
+| in addition, issue a synchronization line for the location LOC.   |
+`------------------------------------------------------------------*/
+
+void
+muscle_code_grow (const char *key, const char *val, location loc)
+{
+  char *extension = NULL;
+  obstack_fgrow1 (&muscle_obstack, "]b4_syncline([[%d]], [[", loc.start.line);
+  MUSCLE_OBSTACK_SGROW (&muscle_obstack,
+			quotearg_style (c_quoting_style, loc.start.file));
+  obstack_sgrow (&muscle_obstack, "]])[\n");
+  obstack_sgrow (&muscle_obstack, val);
+  obstack_1grow (&muscle_obstack, 0);
+  extension = obstack_finish (&muscle_obstack);
+  muscle_grow (key, extension, "");
 }
 
 

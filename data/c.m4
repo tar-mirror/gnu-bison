@@ -1,7 +1,7 @@
 m4_divert(-1)                                               -*- Autoconf -*-
 
 # C M4 Macros for Bison.
-# Copyright (C) 2002 Free Software Foundation, Inc.
+# Copyright (C) 2002, 2004 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -114,8 +114,8 @@ m4_define([b4_int_type],
 [m4_if(b4_ints_in($@,      [0],   [255]), [1], [unsigned char],
        b4_ints_in($@,   [-128],   [127]), [1], [signed char],
 
-       b4_ints_in($@,      [0], [65535]), [1], [unsigned short],
-       b4_ints_in($@, [-32768], [32767]), [1], [short],
+       b4_ints_in($@,      [0], [65535]), [1], [unsigned short int],
+       b4_ints_in($@, [-32768], [32767]), [1], [short int],
 
        m4_eval([0 <= $1]),                [1], [unsigned int],
 
@@ -327,7 +327,8 @@ m4_define([b4_syncline],
 #                   SYMBOL-ACTION, SYMBOL-TYPENAME)
 # -------------------------------------------------
 m4_define([b4_symbol_actions],
-[m4_pushdef([b4_dollar_dollar], [yyvaluep->$6])dnl
+[m4_pushdef([b4_dollar_dollar],
+   [m4_ifval([$6], [(yyvaluep->$6)], [(*yyvaluep)])])dnl
 m4_pushdef([b4_at_dollar], [(*yylocationp)])dnl
       case $4: /* $3 */
 b4_syncline([$2], [$1])
@@ -351,6 +352,7 @@ m4_define([b4_yydestruct_generate],
 
 ]$1([yydestruct],
     [static void],
+    [[const char *yymsg],    [yymsg]],
     [[int yytype],           [yytype]],
     [[YYSTYPE *yyvaluep],    [yyvaluep]]b4_location_if([,
     [[YYLTYPE *yylocationp], [yylocationp]]]))[
@@ -359,6 +361,10 @@ m4_define([b4_yydestruct_generate],
   (void) yyvaluep;
 ]b4_location_if([  (void) yylocationp;
 ])[
+  if (!yymsg)
+    yymsg = "Deleting";
+  YY_SYMBOL_PRINT (yymsg, yytype, yyvaluep, yylocationp);
+
   switch (yytype)
     {
 ]m4_map([b4_symbol_actions], m4_defn([b4_symbol_destructors]))[
@@ -390,23 +396,26 @@ m4_define([b4_yysymprint_generate],
   (void) yyvaluep;
 b4_location_if([  (void) yylocationp;
 ])dnl
-
+[
   if (yytype < YYNTOKENS)
-    {
-      YYFPRINTF (yyoutput, "token %s (", yytname[[yytype]]);
-# ifdef YYPRINT
-      YYPRINT (yyoutput, yytoknum[[yytype]], *yyvaluep);
-# endif
-    }
+    YYFPRINTF (yyoutput, "token %s (", yytname[yytype]);
   else
-    YYFPRINTF (yyoutput, "nterm %s (", yytname[[yytype]]);
+    YYFPRINTF (yyoutput, "nterm %s (", yytname[yytype]);
 
+]b4_location_if([  YY_LOCATION_PRINT (yyoutput, *yylocationp);
+  fprintf (yyoutput, ": ");
+])dnl
+[
+# ifdef YYPRINT
+  if (yytype < YYNTOKENS)
+    YYPRINT (yyoutput, yytoknum[yytype], *yyvaluep);
+# endif
   switch (yytype)
     {
-m4_map([b4_symbol_actions], m4_defn([b4_symbol_printers]))dnl
-      default:
+]m4_map([b4_symbol_actions], m4_defn([b4_symbol_printers]))dnl
+[      default:
         break;
     }
   YYFPRINTF (yyoutput, ")");
 }
-])
+]])

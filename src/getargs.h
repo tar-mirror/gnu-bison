@@ -1,5 +1,5 @@
 /* Parse command line arguments for bison.
-   Copyright (C) 1984, 1986, 1989, 1992, 2000, 2001, 2002
+   Copyright (C) 1984, 1986, 1989, 1992, 2000, 2001, 2002, 2003, 2004
    Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
@@ -26,14 +26,31 @@
 extern const char *skeleton;		/* for -S */
 extern const char *include;		/* for -I */
 
-extern int debug_flag; 		/* for -t */
-extern int defines_flag;    	/* for -d */
-extern int locations_flag;
-extern int no_lines_flag;    	/* for -l */
-extern int no_parser_flag;	/* for -n */
-extern int token_table_flag;   	/* for -k */
-extern int graph_flag;		/* for -g */
-extern int yacc_flag;  		/* for -y */
+extern bool debug_flag;			/* for -t */
+extern bool defines_flag;		/* for -d */
+extern bool locations_flag;
+extern bool no_lines_flag;		/* for -l */
+extern bool no_parser_flag;		/* for -n */
+extern bool token_table_flag;		/* for -k */
+extern bool graph_flag;			/* for -g */
+extern bool yacc_flag;			/* for -y */
+
+/* GLR_PARSER is true if the input file says to use the GLR
+   (Generalized LR) parser, and to output some additional information
+   used by the GLR algorithm.  */
+
+extern bool glr_parser;
+
+/* PURE_PARSER is true if should generate a parser that is all pure
+   and reentrant.  */
+
+extern bool pure_parser;
+
+/* NONDETERMINISTIC_PARSER is true iff conflicts are accepted.  This
+   is used by the GLR parser, and might be used in BackTracking
+   parsers too.  */
+
+extern bool nondeterministic_parser;
 
 /* --trace.  */
 enum trace
@@ -59,7 +76,7 @@ enum report
     report_none             = 0,
     report_states           = 1 << 0,
     report_itemsets         = 1 << 1,
-    report_lookaheads       = 1 << 2,
+    report_look_ahead_tokens= 1 << 2,
     report_solved_conflicts = 1 << 3,
     report_all              = ~0
   };

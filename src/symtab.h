@@ -1,6 +1,6 @@
 /* Definitions for symtab.c and callers, part of Bison.
 
-   Copyright (C) 1984, 1989, 1992, 2000, 2001, 2002
+   Copyright (C) 1984, 1989, 1992, 2000, 2001, 2002, 2004
    Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
@@ -41,11 +41,14 @@ typedef enum
 
 
 /* Internal token numbers. */
-typedef short symbol_number;
-#define SYMBOL_NUMBER_MAXIMUM SHRT_MAX
+typedef int symbol_number;
+#define SYMBOL_NUMBER_MAXIMUM INT_MAX
 
 
 typedef struct symbol symbol;
+
+/* When extending this structure, be sure to complete
+   symbol_check_alias_consistency.  */
 struct symbol
 {
   /* The key, name of the symbol.  */
@@ -55,13 +58,17 @@ struct symbol
 
   /* Its %type and associated printer and destructor.  */
   uniqstr type_name;
+  location type_location;
+
   char *destructor;
   location destructor_location;
+
   char *printer;
   location printer_location;
 
   symbol_number number;
-  short prec;
+  location prec_location;
+  int prec;
   assoc assoc;
   int user_token_number;
 

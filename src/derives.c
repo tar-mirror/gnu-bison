@@ -1,6 +1,6 @@
 /* Match rules with nonterminals for bison,
 
-   Copyright (C) 1984, 1989, 2000, 2001, 2002 Free Software
+   Copyright (C) 1984, 1989, 2000, 2001, 2002, 2003 Free Software
    Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
@@ -37,7 +37,7 @@ typedef struct rule_list
   rule *value;
 } rule_list;
 
-rule ***derives = NULL;
+rule ***derives;
 
 static void
 print_derives (void)
@@ -65,17 +65,17 @@ void
 derives_compute (void)
 {
   symbol_number i;
-  int r;
+  rule_number r;
   rule **q;
 
   /* DSET[NTERM - NTOKENS] -- A linked list of the numbers of the rules
      whose LHS is NTERM.  */
-  rule_list **dset = CALLOC (dset, nvars);
+  rule_list **dset = xcalloc (nvars, sizeof *dset);
 
   /* DELTS[RULE] -- There are NRULES rule number to attach to nterms.
      Instead of performing NRULES allocations for each, have an array
      indexed by rule numbers.  */
-  rule_list *delts = CALLOC (delts, nrules);
+  rule_list *delts = xnmalloc (nrules, sizeof *delts);
 
   for (r = nrules - 1; r >= 0; --r)
     {
@@ -90,8 +90,8 @@ derives_compute (void)
   /* DSET contains what we need under the form of a linked list.  Make
      it a single array.  */
 
-  CALLOC (derives, nvars);
-  CALLOC (q, nvars + nrules);
+  derives = xnmalloc (nvars, sizeof *derives);
+  q = xnmalloc (nvars + nrules, sizeof *q);
 
   for (i = ntokens; i < nsyms; i++)
     {
@@ -116,6 +116,6 @@ derives_compute (void)
 void
 derives_free (void)
 {
-  XFREE (derives[0]);
-  XFREE (derives);
+  free (derives[0]);
+  free (derives);
 }

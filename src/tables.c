@@ -1,6 +1,6 @@
 /* Output the generated parsing program for Bison.
 
-   Copyright (C) 1984, 1986, 1989, 1992, 2000, 2001, 2002
+   Copyright (C) 1984, 1986, 1989, 1992, 2000, 2001, 2002, 2003, 2004
    Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
@@ -42,7 +42,7 @@
 
    Of course vector_number_t ought to be wide enough to contain
    state_number and symbol_number.  */
-typedef short vector_number;
+typedef int vector_number;
 
 static inline vector_number
 state_number_to_vector_number (state_number s)
@@ -51,9 +51,9 @@ state_number_to_vector_number (state_number s)
 }
 
 static inline vector_number
-symbol_number_to_vector_number (symbol_number s)
+symbol_number_to_vector_number (symbol_number sym)
 {
-  return state_number_as_int (nstates) + s - ntokens;
+  return state_number_as_int (nstates) + sym - ntokens;
 }
 
 int nvectors;
@@ -81,11 +81,11 @@ int nvectors;
 #define BASE_MAXIMUM INT_MAX
 #define BASE_MINIMUM INT_MIN
 
-static base_number **froms = NULL;
-static base_number **tos = NULL;
-static unsigned int **conflict_tos = NULL;
-static short *tally = NULL;
-static base_number *width = NULL;
+static base_number **froms;
+static base_number **tos;
+static unsigned int **conflict_tos;
+static int *tally;
+static base_number *width;
 
 
 /* For a given state, N = ACTROW[SYMBOL]:
@@ -94,15 +94,15 @@ static base_number *width = NULL;
    If N = MIN, stands for `raise a syntax error'.
    If N > 0, stands for `shift SYMBOL and go to n'.
    If N < 0, stands for `reduce -N'.  */
-typedef short action_number;
-#define ACTION_NUMBER_MINIMUM SHRT_MIN
+typedef int action_number;
+#define ACTION_NUMBER_MINIMUM INT_MIN
 
-static action_number *actrow = NULL;
+static action_number *actrow;
 
 /* FROMS and TOS are reordered to be compressed.  ORDER[VECTOR] is the
    new vector number of VECTOR.  We skip `empty' vectors (i.e.,
    TALLY[VECTOR] = 0), and call these `entries'.  */
-static vector_number *order = NULL;
+static vector_number *order;
 static int nentries;
 
 base_number *base = NULL;
@@ -112,9 +112,9 @@ base_number *base = NULL;
 base_number base_ninf = 0;
 static base_number *pos = NULL;
 
-static unsigned int *conflrow = NULL;
-unsigned int *conflict_table = NULL;
-unsigned int *conflict_list = NULL;
+static unsigned int *conflrow;
+unsigned int *conflict_table;
+unsigned int *conflict_list;
 int conflict_list_cnt;
 static int conflict_list_free;
 
@@ -122,8 +122,8 @@ static int conflict_list_free;
    with more or less the original hard-coded value (which was
    SHRT_MAX).  */
 static int table_size = 32768;
-base_number *table = NULL;
-base_number *check = NULL;
+base_number *table;
+base_number *check;
 /* The value used in TABLE to denote explicit syntax errors
    (%nonassoc), a negative infinite.  First defaults to ACTION_NUMBER_MININUM,
    but in order to keep small tables, renumbered as TABLE_ERROR, which
@@ -153,13 +153,15 @@ table_grow (int desired)
     fprintf (stderr, "growing table and check from: %d to %d\n",
 	     old_size, table_size);
 
-  REALLOC (table, table_size);
-  REALLOC (check, table_size);
-  REALLOC (conflict_table, table_size);
+  table = xnrealloc (table, table_size, sizeof *table);
+  conflict_table = xnrealloc (conflict_table, table_size,
+			      sizeof *conflict_table);
+  check = xnrealloc (check, table_size, sizeof *check);
 
   for (/* Nothing. */; old_size < table_size; ++old_size)
     {
       table[old_size] = 0;
+      conflict_table[old_size] = 0;
       check[old_size] = -1;
     }
 }
@@ -183,7 +185,7 @@ conflict_row (state *s)
   int i, j;
   reductions *reds = s->reductions;
 
-  if (! glr_parser)
+  if (!nondeterministic_parser)
     return;
 
   for (j = 0; j < ntokens; j += 1)
@@ -194,7 +196,7 @@ conflict_row (state *s)
 	/* Find all reductions for token J, and record all that do not
 	   match ACTROW[J].  */
 	for (i = 0; i < reds->num; i += 1)
-	  if (bitset_test (reds->lookaheads[i], j)
+	  if (bitset_test (reds->look_ahead_tokens[i], j)
 	      && (actrow[j]
 		  != rule_number_as_item_number (reds->rules[i]->number)))
 	    {
@@ -208,6 +210,7 @@ conflict_row (state *s)
 	/* Leave a 0 at the end.  */
 	if (conflict_list_free <= 0)
 	  abort ();
+	conflict_list[conflict_list_cnt] = 0;
 	conflict_list_cnt += 1;
 	conflict_list_free -= 1;
       }
@@ -215,8 +218,8 @@ conflict_row (state *s)
 
 
 /*------------------------------------------------------------------.
-| Decide what to do for each type of token if seen as the lookahead |
-| token in specified state.  The value returned is used as the      |
+| Decide what to do for each type of token if seen as the           |
+| look-ahead in specified state.  The value returned is used as the |
 | default action (yydefact) for the state.  In addition, ACTROW is  |
 | filled with what to do for each kind of token, index by symbol    |
 | number, with zero meaning do the default action.  The value       |
@@ -224,7 +227,7 @@ conflict_row (state *s)
 | situation is an error.  The parser recognizes this value	    |
 | specially.							    |
 |                                                                   |
-| This is where conflicts are resolved.  The loop over lookahead    |
+| This is where conflicts are resolved.  The loop over look-ahead   |
 | rules considered lower-numbered rules last, and the last rule     |
 | considered that likes a token gets to handle it.                  |
 |                                                                   |
@@ -243,28 +246,31 @@ action_row (state *s)
   transitions *trans = s->transitions;
   errs *errp = s->errs;
   /* Set to nonzero to inhibit having any default reduction.  */
-  int nodefault = 0;
-  int conflicted = 0;
+  bool nodefault = false;
+  bool conflicted = false;
 
   for (i = 0; i < ntokens; i++)
     actrow[i] = conflrow[i] = 0;
 
-  if (reds->lookaheads)
+  if (reds->look_ahead_tokens)
     {
       int j;
       bitset_iterator biter;
       /* loop over all the rules available here which require
-	 lookahead (in reverse order to give precedence to the first
+	 look-ahead (in reverse order to give precedence to the first
 	 rule) */
       for (i = reds->num - 1; i >= 0; --i)
 	/* and find each token which the rule finds acceptable
 	   to come next */
-	BITSET_FOR_EACH (biter, reds->lookaheads[i], j, 0)
+	BITSET_FOR_EACH (biter, reds->look_ahead_tokens[i], j, 0)
 	{
 	  /* and record this rule as the rule to use if that
 	     token follows.  */
 	  if (actrow[j] != 0)
-	    conflicted = conflrow[j] = 1;
+	    {
+	      conflicted = true;
+	      conflrow[j] = 1;
+	    }
 	  actrow[j] = rule_number_as_item_number (reds->rules[i]->number);
 	}
     }
@@ -278,13 +284,16 @@ action_row (state *s)
       state *shift_state = trans->states[i];
 
       if (actrow[sym] != 0)
-	conflicted = conflrow[sym] = 1;
+	{
+	  conflicted = true;
+	  conflrow[sym] = 1;
+	}
       actrow[sym] = state_number_as_int (shift_state->number);
 
       /* Do not use any default reduction if there is a shift for
 	 error */
       if (sym == errtoken->number)
-	nodefault = 1;
+	nodefault = true;
     }
 
   /* See which tokens are an explicit error in this state (due to
@@ -334,7 +343,7 @@ action_row (state *s)
 	      int j;
 	      for (j = 0; j < ntokens; j++)
 		if (actrow[j] == rule_number_as_item_number (default_rule->number)
-		    && ! (glr_parser && conflrow[j]))
+		    && ! (nondeterministic_parser && conflrow[j]))
 		  actrow[j] = 0;
 	    }
 	}
@@ -367,7 +376,7 @@ save_row (state_number s)
   base_number *sp;
   base_number *sp1;
   base_number *sp2;
-  unsigned int *sp3 IF_LINT (= NULL);
+  unsigned int *sp3;
 
   /* Number of non default actions in S.  */
   count = 0;
@@ -379,9 +388,10 @@ save_row (state_number s)
     return;
 
   /* Allocate non defaulted actions.  */
-  froms[s] = sp = CALLOC (sp1, count);
-  tos[s] = CALLOC (sp2, count);
-  conflict_tos[s] = glr_parser ? CALLOC (sp3, count) : NULL;
+  froms[s] = sp = sp1 = xnmalloc (count, sizeof *sp1);
+  tos[s] = sp2 = xnmalloc (count, sizeof *sp2);
+  conflict_tos[s] = sp3 =
+    nondeterministic_parser ? xnmalloc (count, sizeof *sp3) : NULL;
 
   /* Store non defaulted actions.  */
   for (i = 0; i < ntokens; i++)
@@ -389,7 +399,7 @@ save_row (state_number s)
       {
 	*sp1++ = i;
 	*sp2++ = actrow[i];
-	if (glr_parser)
+	if (nondeterministic_parser)
 	  *sp3++ = conflrow[i];
       }
 
@@ -400,7 +410,7 @@ save_row (state_number s)
 
 /*------------------------------------------------------------------.
 | Figure out the actions for the specified state, indexed by        |
-| lookahead token type.                                             |
+| look-ahead token type.                                            |
 |                                                                   |
 | The YYDEFACT table is output now.  The detailed info is saved for |
 | putting into YYTABLE later.                                       |
@@ -413,19 +423,19 @@ token_actions (void)
   symbol_number j;
   rule_number r;
 
-  int nconflict = glr_parser ? conflicts_total_count () : 0;
+  int nconflict = nondeterministic_parser ? conflicts_total_count () : 0;
 
-  CALLOC (yydefact, nstates);
+  yydefact = xnmalloc (nstates, sizeof *yydefact);
 
-  CALLOC (actrow, ntokens);
-  CALLOC (conflrow, ntokens);
+  actrow = xnmalloc (ntokens, sizeof *actrow);
+  conflrow = xnmalloc (ntokens, sizeof *conflrow);
 
-  CALLOC (conflict_list, 1 + 2 * nconflict);
+  conflict_list = xnmalloc (1 + 2 * nconflict, sizeof *conflict_list);
   conflict_list_free = 2 * nconflict;
   conflict_list_cnt = 1;
 
   /* Find the rules which are reduced.  */
-  if (!glr_parser)
+  if (!nondeterministic_parser)
     for (r = 0; r < nrules; ++r)
       rules[r].useful = false;
 
@@ -438,7 +448,7 @@ token_actions (void)
       /* Now that the parser was computed, we can find which rules are
 	 really reduced, and which are not because of SR or RR
 	 conflicts.  */
-      if (!glr_parser)
+      if (!nondeterministic_parser)
 	{
 	  for (j = 0; j < ntokens; ++j)
 	    if (actrow[j] < 0 && actrow[j] != ACTION_NUMBER_MINIMUM)
@@ -465,7 +475,7 @@ token_actions (void)
 static void
 save_column (symbol_number sym, state_number default_state)
 {
-  int i;
+  goto_number i;
   base_number *sp;
   base_number *sp1;
   base_number *sp2;
@@ -485,8 +495,8 @@ save_column (symbol_number sym, state_number default_state)
     return;
 
   /* Allocate room for non defaulted gotos.  */
-  froms[symno] = sp = CALLOC (sp1, count);
-  tos[symno] = CALLOC (sp2, count);
+  froms[symno] = sp = sp1 = xnmalloc (count, sizeof *sp1);
+  tos[symno] = sp2 = xnmalloc (count, sizeof *sp2);
 
   /* Store the state numbers of the non defaulted gotos.  */
   for (i = begin; i < end; i++)
@@ -506,14 +516,14 @@ save_column (symbol_number sym, state_number default_state)
 `-------------------------------------------------------------*/
 
 static state_number
-default_goto (symbol_number sym, short state_count[])
+default_goto (symbol_number sym, size_t state_count[])
 {
   state_number s;
-  int i;
+  goto_number i;
   goto_number m = goto_map[sym - ntokens];
   goto_number n = goto_map[sym - ntokens + 1];
   state_number default_state = -1;
-  int max = 0;
+  size_t max = 0;
 
   if (m == n)
     return -1;
@@ -548,8 +558,8 @@ static void
 goto_actions (void)
 {
   symbol_number i;
-  short *state_count = CALLOC (state_count, nstates);
-  MALLOC (yydefgoto, nvars);
+  size_t *state_count = xnmalloc (nstates, sizeof *state_count);
+  yydefgoto = xnmalloc (nvars, sizeof *yydefgoto);
 
   /* For a given nterm I, STATE_COUNT[S] is the number of times there
      is a GOTO to S on I.  */
@@ -663,13 +673,13 @@ pack_vector (vector_number vector)
   base_number *to = tos[i];
   unsigned int *conflict_to = conflict_tos[i];
 
-  if (! t)
+  if (!t)
     abort ();
 
   for (j = lowzero - from[0]; ; j++)
     {
       int k;
-      int ok = 1;
+      bool ok = true;
 
       if (table_size <= j)
 	abort ();
@@ -681,12 +691,12 @@ pack_vector (vector_number vector)
 	    table_grow (loc);
 
 	  if (table[loc] != 0)
-	    ok = 0;
+	    ok = false;
 	}
 
       for (k = 0; ok && k < vector; k++)
 	if (pos[k] == j)
-	  ok = 0;
+	  ok = false;
 
       if (ok)
 	{
@@ -694,7 +704,7 @@ pack_vector (vector_number vector)
 	    {
 	      loc = j + from[k];
 	      table[loc] = to[k];
-	      if (glr_parser && conflict_to != NULL)
+	      if (nondeterministic_parser && conflict_to != NULL)
 		conflict_table[loc] = conflict_to[k];
 	      check[loc] = from[k];
 	    }
@@ -745,11 +755,11 @@ pack_table (void)
 {
   int i;
 
-  CALLOC (base, nvectors);
-  CALLOC (pos, nentries);
-  CALLOC (table, table_size);
-  CALLOC (conflict_table, table_size);
-  CALLOC (check, table_size);
+  base = xnmalloc (nvectors, sizeof *base);
+  pos = xnmalloc (nentries, sizeof *pos);
+  table = xcalloc (table_size, sizeof *table);
+  conflict_table = xcalloc (table_size, sizeof *conflict_table);
+  check = xnmalloc (table_size, sizeof *check);
 
   lowzero = 0;
   high = 0;
@@ -804,11 +814,11 @@ tables_generate (void)
 
   nvectors = state_number_as_int (nstates) + nvars;
 
-  CALLOC (froms, nvectors);
-  CALLOC (tos, nvectors);
-  CALLOC (conflict_tos, nvectors);
-  CALLOC (tally, nvectors);
-  CALLOC (width, nvectors);
+  froms = xcalloc (nvectors, sizeof *froms);
+  tos = xcalloc (nvectors, sizeof *tos);
+  conflict_tos = xcalloc (nvectors, sizeof *conflict_tos);
+  tally = xcalloc (nvectors, sizeof *tally);
+  width = xnmalloc (nvectors, sizeof *width);
 
   token_actions ();
 
@@ -817,7 +827,7 @@ tables_generate (void)
   free (from_state);
   free (to_state);
 
-  CALLOC (order, nvectors);
+  order = xcalloc (nvectors, sizeof *order);
   sort_actions ();
   pack_table ();
   free (order);
@@ -829,7 +839,7 @@ tables_generate (void)
     {
       free (froms[i]);
       free (tos[i]);
-      XFREE (conflict_tos[i]);
+      free (conflict_tos[i]);
     }
 
   free (froms);

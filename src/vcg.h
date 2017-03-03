@@ -102,26 +102,6 @@ struct infoname
   struct infoname *next;
 };
 
-/* Layout Algorithms which can be found in VCG.
-   Details about each algoithm can be found below. */
-enum layoutalgorithm
-{
-  normal,
-  maxdepth,
-  mindepth,
-  maxdepthslow,
-  mindepthslow,
-  maxdegree,
-  mindegree,
-  maxindegree,
-  minindegree,
-  maxoutdegree,
-  minoutdegree,
-  minbackward,
-  dfs,
-  tree
-};
-
 /* VCG decision yes/no. */
 enum decision
 {
@@ -232,18 +212,18 @@ struct node
   int width;
   int height;
 
-  /* shrink, expand gives the shrinking and expanding factor of the
+  /* shrink, stretch gives the shrinking and stretching factor of the
      node. The values of the attributes width, height, borderwidth and
-     the size of the label text is scaled by ((expand=shrink) \Lambda
+     the size of the label text is scaled by ((stretch=shrink) \Lambda
      100) percent. Note that the actual scale value is determined by the
      scale value of a node relatively to a scale value of the graph,
-     i.e. if (expand,shrink) = (2,1) for the graph and (expand,shrink)
+     i.e. if (stretch,shrink) = (2,1) for the graph and (stretch,shrink)
      = (2,1) for the node of the graph, then the node is scaled by the
      factor 4 compared to the normal size. The scale value can also be
      specified by scaling: float.
      Default are 1,1. */
   int shrink;
-  int expand;
+  int stretch;
 
   /* folding specifies the default folding of the nodes. The folding k
      (with k ? 0) means that the graph part that is reachable via edges
@@ -542,16 +522,16 @@ struct graph
      Default value is 0 */
   int folding;
 
-  /* Shrink, expand gives the shrinking and expanding factor for the
-     graph's representation (default is 1, 1). ((expand=shrink) \Lambda
+  /* Shrink, stretch gives the shrinking and stretching factor for the
+     graph's representation (default is 1, 1). ((stretch=shrink) \Lambda
      100) is the scaling of the graph in percentage, e.g.,
-     (expand,shrink) = (1,1) or (2,2) or (3,3) : : : is normal size,
-     (expand,shrink) = (1,2) is half size, (expand,shrink) = (2,1) is
+     (stretch,shrink) = (1,1) or (2,2) or (3,3) : : : is normal size,
+     (stretch,shrink) = (1,2) is half size, (stretch,shrink) = (2,1) is
      double size. For subgraphs, it is also the scaling factor of the
      summary node. The scaling factor can also be specified by scaling:
      float (here, scaling 1.0 means normal size). */
   int shrink;
-  int expand;
+  int stretch;
 
   /* textmode specifies the adjustment of the text within the border of a
      summary node. The possibilities are center, left.justify and
@@ -578,20 +558,20 @@ struct graph
      Default is box, other: rhomb, ellipse, triangle. */
   enum shape shape;
 
-  /* Vertical order is the level position (rank) of the summary node of an 
-     inner subgraph, if this subgraph is folded. We can also specify 
-     level: int. The level is only recognized, if an automatical layout is 
+  /* Vertical order is the level position (rank) of the summary node of an
+     inner subgraph, if this subgraph is folded. We can also specify
+     level: int. The level is only recognized, if an automatical layout is
      calculated.  */
   int vertical_order;
 
-  /* Horizontal order is the horizontal position of the summary node within 
-     a level. The nodes which are specified with horizontal positions are 
-     ordered according to these positions within the levels. The nodes which 
-     do not have this attribute are inserted into this ordering by the 
-     crossing reduction mechanism. Note that connected components are 
-     handled separately, thus it is not possible to intermix such components 
-     by specifying a horizontal order. If the algorithm for downward laid 
-     out trees is used, the horizontal order influences only the order of 
+  /* Horizontal order is the horizontal position of the summary node within
+     a level. The nodes which are specified with horizontal positions are
+     ordered according to these positions within the levels. The nodes which
+     do not have this attribute are inserted into this ordering by the
+     crossing reduction mechanism. Note that connected components are
+     handled separately, thus it is not possible to intermix such components
+     by specifying a horizontal order. If the algorithm for downward laid
+     out trees is used, the horizontal order influences only the order of
      the child nodes at a node, but not the order of the whole level.  */
   int horizontal_order;
 
@@ -664,47 +644,19 @@ struct graph
      By default, no class names. */
   struct classname *classname;
 
-  /* Infoname allows to introduce names for the additional text labels. 
-     The names are used in the menus.  
-     Infoname is given by an integer and a string.  
+  /* Infoname allows to introduce names for the additional text labels.
+     The names are used in the menus.
+     Infoname is given by an integer and a string.
      The default value is NULL.  */
   struct infoname *infoname;
-  
-  /* Colorentry allows to fill the color map. A color is a triplet of integer 
-     values for the red/green/blue-part. Each integer is between 0 (off) and 
-     255 (on), e.g., 0 0 0 is black and 255 255 255 is white. For instance 
-     colorentry 75 : 70 130 180 sets the map entry 75 to steel blue. This 
+
+  /* Colorentry allows to fill the color map. A color is a triplet of integer
+     values for the red/green/blue-part. Each integer is between 0 (off) and
+     255 (on), e.g., 0 0 0 is black and 255 255 255 is white. For instance
+     colorentry 75 : 70 130 180 sets the map entry 75 to steel blue. This
      color can be used by specifying just the number 75.
      Default id NULL.  */
   struct colorentry *colorentry;
-
-  /* layoutalgorithm chooses different graph layout algorithms
-     Possibilities are maxdepth, mindepth, maxdepthslow, mindepthslow,
-     maxdegree, mindegree, maxindegree, minindegree, maxoutdegree,
-     minoutdegree, minbackward, dfs and tree. The default algorithm tries
-     to give all edges the same orientation and is based on the
-     calculation of strongly connected components. The algorithms that
-     are based on depth first search are faster. While the simple dfs
-     does not enforce additionally constraints, the algorithm maxdepth
-     tries to increase the depth of the layout and the algorithm mindepth
-     tries to increase the wide of the layout. These algorithms are fast
-     heuristics. If they are not appropriate, the algorithms maxdepthslow
-     or mindepthslow also increase the depth or wide, but they are very
-     slow. The algorithm maxindegree lays out the nodes by scheduling the
-     nodes with the maximum of incoming edges first, and minindegree lays
-     out the nodes by scheduling the nodes with the minimum of incoming
-     edges first. In the same manner work the algorithms maxoutdegree and
-     minoutdegree for outgoing edges, and maxdegree and mindegree for the
-     sum of incoming and outgoing edges. These algorithms may have various
-     effects, and can sometimes be used as replacements of maxdepthslow
-     or mindepthslow.
-
-     The algorithm minbackward can be used if the graph is acyclic.
-     The algorithm tree is a specialized method for downward laid out
-     trees. It is much faster on such tree-like graphs and results in a
-     balanced layout.
-     Default is normal. */
-  enum layoutalgorithm layoutalgorithm;
 
   /* Layout downfactor, layout upfactor, layout nearfactor The layout
      algorithm partitions the set of edges into edges pointing upward,
@@ -757,15 +709,6 @@ struct graph
      and are sometimes very ugly. Default is to show all nodes.
      Default is no. */
   enum decision ignore_singles;
-
-  /* Long straight phase yes initiates an additional phase that tries to avoid
-     bendings in long edges.
-     Long edges are laid out by long straight vertical lines with
-     gradient 90 degree. Thus, this phase is not very appropriate for
-     normal layout, but it is recommended, if an orthogonal layout is
-     selected (see manhattan.edges).
-     Default is no. */
-  enum decision long_straight_phase;
 
   /* priority phase yes replaces the normal pendulum method by a
      specialized method: It forces straight long edges with 90 degree,
@@ -1000,7 +943,7 @@ void new_edge (edge *e);
 void add_node (graph *g, node *n);
 void add_edge (graph *g, edge *e);
 
-void add_colorentry (graph *g, int color_idx, int red_cp, 
+void add_colorentry (graph *g, int color_idx, int red_cp,
 		     int green_cp, int blue_cp);
 void add_classname (graph *g, int val, const char *name);
 void add_infoname (graph *g, int val, const char *name);

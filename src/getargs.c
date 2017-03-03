@@ -1,6 +1,6 @@
 /* Parse command line arguments for Bison.
 
-   Copyright (C) 1984, 1986, 1989, 1992, 2000, 2001, 2002
+   Copyright (C) 1984, 1986, 1989, 1992, 2000, 2001, 2002, 2003, 2004
    Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
@@ -43,16 +43,20 @@
 #include "getargs.h"
 #include "uniqstr.h"
 
-int debug_flag = 0;
-int defines_flag = 0;
-int locations_flag = 0;
-int no_lines_flag = 0;
-int no_parser_flag = 0;
+bool debug_flag;
+bool defines_flag;
+bool locations_flag;
+bool no_lines_flag;
+bool no_parser_flag;
 int report_flag = report_none;
-int token_table_flag = 0;
-int yacc_flag = 0;	/* for -y */
-int graph_flag = 0;
+bool token_table_flag;
+bool yacc_flag;	/* for -y */
+bool graph_flag;
 int trace_flag = trace_none;
+
+bool nondeterministic_parser = false;
+bool glr_parser = false;
+bool pure_parser = false;
 
 const char *skeleton = NULL;
 const char *include = NULL;
@@ -134,7 +138,7 @@ static const char * const report_args[] =
   "none",
   "state", "states",
   "itemset", "itemsets",
-  "lookahead", "lookaheads",
+  "look-ahead", "lookahead", "lookaheads",
   "solved",
   "all",
   0
@@ -145,7 +149,9 @@ static const int report_types[] =
   report_none,
   report_states, report_states,
   report_states | report_itemsets, report_states | report_itemsets,
-  report_states | report_lookaheads, report_states | report_lookaheads,
+  report_states | report_look_ahead_tokens,
+  report_states | report_look_ahead_tokens,
+  report_states | report_look_ahead_tokens,
   report_states | report_solved_conflicts,
   report_all
 };
@@ -233,7 +239,7 @@ Output:\n\
 THINGS is a list of comma separated words that can include:\n\
   `state'        describe the states\n\
   `itemset'      complete the core item sets with their closure\n\
-  `lookahead'    explicitly associate lookaheads to items\n\
+  `look-ahead'   explicitly associate look-ahead tokens to items\n\
   `solved'       describe shift/reduce conflicts solving\n\
   `all'          include all the above information\n\
   `none'         disable the report\n\
@@ -263,7 +269,7 @@ version (void)
   putc ('\n', stdout);
 
   fprintf (stdout,
-	   _("Copyright (C) %d Free Software Foundation, Inc.\n"), 2002);
+	   _("Copyright (C) %d Free Software Foundation, Inc.\n"), 2004);
 
   fputs (_("\
 This is free software; see the source for copying conditions.  There is NO\n\
@@ -279,6 +285,12 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\
 
 /* Shorts options.  */
 const char *short_options = "yvegdhr:ltknVo:b:p:S:T::";
+
+/* Values for long options that do not have single-letter equivalents.  */
+enum
+{
+  LOCATIONS_OPTION = CHAR_MAX + 1
+};
 
 static struct option const long_options[] =
 {
@@ -310,7 +322,7 @@ static struct option const long_options[] =
 
   /* Parser.  */
   { "debug",	      no_argument,               0,   't' },
-  { "locations",      no_argument, &locations_flag,     1 },
+  { "locations",      no_argument,		 0, LOCATIONS_OPTION },
   { "no-lines",       no_argument,               0,   'l' },
   { "no-parser",      no_argument,               0,   'n' },
   { "raw",            no_argument,               0,     0 },
@@ -342,7 +354,7 @@ getargs (int argc, char *argv[])
 	break;
 
       case 'y':
-	yacc_flag = 1;
+	yacc_flag = true;
 	break;
 
       case 'h':
@@ -354,7 +366,7 @@ getargs (int argc, char *argv[])
 
       case 'g':
 	/* Here, the -g and --graph=FILE options are differentiated.  */
-	graph_flag = 1;
+	graph_flag = true;
 	if (optarg)
 	  spec_graph_file = AS_FILE_NAME (optarg);
 	break;
@@ -373,25 +385,29 @@ getargs (int argc, char *argv[])
 
       case 'd':
 	/* Here, the -d and --defines options are differentiated.  */
-	defines_flag = 1;
+	defines_flag = true;
 	if (optarg)
 	  spec_defines_file = AS_FILE_NAME (optarg);
 	break;
 
       case 'l':
-	no_lines_flag = 1;
+	no_lines_flag = true;
+	break;
+
+      case LOCATIONS_OPTION:
+	locations_flag = true;
 	break;
 
       case 'k':
-	token_table_flag = 1;
+	token_table_flag = true;
 	break;
 
       case 'n':
-	no_parser_flag = 1;
+	no_parser_flag = true;
 	break;
 
       case 't':
-	debug_flag = 1;
+	debug_flag = true;
 	break;
 
       case 'o':

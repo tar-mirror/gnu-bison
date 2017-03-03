@@ -1,4 +1,4 @@
-## Copyright (C) 2001, 2002 Free Software Foundation, Inc.
+## Copyright (C) 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -17,39 +17,27 @@
 
 AM_CFLAGS = $(WARNING_CFLAGS)
 
-lib_LIBRARIES = liby.a
-noinst_LIBRARIES = libbison.a
+BUILT_SOURCES =
+EXTRA_DIST =
+MOSTLYCLEANFILES =
 
-# config.h is in build/., and system.h is in src/src/.
-INCLUDES = -I$(top_builddir)      \
-           -I$(top_srcdir)/src \
-           -I$(top_srcdir)/lib
+lib_LIBRARIES = $(YACC_LIBRARY)
+EXTRA_LIBRARIES = liby.a
+noinst_LIBRARIES = libbison.a
 
 liby_a_SOURCES = main.c yyerror.c
 
-# Heck, we are still using an old version of Automake which does not
-# understand inner AC_LIBOBJ (i.e., from Autoconf itself, not from
-# configure.in).
-EXTRA_DIST = malloc.c realloc.c strnlen.c
-
-libbison_a_SOURCES = \
-  gettext.h \
-  basename.c dirname.h dirname.c \
+libbison_a_SOURCES = $(lib_SOURCES)
+lib_SOURCES = \
   get-errno.h get-errno.c \
-  getopt.h getopt.c getopt1.c \
-  hash.h hash.c \
-  mbswidth.h mbswidth.c \
-  quote.h quote.c quotearg.h quotearg.c \
-  subpipe.h subpipe.c unlocked-io.h \
-  xalloc.h xmalloc.c xstrdup.c xstrndup.c \
+  subpipe.h subpipe.c \
   $(bitsets_sources) $(additional_bitsets_sources) $(timevars_sources)
 
 # Implementation of bitsets
 bitsets_sources = \
-libiberty.h \
-abitset.c  bitset.c        bitset_stats.h  ebitset.c  lbitset.h \
-abitset.h  bitset.h        bitsetv.c       ebitset.h \
-bbitset.h  bitset_stats.c  bitsetv.h       lbitset.c
+  abitset.c abitset.h bbitset.h bitset.c bitset.h bitset_stats.c	\
+  bitset_stats.h bitsetv.c bitsetv.h ebitset.c ebitset.h lbitset.c	\
+  lbitset.h libiberty.h vbitset.c vbitset.h
 
 # Additional bitset operations.
 additional_bitsets_sources = \
@@ -59,5 +47,7 @@ additional_bitsets_sources = \
 timevars_sources = \
 	timevar.h timevar.c timevar.def
 
-libbison_a_LIBADD = @LIBOBJS@ @ALLOCA@
+libbison_a_LIBADD = $(LIBOBJS) $(ALLOCA)
 libbison_a_DEPENDENCIES = $(libbison_a_LIBADD)
+
+include gnulib.mk

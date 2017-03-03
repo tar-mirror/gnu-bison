@@ -1,6 +1,6 @@
 /* Bison Grammar Scanner                             -*- C -*-
 
-   Copyright (C) 2002 Free Software Foundation, Inc.
+   Copyright (C) 2002, 2003, 2004 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -20,7 +20,7 @@
    02111-1307  USA
 */
 
-%option debug nodefault noyywrap never-interactive
+%option debug nodefault nounput noyywrap never-interactive
 %option prefix="gram_" outfile="lex.yy.c"
 
 %{
@@ -43,6 +43,7 @@
       scanner_cursor.file = current_file;		\
       scanner_cursor.line = 1;				\
       scanner_cursor.column = 1;			\
+      code_start = scanner_cursor;			\
     }							\
   while (0)
 
@@ -100,8 +101,10 @@ static int rule_length;
 static void handle_dollar (int token_type, char *cp, location loc);
 static void handle_at (int token_type, char *cp, location loc);
 static void handle_syncline (char *args);
+static unsigned long int scan_integer (char const *p, int base, location loc);
 static int convert_ucn_to_byte (char const *hex_text);
-static void unexpected_end_of_file (boundary, char const *);
+static void unexpected_eof (boundary, char const *);
+static void unexpected_newline (boundary, char const *);
 
 %}
 %x SC_COMMENT SC_LINE_COMMENT SC_YACC_COMMENT
@@ -136,14 +139,16 @@ splice	 (\\[ \f\t\v]*\n)*
   int token_type IF_LINT (= 0);
 
   /* Location of most recent identifier, when applicable.  */
-  location id_loc IF_LINT (= *loc);
+  location id_loc IF_LINT (= empty_location);
 
-  /* Where containing code started, when applicable.  */
-  boundary code_start IF_LINT (= loc->start);
+  /* Where containing code started, when applicable.  Its initial
+     value is relevant only when yylex is invoked in the SC_EPILOGUE
+     start condition.  */
+  boundary code_start = scanner_cursor;
 
   /* Where containing comment or string or character literal started,
      when applicable.  */
-  boundary token_start IF_LINT (= loc->start);
+  boundary token_start IF_LINT (= scanner_cursor);
 %}
 
 
@@ -153,10 +158,9 @@ splice	 (\\[ \f\t\v]*\n)*
 
 <INITIAL,SC_AFTER_IDENTIFIER,SC_PRE_CODE>
 {
-  [ \f\n\t\v]  ;
+  /* Comments and white space.  */
   ","	       warn_at (*loc, _("stray `,' treated as white space"));
-
-  /* Comments. */
+  [ \f\n\t\v]  |
   "//".*       ;
   "/*" {
     token_start = loc->start;
@@ -179,22 +183,27 @@ splice	 (\\[ \f\t\v]*\n)*
 {
   "%binary"               return PERCENT_NONASSOC;
   "%debug"                return PERCENT_DEBUG;
+  "%default"[-_]"prec"    return PERCENT_DEFAULT_PREC;
   "%define"               return PERCENT_DEFINE;
   "%defines"              return PERCENT_DEFINES;
   "%destructor"		  token_type = PERCENT_DESTRUCTOR; BEGIN SC_PRE_CODE;
   "%dprec"		  return PERCENT_DPREC;
   "%error"[-_]"verbose"   return PERCENT_ERROR_VERBOSE;
   "%expect"               return PERCENT_EXPECT;
+  "%expect"[-_]"rr"	  return PERCENT_EXPECT_RR;
   "%file-prefix"          return PERCENT_FILE_PREFIX;
   "%fixed"[-_]"output"[-_]"files"   return PERCENT_YACC;
+  "%initial-action"       token_type = PERCENT_INITIAL_ACTION; BEGIN SC_PRE_CODE;
   "%glr-parser"           return PERCENT_GLR_PARSER;
   "%left"                 return PERCENT_LEFT;
   "%lex-param"		  token_type = PERCENT_LEX_PARAM; BEGIN SC_PRE_CODE;
   "%locations"            return PERCENT_LOCATIONS;
   "%merge"		  return PERCENT_MERGE;
   "%name"[-_]"prefix"     return PERCENT_NAME_PREFIX;
+  "%no"[-_]"default"[-_]"prec"	return PERCENT_NO_DEFAULT_PREC;
   "%no"[-_]"lines"        return PERCENT_NO_LINES;
   "%nonassoc"             return PERCENT_NONASSOC;
+  "%nondeterministic-parser"   return PERCENT_NONDETERMINISTIC_PARSER;
   "%nterm"                return PERCENT_NTERM;
   "%output"               return PERCENT_OUTPUT;
   "%parse-param"	  token_type = PERCENT_PARSE_PARAM; BEGIN SC_PRE_CODE;
@@ -228,15 +237,11 @@ splice	 (\\[ \f\t\v]*\n)*
   }
 
   {int} {
-    unsigned long num;
-    set_errno (0);
-    num = strtoul (yytext, 0, 10);
-    if (INT_MAX < num || get_errno ())
-      {
-	complain_at (*loc, _("integer out of range: %s"), quote (yytext));
-	num = INT_MAX;
-      }
-    val->integer = num;
+    val->integer = scan_integer (yytext, 10, *loc);
+    return INT;
+  }
+  0[xX][0-9abcdefABCDEF]+ {
+    val->integer = scan_integer (yytext, 16, *loc);
     return INT;
   }
 
@@ -270,15 +275,17 @@ splice	 (\\[ \f\t\v]*\n)*
   "%%" {
     static int percent_percent_count;
     if (++percent_percent_count == 2)
-      {
-	code_start = loc->start;
-	BEGIN SC_EPILOGUE;
-      }
+      BEGIN SC_EPILOGUE;
     return PERCENT_PERCENT;
   }
 
   . {
     complain_at (*loc, _("invalid character: %s"), quote (yytext));
+  }
+
+  <<EOF>> {
+    loc->start = loc->end = scanner_cursor;
+    yyterminate ();
   }
 }
 
@@ -318,7 +325,7 @@ splice	 (\\[ \f\t\v]*\n)*
 {
   "*/"     BEGIN context_state;
   .|\n	   ;
-  <<EOF>>  unexpected_end_of_file (token_start, "*/");
+  <<EOF>>  unexpected_eof (token_start, "*/"); BEGIN context_state;
 }
 
 
@@ -329,7 +336,7 @@ splice	 (\\[ \f\t\v]*\n)*
 <SC_COMMENT>
 {
   "*"{splice}"/"  STRING_GROW; BEGIN context_state;
-  <<EOF>>	  unexpected_end_of_file (token_start, "*/");
+  <<EOF>>	  unexpected_eof (token_start, "*/"); BEGIN context_state;
 }
 
 
@@ -345,10 +352,10 @@ splice	 (\\[ \f\t\v]*\n)*
 }
 
 
-  /*----------------------------------------------------------------.
-  | Scanning a C string, including its escapes.  The initial `"' is |
-  | already eaten.                                                  |
-  `----------------------------------------------------------------*/
+  /*------------------------------------------------.
+  | Scanning a Bison string, including its escapes. |
+  | The initial quote is already eaten.             |
+  `------------------------------------------------*/
 
 <SC_ESCAPED_STRING>
 {
@@ -361,15 +368,14 @@ splice	 (\\[ \f\t\v]*\n)*
     BEGIN INITIAL;
     return STRING;
   }
-
-  .|\n	    STRING_GROW;
-  <<EOF>>   unexpected_end_of_file (token_start, "\"");
+  \n		unexpected_newline (token_start, "\"");	BEGIN INITIAL;
+  <<EOF>>	unexpected_eof (token_start, "\"");	BEGIN INITIAL;
 }
 
-  /*---------------------------------------------------------------.
-  | Scanning a C character, decoding its escapes.  The initial "'" |
-  | is already eaten.                                              |
-  `---------------------------------------------------------------*/
+  /*----------------------------------------------------------.
+  | Scanning a Bison character literal, decoding its escapes. |
+  | The initial quote is already eaten.			      |
+  `----------------------------------------------------------*/
 
 <SC_ESCAPED_CHARACTER>
 {
@@ -387,9 +393,13 @@ splice	 (\\[ \f\t\v]*\n)*
     BEGIN INITIAL;
     return ID;
   }
+  \n		unexpected_newline (token_start, "'");	BEGIN INITIAL;
+  <<EOF>>	unexpected_eof (token_start, "'");	BEGIN INITIAL;
+}
 
-  .|\n	    STRING_GROW;
-  <<EOF>>   unexpected_end_of_file (token_start, "'");
+<SC_ESCAPED_CHARACTER,SC_ESCAPED_STRING>
+{
+  \0	    complain_at (*loc, _("invalid null character"));
 }
 
 
@@ -400,19 +410,23 @@ splice	 (\\[ \f\t\v]*\n)*
 <SC_ESCAPED_STRING,SC_ESCAPED_CHARACTER>
 {
   \\[0-7]{1,3} {
-    unsigned long c = strtoul (yytext + 1, 0, 8);
+    unsigned long int c = strtoul (yytext + 1, 0, 8);
     if (UCHAR_MAX < c)
       complain_at (*loc, _("invalid escape sequence: %s"), quote (yytext));
+    else if (! c) 
+      complain_at (*loc, _("invalid null character: %s"), quote (yytext));
     else
       obstack_1grow (&obstack_for_string, c);
   }
 
   \\x[0-9abcdefABCDEF]+ {
-    unsigned long c;
+    unsigned long int c;
     set_errno (0);
     c = strtoul (yytext + 2, 0, 16);
     if (UCHAR_MAX < c || get_errno ())
       complain_at (*loc, _("invalid escape sequence: %s"), quote (yytext));
+    else if (! c)
+      complain_at (*loc, _("invalid null character: %s"), quote (yytext));
     else
       obstack_1grow (&obstack_for_string, c);
   }
@@ -432,6 +446,8 @@ splice	 (\\[ \f\t\v]*\n)*
     int c = convert_ucn_to_byte (yytext);
     if (c < 0)
       complain_at (*loc, _("invalid escape sequence: %s"), quote (yytext));
+    else if (! c)
+      complain_at (*loc, _("invalid null character: %s"), quote (yytext));
     else
       obstack_1grow (&obstack_for_string, c);
   }
@@ -441,30 +457,27 @@ splice	 (\\[ \f\t\v]*\n)*
   }
 }
 
+  /*--------------------------------------------.
+  | Scanning user-code characters and strings.  |
+  `--------------------------------------------*/
 
-  /*----------------------------------------------------------.
-  | Scanning a C character without decoding its escapes.  The |
-  | initial "'" is already eaten.                             |
-  `----------------------------------------------------------*/
+<SC_CHARACTER,SC_STRING>
+{
+  {splice}|\\{splice}[^\n$@\[\]]	STRING_GROW;
+}
 
 <SC_CHARACTER>
 {
-  "'"			STRING_GROW; BEGIN context_state;
-  \\{splice}[^$@\[\]]	STRING_GROW;
-  <<EOF>>		unexpected_end_of_file (token_start, "'");
+  "'"		STRING_GROW; BEGIN context_state;
+  \n		unexpected_newline (token_start, "'"); BEGIN context_state;
+  <<EOF>>	unexpected_eof (token_start, "'"); BEGIN context_state;
 }
-
-
-  /*----------------------------------------------------------------.
-  | Scanning a C string, without decoding its escapes.  The initial |
-  | `"' is already eaten.                                           |
-  `----------------------------------------------------------------*/
 
 <SC_STRING>
 {
-  "\""			STRING_GROW; BEGIN context_state;
-  \\{splice}[^$@\[\]]	STRING_GROW;
-  <<EOF>>		unexpected_end_of_file (token_start, "\"");
+  "\""		STRING_GROW; BEGIN context_state;
+  \n		unexpected_newline (token_start, "\""); BEGIN context_state;
+  <<EOF>>	unexpected_eof (token_start, "\""); BEGIN context_state;
 }
 
 
@@ -530,6 +543,8 @@ splice	 (\\[ \f\t\v]*\n)*
 	return token_type;
       }
   }
+
+  <<EOF>>  unexpected_eof (scanner_cursor, "{}"); BEGIN INITIAL;
 }
 
 
@@ -582,7 +597,7 @@ splice	 (\\[ \f\t\v]*\n)*
   "$"("<"{tag}">")?(-?[0-9]+|"$")  handle_dollar (token_type, yytext, *loc);
   "@"(-?[0-9]+|"$")		   handle_at (token_type, yytext, *loc);
 
-  <<EOF>>  unexpected_end_of_file (code_start, "}");
+  <<EOF>>  unexpected_eof (code_start, "}"); BEGIN INITIAL;
 }
 
 
@@ -600,7 +615,7 @@ splice	 (\\[ \f\t\v]*\n)*
     return PROLOGUE;
   }
 
-  <<EOF>>  unexpected_end_of_file (code_start, "%}");
+  <<EOF>>  unexpected_eof (code_start, "%}"); BEGIN INITIAL;
 }
 
 
@@ -621,10 +636,9 @@ splice	 (\\[ \f\t\v]*\n)*
 }
 
 
-  /*----------------------------------------------------------------.
-  | By default, grow the string obstack with the input, escaping M4 |
-  | quoting characters.						    |
-  `----------------------------------------------------------------*/
+  /*-----------------------------------------.
+  | Escape M4 quoting characters in C code.  |
+  `-----------------------------------------*/
 
 <SC_COMMENT,SC_LINE_COMMENT,SC_STRING,SC_CHARACTER,SC_BRACED_CODE,SC_PROLOGUE,SC_EPILOGUE>
 {
@@ -632,11 +646,22 @@ splice	 (\\[ \f\t\v]*\n)*
   \@	obstack_sgrow (&obstack_for_string, "@@");
   \[	obstack_sgrow (&obstack_for_string, "@{");
   \]	obstack_sgrow (&obstack_for_string, "@}");
-  .|\n  STRING_GROW;
 }
 
 
+  /*-----------------------------------------------------.
+  | By default, grow the string obstack with the input.  |
+  `-----------------------------------------------------*/
+
+<SC_COMMENT,SC_LINE_COMMENT,SC_BRACED_CODE,SC_PROLOGUE,SC_EPILOGUE,SC_STRING,SC_CHARACTER,SC_ESCAPED_STRING,SC_ESCAPED_CHARACTER>.	|
+<SC_COMMENT,SC_LINE_COMMENT,SC_BRACED_CODE,SC_PROLOGUE,SC_EPILOGUE>\n	STRING_GROW;
+
 %%
+
+/* Keeps track of the maximum number of semantic values to the left of
+   a handle (those referenced by $0, $-1, etc.) are required by the
+   semantic actions of this grammar. */
+int max_left_semantic_context = 0;
 
 /* Set *LOC and adjust scanner cursor to account for token TOKEN of
    size SIZE.  */
@@ -682,14 +707,14 @@ adjust_location (location *loc, char const *token, size_t size)
 static size_t
 no_cr_read (FILE *fp, char *buf, size_t size)
 {
-  size_t s = fread (buf, 1, size, fp);
-  if (s)
+  size_t bytes_read = fread (buf, 1, size, fp);
+  if (bytes_read)
     {
-      char *w = memchr (buf, '\r', s);
+      char *w = memchr (buf, '\r', bytes_read);
       if (w)
 	{
 	  char const *r = ++w;
-	  char const *lim = buf + s;
+	  char const *lim = buf + bytes_read;
 
 	  for (;;)
 	    {
@@ -718,7 +743,7 @@ no_cr_read (FILE *fp, char *buf, size_t size)
 	}
     }
 
-  return s;
+  return bytes_read;
 }
 
 
@@ -763,13 +788,15 @@ handle_action_dollar (char *text, location loc)
     }
   else
     {
-      long num;
+      long int num;
       set_errno (0);
       num = strtol (cp, 0, 10);
 
       if (INT_MIN <= num && num <= rule_length && ! get_errno ())
 	{
 	  int n = num;
+	  if (1-n > max_left_semantic_context)
+	    max_left_semantic_context = 1-n;
 	  if (!type_name && n > 0)
 	    type_name = symbol_list_n_type_name_get (current_rule, loc, n);
 	  if (!type_name && typed)
@@ -789,10 +816,10 @@ handle_action_dollar (char *text, location loc)
 }
 
 
-/*-----------------------------------------------------------------.
-| Dispatch onto handle_action_dollar, or handle_destructor_dollar, |
-| depending upon TOKEN_TYPE.                                       |
-`-----------------------------------------------------------------*/
+/*----------------------------------------------------------------.
+| Map `$?' onto the proper M4 symbol, depending on its TOKEN_TYPE |
+| (are we in an action?).                                         |
+`----------------------------------------------------------------*/
 
 static void
 handle_dollar (int token_type, char *text, location loc)
@@ -805,6 +832,7 @@ handle_dollar (int token_type, char *text, location loc)
       break;
 
     case PERCENT_DESTRUCTOR:
+    case PERCENT_INITIAL_ACTION:
     case PERCENT_PRINTER:
       if (text[1] == '$')
 	{
@@ -830,7 +858,7 @@ static inline bool
 handle_action_at (char *text, location loc)
 {
   char *cp = text + 1;
-  locations_flag = 1;
+  locations_flag = true;
 
   if (! current_rule)
     return false;
@@ -839,7 +867,7 @@ handle_action_at (char *text, location loc)
     obstack_sgrow (&obstack_for_string, "]b4_lhs_location[");
   else
     {
-      long num;
+      long int num;
       set_errno (0);
       num = strtol (cp, 0, 10);
 
@@ -857,10 +885,10 @@ handle_action_at (char *text, location loc)
 }
 
 
-/*-------------------------------------------------------------------.
-| Dispatch onto handle_action_at, or handle_destructor_at, depending |
-| upon CODE_KIND.                                                    |
-`-------------------------------------------------------------------*/
+/*----------------------------------------------------------------.
+| Map `@?' onto the proper M4 symbol, depending on its TOKEN_TYPE |
+| (are we in an action?).                                         |
+`----------------------------------------------------------------*/
 
 static void
 handle_at (int token_type, char *text, location loc)
@@ -871,6 +899,7 @@ handle_at (int token_type, char *text, location loc)
       handle_action_at (text, loc);
       return;
 
+    case PERCENT_INITIAL_ACTION:
     case PERCENT_DESTRUCTOR:
     case PERCENT_PRINTER:
       if (text[1] == '$')
@@ -888,6 +917,25 @@ handle_at (int token_type, char *text, location loc)
 }
 
 
+/*------------------------------------------------------.
+| Scan NUMBER for a base-BASE integer at location LOC.  |
+`------------------------------------------------------*/
+
+static unsigned long int
+scan_integer (char const *number, int base, location loc)
+{
+  unsigned long int num;
+  set_errno (0);
+  num = strtoul (number, 0, base);
+  if (INT_MAX < num || get_errno ())
+    {
+      complain_at (loc, _("integer out of range: %s"), quote (number));
+      num = INT_MAX;
+    }
+  return num;
+}
+
+
 /*------------------------------------------------------------------.
 | Convert universal character name UCN to a single-byte character,  |
 | and return that character.  Return -1 if UCN does not correspond  |
@@ -897,7 +945,7 @@ handle_at (int token_type, char *text, location loc)
 static int
 convert_ucn_to_byte (char const *ucn)
 {
-  unsigned long code = strtoul (ucn + 2, 0, 16);
+  unsigned long int code = strtoul (ucn + 2, 0, 16);
 
   /* FIXME: Currently we assume Unicode-compatible unibyte characters
      on ASCII hosts (i.e., Latin-1 on hosts with 8-bit bytes).  On
@@ -955,34 +1003,48 @@ handle_syncline (char *args)
   const char *file = NULL;
   file = strchr (args, '"') + 1;
   *strchr (file, '"') = 0;
-  scanner_cursor.file = current_file = xstrdup (file);
+  scanner_cursor.file = current_file = uniqstr_new (file);
   scanner_cursor.line = lineno;
   scanner_cursor.column = 1;
+}
+
+
+/*----------------------------------------------------------------.
+| For a token or comment starting at START, report message MSGID, |
+| which should say that an end marker was found before		  |
+| the expected TOKEN_END.					  |
+`----------------------------------------------------------------*/
+
+static void
+unexpected_end (boundary start, char const *msgid, char const *token_end)
+{
+  location loc;
+  loc.start = start;
+  loc.end = scanner_cursor;
+  complain_at (loc, _(msgid), token_end);
 }
 
 
 /*------------------------------------------------------------------------.
 | Report an unexpected EOF in a token or comment starting at START.       |
 | An end of file was encountered and the expected TOKEN_END was missing.  |
-| After reporting the problem, pretend that TOKEN_END was found.          |
 `------------------------------------------------------------------------*/
 
 static void
-unexpected_end_of_file (boundary start, char const *token_end)
+unexpected_eof (boundary start, char const *token_end)
 {
-  size_t i = strlen (token_end);
+  unexpected_end (start, N_("missing `%s' at end of file"), token_end);
+}
 
-  location loc;
-  loc.start = start;
-  loc.end = scanner_cursor;
-  complain_at (loc, _("missing `%s' at end of file"), token_end);
 
-  /* Adjust scanner cursor so that any later message does not count
-     the characters about to be inserted.  */
-  scanner_cursor.column -= i;
+/*----------------------------------------.
+| Likewise, but for unexpected newlines.  |
+`----------------------------------------*/
 
-  while (i != 0)
-    unput (token_end[--i]);
+static void
+unexpected_newline (boundary start, char const *token_end)
+{
+  unexpected_end (start, N_("missing `%s' at end of line"), token_end);
 }
 
 

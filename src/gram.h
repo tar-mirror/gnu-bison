@@ -1,6 +1,6 @@
 /* Data definitions for internal representation of Bison's input.
 
-   Copyright (C) 1984, 1986, 1989, 1992, 2001, 2002
+   Copyright (C) 1984, 1986, 1989, 1992, 2001, 2002, 2003, 2004
    Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
@@ -107,8 +107,8 @@
 # include "location.h"
 # include "symtab.h"
 
-# define ISTOKEN(s)	((s) < ntokens)
-# define ISVAR(s)	((s) >= ntokens)
+# define ISTOKEN(i)	((i) < ntokens)
+# define ISVAR(i)	((i) >= ntokens)
 
 extern int nsyms;
 extern int ntokens;
@@ -127,9 +127,9 @@ extern unsigned int nritems;
    sometimes have to perform the converse transformation.  */
 
 static inline item_number
-symbol_number_as_item_number (symbol_number s)
+symbol_number_as_item_number (symbol_number sym)
 {
-  return s;
+  return sym;
 }
 
 static inline symbol_number
@@ -138,10 +138,8 @@ item_number_as_symbol_number (item_number i)
   return i;
 }
 
-extern symbol_number start_symbol;
-
 /* Rule numbers.  */
-typedef short rule_number;
+typedef int rule_number;
 extern rule_number nrules;
 
 static inline item_number
@@ -177,8 +175,8 @@ typedef struct
   /* This symbol provides both the associativity, and the precedence. */
   symbol *prec;
 
-  short dprec;
-  short merger;
+  int dprec;
+  int merger;
 
   /* This symbol was attached to the rule via %prec. */
   symbol *precsym;
@@ -232,17 +230,6 @@ extern symbol_number *token_translations;
 extern int max_user_token_number;
 
 
-
-/* GLR_PARSER is nonzero if the input file says to use the GLR
-   (Generalized LR) parser, and to output some additional
-   information used by the GLR algorithm. */
-
-extern int glr_parser;
-
-/* PURE_PARSER is nonzero if should generate a parser that is all pure
-   and reentrant.  */
-
-extern int pure_parser;
 
 /* Dump RITEM for traces. */
 void ritem_print (FILE *out);

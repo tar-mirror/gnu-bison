@@ -1,6 +1,6 @@
 /* Scan Bison Skeletons.                                       -*- C -*-
 
-   Copyright (C) 2001, 2002 Free Software Foundation, Inc.
+   Copyright (C) 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -28,13 +28,14 @@
 #include <error.h>
 #include <quotearg.h>
 
+#include "complain.h"
 #include "getargs.h"
 #include "files.h"
 
 int skel_lex (void);
 
 #define QPUTS(String) \
-   fputs (quotearg_style (c_quoting_style, (String)), yyout);
+   fputs (quotearg_style (c_quoting_style, (String)), yyout)
 
 %}
 %%
@@ -55,10 +56,10 @@ int skel_lex (void);
       else if (strcmp (filename, "@output_parser_name@") == 0)
 	filename = parser_file_name;
       else
-	abort ();
+	fatal ("invalid token in skeleton: %s", yytext);
     }
 
-  XFREE (outname);
+  free (outname);
   outname = xstrdup (filename);
   xfclose (yyout);
   yyout = xfopen (outname, "w");
@@ -69,12 +70,13 @@ int skel_lex (void);
 "@{"	   fputc ('[', yyout);
 "@}"	   fputc (']', yyout);
 
-"@oline@"  fprintf (yyout, "%d", lineno);
+"@oline@"  fprintf (yyout, "%d", lineno + 1);
 "@ofile@"  QPUTS (outname);
 "@output_parser_name@"	QPUTS (parser_file_name);
 "@output_header_name@"  QPUTS (spec_defines_file);
 
-"@"	   abort ();
+  /* This pattern must not match more than the previous @ patterns. */
+@[^{}@\n]* fatal ("invalid @ in skeleton: %s", yytext);
 \n	   lineno++; ECHO;
 [^@\n]+	   ECHO;
 

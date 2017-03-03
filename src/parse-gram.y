@@ -1,5 +1,6 @@
-/* Bison Grammar Parser                             -*- C -*-
-   Copyright (C) 2002 Free Software Foundation, Inc.
+%{/* Bison Grammar Parser                             -*- C -*-
+
+   Copyright (C) 2002, 2003, 2004 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -19,16 +20,6 @@
    02111-1307  USA
 */
 
-
-%debug
-%defines
-%locations
-%pure-parser
-// %error-verbose
-%defines
-%name-prefix="gram_"
-
-%{
 #include "system.h"
 
 #include "complain.h"
@@ -41,11 +32,11 @@
 #include "reader.h"
 #include "symlist.h"
 
-/* Produce verbose syntax errors.  */
-#define YYERROR_VERBOSE 1
-
 #define YYLLOC_DEFAULT(Current, Rhs, N)  (Current) = lloc_default (Rhs, N)
 static YYLTYPE lloc_default (YYLTYPE const *, int);
+
+#define YY_LOCATION_PRINT(File, Loc) \
+          location_print (File, Loc)
 
 /* Request detailed syntax error messages, and pass them to GRAM_ERROR.
    FIXME: depends on the undocumented availability of YYLLOC.  */
@@ -68,6 +59,22 @@ assoc current_assoc;
 int current_prec = 0;
 %}
 
+%debug
+%defines
+%locations
+%pure-parser
+%error-verbose
+%defines
+%name-prefix="gram_"
+
+%initial-action
+{
+  /* Bison's grammar can initial empty locations, hence a default
+     location is needed. */
+  @$.start.file   = @$.end.file   = current_file;
+  @$.start.line   = @$.end.line   = 1;
+  @$.start.column = @$.end.column = 0;
+}
 
 /* Only NUMBERS have a value.  */
 %union
@@ -108,25 +115,31 @@ int current_prec = 0;
 `----------------------*/
 
 %token
-  PERCENT_DEBUG         "%debug"
-  PERCENT_DEFINE        "%define"
-  PERCENT_DEFINES       "%defines"
-  PERCENT_ERROR_VERBOSE "%error-verbose"
-  PERCENT_EXPECT        "%expect"
-  PERCENT_FILE_PREFIX   "%file-prefix"
-  PERCENT_GLR_PARSER    "%glr-parser"
-  PERCENT_LEX_PARAM     "%lex-param {...}"
-  PERCENT_LOCATIONS     "%locations"
-  PERCENT_NAME_PREFIX   "%name-prefix"
-  PERCENT_NO_LINES      "%no-lines"
-  PERCENT_OUTPUT        "%output"
-  PERCENT_PARSE_PARAM   "%parse-param {...}"
-  PERCENT_PURE_PARSER   "%pure-parser"
-  PERCENT_SKELETON      "%skeleton"
-  PERCENT_START         "%start"
-  PERCENT_TOKEN_TABLE   "%token-table"
-  PERCENT_VERBOSE       "%verbose"
-  PERCENT_YACC          "%yacc"
+  PERCENT_DEBUG           "%debug"
+  PERCENT_DEFAULT_PREC    "%default-prec"
+  PERCENT_DEFINE          "%define"
+  PERCENT_DEFINES         "%defines"
+  PERCENT_ERROR_VERBOSE   "%error-verbose"
+  PERCENT_EXPECT          "%expect"
+  PERCENT_EXPECT_RR	  "%expect-rr"
+  PERCENT_FILE_PREFIX     "%file-prefix"
+  PERCENT_GLR_PARSER      "%glr-parser"
+  PERCENT_INITIAL_ACTION  "%initial-action {...}"
+  PERCENT_LEX_PARAM       "%lex-param {...}"
+  PERCENT_LOCATIONS       "%locations"
+  PERCENT_NAME_PREFIX     "%name-prefix"
+  PERCENT_NO_DEFAULT_PREC "%no-default-prec"
+  PERCENT_NO_LINES        "%no-lines"
+  PERCENT_NONDETERMINISTIC_PARSER
+                          "%nondeterministic-parser"
+  PERCENT_OUTPUT          "%output"
+  PERCENT_PARSE_PARAM     "%parse-param {...}"
+  PERCENT_PURE_PARSER     "%pure-parser"
+  PERCENT_SKELETON        "%skeleton"
+  PERCENT_START           "%start"
+  PERCENT_TOKEN_TABLE     "%token-table"
+  PERCENT_VERBOSE         "%verbose"
+  PERCENT_YACC            "%yacc"
 ;
 
 %token TYPE            "type"
@@ -143,6 +156,7 @@ int current_prec = 0;
 
 %type <chars> STRING string_content
 	      "%destructor {...}"
+	      "%initial-action {...}"
 	      "%lex-param {...}"
 	      "%parse-param {...}"
 	      "%printer {...}"
@@ -173,25 +187,35 @@ declarations:
 declaration:
   grammar_declaration
 | PROLOGUE                                 { prologue_augment ($1, @1); }
-| "%debug"                                 { debug_flag = 1; }
+| "%debug"                                 { debug_flag = true; }
 | "%define" string_content string_content  { muscle_insert ($2, $3); }
-| "%defines"                               { defines_flag = 1; }
-| "%error-verbose"                         { error_verbose = 1; }
-| "%expect" INT                            { expected_conflicts = $2; }
+| "%defines"                               { defines_flag = true; }
+| "%error-verbose"                         { error_verbose = true; }
+| "%expect" INT                            { expected_sr_conflicts = $2; }
+| "%expect-rr" INT 			   { expected_rr_conflicts = $2; }
 | "%file-prefix" "=" string_content        { spec_file_prefix = $3; }
-| "%glr-parser" 			   { glr_parser = 1; }
+| "%glr-parser"
+  {
+    nondeterministic_parser = true;
+    glr_parser = true;
+  }
+| "%initial-action {...}"
+  {
+    muscle_code_grow ("initial_action", $1, @1);
+  }
 | "%lex-param {...}"			   { add_param ("lex_param", $1, @1); }
-| "%locations"                             { locations_flag = 1; }
+| "%locations"                             { locations_flag = true; }
 | "%name-prefix" "=" string_content        { spec_name_prefix = $3; }
-| "%no-lines"                              { no_lines_flag = 1; }
+| "%no-lines"                              { no_lines_flag = true; }
+| "%nondeterministic-parser" 		   { nondeterministic_parser = true; }
 | "%output" "=" string_content             { spec_outfile = $3; }
-| "%parse-param {...}"			 { add_param ("parse_param", $1, @1); }
-| "%pure-parser"                           { pure_parser = 1; }
+| "%parse-param {...}"			   { add_param ("parse_param", $1, @1); }
+| "%pure-parser"                           { pure_parser = true; }
 | "%skeleton" string_content               { skeleton = $2; }
-| "%token-table"                           { token_table_flag = 1; }
+| "%token-table"                           { token_table_flag = true; }
 | "%verbose"                               { report_flag = report_states; }
-| "%yacc"                                  { yacc_flag = 1; }
-| ";"
+| "%yacc"                                  { yacc_flag = true; }
+| /*FIXME: Err?  What is this horror doing here? */ ";"
 ;
 
 grammar_declaration:
@@ -203,7 +227,7 @@ grammar_declaration:
     }
 | "%union {...}"
     {
-      typed = 1;
+      typed = true;
       MUSCLE_INSERT_INT ("stype_line", @1.start.line);
       muscle_insert ("stype", $1);
     }
@@ -220,6 +244,14 @@ grammar_declaration:
       for (list = $2; list; list = list->next)
 	symbol_printer_set (list->sym, $1, list->location);
       symbol_list_free ($2);
+    }
+| "%default-prec"
+    {
+      default_prec = true;
+    }
+| "%no-default-prec"
+    {
+      default_prec = false;
     }
 ;
 
@@ -328,7 +360,7 @@ grammar:
    body of the grammar.  */
 rules_or_grammar_declaration:
   rules
-| grammar_declaration
+| grammar_declaration ";"
     {
       if (yacc_flag)
 	complain_at (@$, _("POSIX forbids declarations in the grammar"));
@@ -337,7 +369,6 @@ rules_or_grammar_declaration:
     {
       yyerrok;
     }
-| ";"
 ;
 
 rules:
@@ -347,6 +378,7 @@ rules:
 rhses.1:
   rhs                { grammar_rule_end (@1); }
 | rhses.1 "|" rhs    { grammar_rule_end (@3); }
+| rhses.1 ";"
 ;
 
 rhs:
@@ -396,7 +428,7 @@ epilogue.opt:
   /* Nothing.  */
 | "%%" EPILOGUE
     {
-      epilogue_augment ($2, @2);
+      muscle_code_grow ("epilogue", $2, @2);
       scanner_last_string_free ();
     }
 ;
@@ -413,8 +445,12 @@ static YYLTYPE
 lloc_default (YYLTYPE const *rhs, int n)
 {
   int i;
-  YYLTYPE r;
-  r.start = r.end = rhs[n].end;
+  YYLTYPE loc;
+
+  /* SGI MIPSpro 7.4.1m miscompiles "loc.start = loc.end = rhs[n].end;".
+     The bug is fixed in 7.4.2m, but play it safe for now.  */
+  loc.start = rhs[n].end;
+  loc.end = rhs[n].end;
 
   /* Ignore empty nonterminals the start of the the right-hand side.
      Do not bother to ignore them at the end of the right-hand side,
@@ -422,11 +458,11 @@ lloc_default (YYLTYPE const *rhs, int n)
   for (i = 1; i <= n; i++)
     if (! equal_boundaries (rhs[i].start, rhs[i].end))
       {
-	r.start = rhs[i].start;
+	loc.start = rhs[i].start;
 	break;
       }
 
-  return r;
+  return loc;
 }
 
 
@@ -436,22 +472,28 @@ lloc_default (YYLTYPE const *rhs, int n)
 static void
 add_param (char const *type, char *decl, location loc)
 {
-  static char const alphanum[] =
-    "0123456789"
+  static char const alphanum[26 + 26 + 1 + 10] =
     "abcdefghijklmnopqrstuvwxyz"
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    "_";
-  char const *alpha = alphanum + 10;
+    "_"
+    "0123456789";
   char const *name_start = NULL;
   char *p;
 
-  for (p = decl; *p; p++)
-    if ((p == decl || ! strchr (alphanum, p[-1])) && strchr (alpha, p[0]))
+  /* Stop on last actual character.  */
+  for (p = decl; p[1]; p++)
+    if ((p == decl
+	 || ! memchr (alphanum, p[-1], sizeof alphanum))
+	&& memchr (alphanum, p[0], sizeof alphanum - 10))
       name_start = p;
 
-  /* Strip the surrounding '{' and '}'.  */
-  decl++;
-  p[-1] = '\0';
+  /* Strip the surrounding '{' and '}', and any blanks just inside
+     the braces.  */
+  while (*--p == ' ' || *p == '\t')
+    continue;
+  p[1] = '\0';
+  while (*++decl == ' ' || *decl == '\t')
+    continue;
 
   if (! name_start)
     complain_at (loc, _("missing identifier in parameter declaration"));
@@ -461,7 +503,7 @@ add_param (char const *type, char *decl, location loc)
       size_t name_len;
 
       for (name_len = 1;
-	   name_start[name_len] && strchr (alphanum, name_start[name_len]);
+	   memchr (alphanum, name_start[name_len], sizeof alphanum);
 	   name_len++)
 	continue;
 

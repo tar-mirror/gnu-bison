@@ -27,7 +27,7 @@
 #define YY_FLEX_MINOR_VERSION 5
 
 #include <stdio.h>
-
+#include <errno.h>
 
 /* cfront 1.2 defines "c_plusplus" instead of "__cplusplus" */
 #ifdef c_plusplus
@@ -40,7 +40,15 @@
 #ifdef __cplusplus
 
 #include <stdlib.h>
+#ifndef _WIN32
 #include <unistd.h>
+#else
+#ifndef YY_ALWAYS_INTERACTIVE
+#ifndef YY_NEVER_INTERACTIVE
+extern int isatty YY_PROTO(( int ));
+#endif
+#endif
+#endif
 
 /* Use prototypes in function declarations. */
 #define YY_USE_PROTOS
@@ -309,14 +317,14 @@ static void yy_fatal_error YY_PROTO(( yyconst char msg[] ));
 
 #define YY_NUM_RULES 12
 #define YY_END_OF_BUFFER 13
-static yyconst short int yy_accept[56] =
+static yyconst short int yy_accept[58] =
     {   0,
-        0,    0,   13,   11,   10,    9,   11,    2,    0,    3,
-        4,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    6,    5,    0,    0,    0,    0,    1,
-        0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    8,    7,    0
+        0,    0,   13,   11,   10,    9,   11,    9,    2,    9,
+        3,    4,    9,    9,    9,    9,    9,    9,    9,    9,
+        9,    9,    9,    9,    6,    5,    9,    9,    9,    9,
+        1,    0,    9,    9,    9,    9,    9,    9,    9,    9,
+        9,    9,    9,    9,    9,    9,    9,    9,    9,    9,
+        9,    9,    9,    9,    8,    7,    0
     } ;
 
 static yyconst int yy_ec[256] =
@@ -353,53 +361,71 @@ static yyconst int yy_ec[256] =
 
 static yyconst int yy_meta[23] =
     {   0,
-        1,    2,    1,    2,    1,    1,    1,    1,    1,    1,
+        1,    2,    1,    3,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1
     } ;
 
-static yyconst short int yy_base[59] =
+static yyconst short int yy_base[63] =
     {   0,
-        0,    1,   57,    0,   58,    2,    0,   58,    0,   58,
-       58,   45,   44,   35,   41,   38,   35,   42,   41,   28,
-       43,   42,   26,   58,   58,    5,   42,    3,   41,   58,
-       34,   35,   34,   22,   31,   19,   28,   27,   17,   16,
-       27,   26,   16,   15,   16,   15,    5,    3,    7,    6,
-        7,    3,   58,   58,   58,   24,    0,   26
+        0,    1,   37,    0,  123,    2,    0,    4,  123,   23,
+      123,  123,   42,   11,    0,    1,    4,    5,   20,   22,
+        9,    3,   30,   28,  123,  123,   37,   63,   39,   84,
+      123,    7,   43,   46,   50,   49,   51,   57,   61,   62,
+       60,   63,   71,   76,   78,   79,   72,   85,   25,   84,
+       90,   91,   96,   99,  123,  123,  123,  110,    0,  113,
+      116,  119
     } ;
 
-static yyconst short int yy_def[59] =
+static yyconst short int yy_def[63] =
     {   0,
-       56,   56,   55,   57,   55,   55,   57,   55,   55,   55,
-       55,   55,   55,   55,   55,   55,   55,   55,   55,   55,
-       55,   55,   55,   55,   55,   55,   58,   55,   58,   55,
-       55,   55,   55,   55,   55,   55,   55,   55,   55,   55,
-       55,   55,   55,   55,   55,   55,   55,   55,   55,   55,
-       55,   55,   55,   55,    0,   55,   55,   55
+       58,   58,   57,   59,   57,   60,   59,   60,   57,   60,
+       57,   57,   60,   13,   13,   13,   13,   13,   13,   13,
+       13,   13,   13,   13,   57,   57,   13,   61,   13,   61,
+       57,   62,   13,   13,   13,   13,   13,   13,   13,   13,
+       13,   13,   13,   13,   13,   13,   13,   13,   13,   13,
+       13,   13,   13,   13,   57,   57,    0,   57,   57,   57,
+       57,   57
     } ;
 
-static yyconst short int yy_nxt[81] =
+static yyconst short int yy_nxt[146] =
     {   0,
-        7,    5,    5,    6,    6,    8,   54,   27,   12,   28,
-       53,   13,   31,   52,   51,   50,    9,   49,   32,   14,
-       48,   47,   10,   11,    4,    4,   29,   29,   46,   45,
-       44,   43,   42,   41,   40,   39,   38,   37,   36,   35,
-       34,   33,   30,   30,   26,   25,   24,   23,   22,   21,
-       20,   19,   18,   17,   16,   15,   55,    3,   55,   55,
-       55,   55,   55,   55,   55,   55,   55,   55,   55,   55,
-       55,   55,   55,   55,   55,   55,   55,   55,   55,   55
+        7,    5,    5,    6,    6,    9,   25,   57,   31,   57,
+        8,    8,   19,    8,    8,    8,   10,   20,   18,    8,
+       21,   17,   11,   12,   57,   57,   57,   22,   24,   23,
+        8,   13,    8,   26,   14,    8,   57,   51,    8,   28,
+        8,   29,   15,   57,   57,   57,   27,    8,   33,    8,
+       35,   36,   16,    8,   34,   37,    8,   39,   57,    8,
+        8,    8,   57,   57,   31,   38,   32,    8,   41,   42,
+        8,    8,    8,    8,   40,   45,   43,   49,   57,   44,
+       46,    8,    8,   32,   32,   31,    8,   32,    8,    8,
+       50,   47,   48,   57,    8,    8,   52,   53,   54,   55,
+
+        8,    8,   56,   57,   32,   32,    8,   57,   57,    8,
+        4,    4,    4,    8,   57,    8,   30,   30,   30,   32,
+       32,   32,    3,   57,   57,   57,   57,   57,   57,   57,
+       57,   57,   57,   57,   57,   57,   57,   57,   57,   57,
+       57,   57,   57,   57,   57
     } ;
 
-static yyconst short int yy_chk[81] =
+static yyconst short int yy_chk[146] =
     {   0,
-       57,    1,    2,    1,    2,    6,   52,   26,    9,   26,
-       51,    9,   28,   50,   49,   48,    6,   47,   28,    9,
-       46,   45,    6,    6,   56,   56,   58,   58,   44,   43,
-       42,   41,   40,   39,   38,   37,   36,   35,   34,   33,
-       32,   31,   29,   27,   23,   22,   21,   20,   19,   18,
-       17,   16,   15,   14,   13,   12,    3,   55,   55,   55,
-       55,   55,   55,   55,   55,   55,   55,   55,   55,   55,
-       55,   55,   55,   55,   55,   55,   55,   55,   55,   55
+       59,    1,    2,    1,    2,    6,   22,    8,   32,    0,
+       15,   16,   16,   22,   17,   18,    6,   17,   15,   21,
+       18,   14,    6,    6,    8,    8,   10,   19,   21,   20,
+       19,   10,   20,   23,   10,   49,    3,   49,   24,   27,
+       23,   27,   10,   10,   10,   13,   24,   27,   29,   29,
+       33,   34,   13,   33,   29,   35,   34,   37,    0,   36,
+       35,   37,   13,   13,   28,   36,   28,   38,   39,   40,
+       41,   39,   40,   42,   38,   43,   41,   47,    0,   42,
+       44,   43,   47,   28,   28,   30,   44,   30,   45,   46,
+       48,   45,   46,    0,   50,   48,   50,   51,   52,   53,
+
+       51,   52,   54,    0,   30,   30,   53,    0,    0,   54,
+       58,   58,   58,   60,    0,   60,   61,   61,   61,   62,
+       62,   62,   57,   57,   57,   57,   57,   57,   57,   57,
+       57,   57,   57,   57,   57,   57,   57,   57,   57,   57,
+       57,   57,   57,   57,   57
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -410,8 +436,8 @@ int yy_flex_debug = 1;
 
 static yyconst short int yy_rule_linenum[12] =
     {   0,
-       47,   68,   69,   70,   72,   73,   74,   75,   77,   78,
-       79
+       48,   69,   70,   71,   73,   74,   75,   76,   79,   80,
+       81
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -426,7 +452,7 @@ char *yytext;
 #define INITIAL 0
 /* Scan Bison Skeletons.                                       -*- C -*-
 
-   Copyright (C) 2001, 2002 Free Software Foundation, Inc.
+   Copyright (C) 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -452,15 +478,16 @@ char *yytext;
 #include <error.h>
 #include <quotearg.h>
 
+#include "complain.h"
 #include "getargs.h"
 #include "files.h"
 
 int skel_lex (void);
 
 #define QPUTS(String) \
-   fputs (quotearg_style (c_quoting_style, (String)), yyout);
+   fputs (quotearg_style (c_quoting_style, (String)), yyout)
 
-#line 464 "scan-skel.c"
+#line 491 "scan-skel.c"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -560,9 +587,20 @@ YY_MALLOC_DECL
 			YY_FATAL_ERROR( "input in flex scanner failed" ); \
 		result = n; \
 		} \
-	else if ( ((result = fread( buf, 1, max_size, yyin )) == 0) \
-		  && ferror( yyin ) ) \
-		YY_FATAL_ERROR( "input in flex scanner failed" );
+	else \
+		{ \
+		errno=0; \
+		while ( (result = fread(buf, 1, max_size, yyin))==0 && ferror(yyin)) \
+			{ \
+			if( errno != EINTR) \
+				{ \
+				YY_FATAL_ERROR( "input in flex scanner failed" ); \
+				break; \
+				} \
+			errno=0; \
+			clearerr(yyin); \
+			} \
+		}
 #endif
 
 /* No semi-colon after return; correct usage is to write "yyterminate();" -
@@ -611,7 +649,7 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 40 "scan-skel.l"
+#line 41 "scan-skel.l"
 
 
 
@@ -619,7 +657,7 @@ YY_DECL
   char *outname = NULL;
 
 
-#line 623 "scan-skel.c"
+#line 661 "scan-skel.c"
 
 	if ( yy_init )
 		{
@@ -670,13 +708,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 56 )
+				if ( yy_current_state >= 58 )
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 58 );
+		while ( yy_base[yy_current_state] != 123 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -719,7 +757,7 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 47 "scan-skel.l"
+#line 48 "scan-skel.l"
 {
   char const *filename = yytext + sizeof "@output " - 1;
   yytext[yyleng - 1] = '\0';
@@ -731,10 +769,10 @@ YY_RULE_SETUP
       else if (strcmp (filename, "@output_parser_name@") == 0)
 	filename = parser_file_name;
       else
-	abort ();
+	fatal ("invalid token in skeleton: %s", yytext);
     }
 
-  XFREE (outname);
+  free (outname);
   outname = xstrdup (filename);
   xfclose (yyout);
   yyout = xfopen (outname, "w");
@@ -743,64 +781,65 @@ YY_RULE_SETUP
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 68 "scan-skel.l"
+#line 69 "scan-skel.l"
 fputc ('@', yyout);
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 69 "scan-skel.l"
+#line 70 "scan-skel.l"
 fputc ('[', yyout);
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 70 "scan-skel.l"
+#line 71 "scan-skel.l"
 fputc (']', yyout);
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 72 "scan-skel.l"
-fprintf (yyout, "%d", lineno);
+#line 73 "scan-skel.l"
+fprintf (yyout, "%d", lineno + 1);
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 73 "scan-skel.l"
+#line 74 "scan-skel.l"
 QPUTS (outname);
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 74 "scan-skel.l"
+#line 75 "scan-skel.l"
 QPUTS (parser_file_name);
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 75 "scan-skel.l"
+#line 76 "scan-skel.l"
 QPUTS (spec_defines_file);
 	YY_BREAK
+/* This pattern must not match more than the previous @ patterns. */
 case 9:
 YY_RULE_SETUP
-#line 77 "scan-skel.l"
-abort ();
+#line 79 "scan-skel.l"
+fatal ("invalid @ in skeleton: %s", yytext);
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 78 "scan-skel.l"
+#line 80 "scan-skel.l"
 lineno++; ECHO;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 79 "scan-skel.l"
+#line 81 "scan-skel.l"
 ECHO;
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 81 "scan-skel.l"
+#line 83 "scan-skel.l"
 xfclose (yyout); free (outname); return EOF;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 82 "scan-skel.l"
+#line 84 "scan-skel.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 804 "scan-skel.c"
+#line 843 "scan-skel.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1090,7 +1129,7 @@ static yy_state_type yy_get_previous_state()
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 56 )
+			if ( yy_current_state >= 58 )
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
@@ -1125,11 +1164,11 @@ yy_state_type yy_current_state;
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 56 )
+		if ( yy_current_state >= 58 )
 			yy_c = yy_meta[(unsigned int) yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
-	yy_is_jam = (yy_current_state == 55);
+	yy_is_jam = (yy_current_state == 57);
 
 	return yy_is_jam ? 0 : yy_current_state;
 	}
@@ -1362,9 +1401,13 @@ YY_BUFFER_STATE b;
 	}
 
 
+#ifndef _WIN32
+#include <unistd.h>
+#else
 #ifndef YY_ALWAYS_INTERACTIVE
 #ifndef YY_NEVER_INTERACTIVE
 extern int isatty YY_PROTO(( int ));
+#endif
 #endif
 #endif
 
@@ -1684,7 +1727,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 82 "scan-skel.l"
+#line 84 "scan-skel.l"
 
 
 /*------------------------.

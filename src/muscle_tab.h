@@ -1,5 +1,5 @@
 /* Muscle table manager for Bison,
-   Copyright (C) 2001, 2002 Free Software Foundation, Inc.
+   Copyright (C) 2001, 2002, 2003 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -21,6 +21,8 @@
 #ifndef MUSCLE_TAB_H_
 # define MUSCLE_TAB_H_
 
+# include "location.h"
+
 void muscle_init (void);
 void muscle_insert (const char *key, char *value);
 char *muscle_find (const char *key);
@@ -29,6 +31,12 @@ void muscle_free (void);
 
 /* An obstack dedicated to receive muscle keys and values.  */
 extern struct obstack muscle_obstack;
+
+#define MUSCLE_INSERT_BOOL(Key, Value)				\
+{								\
+  int v = Value;						\
+  MUSCLE_INSERT_INT (Key, v);					\
+}
 
 #define MUSCLE_INSERT_INT(Key, Value)				\
 {								\
@@ -53,15 +61,15 @@ extern struct obstack muscle_obstack;
 
 #define MUSCLE_OBSTACK_SGROW(Obstack, Value)			\
 {								\
-  char const *s;						\
-  for (s = Value; *s; s++)					\
-    switch (*s)							\
+  char const *p;						\
+  for (p = Value; *p; p++)					\
+    switch (*p)							\
       {								\
       case '$':	obstack_sgrow (Obstack, "$]["); break;		\
       case '@':	obstack_sgrow (Obstack, "@@" ); break;		\
       case '[':	obstack_sgrow (Obstack, "@{" ); break;		\
       case ']':	obstack_sgrow (Obstack, "@}" ); break;		\
-      default: obstack_1grow (Obstack, *s); break;		\
+      default: obstack_1grow (Obstack, *p); break;		\
       }								\
 }
 
@@ -79,6 +87,13 @@ extern struct obstack muscle_obstack;
    associated value.  VALUE and SEPARATOR are copied.  */
 
 void muscle_grow (const char *key, const char *value, const char *separator);
+
+
+/* Append VALUE to the current value of KEY, using muscle_grow.  But
+   in addition, issue a synchronization line for the location LOC.  */
+
+void muscle_code_grow (const char *key, const char *value, location loc);
+
 
 /* MUSCLE is an M4 list of pairs.  Create or extend it with the pair
    (A1, A2).  Note that because the muscle values are output *double*

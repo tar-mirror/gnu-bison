@@ -1,5 +1,5 @@
 /* General bitsets.
-   Copyright (C) 2002 Free Software Foundation, Inc.
+   Copyright (C) 2002, 2003, 2004 Free Software Foundation, Inc.
    Contributed by Michael Hayes (m.hayes@elec.canterbury.ac.nz).
 
    This program is free software; you can redistribute it and/or modify
@@ -21,10 +21,12 @@
 #endif
 
 #include <stdlib.h>
+#include <string.h>
 #include "bitset.h"
 #include "abitset.h"
 #include "lbitset.h"
 #include "ebitset.h"
+#include "vbitset.h"
 #include "bitset_stats.h"
 #include "obstack.h"
 
@@ -55,6 +57,10 @@ bitset_bytes (enum bitset_type type, bitset_bindex n_bits)
       bytes = ebitset_bytes (n_bits);
       break;
 
+    case BITSET_VARRAY:
+      bytes = vbitset_bytes (n_bits);
+      break;
+
     default:
       abort ();
     }
@@ -81,6 +87,9 @@ bitset_init (bitset bset, bitset_bindex n_bits, enum bitset_type type)
     case BITSET_TABLE:
       return ebitset_init (bset, n_bits);
 
+    case BITSET_VARRAY:
+      return vbitset_init (bset, n_bits);
+
     default:
       abort ();
     }
@@ -93,27 +102,30 @@ bitset_init (bitset bset, bitset_bindex n_bits, enum bitset_type type)
 enum bitset_type
 bitset_type_choose (bitset_bindex n_bits ATTRIBUTE_UNUSED, unsigned int attr)
 {
-  enum bitset_type type;
-
   /* Check attributes.  */
   if (attr & BITSET_FIXED && attr & BITSET_VARIABLE)
     abort ();
   if (attr & BITSET_SPARSE && attr & BITSET_DENSE)
     abort ();
 
-  /* Choose the type of bitset. Note that sometimes we will be asked
+  /* Choose the type of bitset.  Note that sometimes we will be asked
   for a zero length fixed size bitset.  */
 
-  type = BITSET_ARRAY;
-  /* Currently, the simple bitsets do not support a variable size.  */
-  if (attr & BITSET_VARIABLE || attr & BITSET_SPARSE)
-    {
-      type = BITSET_LIST;
-      if (attr & BITSET_DENSE || attr & BITSET_GREEDY)
-	type = BITSET_TABLE;
-    }
+  
+  /* If no attributes selected, choose a good compromise.  */
+  if (!attr)
+    return BITSET_VARRAY;
 
-  return type;
+  if (attr & BITSET_SPARSE)
+    return BITSET_LIST;
+
+  if (attr & BITSET_FIXED)
+    return BITSET_ARRAY;
+
+  if (attr & BITSET_GREEDY)
+    return BITSET_TABLE;
+
+  return BITSET_VARRAY;
 }
 
 
@@ -223,6 +235,14 @@ bitset_next (bitset src, bitset_bindex bitno)
 }
 
 
+/* Return true if both bitsets are of the same type and size.  */
+extern bool
+bitset_compatible_p (bitset bset1, bitset bset2)
+{
+    return BITSET_COMPATIBLE_ (bset1, bset2);
+}
+
+
 /* Find previous bit set in SRC starting from and including BITNO.
    Return BITSET_BINDEX_MAX if SRC empty.  */
 bitset_bindex
@@ -253,22 +273,22 @@ bitset_last (bitset src)
 }
 
 
-/* Return non-zero if BITNO in SRC is the only set bit.  */
-int
+/* Is BITNO in SRC the only set bit?  */
+bool
 bitset_only_set_p (bitset src, bitset_bindex bitno)
 {
   bitset_bindex val[2];
   bitset_bindex next = 0;
 
   if (bitset_list (src, val, 2, &next) != 1)
-    return 0;
+    return false;
   return val[0] == bitno;
 }
 
 
 /* Print contents of bitset BSET to FILE.   */
 static void
-bitset_print (FILE *file, bitset bset, int verbose)
+bitset_print (FILE *file, bitset bset, bool verbose)
 {
   unsigned int pos;
   bitset_bindex i;
@@ -276,7 +296,7 @@ bitset_print (FILE *file, bitset bset, int verbose)
 
   if (verbose)
     fprintf (file, "n_bits = %lu, set = {",
-	     (unsigned long) bitset_size (bset));
+	     (unsigned long int) bitset_size (bset));
 
   pos = 30;
   BITSET_FOR_EACH (iter, bset, i, 0)
@@ -300,9 +320,8 @@ bitset_print (FILE *file, bitset bset, int verbose)
 void
 bitset_dump (FILE *file, bitset bset)
 {
-  bitset_print (file, bset, 0);
+  bitset_print (file, bset, false);
 }
-
 
 
 /* Release memory associated with bitsets.  */
@@ -314,9 +333,8 @@ bitset_release_memory (void)
 }
 
 
-
-/* Toggle bit BITNO in bitset BSET and return non-zero if not set.  */
-int
+/* Toggle bit BITNO in bitset BSET and the new value of the bit.  */
+bool
 bitset_toggle_ (bitset bset, bitset_bindex bitno)
 {
   /* This routine is for completeness.  It could be optimized if
@@ -324,13 +342,21 @@ bitset_toggle_ (bitset bset, bitset_bindex bitno)
   if (bitset_test (bset, bitno))
     {
       bitset_reset (bset, bitno);
-      return 0;
+      return false;
     }
   else
     {
       bitset_set (bset, bitno);
-      return 1;
+      return true;
     }
+}
+
+
+/* Return number of bits in bitset SRC.  */
+bitset_bindex
+bitset_size_ (bitset src)
+{
+    return BITSET_NBITS_ (src);
 }
 
 
@@ -356,10 +382,10 @@ bitset_count_ (bitset src)
 }
 
 
-/* DST = SRC.  Return non-zero if DST != SRC.
+/* DST = SRC.  Return true if DST != SRC.
    This is a fallback for the case where SRC and DST are different
    bitset types.  */
-int
+bool
 bitset_copy_ (bitset dst, bitset src)
 {
   bitset_bindex i;
@@ -373,23 +399,23 @@ bitset_copy_ (bitset dst, bitset src)
      bitset_set (dst, i);
   };
 
-  return 1;
+  return true;
 }
 
 
 /* This is a fallback for implementations that do not support
    four operand operations.  */
-static inline int
+static inline bool
 bitset_op4_cmp (bitset dst, bitset src1, bitset src2, bitset src3,
 		enum bitset_ops op)
 {
-  int changed = 0;
-  int stats_enabled_save;
+  bool changed = false;
+  bool stats_enabled_save;
   bitset tmp;
 
   /* Create temporary bitset.  */
   stats_enabled_save = bitset_stats_enabled;
-  bitset_stats_enabled = 0;
+  bitset_stats_enabled = false;
   tmp = bitset_alloc (0, bitset_type_get (dst));
   bitset_stats_enabled = stats_enabled_save;
 
@@ -429,7 +455,7 @@ bitset_and_or_ (bitset dst, bitset src1, bitset src2, bitset src3)
 
 /* DST = (SRC1 & SRC2) | SRC3.  Return non-zero if
    DST != (SRC1 & SRC2) | SRC3.  */
-int
+bool
 bitset_and_or_cmp_ (bitset dst, bitset src1, bitset src2, bitset src3)
 {
   return bitset_op4_cmp (dst, src1, src2, src3, BITSET_OP_AND_OR);
@@ -446,7 +472,7 @@ bitset_andn_or_ (bitset dst, bitset src1, bitset src2, bitset src3)
 
 /* DST = (SRC1 & ~SRC2) | SRC3.  Return non-zero if
    DST != (SRC1 & ~SRC2) | SRC3.  */
-int
+bool
 bitset_andn_or_cmp_ (bitset dst, bitset src1, bitset src2, bitset src3)
 {
   return bitset_op4_cmp (dst, src1, src2, src3, BITSET_OP_ANDN_OR);
@@ -463,7 +489,7 @@ bitset_or_and_ (bitset dst, bitset src1, bitset src2, bitset src3)
 
 /* DST = (SRC1 | SRC2) & SRC3.  Return non-zero if
    DST != (SRC1 | SRC2) & SRC3.  */
-int
+bool
 bitset_or_and_cmp_ (bitset dst, bitset src1, bitset src2, bitset src3)
 {
   return bitset_op4_cmp (dst, src1, src2, src3, BITSET_OP_OR_AND);
@@ -475,5 +501,5 @@ void
 debug_bitset (bitset bset)
 {
   if (bset)
-    bitset_print (stderr, bset, 1);
+    bitset_print (stderr, bset, true);
 }

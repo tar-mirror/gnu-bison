@@ -1,9 +1,11 @@
-/* Copyright (C) 2001 Free Software Foundation, Inc.
+/* Duplicate a bounded initial segment of a string, with out-of-memory
+   checking.
+   Copyright (C) 2003 Free Software Foundation, Inc.
 
-   This program is free software; you can redistribute it and/or modify it
-   under the terms of the GNU General Public License as published by the
-   Free Software Foundation; either version 2, or (at your option) any
-   later version.
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2, or (at your option)
+   any later version.
 
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,34 +20,20 @@
 # include <config.h>
 #endif
 
-#if STDC_HEADERS || HAVE_STRING_H
-# include <string.h>
-#else
-# include <strings.h>
-#endif
+/* Specification.  */
+#include "xstrndup.h"
 
-#include <sys/types.h>
-
+#include "strndup.h"
 #include "xalloc.h"
 
-#ifndef HAVE_DECL_STRNLEN
-"this configure-time declaration test was not run"
-#endif
-#if !HAVE_DECL_STRNLEN
-size_t strnlen ();
-#endif
-
-char *xstrndup (const char *s, size_t n);
-
+/* Return a newly allocated copy of at most N bytes of STRING.
+   In other words, return a copy of the initial segment of length N of
+   STRING.  */
 char *
-xstrndup (const char *s, size_t n)
+xstrndup (const char *string, size_t n)
 {
-  size_t len = strnlen (s, n);
-  char *new = xmalloc (len + 1);
-
-  if (new == NULL)
-    return NULL;
-
-  new[len] = '\0';
-  return (char *) memcpy (new, s, len);
+  char *s = strndup (string, n);
+  if (! s)
+    xalloc_die ();
+  return s;
 }

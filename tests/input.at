@@ -1,5 +1,5 @@
-# Checking the output filenames.                    -*- Autotest -*-
-# Copyright (C) 2002 Free Software Foundation, Inc.
+# Checking the Bison scanner.                    -*- Autotest -*-
+# Copyright (C) 2002, 2003, 2004 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ AT_BANNER([[Input Processing.]])
 ## Invalid $n.  ##
 ## ------------ ##
 
-AT_SETUP([Invalid $n])
+AT_SETUP([Invalid \$n])
 
 AT_DATA([input.y],
 [[%%
@@ -82,6 +82,43 @@ input.y:6.5: warning: empty rule for typed nonterminal, and no action
 AT_CLEANUP
 
 
+## ---------------------- ##
+## Incompatible Aliases.  ##
+## ---------------------- ##
+
+AT_SETUP([Incompatible Aliases])
+
+AT_DATA([input.y],
+[[%token foo "foo"
+
+%type <bar>       foo
+%printer {bar}    foo
+%destructor {bar} foo
+%left             foo
+
+%type <baz>       "foo"
+%printer {baz}    "foo"
+%destructor {baz} "foo"
+%left             "foo"
+
+%%
+exp: foo;
+]])
+
+AT_CHECK([bison input.y], [1], [],
+[[input.y:8.7-11: %type redeclaration for foo
+input.y:3.7-11: first declaration
+input.y:10.13-17: %destructor redeclaration for foo
+input.y:5.13-17: first declaration
+input.y:9.19-23: %printer redeclaration for foo
+input.y:10.13-17: first declaration
+input.y:11.1-5: %left redeclaration for foo
+input.y:6.1-5: first declaration
+]])
+
+AT_CLEANUP
+
+
 
 ## ----------------------- ##
 ## Torturing the Scanner.  ##
@@ -91,6 +128,13 @@ AT_CLEANUP
 # we do.
 
 AT_SETUP([Torturing the Scanner])
+
+
+AT_DATA([input.y], [])
+AT_CHECK([bison input.y], [1], [],
+[[input.y:1.1: syntax error, unexpected "end of file"
+]])
+
 
 AT_DATA_GRAMMAR([input.y],
 [[%{
@@ -160,11 +204,11 @@ static int yylex (void);
 %type <ival> '@<:@'
 
 /* Exercise quotes in strings.  */
-%token FAKE "fake @<:@@:>@ \a\b\f\n\r\t\v\"\'\?\\\u005B\U0000005c ??!??'??(??)??-??/??<??=??> \x0\0"
+%token FAKE "fake @<:@@:>@ \a\b\f\n\r\t\v\"\'\?\\\u005B\U0000005c ??!??'??(??)??-??/??<??=??> \x1\1"
 
 %%
 /* Exercise M4 quoting: '@:>@@:>@', @<:@, 1.  */
-exp: '@<:@' '\1' two '$' '@' '{' oline output
+exp: '@<:@' '\1' two '$' '@' '{' oline output.or.oline.opt
   {
     /* Exercise quotes in braces.  */
     char tmp[] = "@<:@%c@:>@,\n";
@@ -174,6 +218,7 @@ exp: '@<:@' '\1' two '$' '@' '{' oline output
 
 two: '\x000000000000000000000000000000000000000000000000000000000000000000002';
 oline: '@' 'o' 'l' 'i' 'n' 'e' '@' '_' '_' 'o' 'l' 'i' 'n' 'e' '_' '_';
+output.or.oline.opt: ;|oline;;|output;;;
 output: '#' 'o' 'u' 't' 'p' 'u' 't' ' ';
 %%
 /* Exercise M4 quoting: '@:>@@:>@', @<:@, 2.  */

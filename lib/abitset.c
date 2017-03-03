@@ -1,5 +1,5 @@
 /* Array bitsets.
-   Copyright (C) 2002 Free Software Foundation, Inc.
+   Copyright (C) 2002, 2003 Free Software Foundation, Inc.
    Contributed by Michael Hayes (m.hayes@elec.canterbury.ac.nz).
 
    This program is free software; you can redistribute it and/or modify
@@ -31,16 +31,18 @@
 
 #define ABITSET_N_WORDS(N) (((N) + BITSET_WORD_BITS - 1) / BITSET_WORD_BITS)
 #define ABITSET_WORDS(X) ((X)->a.words)
-#define ABITSET_N_BITS(X) ((X)->a.n_bits)
 
 
-/* Return size in bits of bitset SRC.  */
 static bitset_bindex
-abitset_size (bitset src)
+abitset_resize (bitset src ATTRIBUTE_UNUSED,
+		bitset_bindex size ATTRIBUTE_UNUSED)
 {
-  return ABITSET_N_BITS (src);
-}
+    if (BITSET_SIZE_ (src) == size)
+	return size;
 
+    /* These bitsets have a fixed size.  */
+    abort ();
+}
 
 /* Find list of up to NUM bits set in BSET starting from and including
  *NEXT and store in array LIST.  Return with actual number of bits
@@ -60,7 +62,7 @@ abitset_small_list (bitset src, bitset_bindex *list,
   if (!word)
     return 0;
 
-  size = ABITSET_N_BITS (src);
+  size = BITSET_SIZE_ (src);
   bitno = *next;
   if (bitno >= size)
     return 0;
@@ -105,8 +107,9 @@ abitset_small_list (bitset src, bitset_bindex *list,
 static void
 abitset_set (bitset dst ATTRIBUTE_UNUSED, bitset_bindex bitno ATTRIBUTE_UNUSED)
 {
-  /* This should never occur for abitsets since we should always
-     hit the cache.  */
+  /* This should never occur for abitsets since we should always hit
+     the cache.  It is likely someone is trying to access outside the
+     bounds of the bitset.  */
   abort ();
 }
 
@@ -116,21 +119,20 @@ static void
 abitset_reset (bitset dst ATTRIBUTE_UNUSED,
 	       bitset_bindex bitno ATTRIBUTE_UNUSED)
 {
-  /* This should never occur for abitsets since we should always
-     hit the cache.  */
-  abort ();
+  /* This should never occur for abitsets since we should always hit
+     the cache.  It is likely someone is trying to access outside the
+     bounds of the bitset.  Since the bit is zero anyway, let it pass.  */
 }
 
 
 /* Test bit BITNO in bitset SRC.  */
-static int
+static bool
 abitset_test (bitset src ATTRIBUTE_UNUSED,
 	      bitset_bindex bitno ATTRIBUTE_UNUSED)
 {
   /* This should never occur for abitsets since we should always
      hit the cache.  */
-  abort ();
-  return 0;
+  return false;
 }
 
 
@@ -149,7 +151,7 @@ abitset_list_reverse (bitset src, bitset_bindex *list,
   unsigned int bitcnt;
   bitset_bindex bitoff;
   bitset_word *srcp = ABITSET_WORDS (src);
-  bitset_bindex n_bits = ABITSET_N_BITS (src);
+  bitset_bindex n_bits = BITSET_SIZE_ (src);
 
   rbitno = *next;
 
@@ -228,7 +230,7 @@ abitset_list (bitset src, bitset_bindex *list,
     }
   else
     {
-      if (bitno >= ABITSET_N_BITS (src))
+      if (bitno >= BITSET_SIZE_ (src))
 	return 0;
 
       windex = bitno / BITSET_WORD_BITS;
@@ -304,7 +306,7 @@ abitset_unused_clear (bitset dst)
 {
   unsigned int last_bit;
 
-  last_bit = ABITSET_N_BITS (dst) % BITSET_WORD_BITS;
+  last_bit = BITSET_SIZE_ (dst) % BITSET_WORD_BITS;
   if (last_bit)
     ABITSET_WORDS (dst)[dst->b.csize - 1] &=
       ((bitset_word) 1 << last_bit) - 1;
@@ -336,7 +338,7 @@ abitset_zero (bitset dst)
 }
 
 
-static int
+static bool
 abitset_empty_p (bitset dst)
 {
   bitset_windex i;
@@ -344,9 +346,9 @@ abitset_empty_p (bitset dst)
 
   for (i = 0; i < dst->b.csize; i++)
     if (dstp[i])
-      return 0;
+      return false;
 
-  return 1;
+  return true;
 }
 
 
@@ -377,7 +379,7 @@ abitset_not (bitset dst, bitset src)
 }
 
 
-static int
+static bool
 abitset_equal_p (bitset dst, bitset src)
 {
   bitset_windex i;
@@ -387,12 +389,12 @@ abitset_equal_p (bitset dst, bitset src)
 
   for (i = 0; i < size; i++)
       if (*srcp++ != *dstp++)
-	  return 0;
-  return 1;
+	  return false;
+  return true;
 }
 
 
-static int
+static bool
 abitset_subset_p (bitset dst, bitset src)
 {
   bitset_windex i;
@@ -402,12 +404,12 @@ abitset_subset_p (bitset dst, bitset src)
 
   for (i = 0; i < size; i++, dstp++, srcp++)
       if (*dstp != (*srcp | *dstp))
-	  return 0;
-  return 1;
+	  return false;
+  return true;
 }
 
 
-static int
+static bool
 abitset_disjoint_p (bitset dst, bitset src)
 {
   bitset_windex i;
@@ -417,9 +419,9 @@ abitset_disjoint_p (bitset dst, bitset src)
 
   for (i = 0; i < size; i++)
       if (*srcp++ & *dstp++)
-	  return 0;
+	  return false;
 
-  return 1;
+  return true;
 }
 
 
@@ -437,11 +439,11 @@ abitset_and (bitset dst, bitset src1, bitset src2)
 }
 
 
-static int
+static bool
 abitset_and_cmp (bitset dst, bitset src1, bitset src2)
 {
   bitset_windex i;
-  int changed = 0;
+  bool changed = false;
   bitset_word *src1p = ABITSET_WORDS (src1);
   bitset_word *src2p = ABITSET_WORDS (src2);
   bitset_word *dstp = ABITSET_WORDS (dst);
@@ -453,7 +455,7 @@ abitset_and_cmp (bitset dst, bitset src1, bitset src2)
 
       if (*dstp != tmp)
 	{
-	  changed = 1;
+	  changed = true;
 	  *dstp = tmp;
 	}
     }
@@ -475,11 +477,11 @@ abitset_andn (bitset dst, bitset src1, bitset src2)
 }
 
 
-static int
+static bool
 abitset_andn_cmp (bitset dst, bitset src1, bitset src2)
 {
   bitset_windex i;
-  int changed = 0;
+  bool changed = false;
   bitset_word *src1p = ABITSET_WORDS (src1);
   bitset_word *src2p = ABITSET_WORDS (src2);
   bitset_word *dstp = ABITSET_WORDS (dst);
@@ -491,7 +493,7 @@ abitset_andn_cmp (bitset dst, bitset src1, bitset src2)
 
       if (*dstp != tmp)
 	{
-	  changed = 1;
+	  changed = true;
 	  *dstp = tmp;
 	}
     }
@@ -513,11 +515,11 @@ abitset_or (bitset dst, bitset src1, bitset src2)
 }
 
 
-static int
+static bool
 abitset_or_cmp (bitset dst, bitset src1, bitset src2)
 {
   bitset_windex i;
-  int changed = 0;
+  bool changed = false;
   bitset_word *src1p = ABITSET_WORDS (src1);
   bitset_word *src2p = ABITSET_WORDS (src2);
   bitset_word *dstp = ABITSET_WORDS (dst);
@@ -529,7 +531,7 @@ abitset_or_cmp (bitset dst, bitset src1, bitset src2)
 
       if (*dstp != tmp)
 	{
-	  changed = 1;
+	  changed = true;
 	  *dstp = tmp;
 	}
     }
@@ -551,11 +553,11 @@ abitset_xor (bitset dst, bitset src1, bitset src2)
 }
 
 
-static int
+static bool
 abitset_xor_cmp (bitset dst, bitset src1, bitset src2)
 {
   bitset_windex i;
-  int changed = 0;
+  bool changed = false;
   bitset_word *src1p = ABITSET_WORDS (src1);
   bitset_word *src2p = ABITSET_WORDS (src2);
   bitset_word *dstp = ABITSET_WORDS (dst);
@@ -567,7 +569,7 @@ abitset_xor_cmp (bitset dst, bitset src1, bitset src2)
 
       if (*dstp != tmp)
 	{
-	  changed = 1;
+	  changed = true;
 	  *dstp = tmp;
 	}
     }
@@ -590,11 +592,11 @@ abitset_and_or (bitset dst, bitset src1, bitset src2, bitset src3)
 }
 
 
-static int
+static bool
 abitset_and_or_cmp (bitset dst, bitset src1, bitset src2, bitset src3)
 {
   bitset_windex i;
-  int changed = 0;
+  bool changed = false;
   bitset_word *src1p = ABITSET_WORDS (src1);
   bitset_word *src2p = ABITSET_WORDS (src2);
   bitset_word *src3p = ABITSET_WORDS (src3);
@@ -607,7 +609,7 @@ abitset_and_or_cmp (bitset dst, bitset src1, bitset src2, bitset src3)
 
       if (*dstp != tmp)
 	{
-	  changed = 1;
+	  changed = true;
 	  *dstp = tmp;
 	}
     }
@@ -630,11 +632,11 @@ abitset_andn_or (bitset dst, bitset src1, bitset src2, bitset src3)
 }
 
 
-static int
+static bool
 abitset_andn_or_cmp (bitset dst, bitset src1, bitset src2, bitset src3)
 {
   bitset_windex i;
-  int changed = 0;
+  bool changed = false;
   bitset_word *src1p = ABITSET_WORDS (src1);
   bitset_word *src2p = ABITSET_WORDS (src2);
   bitset_word *src3p = ABITSET_WORDS (src3);
@@ -647,7 +649,7 @@ abitset_andn_or_cmp (bitset dst, bitset src1, bitset src2, bitset src3)
 
       if (*dstp != tmp)
 	{
-	  changed = 1;
+	  changed = true;
 	  *dstp = tmp;
 	}
     }
@@ -670,11 +672,11 @@ abitset_or_and (bitset dst, bitset src1, bitset src2, bitset src3)
 }
 
 
-static int
+static bool
 abitset_or_and_cmp (bitset dst, bitset src1, bitset src2, bitset src3)
 {
   bitset_windex i;
-  int changed = 0;
+  bool changed = false;
   bitset_word *src1p = ABITSET_WORDS (src1);
   bitset_word *src2p = ABITSET_WORDS (src2);
   bitset_word *src3p = ABITSET_WORDS (src3);
@@ -687,7 +689,7 @@ abitset_or_and_cmp (bitset dst, bitset src1, bitset src2, bitset src3)
 
       if (*dstp != tmp)
 	{
-	  changed = 1;
+	  changed = true;
 	  *dstp = tmp;
 	}
     }
@@ -711,7 +713,8 @@ struct bitset_vtable abitset_small_vtable = {
   abitset_reset,
   bitset_toggle_,
   abitset_test,
-  abitset_size,
+  abitset_resize,
+  bitset_size_,
   bitset_count_,
   abitset_empty_p,
   abitset_ones,
@@ -748,7 +751,8 @@ struct bitset_vtable abitset_vtable = {
   abitset_reset,
   bitset_toggle_,
   abitset_test,
-  abitset_size,
+  abitset_resize,
+  bitset_size_,
   bitset_count_,
   abitset_empty_p,
   abitset_ones,
@@ -809,7 +813,7 @@ abitset_init (bitset bset, bitset_bindex n_bits)
   bitset_windex size;
 
   size = ABITSET_N_WORDS (n_bits);
-  ABITSET_N_BITS (bset) = n_bits;
+  BITSET_NBITS_ (bset) = n_bits;
 
   /* Use optimized routines if bitset fits within a single word.
      There is probably little merit if using caching since

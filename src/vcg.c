@@ -1,6 +1,6 @@
 /* VCG description handler for Bison.
 
-   Copyright (C) 2001, 2002 Free Software Foundation, Inc.
+   Copyright (C) 2001, 2002, 2003 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -59,7 +59,7 @@ new_graph (graph *g)
   g->y = G_Y;
   g->folding = G_FOLDING;
   g->shrink = G_SHRINK;
-  g->expand = G_EXPAND;
+  g->stretch = G_STRETCH;
 
   g->textmode = G_TEXTMODE;
   g->shape = G_SHAPE;
@@ -85,7 +85,6 @@ new_graph (graph *g)
 
   g->classname = G_CLASSNAME; /* No class name association. */
 
-  g->layoutalgorithm = G_LAYOUTALGORITHM;
   g->layout_downfactor = G_LAYOUT_DOWNFACTOR;
   g->layout_upfactor = G_LAYOUT_UPFACTOR;
   g->layout_nearfactor = G_LAYOUT_NEARFACTOR;
@@ -96,7 +95,6 @@ new_graph (graph *g)
   g->dirty_edge_labels = G_DIRTY_EDGE_LABELS;
   g->finetuning = G_FINETUNING;
   g->ignore_singles = G_IGNORE_SINGLES;
-  g->long_straight_phase = G_LONG_STRAIGHT_PHASE;
   g->priority_phase = G_PRIORITY_PHASE;
   g->manhattan_edges = G_MANHATTAN_EDGES;
   g->smanhattan_edges = G_SMANHATTAN_EDGES;
@@ -150,7 +148,7 @@ new_node (node *n)
   n->height = N_HEIGHT; /* Also. */
 
   n->shrink = N_SHRINK;
-  n->expand = N_EXPAND;
+  n->stretch = N_STRETCH;
 
   n->folding = N_FOLDING; /* No explicit default value. */
 
@@ -210,9 +208,9 @@ new_edge (edge *e)
 `----------------------------------------------*/
 
 static const char *
-get_color_str (enum color c)
+get_color_str (enum color color)
 {
-  switch (c)
+  switch (color)
     {
     case white:		return "white";
     case blue:		return "blue";
@@ -251,9 +249,9 @@ get_color_str (enum color c)
 }
 
 static const char *
-get_textmode_str (enum textmode t)
+get_textmode_str (enum textmode textmode)
 {
-  switch (t)
+  switch (textmode)
     {
     case centered:	return "center";
     case left_justify:	return "left_justify";
@@ -263,9 +261,9 @@ get_textmode_str (enum textmode t)
 }
 
 static const char *
-get_shape_str (enum shape s)
+get_shape_str (enum shape shape)
 {
-  switch (s)
+  switch (shape)
     {
     case box:		return "box";
     case rhomb:		return "rhomb";
@@ -276,32 +274,9 @@ get_shape_str (enum shape s)
 }
 
 static const char *
-get_layoutalgorithm_str (enum layoutalgorithm l)
+get_decision_str (enum decision decision)
 {
-  switch (l)
-    {
-    case normal:       	return "normal";
-    case maxdepth:	return "maxdepth";
-    case mindepth:	return "mindepth";
-    case maxdepthslow:	return "maxdepthslow";
-    case mindepthslow:	return "mindepthslow";
-    case maxdegree:	return "maxdegree";
-    case mindegree:	return "mindegree";
-    case maxindegree:	return "maxindegree";
-    case minindegree:	return "minindegree";
-    case maxoutdegree:	return "maxoutdegree";
-    case minoutdegree:	return "minoutdegree";
-    case minbackward:	return "minbackward";
-    case dfs:		return "dfs";
-    case tree:		return "tree";
-    default:		abort (); return NULL;
-    }
-}
-
-static const char *
-get_decision_str (enum decision d)
-{
-  switch (d)
+  switch (decision)
     {
     case no:	return "no";
     case yes:	return "yes";
@@ -310,9 +285,9 @@ get_decision_str (enum decision d)
 }
 
 static const char *
-get_orientation_str (enum orientation o)
+get_orientation_str (enum orientation orientation)
 {
-  switch (o)
+  switch (orientation)
     {
     case top_to_bottom:	return "top_to_bottom";
     case bottom_to_top: return "bottom_to_top";
@@ -323,9 +298,9 @@ get_orientation_str (enum orientation o)
 }
 
 static const char *
-get_node_alignment_str (enum alignment a)
+get_node_alignment_str (enum alignment alignment)
 {
-  switch (a)
+  switch (alignment)
     {
     case center:	return "center";
     case top:		return "top";
@@ -335,9 +310,9 @@ get_node_alignment_str (enum alignment a)
 }
 
 static const char *
-get_arrow_mode_str (enum arrow_mode a)
+get_arrow_mode_str (enum arrow_mode arrow_mode)
 {
-  switch (a)
+  switch (arrow_mode)
     {
     case fixed:		return "fixed";
     case free_a:	return "free";
@@ -346,9 +321,9 @@ get_arrow_mode_str (enum arrow_mode a)
 }
 
 static const char *
-get_crossing_type_str (enum crossing_type c)
+get_crossing_type_str (enum crossing_type crossing_type)
 {
-  switch (c)
+  switch (crossing_type)
     {
     case bary:		return "bary";
     case median:	return "median";
@@ -359,9 +334,9 @@ get_crossing_type_str (enum crossing_type c)
 }
 
 static const char *
-get_view_str (enum view v)
+get_view_str (enum view view)
 {
-  switch (v)
+  switch (view)
     {
     case normal_view:	return "normal_view";
     case cfish:		return "cfish";
@@ -373,9 +348,9 @@ get_view_str (enum view v)
 }
 
 static const char *
-get_linestyle_str (enum linestyle l)
+get_linestyle_str (enum linestyle linestyle)
 {
-  switch (l)
+  switch (linestyle)
     {
     case continuous:	return "continuous";
     case dashed:	return "dashed";
@@ -386,9 +361,9 @@ get_linestyle_str (enum linestyle l)
 }
 
 static const char *
-get_arrowstyle_str (enum arrowstyle a)
+get_arrowstyle_str (enum arrowstyle arrowstyle)
 {
-  switch (a)
+  switch (arrowstyle)
     {
     case solid:	return "solid";
     case line:	return "line";
@@ -419,9 +394,7 @@ add_edge (graph *g, edge *e)
 void
 add_classname (graph *g, int val, const char *name)
 {
-  struct classname *classname;
-
-  MALLOC (classname, 1);
+  struct classname *classname = xmalloc (sizeof *classname);
   classname->no = val;
   classname->name = name;
   classname->next = g->classname;
@@ -431,9 +404,7 @@ add_classname (graph *g, int val, const char *name)
 void
 add_infoname (graph *g, int integer, const char *str)
 {
-  struct infoname *infoname;
-
-  MALLOC (infoname, 1);
+  struct infoname *infoname = xmalloc (sizeof *infoname);
   infoname->integer = integer;
   infoname->chars = str;
   infoname->next = g->infoname;
@@ -445,9 +416,7 @@ void
 add_colorentry (graph *g, int color_idx, int red_cp,
 		int green_cp, int blue_cp)
 {
-  struct colorentry *ce;
-
-  MALLOC (ce, 1);
+  struct colorentry *ce = xmalloc (sizeof *ce);
   ce->color_index = color_idx;
   ce->red_cp = red_cp;
   ce->green_cp = green_cp;
@@ -566,8 +535,8 @@ output_node (node *n, FILE *fout)
 
   if (n->shrink != N_SHRINK)
     fprintf (fout, "\t\tshrink:\t%d\n", n->shrink);
-  if (n->expand != N_EXPAND)
-    fprintf (fout, "\t\texpand:\t%d\n", n->expand);
+  if (n->stretch != N_STRETCH)
+    fprintf (fout, "\t\tstretch:\t%d\n", n->stretch);
 
   if (n->folding != N_FOLDING)
     fprintf (fout, "\t\tfolding:\t%d\n", n->folding);
@@ -694,8 +663,8 @@ output_graph (graph *g, FILE *fout)
 
   if (g->shrink != G_SHRINK)
     fprintf (fout, "\tshrink:\t%d\n", g->shrink);
-  if (g->expand != G_EXPAND)
-    fprintf (fout, "\texpand:\t%d\n", g->expand);
+  if (g->stretch != G_STRETCH)
+    fprintf (fout, "\tstretch:\t%d\n", g->stretch);
 
   if (g->textmode != G_TEXTMODE)
     fprintf (fout, "\ttextmode:\t%s\n",
@@ -768,10 +737,6 @@ output_graph (graph *g, FILE *fout)
 	}
     }
 
-  if (g->layoutalgorithm != G_LAYOUTALGORITHM)
-    fprintf (fout, "\tlayoutalgorithm:\t%s\n",
-	     get_layoutalgorithm_str (g->layoutalgorithm));
-
   if (g->layout_downfactor != G_LAYOUT_DOWNFACTOR)
     fprintf (fout, "\tlayout_downfactor:\t%d\n", g->layout_downfactor);
   if (g->layout_upfactor != G_LAYOUT_UPFACTOR)
@@ -797,9 +762,6 @@ output_graph (graph *g, FILE *fout)
   if (g->ignore_singles != G_IGNORE_SINGLES)
     fprintf (fout, "\tignore_singles:\t%s\n",
 	     get_decision_str (g->ignore_singles));
-  if (g->long_straight_phase != G_LONG_STRAIGHT_PHASE)
-    fprintf (fout, "\tlong_straight_phase:\t%s\n",
-	     get_decision_str (g->long_straight_phase));
   if (g->priority_phase != G_PRIORITY_PHASE)
     fprintf (fout, "\tpriority_phase:\t%s\n",
 	     get_decision_str (g->priority_phase));

@@ -5,12 +5,16 @@ Airy Andre                Airy.Andre@edf.fr
 Akim Demaille             akim@freefriends.org
 Albert Chin-A-Young       china@thewrittenword.com
 Alexander Belopolsky      alexb@rentec.com
+Alexandre Duret-Lutz      adl@src.lip6.fr
 Andreas Schwab            schwab@suse.de
+Andrew Suffield           asuffield@users.sourceforge.net
 Arnold Robbins            arnold@skeeve.com
 Art Haas                  ahaas@neosoft.com
+Baron Schwartz            baron@sequent.org
 Benoit Perrot             benoit.perrot@epita.fr
 Bert Deknuydt             Bert.Deknuydt@esat.kuleuven.ac.be
 Bruce Lilly               blilly@erols.com
+Bruno Haible              bruno@clisp.org
 Charles-Henri de Boysson  de-boy_c@epita.fr
 Cris Bailiff              c.bailiff+bison@awayweb.com
 Cris van Pelt             cris@amf03054.office.wxs.nl
@@ -21,6 +25,8 @@ Enrico Scholz             enrico.scholz@informatik.tu-chemnitz.de
 Evgeny Stambulchik        fnevgeny@plasma-gate.weizmann.ac.il
 Fabrice Bauzac            noon@cote-dazur.com
 Florian Krohm             florian@edamail.fishkill.ibm.com
+Frank Heckenbach          frank@g-n-u.de
+Guido Trentalancia        trentalg@aston.ac.uk
 H. Merijn Brand           h.m.brand@hccnet.nl
 Hans Aberg                haberg@matematik.su.se
 Jan Nieuwenhuizen         janneke@gnu.org
@@ -44,10 +50,11 @@ Nicolas Burrus            nicolas.burrus@epita.fr
 Nicolas Tisserand         nicolas.tisserand@epita.fr
 Noah Friedman             friedman@gnu.org
 Pascal Bart               pascal.bart@epita.fr
-Paul Eggert               eggert@twinsun.com
+Paul Eggert               eggert@cs.ucla.edu
 Paul Hilfinger            Hilfinger@CS.Berkeley.EDU
 Per Allansson             per@appgate.com
-Peter Hámorský            hamo@upjs.sk
+Peter Fales               psfales@lucent.com
+Peter Hamorsky            hamo@upjs.sk
 Piotr Gackiewicz          gacek@intertel.com.pl
 Quoc Peyrot               chojin@lrde.epita.fr
 R Blake                   blakers@mac.com
@@ -59,6 +66,8 @@ Tim Josling               tej@melbpc.org.au
 Tim Van Holder            tim.van.holder@pandora.be
 Tom Lane                  tgl@sss.pgh.pa.us
 Tom Tromey                tromey@cygnus.com
+Troy A. Johnson           troyj@ecn.purdue.edu
+Vin Shelton               acs@alumni.princeton.edu
 Wayne Green               wayne@infosavvy.com
 Wolfram Wagner            ww@mpi-sb.mpg.de
 Wwp                       subscript@free.fr

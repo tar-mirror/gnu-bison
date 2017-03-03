@@ -1,6 +1,6 @@
 /* Input parser for Bison
 
-   Copyright (C) 1984, 1986, 1989, 1992, 1998, 2000, 2001, 2002
+   Copyright (C) 1984, 1986, 1989, 1992, 1998, 2000, 2001, 2002, 2003
    Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
@@ -36,25 +36,28 @@
 #include "symtab.h"
 
 static symbol_list *grammar = NULL;
-static int start_flag = 0;
+static bool start_flag = false;
 merger_list *merge_functions;
 
-/* Nonzero if %union has been seen.  */
-int typed = 0;
+/* Has %union been seen?  */
+bool typed = false;
+
+/* Should rules have a default precedence?  */
+bool default_prec = true;
 
 /*-----------------------.
 | Set the start symbol.  |
 `-----------------------*/
 
 void
-grammar_start_symbol_set (symbol *s, location loc)
+grammar_start_symbol_set (symbol *sym, location loc)
 {
   if (start_flag)
     complain_at (loc, _("multiple %s declarations"), "%start");
   else
     {
-      start_flag = 1;
-      startsymbol = s;
+      start_flag = true;
+      startsymbol = sym;
       startsymbol_location = loc;
     }
 }
@@ -77,29 +80,6 @@ prologue_augment (const char *prologue, location loc)
   obstack_sgrow (oout, "]])[\n");
   obstack_sgrow (oout, prologue);
 }
-
-
-
-
-/*----------------------.
-| Handle the epilogue.  |
-`----------------------*/
-
-void
-epilogue_augment (const char *epilogue, location loc)
-{
-  char *extension = NULL;
-  obstack_fgrow1 (&muscle_obstack, "]b4_syncline([[%d]], [[", loc.start.line);
-  MUSCLE_OBSTACK_SGROW (&muscle_obstack,
-			quotearg_style (c_quoting_style, loc.start.file));
-  obstack_sgrow (&muscle_obstack, "]])[\n");
-  obstack_sgrow (&muscle_obstack, epilogue);
-  obstack_1grow (&muscle_obstack, 0);
-  extension = obstack_finish (&muscle_obstack);
-  muscle_grow ("epilogue", extension, "");
-  obstack_free (&muscle_obstack, extension);
-}
-
 
 
 
@@ -128,7 +108,7 @@ get_merge_function (uniqstr name, uniqstr type, location loc)
       break;
   if (syms->next == NULL)
     {
-      MALLOC (syms->next, 1);
+      syms->next = xmalloc (sizeof syms->next[0]);
       syms->next->name = uniqstr_new (name);
       syms->next->type = uniqstr_new (type);
       syms->next->next = NULL;
@@ -213,7 +193,7 @@ grammar_rule_begin (symbol *lhs, location loc)
     {
       startsymbol = lhs;
       startsymbol_location = loc;
-      start_flag = 1;
+      start_flag = true;
     }
 
   /* Start a new rule and record its lhs.  */
@@ -407,8 +387,8 @@ packgram (void)
   rule_number ruleno = 0;
   symbol_list *p = grammar;
 
-  CALLOC (ritem, nritems);
-  CALLOC (rules, nrules);
+  ritem = xnmalloc (nritems, sizeof *ritem);
+  rules = xnmalloc (nrules, sizeof *rules);
 
   while (p)
     {
@@ -417,12 +397,14 @@ packgram (void)
       rules[ruleno].number = ruleno;
       rules[ruleno].lhs = p->sym;
       rules[ruleno].rhs = ritem + itemno;
+      rules[ruleno].prec = NULL;
+      rules[ruleno].dprec = p->dprec;
+      rules[ruleno].merger = p->merger;
+      rules[ruleno].precsym = NULL;
       rules[ruleno].location = p->location;
       rules[ruleno].useful = true;
       rules[ruleno].action = p->action;
       rules[ruleno].action_location = p->action_location;
-      rules[ruleno].dprec = p->dprec;
-      rules[ruleno].merger = p->merger;
 
       p = p->next;
       while (p && p->sym)
@@ -432,7 +414,7 @@ packgram (void)
 	  ritem[itemno++] = symbol_number_as_item_number (p->sym->number);
 	  /* A rule gets by default the precedence and associativity
 	     of the last token in it.  */
-	  if (p->sym->class == token_sym)
+	  if (p->sym->class == token_sym && default_prec)
 	    rules[ruleno].prec = p->sym;
 	  if (p)
 	    p = p->next;

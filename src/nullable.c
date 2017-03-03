@@ -1,6 +1,7 @@
 /* Calculate which nonterminals can expand into the null string for Bison.
 
-   Copyright (C) 1984, 1989, 2000, 2001, 2002 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989, 2000, 2001, 2002, 2003, 2004 Free
+   Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -60,16 +61,16 @@ nullable_compute (void)
   symbol_number *s2;
   rule_list *p;
 
-  symbol_number *squeue = CALLOC (squeue, nvars);
-  short *rcount = CALLOC (rcount, nrules);
+  symbol_number *squeue = xnmalloc (nvars, sizeof *squeue);
+  size_t *rcount = xcalloc (nrules, sizeof *rcount);
   /* RITEM contains all the rules, including useless productions.
      Hence we must allocate room for useless nonterminals too.  */
-  rule_list **rsets = CALLOC (rsets, nvars);
+  rule_list **rsets = xcalloc (nvars, sizeof *rsets);
   /* This is said to be more elements than we actually use.
      Supposedly NRITEMS - NRULES is enough.  But why take the risk?  */
-  rule_list *relts = CALLOC (relts, nritems + nvars + 1);
+  rule_list *relts = xnmalloc (nritems + nvars + 1, sizeof *relts);
 
-  CALLOC (nullable, nvars);
+  nullable = xcalloc (nvars, sizeof *nullable);
 
   s1 = s2 = squeue;
   p = relts;
@@ -81,21 +82,21 @@ nullable_compute (void)
 	if (rules_ruleno->rhs[0] >= 0)
 	  {
 	    /* This rule has a non empty RHS. */
-	    item_number *r = NULL;
-	    int any_tokens = 0;
-	    for (r = rules_ruleno->rhs; *r >= 0; ++r)
-	      if (ISTOKEN (*r))
-		any_tokens = 1;
+	    item_number *rp = NULL;
+	    bool any_tokens = false;
+	    for (rp = rules_ruleno->rhs; *rp >= 0; ++rp)
+	      if (ISTOKEN (*rp))
+		any_tokens = true;
 
 	    /* This rule has only nonterminals: schedule it for the second
 	       pass.  */
 	    if (!any_tokens)
-	      for (r = rules_ruleno->rhs; *r >= 0; ++r)
+	      for (rp = rules_ruleno->rhs; *rp >= 0; ++rp)
 		{
 		  rcount[ruleno]++;
-		  p->next = rsets[*r - ntokens];
+		  p->next = rsets[*rp - ntokens];
 		  p->value = rules_ruleno;
-		  rsets[*r - ntokens] = p;
+		  rsets[*rp - ntokens] = p;
 		  p++;
 		}
 	  }
@@ -107,7 +108,7 @@ nullable_compute (void)
 	    if (rules_ruleno->useful
 		&& ! nullable[rules_ruleno->lhs->number - ntokens])
 	      {
-		nullable[rules_ruleno->lhs->number - ntokens] = 1;
+		nullable[rules_ruleno->lhs->number - ntokens] = true;
 		*s2++ = rules_ruleno->lhs->number;
 	      }
 	  }
@@ -120,15 +121,15 @@ nullable_compute (void)
 	if (--rcount[r->number] == 0)
 	  if (r->useful && ! nullable[r->lhs->number - ntokens])
 	    {
-	      nullable[r->lhs->number - ntokens] = 1;
+	      nullable[r->lhs->number - ntokens] = true;
 	      *s2++ = r->lhs->number;
 	    }
       }
 
-  XFREE (squeue);
-  XFREE (rcount);
-  XFREE (rsets);
-  XFREE (relts);
+  free (squeue);
+  free (rcount);
+  free (rsets);
+  free (relts);
 
   if (trace_flag & trace_sets)
     nullable_print (stderr);
@@ -138,5 +139,5 @@ nullable_compute (void)
 void
 nullable_free (void)
 {
-  XFREE (nullable);
+  free (nullable);
 }

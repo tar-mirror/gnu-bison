@@ -1,5 +1,5 @@
 /* Bitset statistics.
-   Copyright (C) 2002 Free Software Foundation, Inc.
+   Copyright (C) 2002, 2003, 2004 Free Software Foundation, Inc.
    Contributed by Michael Hayes (m.hayes@elec.canterbury.ac.nz).
 
    This program is free software; you can redistribute it and/or modify
@@ -33,6 +33,7 @@
 #include "abitset.h"
 #include "ebitset.h"
 #include "lbitset.h"
+#include "vbitset.h"
 #include "bitset_stats.h"
 #include <stdlib.h>
 #include <string.h>
@@ -100,7 +101,7 @@ struct bitset_stats_info_struct
 
 struct bitset_stats_info_struct bitset_stats_info_data;
 struct bitset_stats_info_struct *bitset_stats_info;
-int bitset_stats_enabled = 0;
+bool bitset_stats_enabled = false;
 
 
 /* Print a percentage histogram with message MSG to FILE.  */
@@ -159,8 +160,8 @@ bitset_log_histogram_print (FILE *file, const char *name, const char *msg,
   for (; i < n_bins; i++)
     fprintf (file, "%*lu-%lu\t%8u (%5.1f%%)\n",
 	     max_width - ((unsigned int) (0.30103 * (i) + 0.9999) + 1),
-	     (unsigned long) 1 << (i - 1),
-	     ((unsigned long) 1 << i) - 1,
+	     1UL << (i - 1),
+	     (1UL << i) - 1,
 	     bins[i],
 	     (100.0 * bins[i]) / total);
 }
@@ -203,7 +204,7 @@ bitset_stats_print_1 (FILE *file, const char *name,
 
 /* Print all bitset statistics to FILE.  */
 static void
-bitset_stats_print (FILE *file, int verbose ATTRIBUTE_UNUSED)
+bitset_stats_print (FILE *file, bool verbose ATTRIBUTE_UNUSED)
 {
   int i;
 
@@ -227,14 +228,14 @@ bitset_stats_enable (void)
 {
   if (!bitset_stats_info)
     bitset_stats_info = &bitset_stats_info_data;
-  bitset_stats_enabled = 1;
+  bitset_stats_enabled = true;
 }
 
 
 void
 bitset_stats_disable (void)
 {
-  bitset_stats_enabled = 0;
+  bitset_stats_enabled = false;
 }
 
 
@@ -298,7 +299,7 @@ bitset_stats_write (const char *filename)
 void
 bitset_stats_dump (FILE *file)
 {
-  bitset_stats_print (file, 0);
+  bitset_stats_print (file, false);
 }
 
 
@@ -306,7 +307,7 @@ bitset_stats_dump (FILE *file)
 void
 debug_bitset_stats (void)
 {
-  bitset_stats_print (stderr, 1);
+  bitset_stats_print (stderr, true);
 }
 
 
@@ -349,14 +350,14 @@ bitset_stats_reset (bitset dst, bitset_bindex bitno)
 }
 
 
-static int
+static bool
 bitset_stats_toggle (bitset src, bitset_bindex bitno)
 {
     return BITSET_TOGGLE_ (src->s.bset, bitno);
 }
 
 
-static int
+static bool
 bitset_stats_test (bitset src, bitset_bindex bitno)
 {
   bitset bset = src->s.bset;
@@ -376,6 +377,13 @@ bitset_stats_test (bitset src, bitset_bindex bitno)
 
 
 static bitset_bindex
+bitset_stats_resize (bitset src, bitset_bindex size)
+{
+    return BITSET_RESIZE_ (src->s.bset, size);
+}
+
+
+static bitset_bindex
 bitset_stats_size (bitset src)
 {
   return BITSET_SIZE_ (src->s.bset);
@@ -389,7 +397,7 @@ bitset_stats_count (bitset src)
 }
 
 
-static int
+static bool
 bitset_stats_empty_p (bitset dst)
 {
   return BITSET_EMPTY_P_ (dst->s.bset);
@@ -418,7 +426,7 @@ bitset_stats_copy (bitset dst, bitset src)
 }
 
 
-static int
+static bool
 bitset_stats_disjoint_p (bitset dst, bitset src)
 {
   BITSET_CHECK2_ (dst, src);
@@ -426,7 +434,7 @@ bitset_stats_disjoint_p (bitset dst, bitset src)
 }
 
 
-static int
+static bool
 bitset_stats_equal_p (bitset dst, bitset src)
 {
   BITSET_CHECK2_ (dst, src);
@@ -442,7 +450,7 @@ bitset_stats_not (bitset dst, bitset src)
 }
 
 
-static int
+static bool
 bitset_stats_subset_p (bitset dst, bitset src)
 {
   BITSET_CHECK2_ (dst, src);
@@ -458,7 +466,7 @@ bitset_stats_and (bitset dst, bitset src1, bitset src2)
 }
 
 
-static int
+static bool
 bitset_stats_and_cmp (bitset dst, bitset src1, bitset src2)
 {
   BITSET_CHECK3_ (dst, src1, src2);
@@ -474,7 +482,7 @@ bitset_stats_andn (bitset dst, bitset src1, bitset src2)
 }
 
 
-static int
+static bool
 bitset_stats_andn_cmp (bitset dst, bitset src1, bitset src2)
 {
   BITSET_CHECK3_ (dst, src1, src2);
@@ -490,7 +498,7 @@ bitset_stats_or (bitset dst, bitset src1, bitset src2)
 }
 
 
-static int
+static bool
 bitset_stats_or_cmp (bitset dst, bitset src1, bitset src2)
 {
   BITSET_CHECK3_ (dst, src1, src2);
@@ -506,7 +514,7 @@ bitset_stats_xor (bitset dst, bitset src1, bitset src2)
 }
 
 
-static int
+static bool
 bitset_stats_xor_cmp (bitset dst, bitset src1, bitset src2)
 {
   BITSET_CHECK3_ (dst, src1, src2);
@@ -518,16 +526,14 @@ static void
 bitset_stats_and_or (bitset dst, bitset src1, bitset src2, bitset src3)
 {
   BITSET_CHECK4_ (dst, src1, src2, src3);
-
   BITSET_AND_OR_ (dst->s.bset, src1->s.bset, src2->s.bset, src3->s.bset);
 }
 
 
-static int
+static bool
 bitset_stats_and_or_cmp (bitset dst, bitset src1, bitset src2, bitset src3)
 {
   BITSET_CHECK4_ (dst, src1, src2, src3);
-
   return BITSET_AND_OR_CMP_ (dst->s.bset, src1->s.bset, src2->s.bset, src3->s.bset);
 }
 
@@ -536,16 +542,14 @@ static void
 bitset_stats_andn_or (bitset dst, bitset src1, bitset src2, bitset src3)
 {
   BITSET_CHECK4_ (dst, src1, src2, src3);
-
   BITSET_ANDN_OR_ (dst->s.bset, src1->s.bset, src2->s.bset, src3->s.bset);
 }
 
 
-static int
+static bool
 bitset_stats_andn_or_cmp (bitset dst, bitset src1, bitset src2, bitset src3)
 {
   BITSET_CHECK4_ (dst, src1, src2, src3);
-
   return BITSET_ANDN_OR_CMP_ (dst->s.bset, src1->s.bset, src2->s.bset, src3->s.bset);
 }
 
@@ -554,16 +558,14 @@ static void
 bitset_stats_or_and (bitset dst, bitset src1, bitset src2, bitset src3)
 {
   BITSET_CHECK4_ (dst, src1, src2, src3);
-
   BITSET_OR_AND_ (dst->s.bset, src1->s.bset, src2->s.bset, src3->s.bset);
 }
 
 
-static int
+static bool
 bitset_stats_or_and_cmp (bitset dst, bitset src1, bitset src2, bitset src3)
 {
   BITSET_CHECK4_ (dst, src1, src2, src3);
-
   return BITSET_OR_AND_CMP_ (dst->s.bset, src1->s.bset, src2->s.bset, src3->s.bset);
 }
 
@@ -628,6 +630,7 @@ struct bitset_vtable bitset_stats_vtable = {
   bitset_stats_reset,
   bitset_stats_toggle,
   bitset_stats_test,
+  bitset_stats_resize,
   bitset_stats_size,
   bitset_stats_count,
   bitset_stats_empty_p,
@@ -687,6 +690,8 @@ bitset_stats_init (bitset bset, bitset_bindex n_bits, enum bitset_type type)
   bset->b.csize = 0;
   bset->b.cdata = 0;
 
+  BITSET_NBITS_ (bset) = n_bits;
+
   /* Set up the actual bitset implementation that
      we are a wrapper over.  */
   switch (type)
@@ -707,6 +712,12 @@ bitset_stats_init (bitset bset, bitset_bindex n_bits, enum bitset_type type)
       bytes = ebitset_bytes (n_bits);
       sbset = (bitset) xcalloc (1, bytes);
       ebitset_init (sbset, n_bits);
+      break;
+
+    case BITSET_VARRAY:
+      bytes = vbitset_bytes (n_bits);
+      sbset = (bitset) xcalloc (1, bytes);
+      vbitset_init (sbset, n_bits);
       break;
 
     default:

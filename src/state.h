@@ -1,7 +1,7 @@
 /* Type definitions for nondeterministic finite state machine for Bison.
 
-   Copyright (C) 1984, 1989, 2000, 2001, 2002 Free Software
-   Foundation, Inc.
+   Copyright (C) 1984, 1989, 2000, 2001, 2002, 2003, 2004 Free
+   Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -46,11 +46,11 @@
    Each core contains a vector of NITEMS items which are the indices
    in the RITEMS vector of the items that are selected in this state.
 
-   The two types of actions are shifts/gotos (push the lookahead token
+   The two types of actions are shifts/gotos (push the look-ahead token
    and read another/goto to the state designated by a nterm) and
    reductions (combine the last n things on the stack via a rule,
    replace them with the symbol that the rule derives, and leave the
-   lookahead token alone).  When the states are generated, these
+   look-ahead token alone).  When the states are generated, these
    actions are represented in two other lists.
 
    Each transition structure describes the possible transitions out
@@ -94,8 +94,8 @@
 | Numbering states.  |
 `-------------------*/
 
-typedef short state_number;
-# define STATE_NUMBER_MAXIMUM SHRT_MAX
+typedef int state_number;
+# define STATE_NUMBER_MAXIMUM INT_MAX
 
 /* Be ready to map a state_number to an int.  */
 static inline int
@@ -113,7 +113,7 @@ typedef struct state state;
 
 typedef struct
 {
-  short num;
+  int num;
   state *states[1];
 } transitions;
 
@@ -160,9 +160,9 @@ typedef struct
     if (!TRANSITION_IS_DISABLED (Transitions, Iter))
 
 
-/* Return the state such SHIFTS contain a shift/goto to it on S.
+/* Return the state such SHIFTS contain a shift/goto to it on SYM.
    Abort if none found.  */
-struct state *transitions_to (transitions *shifts, symbol_number s);
+struct state *transitions_to (transitions *shifts, symbol_number sym);
 
 
 /*-------.
@@ -171,7 +171,7 @@ struct state *transitions_to (transitions *shifts, symbol_number s);
 
 typedef struct
 {
-  short num;
+  int num;
   symbol *symbols[1];
 } errs;
 
@@ -184,8 +184,8 @@ errs *errs_new (int num, symbol **tokens);
 
 typedef struct
 {
-  short num;
-  bitset *lookaheads;
+  int num;
+  bitset *look_ahead_tokens;
   rule *rules[1];
 } reductions;
 
@@ -203,7 +203,7 @@ struct state
   reductions *reductions;
   errs *errs;
 
-  /* Nonzero if no lookahead is needed to decide what to do in state S.  */
+  /* Nonzero if no look-ahead is needed to decide what to do in state S.  */
   char consistent;
 
   /* If some conflicts were solved thanks to precedence/associativity,
@@ -212,7 +212,7 @@ struct state
 
   /* Its items.  Must be last, since ITEMS can be arbitrarily large.
      */
-  unsigned short nitems;
+  size_t nitems;
   item_number items[1];
 };
 
@@ -234,9 +234,9 @@ int state_reduction_find (state *s, rule *r);
 /* Set the errs of STATE.  */
 void state_errs_set (state *s, int num, symbol **errors);
 
-/* Print on OUT all the lookaheads such that this STATE wants to
+/* Print on OUT all the look-ahead tokens such that this STATE wants to
    reduce R.  */
-void state_rule_lookaheads_print (state *s, rule *r, FILE *out);
+void state_rule_look_ahead_tokens_print (state *s, rule *r, FILE *out);
 
 /* Create/destroy the states hash table.  */
 void state_hash_new (void);

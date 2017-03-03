@@ -1,6 +1,6 @@
 /* Type definitions for nondeterministic finite state machine for Bison.
 
-   Copyright (C) 2001, 2002 Free Software Foundation, Inc.
+   Copyright (C) 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -49,17 +49,17 @@ transitions_new (int num, state **the_states)
 }
 
 
-/*-------------------------------------------------------------------.
-| Return the state such these TRANSITIONS contain a shift/goto to it |
-| on S.  Abort if none found.                                        |
-`-------------------------------------------------------------------*/
+/*-------------------------------------------------------.
+| Return the state such that SHIFTS contain a shift/goto |
+| to it on SYM.  Abort if none found.                    |
+`-------------------------------------------------------*/
 
 state *
-transitions_to (transitions *shifts, symbol_number s)
+transitions_to (transitions *shifts, symbol_number sym)
 {
   int j;
   for (j = 0; j < shifts->num; j++)
-    if (TRANSITION_SYMBOL (shifts, j) == s)
+    if (TRANSITION_SYMBOL (shifts, j) == sym)
       return shifts->states[j];
   abort ();
 }
@@ -102,7 +102,7 @@ reductions_new (int num, rule **reds)
   size_t rules_size = num * sizeof *reds;
   reductions *res = xmalloc (offsetof (reductions, rules) + rules_size);
   res->num = num;
-  res->lookaheads = NULL;
+  res->look_ahead_tokens = NULL;
   memcpy (res->rules, reds, rules_size);
   return res;
 }
@@ -219,29 +219,30 @@ state_errs_set (state *s, int num, symbol **tokens)
 
 
 
-/*-----------------------------------------------------.
-| Print on OUT all the lookaheads such that S wants to |
-| reduce R.                                            |
-`-----------------------------------------------------*/
+/*---------------------------------------------------.
+| Print on OUT all the look-ahead tokens such that S |
+| wants to reduce R.                                 |
+`---------------------------------------------------*/
 
 void
-state_rule_lookaheads_print (state *s, rule *r, FILE *out)
+state_rule_look_ahead_tokens_print (state *s, rule *r, FILE *out)
 {
   /* Find the reduction we are handling.  */
   reductions *reds = s->reductions;
   int red = state_reduction_find (s, r);
 
   /* Print them if there are.  */
-  if (reds->lookaheads && red != -1)
+  if (reds->look_ahead_tokens && red != -1)
     {
       bitset_iterator biter;
       int k;
-      int not_first = 0;
+      char const *sep = "";
       fprintf (out, "  [");
-      BITSET_FOR_EACH (biter, reds->lookaheads[red], k, 0)
-	fprintf (out, "%s%s",
-		 not_first++ ? ", " : "",
-		 symbols[k]->tag);
+      BITSET_FOR_EACH (biter, reds->look_ahead_tokens[red], k, 0)
+	{
+	  fprintf (out, "%s%s", sep, symbols[k]->tag);
+	  sep = ", ";
+	}
       fprintf (out, "]");
     }
 }
@@ -260,7 +261,7 @@ static struct hash_table *state_table = NULL;
 static inline bool
 state_compare (state const *s1, state const *s2)
 {
-  int i;
+  size_t i;
 
   if (s1->nitems != s2->nitems)
     return false;
@@ -278,19 +279,19 @@ state_comparator (void const *s1, void const *s2)
   return state_compare (s1, s2);
 }
 
-static inline unsigned int
-state_hash (state const *s, unsigned int tablesize)
+static inline size_t
+state_hash (state const *s, size_t tablesize)
 {
   /* Add up the state's item numbers to get a hash key.  */
-  unsigned int key = 0;
-  int i;
+  size_t key = 0;
+  size_t i;
   for (i = 0; i < s->nitems; ++i)
     key += s->items[i];
   return key % tablesize;
 }
 
-static unsigned int
-state_hasher (void const *s, unsigned int tablesize)
+static size_t
+state_hasher (void const *s, size_t tablesize)
 {
   return state_hash (s, tablesize);
 }
