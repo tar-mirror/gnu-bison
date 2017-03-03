@@ -64,3 +64,68 @@ exp: {};
 AT_CHECK([bison --defines union.y])
 
 AT_CLEANUP([union.*])
+
+
+## --------------------------------------- ##
+## Duplicate '/' in C comments in %union   ##
+## --------------------------------------- ##
+
+
+AT_SETUP([%union and C comments])
+
+AT_DATA([union-comment.y],
+[%union
+{
+  /* The int.  */	int   integer;
+  /* The string.  */	char *string ;
+}
+%%
+exp: {};
+])
+
+AT_CHECK([bison union-comment.y])
+AT_CHECK([fgrep '//*' union-comment.tab.c], [1], [])
+
+AT_CLEANUP([union-comment.*])
+
+
+## --------------- ##
+## invalid input.  ##
+## --------------- ##
+
+
+AT_SETUP([Invalid input])
+
+AT_DATA([input.y],
+[[%%
+?
+]])
+
+AT_CHECK([bison input.y], [1], [],
+[input.y:2: invalid input: `?'
+input.y:3: fatal error: no rules in the input grammar
+])
+
+AT_CLEANUP
+
+
+## --------------------- ##
+## Invalid CPP headers.  ##
+## --------------------- ##
+
+AT_SETUP([Invalid CPP headers])
+
+mkdir input
+
+AT_DATA([input/input.y],
+[%%
+dummy:
+])
+
+AT_CHECK([bison --defines input/input.y])
+
+AT_CHECK([sed 1q input/input.tab.h], 0,
+[[#ifndef INPUT_INPUT_TAB_H
+]])
+
+AT_CLEANUP(input)

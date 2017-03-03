@@ -501,19 +501,19 @@ struct	graph_s
      index 2, green has index 3, etc.
      Default is white for background and white or transparent for summary
      nodes. */
-  unsigned char color;
+  enum color_e color;
 
   /* Textcolor.
      need explainations ???
      defalut is black for summary nodes. */
-  unsigned char textcolor;
+  enum color_e textcolor;
 
   /* Bordercolor is the color of the summary node's border. Default color
      is the textcolor. width, height are width and height of the
      displayed part of the window of the outermost graph in pixels, or
      width and height of the summary node of inner subgraphs.
      Default is the defalut of the textcolor. */
-  unsigned char bordercolor;
+  enum color_e bordercolor;
 
   /* Width, height are width and height of the displayed part of the
      window of the outermost graph in pixels, or width and height of the
@@ -1004,16 +1004,16 @@ void add_colorentry PARAMS ((graph_t *g, int color_idx, int red_cp,
 void add_classname PARAMS ((graph_t *g, int val, const char *name));
 void add_infoname PARAMS ((graph_t *g, int val, const char *name));
 
-void open_node PARAMS ((struct obstack *os));
-void output_node PARAMS ((node_t *node, struct obstack *os));
-void close_node PARAMS ((struct obstack *os));
+void open_node PARAMS ((FILE *fout));
+void output_node PARAMS ((node_t *node, FILE *fout));
+void close_node PARAMS ((FILE *fout));
 
-void open_edge PARAMS ((edge_t *edge, struct obstack *os));
-void output_edge PARAMS ((edge_t *edge, struct obstack *os));
-void close_edge PARAMS ((struct obstack *os));
+void open_edge PARAMS ((edge_t *edge, FILE *fout));
+void output_edge PARAMS ((edge_t *edge, FILE *fout));
+void close_edge PARAMS ((FILE *fout));
 
-void open_graph PARAMS ((struct obstack *os));
-void output_graph PARAMS ((graph_t *graph, struct obstack *os));
-void close_graph PARAMS ((graph_t *graph, struct obstack *os));
+void open_graph PARAMS ((FILE *fout));
+void output_graph PARAMS ((graph_t *graph, FILE *fout));
+void close_graph PARAMS ((graph_t *graph, FILE *fout));
 
 #endif /* VCG_H_ */

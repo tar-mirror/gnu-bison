@@ -26,7 +26,6 @@
 #include "quote.h"
 #include "getargs.h"
 #include "files.h"
-#include "xalloc.h"
 #include "symtab.h"
 #include "lex.h"
 #include "gram.h"
@@ -462,8 +461,8 @@ copy_definition (void)
 static void
 parse_token_decl (symbol_class what_is, symbol_class what_is_not)
 {
-  token_t token = 0;
-  char *typename = 0;
+  token_t token = tok_undef;
+  char *typename = NULL;
 
   /* The symbol being defined.  */
   struct bucket *symbol = NULL;
@@ -512,7 +511,6 @@ parse_token_decl (symbol_class what_is, symbol_class what_is_not)
 	      /* symbol and symval combined are only one symbol */
 	      nsyms--;
 	    }
-	  translations = 1;
  	  symbol = NULL;
 	}
       else if (token == tok_identifier)
@@ -537,7 +535,6 @@ parse_token_decl (symbol_class what_is, symbol_class what_is_not)
       else if (symbol && token == tok_number)
 	{
 	  symbol->user_token_number = numval;
-	  translations = 1;
 	}
       else
 	{
@@ -679,7 +676,6 @@ parse_assoc_decl (associativity assoc)
 	  if (prev == tok_identifier)
 	    {
 	      symval->user_token_number = numval;
-	      translations = 1;
 	    }
 	  else
 	    {
@@ -736,9 +732,14 @@ parse_union_decl (void)
 
   while (c != EOF)
     {
-      obstack_1grow (&attrs_obstack, c);
-      if (defines_flag)
-	obstack_1grow (&defines_obstack, c);
+
+      /* If C contains '/', it is output by copy_comment ().  */
+      if (c != '/')
+	{
+	  obstack_1grow (&attrs_obstack, c);
+	  if (defines_flag)
+	    obstack_1grow (&defines_obstack, c);
+	}
 
       switch (c)
 	{
@@ -822,7 +823,6 @@ parse_thong_decl (void)
   char *typename = 0;
   int usrtoknum;
 
-  translations = 1;
   token = lex ();		/* fetch typename or first token */
   if (token == tok_typename)
     {
@@ -874,9 +874,13 @@ parse_thong_decl (void)
   nsyms--;
 }
 
-/*--------------------------------------------------------------.
-| Parse what comes after %header_extension and %source_etension |
-`--------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------.
+| Parse a double quoted parameter. It was used for %{source,header}_extension. |
+| For the moment, It is not used since extension features have been removed.   |
+`-----------------------------------------------------------------------------*/
+
+#if 0
 
 static const char *
 parse_dquoted_param (const char *from)
@@ -884,7 +888,7 @@ parse_dquoted_param (const char *from)
   char buff[32];
   int c;
   int i;
-  
+
   c = skip_white_space ();
 
   if (c != '"')
@@ -893,7 +897,7 @@ parse_dquoted_param (const char *from)
       complain (_("invalid %s declaration"), from);
       return NULL;
     }
-  
+
   c = getc (finput);
   for (i = 0; (c >= '!') && (c <= '~'); i++)
     {
@@ -906,12 +910,12 @@ parse_dquoted_param (const char *from)
 	  if ((c < '!') && (c > '~'))
 	    break;
 	}
-      
+
       buff[i] = c;
       c = getc (finput);
     }
   buff[i] = '\0';
-  
+
   if (c != '"')
     {
       ungetc (c, finput);
@@ -922,25 +926,8 @@ parse_dquoted_param (const char *from)
   return xstrdup (buff);
 }
 
-/* %header_extension case.  */
-static void
-parse_header_extension_decl (void)
-{
-  if (header_extension)
-    complain (_("multiple %%header_extension declarations"));
+#endif
 
-  header_extension = parse_dquoted_param ("%header_extension");
-}
-
-/* %source_extension case.  */
-static void
-parse_source_extension_decl (void)
-{
-  if (src_extension)
-    complain (_("multiple %%source_extension declarations"));
-  
-  src_extension = parse_dquoted_param ("%source_extension");
-}
 
 /*----------------------------------------------------------------.
 | Read from finput until `%%' is seen.  Discard the `%%'.  Handle |
@@ -1009,14 +996,6 @@ read_declarations (void)
 
 	    case tok_nonassoc:
 	      parse_assoc_decl (non_assoc);
-	      break;
-
-	    case tok_hdrext:
-	      parse_header_extension_decl ();
-	      break;
-
-	    case tok_srcext:
-	      parse_source_extension_decl ();
 	      break;
 
 	    case tok_noop:
@@ -1673,9 +1652,10 @@ output_token_defines (struct obstack *oout)
 	continue;
 
       obstack_fgrow2 (oout, "# define\t%s\t%d\n",
-		      symbol,
-		      (translations ? bp->user_token_number : bp->value));
+		      symbol, bp->user_token_number);
       if (semantic_parser)
+	/* FIXME: This is certainly dead wrong, and should be just as
+	   above. --akim.  */
 	obstack_fgrow2 (oout, "# define\tT%s\t%d\n", symbol, bp->value);
     }
 
@@ -1692,9 +1672,9 @@ output_token_defines (struct obstack *oout)
 static void
 packsymbols (void)
 {
-  bucket *bp;
+  bucket *bp = NULL;
   int tokno = 1;
-  int i;
+  int i, j;
   int last_user_token_number;
   static char DOLLAR[] = "$";
 
@@ -1760,7 +1740,7 @@ packsymbols (void)
 
       if (bp->class == token_sym)
 	{
-	  if (translations && !(bp->user_token_number))
+	  if (!bp->user_token_number)
 	    bp->user_token_number = ++last_user_token_number;
 	  if (bp->user_token_number > max_user_token_number)
 	    max_user_token_number = bp->user_token_number;
@@ -1770,33 +1750,27 @@ packsymbols (void)
       user_toknums[bp->value] = bp->user_token_number;
       sprec[bp->value] = bp->prec;
       sassoc[bp->value] = bp->assoc;
-
     }
 
-  if (translations)
+  token_translations = XCALLOC (short, max_user_token_number + 1);
+
+  /* initialize all entries for literal tokens to 2, the internal
+     token number for $undefined., which represents all invalid
+     inputs.  */
+  for (j = 0; j <= max_user_token_number; j++)
+    token_translations[j] = 2;
+
+  for (bp = firstsymbol; bp; bp = bp->next)
     {
-      int j;
-
-      token_translations = XCALLOC (short, max_user_token_number + 1);
-
-      /* initialize all entries for literal tokens to 2, the internal
-         token number for $undefined., which represents all invalid
-         inputs.  */
-      for (j = 0; j <= max_user_token_number; j++)
-	token_translations[j] = 2;
-
-      for (bp = firstsymbol; bp; bp = bp->next)
-	{
-	  if (bp->value >= ntokens)
-	    continue;		/* non-terminal */
-	  if (bp->user_token_number == SALIAS)
-	    continue;
-	  if (token_translations[bp->user_token_number] != 2)
-	    complain (_("tokens %s and %s both assigned number %d"),
-		      tags[token_translations[bp->user_token_number]],
-		      bp->tag, bp->user_token_number);
-	  token_translations[bp->user_token_number] = bp->value;
-	}
+      if (bp->value >= ntokens)
+	continue;		/* non-terminal */
+      if (bp->user_token_number == SALIAS)
+	continue;
+      if (token_translations[bp->user_token_number] != 2)
+	complain (_("tokens %s and %s both assigned number %d"),
+		  tags[token_translations[bp->user_token_number]],
+		  bp->tag, bp->user_token_number);
+      token_translations[bp->user_token_number] = bp->value;
     }
 
   error_token_number = errtoken->value;
@@ -1922,15 +1896,6 @@ reader (void)
   start_flag = 0;
   startval = NULL;		/* start symbol not specified yet. */
 
-#if 0
-  /* initially assume token number translation not needed.  */
-  translations = 0;
-#endif
-  /* Nowadays translations is always set to 1, since we give `error' a
-     user-token-number to satisfy the Posix demand for YYERRCODE==256.
-   */
-  translations = 1;
-
   nsyms = 1;
   nvars = 0;
   nrules = 0;
@@ -1946,7 +1911,7 @@ reader (void)
 
   grammar = NULL;
 
-  init_lex ();
+  lex_init ();
   lineno = 1;
 
   /* Initialize the symbol table.  */
@@ -1993,9 +1958,6 @@ reader (void)
   packsymbols ();
   /* Convert the grammar into the format described in gram.h.  */
   packgram ();
-  /* Free the symbol table data structure since symbols are now all
-     referred to by symbol number.  */
-  free_symtab ();
 }
 
 

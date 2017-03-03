@@ -18,9 +18,9 @@
 ## Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 ## 02111-1307, USA.
 
-EXTRA_DIST = atlocal.in bison $(TESTSUITE_AT) testsuite
+EXTRA_DIST = atlocal.in $(TESTSUITE_AT) testsuite
 
-DISTCLEANFILES       = atconfig atlocal
+DISTCLEANFILES       = atconfig atlocal bison package.m4
 MAINTAINERCLEANFILES = Makefile.in $(TESTSUITE)
 
 TESTSUITE_AT = \
@@ -28,7 +28,6 @@ TESTSUITE_AT = \
 	output.at calc.at regression.at
 TESTSUITE = $(srcdir)/testsuite
 
-AUTOM4TE = autom4te
 AUTOTEST = $(AUTOM4TE) --language=autotest
 $(srcdir)/$(TESTSUITE): $(TESTSUITE_AT)
 	$(AUTOTEST) -I $(srcdir) testsuite.at -o $@.tmp

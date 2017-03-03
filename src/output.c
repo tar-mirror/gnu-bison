@@ -94,7 +94,6 @@
 #include "obstack.h"
 #include "quotearg.h"
 #include "getargs.h"
-#include "xalloc.h"
 #include "files.h"
 #include "gram.h"
 #include "LR0.h"
@@ -110,17 +109,17 @@ extern void berror PARAMS((const char *));
 
 static int nvectors;
 static int nentries;
-static short **froms;
-static short **tos;
-static short *tally;
-static short *width;
-static short *actrow;
-static short *state_count;
-static short *order;
-static short *base;
-static short *pos;
-static short *table;
-static short *check;
+static short **froms = NULL;
+static short **tos = NULL;
+static short *tally = NULL;
+static short *width = NULL;
+static short *actrow = NULL;
+static short *state_count = NULL;
+static short *order = NULL;
+static short *base = NULL;
+static short *pos = NULL;
+static short *table = NULL;
+static short *check = NULL;
 static int lowzero;
 static int high;
 
@@ -295,25 +294,19 @@ output_token_translations (void)
 \n\
 /* YYTRANSLATE(YYLEX) -- Bison token number corresponding to YYLEX. */\n");
 
-  if (translations)
-    {
-      obstack_fgrow2 (&table_obstack,
+  obstack_fgrow2 (&table_obstack,
       "#define YYTRANSLATE(x) ((unsigned)(x) <= %d ? yytranslate[x] : %d)\
 \n\
 \n",
-	       max_user_token_number, nsyms);
+		  max_user_token_number, nsyms);
 
-      output_short_or_char_table (&table_obstack,
+  output_short_or_char_table (&table_obstack,
 	     "YYTRANSLATE[YYLEX] -- Bison token number corresponding to YYLEX",
-		    ntokens < 127 ? "char" : "short",
-		    "yytranslate", token_translations,
-		    0, 1, max_user_token_number + 1);
-    }
-  else
-    {
-      obstack_sgrow (&table_obstack,
-			   "\n#define YYTRANSLATE(x) (x)\n");
-    }
+			      ntokens < 127 ? "char" : "short",
+			      "yytranslate", token_translations,
+			      0, 1, max_user_token_number + 1);
+
+  XFREE (token_translations);
 }
 
 
@@ -1167,6 +1160,7 @@ output_parser (void)
       else
 	skeleton = skeleton_find ("BISON_SIMPLE", BISON_SIMPLE);
     }
+  assert (skeleton);
   fskel = xfopen (skeleton, "r");
 
   /* Set LINE to 2, not 1: `#line LINENUM' -- Here LINENUM is a

@@ -50,7 +50,7 @@ static struct option longopts[] =
 
   /* Parser. */
   {"skeleton",		required_argument,	0, 'S'},
-  {"debug",		no_argument,		0, 'd'},
+  {"debug",		no_argument,		0, 't'},
   {"locations",		no_argument, 	&locations_flag, 1},
   /* was 'a';  apparently unused -wjh */
   {"name-prefix",	required_argument, 	0, 'p'},
@@ -60,11 +60,11 @@ static struct option longopts[] =
   {"token-table",	no_argument,		0, 'k'},
 
   /* Output. */
-  {"defines",		no_argument,		0, 'd'},
+  {"defines",		optional_argument,     	0, 'd'},
   {"verbose",		no_argument,		0, 'v'},
   {"file-prefix",	required_argument, 	0, 'b'},
   {"output-file",	required_argument, 	0, 'o'},
-  {"graph",		no_argument,		0, 'g'},
+  {"graph",		optional_argument,     	0, 'g'},
 
   /* Hidden. */
   {"statistics",	no_argument, 	&statistics_flag, 1},
@@ -183,7 +183,9 @@ getargs (int argc, char *argv[])
 	exit (0);
 
       case 'g':
+	/* Here, the -g and --graph=FILE options are differentiated.  */
 	graph_flag = 1;
+	spec_graph_file = optarg;
 	break;
 
       case 'v':
@@ -195,7 +197,9 @@ getargs (int argc, char *argv[])
 	break;
 
       case 'd':
+	/* Here, the -d and --defines options are differentiated.  */
 	defines_flag = 1;
+	spec_defines_file = optarg;
 	break;
 
       case 'l':
