@@ -1,14 +1,14 @@
 # German translation for message of GNU bison.
 # Copyright (C) 1996 Free Software Foundation, Inc.
 # Ulrich Drepper <drepper@gnu.ai.mit.edu>, 1996.
-# Michael Piefel <piefel@informatik.hu-berlin.de>, 2002, 2003, 2004.
+# Michael Piefel <piefel@informatik.hu-berlin.de>, 2002, 2003, 2004, 2005.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: bison 1.875d\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2004-12-25 21:18-0800\n"
-"PO-Revision-Date: 2004-07-20 13:01 +0200\n"
+"POT-Creation-Date: 2005-09-16 15:58-0700\n"
+"PO-Revision-Date: 2005-01-04 11:24 +0100\n"
 "Last-Translator: Michael Piefel <piefel@informatik.hu-berlin.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -81,20 +81,20 @@ msgid_plural "expected %d reduce/reduce conflicts"
 msgstr[0] "erwartete %d Reduziere/Reduziere-Konflikt"
 msgstr[1] "erwartete %d Reduziere/Reduziere-Konflikte"
 
-#: src/files.c:100
+#: src/files.c:101
 #, c-format
 msgid "cannot open file `%s'"
 msgstr "kann Datei „%s“ nicht öffnen"
 
-#: src/files.c:116
+#: src/files.c:117
 msgid "I/O error"
 msgstr "E/A-Fehler"
 
-#: src/files.c:119
+#: src/files.c:120
 msgid "cannot close file"
 msgstr "kann Datei nicht schließen"
 
-#: src/files.c:337
+#: src/files.c:336
 #, c-format
 msgid "conflicting outputs to file %s"
 msgstr "widersprüchliche Ausgaben in Datei %s"
@@ -124,18 +124,21 @@ msgstr ""
 "Argumente.\n"
 
 #: src/getargs.c:208
+#, fuzzy
 msgid ""
 "Operation modes:\n"
-"  -h, --help      display this help and exit\n"
-"  -V, --version   output version information and exit\n"
-"  -y, --yacc      emulate POSIX yacc\n"
+"  -h, --help                 display this help and exit\n"
+"  -V, --version              output version information and exit\n"
+"      --print-localedir      output directory containing locale-dependent "
+"data\n"
+"  -y, --yacc                 emulate POSIX yacc\n"
 msgstr ""
 "Arbeitsmodi:\n"
 "  -h, --help      diese Hilfe anzeigen und beenden.\n"
 "  -v, --version   Versionsinformation anzeigen und beenden.\n"
 "  -y, --yacc      POSIX' yacc emulieren\n"
 
-#: src/getargs.c:215
+#: src/getargs.c:216
 msgid ""
 "Parser:\n"
 "  -S, --skeleton=FILE        specify the skeleton to use\n"
@@ -157,7 +160,7 @@ msgstr ""
 "  -k, --token-table          einer Tabellen der Token-Namen mit "
 "einschließen\n"
 
-#: src/getargs.c:227
+#: src/getargs.c:228
 msgid ""
 "Output:\n"
 "  -d, --defines              also produce a header file\n"
@@ -177,7 +180,7 @@ msgstr ""
 "  -g, --graph                auch eine VCG-Beschreibung des Automaten "
 "herstellen\n"
 
-#: src/getargs.c:238
+#: src/getargs.c:239
 #, fuzzy
 msgid ""
 "THINGS is a list of comma separated words that can include:\n"
@@ -191,31 +194,31 @@ msgstr ""
 "DINGE ist eine Liste kommagetrennter Wörter aus:\n"
 "  „state“        die Zustänge beschreiben\n"
 "  „itemset“      die Kernsybolmengen mit ihrem Abschluss vervollständigen\n"
-"  „lookahead“    explizit Vorschau mit Symbolen verbinden\n"
+"  „look-ahead“   explizit Vorschautoken mit Symbolen verbinden\n"
 "  „solved“       Schiebe-/Reduzier-Konfliktlösung beschreiben\n"
 "  „all“          alle oben genannten Informationen\n"
 "  „none“         den Report abschalten\n"
 
-#: src/getargs.c:249
+#: src/getargs.c:250
 msgid "Report bugs to <bug-bison@gnu.org>.\n"
 msgstr ""
 "Berichten Sie Fehler (auf Englisch, mit LC_ALL=C) an <bug-bison@gnu.org>.\n"
 
-#: src/getargs.c:266
+#: src/getargs.c:267
 #, c-format
 msgid "bison (GNU Bison) %s"
 msgstr "bison (GNU Bison) %s"
 
-#: src/getargs.c:268
+#: src/getargs.c:269
 msgid "Written by Robert Corbett and Richard Stallman.\n"
 msgstr "Geschrieben von Robert Corbett und Richard Stallman.\n"
 
-#: src/getargs.c:272
+#: src/getargs.c:273
 #, c-format
 msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
 msgstr "Copyright © %d Free Software Foundation, Inc.\n"
 
-#: src/getargs.c:274
+#: src/getargs.c:275
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
@@ -224,12 +227,12 @@ msgstr ""
 "gibt keine Garantie; auch nicht für VERKAUFBARKEIT oder FÜR SPEZIELLE "
 "ZWECKE.\n"
 
-#: src/getargs.c:440
+#: src/getargs.c:447
 #, c-format
 msgid "missing operand after `%s'"
 msgstr "fehlender Operand nach „%s“"
 
-#: src/getargs.c:442
+#: src/getargs.c:449
 #, c-format
 msgid "extra operand `%s'"
 msgstr "zusätzlicher Operand „%s“"
@@ -246,15 +249,15 @@ msgstr "Grammatik"
 msgid "warning"
 msgstr "Warnung"
 
-#: src/main.c:124
+#: src/main.c:125
 msgid "rule never reduced because of conflicts"
 msgstr "Regel nie reduziert wegen Konflikten"
 
-#: src/parse-gram.y:366
+#: src/parse-gram.y:380
 msgid "POSIX forbids declarations in the grammar"
 msgstr "POSIX verbietet Deklarationen in der Grammatik"
 
-#: src/parse-gram.y:499
+#: src/parse-gram.y:511
 msgid "missing identifier in parameter declaration"
 msgstr "fehlender Bezeichner in Parameterdeklaration"
 
@@ -413,131 +416,131 @@ msgstr[1] "%d nutzlose Regeln"
 msgid "start symbol %s does not derive any sentence"
 msgstr "es lassen sich keine Sätze vom Startsymbol %s ableiten"
 
-#: src/scan-gram.l:162
+#: src/scan-gram.l:176
 msgid "stray `,' treated as white space"
 msgstr "überzähliges „,“ als Freiraum betrachtet"
 
-#: src/scan-gram.l:225
+#: src/scan-gram.l:239
 #, c-format
 msgid "invalid directive: %s"
 msgstr "ungültige Direktive: %s"
 
-#: src/scan-gram.l:283
+#: src/scan-gram.l:297
 #, c-format
 msgid "invalid character: %s"
 msgstr "ungültiges Zeichen: %s"
 
-#: src/scan-gram.l:402
+#: src/scan-gram.l:417
 msgid "invalid null character"
 msgstr "ungültiges Null-Zeichen"
 
-#: src/scan-gram.l:415 src/scan-gram.l:427 src/scan-gram.l:448
+#: src/scan-gram.l:430 src/scan-gram.l:442 src/scan-gram.l:463
 #, c-format
 msgid "invalid escape sequence: %s"
 msgstr "unzulässiges Fluchtzeichen: %s"
 
-#: src/scan-gram.l:417 src/scan-gram.l:429 src/scan-gram.l:450
+#: src/scan-gram.l:432 src/scan-gram.l:444 src/scan-gram.l:465
 #, c-format
 msgid "invalid null character: %s"
 msgstr "ungültiges Null-Zeichen: %s"
 
-#: src/scan-gram.l:455
+#: src/scan-gram.l:470
 #, c-format
 msgid "unrecognized escape sequence: %s"
 msgstr "unbekanntes Fluchtzeichen: %s"
 
-#: src/scan-gram.l:537
-#, c-format
-msgid "missing `{' in `%s'"
+#: src/scan-gram.l:552
+#, fuzzy, c-format
+msgid "missing `{' in %s"
 msgstr "fehlende „{“ in „%s“"
 
-#: src/scan-gram.l:782
+#: src/scan-gram.l:797
 #, c-format
 msgid "$$ of `%s' has no declared type"
 msgstr "$$ von „%s“ hat keinen deklarierten Typ"
 
-#: src/scan-gram.l:803
+#: src/scan-gram.l:818
 #, c-format
 msgid "$%d of `%s' has no declared type"
 msgstr "$%d von „%s“ hat keinen deklarierten Typ"
 
-#: src/scan-gram.l:812 src/scan-gram.l:881 src/scan-gram.l:932
+#: src/scan-gram.l:827 src/scan-gram.l:896 src/scan-gram.l:947
 #, c-format
 msgid "integer out of range: %s"
 msgstr "Ganzzahl außerhalb des Wertebereichs: %s"
 
-#: src/scan-gram.l:848 src/scan-gram.l:916
+#: src/scan-gram.l:863 src/scan-gram.l:931
 #, c-format
 msgid "invalid value: %s"
 msgstr "unzulässiger Wert: %s"
 
-#: src/scan-gram.l:1036
+#: src/scan-gram.l:1051
 #, c-format
 msgid "missing `%s' at end of file"
 msgstr "fehlendes „%s“ am Ende der Datei"
 
-#: src/scan-gram.l:1047
+#: src/scan-gram.l:1062
 #, c-format
 msgid "missing `%s' at end of line"
 msgstr "fehlendes „%s“ am Ende der Zeile"
 
-#: src/symlist.c:97 src/symlist.c:108
-msgid "invalid $ value"
-msgstr "unzulässiger $-Wert"
+#: src/symlist.c:113 src/symlist.c:124
+#, fuzzy, c-format
+msgid "invalid $ value: $%d"
+msgstr "unzulässiger Wert: %s"
 
 #: src/symtab.c:70
-#, fuzzy, c-format
+#, c-format
 msgid "too many symbols in input grammar (limit is %d)"
-msgstr "zu viele Symbole (Token plus Nicht-Terminale); Maximum %d"
+msgstr "zu viele Symbole in Eingabegrammatik (Maximum ist %d)"
 
-#: src/symtab.c:85
+#: src/symtab.c:104
 #, c-format
 msgid "%s redeclaration for %s"
 msgstr "%s erneute Deklaration für %s"
 
-#: src/symtab.c:86
-#, fuzzy
+#: src/symtab.c:105
 msgid "first declaration"
-msgstr "ungültige %s-Deklaration"
+msgstr "erste Deklaration"
 
-#: src/symtab.c:173
+#: src/symtab.c:192
 #, c-format
 msgid "symbol %s redefined"
 msgstr "Symbol %s noch einmal definiert"
 
-#: src/symtab.c:196
+#: src/symtab.c:215
 #, c-format
 msgid "redefining user token number of %s"
 msgstr "Nutzertokennummer von %s erneut definiert"
 
-#: src/symtab.c:223
+#: src/symtab.c:242
 #, c-format
 msgid "symbol %s is used, but is not defined as a token and has no rules"
 msgstr ""
 "Symbol %s wird benutzt, ist aber nicht als Token definiert und hat keine "
 "Regel"
 
-#: src/symtab.c:248
+#: src/symtab.c:267
 #, c-format
 msgid "symbol `%s' used more than once as a literal string"
 msgstr "Symbol „%s“ wird mehr als einmal als literale Zeichenkette benutzt"
 
-#: src/symtab.c:251
+#: src/symtab.c:270
 #, c-format
 msgid "symbol `%s' given more than one literal string"
 msgstr "Symbol „%s“ wird mehr als eine literale Zeichenkette gegeben"
 
-#: src/symtab.c:398
+#: src/symtab.c:418
 #, c-format
 msgid "tokens %s and %s both assigned number %d"
 msgstr "Token %s und %s haben die selbe Nummer %d"
 
-#: src/symtab.c:622
+#: src/symtab.c:641
 #, c-format
 msgid "the start symbol %s is undefined"
 msgstr "das Startsymbol %s ist undefiniert"
 
-#: src/symtab.c:626
+#: src/symtab.c:645
 #, c-format
 msgid "the start symbol %s is a token"
 msgstr "das Startsymbol %s ist ein Token"
@@ -625,7 +628,7 @@ msgstr "Konnte Statistik-Datei nicht schreiben."
 msgid "Could not open stats file for writing."
 msgstr "Konnte Statistik-Datei nicht zum Schreiben öffnen."
 
-#: lib/error.c:123
+#: lib/error.c:121
 msgid "Unknown system error"
 msgstr "Unbekannter Systemfehler"
 
@@ -684,34 +687,53 @@ msgstr "%s: Option „-W %s“ ist mehrdeutig\n"
 msgid "%s: option `-W %s' doesn't allow an argument\n"
 msgstr "%s: Option „-W %s“ erlaubt kein Argument\n"
 
-#: lib/obstack.c:433 lib/obstack.c:436
+#: lib/obstack.c:438 lib/obstack.c:441 lib/xalloc-die.c:38
 msgid "memory exhausted"
 msgstr "Speicher ausgeschöpft"
 
-#: lib/quotearg.c:240
+#. TRANSLATORS:
+#. Get translations for open and closing quotation marks.
+#.
+#. The message catalog should translate "`" to a left
+#. quotation mark suitable for the locale, and similarly for
+#. "'".  If the catalog has no translation,
+#. locale_quoting_style quotes `like this', and
+#. clocale_quoting_style quotes "like this".
+#.
+#. For example, an American English Unicode locale should
+#. translate "`" to U+201C (LEFT DOUBLE QUOTATION MARK), and
+#. should translate "'" to U+201D (RIGHT DOUBLE QUOTATION
+#. MARK).  A British English Unicode locale should instead
+#. translate these to U+2018 (LEFT SINGLE QUOTATION MARK) and
+#. U+2019 (RIGHT SINGLE QUOTATION MARK), respectively.
+#.
+#. If you don't know what to put here, please see
+#. <http://en.wikipedia.org/wiki/Quotation_mark#Glyphs>
+#. and use glyphs suitable for your language.
+#: lib/quotearg.c:245
 msgid "`"
 msgstr "„"
 
-#: lib/quotearg.c:241
+#: lib/quotearg.c:246
 msgid "'"
 msgstr "“"
 
-#: lib/subpipe.c:171
+#: lib/subpipe.c:159
 #, c-format
 msgid "subsidiary program `%s' could not be invoked"
 msgstr "untergeordnetes Programm „%s“ konnte nicht aufgerufen werden"
 
-#: lib/subpipe.c:173
+#: lib/subpipe.c:161
 #, c-format
 msgid "subsidiary program `%s' not found"
 msgstr "untergeordnetes Programm „%s“ nicht gefunden"
 
-#: lib/subpipe.c:175
+#: lib/subpipe.c:163
 #, c-format
 msgid "subsidiary program `%s' failed"
 msgstr "untergeordnetes Programm „%s“ fehlgeschlagen"
 
-#: lib/subpipe.c:176
+#: lib/subpipe.c:164
 #, c-format
 msgid "subsidiary program `%s' failed (exit status %d)"
 msgstr "untergeordnetes Programm „%s“ fehlgeschlagen (Rückgabewert %d)"
@@ -732,6 +754,9 @@ msgstr " ZUSAMMEN              :"
 #, c-format
 msgid "time in %s: %ld.%06ld (%ld%%)\n"
 msgstr "Zeit in %s: %ld.%06ld (%ld%%)\n"
+
+#~ msgid "invalid $ value"
+#~ msgstr "unzulässiger $-Wert"
 
 #~ msgid "type redeclaration for %s"
 #~ msgstr "erneute Deklaration des Typs für %s"

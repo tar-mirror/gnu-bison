@@ -1,6 +1,6 @@
 /* VCG description handler for Bison.
 
-   Copyright (C) 2001, 2002 Free Software Foundation, Inc.
+   Copyright (C) 2001, 2002, 2005 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -16,8 +16,8 @@
 
    You should have received a copy of the GNU General Public License
    along with Bison; see the file COPYING.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.  */
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.  */
 
 #ifndef VCG_H_
 # define VCG_H_
@@ -884,8 +884,8 @@ struct graph
   int cmin;
 
   /* Cmax set the maximal number of interactions for crossing reduction.
-     This is helpful for speedup the layout process.
-     Default is infinite. */
+     This is helpful for speeding up the layout process.
+     Default is -1, which represents infinity.  */
   int cmax;
 
   /* Pmin set the minimal number of iterations that is done with the

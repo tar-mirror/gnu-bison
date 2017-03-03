@@ -1,5 +1,5 @@
 # Bison Regressions.                               -*- Autotest -*-
-# Copyright (C) 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2002, 2003, 2004, 2005 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,8 +13,8 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-# 02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+# 02110-1301, USA.
 
 AT_BANNER([[Regression tests.]])
 
@@ -303,6 +303,27 @@ input.y:7.1-8.0: missing `%}' at end of file
 AT_CLEANUP
 
 
+AT_SETUP([Invalid inputs with {}])
+
+AT_DATA([input.y],
+[[
+%destructor
+%initial-action
+%lex-param
+%parse-param
+%printer
+%union
+]])
+
+AT_CHECK([bison input.y], [1], [],
+[[input.y:3.1: missing `{' in "%destructor {...}"
+input.y:4.1: missing `{' in "%initial-action {...}"
+input.y:4.1: syntax error, unexpected %initial-action {...}, expecting string or identifier
+]])
+
+AT_CLEANUP
+
+
 
 ## ------------------- ##
 ## Token definitions.  ##
@@ -314,20 +335,45 @@ AT_SETUP([Token definitions])
 # Bison managed, when fed with `%token 'f' "f"' to #define 'f'!
 AT_DATA_GRAMMAR([input.y],
 [%{
+#include <stdio.h>
 void yyerror (const char *s);
 int yylex (void);
 %}
-[%token MYEOF 0 "end of file"
+[%error-verbose
+%token MYEOF 0 "end of file"
 %token 'a' "a"
-%token b "b"
-%token c 'c'
-%token 'd' d
+%token B_TOKEN "b"
+%token C_TOKEN 'c'
+%token 'd' D_TOKEN
+%token SPECIAL "\\\'\?\"\a\b\f\n\r\t\v\001\201\x001\x000081??!"
 %%
-exp: "a";
+exp: "a" "\\\'\?\"\a\b\f\n\r\t\v\001\201\x001\x000081??!";
+%%
+void
+yyerror (char const *s)
+{
+  fprintf (stderr, "%s\n", s);
+}
+
+int
+yylex (void)
+{
+  return SPECIAL;
+}
+
+int
+main (void)
+{
+  return yyparse ();
+}
 ]])
 
 AT_CHECK([bison -o input.c input.y])
-AT_COMPILE([input.o], [-c input.c])
+AT_COMPILE([input])
+AT_DATA([experr],
+[[syntax error, unexpected "\\'?\"\a\b\f\n\r\t\v\001\201\001\201?\?!", expecting a
+]])
+AT_PARSER_CHECK([./input], 1, [], [experr])
 AT_CLEANUP
 
 

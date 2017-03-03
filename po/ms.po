@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bison 1.875a\n"
+"Project-Id-Version: bison 1.875d\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2004-12-25 21:18-0800\n"
-"PO-Revision-Date: 2003-02-26 22:43GMT+8\n"
+"POT-Creation-Date: 2005-09-16 15:58-0700\n"
+"PO-Revision-Date: 2005-03-27 14:50+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <translation-team-ms@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -62,9 +62,9 @@ msgid "State %d "
 msgstr "Keadaan %d "
 
 #: src/conflicts.c:487
-#, fuzzy, c-format
+#, c-format
 msgid "%%expect-rr applies only to GLR parsers"
-msgstr "%s hanya berkesan kepada parser GLR"
+msgstr "%%expect-rr hanya berkesan kepada parser GLR"
 
 #: src/conflicts.c:511
 #, c-format
@@ -74,25 +74,25 @@ msgstr[0] "jangkaan %d konflik pemindahan/pengurangan"
 msgstr[1] "jangkaan %d konflik pemindahan/pengurangan"
 
 #: src/conflicts.c:515
-#, fuzzy, c-format
+#, c-format
 msgid "expected %d reduce/reduce conflict"
 msgid_plural "expected %d reduce/reduce conflicts"
-msgstr[0] "jangkaan 0 konflik pengurangan/pengurangan"
+msgstr[0] "dijangkakan %d pengurangan/pengurangan konflik"
 
-#: src/files.c:100
+#: src/files.c:101
 #, c-format
 msgid "cannot open file `%s'"
 msgstr "tidak dapat membuka fail `%s'"
 
-#: src/files.c:116
+#: src/files.c:117
 msgid "I/O error"
 msgstr "Ralat I/O"
 
-#: src/files.c:119
+#: src/files.c:120
 msgid "cannot close file"
 msgstr "tidak dapat menutup fail"
 
-#: src/files.c:337
+#: src/files.c:336
 #, c-format
 msgid "conflicting outputs to file %s"
 msgstr "keluaran berkonflik kepada fail %s"
@@ -122,18 +122,21 @@ msgstr ""
 "wajib.\n"
 
 #: src/getargs.c:208
+#, fuzzy
 msgid ""
 "Operation modes:\n"
-"  -h, --help      display this help and exit\n"
-"  -V, --version   output version information and exit\n"
-"  -y, --yacc      emulate POSIX yacc\n"
+"  -h, --help                 display this help and exit\n"
+"  -V, --version              output version information and exit\n"
+"      --print-localedir      output directory containing locale-dependent "
+"data\n"
+"  -y, --yacc                 emulate POSIX yacc\n"
 msgstr ""
 "Mod operasi:\n"
 "  -h, --help      papar bantuan ini dan keluar\n"
 "  -V, --version   keluarkan maklumat versi dan keluar\n"
 "  -y, --yacc      tiru POSIX yacc\n"
 
-#: src/getargs.c:215
+#: src/getargs.c:216
 msgid ""
 "Parser:\n"
 "  -S, --skeleton=FILE        specify the skeleton to use\n"
@@ -153,7 +156,7 @@ msgstr ""
 "  -n, --no-parser            jana jadual sahaja\n"
 "  -k, --token-table          sertakan jadual nama token\n"
 
-#: src/getargs.c:227
+#: src/getargs.c:228
 msgid ""
 "Output:\n"
 "  -d, --defines              also produce a header file\n"
@@ -172,7 +175,7 @@ msgstr ""
 "  -o, --output=FAIL          biarkan keluaran kepada FAIL\n"
 "  -g, --graph                juga hasilkan huraian VCG bagi automaton\n"
 
-#: src/getargs.c:238
+#: src/getargs.c:239
 #, fuzzy
 msgid ""
 "THINGS is a list of comma separated words that can include:\n"
@@ -191,25 +194,25 @@ msgstr ""
 "  `all'          masukkan semua maklumat diatas\n"
 "  `none'         matikan laporan\n"
 
-#: src/getargs.c:249
+#: src/getargs.c:250
 msgid "Report bugs to <bug-bison@gnu.org>.\n"
 msgstr "Lapor pepijat kepada <bug-bison@gnu.org>.\n"
 
-#: src/getargs.c:266
+#: src/getargs.c:267
 #, c-format
 msgid "bison (GNU Bison) %s"
 msgstr "bison (GNU Bison) %s"
 
-#: src/getargs.c:268
+#: src/getargs.c:269
 msgid "Written by Robert Corbett and Richard Stallman.\n"
 msgstr "Ditulis oleh Robert Corbett dan Richard Stallman.\n"
 
-#: src/getargs.c:272
+#: src/getargs.c:273
 #, c-format
 msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
 msgstr "Hakcipta (C) %d Free Software Foundation, Inc.\n"
 
-#: src/getargs.c:274
+#: src/getargs.c:275
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
@@ -218,12 +221,12 @@ msgstr ""
 "jaminan disediakan; tidak juga untuk KEBOLEHDAGANGAN atau KEUPAYAAN UNTUK "
 "SESUATU TUJUAN KHUSUS.\n"
 
-#: src/getargs.c:440
+#: src/getargs.c:447
 #, c-format
 msgid "missing operand after `%s'"
 msgstr "operan hilang selepas `%s'"
 
-#: src/getargs.c:442
+#: src/getargs.c:449
 #, c-format
 msgid "extra operand `%s'"
 msgstr "operan tambahan `%s'"
@@ -240,15 +243,15 @@ msgstr "Tatabahasa"
 msgid "warning"
 msgstr "amaran"
 
-#: src/main.c:124
+#: src/main.c:125
 msgid "rule never reduced because of conflicts"
 msgstr "hukum tidak dikurangkan kerana konflik"
 
-#: src/parse-gram.y:366
+#: src/parse-gram.y:380
 msgid "POSIX forbids declarations in the grammar"
 msgstr "POSIX melarang pengisytiharan didalam tatabahasa"
 
-#: src/parse-gram.y:499
+#: src/parse-gram.y:511
 msgid "missing identifier in parameter declaration"
 msgstr "pengecam hilang dalam parameter pengisytiharan"
 
@@ -407,132 +410,132 @@ msgstr[1] "%d hukum tidak berguna"
 msgid "start symbol %s does not derive any sentence"
 msgstr "simbol permulaan %s tidak menghasilkan sebarang perkataan"
 
-#: src/scan-gram.l:162
+#: src/scan-gram.l:176
 msgid "stray `,' treated as white space"
 msgstr "`,' sesat dianggap sebagai ruang"
 
-#: src/scan-gram.l:225
+#: src/scan-gram.l:239
 #, c-format
 msgid "invalid directive: %s"
 msgstr "arahan tidak sah: %s"
 
-#: src/scan-gram.l:283
+#: src/scan-gram.l:297
 #, c-format
 msgid "invalid character: %s"
 msgstr "aksara tidak sah: %s"
 
-#: src/scan-gram.l:402
-#, fuzzy
+#: src/scan-gram.l:417
 msgid "invalid null character"
-msgstr "aksara tidak sah: %s"
+msgstr "aksara null tidak sah"
 
-#: src/scan-gram.l:415 src/scan-gram.l:427 src/scan-gram.l:448
+#: src/scan-gram.l:430 src/scan-gram.l:442 src/scan-gram.l:463
 #, c-format
 msgid "invalid escape sequence: %s"
 msgstr "turutan escape tidak sah: %s"
 
-#: src/scan-gram.l:417 src/scan-gram.l:429 src/scan-gram.l:450
-#, fuzzy, c-format
+#: src/scan-gram.l:432 src/scan-gram.l:444 src/scan-gram.l:465
+#, c-format
 msgid "invalid null character: %s"
-msgstr "aksara tidak sah: %s"
+msgstr "aksara null tidak sah: %s"
 
-#: src/scan-gram.l:455
+#: src/scan-gram.l:470
 #, c-format
 msgid "unrecognized escape sequence: %s"
 msgstr "turutan escape tidak dikenali: %s"
 
-#: src/scan-gram.l:537
-#, c-format
-msgid "missing `{' in `%s'"
+#: src/scan-gram.l:552
+#, fuzzy, c-format
+msgid "missing `{' in %s"
 msgstr "`(' hilang dalam `%s'"
 
-#: src/scan-gram.l:782
+#: src/scan-gram.l:797
 #, c-format
 msgid "$$ of `%s' has no declared type"
 msgstr "$$ dari `%s' tiada jenis diisytiharkan"
 
-#: src/scan-gram.l:803
+#: src/scan-gram.l:818
 #, c-format
 msgid "$%d of `%s' has no declared type"
 msgstr "$%d dari `%s' tiada jenis diisytiharkan"
 
-#: src/scan-gram.l:812 src/scan-gram.l:881 src/scan-gram.l:932
+#: src/scan-gram.l:827 src/scan-gram.l:896 src/scan-gram.l:947
 #, c-format
 msgid "integer out of range: %s"
 msgstr "integer diluar julat: %s"
 
-#: src/scan-gram.l:848 src/scan-gram.l:916
+#: src/scan-gram.l:863 src/scan-gram.l:931
 #, c-format
 msgid "invalid value: %s"
 msgstr "nilai tidak sah: %s"
 
-#: src/scan-gram.l:1036
+#: src/scan-gram.l:1051
 #, c-format
 msgid "missing `%s' at end of file"
 msgstr "`%s' hilang pada penghujung fail"
 
-#: src/scan-gram.l:1047
-#, fuzzy, c-format
+#: src/scan-gram.l:1062
+#, c-format
 msgid "missing `%s' at end of line"
-msgstr "`%s' hilang pada penghujung fail"
+msgstr "`%s' hilang pada penghujung baris"
 
-#: src/symlist.c:97 src/symlist.c:108
-msgid "invalid $ value"
-msgstr "nilai $ tidak sah"
+#: src/symlist.c:113 src/symlist.c:124
+#, fuzzy, c-format
+msgid "invalid $ value: $%d"
+msgstr "nilai tidak sah: %s"
 
 #: src/symtab.c:70
 #, c-format
 msgid "too many symbols in input grammar (limit is %d)"
 msgstr ""
 
-#: src/symtab.c:85
+#: src/symtab.c:104
 #, c-format
 msgid "%s redeclaration for %s"
 msgstr "%s pengisytiharan semula untuk %s"
 
-#: src/symtab.c:86
+#: src/symtab.c:105
 #, fuzzy
 msgid "first declaration"
 msgstr "pelbagai pengisytiharan %s"
 
-#: src/symtab.c:173
+#: src/symtab.c:192
 #, c-format
 msgid "symbol %s redefined"
 msgstr "simbol %s ditakrif semula"
 
-#: src/symtab.c:196
+#: src/symtab.c:215
 #, c-format
 msgid "redefining user token number of %s"
 msgstr "mentakrif semula nombor token pengguna %s"
 
-#: src/symtab.c:223
+#: src/symtab.c:242
 #, c-format
 msgid "symbol %s is used, but is not defined as a token and has no rules"
 msgstr ""
 "simbol %s digunakan, tetapi tidak ditakrifkan sebagai token atau mempunyai "
 "hukum"
 
-#: src/symtab.c:248
+#: src/symtab.c:267
 #, c-format
 msgid "symbol `%s' used more than once as a literal string"
 msgstr "simbol `%s' digunakan lebih dari sekali sebagai rentetan perkataan"
 
-#: src/symtab.c:251
+#: src/symtab.c:270
 #, c-format
 msgid "symbol `%s' given more than one literal string"
 msgstr "simbol `%s' diberikan lebih daripada satu rentetan perkataan"
 
-#: src/symtab.c:398
+#: src/symtab.c:418
 #, c-format
 msgid "tokens %s and %s both assigned number %d"
 msgstr "token %s dan %s kedua-dunya diberi nombor %d"
 
-#: src/symtab.c:622
+#: src/symtab.c:641
 #, c-format
 msgid "the start symbol %s is undefined"
 msgstr "simbol permulaan %s tidak ditakrifkan"
 
-#: src/symtab.c:626
+#: src/symtab.c:645
 #, c-format
 msgid "the start symbol %s is a token"
 msgstr "simbol permulaan %s adalah token"
@@ -620,7 +623,7 @@ msgstr "Tidak dapat menulis fail stats."
 msgid "Could not open stats file for writing."
 msgstr "Tidak dapat membuka fail stats untuk menulis."
 
-#: lib/error.c:123
+#: lib/error.c:121
 msgid "Unknown system error"
 msgstr "Ralat sistem tidak diketahui"
 
@@ -679,34 +682,53 @@ msgstr "%s: pilihan `-W %s' adalah kabur\n"
 msgid "%s: option `-W %s' doesn't allow an argument\n"
 msgstr "%s: pilihan `-W %s' tidak mengizinkan hujah\n"
 
-#: lib/obstack.c:433 lib/obstack.c:436
+#: lib/obstack.c:438 lib/obstack.c:441 lib/xalloc-die.c:38
 msgid "memory exhausted"
 msgstr "kehabisan memori"
 
-#: lib/quotearg.c:240
+#. TRANSLATORS:
+#. Get translations for open and closing quotation marks.
+#.
+#. The message catalog should translate "`" to a left
+#. quotation mark suitable for the locale, and similarly for
+#. "'".  If the catalog has no translation,
+#. locale_quoting_style quotes `like this', and
+#. clocale_quoting_style quotes "like this".
+#.
+#. For example, an American English Unicode locale should
+#. translate "`" to U+201C (LEFT DOUBLE QUOTATION MARK), and
+#. should translate "'" to U+201D (RIGHT DOUBLE QUOTATION
+#. MARK).  A British English Unicode locale should instead
+#. translate these to U+2018 (LEFT SINGLE QUOTATION MARK) and
+#. U+2019 (RIGHT SINGLE QUOTATION MARK), respectively.
+#.
+#. If you don't know what to put here, please see
+#. <http://en.wikipedia.org/wiki/Quotation_mark#Glyphs>
+#. and use glyphs suitable for your language.
+#: lib/quotearg.c:245
 msgid "`"
 msgstr "`"
 
-#: lib/quotearg.c:241
+#: lib/quotearg.c:246
 msgid "'"
 msgstr "'"
 
-#: lib/subpipe.c:171
+#: lib/subpipe.c:159
 #, c-format
 msgid "subsidiary program `%s' could not be invoked"
 msgstr "program subsidiari `%s' tidak dapat dilaksanakan"
 
-#: lib/subpipe.c:173
+#: lib/subpipe.c:161
 #, c-format
 msgid "subsidiary program `%s' not found"
 msgstr "program subsidiari `%s' tidak dijumpai"
 
-#: lib/subpipe.c:175
+#: lib/subpipe.c:163
 #, c-format
 msgid "subsidiary program `%s' failed"
 msgstr "program subsidiari `%s' gagal"
 
-#: lib/subpipe.c:176
+#: lib/subpipe.c:164
 #, c-format
 msgid "subsidiary program `%s' failed (exit status %d)"
 msgstr "program subsidiari `%s' gagal (status keluar %d)"
@@ -727,6 +749,9 @@ msgstr " JUMLAH                 :"
 #, c-format
 msgid "time in %s: %ld.%06ld (%ld%%)\n"
 msgstr "masa dalam %s: %ld.%06ld (%ld%%)\n"
+
+#~ msgid "invalid $ value"
+#~ msgstr "nilai $ tidak sah"
 
 #~ msgid "type redeclaration for %s"
 #~ msgstr "pengisytiharan semula jenis untuk %s"

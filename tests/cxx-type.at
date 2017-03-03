@@ -1,5 +1,5 @@
 # Checking GLR Parsing.                         -*- Autotest -*-
-# Copyright (C) 2002, 2003, 2004 Free Software Foundation, Inc.
+# Copyright (C) 2002, 2003, 2004, 2005 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,8 +13,8 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-# 02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+# 02110-1301, USA.
 
 AT_BANNER([[C++ Type Syntax (GLR).]])
 
@@ -34,10 +34,11 @@ $1
 
 %{
   #include <stdio.h>
-  #define YYSTYPE char const *
+  #define YYSTYPE char *
 ]m4_bmatch([$2], [stmtMerge],
 [ static YYSTYPE stmtMerge (YYSTYPE x0, YYSTYPE x1);])[
   #define YYINITDEPTH 10
+  #define YYSTACKEXPANDABLE 1
   static char *format (char const *, ...);
   struct YYLTYPE;
 #if YYPURE
@@ -55,7 +56,7 @@ $1
 # define ERROR_PARAMETERS char const *s
 #endif
   int yylex (LEX_PARAMETERS);
-  int yyerror (ERROR_PARAMETERS);
+  void yyerror (ERROR_PARAMETERS);
 %}
 
 %token TYPENAME ID
@@ -64,6 +65,8 @@ $1
 %left '+'
 
 %glr-parser
+
+%destructor { free ($$); } TYPENAME ID
 
 %%
 
@@ -79,8 +82,8 @@ prog :
 
 stmt : expr ';'  $2	{ $$ = ]$[1; }
      | decl      $3
-     | error ';'	{ $$ = "<error>"; }
-     | '@'  		{ YYACCEPT; }
+     | error ';'	{ static char error_msg[] = "<error>"; $$ = error_msg; }
+     | '@'		{ YYACCEPT; }
      ;
 
 expr : ID
@@ -112,8 +115,8 @@ main (int argc, char **argv)
   if (argc != 2)
     abort ();
   if (!freopen (argv[1], "r", stdin))
-    abort ();
-  exit (yyparse ());
+    return 3;
+  return yyparse ();
 }
 
 int
@@ -142,7 +145,7 @@ yylex (LEX_PARAMETERS)
 	  break;
 	case ' ': case '\f':
 	  colNum += 1;
- 	  break;
+	  break;
 	case '\n':
 	  lineNum += 1;
 	  colNum = 0;
@@ -171,13 +174,14 @@ yylex (LEX_PARAMETERS)
 		ungetc (c, stdin);
 		buffer[i++] = 0;
 		tok = isupper ((unsigned char) buffer[0]) ? TYPENAME : ID;
-		yylval = strcpy (malloc (i), buffer);
+		yylval = strcpy ((char *) malloc (i), buffer);
 	      }
 	    else
 	      {
+		static char empty_string[] = "";
 		colNum += 1;
 		tok = c;
-		yylval = "";
+		yylval = empty_string;
 	      }
 #if YYLSP_NEEDED
 	    yylloc.last_column = colNum-1;
@@ -188,7 +192,7 @@ yylex (LEX_PARAMETERS)
     }
 }
 
-int
+void
 yyerror (ERROR_PARAMETERS)
 {
 #if YYPURE && YYLSP_NEEDED
@@ -197,7 +201,6 @@ yyerror (ERROR_PARAMETERS)
     abort ();
 #endif
   fprintf (stderr, "%s\n", s);
-  return 0;
 }
 
 
@@ -209,7 +212,7 @@ format (char const *form, ...)
    va_start (args, form);
    vsprintf (buffer, form, args);
    va_end (args);
-   return strcpy (malloc (strlen (buffer) + 1), buffer);
+   return strcpy ((char *) malloc (strlen (buffer) + 1), buffer);
 }
 
 ]]
@@ -316,60 +319,60 @@ m4_define([_AT_VERBOSE_GLR_STDERR],
 AT_SETUP([GLR: Resolve ambiguity, impure, no locations])
 _AT_TEST_GLR_CXXTYPES([],
                       [%dprec 1], [%dprec 2])
-AT_PARSER_CHECK([[./types test-input | sed 's/  *$//']], 0,
+AT_PARSER_CHECK([[./types test-input]], 0,
                 _AT_RESOLVED_GLR_OUTPUT, _AT_GLR_STDERR)
 AT_CLEANUP
 
 AT_SETUP([GLR: Resolve ambiguity, impure, locations])
 _AT_TEST_GLR_CXXTYPES([%locations],[%dprec 1],[%dprec 2])
-AT_PARSER_CHECK([[./types test-input | sed 's/  *$//']], 0,
+AT_PARSER_CHECK([[./types test-input]], 0,
                 _AT_RESOLVED_GLR_OUTPUT_WITH_LOC, _AT_GLR_STDERR)
 AT_CLEANUP
 
 AT_SETUP([GLR: Resolve ambiguity, pure, no locations])
 _AT_TEST_GLR_CXXTYPES([%pure-parser],
                       [%dprec 1], [%dprec 2])
-AT_PARSER_CHECK([[./types test-input | sed 's/  *$//']], 0,
+AT_PARSER_CHECK([[./types test-input]], 0,
                 _AT_RESOLVED_GLR_OUTPUT, _AT_GLR_STDERR)
 AT_CLEANUP
 
 AT_SETUP([GLR: Resolve ambiguity, pure, locations])
 _AT_TEST_GLR_CXXTYPES([%pure-parser %locations],
                       [%dprec 1], [%dprec 2])
-AT_PARSER_CHECK([[./types test-input | sed 's/  *$//']], 0,
+AT_PARSER_CHECK([[./types test-input]], 0,
                 _AT_RESOLVED_GLR_OUTPUT_WITH_LOC, _AT_GLR_STDERR)
 AT_CLEANUP
 
 AT_SETUP([GLR: Merge conflicting parses, impure, no locations])
 _AT_TEST_GLR_CXXTYPES([],
                       [%merge <stmtMerge>], [%merge <stmtMerge>])
-AT_PARSER_CHECK([[./types test-input | sed 's/  *$//']], 0,
+AT_PARSER_CHECK([[./types test-input]], 0,
                 _AT_AMBIG_GLR_OUTPUT, _AT_GLR_STDERR)
 AT_CLEANUP
 
 AT_SETUP([GLR: Merge conflicting parses, impure, locations])
 _AT_TEST_GLR_CXXTYPES([%locations],
                       [%merge <stmtMerge>], [%merge <stmtMerge>])
-AT_PARSER_CHECK([[./types test-input | sed 's/  *$//']], 0,
+AT_PARSER_CHECK([[./types test-input]], 0,
                 _AT_AMBIG_GLR_OUTPUT_WITH_LOC, _AT_GLR_STDERR)
 AT_CLEANUP
 
 AT_SETUP([GLR: Merge conflicting parses, pure, no locations])
 _AT_TEST_GLR_CXXTYPES([%pure-parser],
                       [%merge <stmtMerge>], [%merge <stmtMerge>])
-AT_PARSER_CHECK([[./types test-input | sed 's/  *$//']], 0,
+AT_PARSER_CHECK([[./types test-input]], 0,
                 _AT_AMBIG_GLR_OUTPUT, _AT_GLR_STDERR)
 AT_CLEANUP
 AT_SETUP([GLR: Merge conflicting parses, pure, locations])
 _AT_TEST_GLR_CXXTYPES([%pure-parser %locations],
                       [%merge <stmtMerge>],[%merge <stmtMerge>])
-AT_PARSER_CHECK([[./types test-input | sed 's/  *$//']], 0,
+AT_PARSER_CHECK([[./types test-input]], 0,
                 _AT_AMBIG_GLR_OUTPUT_WITH_LOC, _AT_GLR_STDERR)
 AT_CLEANUP
 
 AT_SETUP([GLR: Verbose messages, resolve ambiguity, impure, no locations])
 _AT_TEST_GLR_CXXTYPES([%error-verbose],
                       [%merge <stmtMerge>], [%merge <stmtMerge>])
-AT_PARSER_CHECK([[./types test-input | sed 's/  *$//']], 0,
+AT_PARSER_CHECK([[./types test-input]], 0,
 	        _AT_AMBIG_GLR_OUTPUT, _AT_VERBOSE_GLR_STDERR)
 AT_CLEANUP

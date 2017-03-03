@@ -1,6 +1,6 @@
 /* VCG description handler for Bison.
 
-   Copyright (C) 2001, 2002, 2003 Free Software Foundation, Inc.
+   Copyright (C) 2001, 2002, 2003, 2004, 2005 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -16,8 +16,8 @@
 
    You should have received a copy of the GNU General Public License
    along with Bison; see the file COPYING.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.  */
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.  */
 
 #include "system.h"
 
@@ -203,7 +203,7 @@ new_edge (edge *e)
 }
 
 /*----------------------------------------------.
-| Get functions.       	                        |
+| Get functions.	                        |
 | Return string corresponding to an enum value. |
 `----------------------------------------------*/
 
@@ -336,9 +336,10 @@ get_crossing_type_str (enum crossing_type crossing_type)
 static const char *
 get_view_str (enum view view)
 {
+  /* There is no way with vcg 1.30 to specify a normal view explicitly,
+     so it is an error here if view == normal_view.  */
   switch (view)
     {
-    case normal_view:	return "normal_view";
     case cfish:		return "cfish";
     case pfish:		return "pfish";
     case fcfish:	return "fcfish";
@@ -373,7 +374,7 @@ get_arrowstyle_str (enum arrowstyle arrowstyle)
 }
 
 /*------------------------------.
-| Add functions.       	        |
+| Add functions.	        |
 | Edge and nodes into a graph.  |
 `------------------------------*/
 
@@ -583,8 +584,7 @@ output_edge (edge *e, FILE *fout)
     fprintf (fout, "\t\tlabel:\t%s\n", quote (e->label));
 
   if (e->linestyle != E_LINESTYLE)
-    fprintf (fout, "\t\tlinestyle:\t%s\n",
-	     quote (get_linestyle_str (e->linestyle)));
+    fprintf (fout, "\t\tlinestyle:\t%s\n", get_linestyle_str (e->linestyle));
 
   if (e->thickness != E_THICKNESS)
     fprintf (fout, "\t\tthickness:\t%d\n", e->thickness);
@@ -808,7 +808,7 @@ output_graph (graph *g, FILE *fout)
     fprintf (fout, "\tcrossing_optimization:\t%s\n",
 	     get_decision_str (g->crossing_optimization));
 
-  if (g->view != G_VIEW)
+  if (g->view != normal_view)
     fprintf (fout, "\tview:\t%s\n", get_view_str (g->view));
 
   if (g->edges != G_EDGES)

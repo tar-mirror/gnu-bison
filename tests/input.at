@@ -1,5 +1,5 @@
 # Checking the Bison scanner.                    -*- Autotest -*-
-# Copyright (C) 2002, 2003, 2004 Free Software Foundation, Inc.
+# Copyright (C) 2002, 2003, 2004, 2005 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,8 +13,8 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-# 02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+# 02110-1301, USA.
 
 AT_BANNER([[Input Processing.]])
 
@@ -25,7 +25,7 @@ AT_BANNER([[Input Processing.]])
 ## Invalid $n.  ##
 ## ------------ ##
 
-AT_SETUP([Invalid \$n])
+AT_SETUP([Invalid dollar-n])
 
 AT_DATA([input.y],
 [[%%
@@ -132,7 +132,7 @@ AT_SETUP([Torturing the Scanner])
 
 AT_DATA([input.y], [])
 AT_CHECK([bison input.y], [1], [],
-[[input.y:1.1: syntax error, unexpected "end of file"
+[[input.y:1.1: syntax error, unexpected end of file
 ]])
 
 
@@ -270,5 +270,30 @@ AT_COMPILE([input], [input.o main.o])
 AT_PARSER_CHECK([./input], 0,
 [[[@<:@],
 ]])
+
+AT_CLEANUP
+
+
+## ---------------------- ##
+## Typed symbol aliases.  ##
+## ---------------------- ##
+
+AT_SETUP([Typed symbol aliases])
+
+# Bison 2.0 broke typed symbol aliases - ensure they work.
+
+AT_DATA_GRAMMAR([input.y],
+[[%union
+{
+  int val;
+};
+%token <val> MY_TOKEN "MY TOKEN"
+%type <val> exp
+%%
+exp: "MY TOKEN";
+%%
+]])
+
+AT_CHECK([bison -o input.c input.y])
 
 AT_CLEANUP

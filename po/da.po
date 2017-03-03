@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 1.875d\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2004-12-25 21:18-0800\n"
+"POT-Creation-Date: 2005-09-16 15:58-0700\n"
 "PO-Revision-Date: 2004-05-22 11:14+0200\n"
 "Last-Translator: Byrial Ole Jensen <byrial@image.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -78,20 +78,20 @@ msgid_plural "expected %d reduce/reduce conflicts"
 msgstr[0] "forventede %d reducér/reducér-konflikt"
 msgstr[1] "forventede %d reducér/reducér-konflikter"
 
-#: src/files.c:100
+#: src/files.c:101
 #, c-format
 msgid "cannot open file `%s'"
 msgstr "kan ikke åbne filen \"%s\""
 
-#: src/files.c:116
+#: src/files.c:117
 msgid "I/O error"
 msgstr "Fejl ved ind- eller udlæsning"
 
-#: src/files.c:119
+#: src/files.c:120
 msgid "cannot close file"
 msgstr "kan ikke lukke fil"
 
-#: src/files.c:337
+#: src/files.c:336
 #, c-format
 msgid "conflicting outputs to file %s"
 msgstr "konfliktende uddata til filen %s"
@@ -120,18 +120,21 @@ msgstr ""
 "for valgfrie argumenter.\n"
 
 #: src/getargs.c:208
+#, fuzzy
 msgid ""
 "Operation modes:\n"
-"  -h, --help      display this help and exit\n"
-"  -V, --version   output version information and exit\n"
-"  -y, --yacc      emulate POSIX yacc\n"
+"  -h, --help                 display this help and exit\n"
+"  -V, --version              output version information and exit\n"
+"      --print-localedir      output directory containing locale-dependent "
+"data\n"
+"  -y, --yacc                 emulate POSIX yacc\n"
 msgstr ""
 "Arbejdstilstande:\n"
 "  -h, --help      vis denne hjælpetekst og afslut\n"
 "  -V, --version   vis versionsinformation og afslut\n"
 "  -y, --yacc      emulér POSIX-yacc\n"
 
-#: src/getargs.c:215
+#: src/getargs.c:216
 msgid ""
 "Parser:\n"
 "  -S, --skeleton=FILE        specify the skeleton to use\n"
@@ -151,7 +154,7 @@ msgstr ""
 "  -n, --no-parser            generér kun tabellerne\n"
 "  -k, --token-table          inkludér en tabel over elementnavne\n"
 
-#: src/getargs.c:227
+#: src/getargs.c:228
 msgid ""
 "Output:\n"
 "  -d, --defines              also produce a header file\n"
@@ -170,7 +173,7 @@ msgstr ""
 "  -o, --output=FIL           læg uddata i FIL\n"
 "  -g, --graph                lav også en VCG-beskrivelse af automaten\n"
 
-#: src/getargs.c:238
+#: src/getargs.c:239
 #, fuzzy
 msgid ""
 "THINGS is a list of comma separated words that can include:\n"
@@ -189,27 +192,27 @@ msgstr ""
 "  \"all\"          inkludér al ovenstående information\n"
 "  \"none\"         deaktivér rapporten\n"
 
-#: src/getargs.c:249
+#: src/getargs.c:250
 msgid "Report bugs to <bug-bison@gnu.org>.\n"
 msgstr ""
 "Rapportér fejl til <bug-bison@gnu.org>.\n"
 "Rapportér synpunkter om oversættelsen til <dansk@klid.dk>.\n"
 
-#: src/getargs.c:266
+#: src/getargs.c:267
 #, c-format
 msgid "bison (GNU Bison) %s"
 msgstr "bison (GNU Bison) %s"
 
-#: src/getargs.c:268
+#: src/getargs.c:269
 msgid "Written by Robert Corbett and Richard Stallman.\n"
 msgstr "Skrevet af Robert Corbett og Richard Stallman.\n"
 
-#: src/getargs.c:272
+#: src/getargs.c:273
 #, c-format
 msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
 msgstr "Copyright © %d Free Software Foundation, Inc.\n"
 
-#: src/getargs.c:274
+#: src/getargs.c:275
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
@@ -218,12 +221,12 @@ msgstr ""
 "gives INGEN garanti, endog ikke for SALGBARHED eller EGNETHED FOR NOGET\n"
 "BESTEMT FORMÅL.\n"
 
-#: src/getargs.c:440
+#: src/getargs.c:447
 #, c-format
 msgid "missing operand after `%s'"
 msgstr "manglende operand efter \"%s\""
 
-#: src/getargs.c:442
+#: src/getargs.c:449
 #, c-format
 msgid "extra operand `%s'"
 msgstr "overtallig operand \"%s\""
@@ -240,15 +243,15 @@ msgstr "Grammatik"
 msgid "warning"
 msgstr "advarsel"
 
-#: src/main.c:124
+#: src/main.c:125
 msgid "rule never reduced because of conflicts"
 msgstr "regel aldrig reduceret på grund af konflikter"
 
-#: src/parse-gram.y:366
+#: src/parse-gram.y:380
 msgid "POSIX forbids declarations in the grammar"
 msgstr "POSIX forbyder deklarationer i grammatikken"
 
-#: src/parse-gram.y:499
+#: src/parse-gram.y:511
 msgid "missing identifier in parameter declaration"
 msgstr "manglende identifikator i parameterdeklaration"
 
@@ -407,130 +410,131 @@ msgstr[1] "%d ubrugelige regler"
 msgid "start symbol %s does not derive any sentence"
 msgstr "startsymbolet %s genererer ingen sætninger"
 
-#: src/scan-gram.l:162
+#: src/scan-gram.l:176
 msgid "stray `,' treated as white space"
 msgstr "Malplaceret \",\" behandlet som blanktegn"
 
-#: src/scan-gram.l:225
+#: src/scan-gram.l:239
 #, c-format
 msgid "invalid directive: %s"
 msgstr "ugyldigt direktiv: %s"
 
-#: src/scan-gram.l:283
+#: src/scan-gram.l:297
 #, c-format
 msgid "invalid character: %s"
 msgstr "ugyldigt tegn: %s"
 
-#: src/scan-gram.l:402
+#: src/scan-gram.l:417
 msgid "invalid null character"
 msgstr "ugyldigt NUL-tegn"
 
-#: src/scan-gram.l:415 src/scan-gram.l:427 src/scan-gram.l:448
+#: src/scan-gram.l:430 src/scan-gram.l:442 src/scan-gram.l:463
 #, c-format
 msgid "invalid escape sequence: %s"
 msgstr "ugyldig undvigesekvens: %s"
 
-#: src/scan-gram.l:417 src/scan-gram.l:429 src/scan-gram.l:450
+#: src/scan-gram.l:432 src/scan-gram.l:444 src/scan-gram.l:465
 #, c-format
 msgid "invalid null character: %s"
 msgstr "ugyldigt NUL-tegn: %s"
 
-#: src/scan-gram.l:455
+#: src/scan-gram.l:470
 #, c-format
 msgid "unrecognized escape sequence: %s"
 msgstr "ukendt undvigesekvens: %s"
 
-#: src/scan-gram.l:537
-#, c-format
-msgid "missing `{' in `%s'"
+#: src/scan-gram.l:552
+#, fuzzy, c-format
+msgid "missing `{' in %s"
 msgstr "manglende \"{\" i \"%s\""
 
-#: src/scan-gram.l:782
+#: src/scan-gram.l:797
 #, c-format
 msgid "$$ of `%s' has no declared type"
 msgstr "$$ for \"%s\" har ingen erklæret type"
 
-#: src/scan-gram.l:803
+#: src/scan-gram.l:818
 #, c-format
 msgid "$%d of `%s' has no declared type"
 msgstr "$%d for \"%s\" har ingen erklæret type"
 
-#: src/scan-gram.l:812 src/scan-gram.l:881 src/scan-gram.l:932
+#: src/scan-gram.l:827 src/scan-gram.l:896 src/scan-gram.l:947
 #, c-format
 msgid "integer out of range: %s"
 msgstr "heltal uden for gyldigshedsområdet: %s"
 
-#: src/scan-gram.l:848 src/scan-gram.l:916
+#: src/scan-gram.l:863 src/scan-gram.l:931
 #, c-format
 msgid "invalid value: %s"
 msgstr "fejlagtig værdi: %s"
 
-#: src/scan-gram.l:1036
+#: src/scan-gram.l:1051
 #, c-format
 msgid "missing `%s' at end of file"
 msgstr "manglende \"%s\" ved slutningen af filen"
 
-#: src/scan-gram.l:1047
+#: src/scan-gram.l:1062
 #, c-format
 msgid "missing `%s' at end of line"
 msgstr "manglende \"%s\" ved slutningen af linjen"
 
-#: src/symlist.c:97 src/symlist.c:108
-msgid "invalid $ value"
-msgstr "fejlagtig $-værdi"
+#: src/symlist.c:113 src/symlist.c:124
+#, fuzzy, c-format
+msgid "invalid $ value: $%d"
+msgstr "fejlagtig værdi: %s"
 
 #: src/symtab.c:70
 #, c-format
 msgid "too many symbols in input grammar (limit is %d)"
 msgstr ""
 
-#: src/symtab.c:85
+#: src/symtab.c:104
 #, c-format
 msgid "%s redeclaration for %s"
 msgstr "gentagen %s-erklæring for %s"
 
-#: src/symtab.c:86
+#: src/symtab.c:105
 #, fuzzy
 msgid "first declaration"
 msgstr "flere %s-deklarationer"
 
-#: src/symtab.c:173
+#: src/symtab.c:192
 #, c-format
 msgid "symbol %s redefined"
 msgstr "symbol %s redefineret"
 
-#: src/symtab.c:196
+#: src/symtab.c:215
 #, c-format
 msgid "redefining user token number of %s"
 msgstr "redefinition af elementnummer for %s"
 
-#: src/symtab.c:223
+#: src/symtab.c:242
 #, c-format
 msgid "symbol %s is used, but is not defined as a token and has no rules"
 msgstr ""
 "symbol %s bruges, men er ikke defineret som et element og har ingen regler"
 
-#: src/symtab.c:248
+#: src/symtab.c:267
 #, c-format
 msgid "symbol `%s' used more than once as a literal string"
 msgstr "symbol \"%s\" bruges mere end en gang som en bogstavelig streng"
 
-#: src/symtab.c:251
+#: src/symtab.c:270
 #, c-format
 msgid "symbol `%s' given more than one literal string"
 msgstr "symbol \"%s\" har fået mere end én bogstavelig streng"
 
-#: src/symtab.c:398
+#: src/symtab.c:418
 #, c-format
 msgid "tokens %s and %s both assigned number %d"
 msgstr "elementerne %s og %s har begge fået nummer %d"
 
-#: src/symtab.c:622
+#: src/symtab.c:641
 #, c-format
 msgid "the start symbol %s is undefined"
 msgstr "startsymbolet %s er udefineret"
 
-#: src/symtab.c:626
+#: src/symtab.c:645
 #, c-format
 msgid "the start symbol %s is a token"
 msgstr "startsymbolet %s er et element"
@@ -618,7 +622,7 @@ msgstr "Kunne ikke skrive statistikfil."
 msgid "Could not open stats file for writing."
 msgstr "Kunne ikke åbne statistikfil for skrivning."
 
-#: lib/error.c:123
+#: lib/error.c:121
 msgid "Unknown system error"
 msgstr "Ukendt systemfejl"
 
@@ -677,37 +681,56 @@ msgstr "%s: flaget \"-W %s\" er flertydigt\n"
 msgid "%s: option `-W %s' doesn't allow an argument\n"
 msgstr "%s: flaget \"-W %s\" tager intet argument\n"
 
-#: lib/obstack.c:433 lib/obstack.c:436
+#: lib/obstack.c:438 lib/obstack.c:441 lib/xalloc-die.c:38
 msgid "memory exhausted"
 msgstr "hukommelsen opbrugt"
 
 # Når vi går over til Unicode mere allmænt måske vi bør oversættta båda disse
 # med U+201D (RIGHT DOUBLE QUOTATION MARK) på svenska.  Eller?
 #
-#: lib/quotearg.c:240
+#. TRANSLATORS:
+#. Get translations for open and closing quotation marks.
+#.
+#. The message catalog should translate "`" to a left
+#. quotation mark suitable for the locale, and similarly for
+#. "'".  If the catalog has no translation,
+#. locale_quoting_style quotes `like this', and
+#. clocale_quoting_style quotes "like this".
+#.
+#. For example, an American English Unicode locale should
+#. translate "`" to U+201C (LEFT DOUBLE QUOTATION MARK), and
+#. should translate "'" to U+201D (RIGHT DOUBLE QUOTATION
+#. MARK).  A British English Unicode locale should instead
+#. translate these to U+2018 (LEFT SINGLE QUOTATION MARK) and
+#. U+2019 (RIGHT SINGLE QUOTATION MARK), respectively.
+#.
+#. If you don't know what to put here, please see
+#. <http://en.wikipedia.org/wiki/Quotation_mark#Glyphs>
+#. and use glyphs suitable for your language.
+#: lib/quotearg.c:245
 msgid "`"
 msgstr "\""
 
-#: lib/quotearg.c:241
+#: lib/quotearg.c:246
 msgid "'"
 msgstr "\""
 
-#: lib/subpipe.c:171
+#: lib/subpipe.c:159
 #, c-format
 msgid "subsidiary program `%s' could not be invoked"
 msgstr "hjælpeprogrammet \"%s\" kunne ikke startes"
 
-#: lib/subpipe.c:173
+#: lib/subpipe.c:161
 #, c-format
 msgid "subsidiary program `%s' not found"
 msgstr "hjælpeprogrammet \"%s\" ikke fundet"
 
-#: lib/subpipe.c:175
+#: lib/subpipe.c:163
 #, c-format
 msgid "subsidiary program `%s' failed"
 msgstr "hjælpeprogrammet \"%s\" fejlede"
 
-#: lib/subpipe.c:176
+#: lib/subpipe.c:164
 #, c-format
 msgid "subsidiary program `%s' failed (exit status %d)"
 msgstr "hjælpeprogrammet \"%s\" fejlede med afslutningskode %d"
@@ -728,6 +751,9 @@ msgstr " TOTALT                :"
 #, c-format
 msgid "time in %s: %ld.%06ld (%ld%%)\n"
 msgstr "tid i %s: %ld.%06ld (%ld%%)\n"
+
+#~ msgid "invalid $ value"
+#~ msgstr "fejlagtig $-værdi"
 
 #~ msgid "type redeclaration for %s"
 #~ msgstr "gentagen typeerklæring for %s"

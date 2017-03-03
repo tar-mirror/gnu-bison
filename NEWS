@@ -1,6 +1,30 @@
 Bison News
 ----------
 
+Changes in version 2.1, 2005-09-16:
+
+* Bison-generated parsers now support the translation of diagnostics like
+  "syntax error" into languages other than English.  The default
+  language is still English.  For details, please see the new
+  Internationalization section of the Bison manual.  Software
+  distributors should also see the new PACKAGING file.  Thanks to
+  Bruno Haible for this new feature.
+
+* Wording in the Bison-generated parsers has been changed slightly to
+  simplify translation.  In particular, the message "memory exhausted"
+  has replaced "parser stack overflow", as the old message was not
+  always accurate for modern Bison-generated parsers.
+
+* Destructors are now called when the parser aborts, for all symbols left
+  behind on the stack.  Also, the start symbol is now destroyed after a
+  successful parse.  In both cases, the behavior was formerly inconsistent.
+
+* When generating verbose diagnostics, Bison-generated parsers no longer
+  quote the literal strings associated with tokens.  For example, for
+  a syntax error associated with '%token NUM "number"' they might
+  print 'syntax error, unexpected number' instead of 'syntax error,
+  unexpected "number"'.
+
 Changes in version 2.0, 2004-12-25:
 
 * Possibly-incompatible changes
@@ -399,6 +423,8 @@ Changes in version 1.31, 2002-01-14:
   alloca is used only when compiled with GCC, to avoid portability
   problems as on AIX.
 
+* yyparse now returns 2 if memory is exhausted; formerly it dumped core.
+
 * When the generated parser lacks debugging code, YYDEBUG is now 0
   (as POSIX requires) instead of being undefined.
 
@@ -593,7 +619,7 @@ End:
 
 -----
 
-Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005
 Free Software Foundation, Inc.
 
 This file is part of Bison, the GNU Compiler Compiler.
@@ -610,5 +636,5 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with autoconf; see the file COPYING.  If not, write to
-the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-Boston, MA 02111-1307, USA.
+the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA 02110-1301, USA.

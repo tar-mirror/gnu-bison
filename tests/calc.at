@@ -1,5 +1,7 @@
 # Simple calculator.                         -*- Autotest -*-
-# Copyright (C) 2000, 2001, 2002, 2003, 2004  Free Software Foundation, Inc.
+
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Free Software
+# Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,8 +15,8 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-# 02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+# 02110-1301, USA.
 
 ## ---------------------------------------------------- ##
 ## Compile the grammar described in the documentation.  ##
@@ -286,7 +288,7 @@ power (int base, int exponent)
 {
   int res = 1;
   if (exponent < 0)
-    exit (1);
+    exit (3);
   for (/* Niente */; exponent; --exponent)
     res *= base;
   return res;
@@ -300,7 +302,11 @@ main (int argc, const char **argv)
   int count = 0;
   int status;
 
-  alarm (10);
+  /* This used to be alarm (10), but that isn't enough time for
+     a July 1995 vintage DEC Alphastation 200 4/100 system,
+     according to Nelson H. F. Beebe.  100 seconds is enough.  */
+  alarm (100);
+
   if (argc == 2)
     yyin = fopen (argv[1], "r");
   else
@@ -309,7 +315,7 @@ main (int argc, const char **argv)
   if (!yyin)
     {
       perror (argv[1]);
-      exit (1);
+      return 3;
     }
 
 ]AT_LALR1_CC_IF([], [m4_bmatch([$4], [%debug],
@@ -399,6 +405,7 @@ sed '/^Starting/d
 /^Reducing/d
 /^Shifting/d
 /^state/d
+/^Cleanup:/d
 /^Error:/d
 /^Next/d
 /^Discarding/d
@@ -457,13 +464,13 @@ _AT_CHECK_CALC([$1],
 
 2^2^3 = 256
 (2^2)^3 = 64],
-               [570])
+               [571])
 
 # Some syntax errors.
 _AT_CHECK_CALC_ERROR([$1], [1], [0 0], [13],
-                     [1.2: syntax error, unexpected "number"])
+                     [1.2: syntax error, unexpected number])
 _AT_CHECK_CALC_ERROR([$1], [1], [1//2], [18],
-                     [1.2: syntax error, unexpected '/', expecting "number" or '-' or '(' or '!'])
+                     [1.2: syntax error, unexpected '/', expecting number or '-' or '(' or '!'])
 _AT_CHECK_CALC_ERROR([$1], [1], [error], [5],
                      [1.0: syntax error, unexpected $undefined])
 _AT_CHECK_CALC_ERROR([$1], [1], [1 = 2 = 3], [26],
@@ -474,8 +481,8 @@ _AT_CHECK_CALC_ERROR([$1], [1],
                      [16],
                      [2.0: syntax error, unexpected '+'])
 # Exercise error messages with EOF: work on an empty file.
-_AT_CHECK_CALC_ERROR([$1], [1], [/dev/null], [5],
-                     [1.0: syntax error, unexpected "end of input"])
+_AT_CHECK_CALC_ERROR([$1], [1], [/dev/null], [4],
+                     [1.0: syntax error, unexpected end of input])
 
 # Exercise the error token: without it, we die at the first error,
 # hence be sure to
@@ -495,21 +502,21 @@ _AT_CHECK_CALC_ERROR([$1], [1], [/dev/null], [5],
 #
 _AT_CHECK_CALC_ERROR([$1], [0],
                      [() + (1 + 1 + 1 +) + (* * *) + (1 * 2 * *) = 1],
-                     [188],
-[1.1: syntax error, unexpected ')', expecting "number" or '-' or '(' or '!'
-1.17: syntax error, unexpected ')', expecting "number" or '-' or '(' or '!'
-1.22: syntax error, unexpected '*', expecting "number" or '-' or '(' or '!'
-1.40: syntax error, unexpected '*', expecting "number" or '-' or '(' or '!'
+                     [189],
+[1.1: syntax error, unexpected ')', expecting number or '-' or '(' or '!'
+1.17: syntax error, unexpected ')', expecting number or '-' or '(' or '!'
+1.22: syntax error, unexpected '*', expecting number or '-' or '(' or '!'
+1.40: syntax error, unexpected '*', expecting number or '-' or '(' or '!'
 calc: error: 4444 != 1])
 
 # The same, but this time exercising explicitly triggered syntax errors.
 # POSIX says the look-ahead causing the error should not be discarded.
-_AT_CHECK_CALC_ERROR([$1], [0], [(!) + (0 0) = 1], [75],
-[1.9: syntax error, unexpected "number"
+_AT_CHECK_CALC_ERROR([$1], [0], [(!) + (0 0) = 1], [76],
+[1.9: syntax error, unexpected number
 calc: error: 2222 != 1])
-_AT_CHECK_CALC_ERROR([$1], [0], [(- *) + (0 0) = 1], [85],
-[1.3: syntax error, unexpected '*', expecting "number" or '-' or '(' or '!'
-1.11: syntax error, unexpected "number"
+_AT_CHECK_CALC_ERROR([$1], [0], [(- *) + (0 0) = 1], [86],
+[1.3: syntax error, unexpected '*', expecting number or '-' or '(' or '!'
+1.11: syntax error, unexpected number
 calc: error: 2222 != 1])
 AT_BISON_OPTION_POPDEFS
 

@@ -1,6 +1,6 @@
 /* Symbol table manager for Bison.
 
-   Copyright (C) 1984, 1989, 2000, 2001, 2002, 2004 Free Software
+   Copyright (C) 1984, 1989, 2000, 2001, 2002, 2004, 2005 Free Software
    Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
@@ -17,8 +17,8 @@
 
    You should have received a copy of the GNU General Public License
    along with Bison; see the file COPYING.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.  */
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.  */
 
 
 #include "system.h"
@@ -74,6 +74,25 @@ symbol_new (uniqstr tag, location loc)
 }
 
 
+/*-----------------.
+| Print a symbol.  |
+`-----------------*/
+
+#define SYMBOL_ATTR_PRINT(Attr)				\
+  if (s->Attr)						\
+    fprintf (f, " %s { %s }", #Attr, s->Attr)
+
+void
+symbol_print (symbol *s, FILE *f)
+{
+  fprintf (f, "\"%s\"", s->tag);
+  SYMBOL_ATTR_PRINT (type_name);
+  SYMBOL_ATTR_PRINT (destructor);
+  SYMBOL_ATTR_PRINT (printer);
+}
+
+#undef SYMBOL_ATTR_PRINT
+
 /*------------------------------------------------------------------.
 | Complain that S's WHAT is redeclared at SECOND, and was first set |
 | at FIRST.                                                         |
@@ -111,7 +130,7 @@ symbol_type_set (symbol *sym, uniqstr type_name, location loc)
 `------------------------------------------------------------------*/
 
 void
-symbol_destructor_set (symbol *sym, char *destructor, location loc)
+symbol_destructor_set (symbol *sym, const char *destructor, location loc)
 {
   if (destructor)
     {
@@ -128,7 +147,7 @@ symbol_destructor_set (symbol *sym, char *destructor, location loc)
 `---------------------------------------------------------------*/
 
 void
-symbol_printer_set (symbol *sym, char *printer, location loc)
+symbol_printer_set (symbol *sym, const char *printer, location loc)
 {
   if (printer)
     {
@@ -264,6 +283,7 @@ symbol_make_alias (symbol *sym, symbol *symval, location loc)
 	abort ();
       sym->number = symval->number =
 	(symval->number < sym->number) ? symval->number : sym->number;
+      symbol_type_set (symval, sym->type_name, loc);
     }
 }
 
@@ -283,7 +303,7 @@ symbol_check_alias_consistency (symbol *this)
   if (!(this->alias && this->user_token_number == USER_NUMBER_ALIAS))
     return;
 
-  if (orig->type_name || alias->type_name)
+  if (orig->type_name != alias->type_name)
     {
       if (orig->type_name)
 	symbol_type_set (alias, orig->type_name, orig->type_location);
@@ -474,8 +494,7 @@ symbol_get (const char *key, location loc)
   symbol probe;
   symbol *entry;
 
-  /* Keep the symbol in a printable form.  */
-  key = uniqstr_new (quotearg_style (escape_quoting_style, key));
+  key = uniqstr_new (key);
   probe.tag = key;
   entry = hash_lookup (symbol_table, &probe);
 

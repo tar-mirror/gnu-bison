@@ -1,7 +1,7 @@
 /* Output the generated parsing program for Bison.
 
-   Copyright (C) 1984, 1986, 1989, 1992, 2000, 2001, 2002, 2003, 2004
-   Free Software Foundation, Inc.
+   Copyright (C) 1984, 1986, 1989, 1992, 2000, 2001, 2002, 2003, 2004,
+   2005 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -17,8 +17,8 @@
 
    You should have received a copy of the GNU General Public License
    along with Bison; see the file COPYING.  If not, write to the Free
-   Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-   02111-1307, USA.  */
+   Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+   02110-1301, USA.  */
 
 
 #include "system.h"
@@ -44,11 +44,13 @@
    state_number and symbol_number.  */
 typedef int vector_number;
 
+#if 0 /* Not currently used.  */
 static inline vector_number
 state_number_to_vector_number (state_number s)
 {
   return s;
 }
+#endif
 
 static inline vector_number
 symbol_number_to_vector_number (symbol_number sym)
@@ -171,7 +173,7 @@ table_grow (int desired)
 
 /*-------------------------------------------------------------------.
 | For GLR parsers, for each conflicted token in S, as indicated      |
-| by non-zero entries in CONFLROW, create a list of possible 	     |
+| by non-zero entries in CONFLROW, create a list of possible	     |
 | reductions that are alternatives to the shift or reduction	     |
 | currently recorded for that token in S.  Store the alternative     |
 | reductions followed by a 0 in CONFLICT_LIST, updating		     |

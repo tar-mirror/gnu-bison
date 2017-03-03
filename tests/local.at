@@ -1,7 +1,7 @@
 # Process this -*- Autotest -*- file with autom4te.
 
 # Macros for the GNU Bison Test suite.
-# Copyright (C) 2003, 2004 Free Software Foundation, Inc.
+# Copyright (C) 2003, 2004, 2005 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,8 +15,8 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-# 02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+# 02110-1301, USA.
 
 # We want a recent Autotest.
 m4_version_prereq([2.58])
@@ -170,16 +170,18 @@ $2])
 # Compile SOURCES into OUTPUT.  If OUTPUT does not contain '.',
 # assume that we are linking too; this is a hack.
 m4_define([AT_COMPILE],
-[AT_CHECK([$CC $CFLAGS $CPPFLAGS m4_bmatch([$1], [[.]], [], [$LDFLAGS ])m4_default([$2], [$1.c]) m4_bmatch([$1], [[.]], [], [$LIBS ])-o $1],
+[AT_CHECK([$CC $CFLAGS $CPPFLAGS m4_bmatch([$1], [[.]], [], [$LDFLAGS ])-o $1 m4_default([$2], [$1.c])[]m4_bmatch([$1], [[.]], [], [ $LIBS])],
 	   0, [ignore], [ignore])])
 
 # AT_COMPILE_CXX(OUTPUT, [SOURCES = OUTPUT.cc])
 # --------------------------------------------
+# Compile SOURCES into OUTPUT.  If OUTPUT does not contain '.',
+# assume that we are linking too; this is a hack.
 # If the C++ compiler does not work, ignore the test.
 m4_define([AT_COMPILE_CXX],
 [AT_KEYWORDS(c++)
 AT_CHECK([$BISON_CXX_WORKS], 0, ignore, ignore)
-AT_CHECK([$CXX $CXXFLAGS $CPPFLAGS m4_default([$2], [$1.cc]) -o $1],
+AT_CHECK([$CXX $CXXFLAGS $CPPFLAGS m4_bmatch([$1], [[.]], [], [$LDFLAGS ])-o $1 m4_default([$2], [$1.cc])[]m4_bmatch([$1], [[.]], [], [ $LIBS])],
          0, [ignore], [ignore])])
 
 

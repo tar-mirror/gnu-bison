@@ -1,14 +1,14 @@
 This is bison.info, produced by makeinfo version 4.7 from bison.texinfo.
 
-   This manual is for GNU Bison (version 2.0, 22 December 2004), the
+   This manual is for GNU Bison (version 2.1, 16 September 2005), the
 GNU parser generator.
 
    Copyright (C) 1988, 1989, 1990, 1991, 1992, 1993, 1995, 1998, 1999,
-2000, 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
+2000, 2001, 2002, 2003, 2004, 2005 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.1 or any later version published by the Free Software
+     Version 1.2 or any later version published by the Free Software
      Foundation; with no Invariant Sections, with the Front-Cover texts
      being "A GNU Manual," and with the Back-Cover Texts as in (a)
      below.  A copy of the license is included in the section entitled
@@ -18,7 +18,7 @@ GNU parser generator.
      modify this GNU Manual, like GNU software.  Copies published by
      the Free Software Foundation raise funds for GNU development."
 
-INFO-DIR-SECTION GNU programming tools
+INFO-DIR-SECTION Software development
 START-INFO-DIR-ENTRY
 * bison: (bison).       GNU parser generator (Yacc replacement).
 END-INFO-DIR-ENTRY
@@ -29,15 +29,15 @@ File: bison.info,  Node: Top,  Next: Introduction,  Up: (dir)
 Bison
 *****
 
-This manual is for GNU Bison (version 2.0, 22 December 2004), the GNU
+This manual is for GNU Bison (version 2.1, 16 September 2005), the GNU
 parser generator.
 
    Copyright (C) 1988, 1989, 1990, 1991, 1992, 1993, 1995, 1998, 1999,
-2000, 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
+2000, 2001, 2002, 2003, 2004, 2005 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
-     Version 1.1 or any later version published by the Free Software
+     Version 1.2 or any later version published by the Free Software
      Foundation; with no Invariant Sections, with the Front-Cover texts
      being "A GNU Manual," and with the Back-Cover Texts as in (a)
      below.  A copy of the license is included in the section entitled
@@ -67,9 +67,10 @@ Reference sections:
                         messy for Bison to handle straightforwardly.
 * Debugging::         Understanding or debugging Bison parsers.
 * Invocation::        How to run Bison (to produce the parser source file).
+* C++ Language Interface::  Creating C++ parser objects.
+* FAQ::               Frequently Asked Questions
 * Table of Symbols::  All the keywords of the Bison language are explained.
 * Glossary::          Basic concepts are explained.
-* FAQ::               Frequently Asked Questions
 * Copying This Manual::  License for copying this manual.
 * Index::             Cross-references to the text.
 
@@ -191,6 +192,8 @@ Parser C-Language Interface
                         which reads tokens.
 * Error Reporting::   You must supply a function `yyerror'.
 * Action Features::   Special features for use in actions.
+* Internationalization::  How to let the parser speak in the user's
+                        native language.
 
 The Lexical Analyzer Function `yylex'
 
@@ -213,7 +216,7 @@ The Bison Parser Algorithm
 * Reduce/Reduce::     When two rules are applicable in the same situation.
 * Mystery Conflicts::  Reduce/reduce conflicts that look unjustified.
 * Generalized LR Parsing::  Parsing arbitrary context-free grammars.
-* Stack Overflow::    What happens when stack gets full.  How to avoid it.
+* Memory Management:: What happens when memory is exhausted.  How to avoid it.
 
 Operator Precedence
 
@@ -241,12 +244,32 @@ Invoking Bison
 * Option Cross Key::  Alphabetical list of long options.
 * Yacc Library::      Yacc-compatible `yylex' and `main'.
 
+C++ Language Interface
+
+* C++ Parsers::                 The interface to generate C++ parser classes
+* A Complete C++ Example::      Demonstrating their use
+
+C++ Parsers
+
+* C++ Bison Interface::         Asking for C++ parser generation
+* C++ Semantic Values::         %union vs. C++
+* C++ Location Values::         The position and location classes
+* C++ Parser Interface::        Instantiating and running the parser
+* C++ Scanner Interface::       Exchanges between yylex and parse
+
+A Complete C++ Example
+
+* Calc++ --- C++ Calculator::   The specifications
+* Calc++ Parsing Driver::       An active parsing context
+* Calc++ Parser::               A parser class
+* Calc++ Scanner::              A pure C++ Flex scanner
+* Calc++ Top Level::            Conducting the band
+
 Frequently Asked Questions
 
-* Parser Stack Overflow::      Breaking the Stack Limits
+* Memory Exhausted::           Breaking the Stack Limits
 * How Can I Reset the Parser:: `yyparse' Keeps some State
 * Strings are Destroyed::      `yylval' Loses Track of Strings
-* C++ Parsers::                Compiling Parsers with C++ Compilers
 * Implementing Gotos/Loops::   Control Flow in the Calculator
 
 Copying This Manual
@@ -281,7 +304,7 @@ Bison in detail.
 it Yacc-compatible.  Wilfred Hansen of Carnegie Mellon University added
 multi-character string literals and other features.
 
-   This edition corresponds to version 2.0 of Bison.
+   This edition corresponds to version 2.1 of Bison.
 
 
 File: bison.info,  Node: Conditions,  Next: Copying,  Prev: Introduction,  Up: Top
@@ -330,7 +353,7 @@ GNU GENERAL PUBLIC LICENSE
                          Version 2, June 1991
 
      Copyright (C) 1989, 1991 Free Software Foundation, Inc.
-     59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
+     51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
      Everyone is permitted to copy and distribute verbatim copies
      of this license document, but changing it is not allowed.
@@ -644,7 +667,7 @@ the "copyright" line and a pointer to where the full notice is found.
 
      You should have received a copy of the GNU General Public License
      along with this program; if not, write to the Free Software
-     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
    Also add information on how to contact you by electronic and paper
 mail.
@@ -744,7 +767,7 @@ that the next grammar rule to apply at any point in the input is
 uniquely determined by the preceding input and a fixed, finite portion
 (called a "look-ahead") of the remaining input.  A context-free grammar
 can be "ambiguous", meaning that there are multiple ways to apply the
-grammar rules to get the some inputs.  Even unambiguous grammars can be
+grammar rules to get the same inputs.  Even unambiguous grammars can be
 "non-deterministic", meaning that no fixed look-ahead always suffices
 to determine the next grammar rule to apply.  With the proper
 declarations, Bison is also able to parse these more general
@@ -1374,8 +1397,10 @@ file except for the ones defined in this manual.
 those cases your code should respect the identifiers reserved by those
 headers.  On some non-GNU hosts, `<alloca.h>', `<stddef.h>', and
 `<stdlib.h>' are included as needed to declare memory allocators and
-related types.  Other system headers may be included if you define
-`YYDEBUG' to a nonzero value (*note Tracing Your Parser: Tracing.).
+related types.  `<libintl.h>' is included if message translation is in
+use (*note Internationalization::).  Other system headers may be
+included if you define `YYDEBUG' to a nonzero value (*note Tracing Your
+Parser: Tracing.).
 
 
 File: bison.info,  Node: Stages,  Next: Grammar Layout,  Prev: Bison Parser,  Up: Concepts
@@ -1854,14 +1879,13 @@ and use `make' to arrange to recompile them.
    With all the source in a single file, you use the following command
 to convert it into a parser file:
 
-     bison FILE_NAME.y
+     bison FILE.y
 
 In this example the file was called `rpcalc.y' (for "Reverse Polish
-CALCulator").  Bison produces a file named `FILE_NAME.tab.c', removing
-the `.y' from the original file name.  The file output by Bison
-contains the source code for `yyparse'.  The additional functions in
-the input file (`yylex', `yyerror' and `main') are copied verbatim to
-the output.
+CALCulator").  Bison produces a file named `FILE.tab.c', removing the
+`.y' from the original file name.  The file output by Bison contains
+the source code for `yyparse'.  The additional functions in the input
+file (`yylex', `yyerror' and `main') are copied verbatim to the output.
 
 
 File: bison.info,  Node: Rpcalc Compile,  Prev: Rpcalc Gen,  Up: RPN Calc
@@ -2374,7 +2398,7 @@ provides for either functions or variables to be placed in the table.
      /* The symbol table: a chain of `struct symrec'.  */
      extern symrec *sym_table;
 
-     symrec *putsym (char const *, func_t);
+     symrec *putsym (char const *, int);
      symrec *getsym (char const *);
 
    The new version of `main' includes a call to `init_table', a
@@ -2692,7 +2716,7 @@ which need not come before the definition of `yyparse'.  For example,
 the definitions of `yylex' and `yyerror' often go here.  Because C
 requires functions to be declared before being used, you often need to
 declare functions like `yylex' and `yyerror' in the Prologue, even if
-you define them int he Epilogue.  *Note Parser C-Language Interface:
+you define them in the Epilogue.  *Note Parser C-Language Interface:
 Interface.
 
    If the last section is empty, you may omit the `%%' that separates it
@@ -3627,10 +3651,10 @@ code.
 
    For instance, if your locations use a file name, you may use
 
-     %parse-param { const char *filename };
+     %parse-param { char const *file_name };
      %initial-action
      {
-       @$.begin.filename = @$.end.filename = filename;
+       @$.begin.filename = @$.end.filename = file_name;
      };
 
 
@@ -3639,28 +3663,30 @@ File: bison.info,  Node: Destructor Decl,  Next: Expect Decl,  Prev: Initial Act
 3.7.6 Freeing Discarded Symbols
 -------------------------------
 
-Some symbols can be discarded by the parser.  For instance, during error
-recovery (*note Error Recovery::), embarrassing symbols already pushed
-on the stack, and embarrassing tokens coming from the rest of the file
-are thrown away until the parser falls on its feet.  If these symbols
-convey heap based information, this memory is lost.  While this behavior
-can be tolerable for batch parsers, such as in compilers, it is not for
-possibly "never ending" parsers such as shells, or implementations of
-communication protocols.
+Some symbols can be discarded by the parser.  During error recovery
+(*note Error Recovery::), symbols already pushed on the stack and
+tokens coming from the rest of the file are discarded until the parser
+falls on its feet.  If the parser runs out of memory, all the symbols
+on the stack must be discarded.  Even if the parser succeeds, it must
+discard the start symbol.
 
-   The `%destructor' directive allows for the definition of code that
-is called when a symbol is thrown away.
+   When discarded symbols convey heap based information, this memory is
+lost.  While this behavior can be tolerable for batch parsers, such as
+in traditional compilers, it is unacceptable for programs like shells
+or protocol implementations that may parse and execute indefinitely.
+
+   The `%destructor' directive defines code that is called when a
+symbol is discarded.
 
  -- Directive: %destructor { CODE } SYMBOLS
-     Declare that the CODE must be invoked for each of the SYMBOLS that
-     will be discarded by the parser.  The CODE should use `$$' to
-     designate the semantic value associated to the SYMBOLS.  The
-     additional parser parameters are also available (*note The Parser
-     Function `yyparse': Parser Function.).
+     Invoke CODE whenever the parser discards one of the SYMBOLS.
+     Within CODE, `$$' designates the semantic value associated with
+     the discarded symbol.  The additional parser parameters are also
+     available (*note The Parser Function `yyparse': Parser Function.).
 
-     *Warning:* as of Bison 1.875, this feature is still considered as
-     experimental, as there was not enough user feedback.  In
-     particular, the syntax might still change.
+     *Warning:* as of Bison 2.1, this feature is still experimental, as
+     there has not been enough user feedback.  In particular, the
+     syntax might still change.
 
    For instance:
 
@@ -3672,7 +3698,7 @@ is called when a symbol is thrown away.
      %type  <string> string
      %destructor { free ($$); } STRING string
 
-guarantees that when a `STRING' or a `string' will be discarded, its
+guarantees that when a `STRING' or a `string' is discarded, its
 associated memory will be freed.
 
    Note that in the future, Bison might also consider that right hand
@@ -3694,9 +3720,11 @@ Of course, this will not apply to the default action; compare:
 
    * incoming terminals during the second phase of error recovery,
 
-   * the current look-ahead when the parser aborts (either via an
-     explicit call to `YYABORT', or as a consequence of a failed error
-     recovery).
+   * the current look-ahead and the entire stack when the parser aborts
+     (either via an explicit call to `YYABORT', or as a consequence of
+     a failed error recovery or of memory exhaustion), and
+
+   * the start symbol, when the parser succeeds.
 
 
 File: bison.info,  Node: Expect Decl,  Next: Start Decl,  Prev: Destructor Decl,  Up: Declarations
@@ -3876,7 +3904,7 @@ directives:
      of Tokens: Token Values.
 
  -- Directive: %destructor
-     Specifying how the parser should reclaim the memory associated to
+     Specify how the parser should reclaim the memory associated to
      discarded symbols.  *Note Freeing Discarded Symbols: Destructor
      Decl.
 
@@ -3906,7 +3934,7 @@ directives:
      static variable declarations.
 
      This option also tells Bison to write the C code for the grammar
-     actions into a file named `FILENAME.act', in the form of a
+     actions into a file named `FILE.act', in the form of a
      brace-surrounded body fit for a `switch' statement.
 
  -- Directive: %no-lines
@@ -3917,8 +3945,8 @@ directives:
      directive causes them to associate errors with the parser file,
      treating it an independent source file in its own right.
 
- -- Directive: %output="FILENAME"
-     Specify the FILENAME for the parser file.
+ -- Directive: %output="FILE"
+     Specify FILE for the parser file.
 
  -- Directive: %pure-parser
      Request a pure (reentrant) parser program (*note A Pure
@@ -3932,15 +3960,14 @@ directives:
      `"error"', and `"$undefined"'; after these come the symbols
      defined in the grammar file.
 
-     For single-character literal tokens and literal string tokens, the
-     name in the table includes the single-quote or double-quote
-     characters: for example, `"'+'"' is a single-character literal and
-     `"\"<=\""' is a literal string token.  All the characters of the
-     literal string token appear verbatim in the string found in the
-     table; even double-quote characters are not escaped.  For example,
-     if the token consists of three characters `*"*', its string in
-     `yytname' contains `"*"*"'.  (In C, that would be written as
-     `"\"*\"*\""').
+     The name in the table includes all the characters needed to
+     represent the token in Bison.  For single-character literals and
+     literal strings, this includes the surrounding quoting characters
+     and any escape sequences.  For example, the Bison single-character
+     literal `'+'' corresponds to a three-character name, represented
+     in C as `"'+'"'; and the Bison two-character literal string `"\\/"'
+     corresponds to a five-character name, represented in C as
+     `"\"\\\\/\""'.
 
      When you specify `%token-table', Bison also generates macro
      definitions for macros `YYNTOKENS', `YYNNTS', and `YYNRULES', and
@@ -4024,6 +4051,8 @@ grammar file, you are likely to run into trouble.
                         which reads tokens.
 * Error Reporting::   You must supply a function `yyerror'.
 * Action Features::   Special features for use in actions.
+* Internationalization::  How to let the parser speak in the user's
+                        native language.
 
 
 File: bison.info,  Node: Parser Function,  Next: Lexical,  Up: Interface
@@ -4041,7 +4070,11 @@ reading further.
      The value returned by `yyparse' is 0 if parsing was successful
      (return is due to end-of-input).
 
-     The value is 1 if parsing failed (return is due to a syntax error).
+     The value is 1 if parsing failed because of invalid input, i.e.,
+     input that contains a syntax error or that causes `YYABORT' to be
+     invoked.
+
+     The value is 2 if parsing failed due to memory exhaustion.
 
    In an action, you can cause immediate return from `yyparse' by using
 these macros:
@@ -4163,11 +4196,13 @@ utility can be used without change as the definition of `yylex'.
      The index of the token in the table is the token type's code.  The
      name of a multicharacter token is recorded in `yytname' with a
      double-quote, the token's characters, and another double-quote.
-     The token's characters are not escaped in any way; they appear
-     verbatim in the contents of the string in the table.
+     The token's characters are escaped as necessary to be suitable as
+     input to Bison.
 
-     Here's code for looking up a token in `yytname', assuming that the
-     characters of the token are stored in `token_buffer'.
+     Here's code for looking up a multicharacter token in `yytname',
+     assuming that the characters of the token are stored in
+     `token_buffer', and assuming that the token does not contain any
+     characters like `"' that require escaping.
 
           for (i = 0; i < YYNTOKENS; i++)
             {
@@ -4316,12 +4351,16 @@ declarations section (*note The Bison Declarations Section: Bison
 Declarations.), then Bison provides a more verbose and specific error
 message string instead of just plain `"syntax error"'.
 
-   The parser can detect one other kind of error: stack overflow.  This
-happens when the input contains constructions that are very deeply
-nested.  It isn't likely you will encounter this, since the Bison
-parser extends its stack automatically up to a very large limit.  But
-if overflow happens, `yyparse' calls `yyerror' in the usual fashion,
-except that the argument string is `"parser stack overflow"'.
+   The parser can detect one other kind of error: memory exhaustion.
+This can happen when the input contains constructions that are very
+deeply nested.  It isn't likely you will encounter this, since the Bison
+parser normally extends its stack automatically up to a very large
+limit.  But if memory is exhausted, `yyparse' calls `yyerror' in the
+usual fashion, except that the argument string is `"memory exhausted"'.
+
+   In some cases diagnostics like `"syntax error"' are translated
+automatically from English to some other language before they are
+passed to `yyerror'.  *Note Internationalization::.
 
    The following definition suffices in simple programs:
 
@@ -4388,7 +4427,7 @@ request a pure parser (*note A Pure (Reentrant) Parser: Pure Decl.)
 then it is a local variable which only the actions can access.
 
 
-File: bison.info,  Node: Action Features,  Prev: Error Reporting,  Up: Interface
+File: bison.info,  Node: Action Features,  Next: Internationalization,  Prev: Error Reporting,  Up: Interface
 
 4.4 Special Features for Use in Actions
 =======================================
@@ -4478,6 +4517,64 @@ useful in actions.
      Tracking Locations: Locations.
 
 
+File: bison.info,  Node: Internationalization,  Prev: Action Features,  Up: Interface
+
+4.5 Parser Internationalization
+===============================
+
+A Bison-generated parser can print diagnostics, including error and
+tracing messages.  By default, they appear in English.  However, Bison
+also supports outputting diagnostics in the user's native language.  To
+make this work, the user should set the usual environment variables.
+*Note The User's View: (gettext)Users.  For example, the shell command
+`export LC_ALL=fr_CA.UTF-8' might set the user's locale to French
+Canadian using the UTF-8 encoding.  The exact set of available locales
+depends on the user's installation.
+
+   The maintainer of a package that uses a Bison-generated parser
+enables the internationalization of the parser's output through the
+following steps.  Here we assume a package that uses GNU Autoconf and
+GNU Automake.
+
+  1. Into the directory containing the GNU Autoconf macros used by the
+     package--often called `m4'--copy the `bison-i18n.m4' file
+     installed by Bison under `share/aclocal/bison-i18n.m4' in Bison's
+     installation directory.  For example:
+
+          cp /usr/local/share/aclocal/bison-i18n.m4 m4/bison-i18n.m4
+
+  2. In the top-level `configure.ac', after the `AM_GNU_GETTEXT'
+     invocation, add an invocation of `BISON_I18N'.  This macro is
+     defined in the file `bison-i18n.m4' that you copied earlier.  It
+     causes `configure' to find the value of the `BISON_LOCALEDIR'
+     variable, and it defines the source-language symbol `YYENABLE_NLS'
+     to enable translations in the Bison-generated parser.
+
+  3. In the `main' function of your program, designate the directory
+     containing Bison's runtime message catalog, through a call to
+     `bindtextdomain' with domain name `bison-runtime'.  For example:
+
+          bindtextdomain ("bison-runtime", BISON_LOCALEDIR);
+
+     Typically this appears after any other call `bindtextdomain
+     (PACKAGE, LOCALEDIR)' that your package already has.  Here we rely
+     on `BISON_LOCALEDIR' to be defined as a string through the
+     `Makefile'.
+
+  4. In the `Makefile.am' that controls the compilation of the `main'
+     function, make `BISON_LOCALEDIR' available as a C preprocessor
+     macro, either in `DEFS' or in `AM_CPPFLAGS'.  For example:
+
+          DEFS = @DEFS@ -DBISON_LOCALEDIR='"$(BISON_LOCALEDIR)"'
+
+     or:
+
+          AM_CPPFLAGS = -DBISON_LOCALEDIR='"$(BISON_LOCALEDIR)"'
+
+  5. Finally, invoke the command `autoreconf' to generate the build
+     infrastructure.
+
+
 File: bison.info,  Node: Algorithm,  Next: Error Recovery,  Prev: Interface,  Up: Top
 
 5 The Bison Parser Algorithm
@@ -4533,7 +4630,7 @@ Grammar.).
 * Reduce/Reduce::     When two rules are applicable in the same situation.
 * Mystery Conflicts::  Reduce/reduce conflicts that look unjustified.
 * Generalized LR Parsing::  Parsing arbitrary context-free grammars.
-* Stack Overflow::    What happens when stack gets full.  How to avoid it.
+* Memory Management:: What happens when memory is exhausted.  How to avoid it.
 
 
 File: bison.info,  Node: Look-Ahead,  Next: Shift/Reduce,  Up: Algorithm
@@ -5064,8 +5161,14 @@ activates the altered rule for `return_spec' rather than the one for
              |    ID ':' type
              ;
 
+   For a more detailed exposition of LALR(1) parsers and parser
+generators, please see: Frank DeRemer and Thomas Pennello, Efficient
+Computation of LALR(1) Look-Ahead Sets, `ACM Transactions on
+Programming Languages and Systems', Vol. 4, No. 4 (October 1982), pp.
+615-649 `http://doi.acm.org/10.1145/69622.357187'.
+
 
-File: bison.info,  Node: Generalized LR Parsing,  Next: Stack Overflow,  Prev: Mystery Conflicts,  Up: Algorithm
+File: bison.info,  Node: Generalized LR Parsing,  Next: Memory Management,  Prev: Mystery Conflicts,  Up: Algorithm
 
 5.8 Generalized LR (GLR) Parsing
 ================================
@@ -5144,26 +5247,26 @@ Department of Computer Science, TR-00-12,
 (2000-12-24).
 
 
-File: bison.info,  Node: Stack Overflow,  Prev: Generalized LR Parsing,  Up: Algorithm
+File: bison.info,  Node: Memory Management,  Prev: Generalized LR Parsing,  Up: Algorithm
 
-5.9 Stack Overflow, and How to Avoid It
-=======================================
+5.9 Memory Management, and How to Avoid Memory Exhaustion
+=========================================================
 
-The Bison parser stack can overflow if too many tokens are shifted and
-not reduced.  When this happens, the parser function `yyparse' returns
-a nonzero value, pausing only to call `yyerror' to report the overflow.
+The Bison parser stack can run out of memory if too many tokens are
+shifted and not reduced.  When this happens, the parser function
+`yyparse' calls `yyerror' and then returns 2.
 
    Because Bison parsers have growing stacks, hitting the upper limit
 usually results from using a right recursion instead of a left
 recursion, *Note Recursive Rules: Recursion.
 
    By defining the macro `YYMAXDEPTH', you can control how deep the
-parser stack can become before a stack overflow occurs.  Define the
-macro with a value that is an integer.  This value is the maximum number
-of tokens that can be shifted (and not reduced) before overflow.
+parser stack can become before memory is exhausted.  Define the macro
+with a value that is an integer.  This value is the maximum number of
+tokens that can be shifted (and not reduced) before overflow.
 
    The stack space allowed is not necessarily allocated.  If you
-specify a large value for `YYMAXDEPTH', the parser actually allocates a
+specify a large value for `YYMAXDEPTH', the parser normally allocates a
 small stack at first, and then makes it bigger by stages as needed.
 This increasing allocation happens automatically and silently.
 Therefore, you do not need to make `YYMAXDEPTH' painfully small merely
@@ -5181,15 +5284,13 @@ this value must be a compile-time constant unless you are assuming C99
 or some other target language or compiler that allows variable-length
 arrays.  The default is 200.
 
-   Do not allow `YYINITDEPTH' to be a value so large that arithmetic
-overflow would occur when calculating the size of the stack space.
-Also, do not allow `YYINITDEPTH' to be greater than `YYMAXDEPTH'.
+   Do not allow `YYINITDEPTH' to be greater than `YYMAXDEPTH'.
 
    Because of semantical differences between C and C++, the LALR(1)
-parsers in C produced by Bison by compiled as C++ cannot grow.  In this
-precise case (compiling a C parser as C++) you are suggested to grow
-`YYINITDEPTH'.  In the near future, a C++ output output will be
-provided which addresses this issue.
+parsers in C produced by Bison cannot grow when compiled by C++
+compilers.  In this precise case (compiling a C parser as C++) you are
+suggested to grow `YYINITDEPTH'.  The Bison maintainers hope to fix
+this deficiency in a future release.
 
 
 File: bison.info,  Node: Error Recovery,  Next: Context Dependency,  Prev: Algorithm,  Up: Top
@@ -5361,9 +5462,13 @@ parsed.  But in C this is not always so: C allows a declaration to
 redeclare a typedef name provided an explicit type has been specified
 earlier:
 
-     typedef int foo, bar, lose;
-     static foo (bar);        /* redeclare `bar' as static variable */
-     static int foo (lose);   /* redeclare `foo' as function */
+     typedef int foo, bar;
+     int baz (void)
+     {
+       static bar (bar);      /* redeclare `bar' as static variable */
+       extern foo foo (foo);  /* redeclare `foo' as function */
+       return foo (bar);
+     }
 
    Unfortunately, the name being declared is separated from the
 declaration construct itself by a complicated syntactic structure--the
@@ -5957,7 +6062,7 @@ calculator (*note Declarations for `mfcalc': Mfcalc Decl.):
      }
 
 
-File: bison.info,  Node: Invocation,  Next: Table of Symbols,  Prev: Debugging,  Up: Top
+File: bison.info,  Node: Invocation,  Next: C++ Language Interface,  Prev: Debugging,  Up: Top
 
 9 Invoking Bison
 ****************
@@ -5967,14 +6072,15 @@ The usual way to invoke Bison is as follows:
      bison INFILE
 
    Here INFILE is the grammar file name, which usually ends in `.y'.
-The parser file's name is made by replacing the `.y' with `.tab.c'.
-Thus, the `bison foo.y' filename yields `foo.tab.c', and the `bison
-hack/foo.y' filename yields `hack/foo.tab.c'.  It's also possible, in
-case you are writing C++ code instead of C in your grammar file, to
-name it `foo.ypp' or `foo.y++'.  Then, the output files will take an
-extension like the given one as input (respectively `foo.tab.cpp' and
-`foo.tab.c++').  This feature takes effect with all options that
-manipulate filenames like `-o' or `-d'.
+The parser file's name is made by replacing the `.y' with `.tab.c' and
+removing any leading directory.  Thus, the `bison foo.y' file name
+yields `foo.tab.c', and the `bison hack/foo.y' file name yields
+`foo.tab.c'.  It's also possible, in case you are writing C++ code
+instead of C in your grammar file, to name it `foo.ypp' or `foo.y++'.
+Then, the output files will take an extension like the given one as
+input (respectively `foo.tab.cpp' and `foo.tab.c++').  This feature
+takes effect with all options that manipulate file names like `-o' or
+`-d'.
 
    For example :
 
@@ -6019,6 +6125,9 @@ Operations modes:
 `-V'
 `--version'
      Print the version number of Bison and exit.
+
+`--print-localedir'
+     Print the name of the directory containing locale-dependent data.
 
 `-y'
 `--yacc'
@@ -6113,11 +6222,11 @@ Adjust the output:
      file containing verbose descriptions of the grammar and parser.
      *Note Decl Summary::.
 
-`-o FILENAME'
-`--output=FILENAME'
-     Specify the FILENAME for the parser file.
+`-o FILE'
+`--output=FILE'
+     Specify the FILE for the parser file.
 
-     The other output files' names are constructed from FILENAME as
+     The other output files' names are constructed from FILE as
      described under the `-v' and `-d' options.
 
 `-g'
@@ -6128,7 +6237,7 @@ Adjust the output:
 `--graph=GRAPH-FILE'
      The behavior of -GRAPH is the same than `-g'.  The only difference
      is that it has an optional argument which is the name of the
-     output graph filename.
+     output graph file.
 
 
 File: bison.info,  Node: Option Cross Key,  Next: Yacc Library,  Prev: Bison Options,  Up: Invocation
@@ -6148,6 +6257,7 @@ the corresponding short option.
      --no-lines                            -l
      --no-parser                           -n
      --output=OUTFILE                      -o OUTFILE
+     --print-localedir
      --token-table                         -k
      --verbose                             -v
      --version                             -V
@@ -6178,9 +6288,589 @@ have the following type signature:
      int yyparse (void);
 
 
-File: bison.info,  Node: FAQ,  Next: Copying This Manual,  Prev: Glossary,  Up: Top
+File: bison.info,  Node: C++ Language Interface,  Next: FAQ,  Prev: Invocation,  Up: Top
 
-10 Frequently Asked Questions
+10 C++ Language Interface
+*************************
+
+* Menu:
+
+* C++ Parsers::                 The interface to generate C++ parser classes
+* A Complete C++ Example::      Demonstrating their use
+
+
+File: bison.info,  Node: C++ Parsers,  Next: A Complete C++ Example,  Up: C++ Language Interface
+
+10.1 C++ Parsers
+================
+
+* Menu:
+
+* C++ Bison Interface::         Asking for C++ parser generation
+* C++ Semantic Values::         %union vs. C++
+* C++ Location Values::         The position and location classes
+* C++ Parser Interface::        Instantiating and running the parser
+* C++ Scanner Interface::       Exchanges between yylex and parse
+
+
+File: bison.info,  Node: C++ Bison Interface,  Next: C++ Semantic Values,  Up: C++ Parsers
+
+10.1.1 C++ Bison Interface
+--------------------------
+
+The C++ parser LALR(1) skeleton is named `lalr1.cc'.  To select it, you
+may either pass the option `--skeleton=lalr1.cc' to Bison, or include
+the directive `%skeleton "lalr1.cc"' in the grammar preamble.  When
+run, `bison' will create several files:
+`position.hh'
+`location.hh'
+     The definition of the classes `position' and `location', used for
+     location tracking.  *Note C++ Location Values::.
+
+`stack.hh'
+     An auxiliary class `stack' used by the parser.
+
+`FILE.hh'
+`FILE.cc'
+     The declaration and implementation of the C++ parser class.  FILE
+     is the name of the output file.  It follows the same rules as with
+     regular C parsers.
+
+     Note that `FILE.hh' is _mandatory_, the C++ cannot work without
+     the parser class declaration.  Therefore, you must either pass
+     `-d'/`--defines' to `bison', or use the `%defines' directive.
+
+   All these files are documented using Doxygen; run `doxygen' for a
+complete and accurate documentation.
+
+
+File: bison.info,  Node: C++ Semantic Values,  Next: C++ Location Values,  Prev: C++ Bison Interface,  Up: C++ Parsers
+
+10.1.2 C++ Semantic Values
+--------------------------
+
+The `%union' directive works as for C, see *Note The Collection of
+Value Types: Union Decl.  In particular it produces a genuine
+`union'(1), which have a few specific features in C++.
+   - The name `YYSTYPE' also denotes `union YYSTYPE'.  You may forward
+     declare it just with `union YYSTYPE;'.
+
+   - Non POD (Plain Old Data) types cannot be used.  C++ forbids any
+     instance of classes with constructors in unions: only _pointers_
+     to such objects are allowed.
+
+   Because objects have to be stored via pointers, memory is not
+reclaimed automatically: using the `%destructor' directive is the only
+means to avoid leaks.  *Note Freeing Discarded Symbols: Destructor Decl.
+
+   ---------- Footnotes ----------
+
+   (1) In the future techniques to allow complex types within
+pseudo-unions (variants) might be implemented to alleviate these issues.
+
+
+File: bison.info,  Node: C++ Location Values,  Next: C++ Parser Interface,  Prev: C++ Semantic Values,  Up: C++ Parsers
+
+10.1.3 C++ Location Values
+--------------------------
+
+When the directive `%locations' is used, the C++ parser supports
+location tracking, see *Note Locations Overview: Locations.  Two
+auxiliary classes define a `position', a single point in a file, and a
+`location', a range composed of a pair of `position's (possibly
+spanning several files).
+
+ -- Method on position: std::string* file
+     The name of the file.  It will always be handled as a pointer, the
+     parser will never duplicate nor deallocate it.  As an experimental
+     feature you may change it to `TYPE*' using `%define
+     "filename_type" "TYPE"'.
+
+ -- Method on position: unsigned int line
+     The line, starting at 1.
+
+ -- Method on position: unsigned int lines (int HEIGHT = 1)
+     Advance by HEIGHT lines, resetting the column number.
+
+ -- Method on position: unsigned int column
+     The column, starting at 0.
+
+ -- Method on position: unsigned int columns (int WIDTH = 1)
+     Advance by WIDTH columns, without changing the line number.
+
+ -- Method on position: position& operator+= (position& POS, int WIDTH)
+ -- Method on position: position operator+ (const position& POS, int
+          WIDTH)
+ -- Method on position: position& operator-= (const position& POS, int
+          WIDTH)
+ -- Method on position: position operator- (position& POS, int WIDTH)
+     Various forms of syntactic sugar for `columns'.
+
+ -- Method on position: position operator<< (std::ostream O, const
+          position& P)
+     Report P on O like this: `FILE:LINE.COLUMN', or `LINE.COLUMN' if
+     FILE is null.
+
+ -- Method on location: position begin
+ -- Method on location: position end
+     The first, inclusive, position of the range, and the first beyond.
+
+ -- Method on location: unsigned int columns (int WIDTH = 1)
+ -- Method on location: unsigned int lines (int HEIGHT = 1)
+     Advance the `end' position.
+
+ -- Method on location: location operator+ (const location& BEGIN,
+          const location& END)
+ -- Method on location: location operator+ (const location& BEGIN, int
+          WIDTH)
+ -- Method on location: location operator+= (const location& LOC, int
+          WIDTH)
+     Various forms of syntactic sugar.
+
+ -- Method on location: void step ()
+     Move `begin' onto `end'.
+
+
+File: bison.info,  Node: C++ Parser Interface,  Next: C++ Scanner Interface,  Prev: C++ Location Values,  Up: C++ Parsers
+
+10.1.4 C++ Parser Interface
+---------------------------
+
+The output files `OUTPUT.hh' and `OUTPUT.cc' declare and define the
+parser class in the namespace `yy'.  The class name defaults to
+`parser', but may be changed using `%define "parser_class_name"
+"NAME"'.  The interface of this class is detailled below.  It can be
+extended using the `%parse-param' feature: its semantics is slightly
+changed since it describes an additional member of the parser class,
+and an additional argument for its constructor.
+
+ -- Type of parser: semantic_value_type
+ -- Type of parser: location_value_type
+     The types for semantics value and locations.
+
+ -- Method on parser:  parser (TYPE1 ARG1, ...)
+     Build a new parser object.  There are no arguments by default,
+     unless `%parse-param {TYPE1 ARG1}' was used.
+
+ -- Method on parser: int parse ()
+     Run the syntactic analysis, and return 0 on success, 1 otherwise.
+
+ -- Method on parser: std::ostream& debug_stream ()
+ -- Method on parser: void set_debug_stream (std::ostream& O)
+     Get or set the stream used for tracing the parsing.  It defaults to
+     `std::cerr'.
+
+ -- Method on parser: debug_level_type debug_level ()
+ -- Method on parser: void set_debug_level (debug_level L)
+     Get or set the tracing level.  Currently its value is either 0, no
+     trace, or non-zero, full tracing.
+
+ -- Method on parser: void error (const location_type& L, const
+          std::string& M)
+     The definition for this member function must be supplied by the
+     user: the parser uses it to report a parser error occurring at L,
+     described by M.
+
+
+File: bison.info,  Node: C++ Scanner Interface,  Prev: C++ Parser Interface,  Up: C++ Parsers
+
+10.1.5 C++ Scanner Interface
+----------------------------
+
+The parser invokes the scanner by calling `yylex'.  Contrary to C
+parsers, C++ parsers are always pure: there is no point in using the
+`%pure-parser' directive.  Therefore the interface is as follows.
+
+ -- Method on parser: int yylex (semantic_value_type& YYLVAL,
+          location_type& YYLLOC, TYPE1 ARG1, ...)
+     Return the next token.  Its type is the return value, its semantic
+     value and location being YYLVAL and YYLLOC.  Invocations of
+     `%lex-param {TYPE1 ARG1}' yield additional arguments.
+
+
+File: bison.info,  Node: A Complete C++ Example,  Prev: C++ Parsers,  Up: C++ Language Interface
+
+10.2 A Complete C++ Example
+===========================
+
+This section demonstrates the use of a C++ parser with a simple but
+complete example.  This example should be available on your system,
+ready to compile, in the directory "../bison/examples/calc++".  It
+focuses on the use of Bison, therefore the design of the various C++
+classes is very naive: no accessors, no encapsulation of members etc.
+We will use a Lex scanner, and more precisely, a Flex scanner, to
+demonstrate the various interaction.  A hand written scanner is
+actually easier to interface with.
+
+* Menu:
+
+* Calc++ --- C++ Calculator::   The specifications
+* Calc++ Parsing Driver::       An active parsing context
+* Calc++ Parser::               A parser class
+* Calc++ Scanner::              A pure C++ Flex scanner
+* Calc++ Top Level::            Conducting the band
+
+
+File: bison.info,  Node: Calc++ --- C++ Calculator,  Next: Calc++ Parsing Driver,  Up: A Complete C++ Example
+
+10.2.1 Calc++ -- C++ Calculator
+-------------------------------
+
+Of course the grammar is dedicated to arithmetics, a single expression,
+possibily preceded by variable assignments.  An environment containing
+possibly predefined variables such as `one' and `two', is exchanged
+with the parser.  An example of valid input follows.
+
+     three := 3
+     seven := one + two * three
+     seven * seven
+
+
+File: bison.info,  Node: Calc++ Parsing Driver,  Next: Calc++ Parser,  Prev: Calc++ --- C++ Calculator,  Up: A Complete C++ Example
+
+10.2.2 Calc++ Parsing Driver
+----------------------------
+
+To support a pure interface with the parser (and the scanner) the
+technique of the "parsing context" is convenient: a structure
+containing all the data to exchange.  Since, in addition to simply
+launch the parsing, there are several auxiliary tasks to execute (open
+the file for parsing, instantiate the parser etc.), we recommend
+transforming the simple parsing context structure into a fully blown
+"parsing driver" class.
+
+   The declaration of this driver class, `calc++-driver.hh', is as
+follows.  The first part includes the CPP guard and imports the
+required standard library components.
+
+     #ifndef CALCXX_DRIVER_HH
+     # define CALCXX_DRIVER_HH
+     # include <string>
+     # include <map>
+
+Then come forward declarations.  Because the parser uses the parsing
+driver and reciprocally, simple inclusions of header files will not do.
+Because the driver's declaration is the one that will be imported by
+the rest of the project, it is saner to forward declare the parser's
+information here.
+
+     // Forward declarations.
+     union YYSTYPE;
+     namespace yy
+     {
+       class location;
+       class calcxx_parser;
+     }
+     class calcxx_driver;
+
+Then comes the declaration of the scanning function.  Flex expects the
+signature of `yylex' to be defined in the macro `YY_DECL', and the C++
+parser expects it to be declared.  We can factor both as follows.
+
+     // Announce to Flex the prototype we want for lexing function, ...
+     # define YY_DECL						 \
+       int yylex (YYSTYPE* yylval, yy::location* yylloc, calcxx_driver& driver)
+     // ... and declare it for the parser's sake.
+     YY_DECL;
+
+The `calcxx_driver' class is then declared with its most obvious
+members.
+
+     // Conducting the whole scanning and parsing of Calc++.
+     class calcxx_driver
+     {
+     public:
+       calcxx_driver ();
+       virtual ~calcxx_driver ();
+
+       std::map<std::string, int> variables;
+
+       int result;
+
+To encapsulate the coordination with the Flex scanner, it is useful to
+have two members function to open and close the scanning phase.
+members.
+
+       // Handling the scanner.
+       void scan_begin ();
+       void scan_end ();
+       bool trace_scanning;
+
+Similarly for the parser itself.
+
+       // Handling the parser.
+       void parse (const std::string& f);
+       std::string file;
+       bool trace_parsing;
+
+To demonstrate pure handling of parse errors, instead of simply dumping
+them on the standard error output, we will pass them to the compiler
+driver using the following two member functions.  Finally, we close the
+class declaration and CPP guard.
+
+       // Error handling.
+       void error (const yy::location& l, const std::string& m);
+       void error (const std::string& m);
+     };
+     #endif // ! CALCXX_DRIVER_HH
+
+   The implementation of the driver is straightforward.  The `parse'
+member function deserves some attention.  The `error' functions are
+simple stubs, they should actually register the located error messages
+and set error state.
+
+     #include "calc++-driver.hh"
+     #include "calc++-parser.hh"
+
+     calcxx_driver::calcxx_driver ()
+       : trace_scanning (false), trace_parsing (false)
+     {
+       variables["one"] = 1;
+       variables["two"] = 2;
+     }
+
+     calcxx_driver::~calcxx_driver ()
+     {
+     }
+
+     void
+     calcxx_driver::parse (const std::string &f)
+     {
+       file = f;
+       scan_begin ();
+       yy::calcxx_parser parser (*this);
+       parser.set_debug_level (trace_parsing);
+       parser.parse ();
+       scan_end ();
+     }
+
+     void
+     calcxx_driver::error (const yy::location& l, const std::string& m)
+     {
+       std::cerr << l << ": " << m << std::endl;
+     }
+
+     void
+     calcxx_driver::error (const std::string& m)
+     {
+       std::cerr << m << std::endl;
+     }
+
+
+File: bison.info,  Node: Calc++ Parser,  Next: Calc++ Scanner,  Prev: Calc++ Parsing Driver,  Up: A Complete C++ Example
+
+10.2.3 Calc++ Parser
+--------------------
+
+The parser definition file `calc++-parser.yy' starts by asking for the
+C++ skeleton, the creation of the parser header file, and specifies the
+name of the parser class.  It then includes the required headers.
+
+     %skeleton "lalr1.cc"                          /*  -*- C++ -*- */
+     %define "parser_class_name" "calcxx_parser"
+     %defines
+     %{
+     # include <string>
+     # include "calc++-driver.hh"
+     %}
+
+The driver is passed by reference to the parser and to the scanner.
+This provides a simple but effective pure interface, not relying on
+global variables.
+
+     // The parsing context.
+     %parse-param { calcxx_driver& driver }
+     %lex-param   { calcxx_driver& driver }
+
+Then we request the location tracking feature, and initialize the first
+location's file name.  Afterwards new locations are computed relatively
+to the previous locations: the file name will be automatically
+propagated.
+
+     %locations
+     %initial-action
+     {
+       // Initialize the initial location.
+       @$.begin.filename = @$.end.filename = &driver.file;
+     };
+
+Use the two following directives to enable parser tracing and verbose
+error messages.
+
+     %debug
+     %error-verbose
+
+Semantic values cannot use "real" objects, but only pointers to them.
+
+     // Symbols.
+     %union
+     {
+       int          ival;
+       std::string *sval;
+     };
+
+The token numbered as 0 corresponds to end of file; the following line
+allows for nicer error messages referring to "end of file" instead of
+"$end".  Similarly user friendly named are provided for each symbol.
+Note that the tokens names are prefixed by `TOKEN_' to avoid name
+clashes.
+
+     %token        TOKEN_EOF      0 "end of file"
+     %token        TOKEN_ASSIGN     ":="
+     %token <sval> TOKEN_IDENTIFIER "identifier"
+     %token <ival> TOKEN_NUMBER     "number"
+     %type  <ival> exp              "expression"
+
+To enable memory deallocation during error recovery, use `%destructor'.
+
+     %printer    { debug_stream () << *$$; } "identifier"
+     %destructor { delete $$; } "identifier"
+
+     %printer    { debug_stream () << $$; } "number" "expression"
+
+The grammar itself is straightforward.
+
+     %%
+     %start unit;
+     unit: assignments exp  { driver.result = $2; };
+
+     assignments: assignments assignment {}
+                | /* Nothing. */         {};
+
+     assignment: TOKEN_IDENTIFIER ":=" exp { driver.variables[*$1] = $3; };
+
+     %left '+' '-';
+     %left '*' '/';
+     exp: exp '+' exp   { $$ = $1 + $3; }
+        | exp '-' exp   { $$ = $1 - $3; }
+        | exp '*' exp   { $$ = $1 * $3; }
+        | exp '/' exp   { $$ = $1 / $3; }
+        | TOKEN_IDENTIFIER  { $$ = driver.variables[*$1]; }
+        | TOKEN_NUMBER      { $$ = $1; };
+     %%
+
+Finally the `error' member function registers the errors to the driver.
+
+     void
+     yy::calcxx_parser::error (const yy::calcxx_parser::location_type& l,
+                               const std::string& m)
+     {
+       driver.error (l, m);
+     }
+
+
+File: bison.info,  Node: Calc++ Scanner,  Next: Calc++ Top Level,  Prev: Calc++ Parser,  Up: A Complete C++ Example
+
+10.2.4 Calc++ Scanner
+---------------------
+
+The Flex scanner first includes the driver declaration, then the
+parser's to get the set of defined tokens.
+
+     %{                                            /* -*- C++ -*- */
+     # include <cstdlib>
+     # include <errno.h>
+     # include <limits.h>
+     # include <string>
+     # include "calc++-driver.hh"
+     # include "calc++-parser.hh"
+     %}
+
+Because there is no `#include'-like feature we don't need `yywrap', we
+don't need `unput' either, and we parse an actual file, this is not an
+interactive session with the user.  Finally we enable the scanner
+tracing features.
+
+     %option noyywrap nounput batch debug
+
+Abbreviations allow for more readable rules.
+
+     id    [a-zA-Z][a-zA-Z_0-9]*
+     int   [0-9]+
+     blank [ \t]
+
+The following paragraph suffices to track locations acurately.  Each
+time `yylex' is invoked, the begin position is moved onto the end
+position.  Then when a pattern is matched, the end position is advanced
+of its width.  In case it matched ends of lines, the end cursor is
+adjusted, and each time blanks are matched, the begin cursor is moved
+onto the end cursor to effectively ignore the blanks preceding tokens.
+Comments would be treated equally.
+
+     %{
+     # define YY_USER_ACTION  yylloc->columns (yyleng);
+     %}
+     %%
+     %{
+       yylloc->step ();
+     %}
+     {blank}+   yylloc->step ();
+     [\n]+      yylloc->lines (yyleng); yylloc->step ();
+
+The rules are simple, just note the use of the driver to report errors.
+
+     [-+*/]     return yytext[0];
+     ":="       return TOKEN_ASSIGN;
+     {int}      {
+       errno = 0;
+       long n = strtol (yytext, NULL, 10);
+       if (! (INT_MIN <= n && n <= INT_MAX && errno != ERANGE))
+         driver.error (*yylloc, "integer is out of range");
+       yylval->ival = n;
+       return TOKEN_NUMBER;
+     }
+     {id}       yylval->sval = new std::string (yytext); return TOKEN_IDENTIFIER;
+     .          driver.error (*yylloc, "invalid character");
+     %%
+
+Finally, because the scanner related driver's member function depend on
+the scanner's data, it is simpler to implement them in this file.
+
+     void
+     calcxx_driver::scan_begin ()
+     {
+       yy_flex_debug = trace_scanning;
+       if (!(yyin = fopen (file.c_str (), "r")))
+         error (std::string ("cannot open ") + file);
+     }
+
+     void
+     calcxx_driver::scan_end ()
+     {
+       fclose (yyin);
+     }
+
+
+File: bison.info,  Node: Calc++ Top Level,  Prev: Calc++ Scanner,  Up: A Complete C++ Example
+
+10.2.5 Calc++ Top Level
+-----------------------
+
+The top level file, `calc++.cc', poses no problem.
+
+     #include <iostream>
+     #include "calc++-driver.hh"
+
+     int
+     main (int argc, char *argv[])
+     {
+       calcxx_driver driver;
+       for (++argv; argv[0]; ++argv)
+         if (*argv == std::string ("-p"))
+           driver.trace_parsing = true;
+         else if (*argv == std::string ("-s"))
+           driver.trace_scanning = true;
+         else
+           {
+     	driver.parse (*argv);
+     	std::cout << driver.result << std::endl;
+           }
+     }
+
+
+File: bison.info,  Node: FAQ,  Next: Table of Symbols,  Prev: C++ Language Interface,  Up: Top
+
+11 Frequently Asked Questions
 *****************************
 
 Several questions about Bison come up occasionally.  Here some of them
@@ -6188,28 +6878,27 @@ are addressed.
 
 * Menu:
 
-* Parser Stack Overflow::      Breaking the Stack Limits
+* Memory Exhausted::           Breaking the Stack Limits
 * How Can I Reset the Parser:: `yyparse' Keeps some State
 * Strings are Destroyed::      `yylval' Loses Track of Strings
-* C++ Parsers::                Compiling Parsers with C++ Compilers
 * Implementing Gotos/Loops::   Control Flow in the Calculator
 
 
-File: bison.info,  Node: Parser Stack Overflow,  Next: How Can I Reset the Parser,  Up: FAQ
+File: bison.info,  Node: Memory Exhausted,  Next: How Can I Reset the Parser,  Up: FAQ
 
-10.1 Parser Stack Overflow
-==========================
+11.1 Memory Exhausted
+=====================
 
-     My parser returns with error with a `parser stack overflow'
+     My parser returns with error with a `memory exhausted'
      message.  What can I do?
 
    This question is already addressed elsewhere, *Note Recursive Rules:
 Recursion.
 
 
-File: bison.info,  Node: How Can I Reset the Parser,  Next: Strings are Destroyed,  Prev: Parser Stack Overflow,  Up: FAQ
+File: bison.info,  Node: How Can I Reset the Parser,  Next: Strings are Destroyed,  Prev: Memory Exhausted,  Up: FAQ
 
-10.2 How Can I Reset the Parser
+11.2 How Can I Reset the Parser
 ===============================
 
 The following phenomenon has several symptoms, resulting in the
@@ -6288,9 +6977,9 @@ scanner's state, i.e., go back to the initial start condition, through
 a call to `BEGIN (0)'.
 
 
-File: bison.info,  Node: Strings are Destroyed,  Next: C++ Parsers,  Prev: How Can I Reset the Parser,  Up: FAQ
+File: bison.info,  Node: Strings are Destroyed,  Next: Implementing Gotos/Loops,  Prev: How Can I Reset the Parser,  Up: FAQ
 
-10.3 Strings are Destroyed
+11.3 Strings are Destroyed
 ==========================
 
      My parser seems to destroy old strings, or maybe it loses track of
@@ -6341,30 +7030,9 @@ generates a different behavior:
      "two", "two"
 
 
-File: bison.info,  Node: C++ Parsers,  Next: Implementing Gotos/Loops,  Prev: Strings are Destroyed,  Up: FAQ
+File: bison.info,  Node: Implementing Gotos/Loops,  Prev: Strings are Destroyed,  Up: FAQ
 
-10.4 C++ Parsers
-================
-
-     How can I generate parsers in C++?
-
-   We are working on a C++ output for Bison, but unfortunately, for
-lack of time, the skeleton is not finished.  It is functional, but in
-numerous respects, it will require additional work which _might_ break
-backward compatibility.  Since the skeleton for C++ is not documented,
-we do not consider ourselves bound to this interface, nevertheless, as
-much as possible we will try to keep compatibility.
-
-   Another possibility is to use the regular C parsers, and to compile
-them with a C++ compiler.  This works properly, provided that you bear
-some simple C++ rules in mind, such as not including "real classes"
-(i.e., structure with constructors) in unions.  Therefore, in the
-`%union', use pointers to classes.
-
-
-File: bison.info,  Node: Implementing Gotos/Loops,  Prev: C++ Parsers,  Up: FAQ
-
-10.5 Implementing Gotos/Loops
+11.4 Implementing Gotos/Loops
 =============================
 
      My simple calculator supports variables, assignments, and functions,
@@ -6389,7 +7057,7 @@ will result in an interpreter or a compiler.
 invited to consult the dedicated literature.
 
 
-File: bison.info,  Node: Table of Symbols,  Next: Glossary,  Prev: Invocation,  Up: Top
+File: bison.info,  Node: Table of Symbols,  Next: Glossary,  Prev: FAQ,  Up: Top
 
 Appendix A Bison Symbols
 ************************
@@ -6447,7 +7115,7 @@ Appendix A Bison Symbols
      *Note Decl Summary::.
 
  -- Directive: %destructor
-     Specifying how the parser should reclaim the memory associated to
+     Specify how the parser should reclaim the memory associated to
      discarded symbols.  *Note Freeing Discarded Symbols: Destructor
      Decl.
 
@@ -6514,7 +7182,7 @@ Appendix A Bison Symbols
      Bison declaration to assign non-associativity to token(s).  *Note
      Operator Precedence: Precedence Decl.
 
- -- Directive: %output="FILENAME"
+ -- Directive: %output="FILE"
      Bison declaration to set the name of the parser file.  *Note Decl
      Summary::.
 
@@ -6619,7 +7287,7 @@ Appendix A Bison Symbols
 
  -- Macro: YYINITDEPTH
      Macro for specifying the initial size of the parser stack.  *Note
-     Stack Overflow::.
+     Memory Management::.
 
  -- Function: yylex
      User-supplied lexical analyzer function, called with no arguments
@@ -6652,7 +7320,7 @@ Appendix A Bison Symbols
 
  -- Macro: YYMAXDEPTH
      Macro for specifying the maximum size of the parser stack.  *Note
-     Stack Overflow::.
+     Memory Management::.
 
  -- Variable: yynerrs
      Global variable which Bison increments each time there is a syntax
@@ -6699,7 +7367,7 @@ Appendix A Bison Symbols
      of Semantic Values: Value Type.
 
 
-File: bison.info,  Node: Glossary,  Next: FAQ,  Prev: Table of Symbols,  Up: Top
+File: bison.info,  Node: Glossary,  Next: Copying This Manual,  Prev: Table of Symbols,  Up: Top
 
 Appendix B Glossary
 *******************
@@ -6875,7 +7543,7 @@ Terminal symbol
      Grammar.
 
 
-File: bison.info,  Node: Copying This Manual,  Next: Index,  Prev: FAQ,  Up: Top
+File: bison.info,  Node: Copying This Manual,  Next: Index,  Prev: Glossary,  Up: Top
 
 Appendix C Copying This Manual
 ******************************
@@ -6893,7 +7561,7 @@ C.1 GNU Free Documentation License
                       Version 1.2, November 2002
 
      Copyright (C) 2000,2001,2002 Free Software Foundation, Inc.
-     59 Temple Place, Suite 330, Boston, MA  02111-1307, USA
+     51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA
 
      Everyone is permitted to copy and distribute verbatim copies
      of this license document, but changing it is not allowed.
@@ -7296,8 +7964,8 @@ notices just after the title page:
        Permission is granted to copy, distribute and/or modify this document
        under the terms of the GNU Free Documentation License, Version 1.2
        or any later version published by the Free Software Foundation;
-       with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
-       A copy of the license is included in the section entitled ``GNU
+       with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+       Texts.  A copy of the license is included in the section entitled ``GNU
        Free Documentation License''.
 
    If you have Invariant Sections, Front-Cover Texts and Back-Cover
@@ -7379,7 +8047,7 @@ Index
 * %output=" <1>:                         Table of Symbols.    (line 127)
 * %output=":                             Decl Summary.        (line 121)
 * %parse-param <1>:                      Table of Symbols.    (line 131)
-* %parse-param:                          Parser Function.     (line  32)
+* %parse-param:                          Parser Function.     (line  36)
 * %prec <1>:                             Table of Symbols.    (line 136)
 * %prec:                                 Contextual Precedence.
                                                               (line   6)
@@ -7403,8 +8071,8 @@ Index
 * %union <1>:                            Table of Symbols.    (line 169)
 * %union <2>:                            Decl Summary.        (line   9)
 * %union:                                Union Decl.          (line   6)
-* %verbose:                              Decl Summary.        (line 162)
-* %yacc:                                 Decl Summary.        (line 168)
+* %verbose:                              Decl Summary.        (line 161)
+* %yacc:                                 Decl Summary.        (line 167)
 * /*:                                    Table of Symbols.    (line  33)
 * ::                                     Table of Symbols.    (line  36)
 * ;:                                     Table of Symbols.    (line  40)
@@ -7436,6 +8104,7 @@ Index
                                                               (line  17)
 * Backus-Naur form:                      Language and Grammar.
                                                               (line  16)
+* begin on location:                     C++ Location Values. (line  44)
 * Bison declaration summary:             Decl Summary.        (line   6)
 * Bison declarations:                    Declarations.        (line   6)
 * Bison declarations (introduction):     Bison Declarations.  (line   6)
@@ -7445,6 +8114,14 @@ Index
 * Bison parser algorithm:                Algorithm.           (line   6)
 * Bison symbols, table of:               Table of Symbols.    (line   6)
 * Bison utility:                         Bison Parser.        (line   6)
+* bison-i18n.m4:                         Internationalization.
+                                                              (line  20)
+* bison-po:                              Internationalization.
+                                                              (line   6)
+* BISON_I18N:                            Internationalization.
+                                                              (line  27)
+* BISON_LOCALEDIR:                       Internationalization.
+                                                              (line  27)
 * BNF:                                   Language and Grammar.
                                                               (line  16)
 * C code, section for additional:        Epilogue.            (line   6)
@@ -7456,6 +8133,9 @@ Index
 * calculator, multi-function:            Multi-function Calc. (line   6)
 * calculator, simple:                    RPN Calc.            (line   6)
 * character token:                       Symbols.             (line  31)
+* column on position:                    C++ Location Values. (line  25)
+* columns on location:                   C++ Location Values. (line  48)
+* columns on position:                   C++ Location Values. (line  28)
 * compiling the parser:                  Rpcalc Compile.      (line   6)
 * conflicts <1>:                         Shift/Reduce.        (line   6)
 * conflicts <2>:                         Merging GLR Parses.  (line   6)
@@ -7473,6 +8153,10 @@ Index
 * data type of locations:                Location Type.       (line   6)
 * data types in actions:                 Action Types.        (line   6)
 * data types of semantic values:         Value Type.          (line   6)
+* debug_level on parser:                 C++ Parser Interface.
+                                                              (line  31)
+* debug_stream on parser:                C++ Parser Interface.
+                                                              (line  26)
 * debugging:                             Tracing.             (line   6)
 * declaration summary:                   Decl Summary.        (line   6)
 * declarations:                          Prologue.            (line   6)
@@ -7488,14 +8172,17 @@ Index
 * default action:                        Actions.             (line  56)
 * default data type:                     Value Type.          (line   6)
 * default location type:                 Location Type.       (line   6)
-* default stack limit:                   Stack Overflow.      (line  30)
+* default stack limit:                   Memory Management.   (line  30)
 * default start symbol:                  Start Decl.          (line   6)
 * defining language semantics:           Semantics.           (line   6)
-* discarded symbols:                     Destructor Decl.     (line  55)
+* discarded symbols:                     Destructor Decl.     (line  57)
 * else, dangling:                        Shift/Reduce.        (line   6)
+* end on location:                       C++ Location Values. (line  45)
 * epilogue:                              Epilogue.            (line   6)
 * error <1>:                             Table of Symbols.    (line  73)
 * error:                                 Error Recovery.      (line  20)
+* error on parser:                       C++ Parser Interface.
+                                                              (line  37)
 * error recovery:                        Error Recovery.      (line   6)
 * error recovery, simple:                Simple Error Recovery.
                                                               (line   6)
@@ -7506,6 +8193,7 @@ Index
 * FDL, GNU Free Documentation License:   GNU Free Documentation License.
                                                               (line   6)
 * file format:                           Grammar Layout.      (line   6)
+* file on position:                      C++ Location Values. (line  13)
 * finite-state machine:                  Parser States.       (line   6)
 * formal grammar:                        Grammar in Bison.    (line   6)
 * format of grammar file:                Grammar Layout.      (line   6)
@@ -7519,6 +8207,8 @@ Index
 * generalized LR (GLR) parsing, ambiguous grammars: Merging GLR Parses.
                                                               (line   6)
 * generalized LR (GLR) parsing, unambiguous grammars: Simple GLR Parsers.
+                                                              (line   6)
+* gettext:                               Internationalization.
                                                               (line   6)
 * glossary:                              Glossary.            (line   6)
 * GLR parsers and inline:                Compiler Requirements.
@@ -7538,10 +8228,14 @@ Index
                                                               (line   6)
 * grouping, syntactic:                   Language and Grammar.
                                                               (line  47)
+* i18n:                                  Internationalization.
+                                                              (line   6)
 * infix notation calculator:             Infix Calc.          (line   6)
 * inline:                                Compiler Requirements.
                                                               (line   6)
 * interface:                             Interface.           (line   6)
+* internationalization:                  Internationalization.
+                                                              (line   6)
 * introduction:                          Introduction.        (line   6)
 * invoking Bison:                        Invocation.          (line   6)
 * item:                                  Understanding.       (line 107)
@@ -7558,6 +8252,9 @@ Index
 * lexical analyzer, purpose:             Bison Parser.        (line   6)
 * lexical analyzer, writing:             Rpcalc Lexer.        (line   6)
 * lexical tie-in:                        Lexical Tie-ins.     (line   6)
+* line on position:                      C++ Location Values. (line  19)
+* lines on location:                     C++ Location Values. (line  49)
+* lines on position:                     C++ Location Values. (line  22)
 * literal string token:                  Symbols.             (line  53)
 * literal token:                         Symbols.             (line  31)
 * location <1>:                          Locations.           (line   6)
@@ -7568,6 +8265,8 @@ Index
                                                               (line   6)
 * location, textual <1>:                 Locations.           (line   6)
 * location, textual:                     Locations Overview.  (line   6)
+* location_value_type:                   C++ Parser Interface.
+                                                              (line  16)
 * look-ahead token:                      Look-Ahead.          (line   6)
 * LR(1):                                 Mystery Conflicts.   (line  36)
 * LR(1) grammars:                        Language and Grammar.
@@ -7575,11 +8274,15 @@ Index
 * ltcalc:                                Location Tracking Calc.
                                                               (line   6)
 * main function in simple example:       Rpcalc Main.         (line   6)
+* memory exhaustion:                     Memory Management.   (line   6)
+* memory management:                     Memory Management.   (line   6)
 * mfcalc:                                Multi-function Calc. (line   6)
 * mid-rule actions:                      Mid-Rule Actions.    (line   6)
 * multi-function calculator:             Multi-function Calc. (line   6)
 * multicharacter literal:                Symbols.             (line  53)
 * mutual recursion:                      Recursion.           (line  32)
+* NLS:                                   Internationalization.
+                                                              (line   6)
 * non-deterministic parsing <1>:         Generalized LR Parsing.
                                                               (line   6)
 * non-deterministic parsing:             Language and Grammar.
@@ -7588,12 +8291,23 @@ Index
 * nonterminal, useless:                  Understanding.       (line  62)
 * operator precedence:                   Precedence.          (line   6)
 * operator precedence, declaring:        Precedence Decl.     (line   6)
+* operator+ on location:                 C++ Location Values. (line  53)
+* operator+ on position:                 C++ Location Values. (line  33)
+* operator+= on location:                C++ Location Values. (line  57)
+* operator+= on position:                C++ Location Values. (line  31)
+* operator- on position:                 C++ Location Values. (line  36)
+* operator-= on position:                C++ Location Values. (line  35)
+* operator<< on position:                C++ Location Values. (line  40)
 * options for invoking Bison:            Invocation.          (line   6)
-* overflow of parser stack:              Stack Overflow.      (line   6)
+* overflow of parser stack:              Memory Management.   (line   6)
 * parse error:                           Error Reporting.     (line   6)
+* parse on parser:                       C++ Parser Interface.
+                                                              (line  23)
 * parser:                                Bison Parser.        (line   6)
+* parser on parser:                      C++ Parser Interface.
+                                                              (line  19)
 * parser stack:                          Algorithm.           (line   6)
-* parser stack overflow:                 Stack Overflow.      (line   6)
+* parser stack overflow:                 Memory Management.   (line   6)
 * parser state:                          Parser States.       (line   6)
 * pointed rule:                          Understanding.       (line 107)
 * polish notation calculator:            RPN Calc.            (line   6)
@@ -7626,19 +8340,26 @@ Index
 * semantic actions:                      Semantic Actions.    (line   6)
 * semantic value:                        Semantic Values.     (line   6)
 * semantic value type:                   Value Type.          (line   6)
+* semantic_value_type:                   C++ Parser Interface.
+                                                              (line  15)
+* set_debug_level on parser:             C++ Parser Interface.
+                                                              (line  32)
+* set_debug_stream on parser:            C++ Parser Interface.
+                                                              (line  27)
 * shift/reduce conflicts <1>:            Shift/Reduce.        (line   6)
 * shift/reduce conflicts <2>:            Simple GLR Parsers.  (line   6)
 * shift/reduce conflicts:                GLR Parsers.         (line   6)
 * shifting:                              Algorithm.           (line   6)
 * simple examples:                       Examples.            (line   6)
 * single-character literal:              Symbols.             (line  31)
-* stack overflow:                        Stack Overflow.      (line   6)
+* stack overflow:                        Memory Management.   (line   6)
 * stack, parser:                         Algorithm.           (line   6)
 * stages in using Bison:                 Stages.              (line   6)
 * start symbol:                          Language and Grammar.
                                                               (line  96)
 * start symbol, declaring:               Start Decl.          (line   6)
 * state (of parser):                     Parser States.       (line   6)
+* step on location:                      C++ Location Values. (line  60)
 * string token:                          Symbols.             (line  53)
 * summary, action features:              Action Features.     (line   6)
 * summary, Bison declaration:            Decl Summary.        (line   6)
@@ -7674,10 +8395,10 @@ Index
 * warnings, preventing:                  Expect Decl.         (line   6)
 * writing a lexical analyzer:            Rpcalc Lexer.        (line   6)
 * YYABORT <1>:                           Table of Symbols.    (line 173)
-* YYABORT:                               Parser Function.     (line  25)
+* YYABORT:                               Parser Function.     (line  29)
 * YYABORT;:                              Action Features.     (line  28)
 * YYACCEPT <1>:                          Table of Symbols.    (line 179)
-* YYACCEPT:                              Parser Function.     (line  22)
+* YYACCEPT:                              Parser Function.     (line  26)
 * YYACCEPT;:                             Action Features.     (line  32)
 * YYBACKUP <1>:                          Table of Symbols.    (line 184)
 * YYBACKUP:                              Action Features.     (line  36)
@@ -7692,6 +8413,8 @@ Index
 * YYDEBUG:                               Tracing.             (line  12)
 * yydebug:                               Tracing.             (line   6)
 * YYEMPTY:                               Action Features.     (line  49)
+* YYENABLE_NLS:                          Internationalization.
+                                                              (line  27)
 * yyerrok <1>:                           Table of Symbols.    (line 209)
 * yyerrok:                               Error Recovery.      (line  92)
 * yyerrok;:                              Action Features.     (line  75)
@@ -7702,9 +8425,11 @@ Index
 * YYERROR;:                              Action Features.     (line  52)
 * YYERROR_VERBOSE:                       Table of Symbols.    (line 223)
 * YYINITDEPTH <1>:                       Table of Symbols.    (line 230)
-* YYINITDEPTH:                           Stack Overflow.      (line  32)
+* YYINITDEPTH:                           Memory Management.   (line  32)
 * yylex <1>:                             Table of Symbols.    (line 234)
 * yylex:                                 Lexical.             (line   6)
+* yylex on parser:                       C++ Scanner Interface.
+                                                              (line  12)
 * YYLEX_PARAM:                           Table of Symbols.    (line 239)
 * yylloc <1>:                            Table of Symbols.    (line 245)
 * yylloc:                                Token Locations.     (line   6)
@@ -7715,9 +8440,9 @@ Index
 * yylval <1>:                            Table of Symbols.    (line 257)
 * yylval:                                Token Values.        (line   6)
 * YYMAXDEPTH <1>:                        Table of Symbols.    (line 263)
-* YYMAXDEPTH:                            Stack Overflow.      (line  14)
+* YYMAXDEPTH:                            Memory Management.   (line  14)
 * yynerrs <1>:                           Table of Symbols.    (line 267)
-* yynerrs:                               Error Reporting.     (line  88)
+* yynerrs:                               Error Reporting.     (line  92)
 * yyparse <1>:                           Table of Symbols.    (line 273)
 * yyparse:                               Parser Function.     (line   6)
 * YYPARSE_PARAM:                         Table of Symbols.    (line 277)
@@ -7733,122 +8458,136 @@ Index
 
 
 Tag Table:
-Node: Top1104
-Node: Introduction10942
-Node: Conditions12212
-Node: Copying14101
-Node: Concepts33271
-Node: Language and Grammar34425
-Node: Grammar in Bison40319
-Node: Semantic Values42248
-Node: Semantic Actions44354
-Node: GLR Parsers45541
-Node: Simple GLR Parsers48224
-Node: Merging GLR Parses54879
-Node: Compiler Requirements59449
-Node: Locations Overview60183
-Node: Bison Parser61636
-Node: Stages64356
-Node: Grammar Layout65644
-Node: Examples66976
-Node: RPN Calc68175
-Node: Rpcalc Decls69154
-Node: Rpcalc Rules71075
-Node: Rpcalc Input72882
-Node: Rpcalc Line74357
-Node: Rpcalc Expr75485
-Node: Rpcalc Lexer77452
-Node: Rpcalc Main80039
-Node: Rpcalc Error80446
-Node: Rpcalc Gen81474
-Node: Rpcalc Compile82614
-Node: Infix Calc83488
-Node: Simple Error Recovery86251
-Node: Location Tracking Calc88146
-Node: Ltcalc Decls88833
-Node: Ltcalc Rules89786
-Node: Ltcalc Lexer91795
-Node: Multi-function Calc94118
-Node: Mfcalc Decl95690
-Node: Mfcalc Rules97729
-Node: Mfcalc Symtab99110
-Node: Exercises105286
-Node: Grammar File105800
-Node: Grammar Outline106649
-Node: Prologue107409
-Node: Bison Declarations108690
-Node: Grammar Rules109105
-Node: Epilogue109576
-Node: Symbols110592
-Node: Rules117297
-Node: Recursion118938
-Node: Semantics120656
-Node: Value Type121755
-Node: Multiple Types122422
-Node: Actions123452
-Node: Action Types126956
-Node: Mid-Rule Actions128268
-Node: Locations133842
-Node: Location Type134493
-Node: Actions and Locations135085
-Node: Location Default Action137345
-Node: Declarations140787
-Node: Token Decl142217
-Node: Precedence Decl144304
-Node: Union Decl145864
-Node: Type Decl147006
-Node: Initial Action Decl147932
-Node: Destructor Decl148712
-Node: Expect Decl151139
-Node: Start Decl153167
-Node: Pure Decl153555
-Node: Decl Summary155241
-Node: Multiple Parsers162403
-Node: Interface163912
-Node: Parser Function164776
-Node: Lexical166613
-Node: Calling Convention168024
-Node: Token Values170901
-Node: Token Locations172066
-Node: Pure Calling172960
-Node: Error Reporting174815
-Node: Action Features178738
-Node: Algorithm182228
-Node: Look-Ahead184591
-Node: Shift/Reduce186723
-Node: Precedence189620
-Node: Why Precedence190276
-Node: Using Precedence192150
-Node: Precedence Examples193127
-Node: How Precedence193837
-Node: Contextual Precedence194996
-Node: Parser States196792
-Node: Reduce/Reduce198040
-Node: Mystery Conflicts201581
-Node: Generalized LR Parsing204974
-Node: Stack Overflow209594
-Node: Error Recovery211948
-Node: Context Dependency217246
-Node: Semantic Tokens218095
-Node: Lexical Tie-ins221112
-Node: Tie-in Recovery222689
-Node: Debugging224866
-Node: Understanding225532
-Node: Tracing236678
-Node: Invocation240762
-Node: Bison Options242129
-Node: Option Cross Key246343
-Node: Yacc Library247216
-Node: FAQ248041
-Node: Parser Stack Overflow248594
-Node: How Can I Reset the Parser248924
-Node: Strings are Destroyed251205
-Node: C++ Parsers252777
-Node: Implementing Gotos/Loops253682
-Node: Table of Symbols254924
-Node: Glossary266960
-Node: Copying This Manual273845
-Node: GNU Free Documentation License274071
-Node: Index296478
+Node: Top1110
+Node: Introduction11831
+Node: Conditions13101
+Node: Copying14990
+Node: Concepts34168
+Node: Language and Grammar35322
+Node: Grammar in Bison41216
+Node: Semantic Values43145
+Node: Semantic Actions45251
+Node: GLR Parsers46438
+Node: Simple GLR Parsers49121
+Node: Merging GLR Parses55776
+Node: Compiler Requirements60346
+Node: Locations Overview61080
+Node: Bison Parser62533
+Node: Stages65345
+Node: Grammar Layout66633
+Node: Examples67965
+Node: RPN Calc69164
+Node: Rpcalc Decls70143
+Node: Rpcalc Rules72064
+Node: Rpcalc Input73871
+Node: Rpcalc Line75346
+Node: Rpcalc Expr76474
+Node: Rpcalc Lexer78441
+Node: Rpcalc Main81028
+Node: Rpcalc Error81435
+Node: Rpcalc Gen82463
+Node: Rpcalc Compile83593
+Node: Infix Calc84467
+Node: Simple Error Recovery87230
+Node: Location Tracking Calc89125
+Node: Ltcalc Decls89812
+Node: Ltcalc Rules90765
+Node: Ltcalc Lexer92774
+Node: Multi-function Calc95097
+Node: Mfcalc Decl96669
+Node: Mfcalc Rules98708
+Node: Mfcalc Symtab100089
+Node: Exercises106262
+Node: Grammar File106776
+Node: Grammar Outline107625
+Node: Prologue108385
+Node: Bison Declarations109666
+Node: Grammar Rules110081
+Node: Epilogue110552
+Node: Symbols111568
+Node: Rules118273
+Node: Recursion119914
+Node: Semantics121632
+Node: Value Type122731
+Node: Multiple Types123398
+Node: Actions124428
+Node: Action Types127932
+Node: Mid-Rule Actions129244
+Node: Locations134818
+Node: Location Type135469
+Node: Actions and Locations136061
+Node: Location Default Action138321
+Node: Declarations141763
+Node: Token Decl143193
+Node: Precedence Decl145280
+Node: Union Decl146840
+Node: Type Decl147982
+Node: Initial Action Decl148908
+Node: Destructor Decl149690
+Node: Expect Decl152263
+Node: Start Decl154291
+Node: Pure Decl154679
+Node: Decl Summary156365
+Node: Multiple Parsers163438
+Node: Interface164947
+Node: Parser Function165920
+Node: Lexical167904
+Node: Calling Convention169315
+Node: Token Values172275
+Node: Token Locations173440
+Node: Pure Calling174334
+Node: Error Reporting176189
+Node: Action Features180309
+Node: Internationalization183828
+Node: Algorithm186369
+Node: Look-Ahead188736
+Node: Shift/Reduce190868
+Node: Precedence193765
+Node: Why Precedence194421
+Node: Using Precedence196295
+Node: Precedence Examples197272
+Node: How Precedence197982
+Node: Contextual Precedence199141
+Node: Parser States200937
+Node: Reduce/Reduce202185
+Node: Mystery Conflicts205726
+Node: Generalized LR Parsing209435
+Node: Memory Management214058
+Node: Error Recovery216271
+Node: Context Dependency221569
+Node: Semantic Tokens222418
+Node: Lexical Tie-ins225488
+Node: Tie-in Recovery227065
+Node: Debugging229242
+Node: Understanding229908
+Node: Tracing241054
+Node: Invocation245138
+Node: Bison Options246544
+Node: Option Cross Key250830
+Node: Yacc Library251726
+Node: C++ Language Interface252551
+Node: C++ Parsers252839
+Node: C++ Bison Interface253297
+Node: C++ Semantic Values254414
+Ref: C++ Semantic Values-Footnote-1255311
+Node: C++ Location Values255447
+Node: C++ Parser Interface257822
+Node: C++ Scanner Interface259544
+Node: A Complete C++ Example260211
+Node: Calc++ --- C++ Calculator261150
+Node: Calc++ Parsing Driver261661
+Node: Calc++ Parser265635
+Node: Calc++ Scanner268780
+Node: Calc++ Top Level271324
+Node: FAQ271991
+Node: Memory Exhausted272487
+Node: How Can I Reset the Parser272797
+Node: Strings are Destroyed275073
+Node: Implementing Gotos/Loops276658
+Node: Table of Symbols277910
+Node: Glossary289938
+Node: Copying This Manual296839
+Node: GNU Free Documentation License297070
+Node: Index319479
 
 End Tag Table

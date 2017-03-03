@@ -1,14 +1,14 @@
 # Turkish translations for GNU Bison messages.
 # Copyright (C) 2001 Free Software Foundation, Inc.
 # Altuð Bayram <altugbayram_2000@yahoo.com>, 2001.
-# Çaðrý Çöltekin <cagri@xs4all.nl>, 2003
+# Çaðrý Çöltekin <cagri@xs4all.nl>, 2003 - 2005
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bison 1.875a\n"
+"Project-Id-Version: GNU bison 2.0\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2004-12-25 21:18-0800\n"
-"PO-Revision-Date: 2003-11-08 22:00+0100\n"
+"POT-Creation-Date: 2005-09-16 15:58-0700\n"
+"PO-Revision-Date: 2005-03-20 22:03+0100\n"
 "Last-Translator: Çaðrý Çöltekin <cagri@xs4all.nl>\n"
 "Language-Team: Turkish <gnu-tr-u12a@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr "uyarý: "
 
 #: src/complain.c:122 src/complain.c:138
 msgid "fatal error: "
-msgstr "ölümcül hata:"
+msgstr "ölümcül hata: "
 
 #: src/conflicts.c:76
 #, c-format
@@ -60,37 +60,38 @@ msgid "State %d "
 msgstr "Durum %d "
 
 #: src/conflicts.c:487
-#, fuzzy, c-format
+#, c-format
 msgid "%%expect-rr applies only to GLR parsers"
-msgstr "%s sadece GLR ayrýþtýrýcýlarý etkiler"
+msgstr "%%expect-rr sadece GLR ayrýþtýrýcýlarý için geçerlidir"
 
 #: src/conflicts.c:511
 #, c-format
 msgid "expected %d shift/reduce conflict"
 msgid_plural "expected %d shift/reduce conflicts"
-msgstr[0] "beklenen %d öteleme/indirgeme çeliþkisi"
-msgstr[1] "beklenen %d öteleme/indirgeme çeliþkisi"
+msgstr[0] "%d öteleme/indirgeme çeliþkisi bekleniyor"
+msgstr[1] "%d öteleme/indirgeme çeliþkisi bekleniyor"
 
 #: src/conflicts.c:515
-#, fuzzy, c-format
+#, c-format
 msgid "expected %d reduce/reduce conflict"
 msgid_plural "expected %d reduce/reduce conflicts"
-msgstr[0] "0 indirgeme/indirgeme çeliþkisi bekleniyor"
+msgstr[0] "%d indirgeme/indirgeme çeliþkisi bekleniyor"
+msgstr[1] "%d indirgeme/indirgeme çeliþkisi bekleniyor"
 
-#: src/files.c:100
+#: src/files.c:101
 #, c-format
 msgid "cannot open file `%s'"
 msgstr "`%s' dosyasý açýlamýyor"
 
-#: src/files.c:116
+#: src/files.c:117
 msgid "I/O error"
 msgstr "G/Ç hatasý"
 
-#: src/files.c:119
+#: src/files.c:120
 msgid "cannot close file"
 msgstr "dosya kapatýlamýyor"
 
-#: src/files.c:337
+#: src/files.c:336
 #, c-format
 msgid "conflicting outputs to file %s"
 msgstr "%s dosyasýna çeliþen çýktýlar"
@@ -120,18 +121,21 @@ msgstr ""
 "geçerlidir.\n"
 
 #: src/getargs.c:208
+#, fuzzy
 msgid ""
 "Operation modes:\n"
-"  -h, --help      display this help and exit\n"
-"  -V, --version   output version information and exit\n"
-"  -y, --yacc      emulate POSIX yacc\n"
+"  -h, --help                 display this help and exit\n"
+"  -V, --version              output version information and exit\n"
+"      --print-localedir      output directory containing locale-dependent "
+"data\n"
+"  -y, --yacc                 emulate POSIX yacc\n"
 msgstr ""
 "Çalýþma kipleri:\n"
 "  -h, --help      bu yardýmý göster ve çýk\n"
 "  -V, --version   sürüm bilgisini ver ve çýk\n"
 "  -y, --yacc      POSIX yacc öykünmesi\n"
 
-#: src/getargs.c:215
+#: src/getargs.c:216
 msgid ""
 "Parser:\n"
 "  -S, --skeleton=FILE        specify the skeleton to use\n"
@@ -151,7 +155,7 @@ msgstr ""
 "  -n, --no-parser            sadece tablolarý üret\n"
 "  -k, --token-table          andaç isimlerinin bir tablosunu içer\n"
 
-#: src/getargs.c:227
+#: src/getargs.c:228
 msgid ""
 "Output:\n"
 "  -d, --defines              also produce a header file\n"
@@ -171,7 +175,7 @@ msgstr ""
 "  -g, --graph                otomatýn bir VCG grafik açýklamasýný da üret\n"
 
 # DUZELT: cevrilmemis iki mesaj var
-#: src/getargs.c:238
+#: src/getargs.c:239
 #, fuzzy
 msgid ""
 "THINGS is a list of comma separated words that can include:\n"
@@ -190,27 +194,27 @@ msgstr ""
 "  `all'          yukarýdaki bilgilerini tümünü gosterir\n"
 "  `none'         raporu üretme\n"
 
-#: src/getargs.c:249
+#: src/getargs.c:250
 msgid "Report bugs to <bug-bison@gnu.org>.\n"
 msgstr ""
 "Hatalarý <bug-bison@gnu.org>'a,\n"
-"çeviri hatalarýný <gnu-tr-u12a@lists.sourceforge.net>'e bildir.\n"
+"çeviri hatalarýný <gnu-tr-u12a@lists.sourceforge.net>'e bildirin.\n"
 
-#: src/getargs.c:266
+#: src/getargs.c:267
 #, c-format
 msgid "bison (GNU Bison) %s"
 msgstr "bison (GNU Bison) %s"
 
-#: src/getargs.c:268
+#: src/getargs.c:269
 msgid "Written by Robert Corbett and Richard Stallman.\n"
 msgstr "Yazanlar: Robert Corbett ve Richard Stallman.\n"
 
-#: src/getargs.c:272
+#: src/getargs.c:273
 #, c-format
 msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
 msgstr "Telif Hakký (C) %d Free Software Foundation, Inc.\n"
 
-#: src/getargs.c:274
+#: src/getargs.c:275
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
@@ -219,12 +223,12 @@ msgstr ""
 "Hiçbir garantisi yoktur; hatta SATILABÝLÝRLÝÐÝ veya ÞAHSÝ KULLANIMINIZA\n"
 "UYGUNLUÐU için bile garanti verilmez.\n"
 
-#: src/getargs.c:440
+#: src/getargs.c:447
 #, c-format
 msgid "missing operand after `%s'"
 msgstr "`%s'ten sonra eksik iþleç"
 
-#: src/getargs.c:442
+#: src/getargs.c:449
 #, c-format
 msgid "extra operand `%s'"
 msgstr "fazla iþleç: `%s'"
@@ -241,15 +245,15 @@ msgstr "Gramer"
 msgid "warning"
 msgstr "uyarý"
 
-#: src/main.c:124
+#: src/main.c:125
 msgid "rule never reduced because of conflicts"
 msgstr "çeliskiler yüzünden kural indirgenemedi"
 
-#: src/parse-gram.y:366
+#: src/parse-gram.y:380
 msgid "POSIX forbids declarations in the grammar"
 msgstr "Gramer içindeki bildirimler POSIX'e uygun deðildir"
 
-#: src/parse-gram.y:499
+#: src/parse-gram.y:511
 msgid "missing identifier in parameter declaration"
 msgstr "parametre bildiriminde eksik tanýtýcý"
 
@@ -409,131 +413,130 @@ msgstr[1] "%d gereksiz kural"
 msgid "start symbol %s does not derive any sentence"
 msgstr "baþlangýç simgesi %s herhangi bir cümleden türemiyor"
 
-#: src/scan-gram.l:162
+#: src/scan-gram.l:176
 msgid "stray `,' treated as white space"
 msgstr "fazladan `,' boþluk olarak algýlandý"
 
-#: src/scan-gram.l:225
+#: src/scan-gram.l:239
 #, c-format
 msgid "invalid directive: %s"
 msgstr "geçersiz yönerge: %s"
 
-#: src/scan-gram.l:283
+#: src/scan-gram.l:297
 #, c-format
 msgid "invalid character: %s"
 msgstr "geçersiz karakter: %s"
 
-#: src/scan-gram.l:402
-#, fuzzy
+#: src/scan-gram.l:417
 msgid "invalid null character"
-msgstr "geçersiz karakter: %s"
+msgstr "geçersiz 'null' karakter"
 
-#: src/scan-gram.l:415 src/scan-gram.l:427 src/scan-gram.l:448
+#: src/scan-gram.l:430 src/scan-gram.l:442 src/scan-gram.l:463
 #, c-format
 msgid "invalid escape sequence: %s"
 msgstr "geçersiz önceleme dizgesi: %s"
 
-#: src/scan-gram.l:417 src/scan-gram.l:429 src/scan-gram.l:450
-#, fuzzy, c-format
+#: src/scan-gram.l:432 src/scan-gram.l:444 src/scan-gram.l:465
+#, c-format
 msgid "invalid null character: %s"
 msgstr "geçersiz karakter: %s"
 
-#: src/scan-gram.l:455
+#: src/scan-gram.l:470
 #, c-format
 msgid "unrecognized escape sequence: %s"
 msgstr "tanýnmayan önceleme dizgesi: %s"
 
-#: src/scan-gram.l:537
-#, c-format
-msgid "missing `{' in `%s'"
+#: src/scan-gram.l:552
+#, fuzzy, c-format
+msgid "missing `{' in %s"
 msgstr "`%s' içinde eksik `{'"
 
-#: src/scan-gram.l:782
+#: src/scan-gram.l:797
 #, c-format
 msgid "$$ of `%s' has no declared type"
 msgstr "`%s''in $$'ý için bildirilmiþ tip yok"
 
-#: src/scan-gram.l:803
+#: src/scan-gram.l:818
 #, c-format
 msgid "$%d of `%s' has no declared type"
 msgstr "`%2$s''in %1$d'i için bildirilmiþ tip yok"
 
-#: src/scan-gram.l:812 src/scan-gram.l:881 src/scan-gram.l:932
+#: src/scan-gram.l:827 src/scan-gram.l:896 src/scan-gram.l:947
 #, c-format
 msgid "integer out of range: %s"
 msgstr "tam sayý kapsam dýþý: %s"
 
-#: src/scan-gram.l:848 src/scan-gram.l:916
+#: src/scan-gram.l:863 src/scan-gram.l:931
 #, c-format
 msgid "invalid value: %s"
 msgstr "geçersiz deðer: %s"
 
-#: src/scan-gram.l:1036
+#: src/scan-gram.l:1051
 #, c-format
 msgid "missing `%s' at end of file"
 msgstr "dosyanýn sonunda eksik `%s'"
 
-#: src/scan-gram.l:1047
-#, fuzzy, c-format
+#: src/scan-gram.l:1062
+#, c-format
 msgid "missing `%s' at end of line"
-msgstr "dosyanýn sonunda eksik `%s'"
+msgstr "satýr sonunda eksik `%s'"
 
-#: src/symlist.c:97 src/symlist.c:108
-msgid "invalid $ value"
-msgstr "geçersiz $ deðeri"
+#: src/symlist.c:113 src/symlist.c:124
+#, fuzzy, c-format
+msgid "invalid $ value: $%d"
+msgstr "geçersiz deðer: %s"
 
 #: src/symtab.c:70
-#, fuzzy, c-format
+#, c-format
 msgid "too many symbols in input grammar (limit is %d)"
-msgstr "çok fazla simge var (andaçlar ve deðiþken simgeler); en fazla %d"
+msgstr "girdi gramerde çok fazla simge var (sýnýr: %d)"
 
-#: src/symtab.c:85
+#: src/symtab.c:104
 #, c-format
 msgid "%s redeclaration for %s"
 msgstr "%2$s için tekrar %1$s bildirimi"
 
-#: src/symtab.c:86
-#, fuzzy
+#: src/symtab.c:105
 msgid "first declaration"
-msgstr "geçersiz %s bildirimi"
+msgstr "ilk bildirim"
 
-#: src/symtab.c:173
+#: src/symtab.c:192
 #, c-format
 msgid "symbol %s redefined"
 msgstr "%s simgesi tekrar tanýmlanmýþ"
 
-#: src/symtab.c:196
+#: src/symtab.c:215
 #, c-format
 msgid "redefining user token number of %s"
 msgstr "kullanýcý andacý %s tekrar tanýmlanýyor"
 
-#: src/symtab.c:223
+#: src/symtab.c:242
 #, c-format
 msgid "symbol %s is used, but is not defined as a token and has no rules"
 msgstr ""
 "simge %s kullanýlmýþ, fakat andaç olarak tanýmlanmamýþ ve kurallarý yok"
 
-#: src/symtab.c:248
+#: src/symtab.c:267
 #, c-format
 msgid "symbol `%s' used more than once as a literal string"
 msgstr "simge `%s', yalýn dizge olarak birden fazla kullanýlmýþ"
 
-#: src/symtab.c:251
+#: src/symtab.c:270
 #, c-format
 msgid "symbol `%s' given more than one literal string"
 msgstr "simge `%s', birden fazla yalýn dizgeye atanmýþ"
 
-#: src/symtab.c:398
+#: src/symtab.c:418
 #, c-format
 msgid "tokens %s and %s both assigned number %d"
 msgstr "%s ve %s andaçlarýnýn her ikisi %d sayýsýna atandmýþ"
 
-#: src/symtab.c:622
+#: src/symtab.c:641
 #, c-format
 msgid "the start symbol %s is undefined"
 msgstr "baþlangýç simgesi %s tanýmlanmamýþ"
 
-#: src/symtab.c:626
+#: src/symtab.c:645
 #, c-format
 msgid "the start symbol %s is a token"
 msgstr "baþlangýç simgesi %s bir andaç"
@@ -621,7 +624,7 @@ msgstr "Ýstatistik dosyasýna yazýlamadý."
 msgid "Could not open stats file for writing."
 msgstr "Ýstatistik dosyasý yazmak için açýlamadý."
 
-#: lib/error.c:123
+#: lib/error.c:121
 msgid "Unknown system error"
 msgstr "Bilinmeyen sistem hatasý"
 
@@ -680,34 +683,53 @@ msgstr "%s: `-W %s' seçeneði belirsiz\n"
 msgid "%s: option `-W %s' doesn't allow an argument\n"
 msgstr "%s: `-W %s' seçeneði argümansýz kullanýlýr\n"
 
-#: lib/obstack.c:433 lib/obstack.c:436
+#: lib/obstack.c:438 lib/obstack.c:441 lib/xalloc-die.c:38
 msgid "memory exhausted"
 msgstr "bellek tükendi"
 
-#: lib/quotearg.c:240
+#. TRANSLATORS:
+#. Get translations for open and closing quotation marks.
+#.
+#. The message catalog should translate "`" to a left
+#. quotation mark suitable for the locale, and similarly for
+#. "'".  If the catalog has no translation,
+#. locale_quoting_style quotes `like this', and
+#. clocale_quoting_style quotes "like this".
+#.
+#. For example, an American English Unicode locale should
+#. translate "`" to U+201C (LEFT DOUBLE QUOTATION MARK), and
+#. should translate "'" to U+201D (RIGHT DOUBLE QUOTATION
+#. MARK).  A British English Unicode locale should instead
+#. translate these to U+2018 (LEFT SINGLE QUOTATION MARK) and
+#. U+2019 (RIGHT SINGLE QUOTATION MARK), respectively.
+#.
+#. If you don't know what to put here, please see
+#. <http://en.wikipedia.org/wiki/Quotation_mark#Glyphs>
+#. and use glyphs suitable for your language.
+#: lib/quotearg.c:245
 msgid "`"
 msgstr "`"
 
-#: lib/quotearg.c:241
+#: lib/quotearg.c:246
 msgid "'"
 msgstr "'"
 
-#: lib/subpipe.c:171
+#: lib/subpipe.c:159
 #, c-format
 msgid "subsidiary program `%s' could not be invoked"
 msgstr "alt program `%s' çalýþtýrýlamadý"
 
-#: lib/subpipe.c:173
+#: lib/subpipe.c:161
 #, c-format
 msgid "subsidiary program `%s' not found"
 msgstr "alt program `%s' bulunamadý"
 
-#: lib/subpipe.c:175
+#: lib/subpipe.c:163
 #, c-format
 msgid "subsidiary program `%s' failed"
 msgstr "alt program `%s' baþarýsýz"
 
-#: lib/subpipe.c:176
+#: lib/subpipe.c:164
 #, c-format
 msgid "subsidiary program `%s' failed (exit status %d)"
 msgstr "alt program `%s' baþarýsýz (hata kodu: %d)"
@@ -728,6 +750,9 @@ msgstr " TOPLAM                : "
 #, c-format
 msgid "time in %s: %ld.%06ld (%ld%%)\n"
 msgstr "%s'te geçen zaman: %ld.%06ld (%ld%%)\n"
+
+#~ msgid "invalid $ value"
+#~ msgstr "geçersiz $ deðeri"
 
 #~ msgid "type redeclaration for %s"
 #~ msgstr "%s için tekrar tip bildirimi"

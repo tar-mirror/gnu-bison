@@ -1,7 +1,7 @@
 m4_divert(-1)                                               -*- Autoconf -*-
 
 # C M4 Macros for Bison.
-# Copyright (C) 2002, 2004 Free Software Foundation, Inc.
+# Copyright (C) 2002, 2004, 2005 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,8 +15,8 @@ m4_divert(-1)                                               -*- Autoconf -*-
 
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
-# 02111-1307  USA
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+# 02110-1301  USA
 
 
 ## ---------------- ##
@@ -43,8 +43,8 @@ m4_define([b4_copyright],
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.  */])
+   Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.  */])
 
 
 # b4_identification
@@ -52,6 +52,9 @@ m4_define([b4_copyright],
 m4_define([b4_identification],
 [/* Identify Bison output.  */
 [#]define YYBISON 1
+
+/* Bison version.  */
+[#]define YYBISON_VERSION "b4_version"
 
 /* Skeleton name.  */
 [#]define YYSKELETON_NAME b4_skeleton
@@ -119,7 +122,7 @@ m4_define([b4_int_type],
 
        m4_eval([0 <= $1]),                [1], [unsigned int],
 
- 	                                       [int])])
+	                                       [int])])
 
 
 # b4_int_type_for(NAME)
@@ -166,6 +169,16 @@ m4_define([b4_token_define],
 ])
 
 
+# b4_token_defines(LIST-OF-PAIRS-TOKEN-NAME-TOKEN-NUMBER)
+# -------------------------------------------------------
+# Output the definition of the tokens (if there are) as #defines.
+m4_define([b4_token_defines],
+[m4_if([$@], [[]], [],
+[/* Tokens.  */
+m4_map([b4_token_define], [$@])])
+])
+
+
 # b4_token_enum(TOKEN-NAME, TOKEN-NUMBER)
 # ---------------------------------------
 # Output the definition of this token as an enum.
@@ -173,10 +186,10 @@ m4_define([b4_token_enum],
 [$1 = $2])
 
 
-# b4_token_defines(LIST-OF-PAIRS-TOKEN-NAME-TOKEN-NUMBER)
-# -------------------------------------------------------
-# Output the definition of the tokens (if there are) as enums and #define.
-m4_define([b4_token_defines],
+# b4_token_enums(LIST-OF-PAIRS-TOKEN-NAME-TOKEN-NUMBER)
+# -----------------------------------------------------
+# Output the definition of the tokens (if there are) as enums.
+m4_define([b4_token_enums],
 [m4_if([$@], [[]], [],
 [/* Tokens.  */
 #ifndef YYTOKENTYPE
@@ -189,8 +202,14 @@ m4_map_sep([     b4_token_enum], [,
            [$@])
    };
 #endif
-m4_map([b4_token_define], [$@])
-])
+])])
+
+
+# b4_token_enums_defines(LIST-OF-PAIRS-TOKEN-NAME-TOKEN-NUMBER)
+# -------------------------------------------------------------
+# Output the definition of the tokens (if there are) as enums and #defines.
+m4_define([b4_token_enums_defines],
+[b4_token_enums($@)b4_token_defines($@)
 ])
 
 
@@ -345,7 +364,7 @@ m4_popdef([b4_dollar_dollar])dnl
 # Generate the "yydestruct" function, which declaration is issued using
 # FUNCTION-DECLARATOR, which may be "b4_c_ansi_function_def" for ISO C
 # or "b4_c_function_def" for K&R.
-m4_define([b4_yydestruct_generate],
+m4_define_default([b4_yydestruct_generate],
 [[/*-----------------------------------------------.
 | Release the memory associated to this symbol.  |
 `-----------------------------------------------*/
@@ -380,7 +399,7 @@ m4_define([b4_yydestruct_generate],
 # Generate the "yysymprint" function, which declaration is issued using
 # FUNCTION-DECLARATOR, which may be "b4_c_ansi_function_def" for ISO C
 # or "b4_c_function_def" for K&R.
-m4_define([b4_yysymprint_generate],
+m4_define_default([b4_yysymprint_generate],
 [[/*--------------------------------.
 | Print this symbol on YYOUTPUT.  |
 `--------------------------------*/
@@ -403,7 +422,7 @@ b4_location_if([  (void) yylocationp;
     YYFPRINTF (yyoutput, "nterm %s (", yytname[yytype]);
 
 ]b4_location_if([  YY_LOCATION_PRINT (yyoutput, *yylocationp);
-  fprintf (yyoutput, ": ");
+  YYFPRINTF (yyoutput, ": ");
 ])dnl
 [
 # ifdef YYPRINT

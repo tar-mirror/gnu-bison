@@ -1,6 +1,6 @@
 /* Output the generated parsing program for Bison.
 
-   Copyright (C) 1984, 1986, 1989, 1992, 2000, 2001, 2002, 2003, 2004
+   Copyright (C) 1984, 1986, 1989, 1992, 2000, 2001, 2002, 2003, 2004, 2005
    Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
@@ -17,8 +17,8 @@
 
    You should have received a copy of the GNU General Public License
    along with Bison; see the file COPYING.  If not, write to the Free
-   Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-   02111-1307, USA.  */
+   Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+   02110-1301, USA.  */
 
 
 #include "system.h"
@@ -36,11 +36,9 @@
 #include "muscle_tab.h"
 #include "output.h"
 #include "reader.h"
+#include "scan-skel.h"
 #include "symtab.h"
 #include "tables.h"
-
-/* From src/scan-skel.l. */
-void scan_skel (FILE *);
 
 
 static struct obstack format_obstack;
@@ -60,7 +58,7 @@ bool error_verbose = false;
 #define GENERATE_MUSCLE_INSERT_TABLE(Name, Type)			\
 									\
 static void								\
-Name (const char *name,							\
+Name (char const *name,							\
       Type *table_data,							\
       Type first,							\
       int begin,							\
@@ -113,17 +111,17 @@ GENERATE_MUSCLE_INSERT_TABLE(muscle_insert_item_number_table, item_number)
 GENERATE_MUSCLE_INSERT_TABLE(muscle_insert_state_number_table, state_number)
 
 
-/*----------------------------------------------------------------------.
-| Print to OUT a representation of FILENAME escaped both for C and M4.  |
-`----------------------------------------------------------------------*/
+/*--------------------------------------------------------------------.
+| Print to OUT a representation of STRING escaped both for C and M4.  |
+`--------------------------------------------------------------------*/
 
 static void
-escaped_file_name_output (FILE *out, char const *filename)
+escaped_output (FILE *out, char const *string)
 {
   char const *p;
   fprintf (out, "[[");
 
-  for (p = quotearg_style (c_quoting_style, filename); *p; p++)
+  for (p = quotearg_style (c_quoting_style, string); *p; p++)
     switch (*p)
       {
       case '$': fputs ("$][", out); break;
@@ -145,6 +143,7 @@ escaped_file_name_output (FILE *out, char const *filename)
 static void
 prepare_symbols (void)
 {
+  MUSCLE_INSERT_BOOL ("token_table", token_table_flag);
   MUSCLE_INSERT_INT ("tokens_number", ntokens);
   MUSCLE_INSERT_INT ("nterms_number", nvars);
   MUSCLE_INSERT_INT ("undef_token_number", undeftoken->number);
@@ -162,7 +161,7 @@ prepare_symbols (void)
     int j = 2;
     for (i = 0; i < nsyms; i++)
       {
-	const char *cp = quotearg_style (c_quoting_style, symbols[i]->tag);
+	char const *cp = quotearg_style (c_quoting_style, symbols[i]->tag);
 	/* Width of the next token, including the two quotes, the
 	   comma and the space.  */
 	int width = strlen (cp) + 2;
@@ -300,9 +299,9 @@ user_actions_output (FILE *out)
       {
 	fprintf (out, "  case %d:\n", r + 1);
 
-	fprintf (out, "]b4_syncline([[%d]], ",
+	fprintf (out, "]b4_syncline(%d, ",
 		 rules[r].action_location.start.line);
-	escaped_file_name_output (out, rules[r].action_location.start.file);
+	escaped_output (out, rules[r].action_location.start.file);
 	fprintf (out, ")[\n");
 	fprintf (out, "    %s\n    break;\n\n",
 		 rules[r].action);
@@ -375,7 +374,7 @@ token_definitions_output (FILE *out)
       if (strchr (sym->tag, '.') || strchr (sym->tag, '$'))
 	continue;
 
-      fprintf (out, "%s[[[%s]], [%d]]",
+      fprintf (out, "%s[[[%s]], %d]",
 	       sep, sym->tag, number);
       sep = ",\n";
     }
@@ -404,12 +403,10 @@ symbol_destructors_output (FILE *out)
 	   destructor, optional typename.  */
 	fprintf (out, "%s[", sep);
 	sep = ",\n";
-	escaped_file_name_output (out, sym->destructor_location.start.file);
-	fprintf (out, ", [[%d]], [[%s]], [[%d]], [[%s]]",
-		 sym->destructor_location.start.line,
-		 sym->tag,
-		 sym->number,
-		 sym->destructor);
+	escaped_output (out, sym->destructor_location.start.file);
+	fprintf (out, ", %d, ", sym->destructor_location.start.line);
+	escaped_output (out, sym->tag);
+	fprintf (out, ", %d, [[%s]]", sym->number, sym->destructor);
 	if (sym->type_name)
 	  fprintf (out, ", [[%s]]", sym->type_name);
 	fputc (']', out);
@@ -439,12 +436,10 @@ symbol_printers_output (FILE *out)
 	   printer, optional typename.  */
 	fprintf (out, "%s[", sep);
 	sep = ",\n";
-	escaped_file_name_output (out, sym->printer_location.start.file);
-	fprintf (out, ", [[%d]], [[%s]], [[%d]], [[%s]]",
-		 sym->printer_location.start.line,
-		 sym->tag,
-		 sym->number,
-		 sym->printer);
+	escaped_output (out, sym->printer_location.start.file);
+	fprintf (out, ", %d, ", sym->printer_location.start.line);
+	escaped_output (out, sym->tag);
+	fprintf (out, ", %d, [[%s]]", sym->number, sym->printer);
 	if (sym->type_name)
 	  fprintf (out, ", [[%s]]", sym->type_name);
 	fputc (']', out);
@@ -562,7 +557,8 @@ output_skeleton (void)
 
   out = fdopen (filter_fd[0], "w");
   if (! out)
-    error (EXIT_FAILURE, get_errno (), "fdopen");
+    error (EXIT_FAILURE, get_errno (),
+	   "fdopen");
 
   /* Output the definitions of all the muscles.  */
   fputs ("m4_init()\n", out);
@@ -583,7 +579,8 @@ output_skeleton (void)
   timevar_push (TV_M4);
   in = fdopen (filter_fd[1], "r");
   if (! in)
-    error (EXIT_FAILURE, get_errno (), "fdopen");
+    error (EXIT_FAILURE, get_errno (),
+	   "fdopen");
   scan_skel (in);
   xfclose (in);
   reap_subpipe (pid, m4);
@@ -619,8 +616,12 @@ prepare (void)
 	skeleton = "yacc.c";
     }
 
-  /* Parse the skeleton file and output the needed parsers.  */
-  MUSCLE_INSERT_C_STRING ("skeleton", skeleton);
+  /* About the skeletons. */
+  {
+    char const *pkgdatadir = getenv ("BISON_PKGDATADIR");
+    MUSCLE_INSERT_STRING ("pkgdatadir", pkgdatadir ? pkgdatadir : PKGDATADIR);
+    MUSCLE_INSERT_C_STRING ("skeleton", skeleton);
+  }
 }
 
 

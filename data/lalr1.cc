@@ -1,6 +1,8 @@
 m4_divert(-1)
+
 # C++ skeleton for Bison
-# Copyright (C) 2002, 2003, 2004 Free Software Foundation, Inc.
+
+# Copyright (C) 2002, 2003, 2004, 2005 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,98 +16,10 @@ m4_divert(-1)
 
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
-# 02111-1307  USA
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+# 02110-1301  USA
 
-## ---------------- ##
-## Default values.  ##
-## ---------------- ##
-
-# Default parser class name.
-m4_define_default([b4_parser_class_name], [parser])
-
-
-
-## ----------------- ##
-## Semantic Values.  ##
-## ----------------- ##
-
-
-# b4_lhs_value([TYPE])
-# --------------------
-# Expansion of $<TYPE>$.
-m4_define([b4_lhs_value],
-[(yyval[]m4_ifval([$1], [.$1]))])
-
-
-# b4_rhs_value(RULE-LENGTH, NUM, [TYPE])
-# --------------------------------------
-# Expansion of $<TYPE>NUM, where the current rule has RULE-LENGTH
-# symbols on RHS.
-m4_define([b4_rhs_value],
-[(yysemantic_stack_@{m4_eval([$1 - $2])@}m4_ifval([$3], [.$3]))])
-
-m4_define_default([b4_location_type], [location])
-m4_define_default([b4_filename_type], [std::string])
-
-# b4_lhs_location()
-# -----------------
-# Expansion of @$.
-m4_define([b4_lhs_location],
-[(yyloc)])
-
-
-# b4_rhs_location(RULE-LENGTH, NUM)
-# ---------------------------------
-# Expansion of @NUM, where the current rule has RULE-LENGTH symbols
-# on RHS.
-m4_define([b4_rhs_location],
-[(yylocation_stack_@{m4_eval([$1 - $2])@})])
-
-
-# b4_parse_param_decl
-# -------------------
-# Extra formal arguments of the constructor.
-# Change the parameter names from "foo" into "foo_yyarg", so that
-# there is no collision bw the user chosen attribute name, and the
-# argument name in the constructor.
-m4_define([b4_parse_param_decl],
-[m4_ifset([b4_parse_param],
-          [m4_map_sep([b4_parse_param_decl_1], [, ], [b4_parse_param])])])
-
-m4_define([b4_parse_param_decl_1],
-[$1_yyarg])
-
-
-
-# b4_parse_param_cons
-# -------------------
-# Extra initialisations of the constructor.
-m4_define([b4_parse_param_cons],
-          [m4_ifset([b4_parse_param],
-		    [,
-      b4_cc_constructor_calls(b4_parse_param)])])
-m4_define([b4_cc_constructor_calls],
-	  [m4_map_sep([b4_cc_constructor_call], [,
-      ], [$@])])
-m4_define([b4_cc_constructor_call],
-	  [$2 ($2_yyarg)])
-
-# b4_parse_param_vars
-# -------------------
-# Extra instance variables.
-m4_define([b4_parse_param_vars],
-          [m4_ifset([b4_parse_param],
-		    [
-    /* User arguments.  */
-b4_cc_var_decls(b4_parse_param)])])
-m4_define([b4_cc_var_decls],
-	  [m4_map_sep([b4_cc_var_decl], [
-], [$@])])
-m4_define([b4_cc_var_decl],
-	  [    $1;])
-
-
+m4_include(b4_pkgdatadir/[c++.m4])
 
 # We do want M4 expansion after # for CPP macros.
 m4_changecom()
@@ -113,7 +27,7 @@ m4_divert(0)dnl
 m4_if(b4_defines_flag, 0, [],
 [@output @output_header_name@
 b4_copyright([C++ Skeleton parser for LALR(1) parsing with Bison],
-             [2002, 2003, 2004])[
+             [2002, 2003, 2004, 2005])[
 /* FIXME: This is wrong, we want computed header guards.
    I don't know why the macros are missing now. :( */
 #ifndef PARSER_HEADER_H
@@ -131,7 +45,7 @@ namespace yy
   class location;
 }
 
-]b4_token_defines(b4_tokens)[
+]b4_token_enums(b4_tokens)[
 
 /* Copy the first part of user declarations.  */
 ]b4_pre_prologue[
@@ -147,14 +61,28 @@ b4_syncline([@oline@], [@ofile@])[
 # define YYDEBUG ]b4_debug[
 #endif
 
-/* Enabling verbose error message.  */
-#ifndef YYERROR_VERBOSE
+/* Enabling verbose error messages.  */
+#ifdef YYERROR_VERBOSE
+# undef YYERROR_VERBOSE
+# define YYERROR_VERBOSE 1
+#else
 # define YYERROR_VERBOSE ]b4_error_verbose[
+#endif
+
+#if YYERROR_VERBOSE
+# define YYERROR_VERBOSE_IF(x) x
+#else
+# define YYERROR_VERBOSE_IF(x) /* empty */
+#endif
+
+/* Enabling the token table.  */
+#ifndef YYTOKEN_TABLE
+# define YYTOKEN_TABLE ]b4_token_table[
 #endif
 
 #if ! defined (YYSTYPE) && ! defined (YYSTYPE_IS_DECLARED)
 ]m4_ifdef([b4_stype],
-[b4_syncline([b4_stype_line], [b4_filename])
+[b4_syncline([b4_stype_line], [b4_file_name])
 union YYSTYPE b4_stype;
 /* Line __line__ of lalr1.cc.  */
 b4_syncline([@oline@], [@ofile@])],
@@ -247,17 +175,14 @@ namespace yy
     void set_debug_level (debug_level_type l);
 
   private:
-
-    /// Call the scanner.
-    virtual void yylex_ ();
-
     /// Report a syntax error.
     /// \param loc    where the syntax error is found.
     /// \param msg    a description of the syntax error.
     virtual void error (const location_type& loc, const std::string& msg);
 
-    /// Generate an error message, and invoke error.
-    virtual void yyreport_syntax_error_ ();
+    /// Generate an error message.
+    /// \param tok    the look-ahead token.
+    virtual std::string yysyntax_error_ (YYERROR_VERBOSE_IF (int tok));
 
 #if YYDEBUG
     /// \brief Report a symbol on the debug stream.
@@ -319,9 +244,14 @@ namespace yy
     /// For a rule, its RHS length.
     static const ]b4_int_type_for([b4_r2])[ yyr2_[];
 
-#if YYDEBUG || YYERROR_VERBOSE
+#if YYDEBUG || YYERROR_VERBOSE || YYTOKEN_TABLE
     /// For a symbol, its name in clear.
-    static const char* const yyname_[];
+    static const char* const yytname_[];
+#endif
+
+#if YYERROR_VERBOSE
+    /// Convert the symbol name \a n to a form suitable for a diagnostic.
+    virtual std::string yytnamerr_ (const char *n);
 #endif
 
 #if YYDEBUG
@@ -383,21 +313,6 @@ namespace yy
     int yydebug_;
     std::ostream* yycdebug_;
 
-    /* Look-ahead and look-ahead in internal form.  */
-    int yylooka_;
-    int yyilooka_;
-
-    /// Semantic value of the look-ahead.
-    semantic_type yylval;
-    /// Location of the look-ahead.
-    location_type yylloc;
-    /// The locations where the error started and ended.
-    location yyerror_range_[2];
-
-    /// $$.
-    semantic_type yyval;
-    /// @@$.
-    location_type yyloc;
 ]b4_parse_param_vars[
   };
 }
@@ -406,7 +321,7 @@ namespace yy
 ])dnl
 @output @output_parser_name@
 b4_copyright([C++ Skeleton parser for LALR(1) parsing with Bison],
-             [2002, 2003, 2004])
+             [2002, 2003, 2004, 2005])
 m4_if(b4_prefix[], [yy], [],
 [
 // Take the name prefix into account.
@@ -414,6 +329,18 @@ m4_if(b4_prefix[], [yy], [],
 m4_if(b4_defines_flag, 0, [],
 [
 #include @output_header_name@])[
+
+#ifndef YY_
+# if YYENABLE_NLS
+#  if ENABLE_NLS
+#   include <libintl.h> /* FIXME: INFRINGES ON USER NAME SPACE */
+#   define YY_(msgid) dgettext ("bison-runtime", msgid)
+#  endif
+# endif
+# ifndef YY_
+#  define YY_(msgid) msgid
+# endif
+#endif
 
 /* A pseudo ostream that takes yydebug_ into account. */
 # define YYCDEBUG							\
@@ -457,6 +384,47 @@ do {					\
 #define YYABORT		goto yyabortlab
 #define YYERROR		goto yyerrorlab
 
+#if YYERROR_VERBOSE
+
+/* Return YYSTR after stripping away unnecessary quotes and
+   backslashes, so that it's suitable for yyerror.  The heuristic is
+   that double-quoting is unnecessary unless the string contains an
+   apostrophe, a comma, or backslash (other than backslash-backslash).
+   YYSTR is taken from yytname.  */
+std::string
+yy::]b4_parser_class_name[::yytnamerr_ (const char *yystr)
+{
+  if (*yystr == '"')
+    {
+      std::string yyr = "";
+      char const *yyp = yystr;
+
+      for (;;)
+	switch (*++yyp)
+	  {
+	  case '\'':
+	  case ',':
+	    goto do_not_strip_quotes;
+
+	  case '\\':
+	    if (*++yyp != '\\')
+	      goto do_not_strip_quotes;
+	    /* Fall through.  */
+	  default:
+	    yyr += *yyp;
+	    break;
+
+	  case '"':
+	    return yyr;
+	  }
+    do_not_strip_quotes: ;
+    }
+
+  return yystr;
+}
+
+#endif
+
 #if YYDEBUG
 /*--------------------------------.
 | Print this symbol on YYOUTPUT.  |
@@ -474,7 +442,7 @@ yy::]b4_parser_class_name[::yysymprint_ (int yytype,
   (void) cdebug_;
 
   *yycdebug_ << (yytype < yyntokens_ ? "token" : "nterm")
-	     << ' ' << yyname_[yytype] << " ("
+	     << ' ' << yytname_[yytype] << " ("
              << *yylocationp << ": ";
   switch (yytype)
     {
@@ -542,6 +510,24 @@ yy::]b4_parser_class_name[::set_debug_level (debug_level_type l)
 int
 yy::]b4_parser_class_name[::parse ()
 {
+  /* Look-ahead and look-ahead in internal form.  */
+  int yylooka;
+  int yyilooka;
+
+  /// Semantic value of the look-ahead.
+  semantic_type yylval;
+  /// Location of the look-ahead.
+  location_type yylloc;
+  /// The locations where the error started and ended.
+  location yyerror_range[2];
+
+  /// $$.
+  semantic_type yyval;
+  /// @@$.
+  location_type yyloc;
+
+  int yyresult_;
+
   YYCDEBUG << "Starting parse" << std::endl;
 
   yynerrs_ = 0;
@@ -549,7 +535,7 @@ yy::]b4_parser_class_name[::parse ()
 
   /* Start.  */
   yystate_ = 0;
-  yylooka_ = yyempty_;
+  yylooka = yyempty_;
 
 ]m4_ifdef([b4_initial_action], [
 m4_pushdef([b4_at_dollar],     [yylloc])dnl
@@ -586,25 +572,32 @@ yybackup:
     goto yydefault;
 
   /* Read a look-ahead token.  */
-  if (yylooka_ == yyempty_)
-    yylex_ ();
+  if (yylooka == yyempty_)
+    {
+      YYCDEBUG << "Reading a token: ";
+      yylooka = ]b4_c_function_call([yylex], [int],
+[[YYSTYPE*], [&yylval]][]dnl
+b4_location_if([, [[location*], [&yylloc]]])dnl
+m4_ifdef([b4_lex_param], [, ]b4_lex_param))[;
+    }
+
 
   /* Convert token to internal form.  */
-  if (yylooka_ <= yyeof_)
+  if (yylooka <= yyeof_)
     {
-      yylooka_ = yyilooka_ = yyeof_;
+      yylooka = yyilooka = yyeof_;
       YYCDEBUG << "Now at end of input." << std::endl;
     }
   else
     {
-      yyilooka_ = yytranslate_ (yylooka_);
-      YY_SYMBOL_PRINT ("Next token is", yyilooka_, &yylval, &yylloc);
+      yyilooka = yytranslate_ (yylooka);
+      YY_SYMBOL_PRINT ("Next token is", yyilooka, &yylval, &yylloc);
     }
 
   /* If the proper action on seeing token ILOOKA_ is to reduce or to
      detect an error, take that action.  */
-  yyn_ += yyilooka_;
-  if (yyn_ < 0 || yylast_ < yyn_ || yycheck_[yyn_] != yyilooka_)
+  yyn_ += yyilooka;
+  if (yyn_ < 0 || yylast_ < yyn_ || yycheck_[yyn_] != yyilooka)
     goto yydefault;
 
   /* Reduce or error.  */
@@ -627,11 +620,11 @@ yybackup:
     goto yyacceptlab;
 
   /* Shift the look-ahead token.  */
-  YY_SYMBOL_PRINT ("Shifting", yyilooka_, &yylval, &yylloc);
+  YY_SYMBOL_PRINT ("Shifting", yyilooka, &yylval, &yylloc);
 
   /* Discard the token being shifted unless it is eof.  */
-  if (yylooka_ != yyeof_)
-    yylooka_ = yyempty_;
+  if (yylooka != yyeof_)
+    yylooka = yyempty_;
 
   yysemantic_stack_.push (yylval);
   yylocation_stack_.push (yylloc);
@@ -677,6 +670,7 @@ yyreduce:
   switch (yyn_)
     {
       ]b4_actions[
+      default: break;
     }
 
 ]/* Line __line__ of lalr1.cc.  */
@@ -704,36 +698,28 @@ b4_syncline([@oline@], [@ofile@])[
 `------------------------------------*/
 yyerrlab:
   /* If not already recovering from an error, report this error.  */
-  yyreport_syntax_error_ ();
+  if (!yyerrstatus_)
+    {
+      ++yynerrs_;
+      error (yylloc, yysyntax_error_ (YYERROR_VERBOSE_IF (yyilooka)));
+    }
 
-  yyerror_range_[0] = yylloc;
+  yyerror_range[0] = yylloc;
   if (yyerrstatus_ == 3)
     {
       /* If just tried and failed to reuse look-ahead token after an
 	 error, discard it.  */
 
-      /* Return failure if at end of input.  */
-      if (yylooka_ <= yyeof_)
+      if (yylooka <= yyeof_)
         {
-          /* If at end of input, pop the error token,
-	     then the rest of the stack, then return failure.  */
-	  if (yylooka_ == yyeof_)
-	     for (;;)
-	       {
-                 yyerror_range_[0] = yylocation_stack_[0];
-                 yypop_ ();
-		 if (yystate_stack_.height () == 1)
-		   YYABORT;
-                 yydestruct_ ("Error: popping",
-                              yystos_[yystate_stack_[0]],
-                              &yysemantic_stack_[0],
-                              &yylocation_stack_[0]);
-	       }
+	  /* Return failure if at end of input.  */
+	  if (yylooka == yyeof_)
+	    YYABORT;
         }
       else
         {
-          yydestruct_ ("Error: discarding", yyilooka_, &yylval, &yylloc);
-          yylooka_ = yyempty_;
+          yydestruct_ ("Error: discarding", yyilooka, &yylval, &yylloc);
+          yylooka = yyempty_;
         }
     }
 
@@ -747,14 +733,13 @@ yyerrlab:
 `---------------------------------------------------*/
 yyerrorlab:
 
-#ifdef __GNUC__
-  /* Pacify GCC when the user code never invokes YYERROR and the label
-     yyerrorlab therefore never appears in user code.  */
-  if (0)
-     goto yyerrorlab;
-#endif
+  /* Pacify compilers like GCC when the user code never invokes
+     YYERROR and the label yyerrorlab therefore never appears in user
+     code.  */
+  if (false)
+    goto yyerrorlab;
 
-  yyerror_range_[0] = yylocation_stack_[yylen_ - 1];
+  yyerror_range[0] = yylocation_stack_[yylen_ - 1];
   yypop_ (yylen_);
   yystate_ = yystate_stack_[0];
   goto yyerrlab1;
@@ -783,7 +768,7 @@ yyerrlab1:
       if (yystate_stack_.height () == 1)
 	YYABORT;
 
-      yyerror_range_[0] = yylocation_stack_[0];
+      yyerror_range[0] = yylocation_stack_[0];
       yydestruct_ ("Error: popping",
                    yystos_[yystate_],
                    &yysemantic_stack_[0], &yylocation_stack_[0]);
@@ -795,10 +780,10 @@ yyerrlab1:
   if (yyn_ == yyfinal_)
     goto yyacceptlab;
 
-  yyerror_range_[1] = yylloc;
+  yyerror_range[1] = yylloc;
   // Using YYLLOC is tempting, but would change the location of
   // the look-ahead.  YYLOC is available though.
-  YYLLOC_DEFAULT (yyloc, yyerror_range_ - 1, 2);
+  YYLLOC_DEFAULT (yyloc, yyerror_range - 1, 2);
   yysemantic_stack_.push (yylval);
   yylocation_stack_.push (yyloc);
 
@@ -811,70 +796,76 @@ yyerrlab1:
 
   /* Accept.  */
 yyacceptlab:
-  return 0;
+  yyresult_ = 0;
+  goto yyreturn;
 
   /* Abort.  */
 yyabortlab:
-  /* Free the lookahead. */
-  yydestruct_ ("Error: discarding lookahead", yyilooka_, &yylval, &yylloc);
-  yylooka_ = yyempty_;
-  return 1;
-}
+  yyresult_ = 1;
+  goto yyreturn;
 
-void
-yy::]b4_parser_class_name[::yylex_ ()
-{
-  YYCDEBUG << "Reading a token: ";
-#if YYLSP_NEEDED
-  yylooka_ = yylex (&yylval, &yylloc);
-#else
-  yylooka_ = yylex (&yylval);
-#endif
-}
+yyreturn:
+  if (yylooka != yyeof_ && yylooka != yyempty_)
+    yydestruct_ ("Cleanup: discarding lookahead", yyilooka, &yylval, &yylloc);
 
-// Generate an error message, and invoke error.
-void
-yy::]b4_parser_class_name[::yyreport_syntax_error_ ()
-{
-  /* If not already recovering from an error, report this error.  */
-  if (!yyerrstatus_)
+  while (yystate_stack_.height () != 1)
     {
-      ++yynerrs_;
-      std::string message;
-#if YYERROR_VERBOSE
-      yyn_ = yypact_[yystate_];
-      if (yypact_ninf_ < yyn_ && yyn_ < yylast_)
-	{
-	  /* Start YYX at -YYN if negative to avoid negative indexes in
-	     YYCHECK.  */
-	  int yyxbegin = yyn_ < 0 ? -yyn_ : 0;
+      yydestruct_ ("Cleanup: popping",
+		   yystos_[yystate_stack_[0]],
+		   &yysemantic_stack_[0],
+		   &yylocation_stack_[0]);
+      yypop_ ();
+    }
 
-	  /* Stay within bounds of both yycheck and yytname.  */
-	  int yychecklim = yylast_ - yyn_;
-	  int yyxend = yychecklim < yyntokens_ ? yychecklim : yyntokens_;
-          int count = 0;
+  return yyresult_;
+}
+
+// Generate an error message.
+std::string
+yy::]b4_parser_class_name[::yysyntax_error_ (YYERROR_VERBOSE_IF (int tok))
+{
+  std::string res;
+#if YYERROR_VERBOSE
+  yyn_ = yypact_[yystate_];
+  if (yypact_ninf_ < yyn_ && yyn_ < yylast_)
+    {
+      /* Start YYX at -YYN if negative to avoid negative indexes in
+         YYCHECK.  */
+      int yyxbegin = yyn_ < 0 ? -yyn_ : 0;
+
+      /* Stay within bounds of both yycheck and yytname.  */
+      int yychecklim = yylast_ - yyn_;
+      int yyxend = yychecklim < yyntokens_ ? yychecklim : yyntokens_;
+      int count = 0;
+      for (int x = yyxbegin; x < yyxend; ++x)
+        if (yycheck_[x + yyn_] == x && x != yyterror_)
+          ++count;
+
+      // FIXME: This method of building the message is not compatible
+      // with internationalization.  It should work like yacc.c does it.
+      // That is, first build a string that looks like this:
+      // "syntax error, unexpected %s or %s or %s"
+      // Then, invoke YY_ on this string.
+      // Finally, use the string as a format to output
+      // yytname_[tok], etc.
+      // Until this gets fixed, this message appears in English only.
+      res = "syntax error, unexpected ";
+      res += yytnamerr_ (yytname_[tok]);
+      if (count < 5)
+        {
+          count = 0;
           for (int x = yyxbegin; x < yyxend; ++x)
             if (yycheck_[x + yyn_] == x && x != yyterror_)
-              ++count;
-
-	  message = "syntax error, unexpected ";
-	  message += yyname_[yyilooka_];
-          if (count < 5)
-            {
-              count = 0;
-              for (int x = yyxbegin; x < yyxend; ++x)
-                if (yycheck_[x + yyn_] == x && x != yyterror_)
-                  {
-                    message += (!count++) ? ", expecting " : " or ";
-                    message += yyname_[x];
- 	          }
-            }
-	}
-      else
-#endif
-	message = "syntax error";
-      error (yylloc, message);
+              {
+                res += (!count++) ? ", expecting " : " or ";
+                res += yytnamerr_ (yytname_[x]);
+              }
+        }
     }
+  else
+#endif
+    res = YY_("syntax error");
+  return res;
 }
 
 
@@ -959,11 +950,11 @@ yy::]b4_parser_class_name[::yyr2_[] =
   ]b4_r2[
 };
 
-#if YYDEBUG || YYERROR_VERBOSE
+#if YYDEBUG || YYERROR_VERBOSE || YYTOKEN_TABLE
 /* YYTNAME[SYMBOL-NUM] -- String name of the symbol SYMBOL-NUM.
    First, the terminals, then, starting at \a yyntokens_, nonterminals. */
 const char*
-const yy::]b4_parser_class_name[::yyname_[] =
+const yy::]b4_parser_class_name[::yytname_[] =
 {
   ]b4_tname[
 };
@@ -1009,12 +1000,12 @@ yy::]b4_parser_class_name[::yyreduce_print_ (int yyrule)
 {
   unsigned int yylno = yyrline_[yyrule];
   /* Print the symbols being reduced, and their result.  */
-    *yycdebug_ << "Reducing stack by rule " << yyn_ - 1
-               << " (line " << yylno << "), ";
+  *yycdebug_ << "Reducing stack by rule " << yyn_ - 1
+             << " (line " << yylno << "), ";
   for (]b4_int_type_for([b4_prhs])[ i = yyprhs_[yyn_];
        0 <= yyrhs_[i]; ++i)
-    *yycdebug_ << yyname_[yyrhs_[i]] << ' ';
-  *yycdebug_ << "-> " << yyname_[yyr1_[yyn_]] << std::endl;
+    *yycdebug_ << yytname_[yyrhs_[i]] << ' ';
+  *yycdebug_ << "-> " << yytname_[yyr1_[yyn_]] << std::endl;
 }
 #endif // YYDEBUG
 
@@ -1049,7 +1040,7 @@ const yy::]b4_parser_class_name[::token_number_type yy::]b4_parser_class_name[::
 ]b4_epilogue
 dnl
 @output stack.hh
-b4_copyright([stack handling for Bison C++ parsers], [2002, 2003, 2004])[
+b4_copyright([stack handling for Bison C++ parsers], [2002, 2003, 2004, 2005])[
 
 #ifndef BISON_STACK_HH
 # define BISON_STACK_HH
@@ -1148,7 +1139,7 @@ namespace yy
 #endif // not BISON_STACK_HH]
 dnl
 @output position.hh
-b4_copyright([Position class for Bison C++ parsers], [2002, 2003, 2004])[
+b4_copyright([Position class for Bison C++ parsers], [2002, 2003, 2004, 2005])[
 
 /**
  ** \file position.hh
@@ -1261,7 +1252,7 @@ namespace yy
 }
 #endif // not BISON_POSITION_HH]
 @output location.hh
-b4_copyright([Location class for Bison C++ parsers], [2002, 2003, 2004])[
+b4_copyright([Location class for Bison C++ parsers], [2002, 2003, 2004, 2005])[
 
 /**
  ** \file location.hh
