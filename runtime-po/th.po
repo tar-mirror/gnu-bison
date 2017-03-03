@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison-runtime 2.4.2\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-08-03 09:44+0200\n"
+"POT-Creation-Date: 2012-10-22 14:37+0200\n"
 "PO-Revision-Date: 2010-03-23 01:30+0700\n"
 "Last-Translator: Seksan Poltree <seksan.poltree@gmail.com>\n"
 "Language-Team: Thai <translation-team-th@lists.sourceforge.net>\n"
@@ -20,46 +20,46 @@ msgstr ""
 "X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: data/glr.c:882 data/yacc.c:739
+#: data/glr.c:883 data/yacc.c:763
 msgid "syntax error: cannot back up"
 msgstr "ข้อผิดพลาดวากยสัมพันธ์: ไม่สามารถสำรองข้อมูล"
 
-#: data/glr.c:1756
+#: data/glr.c:1757
 msgid "syntax is ambiguous"
 msgstr "วากยสัมพันธ์คลุมเครือไม่ชัดเจน"
 
-#: data/glr.c:2041 data/glr.c:2119 data/glr.c:2157 data/glr.c:2426
-#: data/lalr1.cc:912 data/lalr1.cc:932 data/yacc.c:1336 data/yacc.c:1851
-#: data/yacc.c:1857
+#: data/glr.c:2042 data/glr.c:2120 data/glr.c:2158 data/glr.c:2427
+#: data/lalr1.cc:912 data/lalr1.cc:932 data/yacc.c:1360 data/yacc.c:1877
+#: data/yacc.c:1883
 msgid "syntax error"
 msgstr "ข้อผิดพลาดวากยสัมพันธ์"
 
-#: data/glr.c:2120 data/lalr1.cc:913 data/yacc.c:1337
+#: data/glr.c:2121 data/lalr1.cc:913 data/yacc.c:1361
 #, c-format
 msgid "syntax error, unexpected %s"
 msgstr "ข้อผิดพลาดวากยสัมพันธ์, ไม่คาดว่าจะเป็น %s"
 
-#: data/glr.c:2121 data/lalr1.cc:914 data/yacc.c:1338
+#: data/glr.c:2122 data/lalr1.cc:914 data/yacc.c:1362
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s"
 msgstr "ข้อผิดพลาดวากยสัมพันธ์, ไม่คาดว่าจะเป็น %s, คาดว่าจะเป็น %s"
 
-#: data/glr.c:2122 data/lalr1.cc:915 data/yacc.c:1339
+#: data/glr.c:2123 data/lalr1.cc:915 data/yacc.c:1363
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s"
 msgstr "ข้อผิดพลาดวากยสัมพันธ์, ไม่คาดว่าจะเป็น %s, คาดว่าจะเป็น %s หรือ %s"
 
-#: data/glr.c:2123 data/lalr1.cc:916 data/yacc.c:1340
+#: data/glr.c:2124 data/lalr1.cc:916 data/yacc.c:1364
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s or %s"
 msgstr "ข้อผิดพลาดวากยสัมพันธ์, ไม่คาดว่าจะเป็น %s, คาดว่าจะเป็น %s หรือ %s หรือ %s"
 
-#: data/glr.c:2124 data/lalr1.cc:917 data/yacc.c:1341
+#: data/glr.c:2125 data/lalr1.cc:917 data/yacc.c:1365
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s or %s or %s"
 msgstr "ข้อผิดพลาดวากยสัมพันธ์, ไม่คาดว่าจะเป็น %s, คาดว่าจะเป็น %s หรือ %s หรือ %s หรือ %s"
 
-#: data/glr.c:2486 data/yacc.c:1418 data/yacc.c:1420 data/yacc.c:1613
-#: data/yacc.c:2006
+#: data/glr.c:2487 data/yacc.c:1442 data/yacc.c:1444 data/yacc.c:1637
+#: data/yacc.c:2034
 msgid "memory exhausted"
 msgstr "หน่วยความจำถูกใช้จนหมดสิ้น"

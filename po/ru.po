@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.4.1\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-08-03 09:44+0200\n"
+"POT-Creation-Date: 2012-10-22 14:37+0200\n"
 "PO-Revision-Date: 2009-02-04 19:44+0200\n"
 "Last-Translator: Pavel Maryanov <acid_jack@ukr.net>\n"
 "Language-Team: Russian <gnu@mx.ru>\n"
@@ -264,30 +264,50 @@ msgstr ""
 "  «all»          включить всю эту информацию\n"
 "  «none»         отключить отчет\n"
 
-#: src/getargs.c:364
-#, c-format
-msgid ""
-"\n"
-"Report bugs to <%s>.\n"
+#: src/getargs.c:365
+#, fuzzy, c-format
+msgid "Report bugs to <%s>.\n"
 msgstr ""
 "\n"
 "Ошибки сообщайте по адресу <%s>.\n"
 
+#: src/getargs.c:366
+#, c-format
+msgid "%s home page: <%s>.\n"
+msgstr ""
+
+#: src/getargs.c:367
+msgid "General help using GNU software: <http://www.gnu.org/gethelp/>.\n"
+msgstr ""
+
+#. TRANSLATORS: Replace LANG_CODE in this URL with your language
+#. code <http://translationproject.org/team/LANG_CODE.html> to
+#. form one of the URLs at http://translationproject.org/team/.
+#. Otherwise, replace the entire URL with your translation team's
+#. email address.
 #: src/getargs.c:380
+msgid "Report translation bugs to <http://translationproject.org/team/>.\n"
+msgstr ""
+
+#: src/getargs.c:382
+msgid "For complete documentation, run: info bison.\n"
+msgstr ""
+
+#: src/getargs.c:398
 #, c-format
 msgid "bison (GNU Bison) %s"
 msgstr "bison (GNU Bison) %s"
 
-#: src/getargs.c:382
+#: src/getargs.c:400
 msgid "Written by Robert Corbett and Richard Stallman.\n"
 msgstr "Авторы: Роберт Корбет и Ричард Столмен.\n"
 
-#: src/getargs.c:386
+#: src/getargs.c:404
 #, c-format
 msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
 msgstr "Copyright (C) %d Free Software Foundation, Inc.\n"
 
-#: src/getargs.c:389
+#: src/getargs.c:407
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
@@ -298,26 +318,26 @@ msgstr ""
 "ПРИГОДНОСТИ\n"
 "ДЛЯ ОПРЕДЕЛЕННОЙ ЦЕЛИ.\n"
 
-#: src/getargs.c:410
+#: src/getargs.c:428
 #, c-format
 msgid "multiple skeleton declarations are invalid"
 msgstr "множественные описания скелета не применимо"
 
-#: src/getargs.c:428
+#: src/getargs.c:446
 #, fuzzy, c-format
 msgid "%s: invalid language"
 msgstr "недопустимый язык «%s»"
 
-#: src/getargs.c:431
+#: src/getargs.c:449
 msgid "multiple language declarations are invalid"
 msgstr "множественные описания языка не применимо"
 
-#: src/getargs.c:693
+#: src/getargs.c:711
 #, fuzzy, c-format
 msgid "%s: missing operand"
 msgstr "после «%s» пропущен операнд"
 
-#: src/getargs.c:695
+#: src/getargs.c:713
 #, fuzzy, c-format
 msgid "extra operand %s"
 msgstr "лишний операнд «%s»"
@@ -384,7 +404,7 @@ msgstr ""
 msgid "accepted value: %s"
 msgstr "неиспользуемая переменная: $%d"
 
-#: src/parse-gram.y:746
+#: src/parse-gram.y:747
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "в описании параметра отсутствует идентификатор"
@@ -1139,11 +1159,12 @@ msgid "%s subprocess got fatal signal %d"
 msgstr ""
 
 #, fuzzy
+#~ msgid "error"
+#~ msgstr "ошибка ввода-вывода"
+
+#, fuzzy
 #~ msgid "stray '@'"
 #~ msgstr "некорректный «@»"
-
-#~ msgid "I/O error"
-#~ msgstr "ошибка ввода-вывода"
 
 #~ msgid ""
 #~ "Generate LALR(1) and GLR parsers.\n"

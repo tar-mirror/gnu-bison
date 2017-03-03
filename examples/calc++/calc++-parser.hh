@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 2.6.29-ca7b.  */
+/* A Bison parser, made by GNU Bison 2.6.2.33-cc5a9.  */
 
 /* Skeleton interface for Bison LALR(1) parsers in C++
    
@@ -37,21 +37,19 @@
 
 /* C++ LALR(1) parser skeleton written by Akim Demaille.  */
 
-#ifndef YY_EXAMPLES_CALC_CALC_PARSER_HH
-# define YY_EXAMPLES_CALC_CALC_PARSER_HH
+#ifndef YY_YY_EXAMPLES_CALC_CALC_PARSER_HH_INCLUDED
+# define YY_YY_EXAMPLES_CALC_CALC_PARSER_HH_INCLUDED
 
 /* "%code requires" blocks.  */
-
 /* Line 36 of lalr1.cc  */
-#line 9642 "../../doc/bison.texi"
+#line 9669 "../../doc/bison.texi"
 
 # include <string>
 class calcxx_driver;
 
 
-
 /* Line 36 of lalr1.cc  */
-#line 55 "../../../../examples/calc++/calc++-parser.hh"
+#line 53 "../../../../examples/calc++/calc++-parser.hh"
 
 
 #include <string>
@@ -66,9 +64,8 @@ class calcxx_driver;
 
 
 namespace yy {
-
 /* Line 36 of lalr1.cc  */
-#line 72 "../../../../examples/calc++/calc++-parser.hh"
+#line 69 "../../../../examples/calc++/calc++-parser.hh"
 
   /// A Bison parser.
   class calcxx_parser
@@ -78,17 +75,15 @@ namespace yy {
 #ifndef YYSTYPE
     union semantic_type
     {
-
 /* Line 36 of lalr1.cc  */
-#line 9695 "../../doc/bison.texi"
+#line 9722 "../../doc/bison.texi"
 
   int          ival;
   std::string *sval;
 
 
-
 /* Line 36 of lalr1.cc  */
-#line 92 "../../../../examples/calc++/calc++-parser.hh"
+#line 87 "../../../../examples/calc++/calc++-parser.hh"
     };
 #else
     typedef YYSTYPE semantic_type;
@@ -279,10 +274,9 @@ namespace yy {
   };
 
 } // yy
-
 /* Line 36 of lalr1.cc  */
-#line 285 "../../../../examples/calc++/calc++-parser.hh"
+#line 279 "../../../../examples/calc++/calc++-parser.hh"
 
 
 
-#endif /* !YY_EXAMPLES_CALC_CALC_PARSER_HH  */
+#endif /* !YY_YY_EXAMPLES_CALC_CALC_PARSER_HH_INCLUDED  */

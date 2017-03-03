@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 2.6.29-ca7b.  */
+/* A Bison parser, made by GNU Bison 2.6.2.33-cc5a9.  */
 
 /* Positions for Bison parsers in C++
    
@@ -35,11 +35,11 @@
  ** Define the yy::position class.
  */
 
-#ifndef YY_EXAMPLES_CALC_POSITION_HH
-# define YY_EXAMPLES_CALC_POSITION_HH
+#ifndef YY_YY_EXAMPLES_CALC_POSITION_HH_INCLUDED
+# define YY_YY_EXAMPLES_CALC_POSITION_HH_INCLUDED
 
 # include <algorithm> // std::max
-# include <iosfwd>
+# include <iostream>
 # include <string>
 
 # ifndef YY_NULL
@@ -52,9 +52,8 @@
 
 
 namespace yy {
-
 /* Line 38 of location.cc  */
-#line 58 "../../../../examples/calc++/position.hh"
+#line 57 "../../../../examples/calc++/position.hh"
   /// Abstract a position.
   class position
   {
@@ -167,7 +166,6 @@ namespace yy {
 
 
 } // yy
-
 /* Line 149 of location.cc  */
-#line 173 "../../../../examples/calc++/position.hh"
-#endif /* !YY_EXAMPLES_CALC_POSITION_HH  */
+#line 171 "../../../../examples/calc++/position.hh"
+#endif /* !YY_YY_EXAMPLES_CALC_POSITION_HH_INCLUDED  */

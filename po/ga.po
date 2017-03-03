@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.5\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-08-03 09:44+0200\n"
+"POT-Creation-Date: 2012-10-22 14:37+0200\n"
 "PO-Revision-Date: 2012-05-22 18:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -236,6 +236,7 @@ msgstr ""
 "\n"
 
 #: src/getargs.c:340
+#, fuzzy
 msgid ""
 "Warning categories include:\n"
 "  `midrule-values'  unset or unused midrule values\n"
@@ -279,30 +280,50 @@ msgstr ""
 "  `all'          cuir gach sonra thuas san áireamh\n"
 "  `none'         díchumasaigh an tuairisc\n"
 
-#: src/getargs.c:364
-#, c-format
-msgid ""
-"\n"
-"Report bugs to <%s>.\n"
+#: src/getargs.c:365
+#, fuzzy, c-format
+msgid "Report bugs to <%s>.\n"
 msgstr ""
 "\n"
 "Seol tuairiscí ar fhabhtanna chuig <%s>.\n"
 
+#: src/getargs.c:366
+#, c-format
+msgid "%s home page: <%s>.\n"
+msgstr ""
+
+#: src/getargs.c:367
+msgid "General help using GNU software: <http://www.gnu.org/gethelp/>.\n"
+msgstr ""
+
+#. TRANSLATORS: Replace LANG_CODE in this URL with your language
+#. code <http://translationproject.org/team/LANG_CODE.html> to
+#. form one of the URLs at http://translationproject.org/team/.
+#. Otherwise, replace the entire URL with your translation team's
+#. email address.
 #: src/getargs.c:380
+msgid "Report translation bugs to <http://translationproject.org/team/>.\n"
+msgstr ""
+
+#: src/getargs.c:382
+msgid "For complete documentation, run: info bison.\n"
+msgstr ""
+
+#: src/getargs.c:398
 #, c-format
 msgid "bison (GNU Bison) %s"
 msgstr "bison (GNU Bison) %s"
 
-#: src/getargs.c:382
+#: src/getargs.c:400
 msgid "Written by Robert Corbett and Richard Stallman.\n"
 msgstr "Le Robert Corbett agus Richard Stallman.\n"
 
-#: src/getargs.c:386
+#: src/getargs.c:404
 #, c-format
 msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
 msgstr "Copyright © %d Free Software Foundation, Inc.\n"
 
-#: src/getargs.c:389
+#: src/getargs.c:407
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
@@ -311,26 +332,26 @@ msgstr ""
 "coinníollacha cóipeála.  Níl baránta ar bith ann; go fiú níl baránta ann\n"
 "d'INDÍOLTACHT nó FEILIÚNACHT D'FHEIDHM AR LEITH.\n"
 
-#: src/getargs.c:410
+#: src/getargs.c:428
 #, c-format
 msgid "multiple skeleton declarations are invalid"
 msgstr "ní cheadaítear níos mó ná creatlach amháin"
 
-#: src/getargs.c:428
+#: src/getargs.c:446
 #, fuzzy, c-format
 msgid "%s: invalid language"
 msgstr "teanga neamhbhailí `%s'"
 
-#: src/getargs.c:431
+#: src/getargs.c:449
 msgid "multiple language declarations are invalid"
 msgstr "ní cheadaítear níos mó ná teanga amháin"
 
-#: src/getargs.c:693
+#: src/getargs.c:711
 #, fuzzy, c-format
 msgid "%s: missing operand"
 msgstr "oibreann ar iarraidh i ndiaidh `%s'"
 
-#: src/getargs.c:695
+#: src/getargs.c:713
 #, fuzzy, c-format
 msgid "extra operand %s"
 msgstr "oibreann breise `%s'"
@@ -401,7 +422,7 @@ msgstr "luach neamhbhailí ar athróg %%define `%s': `%s'"
 msgid "accepted value: %s"
 msgstr "luach glactha: `%s'"
 
-#: src/parse-gram.y:746
+#: src/parse-gram.y:747
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "aitheantóir ar iarraidh i bhfógra paraiméadair"
@@ -1167,11 +1188,12 @@ msgid "%s subprocess got fatal signal %d"
 msgstr "fuair fophróiseas %s comhartha marfach %d"
 
 #, fuzzy
+#~ msgid "error"
+#~ msgstr "Earráid I/A"
+
+#, fuzzy
 #~ msgid "stray '@'"
 #~ msgstr "`@' ar strae"
-
-#~ msgid "I/O error"
-#~ msgstr "Earráid I/A"
 
 #~ msgid ""
 #~ "undefined %%define variable `%s' passed to muscle_percent_define_get_loc"

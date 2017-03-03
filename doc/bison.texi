@@ -5076,7 +5076,7 @@ default location or at the location specified by @var{qualifier}.
 
 @deffn {Directive} %debug
 In the parser implementation file, define the macro @code{YYDEBUG} (or
-@code{@var{prefix}DEBUG} with @samp{%define api.prefix @var{prefix}}), see
+@code{@var{prefix}DEBUG} with @samp{%define api.prefix @var{prefix}}, see
 @ref{Multiple Parsers, ,Multiple Parsers in the Same Program}) to 1 if it is
 not already defined, so that the debugging facilities are compiled.
 @xref{Tracing, ,Tracing Your Parser}.
@@ -5124,6 +5124,23 @@ Values, ,Semantic Values of Tokens}.
 If you have declared @code{%code requires} or @code{%code provides}, the output
 header also contains their code.
 @xref{%code Summary}.
+
+@cindex Header guard
+The generated header is protected against multiple inclusions with a C
+preprocessor guard: @samp{YY_@var{PREFIX}_@var{FILE}_INCLUDED}, where
+@var{PREFIX} and @var{FILE} are the prefix (@pxref{Multiple Parsers,
+,Multiple Parsers in the Same Program}) and generated file name turned
+uppercase, with each series of non alphanumerical characters converted to a
+single underscore.
+
+For instance with @samp{%define api.prefix "calc"} and @samp{%defines
+"lib/parse.h"}, the header will be guarded as follows.
+@example
+#ifndef YY_CALC_LIB_PARSE_H_INCLUDED
+# define YY_CALC_LIB_PARSE_H_INCLUDED
+...
+#endif /* ! YY_CALC_LIB_PARSE_H_INCLUDED */
+@end example
 @end deffn
 
 @deffn {Directive} %defines @var{defines-file}
@@ -8502,8 +8519,8 @@ Prologue}).
 If the @code{%define} variable @code{api.prefix} is used (@pxref{Multiple
 Parsers, ,Multiple Parsers in the Same Program}), for instance @samp{%define
 api.prefix x}, then if @code{CDEBUG} is defined, its value controls the
-tracing feature (enabled iff nonzero); otherwise tracing is enabled iff
-@code{YYDEBUG} is nonzero.
+tracing feature (enabled if and only if nonzero); otherwise tracing is
+enabled if and only if @code{YYDEBUG} is nonzero.
 
 @item the option @option{-t} (POSIX Yacc compliant)
 @itemx the option @option{--debug} (Bison extension)
@@ -9055,13 +9072,23 @@ separated list of @var{things} among:
 Description of the grammar, conflicts (resolved and unresolved), and
 parser's automaton.
 
+@item itemset
+Implies @code{state} and augments the description of the automaton with
+the full set of items for each state, instead of its core only.
+
 @item lookahead
 Implies @code{state} and augments the description of the automaton with
 each rule's lookahead set.
 
-@item itemset
-Implies @code{state} and augments the description of the automaton with
-the full set of items for each state, instead of its core only.
+@item solved
+Implies @code{state}.  Explain how conflicts were solved thanks to
+precedence and associativity directives.
+
+@item all
+Enable all the items.
+
+@item none
+Do not generate the report.
 @end table
 
 @item --report-file=@var{file}
@@ -11761,10 +11788,11 @@ London, Department of Computer Science, TR-00-12 (December 2000).
 @c LocalWords: toString deftypeivar deftypeivarx deftypeop YYParser strictfp
 @c LocalWords: superclasses boolean getErrorVerbose setErrorVerbose deftypecv
 @c LocalWords: getDebugStream setDebugStream getDebugLevel setDebugLevel url
-@c LocalWords: bisonVersion deftypecvx bisonSkeleton getStartPos getEndPos
+@c LocalWords: bisonVersion deftypecvx bisonSkeleton getStartPos getEndPos uint
 @c LocalWords: getLVal defvar deftypefn deftypefnx gotos msgfmt Corbett LALR's
-@c LocalWords: subdirectory Solaris nonassociativity perror schemas Malloy
-@c LocalWords: Scannerless ispell american
+@c LocalWords: subdirectory Solaris nonassociativity perror schemas Malloy ints
+@c LocalWords: Scannerless ispell american ChangeLog smallexample CSTYPE CLTYPE
+@c LocalWords: clval CDEBUG cdebug deftypeopx yyterminate
 
 @c Local Variables:
 @c ispell-dictionary: "american"

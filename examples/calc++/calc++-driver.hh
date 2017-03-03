@@ -1,10 +1,10 @@
-#line 9485 "../../doc/bison.texi"
+#line 9512 "../../doc/bison.texi"
 #ifndef CALCXX_DRIVER_HH
 # define CALCXX_DRIVER_HH
 # include <string>
 # include <map>
 # include "calc++-parser.hh"
-#line 9501 "../../doc/bison.texi"
+#line 9528 "../../doc/bison.texi"
 // Tell Flex the lexer's prototype ...
 # define YY_DECL                                        \
   yy::calcxx_parser::token_type                         \
@@ -13,7 +13,7 @@
          calcxx_driver& driver)
 // ... and declare it for the parser's sake.
 YY_DECL;
-#line 9517 "../../doc/bison.texi"
+#line 9544 "../../doc/bison.texi"
 // Conducting the whole scanning and parsing of Calc++.
 class calcxx_driver
 {
@@ -24,17 +24,17 @@ public:
   std::map<std::string, int> variables;
 
   int result;
-#line 9535 "../../doc/bison.texi"
+#line 9562 "../../doc/bison.texi"
   // Handling the scanner.
   void scan_begin ();
   void scan_end ();
   bool trace_scanning;
-#line 9546 "../../doc/bison.texi"
+#line 9573 "../../doc/bison.texi"
   // Run the parser.  Return 0 on success.
   int parse (const std::string& f);
   std::string file;
   bool trace_parsing;
-#line 9560 "../../doc/bison.texi"
+#line 9587 "../../doc/bison.texi"
   // Error handling.
   void error (const yy::location& l, const std::string& m);
   void error (const std::string& m);

@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the bison package.
 # Göran Uddeborg <goeran@uddeborg.se>, 2001-2006, 2008, 2010, 2011, 2012.
 #
-# $Revision: 1.80 $
+# $Revision: 1.82 $
 msgid ""
 msgstr ""
-"Project-Id-Version: bison 2.5.90\n"
+"Project-Id-Version: bison 2.6.2\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-08-03 09:44+0200\n"
-"PO-Revision-Date: 2012-07-05 22:29+0200\n"
+"POT-Creation-Date: 2012-10-22 14:37+0200\n"
+"PO-Revision-Date: 2012-08-06 22:46+0200\n"
 "Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -228,6 +228,7 @@ msgstr ""
 "\n"
 
 #: src/getargs.c:340
+#, fuzzy
 msgid ""
 "Warning categories include:\n"
 "  `midrule-values'  unset or unused midrule values\n"
@@ -271,31 +272,51 @@ msgstr ""
 "  \"all\"          inkludera all ovanstående information\n"
 "  \"none\"         avaktivera rapporten\n"
 
-#: src/getargs.c:364
-#, c-format
-msgid ""
-"\n"
-"Report bugs to <%s>.\n"
+#: src/getargs.c:365
+#, fuzzy, c-format
+msgid "Report bugs to <%s>.\n"
 msgstr ""
 "\n"
 "Rapportera fel till <%s>.\n"
 "Rapportera synpunkter på översättningen till <tp-sv@listor.tp-sv.se>.\n"
 
+#: src/getargs.c:366
+#, c-format
+msgid "%s home page: <%s>.\n"
+msgstr ""
+
+#: src/getargs.c:367
+msgid "General help using GNU software: <http://www.gnu.org/gethelp/>.\n"
+msgstr ""
+
+#. TRANSLATORS: Replace LANG_CODE in this URL with your language
+#. code <http://translationproject.org/team/LANG_CODE.html> to
+#. form one of the URLs at http://translationproject.org/team/.
+#. Otherwise, replace the entire URL with your translation team's
+#. email address.
 #: src/getargs.c:380
+msgid "Report translation bugs to <http://translationproject.org/team/>.\n"
+msgstr ""
+
+#: src/getargs.c:382
+msgid "For complete documentation, run: info bison.\n"
+msgstr ""
+
+#: src/getargs.c:398
 #, c-format
 msgid "bison (GNU Bison) %s"
 msgstr "bison (GNU Bison) %s"
 
-#: src/getargs.c:382
+#: src/getargs.c:400
 msgid "Written by Robert Corbett and Richard Stallman.\n"
 msgstr "Skriven av Robert Corbett och Richard Stallman.\n"
 
-#: src/getargs.c:386
+#: src/getargs.c:404
 #, c-format
 msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
 msgstr "Copyright © %d Free Software Foundation, Inc.\n"
 
-#: src/getargs.c:389
+#: src/getargs.c:407
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
@@ -304,26 +325,26 @@ msgstr ""
 "finns INGEN garanti, inte ens för SÄLJBARHET eller LÄMPLIGHET FÖR ETT\n"
 "SPECIELLT ÄNDAMÅL.\n"
 
-#: src/getargs.c:410
+#: src/getargs.c:428
 #, c-format
 msgid "multiple skeleton declarations are invalid"
 msgstr "flera skelettdeklarationer är inte tillåtet"
 
-#: src/getargs.c:428
+#: src/getargs.c:446
 #, c-format
 msgid "%s: invalid language"
 msgstr "%s: ogiltigt språk"
 
-#: src/getargs.c:431
+#: src/getargs.c:449
 msgid "multiple language declarations are invalid"
 msgstr "flera språkdeklarationer är inte tillåtet"
 
-#: src/getargs.c:693
+#: src/getargs.c:711
 #, c-format
 msgid "%s: missing operand"
 msgstr "%s: saknad operand"
 
-#: src/getargs.c:695
+#: src/getargs.c:713
 #, c-format
 msgid "extra operand %s"
 msgstr "extra operand %s"
@@ -394,7 +415,7 @@ msgstr "ogiltigt värde för %%define-variabeln %s: %s"
 msgid "accepted value: %s"
 msgstr "accepterat värde: %s"
 
-#: src/parse-gram.y:746
+#: src/parse-gram.y:747
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "identiferare saknas i parameterdeklaration"
@@ -575,9 +596,9 @@ msgid "start symbol %s does not derive any sentence"
 msgstr "startsymbolen %s genererar inga meningar"
 
 #: src/scan-code.l:188
-#, fuzzy, c-format
+#, c-format
 msgid "stray '%s'"
-msgstr "vilsekommet \"$\""
+msgstr "vilsekommet \"%s\""
 
 #: src/scan-code.l:227
 #, c-format
@@ -1147,5 +1168,6 @@ msgstr "%s-underprocess"
 msgid "%s subprocess got fatal signal %d"
 msgstr "%s-underprocess fick en ödesdiger signal %d"
 
-#~ msgid "stray '@'"
-#~ msgstr "vilsekommet \"@\""
+#, fuzzy
+#~ msgid "error"
+#~ msgstr "ödesdigert fel"

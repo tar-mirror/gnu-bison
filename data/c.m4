@@ -30,19 +30,21 @@ m4_define([b4_tocpp],
 # ------------------
 # A valid C macro name to use as a CPP header guard for FILE.
 m4_define([b4_cpp_guard],
-[b4_tocpp(m4_defn([b4_prefix])/[$1])])
+[[YY_]b4_tocpp(m4_defn([b4_prefix])/[$1])[_INCLUDED]])
 
 
 # b4_cpp_guard_open(FILE)
 # b4_cpp_guard_close(FILE)
 # ------------------------
-# Open/close CPP inclusion guards for FILE.
+# If FILE does not expand to nothing, open/close CPP inclusion guards for FILE.
 m4_define([b4_cpp_guard_open],
+[m4_ifval(m4_quote($1),
 [#ifndef b4_cpp_guard([$1])
-# define b4_cpp_guard([$1])])
+# define b4_cpp_guard([$1])])])
 
 m4_define([b4_cpp_guard_close],
-[#endif b4_comment([!b4_cpp_guard([$1])])])
+[m4_ifval(m4_quote($1),
+[#endif b4_comment([!b4_cpp_guard([$1])])])])
 
 
 ## ---------------- ##
@@ -182,7 +184,7 @@ m4_define([b4_table_value_equals],
 [m4_if(m4_eval($3 < m4_indir([b4_]$1[_min])
                || m4_indir([b4_]$1[_max]) < $3), [1],
        [[YYID (0)]],
-       [[((]$2[) == (]$3[))]])])
+       [(!!(($2) == ($3)))])])
 
 
 ## ---------##

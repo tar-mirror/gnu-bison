@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU bison 2.0\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-08-03 09:44+0200\n"
+"POT-Creation-Date: 2012-10-22 14:37+0200\n"
 "PO-Revision-Date: 2005-03-20 22:03+0100\n"
 "Last-Translator: Çaðrý Çöltekin <cagri@xs4all.nl>\n"
 "Language-Team: Turkish <gnu-tr-u12a@lists.sourceforge.net>\n"
@@ -236,30 +236,50 @@ msgstr ""
 "  `all'          yukarýdaki bilgilerini tümünü gosterir\n"
 "  `none'         raporu üretme\n"
 
-#: src/getargs.c:364
+#: src/getargs.c:365
 #, fuzzy, c-format
-msgid ""
-"\n"
-"Report bugs to <%s>.\n"
+msgid "Report bugs to <%s>.\n"
 msgstr ""
 "Hatalarý <bug-bison@gnu.org>'a,\n"
 "çeviri hatalarýný <gnu-tr-u12a@lists.sourceforge.net>'e bildirin.\n"
 
+#: src/getargs.c:366
+#, c-format
+msgid "%s home page: <%s>.\n"
+msgstr ""
+
+#: src/getargs.c:367
+msgid "General help using GNU software: <http://www.gnu.org/gethelp/>.\n"
+msgstr ""
+
+#. TRANSLATORS: Replace LANG_CODE in this URL with your language
+#. code <http://translationproject.org/team/LANG_CODE.html> to
+#. form one of the URLs at http://translationproject.org/team/.
+#. Otherwise, replace the entire URL with your translation team's
+#. email address.
 #: src/getargs.c:380
+msgid "Report translation bugs to <http://translationproject.org/team/>.\n"
+msgstr ""
+
+#: src/getargs.c:382
+msgid "For complete documentation, run: info bison.\n"
+msgstr ""
+
+#: src/getargs.c:398
 #, c-format
 msgid "bison (GNU Bison) %s"
 msgstr "bison (GNU Bison) %s"
 
-#: src/getargs.c:382
+#: src/getargs.c:400
 msgid "Written by Robert Corbett and Richard Stallman.\n"
 msgstr "Yazanlar: Robert Corbett ve Richard Stallman.\n"
 
-#: src/getargs.c:386
+#: src/getargs.c:404
 #, c-format
 msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
 msgstr "Telif Hakký (C) %d Free Software Foundation, Inc.\n"
 
-#: src/getargs.c:389
+#: src/getargs.c:407
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
@@ -268,27 +288,27 @@ msgstr ""
 "Hiçbir garantisi yoktur; hatta SATILABÝLÝRLÝÐÝ veya ÞAHSÝ KULLANIMINIZA\n"
 "UYGUNLUÐU için bile garanti verilmez.\n"
 
-#: src/getargs.c:410
+#: src/getargs.c:428
 #, fuzzy, c-format
 msgid "multiple skeleton declarations are invalid"
 msgstr "çoklu %s bildirimleri"
 
-#: src/getargs.c:428
+#: src/getargs.c:446
 #, fuzzy, c-format
 msgid "%s: invalid language"
 msgstr "geçersiz karakter: %s"
 
-#: src/getargs.c:431
+#: src/getargs.c:449
 #, fuzzy
 msgid "multiple language declarations are invalid"
 msgstr "çoklu %s bildirimleri"
 
-#: src/getargs.c:693
+#: src/getargs.c:711
 #, fuzzy, c-format
 msgid "%s: missing operand"
 msgstr "`%s'ten sonra eksik iþleç"
 
-#: src/getargs.c:695
+#: src/getargs.c:713
 #, fuzzy, c-format
 msgid "extra operand %s"
 msgstr "fazla iþleç: `%s'"
@@ -356,7 +376,7 @@ msgstr ""
 msgid "accepted value: %s"
 msgstr "geçersiz deðer: %s"
 
-#: src/parse-gram.y:746
+#: src/parse-gram.y:747
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "parametre bildiriminde eksik tanýtýcý"
@@ -1112,7 +1132,8 @@ msgstr ""
 msgid "%s subprocess got fatal signal %d"
 msgstr ""
 
-#~ msgid "I/O error"
+#, fuzzy
+#~ msgid "error"
 #~ msgstr "G/Ç hatasý"
 
 #, fuzzy

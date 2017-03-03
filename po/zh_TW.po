@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.3a\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-08-03 09:44+0200\n"
+"POT-Creation-Date: 2012-10-22 14:37+0200\n"
 "PO-Revision-Date: 2007-07-23 22:36+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -234,28 +234,48 @@ msgstr ""
 "  `all'          包含所有以上的資訊\n"
 "  `none'         停用報告\n"
 
-#: src/getargs.c:364
+#: src/getargs.c:365
 #, fuzzy, c-format
-msgid ""
-"\n"
-"Report bugs to <%s>.\n"
+msgid "Report bugs to <%s>.\n"
 msgstr "回報錯誤請寄 <"
 
+#: src/getargs.c:366
+#, c-format
+msgid "%s home page: <%s>.\n"
+msgstr ""
+
+#: src/getargs.c:367
+msgid "General help using GNU software: <http://www.gnu.org/gethelp/>.\n"
+msgstr ""
+
+#. TRANSLATORS: Replace LANG_CODE in this URL with your language
+#. code <http://translationproject.org/team/LANG_CODE.html> to
+#. form one of the URLs at http://translationproject.org/team/.
+#. Otherwise, replace the entire URL with your translation team's
+#. email address.
 #: src/getargs.c:380
+msgid "Report translation bugs to <http://translationproject.org/team/>.\n"
+msgstr ""
+
+#: src/getargs.c:382
+msgid "For complete documentation, run: info bison.\n"
+msgstr ""
+
+#: src/getargs.c:398
 #, c-format
 msgid "bison (GNU Bison) %s"
 msgstr "bison (GNU Bison) %s"
 
-#: src/getargs.c:382
+#: src/getargs.c:400
 msgid "Written by Robert Corbett and Richard Stallman.\n"
 msgstr "由 Robert Corbett 與 Richard Stallman 編寫。\n"
 
-#: src/getargs.c:386
+#: src/getargs.c:404
 #, c-format
 msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
 msgstr "版權所有 (C) %d 自由軟體基金會。\n"
 
-#: src/getargs.c:389
+#: src/getargs.c:407
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
@@ -263,27 +283,27 @@ msgstr ""
 "這是自由軟體；請參考原始碼的版權聲明。本軟體不提供任何保證，甚至不會包括\n"
 "可售性或適用於任何特定目的的保證。\n"
 
-#: src/getargs.c:410
+#: src/getargs.c:428
 #, fuzzy, c-format
 msgid "multiple skeleton declarations are invalid"
 msgstr "多重 %s 宣告"
 
-#: src/getargs.c:428
+#: src/getargs.c:446
 #, fuzzy, c-format
 msgid "%s: invalid language"
 msgstr "無效的字元：%s"
 
-#: src/getargs.c:431
+#: src/getargs.c:449
 #, fuzzy
 msgid "multiple language declarations are invalid"
 msgstr "多重 %s 宣告"
 
-#: src/getargs.c:693
+#: src/getargs.c:711
 #, fuzzy, c-format
 msgid "%s: missing operand"
 msgstr "「%s」之後缺少了運算元"
 
-#: src/getargs.c:695
+#: src/getargs.c:713
 #, fuzzy, c-format
 msgid "extra operand %s"
 msgstr "多餘的運算元「%s」"
@@ -351,7 +371,7 @@ msgstr ""
 msgid "accepted value: %s"
 msgstr "未使用的值：$%d"
 
-#: src/parse-gram.y:746
+#: src/parse-gram.y:747
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "在參數宣告中缺少識別項"
@@ -1105,7 +1125,8 @@ msgstr ""
 msgid "%s subprocess got fatal signal %d"
 msgstr ""
 
-#~ msgid "I/O error"
+#, fuzzy
+#~ msgid "error"
 #~ msgstr "輸入/輸出錯誤"
 
 #~ msgid "GNU bison generates LALR(1) and GLR parsers.\n"

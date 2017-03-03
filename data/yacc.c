@@ -170,6 +170,28 @@ m4_define([b4_declare_scanner_communication_variables], [[
 /* The lookahead symbol.  */
 int yychar;
 
+]b4_pure_if([[
+#if defined __GNUC__ && (4 < __GNUC__ + (6 <= __GNUC_MINOR__))
+/* Suppress an incorrect diagnostic about yylval being uninitialized.  */
+# define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN \
+    _Pragma ("GCC diagnostic push") \
+    _Pragma ("GCC diagnostic ignored \"-Wmaybe-uninitialized\"")
+# define YY_IGNORE_MAYBE_UNINITIALIZED_END \
+    _Pragma ("GCC diagnostic pop")
+#else
+/* Default value used for initialization, for pacifying older GCCs
+   or non-GCC compilers.  */
+static YYSTYPE yyval_default;
+# define YYLVAL_INITIALIZE() (yylval = yyval_default)
+#endif]])[
+#ifndef YYLVAL_INITIALIZE
+# define YYLVAL_INITIALIZE()
+#endif
+#ifndef YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
+# define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
+# define YY_IGNORE_MAYBE_UNINITIALIZED_END
+#endif
+
 /* The semantic value of the lookahead symbol.  */
 YYSTYPE yylval;]b4_locations_if([[
 
@@ -345,9 +367,11 @@ m4_if(b4_api_prefix, [yy], [],
 # define YYERROR_VERBOSE ]b4_error_verbose_flag[
 #endif
 
-/* In a future release of Bison, this section will be replaced
+]m4_ifval(m4_quote(b4_spec_defines_file),
+[[/* In a future release of Bison, this section will be replaced
    by #include "@basename(]b4_spec_defines_file[@)".  */
-]b4_shared_declarations[
+]])dnl
+b4_shared_declarations[
 
 /* Copy the second part of user declarations.  */
 ]b4_user_post_prologue
@@ -402,24 +426,24 @@ typedef short int yytype_int16;
 # if defined YYENABLE_NLS && YYENABLE_NLS
 #  if ENABLE_NLS
 #   include <libintl.h> /* INFRINGES ON USER NAME SPACE */
-#   define YY_(msgid) dgettext ("bison-runtime", msgid)
+#   define YY_(Msgid) dgettext ("bison-runtime", Msgid)
 #  endif
 # endif
 # ifndef YY_
-#  define YY_(msgid) msgid
+#  define YY_(Msgid) Msgid
 # endif
 #endif
 
 /* Suppress unused-variable warnings by "using" E.  */
 #if ! defined lint || defined __GNUC__
-# define YYUSE(e) ((void) (e))
+# define YYUSE(E) ((void) (E))
 #else
-# define YYUSE(e) /* empty */
+# define YYUSE(E) /* empty */
 #endif
 
 /* Identity function, used to suppress warnings about constant conditions.  */
 #ifndef lint
-# define YYID(n) (n)
+# define YYID(N) (N)
 #else
 ]b4_c_function_def([YYID], [static int], [[int yyi], [yyi]])[
 {
@@ -678,11 +702,11 @@ static const ]b4_int_type_for([b4_table])[ yytable[] =
   ]b4_table[
 };
 
-#define yypact_value_is_default(yystate) \
-  ]b4_table_value_equals([[pact]], [[yystate]], [b4_pact_ninf])[
+#define yypact_value_is_default(Yystate) \
+  ]b4_table_value_equals([[pact]], [[Yystate]], [b4_pact_ninf])[
 
-#define yytable_value_is_error(yytable_value) \
-  ]b4_table_value_equals([[table]], [[yytable_value]], [b4_table_ninf])[
+#define yytable_value_is_error(Yytable_value) \
+  ]b4_table_value_equals([[table]], [[Yytable_value]], [b4_table_ninf])[
 
 static const ]b4_int_type_for([b4_check])[ yycheck[] =
 {
@@ -1513,7 +1537,7 @@ b4_c_function_def([[yyparse]], [[int]], b4_parse_param)[
   int yyn;
   int yyresult;
   /* Lookahead token as an internal (translated) token number.  */
-  int yytoken;
+  int yytoken = 0;
   /* The variables used to return semantic value and location from the
      action routines.  */
   YYSTYPE yyval;]b4_locations_if([[
@@ -1538,7 +1562,6 @@ b4_c_function_def([[yyparse]], [[int]], b4_parse_param)[
       goto yyread_pushed_token;
     }]])[
 
-  yytoken = 0;
   yyss = yyssa;
   yyvs = yyvsa;]b4_locations_if([[
   yyls = yylsa;]])[
@@ -1562,8 +1585,9 @@ b4_c_function_def([[yyparse]], [[int]], b4_parse_param)[
      The wasted elements are never initialized.  */
   yyssp = yyss;
   yyvsp = yyvs;]b4_locations_if([[
-  yylsp = yyls;
+  yylsp = yyls;]])[
 
+  YYLVAL_INITIALIZE ();]b4_locations_if([[
 #if defined ]b4_api_PREFIX[LTYPE_IS_TRIVIAL && ]b4_api_PREFIX[LTYPE_IS_TRIVIAL
   /* Initialize the default location before parsing starts.  */
   yylloc.first_line   = yylloc.last_line   = ]b4_location_initial_line[;
@@ -1749,7 +1773,9 @@ yyread_pushed_token:]])[
   YY_LAC_DISCARD ("shift");]])[
 
   yystate = yyn;
+  YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
   *++yyvsp = yylval;
+  YY_IGNORE_MAYBE_UNINITIALIZED_END
 ]b4_locations_if([  *++yylsp = yylloc;])[
   goto yynewstate;
 
@@ -1969,7 +1995,9 @@ yyerrlab1:
      current lookahead token, the shift below will for sure.  */
   YY_LAC_DISCARD ("error recovery");]])[
 
+  YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
   *++yyvsp = yylval;
+  YY_IGNORE_MAYBE_UNINITIALIZED_END
 ]b4_locations_if([[
   yyerror_range[2] = yylloc;
   /* Using YYLLOC is tempting, but would change the location of

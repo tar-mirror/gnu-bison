@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.5\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-08-03 09:44+0200\n"
+"POT-Creation-Date: 2012-10-22 14:37+0200\n"
 "PO-Revision-Date: 2011-07-25 11:00中国标准时间\n"
 "Last-Translator: Ji ZhengYu <zhengyuji@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
@@ -205,55 +205,75 @@ msgid ""
 "  `none'         disable the report\n"
 msgstr ""
 
-#: src/getargs.c:364
-#, c-format
-msgid ""
-"\n"
-"Report bugs to <%s>.\n"
+#: src/getargs.c:365
+#, fuzzy, c-format
+msgid "Report bugs to <%s>.\n"
 msgstr ""
 "\n"
 "向 <%s> 报告问题。\n"
 
+#: src/getargs.c:366
+#, c-format
+msgid "%s home page: <%s>.\n"
+msgstr ""
+
+#: src/getargs.c:367
+msgid "General help using GNU software: <http://www.gnu.org/gethelp/>.\n"
+msgstr ""
+
+#. TRANSLATORS: Replace LANG_CODE in this URL with your language
+#. code <http://translationproject.org/team/LANG_CODE.html> to
+#. form one of the URLs at http://translationproject.org/team/.
+#. Otherwise, replace the entire URL with your translation team's
+#. email address.
 #: src/getargs.c:380
+msgid "Report translation bugs to <http://translationproject.org/team/>.\n"
+msgstr ""
+
+#: src/getargs.c:382
+msgid "For complete documentation, run: info bison.\n"
+msgstr ""
+
+#: src/getargs.c:398
 #, c-format
 msgid "bison (GNU Bison) %s"
 msgstr "bison (GNU Bison) %s"
 
-#: src/getargs.c:382
+#: src/getargs.c:400
 msgid "Written by Robert Corbett and Richard Stallman.\n"
 msgstr "由 Robert Corbett 和 Richard Stallman 编写。\n"
 
-#: src/getargs.c:386
+#: src/getargs.c:404
 #, c-format
 msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
 msgstr "版权所有 (C) %d Free Software Foundation, Inc.\n"
 
-#: src/getargs.c:389
+#: src/getargs.c:407
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
 msgstr ""
 
-#: src/getargs.c:410
+#: src/getargs.c:428
 #, c-format
 msgid "multiple skeleton declarations are invalid"
 msgstr ""
 
-#: src/getargs.c:428
+#: src/getargs.c:446
 #, fuzzy, c-format
 msgid "%s: invalid language"
 msgstr "无效的语言“%s”"
 
-#: src/getargs.c:431
+#: src/getargs.c:449
 msgid "multiple language declarations are invalid"
 msgstr "多语言声明是无效的"
 
-#: src/getargs.c:693
+#: src/getargs.c:711
 #, fuzzy, c-format
 msgid "%s: missing operand"
 msgstr "“%s”后缺少操作符"
 
-#: src/getargs.c:695
+#: src/getargs.c:713
 #, fuzzy, c-format
 msgid "extra operand %s"
 msgstr "额外的操作符“%s”"
@@ -324,7 +344,7 @@ msgstr "%%define 变量 %s 的值无效：“%s”"
 msgid "accepted value: %s"
 msgstr "接受的值：“%s”"
 
-#: src/parse-gram.y:746
+#: src/parse-gram.y:747
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "参数声明中缺少识别符"
@@ -1071,7 +1091,8 @@ msgstr "%s 子进程"
 msgid "%s subprocess got fatal signal %d"
 msgstr "%s 子进程收到致命信号 %d"
 
-#~ msgid "I/O error"
+#, fuzzy
+#~ msgid "error"
 #~ msgstr "I/O 错误"
 
 #~ msgid ""

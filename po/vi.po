@@ -6,10 +6,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bison-2.5.90\n"
+"Project-Id-Version: bison-2.6.2\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-08-03 09:44+0200\n"
-"PO-Revision-Date: 2012-07-06 07:12+0700\n"
+"POT-Creation-Date: 2012-10-22 14:37+0200\n"
+"PO-Revision-Date: 2012-08-07 07:33+0700\n"
 "Last-Translator: Trần Ngọc Quân <vnwildman@gmail.com>\n"
 "Language-Team: Vietnamese <translation-team-vi@lists.sourceforge.net>\n"
 "Language: vi\n"
@@ -233,6 +233,7 @@ msgstr ""
 "\n"
 
 #: src/getargs.c:340
+#, fuzzy
 msgid ""
 "Warning categories include:\n"
 "  `midrule-values'  unset or unused midrule values\n"
@@ -276,30 +277,50 @@ msgstr ""
 " • all          \tbao gồm tất cả thông tin trên\n"
 " • none\t\ttắt báo cáo\n"
 
-#: src/getargs.c:364
-#, c-format
-msgid ""
-"\n"
-"Report bugs to <%s>.\n"
+#: src/getargs.c:365
+#, fuzzy, c-format
+msgid "Report bugs to <%s>.\n"
 msgstr ""
 "\n"
 "Hãy thông báo lỗi cho <%s>.\n"
 
+#: src/getargs.c:366
+#, c-format
+msgid "%s home page: <%s>.\n"
+msgstr ""
+
+#: src/getargs.c:367
+msgid "General help using GNU software: <http://www.gnu.org/gethelp/>.\n"
+msgstr ""
+
+#. TRANSLATORS: Replace LANG_CODE in this URL with your language
+#. code <http://translationproject.org/team/LANG_CODE.html> to
+#. form one of the URLs at http://translationproject.org/team/.
+#. Otherwise, replace the entire URL with your translation team's
+#. email address.
 #: src/getargs.c:380
+msgid "Report translation bugs to <http://translationproject.org/team/>.\n"
+msgstr ""
+
+#: src/getargs.c:382
+msgid "For complete documentation, run: info bison.\n"
+msgstr ""
+
+#: src/getargs.c:398
 #, c-format
 msgid "bison (GNU Bison) %s"
 msgstr "bison (GNU Bison) %s"
 
-#: src/getargs.c:382
+#: src/getargs.c:400
 msgid "Written by Robert Corbett and Richard Stallman.\n"
 msgstr "Tác giả: Robert Corbett và Richard Stallman.\n"
 
-#: src/getargs.c:386
+#: src/getargs.c:404
 #, c-format
 msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
 msgstr "Bản quyền © %d Tổ chức Phần mềm Tự do.\n"
 
-#: src/getargs.c:389
+#: src/getargs.c:407
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
@@ -308,26 +329,26 @@ msgstr ""
 "KHÔNG CÓ BẢO HÀNH GÌ CẢ, THẬM CHÍ KHÔNG CÓ BẢO ĐẢM ĐƯỢC NGỤ Ý\n"
 "KHẢ NĂNG BÁN HAY KHẢ NĂNG LÀM ĐƯỢC VIỆC DỨT KHOÁT.\n"
 
-#: src/getargs.c:410
+#: src/getargs.c:428
 #, c-format
 msgid "multiple skeleton declarations are invalid"
 msgstr "chỉ cho phép một khai báo khung sườn"
 
-#: src/getargs.c:428
+#: src/getargs.c:446
 #, c-format
 msgid "%s: invalid language"
 msgstr "%s: ngôn ngữ không hợp lệ"
 
-#: src/getargs.c:431
+#: src/getargs.c:449
 msgid "multiple language declarations are invalid"
 msgstr "chỉ cho phép một khai báo ngôn ngữ"
 
-#: src/getargs.c:693
+#: src/getargs.c:711
 #, c-format
 msgid "%s: missing operand"
 msgstr "%s: thiếu toán hạng"
 
-#: src/getargs.c:695
+#: src/getargs.c:713
 #, c-format
 msgid "extra operand %s"
 msgstr "toán hạng bổ xung %s"
@@ -398,7 +419,7 @@ msgstr "gặp giá trị sai đối với biến %%define %s: %s"
 msgid "accepted value: %s"
 msgstr "giá trị không được chấp nhận: %s"
 
-#: src/parse-gram.y:746
+#: src/parse-gram.y:747
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "thiếu dấu nhận diện trong khai báo tham số"
@@ -577,9 +598,9 @@ msgid "start symbol %s does not derive any sentence"
 msgstr "ký hiệu bắt đầu %s không nhận được câu"
 
 #: src/scan-code.l:188
-#, fuzzy, c-format
+#, c-format
 msgid "stray '%s'"
-msgstr "lạc '$'"
+msgstr "ký hiệu '%s' lạc"
 
 #: src/scan-code.l:227
 #, c-format
@@ -1146,11 +1167,12 @@ msgstr "tiến trình con %s"
 msgid "%s subprocess got fatal signal %d"
 msgstr "tiến trình con %s đã nhận tín hiệu nghiệm trọng %d"
 
+#, fuzzy
+#~ msgid "error"
+#~ msgstr "Lỗi V/R"
+
 #~ msgid "stray '@'"
 #~ msgstr "lạc '@'"
-
-#~ msgid "I/O error"
-#~ msgstr "Lỗi V/R"
 
 #~ msgid ""
 #~ "undefined %%define variable `%s' passed to muscle_percent_define_get_loc"

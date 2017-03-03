@@ -36,7 +36,7 @@
 #define FLEX_SCANNER
 #define YY_FLEX_MAJOR_VERSION 2
 #define YY_FLEX_MINOR_VERSION 5
-#define YY_FLEX_SUBMINOR_VERSION 36
+#define YY_FLEX_SUBMINOR_VERSION 37
 #if YY_FLEX_SUBMINOR_VERSION > 0
 #define FLEX_BETA
 #endif
@@ -944,7 +944,7 @@ char *gram_text;
 #include "reader.h"
 #include "uniqstr.h"
 
-#include <ctype.h>
+#include <c-ctype.h>
 #include <mbswidth.h>
 #include <quote.h>
 
@@ -2173,7 +2173,7 @@ YY_RULE_SETUP
 {
     char const *p = gram_text + 1;
     /* Quote only if escaping won't make the character visible.  */
-    if (isspace ((unsigned char) *p) && isprint ((unsigned char) *p))
+    if (c_isspace ((unsigned char) *p) && c_isprint ((unsigned char) *p))
       p = quote (p);
     else
       p = quotearg_style_mem (escape_quoting_style, p, 1);

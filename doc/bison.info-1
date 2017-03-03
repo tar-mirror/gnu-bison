@@ -1,8 +1,8 @@
 This is bison.info, produced by makeinfo version 4.13 from
 /Users/akim/src/gnu/bison-2.5/doc/bison.texi.
 
-This manual (27 July 2012) is for GNU Bison (version 2.6.1-dirty), the
-GNU parser generator.
+This manual (18 October 2012) is for GNU Bison (version 2.6.2.68-80e0),
+the GNU parser generator.
 
    Copyright (C) 1988-1993, 1995, 1998-2012 Free Software Foundation,
 Inc.
@@ -30,8 +30,8 @@ File: bison.info,  Node: Top,  Next: Introduction,  Up: (dir)
 Bison
 *****
 
-This manual (27 July 2012) is for GNU Bison (version 2.6.1-dirty), the
-GNU parser generator.
+This manual (18 October 2012) is for GNU Bison (version 2.6.2.68-80e0),
+the GNU parser generator.
 
    Copyright (C) 1988-1993, 1995, 1998-2012 Free Software Foundation,
 Inc.
@@ -257,6 +257,7 @@ Handling Context Dependencies
 Debugging Your Parser
 
 * Understanding::     Understanding the structure of your parser.
+* Graphviz::          Getting a visual representation of the parser.
 * Tracing::           Tracing the execution of your parser.
 
 Tracing Your Parser
@@ -290,6 +291,7 @@ C++ Location Values
 
 * C++ position::                One point in the source file
 * C++ location::                Two points in the source file
+* User Defined Location Type::  Required interface for locations
 
 A Complete C++ Example
 
@@ -362,7 +364,7 @@ Bison has grown more robust and evolved many other new features thanks
 to the hard work of a long list of volunteers.  For details, see the
 `THANKS' and `ChangeLog' files included in the Bison distribution.
 
-   This edition corresponds to version 2.6.1-dirty of Bison.
+   This edition corresponds to version 2.6.2.68-80e0 of Bison.
 
 
 File: bison.info,  Node: Conditions,  Next: Copying,  Prev: Introduction,  Up: Top
@@ -4761,6 +4763,10 @@ discards the mid-rule symbol.
    * the current lookahead and the entire stack (except the current
      right-hand side symbols) when the parser returns immediately, and
 
+   * the current lookahead and the entire stack (including the current
+     right-hand side symbols) when the C++ parser (`lalr1.cc') catches
+     an exception in `parse',
+
    * the start symbol, when the parser succeeds.
 
    The parser can "return immediately" because of an explicit call to
@@ -5077,10 +5083,10 @@ directives:
 
  -- Directive: %debug
      In the parser implementation file, define the macro `YYDEBUG' (or
-     `PREFIXDEBUG' with `%define api.prefix PREFIX'), see *note
-     Multiple Parsers in the Same Program: Multiple Parsers.) to 1 if
-     it is not already defined, so that the debugging facilities are
-     compiled.  *Note Tracing Your Parser: Tracing.
+     `PREFIXDEBUG' with `%define api.prefix PREFIX', see *note Multiple
+     Parsers in the Same Program: Multiple Parsers.) to 1 if it is not
+     already defined, so that the debugging facilities are compiled.
+     *Note Tracing Your Parser: Tracing.
 
  -- Directive: %define VARIABLE
  -- Directive: %define VARIABLE VALUE
@@ -5121,6 +5127,20 @@ directives:
 
      If you have declared `%code requires' or `%code provides', the
      output header also contains their code.  *Note %code Summary::.
+
+     The generated header is protected against multiple inclusions with
+     a C preprocessor guard: `YY_PREFIX_FILE_INCLUDED', where PREFIX
+     and FILE are the prefix (*note Multiple Parsers in the Same
+     Program: Multiple Parsers.) and generated file name turned
+     uppercase, with each series of non alphanumerical characters
+     converted to a single underscore.
+
+     For instance with `%define api.prefix "calc"' and `%defines
+     "lib/parse.h"', the header will be guarded as follows.
+          #ifndef YY_CALC_LIB_PARSE_H_INCLUDED
+          # define YY_CALC_LIB_PARSE_H_INCLUDED
+          ...
+          #endif /* ! YY_CALC_LIB_PARSE_H_INCLUDED */
 
  -- Directive: %defines DEFINES-FILE
      Same as above, but save in the file DEFINES-FILE.
@@ -5270,11 +5290,24 @@ skeleton (*note %language: Decl Summary, *note %skeleton: Decl
 Summary.).  Unaccepted VARIABLEs produce an error.  Some of the
 accepted VARIABLEs are:
 
+   * `api.location.type' 
+
+        * Language(s): C++, Java
+
+        * Purpose: Define the location type.  *Note User Defined
+          Location Type::.
+
+        * Accepted Values: String
+
+        * Default Value: none
+
+        * History: introduced in Bison 2.7
+
    * `api.prefix' 
 
         * Language(s): All
 
-        * Purpose: Rename exported symbols *Note Multiple Parsers in
+        * Purpose: Rename exported symbols.  *Note Multiple Parsers in
           the Same Program: Multiple Parsers.
 
         * Accepted Values: String
@@ -7225,79 +7258,4 @@ understand the relationship between the parser and the grammar.
      actions were useless and then disable those actions, it could
      identify such states as unreachable and then remove those states.
      However, Bison does not compute which goto actions are useless.
-
-
-File: bison.info,  Node: Generalized LR Parsing,  Next: Memory Management,  Prev: Tuning LR,  Up: Algorithm
-
-5.9 Generalized LR (GLR) Parsing
-================================
-
-Bison produces _deterministic_ parsers that choose uniquely when to
-reduce and which reduction to apply based on a summary of the preceding
-input and on one extra token of lookahead.  As a result, normal Bison
-handles a proper subset of the family of context-free languages.
-Ambiguous grammars, since they have strings with more than one possible
-sequence of reductions cannot have deterministic parsers in this sense.
-The same is true of languages that require more than one symbol of
-lookahead, since the parser lacks the information necessary to make a
-decision at the point it must be made in a shift-reduce parser.
-Finally, as previously mentioned (*note Mysterious Conflicts::), there
-are languages where Bison's default choice of how to summarize the
-input seen so far loses necessary information.
-
-   When you use the `%glr-parser' declaration in your grammar file,
-Bison generates a parser that uses a different algorithm, called
-Generalized LR (or GLR).  A Bison GLR parser uses the same basic
-algorithm for parsing as an ordinary Bison parser, but behaves
-differently in cases where there is a shift-reduce conflict that has not
-been resolved by precedence rules (*note Precedence::) or a
-reduce-reduce conflict.  When a GLR parser encounters such a situation,
-it effectively _splits_ into a several parsers, one for each possible
-shift or reduction.  These parsers then proceed as usual, consuming
-tokens in lock-step.  Some of the stacks may encounter other conflicts
-and split further, with the result that instead of a sequence of states,
-a Bison GLR parsing stack is what is in effect a tree of states.
-
-   In effect, each stack represents a guess as to what the proper parse
-is.  Additional input may indicate that a guess was wrong, in which case
-the appropriate stack silently disappears.  Otherwise, the semantics
-actions generated in each stack are saved, rather than being executed
-immediately.  When a stack disappears, its saved semantic actions never
-get executed.  When a reduction causes two stacks to become equivalent,
-their sets of semantic actions are both saved with the state that
-results from the reduction.  We say that two stacks are equivalent when
-they both represent the same sequence of states, and each pair of
-corresponding states represents a grammar symbol that produces the same
-segment of the input token stream.
-
-   Whenever the parser makes a transition from having multiple states
-to having one, it reverts to the normal deterministic parsing
-algorithm, after resolving and executing the saved-up actions.  At this
-transition, some of the states on the stack will have semantic values
-that are sets (actually multisets) of possible actions.  The parser
-tries to pick one of the actions by first finding one whose rule has
-the highest dynamic precedence, as set by the `%dprec' declaration.
-Otherwise, if the alternative actions are not ordered by precedence,
-but there the same merging function is declared for both rules by the
-`%merge' declaration, Bison resolves and evaluates both and then calls
-the merge function on the result.  Otherwise, it reports an ambiguity.
-
-   It is possible to use a data structure for the GLR parsing tree that
-permits the processing of any LR(1) grammar in linear time (in the size
-of the input), any unambiguous (not necessarily LR(1)) grammar in
-quadratic worst-case time, and any general (possibly ambiguous)
-context-free grammar in cubic worst-case time.  However, Bison currently
-uses a simpler data structure that requires time proportional to the
-length of the input times the maximum number of stacks required for any
-prefix of the input.  Thus, really ambiguous or nondeterministic
-grammars can require exponential time and space to process.  Such badly
-behaving examples, however, are not generally of practical interest.
-Usually, nondeterminism in a grammar is local--the parser is "in doubt"
-only for a few tokens at a time.  Therefore, the current data structure
-should generally be adequate.  On LR(1) portions of a grammar, in
-particular, it is only slightly slower than with the deterministic
-LR(1) Bison parser.
-
-   For a more detailed exposition of GLR parsers, *note Scott 2000:
-Bibliography.
 

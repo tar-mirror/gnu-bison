@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU bison 2.5.1\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-08-03 09:44+0200\n"
+"POT-Creation-Date: 2012-10-22 14:37+0200\n"
 "PO-Revision-Date: 2012-06-10 18:47+0900\n"
 "Last-Translator: Takeshi Hamasaki <hmatrjp@users.sourceforge.jp>\n"
 "Language-Team: Japanese <translation-team-ja@lists.sourceforge.net>\n"
@@ -215,32 +215,54 @@ msgid ""
 "  `none'         disable the report\n"
 msgstr ""
 
-#: src/getargs.c:364
-#, c-format
-msgid ""
-"\n"
-"Report bugs to <%s>.\n"
+#: src/getargs.c:365
+#, fuzzy, c-format
+msgid "Report bugs to <%s>.\n"
 msgstr ""
 "\n"
 "バグを発見したら <%s> 宛に報告して下さい。\n"
 "翻訳に関するバグは<translation-team-ja@lists.sourceforge.net>に報告してくださ"
 "い。\n"
 
+#: src/getargs.c:366
+#, fuzzy, c-format
+msgid "%s home page: <%s>.\n"
+msgstr "%s のホームページ: <%s>\n"
+
+#: src/getargs.c:367
+#, fuzzy
+msgid "General help using GNU software: <http://www.gnu.org/gethelp/>.\n"
+msgstr ""
+"GNU ソフトウェアを使用する際の一般的なヘルプ: <http://www.gnu.org/gethelp/>\n"
+
+#. TRANSLATORS: Replace LANG_CODE in this URL with your language
+#. code <http://translationproject.org/team/LANG_CODE.html> to
+#. form one of the URLs at http://translationproject.org/team/.
+#. Otherwise, replace the entire URL with your translation team's
+#. email address.
 #: src/getargs.c:380
+msgid "Report translation bugs to <http://translationproject.org/team/>.\n"
+msgstr ""
+
+#: src/getargs.c:382
+msgid "For complete documentation, run: info bison.\n"
+msgstr ""
+
+#: src/getargs.c:398
 #, c-format
 msgid "bison (GNU Bison) %s"
 msgstr "bison (GNU Bison) %s"
 
-#: src/getargs.c:382
+#: src/getargs.c:400
 msgid "Written by Robert Corbett and Richard Stallman.\n"
 msgstr "Robert Corbett と Richard Stallman によって書かれました\n"
 
-#: src/getargs.c:386
+#: src/getargs.c:404
 #, c-format
 msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
 msgstr "Copyright (C) %d Free Software Foundation, Inc.\n"
 
-#: src/getargs.c:389
+#: src/getargs.c:407
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
@@ -251,27 +273,27 @@ msgstr ""
 "これはフリーソフトウェアです -- 複製についての条件はソースを見ましょう。\n"
 "一切の保証はありません -- 商業性や目的適合性についての保証すらありません。\n"
 
-#: src/getargs.c:410
+#: src/getargs.c:428
 #, fuzzy, c-format
 msgid "multiple skeleton declarations are invalid"
 msgstr "%s が複数個宣言されました"
 
-#: src/getargs.c:428
+#: src/getargs.c:446
 #, c-format
 msgid "%s: invalid language"
 msgstr "%s: 無効な言語"
 
-#: src/getargs.c:431
+#: src/getargs.c:449
 #, fuzzy
 msgid "multiple language declarations are invalid"
 msgstr "%s が複数個宣言されました"
 
-#: src/getargs.c:693
+#: src/getargs.c:711
 #, c-format
 msgid "%s: missing operand"
 msgstr "%s: オペランドがありません"
 
-#: src/getargs.c:695
+#: src/getargs.c:713
 #, c-format
 msgid "extra operand %s"
 msgstr "余分なオペランド %s"
@@ -338,7 +360,7 @@ msgstr "アイコン型として不適切な値 '%s'"
 msgid "accepted value: %s"
 msgstr "無効な値\n"
 
-#: src/parse-gram.y:746
+#: src/parse-gram.y:747
 #, fuzzy, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "マクロ仮引数リストに ')' がありません"
@@ -1107,7 +1129,7 @@ msgid "%s subprocess got fatal signal %d"
 msgstr "%s 子プロセスが致命的なシグナル %d を受信しました"
 
 #, fuzzy
-#~ msgid "I/O error"
+#~ msgid "error"
 #~ msgstr "エラー"
 
 #, fuzzy
@@ -1690,16 +1712,8 @@ msgstr "%s 子プロセスが致命的なシグナル %d を受信しました"
 #~ msgid "Report %s bugs to: %s\n"
 #~ msgstr "%s のバグは <%s> に報告してください。\n"
 
-#~ msgid "%s home page: <%s>\n"
-#~ msgstr "%s のホームページ: <%s>\n"
-
 #~ msgid "%s home page: <http://www.gnu.org/software/%s/>\n"
 #~ msgstr "%s のホームページ: <http://www.gnu.org/software/%s/>\n"
-
-#~ msgid "General help using GNU software: <http://www.gnu.org/gethelp/>\n"
-#~ msgstr ""
-#~ "GNU ソフトウェアを使用する際の一般的なヘルプ: <http://www.gnu.org/gethelp/"
-#~ ">\n"
 
 #~ msgid "stdin"
 #~ msgstr "標準入力"

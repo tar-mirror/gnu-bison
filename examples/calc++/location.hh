@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 2.6.29-ca7b.  */
+/* A Bison parser, made by GNU Bison 2.6.2.33-cc5a9.  */
 
 /* Locations for Bison parsers in C++
    
@@ -35,18 +35,15 @@
  ** Define the yy::location class.
  */
 
-#ifndef YY_EXAMPLES_CALC_LOCATION_HH
-# define YY_EXAMPLES_CALC_LOCATION_HH
+#ifndef YY_YY_EXAMPLES_CALC_LOCATION_HH_INCLUDED
+# define YY_YY_EXAMPLES_CALC_LOCATION_HH_INCLUDED
 
-# include <iostream>
-# include <string>
 # include "position.hh"
 
 
 namespace yy {
-
-/* Line 166 of location.cc  */
-#line 50 "../../../../examples/calc++/location.hh"
+/* Line 164 of location.cc  */
+#line 47 "../../../../examples/calc++/location.hh"
 
   /// Abstract a location.
   class location
@@ -176,8 +173,7 @@ namespace yy {
 
 
 } // yy
+/* Line 292 of location.cc  */
+#line 178 "../../../../examples/calc++/location.hh"
 
-/* Line 294 of location.cc  */
-#line 182 "../../../../examples/calc++/location.hh"
-
-#endif /* !YY_EXAMPLES_CALC_LOCATION_HH  */
+#endif /* !YY_YY_EXAMPLES_CALC_LOCATION_HH_INCLUDED  */

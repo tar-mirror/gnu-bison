@@ -1,50 +1,50 @@
-#line 9624 "../../doc/bison.texi"
+#line 9651 "../../doc/bison.texi"
 %skeleton "lalr1.cc" /* -*- C++ -*- */
-%require "2.6.29-ca7b"
+%require "2.6.2.33-cc5a9"
 %defines
 %define parser_class_name "calcxx_parser"
-#line 9642 "../../doc/bison.texi"
+#line 9669 "../../doc/bison.texi"
 %code requires {
 # include <string>
 class calcxx_driver;
 }
-#line 9655 "../../doc/bison.texi"
+#line 9682 "../../doc/bison.texi"
 // The parsing context.
 %parse-param { calcxx_driver& driver }
 %lex-param   { calcxx_driver& driver }
-#line 9668 "../../doc/bison.texi"
+#line 9695 "../../doc/bison.texi"
 %locations
 %initial-action
 {
   // Initialize the initial location.
   @$.begin.filename = @$.end.filename = &driver.file;
 };
-#line 9683 "../../doc/bison.texi"
+#line 9710 "../../doc/bison.texi"
 %debug
 %error-verbose
-#line 9693 "../../doc/bison.texi"
+#line 9720 "../../doc/bison.texi"
 // Symbols.
 %union
 {
   int          ival;
   std::string *sval;
 };
-#line 9708 "../../doc/bison.texi"
+#line 9735 "../../doc/bison.texi"
 %code {
 # include "calc++-driver.hh"
 }
-#line 9723 "../../doc/bison.texi"
+#line 9750 "../../doc/bison.texi"
 %token        END      0 "end of file"
 %token        ASSIGN     ":="
 %token <sval> IDENTIFIER "identifier"
 %token <ival> NUMBER     "number"
 %type  <ival> exp
-#line 9737 "../../doc/bison.texi"
+#line 9764 "../../doc/bison.texi"
 %printer    { yyoutput << *$$; } "identifier"
 %destructor { delete $$; } "identifier"
 
 %printer    { yyoutput << $$; } <ival>
-#line 9748 "../../doc/bison.texi"
+#line 9775 "../../doc/bison.texi"
 %%
 %start unit;
 unit: assignments exp  { driver.result = $2; };
@@ -66,7 +66,7 @@ exp: exp '+' exp   { $$ = $1 + $3; }
    | "identifier"  { $$ = driver.variables[*$1]; delete $1; }
    | "number"      { $$ = $1; };
 %%
-#line 9777 "../../doc/bison.texi"
+#line 9804 "../../doc/bison.texi"
 void
 yy::calcxx_parser::error (const yy::calcxx_parser::location_type& l,
                           const std::string& m)

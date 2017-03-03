@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bison 2.5.90\n"
+"Project-Id-Version: bison 2.6.2\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-08-03 09:44+0200\n"
-"PO-Revision-Date: 2012-07-05 21:46+0300\n"
+"POT-Creation-Date: 2012-10-22 14:37+0200\n"
+"PO-Revision-Date: 2012-08-06 21:00+0300\n"
 "Last-Translator: Toomas Soome <Toomas.Soome@microlink.ee>\n"
 "Language-Team: Estonian <linux-ee@lists.eenet.ee>\n"
 "Language: et\n"
@@ -223,6 +223,7 @@ msgstr ""
 "                             (XML skeem on eksperimentaalne)\n"
 
 #: src/getargs.c:340
+#, fuzzy
 msgid ""
 "Warning categories include:\n"
 "  `midrule-values'  unset or unused midrule values\n"
@@ -266,30 +267,50 @@ msgstr ""
 "  `all'          kogu ülaltoodud info\n"
 "  `none'         blokeeri raport\n"
 
-#: src/getargs.c:364
-#, c-format
-msgid ""
-"\n"
-"Report bugs to <%s>.\n"
+#: src/getargs.c:365
+#, fuzzy, c-format
+msgid "Report bugs to <%s>.\n"
 msgstr ""
 "\n"
 "Teatage palun vigadest aadressil <%s>.\n"
 
+#: src/getargs.c:366
+#, c-format
+msgid "%s home page: <%s>.\n"
+msgstr ""
+
+#: src/getargs.c:367
+msgid "General help using GNU software: <http://www.gnu.org/gethelp/>.\n"
+msgstr ""
+
+#. TRANSLATORS: Replace LANG_CODE in this URL with your language
+#. code <http://translationproject.org/team/LANG_CODE.html> to
+#. form one of the URLs at http://translationproject.org/team/.
+#. Otherwise, replace the entire URL with your translation team's
+#. email address.
 #: src/getargs.c:380
+msgid "Report translation bugs to <http://translationproject.org/team/>.\n"
+msgstr ""
+
+#: src/getargs.c:382
+msgid "For complete documentation, run: info bison.\n"
+msgstr ""
+
+#: src/getargs.c:398
 #, c-format
 msgid "bison (GNU Bison) %s"
 msgstr "bison (GNU Bison) %s"
 
-#: src/getargs.c:382
+#: src/getargs.c:400
 msgid "Written by Robert Corbett and Richard Stallman.\n"
 msgstr "Kirjutanud Robert Corbett ja Richard Stallman.\n"
 
-#: src/getargs.c:386
+#: src/getargs.c:404
 #, c-format
 msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
 msgstr "Autoriõigus © %d Free Software Foundation, Inc.\n"
 
-#: src/getargs.c:389
+#: src/getargs.c:407
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
@@ -297,26 +318,26 @@ msgstr ""
 "See on vaba tarkvara; kopeerimistingimused leiate lähtetekstidest. Garantii\n"
 "PUUDUB; ka müügiks või mingil eesmärgil kasutamiseks.\n"
 
-#: src/getargs.c:410
+#: src/getargs.c:428
 #, c-format
 msgid "multiple skeleton declarations are invalid"
 msgstr "korduvad skeleti deklaratsioonid ei ole lubatud"
 
-#: src/getargs.c:428
+#: src/getargs.c:446
 #, c-format
 msgid "%s: invalid language"
 msgstr "%s: vigane keel"
 
-#: src/getargs.c:431
+#: src/getargs.c:449
 msgid "multiple language declarations are invalid"
 msgstr "korduvad keele deklaratsioonid ei ole lubatud"
 
-#: src/getargs.c:693
+#: src/getargs.c:711
 #, c-format
 msgid "%s: missing operand"
 msgstr "%s: puudub operand"
 
-#: src/getargs.c:695
+#: src/getargs.c:713
 #, c-format
 msgid "extra operand %s"
 msgstr "liigne operand %s"
@@ -387,7 +408,7 @@ msgstr "vigane väärtus %%define muutujale %s: %s"
 msgid "accepted value: %s"
 msgstr "lubatud väärtus: %s"
 
-#: src/parse-gram.y:746
+#: src/parse-gram.y:747
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "parameetri deklaratsioonis puudub identifikaator"
@@ -568,9 +589,9 @@ msgid "start symbol %s does not derive any sentence"
 msgstr "stardisümbolist %s ei tuletata ühtegi lauset"
 
 #: src/scan-code.l:188
-#, fuzzy, c-format
+#, c-format
 msgid "stray '%s'"
-msgstr "liigne '$'"
+msgstr "liigne '%s'"
 
 #: src/scan-code.l:227
 #, c-format
@@ -1136,5 +1157,6 @@ msgstr "%s alamprotsess"
 msgid "%s subprocess got fatal signal %d"
 msgstr "%s alamprotsess sai fataalse signaali %d"
 
-#~ msgid "stray '@'"
-#~ msgstr "liigne '@'"
+#, fuzzy
+#~ msgid "error"
+#~ msgstr "fataalne viga"

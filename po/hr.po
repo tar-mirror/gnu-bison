@@ -6,10 +6,10 @@
 # Tomislav Krznar <tomislav.krznar@gmail.com>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: bison 2.5.90\n"
+"Project-Id-Version: bison 2.6.2\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-08-03 09:44+0200\n"
-"PO-Revision-Date: 2012-07-10 17:28+0200\n"
+"POT-Creation-Date: 2012-10-22 14:37+0200\n"
+"PO-Revision-Date: 2012-08-13 00:03+0200\n"
 "Last-Translator: Tomislav Krznar <tomislav.krznar@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -227,6 +227,7 @@ msgstr ""
 "\n"
 
 #: src/getargs.c:340
+#, fuzzy
 msgid ""
 "Warning categories include:\n"
 "  `midrule-values'  unset or unused midrule values\n"
@@ -270,30 +271,50 @@ msgstr ""
 "  „all”          uključi sve gore navedene informacije\n"
 "  „none”         onemogući izvještaj\n"
 
-#: src/getargs.c:364
-#, c-format
-msgid ""
-"\n"
-"Report bugs to <%s>.\n"
+#: src/getargs.c:365
+#, fuzzy, c-format
+msgid "Report bugs to <%s>.\n"
 msgstr ""
 "\n"
 "Prijavite greške na <%s>.\n"
 
+#: src/getargs.c:366
+#, c-format
+msgid "%s home page: <%s>.\n"
+msgstr ""
+
+#: src/getargs.c:367
+msgid "General help using GNU software: <http://www.gnu.org/gethelp/>.\n"
+msgstr ""
+
+#. TRANSLATORS: Replace LANG_CODE in this URL with your language
+#. code <http://translationproject.org/team/LANG_CODE.html> to
+#. form one of the URLs at http://translationproject.org/team/.
+#. Otherwise, replace the entire URL with your translation team's
+#. email address.
 #: src/getargs.c:380
+msgid "Report translation bugs to <http://translationproject.org/team/>.\n"
+msgstr ""
+
+#: src/getargs.c:382
+msgid "For complete documentation, run: info bison.\n"
+msgstr ""
+
+#: src/getargs.c:398
 #, c-format
 msgid "bison (GNU Bison) %s"
 msgstr "bison (GNU Bison) %s"
 
-#: src/getargs.c:382
+#: src/getargs.c:400
 msgid "Written by Robert Corbett and Richard Stallman.\n"
 msgstr "Napisali Robert Corbett i Richard Stallman.\n"
 
-#: src/getargs.c:386
+#: src/getargs.c:404
 #, c-format
 msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
 msgstr "Copyright (C) %d Free Software Foundation, Inc.\n"
 
-#: src/getargs.c:389
+#: src/getargs.c:407
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
@@ -301,26 +322,26 @@ msgstr ""
 "Ovo je slobodan softver; pogledajte kod za upute o kopiranju.  NEMA\n"
 "jamstava; čak ni za TRGOVINSKU PRIKLADNOST ili ODGOVARANJE ODREĐENOJ SVRSI.\n"
 
-#: src/getargs.c:410
+#: src/getargs.c:428
 #, c-format
 msgid "multiple skeleton declarations are invalid"
 msgstr "višestruke deklaracije kostura nisu ispravne"
 
-#: src/getargs.c:428
+#: src/getargs.c:446
 #, c-format
 msgid "%s: invalid language"
 msgstr "%s: neispravan jezik"
 
-#: src/getargs.c:431
+#: src/getargs.c:449
 msgid "multiple language declarations are invalid"
 msgstr "višestruke deklaracije jezika nisu ispravne"
 
-#: src/getargs.c:693
+#: src/getargs.c:711
 #, c-format
 msgid "%s: missing operand"
 msgstr "%s: nedostaje operand"
 
-#: src/getargs.c:695
+#: src/getargs.c:713
 #, c-format
 msgid "extra operand %s"
 msgstr "operand viška %s"
@@ -391,7 +412,7 @@ msgstr "neispravna vrijednost %%define varijable %s: %s"
 msgid "accepted value: %s"
 msgstr "prihvaćena vrijednost: %s"
 
-#: src/parse-gram.y:746
+#: src/parse-gram.y:747
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "nedostaje identifikator u deklaraciji paremetra"
@@ -574,9 +595,9 @@ msgid "start symbol %s does not derive any sentence"
 msgstr "početni simbol %s ne daje niti jednu rečenicu"
 
 #: src/scan-code.l:188
-#, fuzzy, c-format
+#, c-format
 msgid "stray '%s'"
-msgstr "stray „$”"
+msgstr "stray „%s”"
 
 #: src/scan-code.l:227
 #, c-format
@@ -1149,11 +1170,12 @@ msgstr "%s potproces"
 msgid "%s subprocess got fatal signal %d"
 msgstr "%s potproces je dobio fatalni signal %d"
 
+#, fuzzy
+#~ msgid "error"
+#~ msgstr "U/I greška"
+
 #~ msgid "stray '@'"
 #~ msgstr "stray „@”"
-
-#~ msgid "I/O error"
-#~ msgstr "U/I greška"
 
 #~ msgid ""
 #~ "undefined %%define variable `%s' passed to muscle_percent_define_get_loc"

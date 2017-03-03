@@ -1,3 +1,292 @@
+2012-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	version 2.6.3
+	* NEWS: Record release date.
+
+2012-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	gnulib: update
+
+2012-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: check %no-lines
+	* tests/synclines.at: here.
+
+2012-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	NEWS: warnings with clang
+	* NEWS: here.
+
+2012-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	warnings: avoid warnings from clang
+	Fix the following warning
+
+	  parse-gram.c:2078:14: error: equality comparison with extraneous parentheses
+	                        [-Werror,-Wparentheses-equality]
+	    if (((yyn) == (-91)))
+	         ~~~~~~^~~~~~~~
+	  parse-gram.c:2078:14: note: remove extraneous parentheses around the
+	                        comparison to silence this warning
+	    if (((yyn) == (-91)))
+	        ~      ^       ~
+	  parse-gram.c:2078:14: note: use '=' to turn this equality comparison into
+	                        an assignment
+	    if (((yyn) == (-91)))
+	               ^~
+	               =
+	  1 error generated.
+
+	and the following one:
+
+	  input.cc:740:1: error: function declared 'noreturn' should not return
+	                         [-Werror,-Winvalid-noreturn]
+	  static void yyMemoryExhausted (yyGLRStack* yystackp)
+	    __attribute__ ((__noreturn__));
+	  static void
+	  yyMemoryExhausted (yyGLRStack* yystackp)
+	  {
+	    YYLONGJMP (yystackp->yyexception_buffer, 2);
+	  }
+	  ^
+	  1 warning and 1 error generated.
+
+	This is Apple clang version 3.1 (tags/Apple/clang-318.0.61).
+
+	* data/c.m4 (b4_table_value_equals): Use (!!(A == B)) instead of (A == B)
+	to avoid this warning.
+	Any reasonable compiler should generate the same code.
+	* src/uniqstr.h (UNIQSTR_EQ): Likewise.
+	* data/glr.c (LONGJMP): abort after longjmp to pacify clang.
+
+2012-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: no longer disable -O compiler options
+	Tests are running without -O since
+	f377f69fec28013c79db4efe12bbb9d48987fb2c because some warnings (about
+	yylval not being initialized) show only when GCC is given -O2.  The
+	previous patch fixes the warnings. Run the test suite with compiler
+	options unmodified.
+
+	* tests/atlocal.in (O0CFLAGS, O0CXXFLAGS): Remove, use CFLAGS and
+	CXXFLAGS.
+
+2012-10-22  Paul Eggert  <eggert@cs.ucla.edu>
+
+	yacc.c: initialize yylval in pure-parser mode
+	See http://lists.gnu.org/archive/html/bison-patches/2012-08/msg00024.html
+	(spreading over September and October).
+
+	* data/yacc.c (YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN)
+	(YY_IGNORE_MAYBE_UNINITIALIZED_END, YYLVAL_INITIALIZE):
+	New macros.  Use them to suppress an unwanted GCC diagnostic.
+
+2012-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	skeletons: style changes
+	* data/yacc.c, data/glr.c: Prefer Title case for (CPP) macro arguments.
+
+2012-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: minor improvements
+	* tests/c++.at: Space changes.
+	Use AT_YYERROR_DEFINE.
+	* tests/local.at (AT_YYERROR_DEFINE): Issue errors on unknown languages.
+
+2012-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: use $PERL instead of perl
+	* tests/atlocal.in (PERL): New.
+	Sort.
+	* tests/calc.at, tests/input.at, tests/local.at, tests/regression.at,
+	* tests/skeletons.at, tests/synclines.at, tests/torture.at: here.
+
+2012-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	build: look for Perl in configure.
+	Bison uses "/usr/bin/perl" or "perl" in several places, and it does
+	not appear to be a problem.  But, at least to make it simpler to
+	change PERL on the make command line, check for perl in configure.
+
+	* configure.ac (PERL): New.
+	* doc/Doxyfile.in, doc/Makefile.am, tests/bison.in: Use it.
+
+2012-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: fix sed portability issues
+	Reported by Didier Godefroy,
+	<http://lists.gnu.org/archive/html/bug-bison/2012-10/msg00005.html>.
+
+	* tests/calc.at (AT_CHECK_SPACES): Use Perl.
+
+2012-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: diff -u is not portable
+	Reported by Didier Godefroy
+	<http://lists.gnu.org/archive/html/bug-bison/2012-10/msg00006.html>.
+
+	* tests/existing.at (AT_LALR1_DIFF_CHECK): Skip if diff -u does not
+	work.
+
+2012-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	maint: word changes
+	* README-hacking (Typical errors): Improve wording.
+
+2012-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	lalr1.cc: fix test suite portability
+	Reported by Rob Vermaas' Hydra build farm on x86_64-darwin 10.2.0 with
+	G++ 4.6.3.
+
+	* tests/headers.at (Several parsers): Include AT_DATA_SOURCE_PROLOGUE
+	in the files to compile.
+	* data/location.cc: Do not include twice string and iostream (once
+	by position.hh, and then by location.hh).
+	* README-hacking (Typical errors): Some hints for other maintainers.
+
+2012-10-22  Theophile Ranquet  <theophile.ranquet@gmail.com>
+
+	maint: fix an erroneous include
+	This fixes test 130 (Several parsers).
+
+	* data/location.cc: Include <iostream> rather than <iosfwd> since
+	we really need << on strings for instance.
+	* NEWS: Document this.
+
+2012-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: check that headers are self contained
+	Reported by Alexandre Duret-Lutz.
+
+	* tests/headers.at (Several parsers): here.
+
+2012-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	doc: add missing documentation for --report
+	* doc/bison.texi (Bison Options): Document --report's "solved", "all",
+	and "none".
+
+2012-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	headers: move CPP guards into YY_*_INCLUDED to avoid collisions
+	See <http://lists.gnu.org/archive/html/bug-bison/2012-09/msg00016.html>.
+
+	* data/c.m4 (b4_cpp_guard): Prepend YY_ and append _INCLUDED.
+	* tests/headers.at: Adjust.
+	* NEWS, doc/bison.texi: Document.
+
+2012-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	minor changes.
+	* NEWS: Word changes.
+	* doc/bison.texi: Spell check.
+	Fix minor issues.
+	* tests/headers.at: Comment and formatting changes.
+
+2012-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	gnulib: update
+
+2012-09-25  Akim Demaille  <akim@lrde.epita.fr>
+
+	regen
+
+2012-09-25  Akim Demaille  <akim@lrde.epita.fr>
+
+	yacc: fix handling of CPP guards when no header is generated
+	When no header was to be generated, Bison would issue:
+
+	  /* In a future release of Bison, this section will be replaced
+	     by #include "".  */
+	  #ifndef YY_
+	  # define YY_
+
+	It now properly generates nothing.
+
+	* data/c.m4 (b4_cpp_guard_open, b4_cpp_guard_close): Issue nothing when
+	the file name is empty.
+	* data/yacc.c: Do not generate the above comment when there is no header
+	to generate.
+	* NEWS: Update.
+
+2012-09-25  Akim Demaille  <akim@lrde.epita.fr>
+
+	gnulib: update
+
+2012-09-04  Akim Demaille  <akim@lrde.epita.fr>
+
+	maint: remove useless file
+	* externals/bootstrap.cfg: Remove.
+	This file was used by a specific build system.
+	It was added to the master repository by accident.
+
+2012-09-04  Akim Demaille  <akim@lrde.epita.fr>
+
+	update files to ignore
+	* doc/.gitignore: Don't ignore split info files as we don't split our
+	info file.
+	See <http://lists.gnu.org/archive/html/bug-bison/2012-08/msg00006.html>.
+
+2012-09-04  Akim Demaille  <akim@lrde.epita.fr>
+
+	remove useless include
+	* src/system.h: Don't include sys/types.h.
+	Reported by Eric Blake,
+	<http://lists.gnu.org/archive/html/bug-bison/2012-09/msg00002.html>.
+	(FUNCTION_PRINT): Remove, unused.
+
+2012-09-03  Jim Meyering  <meyering@redhat.com>
+
+	use locale-indep. c_is* functions for parsing, not isspace, isprint etc
+	* src/parse-gram.y: Include "c-ctype.h".
+	(add_param): Parse with c_isspace, not isspace.
+	* src/parse-gram.c: Likewise.
+	* src/scan-gram.l: Include c-ctype.h, not ctype.h.
+	(SC_ESCAPED_STRING,SC_ESCAPED_CHARACTER): Use c_isspace and c_isprint,
+	not ctype.h's locale-dependent functions.
+
+2012-09-03  Akim Demaille  <akim@lrde.epita.fr>
+
+	gnulib: update
+
+2012-09-03  Akim Demaille  <akim@lrde.epita.fr>
+
+	--help: include a place to report translation issues
+	http://lists.gnu.org/archive/html/bug-bison/2012-08/msg00007.html
+	shows that it is useful to help users report translation issues.
+	While at it, include other informative bits that the coreutils shows.
+
+	* src/getargs.c (usage): Report more URLs where the user can
+	refer to.
+	Mostly copied/pasted from coreutils' emit_ancillary_info function.
+
+2012-08-31  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: style changes
+	* tests/torture.at (AT_DATA_STACK_TORTURE): M4 style changes to
+	improve readability.
+	Fix an assertion which, because of a <= instead of ==, did not check
+	new_status as visibly meant.
+	(get_args): New.
+
+2012-08-31  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: fix push-pull test
+	* tests/torture.at: %push-pull-parser is no longer supported.
+
+2012-08-31  Akim Demaille  <akim@lrde.epita.fr>
+
+	yacc.c: style changes
+	* data/yacc.c: (yytoken): Define with initial value.
+
+2012-08-03  Akim Demaille  <akim@lrde.epita.fr>
+
+	maint: post-release administrivia
+	* NEWS: Add header line for next release.
+	* .prev-version: Record previous version.
+	* cfg.mk (old_NEWS_hash): Auto-update.
+
 2012-08-03  Akim Demaille  <akim@lrde.epita.fr>
 
 	version 2.6.2
