@@ -1,6 +1,6 @@
 #line 10196 "../../doc/bison.texi"
 %skeleton "lalr1.cc" /* -*- C++ -*- */
-%require "2.6.90.8-d4fe"
+%require "2.7.11-68f91"
 %defines
 %define parser_class_name "calcxx_parser"
 #line 10214 "../../doc/bison.texi"

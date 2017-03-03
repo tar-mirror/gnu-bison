@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison-runtime-2.4\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-12-12 16:09+0100\n"
+"POT-Creation-Date: 2013-04-15 13:59+0200\n"
 "PO-Revision-Date: 2009-07-28 21:28+0200\n"
 "Last-Translator: Rihards Priedītis <rprieditis@gmail.com>\n"
 "Language-Team: Latvian <translation-team-lv@lists.sourceforge.net>\n"
@@ -20,46 +20,46 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
 "2);\n"
 
-#: data/glr.c:855 data/yacc.c:776
+#: data/glr.c:838 data/yacc.c:771
 msgid "syntax error: cannot back up"
 msgstr "sintakses kļūda: nevar dublēt datus"
 
-#: data/glr.c:1729
+#: data/glr.c:1712
 msgid "syntax is ambiguous"
 msgstr "sintakse ir divdomīga"
 
-#: data/glr.c:2014 data/glr.c:2094 data/glr.c:2134 data/glr.c:2399
-#: data/lalr1.cc:947 data/lalr1.cc:967 data/yacc.c:1351 data/yacc.c:1856
-#: data/yacc.c:1862
+#: data/glr.c:1997 data/glr.c:2077 data/glr.c:2117 data/glr.c:2382
+#: data/lalr1.cc:941 data/lalr1.cc:961 data/yacc.c:1346 data/yacc.c:1851
+#: data/yacc.c:1857
 msgid "syntax error"
 msgstr "sintakses kļūda"
 
-#: data/glr.c:2095 data/lalr1.cc:948 data/yacc.c:1352
+#: data/glr.c:2078 data/lalr1.cc:942 data/yacc.c:1347
 #, c-format
 msgid "syntax error, unexpected %s"
 msgstr "sintakses kļūda, negaidīts %s"
 
-#: data/glr.c:2096 data/lalr1.cc:949 data/yacc.c:1353
+#: data/glr.c:2079 data/lalr1.cc:943 data/yacc.c:1348
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s"
 msgstr "sintakses kļūda, negaidīts %s, tika gaidīts %s"
 
-#: data/glr.c:2097 data/lalr1.cc:950 data/yacc.c:1354
+#: data/glr.c:2080 data/lalr1.cc:944 data/yacc.c:1349
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s"
 msgstr "sintakses kļūda, negaidīts %s, tika gaidīts %s vai %s"
 
-#: data/glr.c:2098 data/lalr1.cc:951 data/yacc.c:1355
+#: data/glr.c:2081 data/lalr1.cc:945 data/yacc.c:1350
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s or %s"
 msgstr "sintakses kļūda, negaidīts %s, tika gaidīts %s vai %s, vai %s"
 
-#: data/glr.c:2099 data/lalr1.cc:952 data/yacc.c:1356
+#: data/glr.c:2082 data/lalr1.cc:946 data/yacc.c:1351
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s or %s or %s"
 msgstr "sintakses kļūda, negaidīts %s, tika gaidīts %s vai %s, vai %s, vai %s"
 
-#: data/glr.c:2459 data/yacc.c:1436 data/yacc.c:1438 data/yacc.c:1616
-#: data/yacc.c:2013
+#: data/glr.c:2442 data/yacc.c:1431 data/yacc.c:1433 data/yacc.c:1611
+#: data/yacc.c:2008
 msgid "memory exhausted"
 msgstr "izsmelta atmiņa"

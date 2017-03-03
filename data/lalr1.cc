@@ -1,6 +1,6 @@
 # C++ skeleton for Bison
 
-# Copyright (C) 2002-2012 Free Software Foundation, Inc.
+# Copyright (C) 2002-2013 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ m4_include(b4_pkgdatadir/[stack.hh])
 b4_defines_if(
 [b4_output_begin([b4_spec_defines_file])
 b4_copyright([Skeleton interface for Bison LALR(1) parsers in C++],
-             [2002-2012])
+             [2002-2013])
 [
 /**
  ** \file ]b4_spec_defines_file[
@@ -107,6 +107,10 @@ b4_user_stype
 #endif
 
   private:
+    /// This class is not copyable.
+    ]b4_parser_class_name[ (const ]b4_parser_class_name[&);
+    ]b4_parser_class_name[& operator= (const ]b4_parser_class_name[&);
+
     /// Report a syntax error.
     /// \param loc    where the syntax error is found.
     /// \param msg    a description of the syntax error.
@@ -268,7 +272,7 @@ b4_output_end()
 
 b4_output_begin([b4_parser_file_name])
 b4_copyright([Skeleton implementation for Bison LALR(1) parsers in C++],
-             [2002-2012])
+             [2002-2013])
 b4_percent_code_get([[top]])[]dnl
 m4_if(b4_prefix, [yy], [],
 [
@@ -418,12 +422,7 @@ do {					\
     std::ostream& yyo = debug_stream ();
     std::ostream& yyoutput = yyo;
     YYUSE (yyoutput);
-    switch (yytype)
-      {
-  ]m4_map([b4_symbol_actions], m4_defn([b4_symbol_printers]))dnl
-[       default:
-	  break;
-      }
+    ]b4_symbol_actions([printers])[
   }
 
 
@@ -450,12 +449,7 @@ do {					\
     if (yymsg)
       YY_SYMBOL_PRINT (yymsg, yytype, yyvaluep, yylocationp);
 
-    switch (yytype)
-      {
-  ]m4_map([b4_symbol_actions], m4_defn([b4_symbol_destructors]))[
-	default:
-	  break;
-      }
+    ]b4_symbol_actions([destructors])[
   }
 
   void
@@ -552,9 +546,9 @@ b4_dollar_popdef])[]dnl
        yynewstate, since the latter expects the semantical and the
        location values to have been already stored, initialize these
        stacks with a primary value.  */
-    yystate_stack_ = state_stack_type (0);
-    yysemantic_stack_ = semantic_stack_type (0);
-    yylocation_stack_ = location_stack_type (0);
+    yystate_stack_.clear ();
+    yysemantic_stack_.clear ();
+    yylocation_stack_.clear ();
     yysemantic_stack_.push (yylval);
     yylocation_stack_.push (yylloc);
 

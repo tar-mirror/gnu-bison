@@ -2,7 +2,7 @@
 
 # Macros for the GNU Bison Test suite.
 
-# Copyright (C) 2003-2012 Free Software Foundation, Inc.
+# Copyright (C) 2003-2013 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -889,8 +889,8 @@ $9
 # There is no "" around `wc` since some indent the result.
 m4_bmatch([$4], [%define lr.type canonical-lr],
 [if test 32767 -lt `wc -l < input.c`; then
-  CFLAGS=`echo " $CFLAGS " | sed -e 's/ -pedantic //'`
-  CXXFLAGS=`echo " $CXXFLAGS " | sed -e 's/ -pedantic //'`
+  CFLAGS=`echo " $CFLAGS " | sed -e 's/ -pedantic / /'`
+  CXXFLAGS=`echo " $CXXFLAGS " | sed -e 's/ -pedantic / /'`
 fi])
 AT_COMPILE([[input]])
 

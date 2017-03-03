@@ -1,3 +1,108 @@
+2013-04-15  Akim Demaille  <akim@lrde.epita.fr>
+
+	version 2.7.1
+	* NEWS: Record release date.
+
+2013-04-15  Akim Demaille  <akim@lrde.epita.fr>
+
+	regen
+
+2013-04-08  Akim Demaille  <akim@lrde.epita.fr>
+
+	glr.cc: fix a clang warning
+	* data/glr.cc (b4_epilogue): Be sure to end with an end-of-line,
+	so that the file does end with one.
+
+2013-04-08  Akim Demaille  <akim@lrde.epita.fr>
+
+	maint: update copyright years
+	Run "make update-copyright".
+
+2013-04-08  Akim Demaille  <akim@lrde.epita.fr>
+
+	build: fix VPATH issue
+	* Makefile.am (update-b4-copyright, update-package-copyright-year): Fix
+	path to build-aux.
+
+2013-04-08  Akim Demaille  <akim@lrde.epita.fr>
+
+	build: avoid clang's colored diagnostics in the test suite
+	The syncline tests, which try to recognize compiler diagnostics,
+	are confused by escapes for colors.
+
+	* configure.ac (warn_tests): New, to factor the warnings for both
+	C and C++ tests.
+	Add -fno-color-diagnostics to it.
+	* tests/local.at (AT_TEST_TABLES_AND_PARSE): Do not remove glue
+	together compiler flags.
+
+2013-04-08  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: please clang and use ".cc", not ".c", for C++ input
+	When fed with foo.c, clang++ 3.2 answers:
+
+	  clang: error: treating 'c' input as 'c++' when in C++ mode,
+	                this behavior is deprecated
+
+	* tests/output.at (AT_CHECK_OUTPUT_FILE_NAME): Use *.cc and *.hh
+	for C++.
+
+2013-04-08  Akim Demaille  <akim@lrde.epita.fr>
+
+	gnulib: update
+
+2013-04-08  Akim Demaille  <akim@lrde.epita.fr>
+
+	skeletons: avoid empty switch constructs
+	Reported by Rob Conde.
+	http://lists.gnu.org/archive/html/bug-bison/2013-03/msg00003.html
+
+	* data/c.m4 (b4_symbol_actions): Rename as...
+	(_b4_symbol_actions): this.
+	(b4_symbol_actions): New wrapper.
+	Do not emit empty switches.
+	Adjust all b4_symbol_actions callers.
+
+2013-04-08  Akim Demaille  <akim@lrde.epita.fr>
+
+	lalr1.cc: fix compiler warnings
+	Reported by Rob Conde.
+	http://lists.gnu.org/archive/html/bug-bison/2013-03/msg00003.html
+
+	* data/stack.hh (operator=, stack(const stack&)): Make this class
+	uncopyable, i.e., "undefine" these operators: make them private and
+	don't implement them.
+	(clear): New.
+	* data/lalr1.cc: Use it instead of an assignment.
+	(parser): Make this class uncopyable.
+
+2013-04-08  Akim Demaille  <akim@lrde.epita.fr>
+
+	yacc.c: do not use __attribute__ unprotected
+	Reported by Victor Khomenko.
+	http://lists.gnu.org/archive/html/bug-bison/2013-04/msg00001.html
+
+	* data/glr.c (YYUSE, __attribute__): Fuse their definition into...
+	* data/c.m4 (b4_attribute_define): this new macro.
+	* data/yacc.c, data/glr.c: Use it.
+
+2012-12-15  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: style changes
+	* tests/glr-regression.at: Issue yyerror before yylex.
+
+2012-12-13  Akim Demaille  <akim@lrde.epita.fr>
+
+	maint: credit Wojciech Polak
+	* NEWS, THANKS: He is the author of XML support (including XSLTs).
+
+2012-12-12  Akim Demaille  <akim@lrde.epita.fr>
+
+	maint: post-release administrivia
+	* NEWS: Add header line for next release.
+	* .prev-version: Record previous version.
+	* cfg.mk (old_NEWS_hash): Auto-update.
+
 2012-12-12  Akim Demaille  <akim@lrde.epita.fr>
 
 	version 2.7

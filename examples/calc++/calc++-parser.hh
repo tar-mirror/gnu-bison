@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 2.6.90.8-d4fe.  */
+/* A Bison parser, made by GNU Bison 2.7.11-68f91.  */
 
 /* Skeleton interface for Bison LALR(1) parsers in C++
    
-      Copyright (C) 2002-2012 Free Software Foundation, Inc.
+      Copyright (C) 2002-2013 Free Software Foundation, Inc.
    
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -128,6 +128,10 @@ namespace yy {
 #endif
 
   private:
+    /// This class is not copyable.
+    calcxx_parser (const calcxx_parser&);
+    calcxx_parser& operator= (const calcxx_parser&);
+
     /// Report a syntax error.
     /// \param loc    where the syntax error is found.
     /// \param msg    a description of the syntax error.
@@ -276,7 +280,7 @@ namespace yy {
 
 } // yy
 /* Line 33 of lalr1.cc  */
-#line 280 "../../../../examples/calc++/calc++-parser.hh"
+#line 284 "../../../../examples/calc++/calc++-parser.hh"
 
 
 

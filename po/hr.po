@@ -6,10 +6,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bison 2.6.5\n"
+"Project-Id-Version: bison 2.6.90\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-12-12 16:09+0100\n"
-"PO-Revision-Date: 2012-11-09 16:52+0100\n"
+"POT-Creation-Date: 2013-04-15 13:59+0200\n"
+"PO-Revision-Date: 2012-12-21 15:57+0100\n"
 "Last-Translator: Tomislav Krznar <tomislav.krznar@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Lokalize 1.4\n"
+"X-Generator: Gtranslator 2.91.5\n"
 
 #: src/complain.c:120 src/complain.c:131 src/complain.c:140 src/complain.c:188
 #: src/complain.c:198
@@ -26,9 +26,8 @@ msgid "warning"
 msgstr "upozorenje"
 
 #: src/complain.c:151 src/complain.c:160 src/complain.c:167
-#, fuzzy
 msgid "error"
-msgstr "U/I greška"
+msgstr "greška"
 
 #: src/complain.c:208 src/complain.c:215
 msgid "fatal error"
@@ -132,7 +131,7 @@ msgid ""
 "canonical LR(1) support is experimental.\n"
 "\n"
 msgstr ""
-"Stvori deterministički LR ili općeniti LR (GLR) analizator koji\n"
+"Napravi deterministički LR ili općeniti LR (GLR) analizator koji\n"
 "koristi LALR(1), IELR(1) ili kanonske LR(1) tablice analize.\n"
 "Podrška za IELR(1) i kanonski LR(1) je eksperimentalna.\n"
 "\n"
@@ -148,7 +147,6 @@ msgid "The same is true for optional arguments.\n"
 msgstr "Isto vrijedi i za opcionalne argumente.\n"
 
 #: src/getargs.c:316
-#, fuzzy
 msgid ""
 "\n"
 "Operation modes:\n"
@@ -170,10 +168,11 @@ msgstr ""
 "      --print-datadir        ispiši direktorij s predlošcima i XSLT-om\n"
 "  -y, --yacc                 emuliraj POSIX Yacc\n"
 "  -W, --warnings[=KATEGORIJA]  prijavi upozorenja iz KATEGORIJE\n"
+"  -f, --feature[=MOGUĆNOST]  aktiviraj razne mogućnosti\n"
 "\n"
 
 #: src/getargs.c:329
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Parser:\n"
 "  -L, --language=LANGUAGE          specify the output programming language\n"
@@ -189,7 +188,6 @@ msgid ""
 msgstr ""
 "Parser:\n"
 "  -L, --language=JEZIK             navedi izlazni programski jezik\n"
-"                                   (ovo je eksperimentalna mogućnost)\n"
 "  -S, --skeleton=DATOTEKA          navedi predložak za korištenje\n"
 "  -t, --debug                      pripremi analizator za ispravljanje "
 "grešaka\n"
@@ -201,10 +199,8 @@ msgstr ""
 "                                   zastarjelo zbog „-Dapi.prefix=PREFIKS”\n"
 "  -l, --no-lines                   ne stvaraj „#line” propise\n"
 "  -k, --token-table                uključi tablicu imena simbola\n"
-"\n"
 
 #: src/getargs.c:346
-#, fuzzy
 msgid ""
 "Output:\n"
 "      --defines[=FILE]       also produce a header file\n"
@@ -230,10 +226,8 @@ msgstr ""
 "  -g, --graph[=DATOTEKA]     također ispiši graf automata\n"
 "  -x, --xml[=DATOTEKA]       također ispiši XML izvještaj o automatu\n"
 "                             (XML shema je eksperimentalna)\n"
-"\n"
 
 #: src/getargs.c:361
-#, fuzzy
 msgid ""
 "Warning categories include:\n"
 "  `midrule-values'  unset or unused midrule values\n"
@@ -252,12 +246,12 @@ msgstr ""
 "  „yacc”            nekompatibilnosti za POSIX Yacc\n"
 "  „conflicts-sr”    P/R konflikte (uobičajeno uključeno)\n"
 "  „conflicts-rr”    R/R konflikte (uobičajeno uključeno)\n"
+"  „deprecated”      zastarjele konstrukcije\n"
 "  „other”           sva ostala upozorenja (uobičajeno uključeno)\n"
 "  „all”             sva upozorenja\n"
 "  „no-KATEGORIJA”   isključi upozorenja iz KATEGORIJE\n"
 "  „none”            isključi sva upozorenja\n"
 "  „error”           postupaj s upozorenjima kao s greškama\n"
-"\n"
 
 #: src/getargs.c:376
 msgid ""
@@ -285,6 +279,11 @@ msgid ""
 "  `none'         disable all of the above\n"
 "  "
 msgstr ""
+"MOGUĆNOST je popis zarezom odvojenih riječi koje mogu biti:\n"
+"  „caret”        prikaži greške sa znakom „^”\n"
+"  „all”          sve navedeno\n"
+"  „none”         onemogući sve navedeno\n"
+"  "
 
 #: src/getargs.c:395
 #, c-format
@@ -466,9 +465,9 @@ msgid "$default"
 msgstr "$default"
 
 #: src/print.c:373 src/print_graph.c:78
-#, fuzzy, c-format
+#, c-format
 msgid "State %d"
-msgstr "Stanje %d "
+msgstr "Stanje %d"
 
 #: src/print.c:409
 msgid "Terminals, with rules where they appear"
@@ -723,12 +722,11 @@ msgid "invalid identifier: %s"
 msgstr "neispravan identifikator: %s"
 
 #: src/scan-gram.l:295
-#, fuzzy
 msgid "invalid character"
 msgid_plural "invalid characters"
-msgstr[0] "neispravan znak: %s"
-msgstr[1] "neispravan znak: %s"
-msgstr[2] "neispravan znak: %s"
+msgstr[0] "neispravan znak"
+msgstr[1] "neispravni znakovi"
+msgstr[2] "neispravni znakovi"
 
 #: src/scan-gram.l:354
 #, c-format
@@ -741,12 +739,11 @@ msgid "an identifier expected"
 msgstr "očekujem identifikator"
 
 #: src/scan-gram.l:381
-#, fuzzy
 msgid "invalid character in bracketed name"
 msgid_plural "invalid characters in bracketed name"
-msgstr[0] "neispravan znak u zagrađenom imenu: %s"
-msgstr[1] "neispravan znak u zagrađenom imenu: %s"
-msgstr[2] "neispravan znak u zagrađenom imenu: %s"
+msgstr[0] "neispravan znak u zagrađenom imenu"
+msgstr[1] "neispravni znakovi u zagrađenom imenu"
+msgstr[2] "neispravni znakovi u zagrađenom imenu"
 
 #: src/scan-gram.l:481 src/scan-gram.l:502
 #, c-format
@@ -1231,8 +1228,9 @@ msgstr "%s potproces je primio fatalni signal %d"
 
 #~ msgid "%d shift/reduce conflict"
 #~ msgid_plural "%d shift/reduce conflicts"
-#~ msgstr[0] "%d pomakni/reduciraj konflikat"
-#~ msgstr[1] "%d pomakni/reduciraj konflikata"
+#~ msgstr[0] "%d pomakni/reduciraj konflikt"
+#~ msgstr[1] "%d pomakni/reduciraj konflikta"
+#~ msgstr[2] "%d pomakni/reduciraj konflikata"
 
 #~ msgid "and"
 #~ msgstr "i"
@@ -1463,11 +1461,13 @@ msgstr "%s potproces je primio fatalni signal %d"
 #~ msgid_plural "%d rules never reduced\n"
 #~ msgstr[0] "%d pravilo nije nikad reducirano\n"
 #~ msgstr[1] "%d pravila nisu nikad reducirana\n"
+#~ msgstr[2] "%d pravila nije nikad reducirano\n"
 
 #~ msgid "%d useless nonterminal"
 #~ msgid_plural "%d useless nonterminals"
-#~ msgstr[0] "%d beskorisan nezavršni znak"
-#~ msgstr[1] "%d beskorisnih nezavršnih znakova"
+#~ msgstr[0] "%d beskoristan nezavršni znak"
+#~ msgstr[1] "%d beskorisna nezavršna znaka"
+#~ msgstr[2] "%d beskorisnih nezavršnih znakova"
 
 #~ msgid " and "
 #~ msgstr " i"
@@ -1475,7 +1475,8 @@ msgstr "%s potproces je primio fatalni signal %d"
 #~ msgid "%d useless rule"
 #~ msgid_plural "%d useless rules"
 #~ msgstr[0] "%d beskorisno pravilo"
-#~ msgstr[1] "%d beskorisnih pravila"
+#~ msgstr[1] "%d beskorisna pravila"
+#~ msgstr[2] "%d beskorisnih pravila"
 
 #~ msgid "%s: illegal option -- %c\n"
 #~ msgstr "%s: nedozvoljena opcija -- %c\n"

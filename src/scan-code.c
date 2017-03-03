@@ -651,10 +651,10 @@ static yyconst flex_int16_t yy_rule_linenum[29] =
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *code_text;
-#line 1 "scan-code.l"
+#line 1 "../../../src/scan-code.l"
 /* Bison Action Scanner                             -*- C -*-
 
-   Copyright (C) 2006-2012 Free Software Foundation, Inc.
+   Copyright (C) 2006-2013 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -671,7 +671,7 @@ char *code_text;
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 #define YY_NO_INPUT 1
-#line 24 "scan-code.l"
+#line 24 "../../../src/scan-code.l"
 /* Work around a bug in flex 2.5.31.  See Debian bug 333231
    <http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=333231>.  */
 #undef code_wrap
@@ -977,7 +977,7 @@ YY_DECL
 	register int yy_act;
     
 /* %% [7.0] user's declarations go here */
-#line 94 "scan-code.l"
+#line 94 "../../../src/scan-code.l"
 
 
 
@@ -1127,7 +1127,7 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 132 "scan-code.l"
+#line 132 "../../../src/scan-code.l"
 STRING_GROW; BEGIN sc_context;
 	YY_BREAK
 
@@ -1139,13 +1139,13 @@ STRING_GROW; BEGIN sc_context;
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 142 "scan-code.l"
+#line 142 "../../../src/scan-code.l"
 STRING_GROW; BEGIN sc_context;
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 143 "scan-code.l"
+#line 143 "../../../src/scan-code.l"
 STRING_GROW;
 	YY_BREAK
 
@@ -1157,7 +1157,7 @@ STRING_GROW;
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 153 "scan-code.l"
+#line 153 "../../../src/scan-code.l"
 STRING_GROW;
 	YY_BREAK
 
@@ -1165,7 +1165,7 @@ STRING_GROW;
 
 case 5:
 YY_RULE_SETUP
-#line 158 "scan-code.l"
+#line 158 "../../../src/scan-code.l"
 STRING_GROW; BEGIN sc_context;
 	YY_BREAK
 
@@ -1173,7 +1173,7 @@ STRING_GROW; BEGIN sc_context;
 
 case 6:
 YY_RULE_SETUP
-#line 163 "scan-code.l"
+#line 163 "../../../src/scan-code.l"
 STRING_GROW; BEGIN sc_context;
 	YY_BREAK
 
@@ -1181,7 +1181,7 @@ STRING_GROW; BEGIN sc_context;
 
 case 7:
 YY_RULE_SETUP
-#line 169 "scan-code.l"
+#line 169 "../../../src/scan-code.l"
 {
     STRING_GROW;
     BEGIN SC_CHARACTER;
@@ -1190,7 +1190,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 174 "scan-code.l"
+#line 174 "../../../src/scan-code.l"
 {
     STRING_GROW;
     BEGIN SC_STRING;
@@ -1200,7 +1200,7 @@ YY_RULE_SETUP
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 179 "scan-code.l"
+#line 179 "../../../src/scan-code.l"
 {
     STRING_GROW;
     BEGIN SC_COMMENT;
@@ -1209,7 +1209,7 @@ YY_RULE_SETUP
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 183 "scan-code.l"
+#line 183 "../../../src/scan-code.l"
 {
     STRING_GROW;
     BEGIN SC_LINE_COMMENT;
@@ -1217,7 +1217,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 187 "scan-code.l"
+#line 187 "../../../src/scan-code.l"
 {
     warn_at (*loc, _("stray '%s'"), code_text);
     obstack_escape (&obstack_for_string, code_text);
@@ -1226,7 +1226,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 192 "scan-code.l"
+#line 192 "../../../src/scan-code.l"
 {
     obstack_escape (&obstack_for_string, code_text);
     need_semicolon = true;
@@ -1237,7 +1237,7 @@ YY_RULE_SETUP
 
 case 13:
 YY_RULE_SETUP
-#line 200 "scan-code.l"
+#line 200 "../../../src/scan-code.l"
 {
     ref_tail_fields = NULL;
     handle_action_dollar (self->rule, code_text, *loc);
@@ -1248,7 +1248,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 207 "scan-code.l"
+#line 207 "../../../src/scan-code.l"
 {
     ref_tail_fields = NULL;
     handle_action_at (self->rule, code_text, *loc);
@@ -1259,17 +1259,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 215 "scan-code.l"
+#line 215 "../../../src/scan-code.l"
 STRING_GROW;                 need_semicolon = false;
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 216 "scan-code.l"
+#line 216 "../../../src/scan-code.l"
 STRING_GROW; ++braces_level; need_semicolon = false;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 217 "scan-code.l"
+#line 217 "../../../src/scan-code.l"
 {
     bool outer_brace = --braces_level == 0;
 
@@ -1299,31 +1299,31 @@ YY_RULE_SETUP
      '#define' directives anyway, so don't bother with begin of line.  */
 case 18:
 YY_RULE_SETUP
-#line 244 "scan-code.l"
+#line 244 "../../../src/scan-code.l"
 STRING_GROW; in_cpp = true;
 	YY_BREAK
 case 19:
 /* rule 19 can match eol */
 YY_RULE_SETUP
-#line 246 "scan-code.l"
+#line 246 "../../../src/scan-code.l"
 STRING_GROW;
 	YY_BREAK
 case 20:
 /* rule 20 can match eol */
 YY_RULE_SETUP
-#line 247 "scan-code.l"
+#line 247 "../../../src/scan-code.l"
 STRING_GROW; if (in_cpp) in_cpp = need_semicolon = false;
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 248 "scan-code.l"
+#line 248 "../../../src/scan-code.l"
 STRING_GROW;
 	YY_BREAK
 /* YYFAIL is undocumented and was formally deprecated in Bison
      2.4.2.  */
 case 22:
 YY_RULE_SETUP
-#line 252 "scan-code.l"
+#line 252 "../../../src/scan-code.l"
 {
     STRING_GROW; need_semicolon = true;
     warn_at (*loc, _("use of YYFAIL, which is deprecated and will be"
@@ -1334,12 +1334,12 @@ YY_RULE_SETUP
      contain YYFAIL don't produce the above warning.  */
 case 23:
 YY_RULE_SETUP
-#line 260 "scan-code.l"
+#line 260 "../../../src/scan-code.l"
 STRING_GROW; need_semicolon = true;
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 262 "scan-code.l"
+#line 262 "../../../src/scan-code.l"
 STRING_GROW; need_semicolon = true;
 	YY_BREAK
 
@@ -1347,7 +1347,7 @@ STRING_GROW; need_semicolon = true;
 
 case 25:
 YY_RULE_SETUP
-#line 267 "scan-code.l"
+#line 267 "../../../src/scan-code.l"
 {
     const char *type_name = NULL;
     fetch_type_name (code_text + 1, &type_name, *loc)[-1] = 0;
@@ -1359,7 +1359,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 275 "scan-code.l"
+#line 275 "../../../src/scan-code.l"
 {
     obstack_sgrow (&obstack_for_string, "]b4_at_dollar[");
     locations_flag = true;
@@ -1371,14 +1371,14 @@ YY_RULE_SETUP
 /* Escape M4 quoting characters in C code.  */
 case 27:
 YY_RULE_SETUP
-#line 285 "scan-code.l"
+#line 285 "../../../src/scan-code.l"
 obstack_escape (&obstack_for_string, code_text);
 	YY_BREAK
 /* By default, grow the string obstack with the input.  */
 case 28:
 /* rule 28 can match eol */
 YY_RULE_SETUP
-#line 288 "scan-code.l"
+#line 288 "../../../src/scan-code.l"
 STRING_GROW;
 	YY_BREAK
 /* End of processing. */
@@ -1389,13 +1389,13 @@ case YY_STATE_EOF(SC_STRING):
 case YY_STATE_EOF(SC_CHARACTER):
 case YY_STATE_EOF(SC_RULE_ACTION):
 case YY_STATE_EOF(SC_SYMBOL_ACTION):
-#line 291 "scan-code.l"
+#line 291 "../../../src/scan-code.l"
 STRING_FINISH; return last_string;
 	YY_BREAK
 
 case 29:
 YY_RULE_SETUP
-#line 294 "scan-code.l"
+#line 294 "../../../src/scan-code.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
 #line 1402 "scan-code.c"
@@ -2478,7 +2478,7 @@ void code_free (void * ptr )
 
 /* %ok-for-header */
 
-#line 294 "scan-code.l"
+#line 294 "../../../src/scan-code.l"
 
 
 

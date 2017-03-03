@@ -943,10 +943,10 @@ static yyconst flex_int16_t yy_rule_linenum[109] =
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *gram_text;
-#line 1 "scan-gram.l"
+#line 1 "../../../src/scan-gram.l"
 /* Bison Grammar Scanner                             -*- C -*-
 
-   Copyright (C) 2002-2012 Free Software Foundation, Inc.
+   Copyright (C) 2002-2013 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -963,7 +963,7 @@ char *gram_text;
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 #define YY_NO_INPUT 1
-#line 24 "scan-gram.l"
+#line 24 "../../../src/scan-gram.l"
 /* Work around a bug in flex 2.5.31.  See Debian bug 333231
    <http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=333231>.  */
 #undef gram_wrap
@@ -1304,7 +1304,7 @@ YY_DECL
 	register int yy_act;
     
 /* %% [7.0] user's declarations go here */
-#line 120 "scan-gram.l"
+#line 120 "../../../src/scan-gram.l"
 
 
   /* Nesting level of the current code in braces.  */
@@ -1445,21 +1445,21 @@ do_action:	/* This label is used only to access EOF actions. */
 /* Comments and white space.  */
 case 1:
 YY_RULE_SETUP
-#line 149 "scan-gram.l"
+#line 149 "../../../src/scan-gram.l"
 warn_at (*loc, _("stray ',' treated as white space"));
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
-#line 151 "scan-gram.l"
+#line 151 "../../../src/scan-gram.l"
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 151 "scan-gram.l"
+#line 151 "../../../src/scan-gram.l"
 continue;
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 152 "scan-gram.l"
+#line 152 "../../../src/scan-gram.l"
 {
     token_start = loc->start;
     context_state = YY_START;
@@ -1471,7 +1471,7 @@ YY_RULE_SETUP
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 160 "scan-gram.l"
+#line 160 "../../../src/scan-gram.l"
 {
     handle_syncline (gram_text + sizeof "#line " - 1, *loc);
   }
@@ -1489,250 +1489,250 @@ YY_RULE_SETUP
 
 case 6:
 YY_RULE_SETUP
-#line 178 "scan-gram.l"
+#line 178 "../../../src/scan-gram.l"
 return PERCENT_NONASSOC;
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 179 "scan-gram.l"
+#line 179 "../../../src/scan-gram.l"
 return PERCENT_CODE;
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 180 "scan-gram.l"
+#line 180 "../../../src/scan-gram.l"
 return PERCENT_DEBUG;
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 181 "scan-gram.l"
+#line 181 "../../../src/scan-gram.l"
 return PERCENT_DEFAULT_PREC;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 182 "scan-gram.l"
+#line 182 "../../../src/scan-gram.l"
 return PERCENT_DEFINE;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 183 "scan-gram.l"
+#line 183 "../../../src/scan-gram.l"
 return PERCENT_DEFINES;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 184 "scan-gram.l"
+#line 184 "../../../src/scan-gram.l"
 return PERCENT_DESTRUCTOR;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 185 "scan-gram.l"
+#line 185 "../../../src/scan-gram.l"
 return PERCENT_DPREC;
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 186 "scan-gram.l"
+#line 186 "../../../src/scan-gram.l"
 return PERCENT_ERROR_VERBOSE;
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 187 "scan-gram.l"
+#line 187 "../../../src/scan-gram.l"
 return PERCENT_EXPECT;
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 188 "scan-gram.l"
+#line 188 "../../../src/scan-gram.l"
 return PERCENT_EXPECT_RR;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 189 "scan-gram.l"
+#line 189 "../../../src/scan-gram.l"
 return PERCENT_FILE_PREFIX;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 190 "scan-gram.l"
+#line 190 "../../../src/scan-gram.l"
 return PERCENT_YACC;
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 191 "scan-gram.l"
+#line 191 "../../../src/scan-gram.l"
 return PERCENT_INITIAL_ACTION;
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 192 "scan-gram.l"
+#line 192 "../../../src/scan-gram.l"
 return PERCENT_GLR_PARSER;
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 193 "scan-gram.l"
+#line 193 "../../../src/scan-gram.l"
 return PERCENT_LANGUAGE;
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 194 "scan-gram.l"
+#line 194 "../../../src/scan-gram.l"
 return PERCENT_LEFT;
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 195 "scan-gram.l"
+#line 195 "../../../src/scan-gram.l"
 return PERCENT_LEX_PARAM;
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 196 "scan-gram.l"
+#line 196 "../../../src/scan-gram.l"
 return PERCENT_LOCATIONS;
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 197 "scan-gram.l"
+#line 197 "../../../src/scan-gram.l"
 return PERCENT_MERGE;
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 198 "scan-gram.l"
+#line 198 "../../../src/scan-gram.l"
 return PERCENT_NAME_PREFIX;
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 199 "scan-gram.l"
+#line 199 "../../../src/scan-gram.l"
 return PERCENT_NO_DEFAULT_PREC;
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 200 "scan-gram.l"
+#line 200 "../../../src/scan-gram.l"
 return PERCENT_NO_LINES;
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 201 "scan-gram.l"
+#line 201 "../../../src/scan-gram.l"
 return PERCENT_NONASSOC;
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 202 "scan-gram.l"
+#line 202 "../../../src/scan-gram.l"
 return PERCENT_NONDETERMINISTIC_PARSER;
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 203 "scan-gram.l"
+#line 203 "../../../src/scan-gram.l"
 return PERCENT_NTERM;
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 204 "scan-gram.l"
+#line 204 "../../../src/scan-gram.l"
 return PERCENT_OUTPUT;
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 205 "scan-gram.l"
+#line 205 "../../../src/scan-gram.l"
 return PERCENT_PARSE_PARAM;
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 206 "scan-gram.l"
+#line 206 "../../../src/scan-gram.l"
 return PERCENT_PREC;
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 207 "scan-gram.l"
+#line 207 "../../../src/scan-gram.l"
 return PERCENT_PRINTER;
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 208 "scan-gram.l"
+#line 208 "../../../src/scan-gram.l"
 return PERCENT_PURE_PARSER;
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 209 "scan-gram.l"
+#line 209 "../../../src/scan-gram.l"
 return PERCENT_REQUIRE;
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 210 "scan-gram.l"
+#line 210 "../../../src/scan-gram.l"
 return PERCENT_RIGHT;
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 211 "scan-gram.l"
+#line 211 "../../../src/scan-gram.l"
 return PERCENT_SKELETON;
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 212 "scan-gram.l"
+#line 212 "../../../src/scan-gram.l"
 return PERCENT_START;
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 213 "scan-gram.l"
+#line 213 "../../../src/scan-gram.l"
 return PERCENT_TOKEN;
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 214 "scan-gram.l"
+#line 214 "../../../src/scan-gram.l"
 return PERCENT_TOKEN;
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 215 "scan-gram.l"
+#line 215 "../../../src/scan-gram.l"
 return PERCENT_TOKEN_TABLE;
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 216 "scan-gram.l"
+#line 216 "../../../src/scan-gram.l"
 return PERCENT_TYPE;
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 217 "scan-gram.l"
+#line 217 "../../../src/scan-gram.l"
 return PERCENT_UNION;
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 218 "scan-gram.l"
+#line 218 "../../../src/scan-gram.l"
 return PERCENT_VERBOSE;
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 219 "scan-gram.l"
+#line 219 "../../../src/scan-gram.l"
 return PERCENT_YACC;
 	YY_BREAK
 case 48:
 /* rule 48 can match eol */
 YY_RULE_SETUP
-#line 221 "scan-gram.l"
+#line 221 "../../../src/scan-gram.l"
 {
     complain_at (*loc, _("invalid directive: %s"), quote (gram_text));
   }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 225 "scan-gram.l"
+#line 225 "../../../src/scan-gram.l"
 return EQUAL;
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 226 "scan-gram.l"
+#line 226 "../../../src/scan-gram.l"
 return PIPE;
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 227 "scan-gram.l"
+#line 227 "../../../src/scan-gram.l"
 return SEMICOLON;
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 228 "scan-gram.l"
+#line 228 "../../../src/scan-gram.l"
 return TYPE_TAG_ANY;
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 229 "scan-gram.l"
+#line 229 "../../../src/scan-gram.l"
 return TYPE_TAG_NONE;
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 231 "scan-gram.l"
+#line 231 "../../../src/scan-gram.l"
 {
     val->uniqstr = uniqstr_new (gram_text);
     id_loc = *loc;
@@ -1742,7 +1742,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 238 "scan-gram.l"
+#line 238 "../../../src/scan-gram.l"
 {
     val->integer = scan_integer (gram_text, 10, *loc);
     return INT;
@@ -1750,7 +1750,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 242 "scan-gram.l"
+#line 242 "../../../src/scan-gram.l"
 {
     val->integer = scan_integer (gram_text, 16, *loc);
     return INT;
@@ -1760,7 +1760,7 @@ YY_RULE_SETUP
      accept "1FOO" as "1 FOO".  */
 case 57:
 YY_RULE_SETUP
-#line 249 "scan-gram.l"
+#line 249 "../../../src/scan-gram.l"
 {
     complain_at (*loc, _("invalid identifier: %s"), quote (gram_text));
   }
@@ -1768,25 +1768,25 @@ YY_RULE_SETUP
 /* Characters.  */
 case 58:
 YY_RULE_SETUP
-#line 254 "scan-gram.l"
+#line 254 "../../../src/scan-gram.l"
 token_start = loc->start; BEGIN SC_ESCAPED_CHARACTER;
 	YY_BREAK
 /* Strings. */
 case 59:
 YY_RULE_SETUP
-#line 257 "scan-gram.l"
+#line 257 "../../../src/scan-gram.l"
 token_start = loc->start; BEGIN SC_ESCAPED_STRING;
 	YY_BREAK
 /* Prologue. */
 case 60:
 YY_RULE_SETUP
-#line 260 "scan-gram.l"
+#line 260 "../../../src/scan-gram.l"
 code_start = loc->start; BEGIN SC_PROLOGUE;
 	YY_BREAK
 /* Code in between braces.  */
 case 61:
 YY_RULE_SETUP
-#line 263 "scan-gram.l"
+#line 263 "../../../src/scan-gram.l"
 {
     STRING_GROW;
     braces_level = 0;
@@ -1797,7 +1797,7 @@ YY_RULE_SETUP
 /* A type. */
 case 62:
 YY_RULE_SETUP
-#line 271 "scan-gram.l"
+#line 271 "../../../src/scan-gram.l"
 {
     obstack_grow (&obstack_for_string, gram_text + 1, gram_leng - 2);
     STRING_FINISH;
@@ -1808,7 +1808,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 279 "scan-gram.l"
+#line 279 "../../../src/scan-gram.l"
 {
     static int percent_percent_count;
     if (++percent_percent_count == 2)
@@ -1818,7 +1818,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 286 "scan-gram.l"
+#line 286 "../../../src/scan-gram.l"
 {
     bracketed_id_str = NULL;
     bracketed_id_start = loc->start;
@@ -1828,7 +1828,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 293 "scan-gram.l"
+#line 293 "../../../src/scan-gram.l"
 {
     complain_at (*loc, "%s: %s",
                  ngettext ("invalid character", "invalid characters", gram_leng),
@@ -1836,7 +1836,7 @@ YY_RULE_SETUP
   }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 299 "scan-gram.l"
+#line 299 "../../../src/scan-gram.l"
 {
     loc->start = loc->end = scanner_cursor;
     yyterminate ();
@@ -1850,7 +1850,7 @@ case YY_STATE_EOF(INITIAL):
 
 case 66:
 YY_RULE_SETUP
-#line 312 "scan-gram.l"
+#line 312 "../../../src/scan-gram.l"
 {
     if (bracketed_id_str)
       {
@@ -1869,7 +1869,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 327 "scan-gram.l"
+#line 327 "../../../src/scan-gram.l"
 {
     BEGIN (bracketed_id_str ? SC_RETURN_BRACKETED_ID : INITIAL);
     *loc = id_loc;
@@ -1878,7 +1878,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 332 "scan-gram.l"
+#line 332 "../../../src/scan-gram.l"
 {
     ROLLBACK_CURRENT_TOKEN;
     BEGIN (bracketed_id_str ? SC_RETURN_BRACKETED_ID : INITIAL);
@@ -1887,7 +1887,7 @@ YY_RULE_SETUP
   }
 	YY_BREAK
 case YY_STATE_EOF(SC_AFTER_IDENTIFIER):
-#line 338 "scan-gram.l"
+#line 338 "../../../src/scan-gram.l"
 {
     BEGIN (bracketed_id_str ? SC_RETURN_BRACKETED_ID : INITIAL);
     *loc = id_loc;
@@ -1902,7 +1902,7 @@ case YY_STATE_EOF(SC_AFTER_IDENTIFIER):
 
 case 69:
 YY_RULE_SETUP
-#line 351 "scan-gram.l"
+#line 351 "../../../src/scan-gram.l"
 {
     if (bracketed_id_str)
       {
@@ -1918,7 +1918,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 363 "scan-gram.l"
+#line 363 "../../../src/scan-gram.l"
 {
     BEGIN bracketed_id_context_state;
     if (bracketed_id_str)
@@ -1937,7 +1937,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 379 "scan-gram.l"
+#line 379 "../../../src/scan-gram.l"
 {
     complain_at (*loc, "%s: %s",
                  ngettext ("invalid character in bracketed name",
@@ -1946,7 +1946,7 @@ YY_RULE_SETUP
   }
 	YY_BREAK
 case YY_STATE_EOF(SC_BRACKETED_ID):
-#line 386 "scan-gram.l"
+#line 386 "../../../src/scan-gram.l"
 {
     BEGIN bracketed_id_context_state;
     unexpected_eof (bracketed_id_start, "]");
@@ -1957,7 +1957,7 @@ case YY_STATE_EOF(SC_BRACKETED_ID):
 
 case 72:
 YY_RULE_SETUP
-#line 394 "scan-gram.l"
+#line 394 "../../../src/scan-gram.l"
 {
     ROLLBACK_CURRENT_TOKEN;
     val->uniqstr = bracketed_id_str;
@@ -1975,17 +1975,17 @@ YY_RULE_SETUP
 
 case 73:
 YY_RULE_SETUP
-#line 411 "scan-gram.l"
+#line 411 "../../../src/scan-gram.l"
 BEGIN context_state;
 	YY_BREAK
 case 74:
 /* rule 74 can match eol */
 YY_RULE_SETUP
-#line 412 "scan-gram.l"
+#line 412 "../../../src/scan-gram.l"
 continue;
 	YY_BREAK
 case YY_STATE_EOF(SC_YACC_COMMENT):
-#line 413 "scan-gram.l"
+#line 413 "../../../src/scan-gram.l"
 unexpected_eof (token_start, "*/"); BEGIN context_state;
 	YY_BREAK
 
@@ -1997,11 +1997,11 @@ unexpected_eof (token_start, "*/"); BEGIN context_state;
 case 75:
 /* rule 75 can match eol */
 YY_RULE_SETUP
-#line 423 "scan-gram.l"
+#line 423 "../../../src/scan-gram.l"
 STRING_GROW; BEGIN context_state;
 	YY_BREAK
 case YY_STATE_EOF(SC_COMMENT):
-#line 424 "scan-gram.l"
+#line 424 "../../../src/scan-gram.l"
 unexpected_eof (token_start, "*/"); BEGIN context_state;
 	YY_BREAK
 
@@ -2013,17 +2013,17 @@ unexpected_eof (token_start, "*/"); BEGIN context_state;
 case 76:
 /* rule 76 can match eol */
 YY_RULE_SETUP
-#line 434 "scan-gram.l"
+#line 434 "../../../src/scan-gram.l"
 STRING_GROW; BEGIN context_state;
 	YY_BREAK
 case 77:
 /* rule 77 can match eol */
 YY_RULE_SETUP
-#line 435 "scan-gram.l"
+#line 435 "../../../src/scan-gram.l"
 STRING_GROW;
 	YY_BREAK
 case YY_STATE_EOF(SC_LINE_COMMENT):
-#line 436 "scan-gram.l"
+#line 436 "../../../src/scan-gram.l"
 BEGIN context_state;
 	YY_BREAK
 
@@ -2036,7 +2036,7 @@ BEGIN context_state;
 case 78:
 /* rule 78 can match eol */
 YY_RULE_SETUP
-#line 447 "scan-gram.l"
+#line 447 "../../../src/scan-gram.l"
 {
     if (gram_text[0] == '\n')
       unexpected_newline (token_start, "\"");
@@ -2048,7 +2048,7 @@ YY_RULE_SETUP
   }
 	YY_BREAK
 case YY_STATE_EOF(SC_ESCAPED_STRING):
-#line 456 "scan-gram.l"
+#line 456 "../../../src/scan-gram.l"
 {
     unexpected_eof (token_start, "\"");
     STRING_FINISH;
@@ -2068,7 +2068,7 @@ case YY_STATE_EOF(SC_ESCAPED_STRING):
 case 79:
 /* rule 79 can match eol */
 YY_RULE_SETUP
-#line 473 "scan-gram.l"
+#line 473 "../../../src/scan-gram.l"
 {
     STRING_FINISH;
     loc->start = token_start;
@@ -2092,7 +2092,7 @@ YY_RULE_SETUP
   }
 	YY_BREAK
 case YY_STATE_EOF(SC_ESCAPED_CHARACTER):
-#line 494 "scan-gram.l"
+#line 494 "../../../src/scan-gram.l"
 {
     STRING_FINISH;
     loc->start = token_start;
@@ -2119,7 +2119,7 @@ case YY_STATE_EOF(SC_ESCAPED_CHARACTER):
 
 case 80:
 YY_RULE_SETUP
-#line 518 "scan-gram.l"
+#line 518 "../../../src/scan-gram.l"
 complain_at (*loc, _("invalid null character"));
 	YY_BREAK
 
@@ -2130,7 +2130,7 @@ complain_at (*loc, _("invalid null character"));
 
 case 81:
 YY_RULE_SETUP
-#line 528 "scan-gram.l"
+#line 528 "../../../src/scan-gram.l"
 {
     unsigned long int c = strtoul (gram_text + 1, NULL, 8);
     if (!c || UCHAR_MAX < c)
@@ -2142,7 +2142,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 82:
 YY_RULE_SETUP
-#line 537 "scan-gram.l"
+#line 537 "../../../src/scan-gram.l"
 {
     verify (UCHAR_MAX < ULONG_MAX);
     unsigned long int c = strtoul (gram_text + 2, NULL, 16);
@@ -2155,48 +2155,48 @@ YY_RULE_SETUP
 	YY_BREAK
 case 83:
 YY_RULE_SETUP
-#line 547 "scan-gram.l"
+#line 547 "../../../src/scan-gram.l"
 obstack_1grow (&obstack_for_string, '\a');
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
-#line 548 "scan-gram.l"
+#line 548 "../../../src/scan-gram.l"
 obstack_1grow (&obstack_for_string, '\b');
 	YY_BREAK
 case 85:
 YY_RULE_SETUP
-#line 549 "scan-gram.l"
+#line 549 "../../../src/scan-gram.l"
 obstack_1grow (&obstack_for_string, '\f');
 	YY_BREAK
 case 86:
 YY_RULE_SETUP
-#line 550 "scan-gram.l"
+#line 550 "../../../src/scan-gram.l"
 obstack_1grow (&obstack_for_string, '\n');
 	YY_BREAK
 case 87:
 YY_RULE_SETUP
-#line 551 "scan-gram.l"
+#line 551 "../../../src/scan-gram.l"
 obstack_1grow (&obstack_for_string, '\r');
 	YY_BREAK
 case 88:
 YY_RULE_SETUP
-#line 552 "scan-gram.l"
+#line 552 "../../../src/scan-gram.l"
 obstack_1grow (&obstack_for_string, '\t');
 	YY_BREAK
 case 89:
 YY_RULE_SETUP
-#line 553 "scan-gram.l"
+#line 553 "../../../src/scan-gram.l"
 obstack_1grow (&obstack_for_string, '\v');
 	YY_BREAK
 /* \\[\"\'?\\] would be shorter, but it confuses xgettext.  */
 case 90:
 YY_RULE_SETUP
-#line 556 "scan-gram.l"
+#line 556 "../../../src/scan-gram.l"
 obstack_1grow (&obstack_for_string, gram_text[1]);
 	YY_BREAK
 case 91:
 YY_RULE_SETUP
-#line 558 "scan-gram.l"
+#line 558 "../../../src/scan-gram.l"
 {
     int c = convert_ucn_to_byte (gram_text);
     if (c <= 0)
@@ -2209,7 +2209,7 @@ YY_RULE_SETUP
 case 92:
 /* rule 92 can match eol */
 YY_RULE_SETUP
-#line 566 "scan-gram.l"
+#line 566 "../../../src/scan-gram.l"
 {
     char const *p = gram_text + 1;
     /* Quote only if escaping won't make the character visible.  */
@@ -2229,7 +2229,7 @@ YY_RULE_SETUP
 case 93:
 /* rule 93 can match eol */
 YY_RULE_SETUP
-#line 583 "scan-gram.l"
+#line 583 "../../../src/scan-gram.l"
 STRING_GROW;
 	YY_BREAK
 
@@ -2237,17 +2237,17 @@ STRING_GROW;
 
 case 94:
 YY_RULE_SETUP
-#line 588 "scan-gram.l"
+#line 588 "../../../src/scan-gram.l"
 STRING_GROW; BEGIN context_state;
 	YY_BREAK
 case 95:
 /* rule 95 can match eol */
 YY_RULE_SETUP
-#line 589 "scan-gram.l"
+#line 589 "../../../src/scan-gram.l"
 unexpected_newline (token_start, "'"); BEGIN context_state;
 	YY_BREAK
 case YY_STATE_EOF(SC_CHARACTER):
-#line 590 "scan-gram.l"
+#line 590 "../../../src/scan-gram.l"
 unexpected_eof (token_start, "'"); BEGIN context_state;
 	YY_BREAK
 
@@ -2255,17 +2255,17 @@ unexpected_eof (token_start, "'"); BEGIN context_state;
 
 case 96:
 YY_RULE_SETUP
-#line 595 "scan-gram.l"
+#line 595 "../../../src/scan-gram.l"
 STRING_GROW; BEGIN context_state;
 	YY_BREAK
 case 97:
 /* rule 97 can match eol */
 YY_RULE_SETUP
-#line 596 "scan-gram.l"
+#line 596 "../../../src/scan-gram.l"
 unexpected_newline (token_start, "\""); BEGIN context_state;
 	YY_BREAK
 case YY_STATE_EOF(SC_STRING):
-#line 597 "scan-gram.l"
+#line 597 "../../../src/scan-gram.l"
 unexpected_eof (token_start, "\""); BEGIN context_state;
 	YY_BREAK
 
@@ -2276,7 +2276,7 @@ unexpected_eof (token_start, "\""); BEGIN context_state;
 
 case 98:
 YY_RULE_SETUP
-#line 607 "scan-gram.l"
+#line 607 "../../../src/scan-gram.l"
 {
     STRING_GROW;
     context_state = YY_START;
@@ -2286,7 +2286,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 99:
 YY_RULE_SETUP
-#line 613 "scan-gram.l"
+#line 613 "../../../src/scan-gram.l"
 {
     STRING_GROW;
     context_state = YY_START;
@@ -2297,7 +2297,7 @@ YY_RULE_SETUP
 case 100:
 /* rule 100 can match eol */
 YY_RULE_SETUP
-#line 619 "scan-gram.l"
+#line 619 "../../../src/scan-gram.l"
 {
     STRING_GROW;
     context_state = YY_START;
@@ -2308,7 +2308,7 @@ YY_RULE_SETUP
 case 101:
 /* rule 101 can match eol */
 YY_RULE_SETUP
-#line 625 "scan-gram.l"
+#line 625 "../../../src/scan-gram.l"
 {
     STRING_GROW;
     context_state = YY_START;
@@ -2325,18 +2325,18 @@ YY_RULE_SETUP
 case 102:
 /* rule 102 can match eol */
 YY_RULE_SETUP
-#line 641 "scan-gram.l"
+#line 641 "../../../src/scan-gram.l"
 STRING_GROW; braces_level++;
 	YY_BREAK
 case 103:
 /* rule 103 can match eol */
 YY_RULE_SETUP
-#line 642 "scan-gram.l"
+#line 642 "../../../src/scan-gram.l"
 STRING_GROW; braces_level--;
 	YY_BREAK
 case 104:
 YY_RULE_SETUP
-#line 643 "scan-gram.l"
+#line 643 "../../../src/scan-gram.l"
 {
     obstack_1grow (&obstack_for_string, '}');
 
@@ -2356,11 +2356,11 @@ YY_RULE_SETUP
 case 105:
 /* rule 105 can match eol */
 YY_RULE_SETUP
-#line 659 "scan-gram.l"
+#line 659 "../../../src/scan-gram.l"
 STRING_GROW;
 	YY_BREAK
 case YY_STATE_EOF(SC_BRACED_CODE):
-#line 661 "scan-gram.l"
+#line 661 "../../../src/scan-gram.l"
 {
     unexpected_eof (code_start, "}");
     STRING_FINISH;
@@ -2378,7 +2378,7 @@ case YY_STATE_EOF(SC_BRACED_CODE):
 
 case 106:
 YY_RULE_SETUP
-#line 678 "scan-gram.l"
+#line 678 "../../../src/scan-gram.l"
 {
     STRING_FINISH;
     loc->start = code_start;
@@ -2388,7 +2388,7 @@ YY_RULE_SETUP
   }
 	YY_BREAK
 case YY_STATE_EOF(SC_PROLOGUE):
-#line 686 "scan-gram.l"
+#line 686 "../../../src/scan-gram.l"
 {
     unexpected_eof (code_start, "%}");
     STRING_FINISH;
@@ -2406,7 +2406,7 @@ case YY_STATE_EOF(SC_PROLOGUE):
 
 
 case YY_STATE_EOF(SC_EPILOGUE):
-#line 704 "scan-gram.l"
+#line 704 "../../../src/scan-gram.l"
 {
     STRING_FINISH;
     loc->start = code_start;
@@ -2420,16 +2420,16 @@ case YY_STATE_EOF(SC_EPILOGUE):
   | By default, grow the string obstack with the input.  |
   `-----------------------------------------------------*/
 case 107:
-#line 719 "scan-gram.l"
+#line 719 "../../../src/scan-gram.l"
 case 108:
 /* rule 108 can match eol */
 YY_RULE_SETUP
-#line 719 "scan-gram.l"
+#line 719 "../../../src/scan-gram.l"
 STRING_GROW;
 	YY_BREAK
 case 109:
 YY_RULE_SETUP
-#line 721 "scan-gram.l"
+#line 721 "../../../src/scan-gram.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
 #line 2436 "scan-gram.c"
@@ -3516,7 +3516,7 @@ void gram_free (void * ptr )
 
 /* %ok-for-header */
 
-#line 721 "scan-gram.l"
+#line 721 "../../../src/scan-gram.l"
 
 
 

@@ -2,7 +2,7 @@
 
 # C++ GLR skeleton for Bison
 
-# Copyright (C) 2002-2012 Free Software Foundation, Inc.
+# Copyright (C) 2002-2013 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -167,12 +167,7 @@ m4_pushdef([b4_parse_param], m4_defn([b4_parse_param_orig]))dnl
     std::ostream& yyoutput = debug_stream ();
     std::ostream& yyo = yyoutput;
     YYUSE (yyo);
-    switch (yytype)
-      {
-  ]m4_map([b4_symbol_actions], m4_defn([b4_symbol_printers]))dnl
-[        default:
-          break;
-      }
+    ]b4_symbol_actions([printers])[
   }
 
 
@@ -216,7 +211,8 @@ m4_pushdef([b4_parse_param], m4_defn([b4_parse_param_orig]))dnl
 
 #endif
 ]m4_popdef([b4_parse_param])dnl
-b4_namespace_close])
+b4_namespace_close
+])
 
 
 # Let glr.c believe that the user arguments include the parser itself.
@@ -232,7 +228,7 @@ m4_popdef([b4_parse_param])
 
 b4_output_begin([b4_spec_defines_file])
 b4_copyright([Skeleton interface for Bison GLR parsers in C++],
-             [2002-2006, 2009-2012])[
+             [2002-2006, 2009-2013])[
 
 /* C++ GLR parser skeleton written by Akim Demaille.  */
 
