@@ -1,5 +1,5 @@
 /* Top level entry point of bison,
-   Copyright 1984, 1986, 1989, 1992, 1995, 2000
+   Copyright 1984, 1986, 1989, 1992, 1995, 2000, 2001
    Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
@@ -40,7 +40,6 @@
 /* The name this program was run with, for messages.  */
 char *program_name;
 
-extern void berror PARAMS((const char *));
 
 int
 main (int argc, char *argv[])
@@ -62,15 +61,15 @@ main (int argc, char *argv[])
   if (complain_message_count)
     exit (1);
 
-  /* find useless nonterminals and productions and reduce the grammar.  In
-     file reduce.c */
+  /* Find useless nonterminals and productions and reduce the grammar. */
   reduce_grammar ();
 
-  /* record other info about the grammar.  In files derives and nullable.  */
+  /* Record other info about the grammar.  In files derives and
+     nullable.  */
   set_derives ();
   set_nullable ();
 
-  /* convert to nondeterministic finite state machine.  In file LR0.
+  /* Convert to nondeterministic finite state machine.  In file LR0.
      See state.h for more info.  */
   generate_states ();
 
@@ -82,6 +81,7 @@ main (int argc, char *argv[])
      conflicts.  Also resolve s/r conflicts based on precedence
      declarations.  */
   solve_conflicts ();
+  conflicts_print ();
 
   /* Output file names. */
   compute_output_file_names ();
@@ -91,7 +91,7 @@ main (int argc, char *argv[])
   if (complain_message_count)
     exit (1);
 
-  /* Print information about results, if requested.  */
+  /* Output the detailed report on the grammar.  */
   print_results ();
 
   /* Output the VCG graph. */
@@ -100,28 +100,26 @@ main (int argc, char *argv[])
   /* Output the tables and the parser to ftable.  In file output.  */
   output ();
 
+  /* Close the input files. */
+  close_files ();
+
   /* Free the symbol table data structure.  */
   free_symtab ();
 
   lex_free ();
 
-  /* Close the input files. */
-  close_files ();
-
+  reduce_free ();
   free_conflicts ();
   free_nullable ();
   free_derives ();
 
   output_files ();
 
-  exit (complain_message_count ? 1 : 0);
-}
-
-/* Abort for an internal error denoted by string S.  */
+  /* If using alloca.c, flush the alloca'ed memory for the benefit of
+     people running Bison as a library in IDEs.  */
+#if C_ALLOCA
+    alloca (0);
+#endif
 
-void
-berror (const char *s)
-{
-  fprintf (stderr, _("%s: internal error: %s\n"), program_name, s);
-  abort ();
+  return complain_message_count ? EXIT_FAILURE : EXIT_SUCCESS;
 }

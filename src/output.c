@@ -1,5 +1,7 @@
 /* Output the generated parsing program for bison,
-   Copyright 1984, 1986, 1989, 1992, 2000, 2001 Free Software Foundation, Inc.
+
+   Copyright (C) 1984, 1986, 1989, 1992, 2000, 2001 Free Software
+   Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -103,9 +105,6 @@
 #include "reader.h"
 #include "conflicts.h"
 
-extern void berror PARAMS((const char *));
-
-
 
 static int nvectors;
 static int nentries;
@@ -132,7 +131,7 @@ output_short_or_char_table (struct obstack *oout,
 			    const char *table_name,
 			    short *short_table,
 			    short first_value,
-			    short begin, short end)
+			    int begin, int end)
 {
   int i, j;
 
@@ -170,7 +169,7 @@ output_short_table (struct obstack *oout,
 		    const char *table_name,
 		    short *short_table,
 		    short first_value,
-		    short begin, short end)
+		    int begin, int end)
 {
   output_short_or_char_table (oout, comment, "short", table_name, short_table,
 			      first_value, begin, end);
@@ -317,10 +316,17 @@ output_gram (void)
      yyprhs and yyrhs are needed only for yydebug. */
   /* With the no_parser option, all tables are generated */
   if (!semantic_parser && !no_parser_flag)
-    obstack_sgrow (&table_obstack, "\n#if YYDEBUG != 0\n");
+    obstack_sgrow (&table_obstack, "\n#if YYDEBUG\n");
 
-  output_short_table (&table_obstack, NULL, "yyprhs", rrhs,
-		      0, 1, nrules + 1);
+  {
+    int i;
+    short *values = XCALLOC (short, nrules + 1);
+    for (i = 0; i < nrules + 1; ++i)
+      values[i] = rule_table[i].rhs;
+    output_short_table (&table_obstack, NULL, "yyprhs", values,
+			0, 1, nrules + 1);
+    XFREE (values);
+  }
 
   {
     size_t yyrhs_size = 1;
@@ -347,7 +353,13 @@ output_gram (void)
 static void
 output_stos (void)
 {
-  output_short_table (&table_obstack, NULL, "yystos", accessing_symbol,
+  int i;
+  short *values = (short *) alloca (sizeof (short) * nstates);
+  for (i = 0; i < nstates; ++i)
+    values[i] = state_table[i].accessing_symbol;
+  output_short_table (&table_obstack,
+		      "YYSTOS[STATE] -- Accessing symbol to the STATE",
+		      "yystos", values,
 		      0, 1, nstates);
 }
 
@@ -360,12 +372,18 @@ output_rule_data (void)
   short *short_tab = NULL;
 
   obstack_sgrow (&table_obstack, "\n\
-#if YYDEBUG != 0\n");
+#if YYDEBUG\n");
 
-  output_short_table (&table_obstack,
-           "YYRLINE[YYN] -- source line where rule number YYN was defined",
-		      "yyrline", rline,
-		      0, 1, nrules + 1);
+  {
+    short *values = XCALLOC (short, nrules + 1);
+    for (i = 0; i < nrules + 1; ++i)
+      values[i] = rule_table[i].line;
+    output_short_table (&table_obstack,
+			"YYRLINE[YYN] -- source line where rule number YYN was defined",
+			"yyrline", values,
+			0, 1, nrules + 1);
+    XFREE (values);
+  }
 
   obstack_sgrow (&table_obstack, "#endif\n\n");
 
@@ -382,7 +400,7 @@ output_rule_data (void)
   /* Output the table of symbol names.  */
   if (!token_table_flag && !no_parser_flag)
     obstack_sgrow (&table_obstack,
-			 "\n#if YYDEBUG != 0 || defined YYERROR_VERBOSE\n\n");
+			 "\n#if (YYDEBUG) || defined YYERROR_VERBOSE\n\n");
   obstack_sgrow (&table_obstack, "\
 /* YYTNAME[TOKEN_NUM] -- String name of the token TOKEN_NUM. */\n");
   obstack_sgrow (&table_obstack,
@@ -449,19 +467,24 @@ output_rule_data (void)
     }
 
   /* Output YYR1. */
-  output_short_table (&table_obstack,
+  {
+    short *values = XCALLOC (short, nrules + 1);
+    for (i = 0; i < nrules + 1; ++i)
+      values[i] = rule_table[i].lhs;
+    output_short_table (&table_obstack,
 	      "YYR1[YYN] -- Symbol number of symbol that rule YYN derives",
-		      "yyr1", rlhs,
-		      0, 1, nrules + 1);
-  XFREE (rlhs + 1);
+			"yyr1", values,
+			0, 1, nrules + 1);
+    XFREE (values);
+  }
 
   obstack_1grow (&table_obstack, '\n');
 
   /* Output YYR2. */
   short_tab = XMALLOC (short, nrules + 1);
   for (i = 1; i < nrules; i++)
-    short_tab[i] = rrhs[i + 1] - rrhs[i] - 1;
-  short_tab[nrules] = nitems - rrhs[nrules] - 1;
+    short_tab[i] = rule_table[i + 1].rhs - rule_table[i].rhs - 1;
+  short_tab[nrules] = nitems - rule_table[nrules].rhs - 1;
   output_short_table (&table_obstack,
         "YYR2[YYN] -- Number of symbols composing right hand side of rule YYN",
 		      "yyr2", short_tab,
@@ -470,7 +493,7 @@ output_rule_data (void)
 
   XFREE (short_tab);
 
-  XFREE (rrhs + 1);
+  XFREE (rule_table + 1);
 }
 
 
@@ -505,15 +528,11 @@ action_row (int state)
   int k;
   int m = 0;
   int n = 0;
-  int count;
   int default_rule;
   int nreds;
-  int max;
   int rule;
   int shift_state;
   int symbol;
-  unsigned mask;
-  unsigned *wordp;
   reductions *redp;
   shifts *shiftp;
   errs *errp;
@@ -524,7 +543,7 @@ action_row (int state)
 
   default_rule = 0;
   nreds = 0;
-  redp = reduction_table[state];
+  redp = state_table[state].reductions;
 
   if (redp)
     {
@@ -534,69 +553,46 @@ action_row (int state)
 	{
 	  /* loop over all the rules available here which require
 	     lookahead */
-	  m = lookaheads[state];
-	  n = lookaheads[state + 1];
+	  m = state_table[state].lookaheads;
+	  n = state_table[state + 1].lookaheads;
 
 	  for (i = n - 1; i >= m; i--)
-	    {
-	      rule = -LAruleno[i];
-	      wordp = LA + i * tokensetsize;
-	      mask = 1;
-
-	      /* and find each token which the rule finds acceptable
-	         to come next */
-	      for (j = 0; j < ntokens; j++)
-		{
-		  /* and record this rule as the rule to use if that
-		     token follows.  */
-		  if (mask & *wordp)
-		    actrow[j] = rule;
-
-		  mask <<= 1;
-		  if (mask == 0)
-		    {
-		      mask = 1;
-		      wordp++;
-		    }
-		}
-	    }
+	    /* and find each token which the rule finds acceptable
+	       to come next */
+	    for (j = 0; j < ntokens; j++)
+	      /* and record this rule as the rule to use if that
+		 token follows.  */
+	      if (BITISSET (LA (i), j))
+		actrow[j] = -LAruleno[i];
 	}
     }
-
-  shiftp = shift_table[state];
 
   /* Now see which tokens are allowed for shifts in this state.  For
      them, record the shift as the thing to do.  So shift is preferred
      to reduce.  */
-
-  if (shiftp)
+  shiftp = state_table[state].shifts;
+  for (i = 0; i < shiftp->nshifts; i++)
     {
-      k = shiftp->nshifts;
+      shift_state = shiftp->shifts[i];
+      if (!shift_state)
+	continue;
 
-      for (i = 0; i < k; i++)
-	{
-	  shift_state = shiftp->shifts[i];
-	  if (!shift_state)
-	    continue;
+      symbol = state_table[shift_state].accessing_symbol;
 
-	  symbol = accessing_symbol[shift_state];
+      if (ISVAR (symbol))
+	break;
 
-	  if (ISVAR (symbol))
-	    break;
+      actrow[symbol] = shift_state;
 
-	  actrow[symbol] = shift_state;
-
-	  /* Do not use any default reduction if there is a shift for
-	     error */
-	  if (symbol == error_token_number)
-	    nodefault = 1;
-	}
+      /* Do not use any default reduction if there is a shift for
+	 error */
+      if (symbol == error_token_number)
+	nodefault = 1;
     }
-
-  errp = err_table[state];
 
   /* See which tokens are an explicit error in this state (due to
      %nonassoc).  For them, record MINSHORT as the action.  */
+  errp = state_table[state].errs;
 
   if (errp)
     {
@@ -614,14 +610,14 @@ action_row (int state)
 
   if (nreds >= 1 && !nodefault)
     {
-      if (consistent[state])
+      if (state_table[state].consistent)
 	default_rule = redp->rules[0];
       else
 	{
-	  max = 0;
+	  int max = 0;
 	  for (i = m; i < n; i++)
 	    {
-	      count = 0;
+	      int count = 0;
 	      rule = -LAruleno[i];
 
 	      for (j = 0; j < ntokens; j++)
@@ -734,37 +730,6 @@ token_actions (void)
   obstack_1grow (&table_obstack, '\n');
   XFREE (yydefact);
 }
-
-
-static void
-free_shifts (void)
-{
-  shifts *sp, *sptmp;	/* JF derefrenced freed ptr */
-
-  XFREE (shift_table);
-
-  for (sp = first_shift; sp; sp = sptmp)
-    {
-      sptmp = sp->next;
-      XFREE (sp);
-    }
-}
-
-
-static void
-free_reductions (void)
-{
-  reductions *rp, *rptmp;	/* JF fixed freed ptr */
-
-  XFREE (reduction_table);
-
-  for (rp = first_reduction; rp; rp = rptmp)
-    {
-      rptmp = rp->next;
-      XFREE (rp);
-    }
-}
-
 
 
 static void
@@ -1013,9 +978,9 @@ pack_vector (int vector)
 	  return j;
 	}
     }
-
-  berror ("pack_vector");
-  return 0;			/* JF keep lint happy */
+#define pack_vector_succeeded 0
+  assert (pack_vector_succeeded);
+  return 0;
 }
 
 
@@ -1116,12 +1081,10 @@ output_actions (void)
   width = XCALLOC (short, nvectors);
 
   token_actions ();
-  free_shifts ();
-  free_reductions ();
-  XFREE (lookaheads);
+  LIST_FREE (shifts, first_shift);
+  LIST_FREE (reductions, first_reduction);
   XFREE (LA);
   XFREE (LAruleno);
-  XFREE (accessing_symbol);
 
   goto_actions ();
   XFREE (goto_map + ntokens);
@@ -1288,21 +1251,6 @@ output_program (void)
 }
 
 
-static void
-free_itemsets (void)
-{
-  core *cp, *cptmp;
-
-  XFREE (state_table);
-
-  for (cp = first_state; cp; cp = cptmp)
-    {
-      cptmp = cp->next;
-      XFREE (cp);
-    }
-}
-
-
 /*----------------------------------------------------------.
 | Output the parsing tables and the parser code to ftable.  |
 `----------------------------------------------------------*/
@@ -1320,21 +1268,17 @@ output (void)
       obstack_grow (&table_obstack, obstack_finish (&attrs_obstack), size);
     }
   reader_output_yylsp (&table_obstack);
-  if (debug_flag)
-    obstack_sgrow (&table_obstack, "\
+  obstack_fgrow1 (&table_obstack, "\
 #ifndef YYDEBUG\n\
-# define YYDEBUG 1\n\
+# define YYDEBUG %d\n\
 #endif\n\
-\n");
+\n", debug_flag);
 
   if (semantic_parser)
     obstack_fgrow1 (&table_obstack, "#include %s\n",
 		    quotearg_style (c_quoting_style, attrsfile));
 
-  if (!no_parser_flag)
-    obstack_sgrow (&table_obstack, "#include <stdio.h>\n\n");
-
-  free_itemsets ();
+  LIST_FREE (core, first_state);
   output_defines ();
   output_token_translations ();
 /*   if (semantic_parser) */
@@ -1345,6 +1289,8 @@ output (void)
     output_stos ();
   output_rule_data ();
   output_actions ();
+  XFREE (state_table);
+
   if (!no_parser_flag)
     output_parser ();
   output_program ();

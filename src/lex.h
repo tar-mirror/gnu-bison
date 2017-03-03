@@ -49,7 +49,8 @@ typedef enum token_e
     tok_expect,
     tok_thong,
     tok_noop,
-    tok_setopt,
+    tok_intopt,
+    tok_stropt,
     tok_illegal,
     tok_obsolete
   } token_t;

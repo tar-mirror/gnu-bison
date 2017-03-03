@@ -447,16 +447,26 @@ lexicography, not grammar.)
 
 Here is a simple C function subdivided into tokens:
 
+@ifinfo
 @example
 int             /* @r{keyword `int'} */
-square (x)      /* @r{identifier, open-paren,} */
-                /* @r{identifier, close-paren} */
-     int x;     /* @r{keyword `int', identifier, semicolon} */
+square (int x)  /* @r{identifier, open-paren, identifier,}
+                   @r{identifier, close-paren} */
 @{               /* @r{open-brace} */
-  return x * x; /* @r{keyword `return', identifier,} */
-                /* @r{asterisk, identifier, semicolon} */
+  return x * x; /* @r{keyword `return', identifier, asterisk,
+                   identifier, semicolon} */
 @}               /* @r{close-brace} */
 @end example
+@end ifinfo
+@ifnotinfo
+@example
+int             /* @r{keyword `int'} */
+square (int x)  /* @r{identifier, open-paren, identifier, identifier, close-paren} */
+@{               /* @r{open-brace} */
+  return x * x; /* @r{keyword `return', identifier, asterisk, identifier, semicolon} */
+@}               /* @r{close-brace} */
+@end example
+@end ifnotinfo
 
 The syntactic groupings of C include the expression, the statement, the
 declaration, and the function definition.  These are represented in the
@@ -683,7 +693,7 @@ arrange for it to call @code{yyparse} or the parser will never run.
 @xref{Interface, ,Parser C-Language Interface}.
 
 Aside from the token type names and the symbols in the actions you
-write, all variable and function names used in the Bison parser file
+write, all symbols defined in the Bison parser file itself
 begin with @samp{yy} or @samp{YY}.  This includes interface functions
 such as the lexical analyzer function @code{yylex}, the error reporting
 function @code{yyerror} and the parser function @code{yyparse} itself.
@@ -691,6 +701,15 @@ This also includes numerous identifiers used for internal purposes.
 Therefore, you should avoid using C identifiers starting with @samp{yy}
 or @samp{YY} in the Bison grammar file except for the ones defined in
 this manual.
+
+In some cases the Bison parser file includes system headers, and in
+those cases your code should respect the identifiers reserved by those
+headers.  On some non-@sc{gnu} hosts, @code{<alloca.h>},
+@code{<stddef.h>}, and @code{<stdlib.h>} are included as needed to
+declare memory allocators and related types.  In the same situation,
+C++ parsers may include @code{<cstddef>} and @code{<cstdlib>} instead.
+Other system headers may be included if you define @code{YYDEBUG} to a
+nonzero value (@pxref{Debugging, ,Debugging Your Parser}).
 
 @node Stages
 @section Stages in Using Bison
@@ -855,11 +874,12 @@ The C declarations section (@pxref{C Declarations, ,The C Declarations Section})
 preprocessor directives.
 
 The @code{#define} directive defines the macro @code{YYSTYPE}, thus
-specifying the C data type for semantic values of both tokens and groupings
-(@pxref{Value Type, ,Data Types of Semantic Values}).  The Bison parser will use whatever type
-@code{YYSTYPE} is defined as; if you don't define it, @code{int} is the
-default.  Because we specify @code{double}, each token and each expression
-has an associated value, which is a floating point number.
+specifying the C data type for semantic values of both tokens and
+groupings (@pxref{Value Type, ,Data Types of Semantic Values}).  The
+Bison parser will use whatever type @code{YYSTYPE} is defined as; if you
+don't define it, @code{int} is the default.  Because we specify
+@code{double}, each token and each expression has an associated value,
+which is a floating point number.
 
 The @code{#include} directive is used to declare the exponentiation
 function @code{pow}.
@@ -1066,10 +1086,11 @@ token type is an identifier, that identifier is defined by Bison as a C
 macro whose definition is the appropriate number.  In this example,
 therefore, @code{NUM} becomes a macro for @code{yylex} to use.
 
-The semantic value of the token (if it has one) is stored into the global
-variable @code{yylval}, which is where the Bison parser will look for it.
-(The C data type of @code{yylval} is @code{YYSTYPE}, which was defined
-at the beginning of the grammar; @pxref{Rpcalc Decls, ,Declarations for @code{rpcalc}}.)
+The semantic value of the token (if it has one) is stored into the
+global variable @code{yylval}, which is where the Bison parser will look
+for it.  (The C data type of @code{yylval} is @code{YYSTYPE}, which was
+defined at the beginning of the grammar; @pxref{Rpcalc Decls,
+,Declarations for @code{rpcalc}}.)
 
 A token type code of zero is returned if the end-of-file is encountered.
 (Bison recognizes any nonpositive value as indicating the end of the
@@ -1202,19 +1223,19 @@ Here is how to compile and run the parser file:
 @example
 @group
 # @r{List files in current directory.}
-% ls
+$ @kbd{ls}
 rpcalc.tab.c  rpcalc.y
 @end group
 
 @group
 # @r{Compile the Bison parser.}
 # @r{@samp{-lm} tells compiler to search math library for @code{pow}.}
-% cc rpcalc.tab.c -lm -o rpcalc
+$ @kbd{cc rpcalc.tab.c -lm -o rpcalc}
 @end group
 
 @group
 # @r{List files again.}
-% ls
+$ @kbd{ls}
 rpcalc  rpcalc.tab.c  rpcalc.y
 @end group
 @end example
@@ -1223,19 +1244,19 @@ The file @file{rpcalc} now contains the executable code.  Here is an
 example session using @code{rpcalc}.
 
 @example
-% rpcalc
-4 9 +
+$ @kbd{rpcalc}
+@kbd{4 9 +}
 13
-3 7 + 3 4 5 *+-
+@kbd{3 7 + 3 4 5 *+-}
 -13
-3 7 + 3 4 5 * + - n              @r{Note the unary minus, @samp{n}}
+@kbd{3 7 + 3 4 5 * + - n}              @r{Note the unary minus, @samp{n}}
 13
-5 6 / 4 n +
+@kbd{5 6 / 4 n +}
 -3.166666667
-3 4 ^                            @r{Exponentiation}
+@kbd{3 4 ^}                            @r{Exponentiation}
 81
-^D                               @r{End-of-file indicator}
-%
+@kbd{^D}                               @r{End-of-file indicator}
+$
 @end example
 
 @node Infix Calc
@@ -1315,12 +1336,12 @@ Here is a sample run of @file{calc.y}:
 
 @need 500
 @example
-% calc
-4 + 4.5 - (34/(8*3+-3))
+$ @kbd{calc}
+@kbd{4 + 4.5 - (34/(8*3+-3))}
 6.880952381
--56 + 2
+@kbd{-56 + 2}
 -54
-3 ^ 2
+@kbd{3 ^ 2}
 9
 @end example
 
@@ -1372,13 +1393,11 @@ Bison programs.
 @cindex @code{ltcalc}
 @cindex calculator, location tracking
 
-This example extends the infix notation calculator with location tracking.
-This feature will be used to improve error reporting, and provide better
-error messages.
-
-For the sake of clarity, we will switch for this example to an integer
-calculator, since most of the work needed to use locations will be done
-in the lexical analyser.
+This example extends the infix notation calculator with location
+tracking.  This feature will be used to improve the error messages.  For
+the sake of clarity, this example is a simple integer calculator, since
+most of the work needed to use locations will be done in the lexical
+analyser.
 
 @menu
 * Decls: Ltcalc Decls.  Bison and C declarations for ltcalc.
@@ -1389,8 +1408,8 @@ in the lexical analyser.
 @node Ltcalc Decls
 @subsection Declarations for @code{ltcalc}
 
-The C and Bison declarations for the location tracking calculator are the same
-as the declarations for the infix notation calculator.
+The C and Bison declarations for the location tracking calculator are
+the same as the declarations for the infix notation calculator.
 
 @example
 /* Location tracking calculator.  */
@@ -1411,22 +1430,24 @@ as the declarations for the infix notation calculator.
 %% /* Grammar follows */
 @end example
 
-In the code above, there are no declarations specific to locations.  Defining
-a data type for storing locations is not needed: we will use the type provided
-by default (@pxref{Location Type, ,Data Types of Locations}), which is a four
-member structure with the following integer fields: @code{first_line},
-@code{first_column}, @code{last_line} and @code{last_column}.
+@noindent
+Note there are no declarations specific to locations.  Defining a data
+type for storing locations is not needed: we will use the type provided
+by default (@pxref{Location Type, ,Data Types of Locations}), which is a
+four member structure with the following integer fields:
+@code{first_line}, @code{first_column}, @code{last_line} and
+@code{last_column}.
 
 @node Ltcalc Rules
 @subsection Grammar Rules for @code{ltcalc}
 
-Whether you choose to handle locations or not has no effect on the syntax of
-your language.  Therefore, grammar rules for this example will be very close to
-those of the previous example: we will only modify them to benefit from the new
-informations we will have.
+Whether handling locations or not has no effect on the syntax of your
+language.  Therefore, grammar rules for this example will be very close
+to those of the previous example: we will only modify them to benefit
+from the new information.
 
-Here, we will use locations to report divisions by zero, and locate the wrong
-expressions or subexpressions.
+Here, we will use locations to report divisions by zero, and locate the
+wrong expressions or subexpressions.
 
 @example
 @group
@@ -1447,17 +1468,17 @@ exp     : NUM           @{ $$ = $1; @}
         | exp '-' exp   @{ $$ = $1 - $3; @}
         | exp '*' exp   @{ $$ = $1 * $3; @}
 @end group
-        | exp '/' exp
 @group
+        | exp '/' exp
             @{
               if ($3)
                 $$ = $1 / $3;
               else
                 @{
                   $$ = 1;
-                  printf("Division by zero, l%d,c%d-l%d,c%d",
-                         @@3.first_line, @@3.first_column,
-                         @@3.last_line, @@3.last_column);
+                  fprintf (stderr, "%d.%d-%d.%d: division by zero",
+                           @@3.first_line, @@3.first_column,
+                           @@3.last_line, @@3.last_column);
                 @}
             @}
 @end group
@@ -1472,25 +1493,24 @@ This code shows how to reach locations inside of semantic actions, by
 using the pseudo-variables @code{@@@var{n}} for rule components, and the
 pseudo-variable @code{@@$} for groupings.
 
-In this example, we never assign a value to @code{@@$}, because the
-output parser can do this automatically.  By default, before executing
-the C code of each action, @code{@@$} is set to range from the beginning
-of @code{@@1} to the end of @code{@@@var{n}}, for a rule with @var{n}
-components.
-
-Of course, this behavior can be redefined (@pxref{Location Default
-Action, , Default Action for Locations}), and for very specific rules,
-@code{@@$} can be computed by hand.
+We don't need to assign a value to @code{@@$}: the output parser does it
+automatically.  By default, before executing the C code of each action,
+@code{@@$} is set to range from the beginning of @code{@@1} to the end
+of @code{@@@var{n}}, for a rule with @var{n} components.  This behavior
+can be redefined (@pxref{Location Default Action, , Default Action for
+Locations}), and for very specific rules, @code{@@$} can be computed by
+hand.
 
 @node Ltcalc Lexer
 @subsection The @code{ltcalc} Lexical Analyzer.
 
-Until now, we relied on Bison's defaults to enable location tracking. The next
-step is to rewrite the lexical analyser, and make it able to feed the parser
-with locations of tokens, as he already does for semantic values.
+Until now, we relied on Bison's defaults to enable location
+tracking. The next step is to rewrite the lexical analyser, and make it
+able to feed the parser with the token locations, as it already does for
+semantic values.
 
-To do so, we must take into account every single character of the input text,
-to avoid the computed locations of being fuzzy or wrong:
+To this end, we must take into account every single character of the
+input text, to avoid the computed locations of being fuzzy or wrong:
 
 @example
 @group
@@ -1540,17 +1560,18 @@ yylex (void)
 @}
 @end example
 
-Basically, the lexical analyzer does the same processing as before: it skips
-blanks and tabs, and reads numbers or single-character tokens.  In addition
-to this, it updates the @code{yylloc} global variable (of type @code{YYLTYPE}),
-where the location of tokens is stored.
+Basically, the lexical analyzer performs the same processing as before:
+it skips blanks and tabs, and reads numbers or single-character tokens.
+In addition, it updates @code{yylloc}, the global variable (of type
+@code{YYLTYPE}) containing the token's location.
 
-Now, each time this function returns a token, the parser has it's number as
-well as it's semantic value, and it's position in the text. The last needed
-change is to initialize @code{yylloc}, for example in the controlling
-function:
+Now, each time this function returns a token, the parser has its number
+as well as its semantic value, and its location in the text. The last
+needed change is to initialize @code{yylloc}, for example in the
+controlling function:
 
 @example
+@group
 int
 main (void)
 @{
@@ -1558,11 +1579,12 @@ main (void)
   yylloc.first_column = yylloc.last_column = 0;
   return yyparse ();
 @}
+@end group
 @end example
 
-Remember that computing locations is not a matter of syntax.  Every character
-must be associated to a location update, whether it is in valid input, in
-comments, in literal strings, and so on...
+Remember that computing locations is not a matter of syntax.  Every
+character must be associated to a location update, whether it is in
+valid input, in comments, in literal strings, and so on.
 
 @node Multi-function Calc
 @section Multi-Function Calculator: @code{mfcalc}
@@ -1592,20 +1614,20 @@ to create named variables, store values in them, and use them later.
 Here is a sample session with the multi-function calculator:
 
 @example
-% mfcalc
-pi = 3.141592653589
+$ @kbd{mfcalc}
+@kbd{pi = 3.141592653589}
 3.1415926536
-sin(pi)
+@kbd{sin(pi)}
 0.0000000000
-alpha = beta1 = 2.3
+@kbd{alpha = beta1 = 2.3}
 2.3000000000
-alpha
+@kbd{alpha}
 2.3000000000
-ln(alpha)
+@kbd{ln(alpha)}
 0.8329091229
-exp(ln(beta1))
+@kbd{exp(ln(beta1))}
 2.3000000000
-%
+$
 @end example
 
 Note that multiple assignment and nested function calls are permitted.
@@ -2374,7 +2396,8 @@ the numbers associated with @var{x} and @var{y}.
 
 In a simple program it may be sufficient to use the same data type for
 the semantic values of all language constructs.  This was true in the
-RPN and infix calculator examples (@pxref{RPN Calc, ,Reverse Polish Notation Calculator}).
+RPN and infix calculator examples (@pxref{RPN Calc, ,Reverse Polish
+Notation Calculator}).
 
 Bison's default is to use type @code{int} for all semantic values.  To
 specify some other type, define @code{YYSTYPE} as a macro, like this:
@@ -3067,11 +3090,11 @@ terminal symbol.  All kinds of token declarations allow
 @findex %expect
 
 Bison normally warns if there are any conflicts in the grammar
-(@pxref{Shift/Reduce, ,Shift/Reduce Conflicts}), but most real grammars have harmless shift/reduce
-conflicts which are resolved in a predictable way and would be difficult to
-eliminate.  It is desirable to suppress the warning about these conflicts
-unless the number of conflicts changes.  You can do this with the
-@code{%expect} declaration.
+(@pxref{Shift/Reduce, ,Shift/Reduce Conflicts}), but most real grammars
+have harmless shift/reduce conflicts which are resolved in a predictable
+way and would be difficult to eliminate.  It is desirable to suppress
+the warning about these conflicts unless the number of conflicts
+changes.  You can do this with the @code{%expect} declaration.
 
 The declaration looks like this:
 
@@ -3079,10 +3102,11 @@ The declaration looks like this:
 %expect @var{n}
 @end example
 
-Here @var{n} is a decimal integer.  The declaration says there should be no
-warning if there are @var{n} shift/reduce conflicts and no reduce/reduce
-conflicts.  The usual warning is given if there are either more or fewer
-conflicts, or if there are any reduce/reduce conflicts.
+Here @var{n} is a decimal integer.  The declaration says there should be
+no warning if there are @var{n} shift/reduce conflicts and no
+reduce/reduce conflicts.  An error, instead of the usual warning, is
+given if there are either more or fewer conflicts, or if there are any
+reduce/reduce conflicts.
 
 In general, using @code{%expect} involves these steps:
 
@@ -3167,7 +3191,7 @@ valid grammar.
 @cindex declaration summary
 @cindex summary, Bison declaration
 
-Here is a summary of all Bison declarations:
+Here is a summary of the declarations used to define a grammar:
 
 @table @code
 @item %union
@@ -3202,44 +3226,18 @@ Start-Symbol}).
 @item %expect
 Declare the expected number of shift-reduce conflicts
 (@pxref{Expect Decl, ,Suppressing Conflict Warnings}).
+@end table
 
-@item %yacc
-@itemx %fixed_output_files
-Pretend the option @option{--yacc} was given, i.e., imitate Yacc,
-including its naming conventions.  @xref{Bison Options}, for more.
+@sp 1
+@noindent
+In order to change the behavior of @command{bison}, use the following
+directives:
 
-@item %locations
-Generate the code processing the locations (@pxref{Action Features,
-,Special Features for Use in Actions}).  This mode is enabled as soon as
-the grammar uses the special @samp{@@@var{n}} tokens, but if your
-grammar does not use it, using @samp{%locations} allows for more
-accurate parse error messages.
-
-@item %pure_parser
-Request a pure (reentrant) parser program (@pxref{Pure Decl, ,A Pure
-(Reentrant) Parser}).
-
-@item %no_parser
-Do not include any C code in the parser file; generate tables only.  The
-parser file contains just @code{#define} directives and static variable
-declarations.
-
-This option also tells Bison to write the C code for the grammar actions
-into a file named @file{@var{filename}.act}, in the form of a
-brace-surrounded body fit for a @code{switch} statement.
-
-@item %no_lines
-Don't generate any @code{#line} preprocessor commands in the parser
-file.  Ordinarily Bison writes these commands in the parser file so that
-the C compiler and debuggers will associate errors and object code with
-your source file (the grammar file).  This directive causes them to
-associate errors with the parser file, treating it an independent source
-file in its own right.
-
+@table @code
 @item %debug
-Output a definition of the macro @code{YYDEBUG} into the parser file, so
-that the debugging facilities are compiled.  @xref{Debugging, ,Debugging
-Your Parser}.
+In the parser file, define the macro @code{YYDEBUG} to 1 if it is not
+already defined, so that the debugging facilities are compiled.
+@xref{Debugging, ,Debugging Your Parser}.
 
 @item %defines
 Write an extra output file containing macro definitions for the token
@@ -3254,35 +3252,64 @@ This output file is essential if you wish to put the definition of
 be able to refer to token type codes and the variable
 @code{yylval}.  @xref{Token Values, ,Semantic Values of Tokens}.@refill
 
+@item %file-prefix="@var{prefix}"
+Specify a prefix to use for all Bison output file names.  The names are
+chosen as if the input file were named @file{@var{prefix}.y}.
+
+@c @item %header_extension
+@c Specify the extension of the parser header file generated when
+@c @code{%define} or @samp{-d} are used.
+@c
+@c For example, a grammar file named @file{foo.ypp} and containing a
+@c @code{%header_extension .hh} directive will produce a header file
+@c named @file{foo.tab.hh}
+
+@item %locations
+Generate the code processing the locations (@pxref{Action Features,
+,Special Features for Use in Actions}).  This mode is enabled as soon as
+the grammar uses the special @samp{@@@var{n}} tokens, but if your
+grammar does not use it, using @samp{%locations} allows for more
+accurate parse error messages.
+
+@item %name-prefix="@var{prefix}"
+Rename the external symbols used in the parser so that they start with
+@var{prefix} instead of @samp{yy}.  The precise list of symbols renamed
+is @code{yyparse}, @code{yylex}, @code{yyerror}, @code{yynerrs},
+@code{yylval}, @code{yychar} and @code{yydebug}.  For example, if you
+use @samp{%name-prefix="c_"}, the names become @code{c_parse},
+@code{c_lex}, and so on.  @xref{Multiple Parsers, ,Multiple Parsers in
+the Same Program}.
+
+@item %no-parser
+Do not include any C code in the parser file; generate tables only.  The
+parser file contains just @code{#define} directives and static variable
+declarations.
+
+This option also tells Bison to write the C code for the grammar actions
+into a file named @file{@var{filename}.act}, in the form of a
+brace-surrounded body fit for a @code{switch} statement.
+
+@item %no-lines
+Don't generate any @code{#line} preprocessor commands in the parser
+file.  Ordinarily Bison writes these commands in the parser file so that
+the C compiler and debuggers will associate errors and object code with
+your source file (the grammar file).  This directive causes them to
+associate errors with the parser file, treating it an independent source
+file in its own right.
+
+@item %output="@var{filename}"
+Specify the @var{filename} for the parser file.
+
+@item %pure-parser
+Request a pure (reentrant) parser program (@pxref{Pure Decl, ,A Pure
+(Reentrant) Parser}).
+
 @c @item %source_extension
 @c Specify the extension of the parser output file.
 @c
 @c For example, a grammar file named @file{foo.yy} and containing a
 @c @code{%source_extension .cpp} directive will produce a parser file
 @c named @file{foo.tab.cpp}
-@c
-@c @item %header_extension
-@c Specify the extension of the parser header file generated when
-@c @code{%define} or @samp{-d} are used.
-@c
-@c For example, a garmmar file named @file{foo.ypp} and containing a
-@c @code{%header_extension .hh} directive will produce a header file
-@c named @file{foo.tab.hh}
-
-@item %verbose
-Write an extra output file containing verbose descriptions of the
-parser states and what is done for each type of look-ahead token in
-that state.
-
-This file also describes all the conflicts, both those resolved by
-operator precedence and the unresolved ones.
-
-The file's name is made by removing @samp{.tab.c} or @samp{.c} from
-the parser output file name, and adding @samp{.output} instead.@refill
-
-Therefore, if the input file is @file{foo.y}, then the parser file is
-called @file{foo.tab.c} by default.  As a consequence, the verbose
-output file is called @file{foo.output}.@refill
 
 @item %token_table
 Generate an array of token names in the parser file.  The name of the
@@ -3316,7 +3343,30 @@ The number of grammar rules,
 @item YYNSTATES
 The number of parser states (@pxref{Parser States}).
 @end table
+
+@item %verbose
+Write an extra output file containing verbose descriptions of the
+parser states and what is done for each type of look-ahead token in
+that state.
+
+This file also describes all the conflicts, both those resolved by
+operator precedence and the unresolved ones.
+
+The file's name is made by removing @samp{.tab.c} or @samp{.c} from
+the parser output file name, and adding @samp{.output} instead.@refill
+
+Therefore, if the input file is @file{foo.y}, then the parser file is
+called @file{foo.tab.c} by default.  As a consequence, the verbose
+output file is called @file{foo.output}.@refill
+
+@item %yacc
+@itemx %fixed-output-files
+Pretend the option @option{--yacc} was given, i.e., imitate Yacc,
+including its naming conventions.  @xref{Bison Options}, for more.
 @end table
+
+
+
 
 @node Multiple Parsers
 @section Multiple Parsers in the Same Program
@@ -4875,15 +4925,23 @@ If a Bison grammar compiles properly but doesn't do what you want when it
 runs, the @code{yydebug} parser-trace feature can help you figure out why.
 
 To enable compilation of trace facilities, you must define the macro
-@code{YYDEBUG} when you compile the parser.  You could use
-@samp{-DYYDEBUG=1} as a compiler option or you could put @samp{#define
-YYDEBUG 1} in the C declarations section of the grammar file
-(@pxref{C Declarations, ,The C Declarations Section}).  Alternatively, use the @samp{-t} option when
-you run Bison (@pxref{Invocation, ,Invoking Bison}).  We always define @code{YYDEBUG} so that
-debugging is always possible.
+@code{YYDEBUG} to a nonzero value when you compile the parser.  You
+could use @samp{-DYYDEBUG=1} as a compiler option or you could put
+@samp{#define YYDEBUG 1} in the C declarations section of the grammar
+file (@pxref{C Declarations, ,The C Declarations Section}).
+Alternatively, use the @samp{-t} option when you run Bison
+(@pxref{Invocation, ,Invoking Bison}) or the @code{%debug} declaration
+(@pxref{Decl Summary, ,Bison Declaration Summary}).  We suggest that
+you always define @code{YYDEBUG} so that debugging is always possible.
 
-The trace facility uses @code{stderr}, so you must add @w{@code{#include
-<stdio.h>}} to the C declarations section unless it is already there.
+The trace facility outputs messages with macro calls of the form
+@code{YYFPRINTF (stderr, @var{format}, @var{args})} where
+@var{format} and @var{args} are the usual @code{printf} format and
+arguments.  If you define @code{YYDEBUG} to a nonzero value but do not
+define @code{YYFPRINTF}, @code{<stdio.h>} is automatically included
+and @code{YYPRINTF} is defined to @code{fprintf}.  In the same
+situation, C++ parsers include @code{<cstdio>} and use
+@code{std::fprintf} instead.
 
 Once you have compiled the program with trace facilities, the way to
 request a trace is to store a nonzero value in the variable @code{yydebug}.
@@ -4962,7 +5020,7 @@ Here @var{infile} is the grammar file name, which usually ends in
 @samp{.y}.  The parser file's name is made by replacing the @samp{.y}
 with @samp{.tab.c}.  Thus, the @samp{bison foo.y} filename yields
 @file{foo.tab.c}, and the @samp{bison hack/foo.y} filename yields
-@file{hack/foo.tab.c}. It's is also possible, in case you are writting
+@file{hack/foo.tab.c}. It's is also possible, in case you are writing
 C++ code instead of C in your grammar file, to name it @file{foo.ypp}
 or @file{foo.y++}. Then, the output files will take an extention like
 the given one as input (repectively @file{foo.tab.cpp} and @file{foo.tab.c++}).
@@ -5044,24 +5102,17 @@ you are developing Bison.
 
 @item -t
 @itemx --debug
-Output a definition of the macro @code{YYDEBUG} into the parser file, so
-that the debugging facilities are compiled.  @xref{Debugging, ,Debugging
-Your Parser}.
+In the parser file, define the macro @code{YYDEBUG} to 1 if it is not
+already defined, so that the debugging facilities are compiled.
+@xref{Debugging, ,Debugging Your Parser}.
 
 @item --locations
-Pretend that @code{%locactions} was specified.  @xref{Decl Summary}.
+Pretend that @code{%locations} was specified.  @xref{Decl Summary}.
 
 @item -p @var{prefix}
 @itemx --name-prefix=@var{prefix}
-Rename the external symbols used in the parser so that they start with
-@var{prefix} instead of @samp{yy}.  The precise list of symbols renamed
-is @code{yyparse}, @code{yylex}, @code{yyerror}, @code{yynerrs},
-@code{yylval}, @code{yychar} and @code{yydebug}.
-
-For example, if you use @samp{-p c}, the names become @code{cparse},
-@code{clex}, and so on.
-
-@xref{Multiple Parsers, ,Multiple Parsers in the Same Program}.
+Pretend that @code{%name-prefix="@var{prefix}"} was specified.
+@xref{Decl Summary}.
 
 @item -l
 @itemx --no-lines
@@ -5073,11 +5124,11 @@ parser file, treating it as an independent source file in its own right.
 
 @item -n
 @itemx --no-parser
-Pretend that @code{%no_parser} was specified.  @xref{Decl Summary}.
+Pretend that @code{%no-parser} was specified.  @xref{Decl Summary}.
 
 @item -k
 @itemx --token-table
-Pretend that @code{%token_table} was specified.  @xref{Decl Summary}.
+Pretend that @code{%token-table} was specified.  @xref{Decl Summary}.
 @end table
 
 @noindent
@@ -5085,33 +5136,32 @@ Adjust the output:
 
 @table @option
 @item -d
-Pretend that @code{%verbose} was specified, i.e., write an extra output
+@itemx --defines
+Pretend that @code{%defines} was specified, i.e., write an extra output
 file containing macro definitions for the token type names defined in
 the grammar and the semantic value type @code{YYSTYPE}, as well as a few
 @code{extern} variable declarations.  @xref{Decl Summary}.
 
 @item --defines=@var{defines-file}
-The behaviour of @var{--defines} is the same than @samp{-d}. The only 
-difference is that it has an optionnal argument which is the name of
-the output filename.
+Same as above, but save in the file @var{defines-file}.
 
 @item -b @var{file-prefix}
 @itemx --file-prefix=@var{prefix}
-Specify a prefix to use for all Bison output file names.  The names are
-chosen as if the input file were named @file{@var{prefix}.c}.
+Pretend that @code{%verbose} was specified, i.e, specify prefix to use
+for all Bison output file names. @xref{Decl Summary}.
 
 @item -v
 @itemx --verbose
 Pretend that @code{%verbose} was specified, i.e, write an extra output
 file containing verbose descriptions of the grammar and
-parser. @xref{Decl Summary}, for more.
+parser. @xref{Decl Summary}.
 
-@item -o @var{outfile}
-@itemx --output-file=@var{outfile}
-Specify the name @var{outfile} for the parser file.
+@item -o @var{filename}
+@itemx --output=@var{filename}
+Specify the @var{filename} for the parser file.
 
-The other output files' names are constructed from @var{outfile}
-as described under the @samp{-v} and @samp{-d} options.
+The other output files' names are constructed from @var{filename} as
+described under the @samp{-v} and @samp{-d} options.
 
 @item -g
 Output a VCG definition of the LALR(1) grammar automaton computed by
@@ -5119,7 +5169,7 @@ Bison. If the grammar file is @file{foo.y}, the VCG output file will
 be @file{foo.vcg}.
 
 @item --graph=@var{graph-file}
-The behaviour of @var{--graph} is the same than @samp{-g}. The only 
+The behaviour of @var{--graph} is the same than @samp{-g}. The only
 difference is that it has an optionnal argument which is the name of
 the output graph filename.
 @end table
@@ -5168,7 +5218,7 @@ the corresponding short option.
 \line{ --name-prefix \leaderfill -p}
 \line{ --no-lines \leaderfill -l}
 \line{ --no-parser \leaderfill -n}
-\line{ --output-file \leaderfill -o}
+\line{ --output \leaderfill -o}
 \line{ --token-table \leaderfill -k}
 \line{ --verbose \leaderfill -v}
 \line{ --version \leaderfill -V}
@@ -5187,7 +5237,7 @@ the corresponding short option.
 --name-prefix=@var{prefix}                  -p @var{name-prefix}
 --no-lines                            -l
 --no-parser                           -n
---output-file=@var{outfile}                 -o @var{outfile}
+--output=@var{outfile}                      -o @var{outfile}
 --token-table                         -k
 --verbose                             -v
 --version                             -V
@@ -5361,6 +5411,10 @@ Equip the parser for debugging.  @xref{Decl Summary}.
 Bison declaration to create a header file meant for the scanner.
 @xref{Decl Summary}.
 
+@item %file-prefix="@var{prefix}"
+Bison declaration to set tge prefix of the output files. @xref{Decl
+Summary}.
+
 @c @item %source_extension
 @c Bison declaration to specify the generated parser output file extension.
 @c @xref{Decl Summary}.
@@ -5373,7 +5427,10 @@ Bison declaration to create a header file meant for the scanner.
 Bison declaration to assign left associativity to token(s).
 @xref{Precedence Decl, ,Operator Precedence}.
 
-@item %no_lines
+@item %name-prefix="@var{prefix}"
+Bison declaration to rename the external symbols. @xref{Decl Summary}.
+
+@item %no-lines
 Bison declaration to avoid generating @code{#line} directives in the
 parser file.  @xref{Decl Summary}.
 
@@ -5381,11 +5438,15 @@ parser file.  @xref{Decl Summary}.
 Bison declaration to assign non-associativity to token(s).
 @xref{Precedence Decl, ,Operator Precedence}.
 
+@item %output="@var{filename}"
+Bison declaration to set the name of the parser file. @xref{Decl
+Summary}.
+
 @item %prec
 Bison declaration to assign a precedence to a specific rule.
 @xref{Contextual Precedence, ,Context-Dependent Precedence}.
 
-@item %pure_parser
+@item %pure-parser
 Bison declaration to request a pure (reentrant) parser.
 @xref{Pure Decl, ,A Pure (Reentrant) Parser}.
 
@@ -5400,7 +5461,7 @@ Bison declaration to specify the start symbol.  @xref{Start Decl, ,The Start-Sym
 Bison declaration to declare token(s) without specifying precedence.
 @xref{Token Decl, ,Token Type Names}.
 
-@item %token_table
+@item %token-table
 Bison declaration to include a token name table in the parser file.
 @xref{Decl Summary}.
 

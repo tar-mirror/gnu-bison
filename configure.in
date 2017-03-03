@@ -1,5 +1,7 @@
 # Configure template for GNU Bison.                   -*-Autoconf-*-
 #
+# Copyright 2001, 2002  Free Software Foundation, Inc.
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
@@ -16,17 +18,18 @@
 # 02111-1307  USA
 
 # We need a recent Autoconf to run a recent Autotest.
-AC_PREREQ(2.52e)
+AC_PREREQ(2.52g)
 
-AC_INIT([GNU Bison], [1.30], [bug-bison@gnu.org])
+AC_INIT([GNU Bison], [1.31], [bug-bison@gnu.org])
 AC_CONFIG_AUX_DIR(config)
 
-AM_INIT_AUTOMAKE([bison], [1.30])
+AM_INIT_AUTOMAKE([bison], [1.31])
 AM_CONFIG_HEADER(config.h:config.hin)
 
 # Initialize the test suite.
 AC_CONFIG_TESTDIR(tests)
 AC_CONFIG_FILES([tests/bison], [chmod +x tests/bison])
+AC_CONFIG_FILES([tests/Makefile tests/atlocal])
 # Needed by tests/atlocal.in.
 AC_SUBST([GCC])
 
@@ -46,6 +49,9 @@ AC_ARG_ENABLE(gcc-warnings,
  esac],
               [enableval=no])
 if test "${enableval}" = yes; then
+  BISON_WARNING(-Werror)
+  AC_SUBST([WERROR_CFLAGS], [$WARNING_CFLAGS])
+  WARNING_CFLAGS=
   BISON_WARNING(-Wall)
   BISON_WARNING(-W)
   BISON_WARNING(-Wbad-function-cast)
@@ -58,7 +64,6 @@ if test "${enableval}" = yes; then
   BISON_WARNING(-Wshadow)
   BISON_WARNING(-Wstrict-prototypes)
   BISON_WARNING(-Wwrite-strings)
-  CFLAGS="$CFLAGS $WARNING_CFLAGS"
 fi
 
 # Checks for libraries.
@@ -79,26 +84,28 @@ AM_C_PROTOTYPES
 
 # Checks for library functions.
 AC_FUNC_ALLOCA
+AC_FUNC_OBSTACK
+AC_FUNC_ERROR_AT_LINE
+AC_FUNC_STRNLEN
 AC_CHECK_FUNCS(mkstemp setlocale)
-AC_CHECK_DECLS([stpcpy, strndup, strnlen, memchr])
-AC_REPLACE_FUNCS(stpcpy strndup strnlen strspn memchr)
+AC_CHECK_DECLS([stpcpy, strchr, strspn, strnlen, memchr, memrchr])
+AC_REPLACE_FUNCS(stpcpy strchr strspn memchr memrchr)
 jm_FUNC_MALLOC
 jm_FUNC_REALLOC
 jm_PREREQ_QUOTEARG
 jm_PREREQ_ERROR
 AM_WITH_DMALLOC
 
-ALL_LINGUAS="de es et fr ja nl tr ru"
-AM_GNU_GETTEXT
+ALL_LINGUAS="de es et fr ja nl ru sv tr"
+AM_GNU_GETTEXT(, need-ngettext)
 
 # This is necessary so that .o files in LIBOBJS are also built via
 # the ANSI2KNR-filtering rules.
-LIBOBJS=`echo $LIBOBJS|sed 's/\.o /\$U.o /g;s/\.o$/\$U.o/'`
-AC_SUBST(LIBOBJS)
+LIB@&t@OBJS=`echo $LIB@&t@OBJS|sed 's/\.o /\$U.o /g;s/\.o$/\$U.o/'`
+AC_SUBST(LIB@&t@OBJS)
 
 AC_OUTPUT([Makefile
            config/Makefile
            intl/Makefile po/Makefile.in
            lib/Makefile src/Makefile doc/Makefile
-           m4/Makefile
-           tests/Makefile])
+           m4/Makefile])

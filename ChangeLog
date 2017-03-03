@@ -1,3 +1,1189 @@
+2002-01-14  Akim Demaille  <akim@epita.fr>
+
+	Version 1.31.
+
+2002-01-14  Akim Demaille  <akim@epita.fr>
+
+	* tests/regression.at (Invalid CPP headers): Remove.
+
+2002-01-12  Akim Demaille  <akim@epita.fr>
+
+	Version 1.30l.
+
+2002-01-12  Akim Demaille  <akim@epita.fr>
+
+	* lib/Makefile.am (EXTRA_DIST): Add strnlen.c: Automake is still
+	not using Autoconf traces and does not see Autoconf's AC_LIBOBJ.
+
+2002-01-11  Akim Demaille  <akim@epita.fr>
+
+	Version 1.30k.
+
+2002-01-11  Akim Demaille  <akim@epita.fr>
+
+	* configure.in: Use AC_FUNC_STRNLEN.
+	Fixes the failures observed on AIX 4.3 by H.Merijn Brand.
+
+2002-01-09  Akim Demaille  <akim@epita.fr>
+
+	Version 1.30j.
+
+2002-01-09  Akim Demaille  <akim@epita.fr>
+
+	* configure.in (WERROR_CFLAGS): Compute it.
+	* src/Makefile.am (CFLAGS): Pass it.
+	* tests/atlocal.in (CFLAGS): Idem.
+
+2002-01-08  Akim Demaille  <akim@epita.fr>
+
+	* lib/Makefile.am (libbison_a_SOURCES): Add xstrndup.c.
+	* src/getargs.c (AS_FILE_NAME): New.
+	(getargs): Use it to convert DOSish file names.
+	* src/files.c (base_name): Rename as full_base_name to avoid
+	clashes with `base_name ()'.
+	(get_extension_index): Remove.
+	(filename_split): New.
+	(compute_base_names): N-th rewrite, using filename_split.
+
+2002-01-08  Akim Demaille  <akim@epita.fr>
+
+	* lib/basename.c, lib/dirname.h, lib/dirname.c, lib/memrchr.c,
+	* lib/xstrndup.c, lib/strchr.c:
+	New, stolen from the Fileutils 4.1.
+	* lib/Makefile.am (libbison_a_SOURCES): Adjust.
+	* configure.in: Check for the presence of memrchr, strchr,
+	strnlen, and of their prototypes.
+	Don't check for strndup: we no longer use it.
+	* src/system.h: Adjust the prototypes.
+
+2002-01-07  Akim Demaille  <akim@epita.fr>
+
+	* src/conflicts.c (count_rr_conflicts): The previous RR conflicts
+	patch was improperly applied: fix it.
+
+2002-01-07  Akim Demaille  <akim@epita.fr>
+
+	* tests/torture.at (GNU Cim Grammar): Reintroduce their weird
+	'switch' without a following semicolon.
+	* tests/regression.at (braces parsing): New.
+
+2002-01-06  Akim Demaille  <akim@epita.fr>
+
+	Bison is dead wrong in its RR conflict reports.
+
+	* tests/torture.at (GNU Cim Grammar): New.
+	* src/conflicts.c (count_rr_conflicts): Fix.
+
+2002-01-06  Akim Demaille  <akim@epita.fr>
+
+	Creating package.m4 from configure.ac causes too many problems.
+
+	* tests/Makefile.am (package.m4): Create it by hand,
+	AC_CONFIG_TESTDIR no longer does in the most recent CVS Autoconf.
+
+2002-01-04  Paul Eggert  <eggert@twinsun.com>
+
+	* doc/bison.texinfo (Debugging):
+	Remove YYSTDERR; it's no longer defined or used.
+	Also, s/cstdio.h/cstdio/.
+
+2002-01-03  Akim Demaille  <akim@epita.fr>
+
+	* src/files.h: Add it prototype.
+
+2002-01-03  Akim Demaille  <akim@epita.fr>
+
+	* src/files.c, src/files.h (strsuffix): Not static.
+	* src/conflicts.c (conflicts_print): Don't consider it is an error
+	to have a %expectation violation on a file ending by `plural.y'.
+	Eek.
+
+2002-01-03  Akim Demaille  <akim@epita.fr>
+
+	* tests/bison.in: Adjust to CVS Autoconf.
+	* tests/calc.at (exp): We no longer need to special case GCC as
+	the warning flags are passed by configure.
+	* tests/atlocal.in: Adjust.
+	* configure.in: Bump to 1.30j.
+
+2002-01-03  Akim Demaille  <akim@epita.fr>
+
+	Version 1.30i.
+
+2002-01-03  Akim Demaille  <akim@epita.fr>
+
+	* src/bison.simple (YYSTDERR): Remove, replace `stderr'.
+	The ISO C++ standard is extremely clear about it: stderr is
+	considered a macro, not a regular symbol (see table 94 `Header
+	<cstdio> synopsis', [lib.c.files] 27.8.2 C Library files).
+	Therefore std:: does not apply to it.  It still does with fprintf.
+	Also, s/cstdio.h/cstdio/.
+
+2002-01-03  Akim Demaille  <akim@epita.fr>
+
+	* lib/quotearg.c: Use `#include "..."' instead of `#include <...>'
+	for non system headers.
+
+2001-12-27  Paul Eggert  <eggert@twinsun.com>
+
+	* src/bison.simple (YYSTACK_ALLOC, YYSIZE_T): Remove special
+	cases for non-GNU systems like AIX, HP-UX, SGI, Sun, and
+	Sparc, as they were causing more porting problems than the
+	(minor) performance improvement was worth.
+
+2001-12-22  Akim Demaille  <akim@epita.fr>
+
+	* src/output.c (output_short_table, output_short_or_char_table):
+	Change the prototype to use `int' for array ranges: some
+	invocations do pass an int, not a short.
+	Reported by Wayne Green.
+
+2001-12-22  Akim Demaille  <akim@epita.fr>
+
+	Some actions of web2c.y are improperly triggered.
+	Reported by Mike Castle.
+
+	* src/lalr.c (traverse): s/F (i)[k] = F (j)[k]/F (j)[k] = F (i)[k]/.
+	* tests/regression.at (Web2c): Rename as...
+	(Web2c Report): this.
+	(Web2c Actions): New.
+
+2001-12-22  Akim Demaille  <akim@epita.fr>
+
+	Reductions in web2c.y are improperly reported.
+	Reported by Mike Castle.
+
+	* src/conflicts.c (print_reductions): Fix.
+	* tests/regression.at (Web2c): New.
+
+2001-12-18  Akim Demaille  <akim@epita.fr>
+
+	Version 1.30h.
+
+2001-12-18  Akim Demaille  <akim@epita.fr>
+
+	Some host fail on `assert (!"foo")', which expands to
+	((!"foo") ? (void)0 : __assert("!"foo."", __FILE__, __LINE__))
+	Reported by Nelson Beebee.
+
+	* src/output.c, src/vcg.c: Replace `assert (!"it succeeded")' with
+	`#define it_succeeded 0' and `assert (it_succeeded)'.
+
+2001-12-17  Paul Eggert  <eggert@twinsun.com>
+
+	* src/bison.simple (YYSTD): New macro.
+	(YYSIZE_T, YYSTACK_ALLOC, YYSTACK_FREE, YYFPRINTF, YYSTDERR): Use
+	it to simplify macros, and fix some C++ porting problems reported
+	by Hans Aberg.
+
+	* src/output.c (output): Define YYDEBUG to 0 if it is not defined
+	and if we are not debugging.  POSIX requires this.
+	* NEWS, doc/bison.texinfo, doc/bison.1, doc/bison.rnh: Document this.
+
+	* src/output.c (output_gram, output_rule_data): Do not assume that
+	the user defines YYDEBUG to a properly parenthesized expression.
+
+2001-12-15  Akim Demaille  <akim@epita.fr>
+
+	* src/nullable.c (set_nullable): Useless rules must be skipped,
+	otherwise, since we range over their symbols, we might look at a
+	nonterminal which no longer ``exists'', i.e., it is not counted in
+	`nvars', hence we overflow our arrays.
+
+2001-12-15  Akim Demaille  <akim@epita.fr>
+
+	* src/reader.c (copy_action): When --yacc, don't append a `;'
+	to the user action: let it fail if lacking.
+	Suggested by Arnold Robbins and Tom Tromey.
+
+2001-12-13  Akim Demaille  <akim@epita.fr>
+
+	Version 1.30g.
+
+2001-12-13  Akim Demaille  <akim@epita.fr>
+
+	The computation of nullable is broken: it doesn't handle empty
+	RHS's properly.
+
+	* tests/torture.at (GNU AWK Grammar): New.
+	* tests/sets.at (Nullable): New.
+	* src/nullable.c (set_nullable): Instead of blindly looping over
+	`ritems', loop over the rules, and then over their rhs's.
+
+	Work around Autotest bugs.
+
+	* src/warshall.c (bitmatrix_print): Don't use `+--+' as table
+	frame, because Autotest understand lines starting with a `+' as
+	traces from the shell.  Then, they are not processed properly.
+	Admittedly an Autotest bug, but we don't have time to wait for
+	Autotest to catch up.
+	* tests/regression.at (Broken Closure): Adjust to the new table
+	frames.
+	Move to...
+	* tests/sets.at: here.
+
+2001-12-12  Paul Eggert  <eggert@twinsun.com>
+
+	* src/bison.simple (YYSIZE_T, YYSTACK_ALLOC, YYSTACK_FREE):
+	Do not infringe on the global user namespace when using C++.
+	(YYFPRINTF, YYSTDERR): New macros, needed for the above.
+	All uses of `fprintf' and `stderr' changed.
+
+	* src/output.c (output): Do not output "#include <stdio.h>"; that
+	is bison.simple's job.  stdio.h should be included only if
+	necessary, to avoid infringing on the user name space when
+	possible.
+
+2001-12-12  Akim Demaille  <akim@epita.fr>
+
+	* src/complain.h, src/complain.c: Remove error_one_per_line, rely
+	on that of lib/error.c.
+
+2001-12-12  Akim Demaille  <akim@epita.fr>
+
+	Some hosts don't like `/' in includes.
+
+	* src/system.h: Include libgettext.h without qualifying the path.
+	* src/Makefile.am (INCLUDES): Add $(top_srcdir)/intl, remove
+	$(top_srcdir).
+
+2001-12-10  Akim Demaille  <akim@epita.fr>
+
+	Bison dumps core on bash.y.
+	Reported by Pascal Bart.
+
+	* src/warshall.c (bitmatrix_print): New.
+	(TC): Use it.
+	When performing a transitive closure R(i, j) && R(j, k) => R(i,	k),
+	j must be the outer loop.
+	* tests/regression.at (Broken Closure): New.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	Version 1.30f.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* tests/atlocal.in (CPPFLAGS): Do not leave a space between -I and
+	its argument.
+	Reported by Peter Hámorský.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/conflicts.c (err_table): Remove.
+	(resolve_sr_conflict): Adjust.
+	* src/lalr.h (state_t.reduction_table, state_t.shift_table):
+	Rename as...
+	(state_t.reductions, state_t.shifts): this.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/reduce.c (reduce_grammar_tables): No longer disable the
+	removal of useless rules via CPP but via `if (0)', so that the
+	compiler still check the code is valid.
+	For instance, it should have noticed `rline' no longer exists: use
+	the `line' member of rule_t.
+	* src/gram.c (dummy, rline): Remove, unused.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/output.c (pack_vector): Use assert, not berror.
+	* src/main.c (berror): Remove, unused.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	New experimental feature: if --verbose --trace output all the
+	items of a state, not only its kernel.
+
+	* src/print.c (print_core): If `trace_flag', then invoke closure
+	before outputting the items of the state (print_core is no longer
+	a correct name them).
+	(print_results): Invoke new_closure/free_closure if needed.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/LR0.c (new_itemsets): Use nshifts only, not shiftcount.
+	* src/closure.c, src/closure.h (itemsetsize): Rename as...
+	(nitemset): for consistency with the rest of the project.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/closure.c (print_closure): Improve.
+	(closure): Use it for printing input and output.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/closure.c (FIRSTS, FDERIVES): Adjust to reality: they are
+	indexed by nonterminals.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/warshall.c (TC, RTC): De-obsfucate (source reduced to 22% of
+	what it was!).
+	* src/warshall.h: Remove accidental duplication of the content.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/closure.c (set_fderives): De-obfuscate.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/closure.c (print_firsts, print_fderives): De-obfuscate.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/closure.c (set_firsts): De-obfuscate.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/output.c (action_row): De-obfuscate
+	using the good o' techniques: arrays not pointers, variable
+	locality, BITISSET, RESETBIT etc.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	Pessimize the code to simplify it: from now on, all the states
+	have a valid SHIFTS, which NSHIFTS is possibly 0.
+
+	* src/LR0.c (shifts_new): Be global and move to..
+	* src/state.c, src/state.h: here.
+	* src/conflicts, src/lalr.c, src/output.c, src/print.c,
+	* src/print_graph: Adjust.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/state.h (SHIFT_DISABLE, SHIFT_IS_DISABLED): New.
+	* src/conflicts.c: Use it.
+	Restore a few missing `if (!SHIFT_IS_DISABLED)' which were
+	incorrectly ``simplified''.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/conflicts.c (flush_shift, resolve_sr_conflict): De-obfuscate
+	using the good o' techniques: arrays not pointers, variable
+	locality, BITISSET, RESETBIT etc.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/state.h (SHIFT_SYMBOL): New.
+	* src/conflicts.c: Use it to deobfuscate.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/conflicts.c (count_sr_conflicts, count_rr_conflicts)
+	(print_reductions): De-obfuscate using the good o' techniques:
+	arrays not pointers, variable locality, BITISSET.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/conflicts.c (print_reductions): Arrays, not pointers.
+	Use BITISSET.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/conflicts.c (print_reductions): Pessimize, but clarify.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/conflicts.c (print_reductions): Improve variable locality.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/conflicts.c (print_reductions): Pessimize, but clarify.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/conflicts.c (print_reductions): Improve variable locality.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/state.h (SHIFT_IS_ERROR, SHIFT_IS_GOTO, SHIFT_IS_SHIFT): New.
+	* src/lalr.c: Use them.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/LR0.c (augment_automaton): Formatting changes.
+	Better variable locality.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/lalr.c (matrix_print): New.
+	(transpose): Use it.
+	Use arrays instead of pointers.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/lalr.c (maxrhs): Move to...
+	* src/gram.c, src/gram.h (ritem_longest_rhs): here.
+	* src/lalr.c (build_relations): Adjust.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/lalr.c (transpose): Free the memory allocated to the
+	argument, as it is replaced by the results by the unique caller.
+	(build_relations): Merely invoke transpose: it handles the memory
+	deallocation.
+	Improve variable locality.
+	Avoid variables used as mere abbreviations.
+	(compute_lookaheads): Use arrays instead of pointers.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/lalr.c (initialize_F): Improve variable locality.
+	Avoid variables used as mere abbreviations.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/derives.c (print_derives): Display the ruleno.
+	* src/lalr.c (initialize_F, transpose): Better variable locality
+	to improve readability.
+	Avoid variables used as mere abbreviations.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/lalr.c (traverse): Use arrays instead of pointers.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/nullable.c (set_nullable): Use a for loop to de-obfuscate
+	the handling of squeue.
+	`symbol >= 0' is wrong now, use `rule_table[ruleno].useful'.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	Because useless nonterminals are now kept alive (instead of being
+	`destroyed'), we now sometimes examine them, and store information
+	related to them.  Hence we need to know their number, and adjust
+	memory allocations.
+
+	* src/reduce.c, src/reduce.h (nuseless_nonterminals): No longer
+	static.
+	* src/LR0.c (allocate_itemsets): The memory allocated to
+	`symbol_count' was used for two different purpose: once to count
+	the number of occurrences of each symbol, and later reassigned to
+	`shift_symbol', containing the symbol that can be shifted from a
+	given state.
+	Deobfuscate, i.e., allocate, use and free `symbol_count' here
+	only, and...
+	(new_itemsets): Allocate `shift_symbol' here.
+	(allocate_itemsets): symbol_count includes useless nonterminals.
+	Make room for them.
+	(free_storage): Use `free', not `XFREE', for pointers that cannot
+	be null.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/nullable.c (set_nullable): Deobfuscate the handling of
+	ritem.
+	`symbol >= 0' is wrong now, use `rule_table[ruleno].useful'.
+
+2001-12-05  Akim Demaille  <akim@epita.fr>
+
+	* src/gram.c, src/gram.h (ritem_print): New.
+	* src/gram.c (dummy): Remove, now there is actual code in gram.c.
+	(This useless function was defined only to work around VMS linkers
+	that can't handle compilation units with variables only).
+	* src/reduce.c (dump_grammar): Use it to trace the construction of
+	ritem.
+
+2001-12-04  Paul Eggert  <eggert@twinsun.com>
+
+	* src/bison.simple (union yyalloc): Change member names
+	to be the same as the stack names.
+	(yyparse): yyptr is now union yyalloc *, not char *.
+	(YYSTACK_RELOCATE): Likewise.  This avoids a GCC warning,
+	and may generate better code on some machines.
+	(yystpcpy): Use prototype if __STDC__ is defined, not just
+	if __cplusplus is defined.
+
+2001-11-30  Akim Demaille  <akim@epita.fr>
+
+	* configure.in (WARNING_CFLAGS): Add -Werror when possible.
+	(CFLAGS): Do not include the WARNING_CFLAGS here, since GNU
+	Gettext doesn't compile cleanly, and dies with -Werror.
+	* src/Makefile.am, lib/Makefile.am, tests/atlocal.in (CFLAGS):
+	Include WARNING_CFLAGS here.
+	* lib/xstrdup.c: Include xalloc.h, so that xstrdup be declared
+	before being defined.
+
+2001-11-30  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/quotearg.h (quotearg_n, quotearg_n_style):
+	First arg is int, not unsigned.
+	* lib/quotearg.c (quotearg_n, quotearg_n_style): Likewise.
+	(SIZE_MAX, UINT_MAX): New macros.
+	(quotearg_n_options): Abort if N is negative.
+	Avoid overflow check on hosts where size_t is 64 bits and int
+	is 32 bits, as overflow is impossible there.
+	Fix off-by-one typo that caused unnecessary reallocation.
+
+2001-11-30  Paul Eggert  <eggert@twinsun.com>
+
+	Name space cleanup in generated parser.
+
+	* doc/bison.texinfo (Bison Parser): Discuss system headers
+	and their effect on the user name space.
+
+	* src/bison.simple:
+	(YYSTACK_ALLOC, YYSTACK_FREE, union yyalloc, YYSTACK_GAP_MAX,
+	YYSTACK_BYTES, YYSTACK_RELOCATE): Do not define unless necessary,
+	i.e. unless ! defined (yyoverflow) || defined (YYERROR_VERBOSE).
+
+	(YYSIZE_T): New macro.  Use it instead of size_t, to avoid infringing
+	on user names when possible.
+
+	(YYSTACK_USE_ALLOCA): Do not define; just use any existing defn.
+	Simplify test for whather <alloca.h> exists.
+
+	(<stdlib.h>): Include if we will use malloc, and if standard C or C++.
+
+	(<stdio.h>): Include if YYDEBUG.
+
+	(yymemcpy): Renamed from __yy_memcpy.  Do not define unless
+	! defined (yyoverflow) && ! defined (yymemcpy).
+
+	(yymemcpy, yyparse): Rename local variables as needed so that
+	they all begin with 'yy'.
+
+	(yystrlen, yystpcpy): New functions.
+
+	(YY_DECL_NON_LSP_VARIABLES): Renamed from _YY_DECL_VARIABLES.
+	All uses changed.
+
+	(yyparse): size_t -> YYSIZE_T.  Use yystrlen and yystpcpy
+	instead of relying on string.h functions.  Use YYSTACK_ALLOC
+	and YYSTACK_FREE instead of malloc and free.
+
+2001-11-30  Akim Demaille  <akim@epita.fr>
+
+	* src/bison.simple (YYSTACK_FREE): Use `do {;} while (0)' as empty
+	if body instead of `;' to pacify GCC's warnings.
+
+2001-11-30  Akim Demaille  <akim@epita.fr>
+
+	Instead of mapping the LHS of unused rules to -1, keep the LHS
+	valid, but flag the rules as invalid.
+
+	* src/gram.h (rule_t): `useful' is a new member.
+	* src/print.c (print_grammar): Adjust.
+	* src/derives.c (set_derives): Likewise.
+	* src/reader.c (packgram, reduce_output): Likewise.
+	* src/reduce.c (reduce_grammar_tables): Likewise.
+	* tests/reduce.at (Underivable Rules, Useless Rules): New.
+
+2001-11-30  Akim Demaille  <akim@epita.fr>
+
+	* src/reduce.c (reduce_output): Formatting changes.
+	* src/print.c (print_results, print_grammar): Likewise.
+	* tests/regression.at (Rule Line Numbers)
+	(Solved SR Conflicts, Unresolved SR Conflicts): Adjust.
+
+2001-11-30  Akim Demaille  <akim@epita.fr>
+
+	* src/reduce.c (nonterminals_reduce): Instead of throwing away
+	useless nonterminals, move them at the end of the symbol arrays.
+	(reduce_output): Adjust.
+	* tests/reduce.at (Useless Nonterminals): Adjust.
+
+2001-11-30  Akim Demaille  <akim@epita.fr>
+
+	* src/reduce.c: Various comment/formatting changes.
+	(nonterminals_reduce): New, extracted from...
+	(reduce_grammar_tables): here.
+	(reduce_grammar): Call nonterminals_reduce.
+
+2001-11-29  Paul Eggert  <eggert@twinsun.com>
+
+	* src/bison.simple (YYSTACK_REALLOC): Remove.
+	(YYSTACK_ALLOC): Resurrect this macro, with its old meaning.
+	(YYSTACK_FREE, YYSTACK_GAP_MAX, YYSTACK_BYTES, YYSTACK_RELOCATE):
+	New macros.
+	(union yyalloc): New type.
+	(__yy_memcpy): Last arg is size_t, not unsigned int, to remove
+	an arbitrary restriction on hosts where size_t is wider than int.
+
+	(yyparse): Don't dump core if alloca or malloc fails; instead, report
+	a parser stack overflow.  Allocate just one block of memory for all
+	three stacks, instead of allocating three blocks; this typically is
+	faster and reduces fragmentation.
+
+	Do not limit the number of items in the stack to a value that fits
+	in 'int', as this is an arbitrary limit on hosts with 64-bit
+	size_t and 32-bit int.
+
+2001-11-28  Akim Demaille  <akim@epita.fr>
+
+	* src/LR0.c (shifts_new): New.
+	(save_shifts, insert_start_shift, augment_automaton): Use it.
+
+2001-11-28  Akim Demaille  <akim@epita.fr>
+
+	* src/closure.c (closure): `b' and `ruleno' denote the same value:
+	keep ruleno only.
+
+2001-11-28  Akim Demaille  <akim@epita.fr>
+
+	* src/closure.c (closure): Instead of looping over word in array
+	then bits in words, loop over bits in array.
+
+2001-11-28  Akim Demaille  <akim@epita.fr>
+
+	* src/closure.c (closure): No longer optimize the special case
+	where all the bits of `ruleset[r]' are set to 0, to make the code
+	clearer.
+
+2001-11-28  Akim Demaille  <akim@epita.fr>
+
+	* src/closure.c (closure): `r' and `c' are new variables, used to
+	de-obfuscate accesses to RULESET and CORE.
+
+2001-11-28  Akim Demaille  <akim@epita.fr>
+
+	* src/reduce.c (reduce_print): Use ngettext.
+	(dump_grammar): Improve the trace accuracy.
+
+2001-11-28  Akim Demaille  <akim@epita.fr>
+
+	* src/reduce.c (dump_grammar): Don't translate trace messages.
+
+2001-11-28  Akim Demaille  <akim@epita.fr>
+
+	* tests/reduce.at (Useless Terminals, Useless Nonterminals): New.
+	* src/reduce.c (reduce_grammar_tables): Do not free useless tags,
+	as all tags are free'ed afterwards.
+	From Enrico Scholz.
+
+2001-11-27  Akim Demaille  <akim@epita.fr>
+
+	* src/system.h: Use intl/libgettext.h.
+	* src/Makefile.am (INCLUDES): Add -I $(top_srcdir).
+
+2001-11-27  Paul Eggert  <eggert@twinsun.com>
+
+	* src/bison.simple (YYSTACK_REALLOC): Fix typo that caused us to
+	use alloca when we didn't want to, and vice versa.
+
+2001-11-27  Akim Demaille  <akim@epita.fr>
+
+	* tests/torture.at (Exploding the Stack Size with Malloc):
+	s/YYSTACK_USE_ALLOCA_ALLOCA/YYSTACK_USE_ALLOCA/.
+
+2001-11-27  Akim Demaille  <akim@epita.fr>
+
+	* src/files.c: Include error.h.
+	From Hans Aberg.
+
+2001-11-26  Akim Demaille  <akim@epita.fr>
+
+	Version 1.30e.
+
+2001-11-26  Akim Demaille  <akim@epita.fr>
+
+	* src/reader.c (readgram): Make sure rules for mid-rule actions
+	have a lineno equal to that of their host rule.
+	Reported by Hans Aberg.
+	* tests/regression.at (Rule Line Numbers): New.
+
+2001-11-26  Akim Demaille  <akim@epita.fr>
+
+	* src/LR0.c (allocate_itemsets): kernel_size contains ints, not
+	size_ts.
+	Reported by Hans Aberg.
+
+2001-11-26  Akim Demaille  <akim@epita.fr>
+
+	* src/complain.c, src/complain.h (error): Remove, provided by
+	lib/error.[ch].
+
+2001-11-26  Akim Demaille  <akim@epita.fr>
+
+	* src/reader.c (read_declarations): Don't abort on tok_illegal,
+	issue an error message.
+	* tests/regression.at (Invalid %directive): New.
+	Reported by Hans Aberg.
+
+2001-11-26  Akim Demaille  <akim@epita.fr>
+
+	* configure.in: Invoke AC_FUNC_OBSTACK and AC_FUNC_ERROR_AT_LINE.
+	* lib/Makefile.am (libbison_a_SOURCES): Adjust.
+
+2001-11-26  Akim Demaille  <akim@epita.fr>
+
+	* src/conflicts.c (conflicts_print): Don't complain at all when
+	there are no reduce/reduce conflicts, and as many shift/reduce
+	conflicts as expected.
+	* tests/regression.at (%expect right): Adjust.
+
+2001-11-23  Akim Demaille  <akim@epita.fr>
+
+	* lib/alloca.c: Update, from fileutils.
+
+2001-11-23  Akim Demaille  <akim@epita.fr>
+
+	* lib/Makefile.am (libbison_a_LIBADD): Add @ALLOCA@.
+
+2001-11-23  Akim Demaille  <akim@epita.fr>
+
+	* src/system.h: Include alloca.h.
+	* src/main.c (main) [C_ALLOCA]: Call alloca (0).
+
+2001-11-23  Akim Demaille  <akim@epita.fr>
+
+	* src/print_graph.c (print_actions): Remove `rule', unused.
+	* src/LR0.c (kernel_size): Contain `int' instead of `size_t' to
+	pacify GCC's signed < unsigned warnings.
+	* src/closure.c (itemsetsize): Likewise.
+	* src/reader.c (symbol_list_new): Static.
+
+2001-11-23  Akim Demaille  <akim@epita.fr>
+
+	Attaching lineno to buckets is stupid, since only one copy of each
+	symbol is kept, only the line of the first occurrence is kept too.
+
+	* src/symtab.h, src/symtab.c (bucket): Remove the line member.
+	* src/reader.c (rline_allocated): Remove, unused.
+	(symbol_list): Have a `line' member.
+	(symbol_list_new): New.
+	(readgram): Use it.
+	* src/print.c (print_grammar): Output the rule line numbers.
+	* tests/regression.at (Solved SR Conflicts)
+	(Unresolved SR Conflicts): Adjust.
+	Reported by Hans Aberg.
+
+2001-11-20  Akim Demaille  <akim@epita.fr>
+
+	Version 1.30d.
+
+2001-11-20  Akim Demaille  <akim@epita.fr>
+
+	* po/sv.po: New.
+	* configure.in (ALL_LINGUAS): Adjust.
+	* po/POTFILE.in: Remove `nullable.c' and `derives.c' which no
+	longer contains strings to translate.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/conflicts.c (conflicts_print): Add a missing \n.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/nullable.c (nullable_print): New.
+	(set_nullable): Call it when tracing.
+	Better locality of variables.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/print.c (print_actions): Better locality of variables.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/derives.c (print_derives): Fix and enrich.
+	* src/closure.c (print_fderives): Likewise.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/closure.c (itemsetend): Remove, replaced with...
+	(itemsetsize): new.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/LR0.c (kernel_end): Remove, replaced with...
+	(kernel_size): new.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/conflicts.c (set_conflicts): Use arrays instead of pointers
+	to clarify.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/closure.c (closure): Use arrays instead of pointers to clarify.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/closure.c, src/derives.c, src/nullable.c: Adjust various
+	trace messages.
+	* src/LR0.c: Likewise.
+	(allocate_itemsets): Use arrays instead of pointers to clarify.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/getargs.c (statistics_flag): Replace with...
+	(trace_flag): New.
+	(longopts): Accept --trace instead of --statistics.
+	* src/getargs.h: Adjust.
+	* src/LR0.c, src/closure.c, src/derives.c, src/nullable.c,
+	* src/reduce.c: Use trace_flags instead of the CPP conditional TRACE.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/LR0.c (new_itemsets, get_state): Use more arrays and fewer
+	pointers to clarify the code.
+	(save_reductions, save_shifts): Factor common parts of alternatives.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/LR0.c (new_state, get_state): Complete TRACE code.
+	* src/closure.c: Include `reader.h' to get `tags', needed by the
+	trace code.
+	Rename the conditional DEBUG as TRACE.
+	Output consistently TRACEs to stderr, not stdout.
+	* src/derives.c: Likewise.
+	* src/reduce.c: (inaccessable_symbols): Using if is better style
+	than goto.
+	Use `#if TRACE' instead of `#if 0' for tracing code.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/system.h (LIST_FREE, shortcpy): New.
+	* src/LR0.c: Use them.
+	* src/output.c (free_itemsets, free_reductions, free_shifts):
+	Remove, replaced by LIST_FREE.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/state.h (CORE_ALLOC, SHIFTS_ALLOC, ERRS_ALLOC)
+	(REDUCTIONS_ALLOC):  New.
+	* src/LR0.c, src/conflicts.c: Use them to de-obfuscate memory
+	allocation.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/LR0.c (new_state): Complete trace code.
+	* src/nullable.c (set_nullable): Don't translate traces.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/print_graph.c (print_core): Better locality of variables.
+	* src/print.c (print_core): Likewise.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/vcg.c: You do the output, so you are responsible of the
+	handling of VCG syntax, in particular: use quotearg.
+	* src/print_graph.c: Don't.
+	(print_actions): Don't output the actions as part of the nodes,
+	since that's the job of the edges.
+	(print_state): Don't output by hand: fill the node description,
+	and ask for its output.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/bison.simple (yyparse): When verbosely reporting an error,
+	no longer put additional quotes around token names.
+	* tests/calc.at: Adjust.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/symtab.h, src/symtab.c: `line' is a new member of `bucket'.
+	* src/reader.c (record_rule_lines, rline, rline_allocated): Remove.
+	* src/output.c: Adjust.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/gram.h (rprec, rprecsym, rassoc): Remove, now part of...
+	(rule_t): this.
+	* src/conflicts.c, src/reader.c, src/reduce.c: Adjust.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/gram.h (rule_t): New.
+	(rule_table): New.
+	(rrhs, rlhs): Remove, part of state_t.
+	* src/print_graph.c, src/closure.c, src/conflicts.c, src/derives.c,
+	* src/lalr.c, src/nullable.c, src/output.c, src/print.c,
+	* src/reader.c, src/reduce.c: Adjust.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/reader.c (symbols_output): New, extracted from...
+	(packsymbols): Here.
+	(reader): Call it.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/lalr.c (set_maxrhs, maxrhs): Remove, replaced with...
+	(maxrhs): this new function.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/lalr.c (F): New macro to access the variable F.
+	Adjust.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/lalr.h (LA): New macro to access the variable LA.
+	* src/output.c, src/lalr.c, src/print_graph.c, src/conflicts.c:
+	* src/lalr.c: Adjust.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/lalr.c (initialize_LA): Only initialize LA.  Let...
+	(set_state_table): handle the `lookaheads' members.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/lalr.h (lookaheads): Removed array, whose contents is now
+	a member of...
+	(state_t): this structure.
+	* src/output.c, src/lalr.c, src/print_graph.c, src/conflicts.c:
+	Adjust.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/lalr.h (consistent): Removed array, whose contents is now
+	a member of...
+	(state_t): this structure.
+	* src/output.c, src/lalr.c, src/print_graph.c, src/conflicts.c:
+	Adjust.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/lalr.h (reduction_table, shift_table): Removed arrays, whose
+	contents are now members of...
+	(state_t): this structure.
+	* src/output.c, src/lalr.c, src/print_graph.c, src/conflicts.c:
+	Adjust.
+
+2001-11-19  Akim Demaille  <akim@epita.fr>
+
+	* src/lalr.h (state_t): New.
+	(state_table): Be a state_t * instead of a core **.
+	(accessing_symbol): Remove, part of state_t.
+	* src/lalr.c: Adjust.
+	(set_accessing_symbol): Merge into...
+	(set_state_table): this.
+	* src/print_graph.c, src/conflicts.c: Adjust.
+
+2001-11-14  Akim Demaille  <akim@epita.fr>
+
+	Version 1.30c.
+
+2001-11-14  Akim Demaille  <akim@epita.fr>
+
+	* tests/calc.at, tests/output.at, tests/regression.at,
+	* tests/testsuite.at, tests/torture.at: Rely on Autotest 2.52g:
+	now the tests are run in private dirs, therefore AC_CLEANUP and
+	family can be simplified to 0-ary.
+	* tests/atlocal.in: Now that we run `elsewhere' than in tests/,
+	use abs. path to find config.h.
+
+2001-11-14  Akim Demaille  <akim@epita.fr>
+
+	* tests/calc.at (AT_CHECK_CALC): Don't try to check the compiler's
+	stderr, there can be way too much random noise.
+	Instead pass -Werror to GCC and rely on the exit status.
+	Reported by Wolfram Wagner.
+
+2001-11-14  Akim Demaille  <akim@epita.fr>
+
+	* src/bison.simple (yyparse): Let yyls1, yyss1 and yyvs1 be
+	defined only if yyoverflow is defined, to avoid `warning: unused
+	variable `yyvs1''.
+	Reported by The Test Suite.
+
+2001-11-14  Akim Demaille  <akim@epita.fr>
+
+	* src/print.c: Include reduce.h.
+	Reported by Hans Aberg.
+
+2001-11-14  Akim Demaille  <akim@epita.fr>
+
+	* src/lex.c, src/lex.h (token_buffer, unlexed_token_buffer):
+	Revert a previous patch:  these are really const.
+	* src/conflicts.c (conflict_report): Additional useless pair of
+	braces to pacify GCC's warnings for `if () if () {} else {}'.
+	* src/lex.c (parse_percent_token): Replace equal_offset with
+	arg_offset.
+	arg is const.
+	Be sure to strdup `arg' when used, since there is no reason for
+	token_buffer not to change.
+
+2001-11-14  Akim Demaille  <akim@epita.fr>
+
+	* src/system.h (EXIT_SUCCESS, EXIT_FAILURE): Ensure a proper
+	definition.
+	* src/main.c (main): Use them.
+	Suggested by Hans Aberg.
+
+2001-11-12  Akim Demaille  <akim@epita.fr>
+
+	Version 1.30b.
+
+	* src/system.h (ngettext): Now that we use ngettext, be sure to
+	provide a default definition when NLS are not used that takes care
+	of the cardinality.
+
+2001-11-12  Akim Demaille  <akim@epita.fr>
+
+	* doc/bison.texinfo: Use `$' as shell prompt, not `%'.
+	Use @kbd to denote user input.
+	(Language and Grammar): ANSIfy the example.
+	Adjust its layout for info/notinfo.
+	(Location Tracking Calc): Output error messages to stderr.
+	Output locations in a more GNUtically correct way.
+	Fix a couple of Englishos.
+	Adjust @group/@end group pairs.
+
+2001-11-12  Akim Demaille  <akim@epita.fr>
+
+	%expext was not functioning at all.
+
+	* src/conflicts.c (expected_conflicts): Set to -1.
+	(conflict_report): Use ngettext.
+	(conflicts_print): Check %expect and make its violation an error.
+	* doc/bison.texinfo (Expect Decl): Adjust.
+	* configure.in (AM_GNU_GETTEXT): Ask for ngettext.
+	* tests/regression.at (%expect not enough, %expect right)
+	(%expect too much): New.
+
+2001-11-12  Akim Demaille  <akim@epita.fr>
+
+	* tests/regression.at (Conflicts): Rename as...
+	(Unresolved SR Conflicts): this.
+	(Solved SR Conflicts): New.
+
+2001-11-12  Akim Demaille  <akim@epita.fr>
+
+	* src/reduce.c (print_results): Rename as...
+	(reduce_output): This.
+	Output to OUT, passed as argument, instead of output_obstack.
+	(dump_grammar): Likewise.
+	(reduce_free): New.
+	Also free V1.
+	(reduce_grammar): No longer call reduce_output, since...
+	* src/print.c (print_results): do it.
+	* src/main.c (main): Call reduce_free;
+
+2001-11-12  Akim Demaille  <akim@epita.fr>
+
+	* src/conflicts.c (print_reductions): Accept OUT as argument.
+	Output to it, not to output_obstack.
+	* src/print.c (print_actions): Adjust.
+
+2001-11-12  Akim Demaille  <akim@epita.fr>
+
+	* src/conflicts.c (count_sr_conflicts, count_rr_conflicts): Return
+	the result instead of using...
+	(src_total, rrc_total, src_count, rrc_count): Remove.
+	(any_conflicts): Remove.
+	(print_conflicts): Split into...
+	(conflicts_print, conflicts_output): New.
+	* src/conflicts.h: Adjust.
+	* src/main.c (main): Invoke both conflicts_output and conflicts_print.
+	* src/print.c (print_grammar): Issue `\n' between to rule outputs.
+	* tests/regression.at (Conflicts): New.
+	Reported by Tom Lane.
+
+2001-11-12  Akim Demaille  <akim@epita.fr>
+
+	* tests/regression.at (Invalid input): Remove, duplicate with
+	``Invalid input: 1''.
+
+2001-11-12  Akim Demaille  <akim@epita.fr>
+
+	* tests/torture.at (AT_DATA_STACK_TORTURE)
+	(Exploding the Stack Size with Alloca)
+	(Exploding the Stack Size with Malloc): New.
+
+2001-11-12  Akim Demaille  <akim@epita.fr>
+
+	* src/bison.simple (YYSTACK_REALLOC): New.
+	(yyparse) [!yyoverflow]: Use it and free the old stack.
+	Reported by Per Allansson.
+
+2001-11-05  Akim Demaille  <akim@epita.fr>
+
+	Version 1.30a.
+	* src/lex.c (parse_percent_token): s/quotearg/quote/.
+
+2001-11-05  Akim Demaille  <akim@epita.fr>
+
+	* tests/regression.at (AT_TEST_CPP_GUARD_H): Adjust the clean up
+	pattern.
+
+2001-11-05  Akim Demaille  <akim@epita.fr>
+
+	* src/reader.c (parse_union_decl): Output yystype/YYSTYPE as we do
+	with yyltype/YYLTYPE.  This allows inclusion of the generated
+	header within the parser if the compiler, such as GGC, accepts
+	multiple equivalent #defines.
+
+2001-11-04  Akim Demaille  <akim@epita.fr>
+
+	* src/getargs.c (longopts): Support `--output'.  getopt is now
+	able to understand that `--out' is OK: the two racing long options
+	are aliases.
+	(usage): Adjust.
+	* src/lex.h (tok_setopt): Remove, replaced with...
+	(tok_intopt, tok_stropt): these new guys.
+	* src/lex.c (getopt.h): Not needed.
+	(token_buffer, unlexed_token_buffer): Not const.
+	(percent_table): Promote `-' over `_' in directive names.
+	Active `%name-prefix', `file-prefix', and `output'.
+	(parse_percent_token): Accept possible arguments to directives.
+	Promote `-' over `_' in directive names.
+	* doc/bison.texinfo (Decl Summary): Split the list into
+	`directives for grammars' and `directives for bison'.
+	Sort'em.
+	Add description of `%name-prefix', `file-prefix', and `output'.
+	Promote `-' over `_' in directive names.
+	(Bison Options): s/%locactions/%locations/.  Nice Freudian slip.
+	Simplify the description of `--name-prefix'.
+	Promote `-' over `_' in directive names.
+	Promote `--output' over `--output-file'.
+	Fix the description of `--defines'.
+	* tests/output.at: Exercise %file-prefix and %output.
+
+2001-11-02  Akim Demaille  <akim@epita.fr>
+
+	* doc/refcard.tex: Update.
+
+2001-11-02  Akim Demaille  <akim@epita.fr>
+
+	* src/symtab.h (SUNDEF): New.
+	* src/symtab.c (bucket_new): Init user_token_number to SUNDEF to
+	stand for `uninitialized', instead of 0.
+	* src/reader.c (packsymbols, parse_thong_decl): Adjust.
+	* src/lex.c (lex): Adjust.
+
+	* tests/calc.at (_AT_DATA_CALC_Y): Declare a token for EOF.
+	Number it 0.
+	Let yylex return it instead of a plain 0.
+	Reported by Dick Streefland.
+
+2001-11-02  Akim Demaille  <akim@epita.fr>
+
+	* tests/regression.at (Mixing %token styles): New test.
+
+2001-11-02  Akim Demaille  <akim@epita.fr>
+
+	* src/reader.c (parse_thong_decl): Formatting changes.
+	(token_translations_init): New, extracted from...
+	(packsymbols): Here.
+	Adjust.
+
+2001-11-01  Akim Demaille  <akim@epita.fr>
+
+	* tests/regression.at (AT_TEST_CPP_GUARD_H): New.
+	Check that `9foo.y' produces correct cpp guards.
+	* src/files.c (compute_header_macro): Prepend `BISON_' to CPP
+	guards.
+	Reported by Wwp.
+
+2001-11-01  Akim Demaille  <akim@epita.fr>
+
+	* tests/regression.at (Invalid input: 2): New.
+	* src/lex.c (unlexed_token_buffer): New.
+	(lex, unlex): Adjust: when unlexing, be sure to save token_buffer
+	too.
+	Reported by Wwp.
+
+2001-11-01  Akim Demaille  <akim@epita.fr>
+
+	* configure.in: Bump to 1.30a.
+	Adjust to newer Autotest.
+
 2001-10-26  Akim Demaille  <akim@epita.fr>
 
 	Version 1.30.

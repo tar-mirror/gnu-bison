@@ -1,5 +1,5 @@
 /* Type definitions for nondeterministic finite state machine for bison,
-   Copyright 1984, 1989, 2000 Free Software Foundation, Inc.
+   Copyright 1984, 1989, 2000, 2001 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -88,6 +88,11 @@
 #ifndef STATE_H_
 # define STATE_H_
 
+
+/*-------.
+| Core.  |
+`-------*/
+
 typedef struct core
 {
   struct core *next;
@@ -96,10 +101,15 @@ typedef struct core
   short accessing_symbol;
   short nitems;
   short items[1];
-}
-core;
+} core;
 
+#define CORE_ALLOC(Nitems)						\
+  (core *) xcalloc ((unsigned) (sizeof (core)	 			\
+                                + (Nitems - 1) * sizeof (short)), 1)
 
+/*---------.
+| Shifts.  |
+`---------*/
 
 typedef struct shifts
 {
@@ -107,19 +117,66 @@ typedef struct shifts
   short number;
   short nshifts;
   short shifts[1];
-}
-shifts;
+} shifts;
 
 
+#define SHIFTS_ALLOC(Nshifts)						\
+  (shifts *) xcalloc ((unsigned) (sizeof (shifts) 			\
+                                  + (Nshifts - 1) * sizeof (short)), 1)
+
+shifts * shifts_new PARAMS ((int n));
+
+
+/* What is the symbol which is shifted by SHIFTS->shifts[Shift]?  Can
+   be a token (amongst which the error token), or non terminals in
+   case of gotos.  */
+
+#define SHIFT_SYMBOL(Shifts, Shift) \
+  (state_table[Shifts->shifts[Shift]].accessing_symbol)
+
+/* Is the SHIFTS->shifts[Shift] a real shift? (as opposed to gotos.) */
+
+#define SHIFT_IS_SHIFT(Shifts, Shift) \
+  (ISTOKEN (SHIFT_SYMBOL (Shifts, Shift)))
+
+/* Is the SHIFTS->shifts[Shift] a goto?. */
+
+#define SHIFT_IS_GOTO(Shifts, Shift) \
+  (!SHIFT_IS_SHIFT (Shifts, Shift))
+
+/* Is the SHIFTS->shifts[Shift] then handling of the error token?. */
+
+#define SHIFT_IS_ERROR(Shifts, Shift) \
+  (SHIFT_SYMBOL (Shifts, Shift) == error_token_number)
+
+/* When resolving a SR conflicts, if the reduction wins, the shift is
+   disabled.  */
+
+#define SHIFT_DISABLE(Shifts, Shift) \
+  (Shifts->shifts[Shift] = 0)
+
+#define SHIFT_IS_DISABLED(Shifts, Shift) \
+  (Shifts->shifts[Shift] == 0)
+
+
+/*-------.
+| Errs.  |
+`-------*/
 
 typedef struct errs
 {
   short nerrs;
   short errs[1];
-}
-errs;
+} errs;
+
+#define ERRS_ALLOC(Nerrs)						\
+  (errs *) xcalloc ((unsigned) (sizeof (errs) 				\
+                                  + (Nerrs - 1) * sizeof (short)), 1)
 
 
+/*-------------.
+| Reductions.  |
+`-------------*/
 
 typedef struct reductions
 {
@@ -127,7 +184,10 @@ typedef struct reductions
   short number;
   short nreds;
   short rules[1];
-}
-reductions;
+} reductions;
+
+#define REDUCTIONS_ALLOC(Nreductions)					\
+  (reductions *) xcalloc ((unsigned) (sizeof (reductions)		\
+                                  + (Nreductions - 1) * sizeof (short)), 1)
 
 #endif /* !STATE_H_ */

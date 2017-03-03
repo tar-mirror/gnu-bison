@@ -34,8 +34,7 @@ File: bison.info,  Node: Top,  Next: Introduction,  Up: (dir)
 Bison
 *****
 
-   This manual documents version 1.30 of Bison, updated 20 September
-2001.
+   This manual documents version 1.31 of Bison, updated 5 January 2002.
 
 * Menu:
 
@@ -238,7 +237,7 @@ Bison in detail.
 it Yacc-compatible.  Wilfred Hansen of Carnegie Mellon University added
 multi-character string literals and other features.
 
-   This edition corresponds to version 1.30 of Bison.
+   This edition corresponds to version 1.31 of Bison.
 
 
 File: bison.info,  Node: Conditions,  Next: Copying,  Prev: Introduction,  Up: Top
@@ -709,12 +708,11 @@ matter of lexicography, not grammar.)
    Here is a simple C function subdivided into tokens:
 
      int             /* keyword `int' */
-     square (x)      /* identifier, open-paren, */
-                     /* identifier, close-paren */
-          int x;     /* keyword `int', identifier, semicolon */
+     square (int x)  /* identifier, open-paren, identifier,
+                        identifier, close-paren */
      {               /* open-brace */
-       return x * x; /* keyword `return', identifier, */
-                     /* asterisk, identifier, semicolon */
+       return x * x; /* keyword `return', identifier, asterisk,
+                        identifier, semicolon */
      }               /* close-brace */
 
    The syntactic groupings of C include the expression, the statement,
@@ -938,13 +936,22 @@ arrange for it to call `yyparse' or the parser will never run.  *Note
 Parser C-Language Interface: Interface.
 
    Aside from the token type names and the symbols in the actions you
-write, all variable and function names used in the Bison parser file
-begin with `yy' or `YY'.  This includes interface functions such as the
-lexical analyzer function `yylex', the error reporting function
-`yyerror' and the parser function `yyparse' itself.  This also includes
-numerous identifiers used for internal purposes.  Therefore, you should
-avoid using C identifiers starting with `yy' or `YY' in the Bison
-grammar file except for the ones defined in this manual.
+write, all symbols defined in the Bison parser file itself begin with
+`yy' or `YY'.  This includes interface functions such as the lexical
+analyzer function `yylex', the error reporting function `yyerror' and
+the parser function `yyparse' itself.  This also includes numerous
+identifiers used for internal purposes.  Therefore, you should avoid
+using C identifiers starting with `yy' or `YY' in the Bison grammar
+file except for the ones defined in this manual.
+
+   In some cases the Bison parser file includes system headers, and in
+those cases your code should respect the identifiers reserved by those
+headers.  On some non-GNU hosts, `<alloca.h>', `<stddef.h>', and
+`<stdlib.h>' are included as needed to declare memory allocators and
+related types.  In the same situation, C++ parsers may include
+`<cstddef>' and `<cstdlib>' instead.  Other system headers may be
+included if you define `YYDEBUG' to a nonzero value (*note Debugging
+Your Parser: Debugging.).
 
 
 File: bison.info,  Node: Stages,  Next: Grammar Layout,  Prev: Bison Parser,  Up: Concepts

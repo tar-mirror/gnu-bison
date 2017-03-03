@@ -40,6 +40,18 @@
 # include <stdlib.h>
 #endif
 
+/* The following test is to work around the gross typo in
+   systems like Sony NEWS-OS Release 4.0C, whereby EXIT_FAILURE
+   is defined to 0, not 1.  */
+#if !EXIT_FAILURE
+# undef EXIT_FAILURE
+# define EXIT_FAILURE 1
+#endif
+
+#ifndef EXIT_SUCCESS
+# define EXIT_SUCCESS 0
+#endif
+
 #if HAVE_UNISTD_H
 # include <unistd.h>
 #endif
@@ -67,6 +79,21 @@
 extern int errno;
 #endif
 
+/* AIX requires this to be the first thing in the file.  */
+#ifndef __GNUC__
+# if HAVE_ALLOCA_H
+#  include <alloca.h>
+# else
+#  ifdef _AIX
+ #pragma alloca
+#  else
+#   ifndef alloca /* predefined by HP cc +Olibcalls */
+char *alloca ();
+#   endif
+#  endif
+# endif
+#endif
+
 #if PROTOTYPES
 # define PARAMS(p) p
 #else
@@ -83,12 +110,24 @@ extern int errno;
 char *stpcpy PARAMS ((char *dest, const char *src));
 #endif
 
-#if !HAVE_DECL_STRNDUP
-char *strndup PARAMS ((const char *s, size_t size));
+#if !HAVE_DECL_STRCHR
+char *strchr(const char *s, int c);
+#endif
+
+#if !HAVE_DECL_STRSPN
+size_t strspn(const char *s, const char *accept);
 #endif
 
 #if !HAVE_DECL_STRNLEN
 size_t strnlen PARAMS ((const char *s, size_t maxlen));
+#endif
+
+#if !HAVE_DECL_MEMCHR
+void *memchr PARAMS ((const void *s, int c, size_t n));
+#endif
+
+#if !HAVE_DECL_MEMRCHR
+void *memrchr PARAMS ((const void *s, int c, size_t n));
 #endif
 
 
@@ -122,17 +161,9 @@ size_t strnlen PARAMS ((const char *s, size_t maxlen));
 # define setlocale(Category, Locale)
 #endif
 
-#ifdef ENABLE_NLS
-# include <libintl.h>
-# define _(Text) gettext (Text)
-#else
-# undef bindtextdomain
-# define bindtextdomain(Domain, Directory)
-# undef textdomain
-# define textdomain(Domain)
-# define _(Text) Text
-#endif
-#define N_(Text) Text
+#include "libgettext.h"
+#define _(Msgid)  gettext (Msgid)
+#define N_(Msgid) (Msgid)
 
 
 /*-------------------------------.
@@ -263,6 +294,21 @@ do {								\
 # endif
 #endif
 
+
+/* As memcpy, but for shorts.  */
+#define shortcpy(Dest, Src, Num) \
+  memcpy (Dest, Src, Num * sizeof (short))
+
+/* Free a linked list. */
+#define LIST_FREE(Type, List)			\
+do {						\
+  Type *_node, *_next;				\
+  for (_node = List; _node; _node = _next)	\
+    {						\
+      _next = _node->next;			\
+      XFREE (_node);				\
+    }						\
+} while (0)
 
 /*---------------------------------.
 | Debugging the memory allocator.  |

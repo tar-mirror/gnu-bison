@@ -32,9 +32,9 @@ int no_lines_flag = 0;
 int no_parser_flag = 0;
 int token_table_flag = 0;
 int verbose_flag = 0;
-int statistics_flag = 0;
 int yacc_flag = 0;	/* for -y */
 int graph_flag = 0;
+int trace_flag = 0;
 
 const char *skeleton = NULL;
 
@@ -63,11 +63,12 @@ static struct option longopts[] =
   {"defines",		optional_argument,     	0, 'd'},
   {"verbose",		no_argument,		0, 'v'},
   {"file-prefix",	required_argument, 	0, 'b'},
+  {"output",		required_argument, 	0, 'o'},
   {"output-file",	required_argument, 	0, 'o'},
   {"graph",		optional_argument,     	0, 'g'},
 
   /* Hidden. */
-  {"statistics",	no_argument, 	&statistics_flag, 1},
+  {"trace", 		no_argument, 	&trace_flag, 1},
   {0, 0, 0, 0}
 };
 
@@ -118,9 +119,9 @@ Output:\n\
   -d, --defines              also produce a header file\n\
   -v, --verbose              also produce an explanation of the automaton\n\
   -b, --file-prefix=PREFIX   specify a PREFIX for output files\n\
-  -o, --output-file=FILE     leave output to FILE\n\
-  -g, --graph                also produce a VCG graph description of the \
-automaton\n"), stream);
+  -o, --output=FILE          leave output to FILE\n\
+  -g, --graph                also produce a VCG description of the automaton\n\
+"), stream);
   putc ('\n', stream);
 
   fputs (_("\
@@ -158,6 +159,14 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\
 | Process the options.  |
 `----------------------*/
 
+/* Under DOS, there is no difference on the case.  This can be
+   troublesome when looking for `.tab' etc.  */
+#ifdef MSDOS
+# define AS_FILE_NAME(File) (strlwr (File), (File))
+#else
+# define AS_FILE_NAME(File) (File)
+#endif
+
 void
 getargs (int argc, char *argv[])
 {
@@ -185,7 +194,7 @@ getargs (int argc, char *argv[])
       case 'g':
 	/* Here, the -g and --graph=FILE options are differentiated.  */
 	graph_flag = 1;
-	spec_graph_file = optarg;
+	spec_graph_file = AS_FILE_NAME (optarg);
 	break;
 
       case 'v':
@@ -193,13 +202,13 @@ getargs (int argc, char *argv[])
 	break;
 
       case 'S':
-	skeleton = optarg;
+	skeleton = AS_FILE_NAME (optarg);
 	break;
 
       case 'd':
 	/* Here, the -d and --defines options are differentiated.  */
 	defines_flag = 1;
-	spec_defines_file = optarg;
+	spec_defines_file = AS_FILE_NAME (optarg);
 	break;
 
       case 'l':
@@ -223,11 +232,11 @@ getargs (int argc, char *argv[])
 	break;
 
       case 'o':
-	spec_outfile = optarg;
+	spec_outfile = AS_FILE_NAME (optarg);
 	break;
 
       case 'b':
-	spec_file_prefix = optarg;
+	spec_file_prefix = AS_FILE_NAME (optarg);
 	break;
 
       case 'p':

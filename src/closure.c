@@ -1,5 +1,5 @@
 /* Subroutines for bison
-   Copyright 1984, 1989, 2000 Free Software Foundation, Inc.
+   Copyright 1984, 1989, 2000, 2001 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -19,18 +19,26 @@
    02111-1307, USA.  */
 
 #include "system.h"
+#include "getargs.h"
 #include "gram.h"
+#include "reader.h"
 #include "closure.h"
 #include "derives.h"
 #include "warshall.h"
 
+/* NITEMSET is the size of the array ITEMSET.  */
 short *itemset;
-short *itemsetend;
+int nitemset;
+
 static unsigned *ruleset;
 
 /* internal data.  See comments before set_fderives and set_firsts.  */
 static unsigned *fderives;
 static unsigned *firsts;
+
+/* Retrieve the FDERIVES/FIRSTS sets of the nonterminals numbered Var.  */
+#define FDERIVES(Var)   (fderives + ((Var) - ntokens) * rulesetsize)
+#define   FIRSTS(Var)   (firsts   + ((Var) - ntokens) * varsetsize)
 
 /* number of words required to hold a bit for each rule */
 static int rulesetsize;
@@ -38,42 +46,42 @@ static int rulesetsize;
 /* number of words required to hold a bit for each variable */
 static int varsetsize;
 
-#if DEBUG
 
 /*-----------------.
 | Debugging code.  |
 `-----------------*/
 
 static void
-print_closure (int n)
+print_closure (const char *title, short *array, size_t size)
 {
-  short *isp;
-
-  printf ("\n\nn = %d\n\n", n);
-  for (isp = itemset; isp < itemsetend; isp++)
-    printf ("   %d\n", *isp);
+  size_t i;
+  fprintf (stderr, "Closure: %s\n", title);
+  for (i = 0; i < size; ++i)
+    {
+      short *rp;
+      fprintf (stderr, "  %2d: .", array[i]);
+      for (rp = &ritem[array[i]]; *rp > 0; ++rp)
+	fprintf (stderr, " %s", tags[*rp]);
+      fprintf (stderr, "  (rule %d)\n", -*rp);
+    }
+  fputs ("\n\n", stderr);
 }
 
 
 static void
 print_firsts (void)
 {
-  int i;
-  int j;
-  unsigned *rowp;
+  int i, j;
 
-  printf ("\n\n\nFIRSTS\n\n");
-
+  fprintf (stderr, "FIRSTS\n");
   for (i = ntokens; i < nsyms; i++)
     {
-      printf ("\n\n%s firsts\n\n", tags[i]);
-
-      rowp = firsts + ((i - ntokens) * varsetsize);
-
+      fprintf (stderr, "\t%s firsts\n", tags[i]);
       for (j = 0; j < nvars; j++)
-	if (BITISSET (rowp, j))
-	  printf ("   %s\n", tags[j + ntokens]);
+	if (BITISSET (FIRSTS (i), j))
+	  fprintf (stderr, "\t\t%d (%s)\n", j + ntokens, tags[j + ntokens]);
     }
+  fprintf (stderr, "\n\n");
 }
 
 
@@ -82,23 +90,24 @@ print_fderives (void)
 {
   int i;
   int j;
-  unsigned *rp;
 
-  printf ("\n\n\nFDERIVES\n");
+  fprintf (stderr, "FDERIVES\n");
 
   for (i = ntokens; i < nsyms; i++)
     {
-      printf ("\n\n%s derives\n\n", tags[i]);
-      rp = fderives + i * rulesetsize;
-
+      fprintf (stderr, "\t%s derives\n", tags[i]);
       for (j = 0; j <= nrules; j++)
-	if (BITISSET (rp, j))
-	  printf ("   %d\n", j);
+	if (BITISSET (FDERIVES (i), j))
+	  {
+	    short *rhsp;
+	    fprintf (stderr, "\t\t%d:", j);
+	    for (rhsp = ritem + rule_table[j].rhs; *rhsp > 0; ++rhsp)
+	      fprintf (stderr, " %s", tags[*rhsp]);
+	    fputc ('\n', stderr);
+	  }
     }
-
-  fflush (stdout);
+  fprintf (stderr, "\n\n");
 }
-#endif
 
 /*-------------------------------------------------------------------.
 | Set FIRSTS to be an NVARS by NVARS bit matrix indicating which     |
@@ -113,39 +122,24 @@ print_fderives (void)
 static void
 set_firsts (void)
 {
-  unsigned *row;
-  int symbol;
-  short *sp;
-  int rowsize;
+  int i, j;
 
-  int i;
+  varsetsize = WORDSIZE (nvars);
 
-  varsetsize = rowsize = WORDSIZE (nvars);
+  firsts = XCALLOC (unsigned, nvars * varsetsize);
 
-  firsts = XCALLOC (unsigned, nvars * rowsize);
-
-  row = firsts;
   for (i = ntokens; i < nsyms; i++)
-    {
-      sp = derives[i];
-      while (*sp >= 0)
-	{
-	  symbol = ritem[rrhs[*sp++]];
-	  if (ISVAR (symbol))
-	    {
-	      symbol -= ntokens;
-	      SETBIT (row, symbol);
-	    }
-	}
-
-      row += rowsize;
-    }
+    for (j = 0; derives[i][j] >= 0; ++j)
+      {
+	int symbol = ritem[rule_table[derives[i][j]].rhs];
+	if (ISVAR (symbol))
+	  SETBIT (FIRSTS (i), symbol - ntokens);
+      }
 
   RTC (firsts, nvars);
 
-#ifdef	DEBUG
-  print_firsts ();
-#endif
+  if (trace_flag)
+    print_firsts ();
 }
 
 /*-------------------------------------------------------------------.
@@ -161,52 +155,20 @@ set_firsts (void)
 static void
 set_fderives (void)
 {
-  unsigned *rrow;
-  unsigned *vrow;
-  int j;
-  unsigned cword;
-  short *rp;
-  int b;
+  int i, j, k;
 
-  int ruleno;
-  int i;
-
-  fderives = XCALLOC (unsigned, nvars * rulesetsize) - ntokens * rulesetsize;
+  fderives = XCALLOC (unsigned, nvars * rulesetsize);
 
   set_firsts ();
 
-  rrow = fderives + ntokens * rulesetsize;
+  for (i = ntokens; i < nsyms; ++i)
+    for (j = ntokens; j < nsyms; ++j)
+      if (BITISSET (FIRSTS (i), j - ntokens))
+	for (k = 0; derives[j][k] > 0; ++k)
+	  SETBIT (FDERIVES (i), derives[j][k]);
 
-  for (i = ntokens; i < nsyms; i++)
-    {
-      vrow = firsts + ((i - ntokens) * varsetsize);
-      cword = *vrow++;
-      b = 0;
-      for (j = ntokens; j < nsyms; j++)
-	{
-	  if (cword & (1 << b))
-	    {
-	      rp = derives[j];
-	      while ((ruleno = *rp++) > 0)
-		{
-		  SETBIT (rrow, ruleno);
-		}
-	    }
-
-	  b++;
-	  if (b >= BITS_PER_WORD && j + 1 < nsyms)
-	    {
-	      cword = *vrow++;
-	      b = 0;
-	    }
-	}
-
-      rrow += rulesetsize;
-    }
-
-#ifdef	DEBUG
-  print_fderives ();
-#endif
+  if (trace_flag)
+    print_fderives ();
 
   XFREE (firsts);
 }
@@ -228,82 +190,59 @@ new_closure (int n)
 void
 closure (short *core, int n)
 {
+  /* Index over CORE. */
+  int c;
+
+  /* Index over RULESET. */
+  int r;
+
+  /* A bit index over RULESET. */
   int ruleno;
-  unsigned word;
-  short *csp;
-  unsigned *dsp;
-  unsigned *rsp;
 
-  short *csend;
-  unsigned *rsend;
-  int symbol;
-  int itemno;
-
-  rsp = ruleset;
-  rsend = ruleset + rulesetsize;
-  csend = core + n;
+  if (trace_flag)
+    print_closure ("input", core, n);
 
   if (n == 0)
     {
-      dsp = fderives + start_symbol * rulesetsize;
-      while (rsp < rsend)
-	*rsp++ = *dsp++;
+      for (r = 0; r < rulesetsize; ++r)
+	ruleset[r] = FDERIVES (start_symbol)[r];
     }
   else
     {
-      while (rsp < rsend)
-	*rsp++ = 0;
+      for (r = 0; r < rulesetsize; ++r)
+	ruleset[r] = 0;
 
-      csp = core;
-      while (csp < csend)
-	{
-	  symbol = ritem[*csp++];
-	  if (ISVAR (symbol))
-	    {
-	      dsp = fderives + symbol * rulesetsize;
-	      rsp = ruleset;
-	      while (rsp < rsend)
-		*rsp++ |= *dsp++;
-	    }
-	}
+      for (c = 0; c < n; ++c)
+	if (ISVAR (ritem[core[c]]))
+	  for (r = 0; r < rulesetsize; ++r)
+	    ruleset[r] |= FDERIVES (ritem[core[c]])[r];
     }
 
-  ruleno = 0;
-  itemsetend = itemset;
-  csp = core;
-  rsp = ruleset;
-  while (rsp < rsend)
+  nitemset = 0;
+  c = 0;
+  for (ruleno = 0; ruleno < rulesetsize * BITS_PER_WORD; ++ruleno)
+    if (BITISSET (ruleset, ruleno))
+      {
+	int itemno = rule_table[ruleno].rhs;
+	while (c < n && core[c] < itemno)
+	  {
+	    itemset[nitemset] = core[c];
+	    nitemset++;
+	    c++;
+	  }
+	itemset[nitemset] = itemno;
+	nitemset++;
+      }
+
+  while (c < n)
     {
-      word = *rsp++;
-      if (word == 0)
-	{
-	  ruleno += BITS_PER_WORD;
-	}
-      else
-	{
-	  int b;
-
-	  for (b = 0; b < BITS_PER_WORD; b++)
-	    {
-	      if (word & (1 << b))
-		{
-		  itemno = rrhs[ruleno];
-		  while (csp < csend && *csp < itemno)
-		    *itemsetend++ = *csp++;
-		  *itemsetend++ = itemno;
-		}
-
-	      ruleno++;
-	    }
-	}
+      itemset[nitemset] = core[c];
+      nitemset++;
+      c++;
     }
 
-  while (csp < csend)
-    *itemsetend++ = *csp++;
-
-#if DEBUG
-  print_closure (n);
-#endif
+  if (trace_flag)
+    print_closure ("output", itemset, nitemset);
 }
 
 
@@ -312,5 +251,5 @@ free_closure (void)
 {
   XFREE (itemset);
   XFREE (ruleset);
-  XFREE (fderives + ntokens * rulesetsize);
+  XFREE (fderives);
 }

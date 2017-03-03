@@ -1,5 +1,5 @@
 /* Compute look-ahead criteria for bison,
-   Copyright 1984, 1986, 1989, 2000 Free Software Foundation, Inc.
+   Copyright 1984, 1986, 1989, 2000, 2001  Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -31,88 +31,80 @@
 #include "lalr.h"
 #include "nullable.h"
 #include "derives.h"
+#include "getargs.h"
+
+/* All the decorated states, indexed by the state number.  Warning:
+   there is a state_TABLE in LR0.c, but it is different and static.
+   */
+state_t *state_table = NULL;
 
 int tokensetsize;
-short *lookaheads;
 short *LAruleno;
 unsigned *LA;
-short *accessing_symbol;
-char *consistent;
-core **state_table;
-shifts **shift_table;
-reductions **reduction_table;
+
+static int ngotos;
 short *goto_map;
 short *from_state;
 short *to_state;
 
-extern void berror PARAMS ((const char *));
+/* And for the famous F variable, which name is so descriptive that a
+   comment is hardly needed.  <grin>.  */
+static unsigned *F = NULL;
+#define F(Rule)  (F + (Rule) * tokensetsize)
 
-static int infinity;
-static int maxrhs;
-static int ngotos;
-static unsigned *F;
 static short **includes;
 static shorts **lookback;
+
+
+/*---------------------------------------------------------------.
+| digraph & traverse.                                            |
+|                                                                |
+| The following variables are used as common storage between the |
+| two.                                                           |
+`---------------------------------------------------------------*/
+
 static short **R;
 static short *INDEX;
 static short *VERTICES;
 static int top;
-
+static int infinity;
 
 static void
 traverse (int i)
 {
-  unsigned *fp1;
-  unsigned *fp2;
-  unsigned *fp3;
   int j;
-  short *rp;
-
+  size_t k;
   int height;
-  unsigned *base;
+  size_t size = F (i + 1) - F(i);
 
   VERTICES[++top] = i;
   INDEX[i] = height = top;
 
-  base = F + i * tokensetsize;
-  fp3 = base + tokensetsize;
+  if (R[i])
+    for (j = 0; R[i][j] >= 0; ++j)
+      {
+	if (INDEX[R[i][j]] == 0)
+	  traverse (R[i][j]);
 
-  rp = R[i];
-  if (rp)
-    {
-      while ((j = *rp++) >= 0)
-	{
-	  if (INDEX[j] == 0)
-	    traverse (j);
+	if (INDEX[i] > INDEX[R[i][j]])
+	  INDEX[i] = INDEX[R[i][j]];
 
-	  if (INDEX[i] > INDEX[j])
-	    INDEX[i] = INDEX[j];
-
-	  fp1 = base;
-	  fp2 = F + j * tokensetsize;
-
-	  while (fp1 < fp3)
-	    *fp1++ |= *fp2++;
-	}
-    }
+	for (k = 0; k < size; ++k)
+	  F (i)[k] |= F (R[i][j])[k];
+      }
 
   if (INDEX[i] == height)
-    {
-      for (;;)
-	{
-	  j = VERTICES[top--];
-	  INDEX[j] = infinity;
+    for (;;)
+      {
+	j = VERTICES[top--];
+	INDEX[j] = infinity;
 
-	  if (i == j)
-	    break;
+	if (i == j)
+	  break;
 
-	  fp1 = base;
-	  fp2 = F + j * tokensetsize;
-
-	  while (fp1 < fp3)
-	    *fp2++ = *fp1++;
-	}
-    }
+	for (k = 0; k < size; ++k)
+	  F (j)[k] = F (i)[k];
+      }
 }
 
 
@@ -132,87 +124,85 @@ digraph (short **relation)
     INDEX[i] = 0;
 
   for (i = 0; i < ngotos; i++)
-    {
-      if (INDEX[i] == 0 && R[i])
-	traverse (i);
-    }
+    if (INDEX[i] == 0 && R[i])
+      traverse (i);
 
   XFREE (INDEX);
   XFREE (VERTICES);
 }
 
+
+/*--------------------.
+| Build STATE_TABLE.  |
+`--------------------*/
+
 static void
 set_state_table (void)
 {
-  core *sp;
+  /* NSTATES + 1 because lookahead for the pseudo state number NSTATES
+     might be used (see conflicts.c).  It is too opaque for me to
+     provide a probably less hacky implementation. --akim */
+  state_table = XCALLOC (state_t, nstates + 1);
 
-  state_table = XCALLOC (core *, nstates);
+  {
+    core *sp;
+    for (sp = first_state; sp; sp = sp->next)
+      {
+	state_table[sp->number].state = sp;
+	state_table[sp->number].accessing_symbol = sp->accessing_symbol;
+      }
+  }
 
-  for (sp = first_state; sp; sp = sp->next)
-    state_table[sp->number] = sp;
-}
+  {
+    shifts *sp;
+    for (sp = first_shift; sp; sp = sp->next)
+      state_table[sp->number].shifts = sp;
+  }
 
+  {
+    reductions *rp;
+    for (rp = first_reduction; rp; rp = rp->next)
+      state_table[rp->number].reductions = rp;
+  }
 
-static void
-set_accessing_symbol (void)
-{
-  core *sp;
+  /* Pessimization, but simplification of the code: make sense all the
+     states have a shifts, even if reduced to 0 shifts.  */
+  {
+    int i;
+    for (i = 0; i < nstates; i++)
+      if (!state_table[i].shifts)
+	state_table[i].shifts = shifts_new (0);
+  }
 
-  accessing_symbol = XCALLOC (short, nstates);
+  /* Initializing the lookaheads members.  Please note that it must be
+     performed after having set some of the other members which are
+     used below.  Change with extreme caution.  */
+  {
+    int i;
+    int count = 0;
+    for (i = 0; i < nstates; i++)
+      {
+	int k;
+	reductions *rp = state_table[i].reductions;
+	shifts *sp = state_table[i].shifts;
 
-  for (sp = first_state; sp; sp = sp->next)
-    accessing_symbol[sp->number] = sp->accessing_symbol;
-}
+	state_table[i].lookaheads = count;
 
+	if (rp
+	    && (rp->nreds > 1 || (sp->nshifts && SHIFT_IS_SHIFT (sp, 0))))
+	  count += rp->nreds;
+	else
+	  state_table[i].consistent = 1;
 
-static void
-set_shift_table (void)
-{
-  shifts *sp;
-
-  shift_table = XCALLOC (shifts *, nstates);
-
-  for (sp = first_shift; sp; sp = sp->next)
-    shift_table[sp->number] = sp;
-}
-
-
-static void
-set_reduction_table (void)
-{
-  reductions *rp;
-
-  reduction_table = XCALLOC (reductions *, nstates);
-
-  for (rp = first_reduction; rp; rp = rp->next)
-    reduction_table[rp->number] = rp;
-}
-
-
-static void
-set_maxrhs (void)
-{
-  short *itemp;
-  int length;
-  int max;
-
-  length = 0;
-  max = 0;
-  for (itemp = ritem; *itemp; itemp++)
-    {
-      if (*itemp > 0)
-	{
-	  length++;
-	}
-      else
-	{
-	  if (length > max)
-	    max = length;
-	  length = 0;
-	}
-    }
-
-  maxrhs = max;
+	for (k = 0; k < sp->nshifts; k++)
+	  if (SHIFT_IS_ERROR (sp, k))
+	    {
+	      state_table[i].consistent = 0;
+	      break;
+	    }
+      }
+     state_table[nstates].lookaheads = count;
+  }
 }
 
 
@@ -221,65 +211,23 @@ initialize_LA (void)
 {
   int i;
   int j;
-  int count;
-  reductions *rp;
-  shifts *sp;
   short *np;
+  reductions *rp;
 
-  consistent = XCALLOC (char, nstates);
-  lookaheads = XCALLOC (short, nstates + 1);
+  size_t nLA = state_table[nstates].lookaheads;
+  if (!nLA)
+    nLA = 1;
 
-  count = 0;
-  for (i = 0; i < nstates; i++)
-    {
-      int k;
-
-      lookaheads[i] = count;
-
-      rp = reduction_table[i];
-      sp = shift_table[i];
-      if (rp && (rp->nreds > 1
-		 || (sp && !ISVAR (accessing_symbol[sp->shifts[0]]))))
-	count += rp->nreds;
-      else
-	consistent[i] = 1;
-
-      if (sp)
-	for (k = 0; k < sp->nshifts; k++)
-	  {
-	    if (accessing_symbol[sp->shifts[k]] == error_token_number)
-	      {
-		consistent[i] = 0;
-		break;
-	      }
-	  }
-    }
-
-  lookaheads[nstates] = count;
-
-  if (count == 0)
-    {
-      LA = XCALLOC (unsigned, 1 * tokensetsize);
-      LAruleno = XCALLOC (short, 1);
-      lookback = XCALLOC (shorts *, 1);
-    }
-  else
-    {
-      LA = XCALLOC (unsigned, count * tokensetsize);
-      LAruleno = XCALLOC (short, count);
-      lookback = XCALLOC (shorts *, count);
-    }
+  LA = XCALLOC (unsigned, nLA * tokensetsize);
+  LAruleno = XCALLOC (short, nLA);
+  lookback = XCALLOC (shorts *, nLA);
 
   np = LAruleno;
   for (i = 0; i < nstates; i++)
-    {
-      if (!consistent[i])
-	{
-	  if ((rp = reduction_table[i]))
-	    for (j = 0; j < rp->nreds; j++)
-	      *np++ = rp->rules[j];
-	}
-    }
+    if (!state_table[i].consistent)
+      if ((rp = state_table[i].reductions))
+	for (j = 0; j < rp->nreds; j++)
+	  *np++ = rp->rules[j];
 }
 
 
@@ -299,13 +247,10 @@ set_goto_map (void)
 
   ngotos = 0;
   for (sp = first_shift; sp; sp = sp->next)
-    {
-      for (i = sp->nshifts - 1; i >= 0; i--)
+    if (sp->nshifts)
+      for (i = sp->nshifts - 1; i >= 0 && SHIFT_IS_GOTO (sp, i); --i)
 	{
-	  symbol = accessing_symbol[sp->shifts[i]];
-
-	  if (ISTOKEN (symbol))
-	    break;
+	  symbol = state_table[sp->shifts[i]].accessing_symbol;
 
 	  if (ngotos == MAXSHORT)
 	    fatal (_("too many gotos (max %d)"), MAXSHORT);
@@ -313,7 +258,6 @@ set_goto_map (void)
 	  ngotos++;
 	  goto_map[symbol]++;
 	}
-    }
 
   k = 0;
   for (i = ntokens; i < nsyms; i++)
@@ -334,18 +278,16 @@ set_goto_map (void)
   for (sp = first_shift; sp; sp = sp->next)
     {
       state1 = sp->number;
-      for (i = sp->nshifts - 1; i >= 0; i--)
-	{
-	  state2 = sp->shifts[i];
-	  symbol = accessing_symbol[state2];
+      if (sp->nshifts)
+	for (i = sp->nshifts - 1; i >= 0 && SHIFT_IS_GOTO (sp, i); --i)
+	  {
+	    state2 = sp->shifts[i];
+	    symbol = state_table[state2].accessing_symbol;
 
-	  if (ISTOKEN (symbol))
-	    break;
-
-	  k = temp_map[symbol]++;
-	  from_state[k] = state1;
-	  to_state[k] = state2;
-	}
+	    k = temp_map[symbol]++;
+	    from_state[k] = state1;
+	    to_state[k] = state2;
+	  }
     }
 
   XFREE (temp_map + ntokens);
@@ -389,73 +331,46 @@ map_goto (int state, int symbol)
 static void
 initialize_F (void)
 {
+  short **reads = XCALLOC (short *, ngotos);
+  short *edge = XCALLOC (short, ngotos + 1);
+  int nedges = 0;
+
   int i;
-  int j;
-  int k;
-  shifts *sp;
-  short *edge;
-  unsigned *rowp;
-  short *rp;
-  short **reads;
-  int nedges;
-  int stateno;
-  int symbol;
-  int nwords;
 
-  nwords = ngotos * tokensetsize;
-  F = XCALLOC (unsigned, nwords);
+  F = XCALLOC (unsigned, ngotos * tokensetsize);
 
-  reads = XCALLOC (short *, ngotos);
-  edge = XCALLOC (short, ngotos + 1);
-  nedges = 0;
-
-  rowp = F;
   for (i = 0; i < ngotos; i++)
     {
-      stateno = to_state[i];
-      sp = shift_table[stateno];
+      int stateno = to_state[i];
+      shifts *sp = state_table[stateno].shifts;
 
-      if (sp)
+      int j;
+      for (j = 0; j < sp->nshifts && SHIFT_IS_SHIFT (sp, j); j++)
 	{
-	  k = sp->nshifts;
-
-	  for (j = 0; j < k; j++)
-	    {
-	      symbol = accessing_symbol[sp->shifts[j]];
-	      if (ISVAR (symbol))
-		break;
-	      SETBIT (rowp, symbol);
-	    }
-
-	  for (; j < k; j++)
-	    {
-	      symbol = accessing_symbol[sp->shifts[j]];
-	      if (nullable[symbol])
-		edge[nedges++] = map_goto (stateno, symbol);
-	    }
-
-	  if (nedges)
-	    {
-	      reads[i] = rp = XCALLOC (short, nedges + 1);
-
-	      for (j = 0; j < nedges; j++)
-		rp[j] = edge[j];
-
-	      rp[nedges] = -1;
-	      nedges = 0;
-	    }
+	  int symbol = state_table[sp->shifts[j]].accessing_symbol;
+	  SETBIT (F (i), symbol);
 	}
 
-      rowp += tokensetsize;
+      for (; j < sp->nshifts; j++)
+	{
+	  int symbol = state_table[sp->shifts[j]].accessing_symbol;
+	  if (nullable[symbol])
+	    edge[nedges++] = map_goto (stateno, symbol);
+	}
+
+      if (nedges)
+	{
+	  reads[i] = XCALLOC (short, nedges + 1);
+	  shortcpy (reads[i], edge, nedges);
+	  reads[i][nedges] = -1;
+	  nedges = 0;
+	}
     }
 
   digraph (reads);
 
   for (i = 0; i < ngotos; i++)
-    {
-      if (reads[i])
-	XFREE (reads[i]);
-    }
+    XFREE (reads[i]);
 
   XFREE (reads);
   XFREE (edge);
@@ -470,8 +385,8 @@ add_lookback_edge (int stateno, int ruleno, int gotono)
   int found;
   shorts *sp;
 
-  i = lookaheads[stateno];
-  k = lookaheads[stateno + 1];
+  i = state_table[stateno].lookaheads;
+  k = state_table[stateno + 1].lookaheads;
   found = 0;
   while (!found && i < k)
     {
@@ -490,56 +405,87 @@ add_lookback_edge (int stateno, int ruleno, int gotono)
 }
 
 
+static void
+matrix_print (FILE *out, short **matrix, int n)
+{
+  int i, j;
+
+  for (i = 0; i < n; ++i)
+    {
+      fprintf (out, "%3d: ", i);
+      if (matrix[i])
+	for (j = 0; matrix[i][j] != -1; ++j)
+	  fprintf (out, "%3d ", matrix[i][j]);
+      fputc ('\n', out);
+    }
+  fputc ('\n', out);
+}
+
+/*-------------------------------------------------------------------.
+| Return the transpose of R_ARG, of size N.  Destroy R_ARG, as it is |
+| replaced with the result.                                          |
+|                                                                    |
+| R_ARG[I] is NULL or a -1 terminated list of numbers.               |
+|                                                                    |
+| RESULT[NUM] is NULL or the -1 terminated list of the I such as NUM |
+| is in R_ARG[I].                                                    |
+`-------------------------------------------------------------------*/
+
 static short **
 transpose (short **R_arg, int n)
 {
-  short **new_R;
-  short **temp_R;
-  short *nedges;
-  short *sp;
-  int i;
-  int k;
+  /* The result. */
+  short **new_R = XCALLOC (short *, n);
+  /* END_R[I] -- next entry of NEW_R[I]. */
+  short **end_R = XCALLOC (short *, n);
+  /* NEDGES[I] -- total size of NEW_R[I]. */
+  short *nedges = XCALLOC (short, n);
+  int i, j;
 
-  nedges = XCALLOC (short, n);
-
-  for (i = 0; i < n; i++)
+  if (trace_flag)
     {
-      sp = R_arg[i];
-      if (sp)
-	{
-	  while (*sp >= 0)
-	    nedges[*sp++]++;
-	}
+      fputs ("transpose: input\n", stderr);
+      matrix_print (stderr, R_arg, n);
     }
 
-  new_R = XCALLOC (short *, n);
-  temp_R = XCALLOC (short *, n);
-
+  /* Count. */
   for (i = 0; i < n; i++)
-    {
-      k = nedges[i];
-      if (k > 0)
-	{
-	  sp = XCALLOC (short, k + 1);
-	  new_R[i] = sp;
-	  temp_R[i] = sp;
-	  sp[k] = -1;
-	}
-    }
+    if (R_arg[i])
+      for (j = 0; R_arg[i][j] >= 0; ++j)
+	++nedges[R_arg[i][j]];
 
-  XFREE (nedges);
-
+  /* Allocate. */
   for (i = 0; i < n; i++)
-    {
-      sp = R_arg[i];
-      if (sp)
-	{
-	  while (*sp >= 0)
-	    *temp_R[*sp++]++ = i;
-	}
-    }
+    if (nedges[i] > 0)
+      {
+	short *sp = XCALLOC (short, nedges[i] + 1);
+	sp[nedges[i]] = -1;
+	new_R[i] = sp;
+	end_R[i] = sp;
+      }
 
-  XFREE (temp_R);
+  /* Store. */
+  for (i = 0; i < n; i++)
+    if (R_arg[i])
+      for (j = 0; R_arg[i][j] >= 0; ++j)
+	{
+	  *end_R[R_arg[i][j]] = i;
+	  ++end_R[R_arg[i][j]];
+	}
+
+  free (nedges);
+  free (end_R);
+
+  /* Free the input: it is replaced with the result. */
+  for (i = 0; i < n; i++)
+    XFREE (R_arg[i]);
+  free (R_arg);
+
+  if (trace_flag)
+    {
+      fputs ("transpose: output\n", stderr);
+      matrix_print (stderr, new_R, n);
+    }
 
   return new_R;
 }
@@ -548,57 +494,42 @@ transpose (short **R_arg, int n)
 static void
 build_relations (void)
 {
+  short *edge = XCALLOC (short, ngotos + 1);
+  short *states = XCALLOC (short, ritem_longest_rhs () + 1);
   int i;
-  int j;
-  int k;
-  short *rulep;
-  short *rp;
-  shifts *sp;
-  int length;
-  int nedges;
-  int done;
-  int state1;
-  int stateno;
-  int symbol1;
-  int symbol2;
-  short *shortp;
-  short *edge;
-  short *states;
-  short **new_includes;
 
   includes = XCALLOC (short *, ngotos);
-  edge = XCALLOC (short, ngotos + 1);
-  states = XCALLOC (short, maxrhs + 1);
 
   for (i = 0; i < ngotos; i++)
     {
-      nedges = 0;
-      state1 = from_state[i];
-      symbol1 = accessing_symbol[to_state[i]];
+      int nedges = 0;
+      int state1 = from_state[i];
+      int symbol1 = state_table[to_state[i]].accessing_symbol;
+      short *rulep;
 
       for (rulep = derives[symbol1]; *rulep > 0; rulep++)
 	{
-	  length = 1;
+	  int done;
+	  int length = 1;
+	  int stateno = state1;
+	  short *rp;
 	  states[0] = state1;
-	  stateno = state1;
 
-	  for (rp = ritem + rrhs[*rulep]; *rp > 0; rp++)
+	  for (rp = ritem + rule_table[*rulep].rhs; *rp > 0; rp++)
 	    {
-	      symbol2 = *rp;
-	      sp = shift_table[stateno];
-	      k = sp->nshifts;
-
-	      for (j = 0; j < k; j++)
+	      shifts *sp = state_table[stateno].shifts;
+	      int j;
+	      for (j = 0; j < sp->nshifts; j++)
 		{
 		  stateno = sp->shifts[j];
-		  if (accessing_symbol[stateno] == symbol2)
+		  if (state_table[stateno].accessing_symbol == *rp)
 		    break;
 		}
 
 	      states[length++] = stateno;
 	    }
 
-	  if (!consistent[stateno])
+	  if (!state_table[stateno].consistent)
 	    add_lookback_edge (stateno, *rulep, i);
 
 	  length--;
@@ -620,25 +551,18 @@ build_relations (void)
 
       if (nedges)
 	{
-	  includes[i] = shortp = XCALLOC (short, nedges + 1);
+	  int j;
+	  includes[i] = XCALLOC (short, nedges + 1);
 	  for (j = 0; j < nedges; j++)
-	    shortp[j] = edge[j];
-	  shortp[nedges] = -1;
+	    includes[i][j] = edge[j];
+	  includes[i][nedges] = -1;
 	}
     }
 
-  new_includes = transpose (includes, ngotos);
-
-  for (i = 0; i < ngotos; i++)
-    if (includes[i])
-      XFREE (includes[i]);
-
-  XFREE (includes);
-
-  includes = new_includes;
-
   XFREE (edge);
   XFREE (states);
+
+  includes = transpose (includes, ngotos);
 }
 
 
@@ -651,10 +575,7 @@ compute_FOLLOWS (void)
   digraph (includes);
 
   for (i = 0; i < ngotos; i++)
-    {
-      if (includes[i])
-	XFREE (includes[i]);
-    }
+    XFREE (includes[i]);
 
   XFREE (includes);
 }
@@ -664,39 +585,20 @@ static void
 compute_lookaheads (void)
 {
   int i;
-  int n;
-  unsigned *fp1;
-  unsigned *fp2;
-  unsigned *fp3;
   shorts *sp;
-  unsigned *rowp;
-  shorts *sptmp;		/* JF */
 
-  rowp = LA;
-  n = lookaheads[nstates];
-  for (i = 0; i < n; i++)
-    {
-      fp3 = rowp + tokensetsize;
-      for (sp = lookback[i]; sp; sp = sp->next)
-	{
-	  fp1 = rowp;
-	  fp2 = F + tokensetsize * sp->value;
-	  while (fp1 < fp3)
-	    *fp1++ |= *fp2++;
-	}
+  for (i = 0; i < state_table[nstates].lookaheads; i++)
+    for (sp = lookback[i]; sp; sp = sp->next)
+      {
+	int size = LA (i + 1) - LA (i);
+	int j;
+	for (j = 0; j < size; ++j)
+	  LA (i)[j] |= F (sp->value)[j];
+      }
 
-      rowp = fp3;
-    }
-
-  for (i = 0; i < n; i++)
-    {
-      /* JF removed ref to freed storage */
-      for (sp = lookback[i]; sp; sp = sptmp)
-	{
-	  sptmp = sp->next;
-	  XFREE (sp);
-	}
-    }
+  /* Free LOOKBACK. */
+  for (i = 0; i < state_table[nstates].lookaheads; i++)
+    LIST_FREE (shorts, lookback[i]);
 
   XFREE (lookback);
   XFREE (F);
@@ -709,10 +611,6 @@ lalr (void)
   tokensetsize = WORDSIZE (ntokens);
 
   set_state_table ();
-  set_accessing_symbol ();
-  set_shift_table ();
-  set_reduction_table ();
-  set_maxrhs ();
   initialize_LA ();
   set_goto_map ();
   initialize_F ();

@@ -21,7 +21,6 @@
 #include "system.h"
 #include "getargs.h"
 #include "files.h"
-#include "getopt.h"		/* for optarg */
 #include "symtab.h"
 #include "lex.h"
 #include "complain.h"
@@ -32,14 +31,13 @@
 struct obstack token_obstack;
 const char *token_buffer = NULL;
 
-bucket *symval;
+bucket *symval = NULL;
 int numval;
 
-/* these two describe a token to be reread */
+/* A token to be reread, see unlex and lex. */
 static token_t unlexed = tok_undef;
-/* by the next call to lex */
 static bucket *unlexed_symval = NULL;
-
+static const char *unlexed_token_buffer = NULL;
 
 void
 lex_init (void)
@@ -324,6 +322,7 @@ void
 unlex (token_t token)
 {
   unlexed = token;
+  unlexed_token_buffer = token_buffer;
   unlexed_symval = symval;
 }
 
@@ -368,6 +367,7 @@ lex (void)
     {
       token_t res = unlexed;
       symval = unlexed_symval;
+      token_buffer = unlexed_token_buffer;
       unlexed = tok_undef;
       return res;
     }
@@ -426,7 +426,7 @@ lex (void)
       /* parse the literal token and compute character code in  code  */
 
       {
-	int code, discode;
+	int code;
 
 	obstack_1grow (&token_obstack, '\'');
 	literalchar (&token_obstack, &code, '\'');
@@ -434,6 +434,7 @@ lex (void)
 	c = getc (finput);
 	if (c != '\'')
 	  {
+	    int discode;
 	    complain (_("use \"...\" for multi-character literal tokens"));
 	    while (1)
 	      if (!literalchar (0, &discode, '\''))
@@ -444,7 +445,7 @@ lex (void)
 	token_buffer = obstack_finish (&token_obstack);
 	symval = getsym (token_buffer);
 	symval->class = token_sym;
-	if (!symval->user_token_number)
+	if (symval->user_token_number == SUNDEF)
 	  symval->user_token_number = code;
 	return tok_identifier;
       }
@@ -552,28 +553,27 @@ struct percent_table_struct percent_table[] =
   { "nonassoc",		NULL,			tok_nonassoc },
   { "binary",		NULL,			tok_nonassoc },
   { "prec",		NULL,			tok_prec },
-  { "locations",	&locations_flag,	tok_noop },	/* -l */
-  { "no_lines",		&no_lines_flag,		tok_noop },	/* -l */
+  { "locations",	&locations_flag,	tok_intopt },	/* -l */
+  { "no-lines",		&no_lines_flag,		tok_intopt },	/* -l */
   { "raw",		NULL,			tok_obsolete },	/* -r */
-  { "token_table",	&token_table_flag,	tok_noop },	/* -k */
-  { "yacc",		&yacc_flag,		tok_noop },	/* -y */
-  { "fixed_output_files",&yacc_flag,		tok_noop },	/* -y */
-  { "defines",		&defines_flag,		tok_noop },	/* -d */
-  { "no_parser",	&no_parser_flag,	tok_noop },	/* -n */
-  { "graph",		&graph_flag,		tok_noop },	/* -g */
-#if 0
-  /* For the time being, this is not enabled yet, while it's possible
-     though, since we use obstacks.  The only risk is with semantic
-     parsers which will output an `include' of an output file: be sure
-     that the name included is indeed the name of the output file.  */
-  { "output_file",	&spec_outfile,		tok_setopt },	/* -o */
-  { "file_prefix",	&spec_file_prefix,	tok_setopt },	/* -b */
-  { "name_prefix",	&spec_name_prefix,	tok_setopt },	/* -p */
-#endif
-  { "verbose",		&verbose_flag,		tok_noop },	/* -v */
-  { "debug",		&debug_flag,		tok_noop },	/* -t */
-  { "semantic_parser",	&semantic_parser,	tok_noop },
-  { "pure_parser",	&pure_parser,		tok_noop },
+  { "token-table",	&token_table_flag,	tok_intopt },	/* -k */
+  { "yacc",		&yacc_flag,		tok_intopt },	/* -y */
+  { "fixed-output-files",&yacc_flag,		tok_intopt },	/* -y */
+  { "defines",		&defines_flag,		tok_intopt },	/* -d */
+  { "no-parser",	&no_parser_flag,	tok_intopt },	/* -n */
+  { "graph",		&graph_flag,		tok_intopt },	/* -g */
+
+  /* FIXME: semantic parsers which will output an `include' of an
+     output file: be sure that the name included is indeed the name of
+     the output file.  */
+  { "output",		&spec_outfile,		tok_stropt },	/* -o */
+  { "file-prefix",	&spec_file_prefix,	tok_stropt },	/* -b */
+  { "name-prefix",	&spec_name_prefix,	tok_stropt },	/* -p */
+
+  { "verbose",		&verbose_flag,		tok_intopt },	/* -v */
+  { "debug",		&debug_flag,		tok_intopt },	/* -t */
+  { "semantic-parser",	&semantic_parser,	tok_intopt },
+  { "pure-parser",	&pure_parser,		tok_intopt },
 
   { NULL, NULL, tok_illegal}
 };
@@ -584,7 +584,10 @@ struct percent_table_struct percent_table[] =
 token_t
 parse_percent_token (void)
 {
-  struct percent_table_struct *tx;
+  struct percent_table_struct *tx = NULL;
+  const char *arg = NULL;
+  /* Where the ARG was found in token_buffer. */
+  size_t arg_offset = 0;
 
   int c = getc (finput);
 
@@ -596,6 +599,8 @@ parse_percent_token (void)
     case '{':
       return tok_percent_left_curly;
 
+      /* FIXME: Who the heck are those 5 guys!?! `%<' = `%left'!!!
+	 Let's ask for there removal.  */
     case '<':
       return tok_left;
 
@@ -618,42 +623,81 @@ parse_percent_token (void)
   obstack_1grow (&token_obstack, '%');
   while (isalpha (c) || c == '_' || c == '-')
     {
-      if (c == '-')
-	c = '_';
+      if (c == '_')
+	c = '-';
       obstack_1grow (&token_obstack, c);
       c = getc (finput);
     }
 
-  ungetc (c, finput);
+  /* %DIRECTIVE="ARG".  Separate into
+     TOKEN_BUFFER = `%DIRECTIVE\0ARG\0'.
+     This is a bit hackish, but once we move to a Bison parser,
+     things will be cleaned up.  */
+  if (c == '=')
+    {
+      /* End of the directive.  We skip the `='. */
+      obstack_1grow (&token_obstack, '\0');
+      /* Fetch the ARG if present. */
+      c = getc (finput);
+      if (c == '"')
+	{
+	  int code;
+	  arg_offset = obstack_object_size (&token_obstack);
+	  /* Read up to and including `"'.  Do not append the closing
+	     `"' in the output: it's not part of the ARG.  */
+	  while (literalchar (NULL, &code, '"'))
+	    obstack_1grow (&token_obstack, code);
+	}
+      /* else: should be an error. */
+    }
+  else
+    ungetc (c, finput);
+
   obstack_1grow (&token_obstack, '\0');
   token_buffer = obstack_finish (&token_obstack);
+  if (arg_offset)
+    arg = token_buffer + arg_offset;
 
   /* table lookup % directive */
   for (tx = percent_table; tx->name; tx++)
     if (strcmp (token_buffer + 1, tx->name) == 0)
       break;
 
-  if (tx->set_flag)
-    {
-      *((int *) (tx->set_flag)) = 1;
-      return tok_noop;
-    }
+  if (arg && tx->retval != tok_stropt)
+    fatal (_("`%s' supports no argument: %s"), token_buffer, quote (arg));
 
   switch (tx->retval)
     {
-    case tok_setopt:
-      *((char **) (tx->set_flag)) = optarg;
+    case tok_stropt:
+      assert (tx->set_flag);
+      if (arg)
+	{
+	  /* Keep only the first assignment: command line options have
+	     already been processed, and we want them to have
+	     precedence.  Side effect: if this %-option is used
+	     several times, only the first is honored.  Bah.  */
+	  if (!*((char **) (tx->set_flag)))
+	    *((char **) (tx->set_flag)) = xstrdup (arg);
+	}
+      else
+	fatal (_("`%s' requires an argument"), token_buffer);
+      return tok_noop;
+      break;
+
+    case tok_intopt:
+      assert (tx->set_flag);
+      *((int *) (tx->set_flag)) = 1;
       return tok_noop;
       break;
 
     case tok_obsolete:
       fatal (_("`%s' is no longer supported"), token_buffer);
+      return tok_noop;
       break;
 
     default:
-      /* Other cases do not apply here. */
+      return tx->retval;
       break;
     }
-
-  return tx->retval;
+  abort ();
 }

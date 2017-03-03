@@ -1,5 +1,5 @@
 /* Subroutines for bison
-   Copyright 1984, 1989, 2000 Free Software Foundation, Inc.
+   Copyright 1984, 1989, 2000, 2001  Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -30,18 +30,19 @@
 void new_closure PARAMS ((int n));
 
 
-/* Given a vector of item numbers ITEMS, of length N, set up ruleset
-   and itemset to indicate what rules could be run and which items
-   could be accepted when those items are the active ones.
+/* Given the kernel (aka core) of a state (a vector of item numbers
+   ITEMS, of length N), set up ruleset and itemset to indicate what
+   rules could be run and which items could be accepted when those
+   items are the active ones.
 
    ruleset contains a bit for each rule.  closure sets the bits for
    all rules which could potentially describe the next input to be
    read.
 
-   itemset is a vector of item numbers; itemsetend points to just
-   beyond the end of the part of it that is significant.  closure
-   places there the indices of all items which represent units of
-   input that could arrive next.  */
+   ITEMSET is a vector of item numbers; NITEMSET is its size
+   9actually, points to just beyond the end of the part of it that is
+   significant).  closure places there the indices of all items which
+   represent units of input that could arrive next.  */
 
 void closure PARAMS ((short *items, int n));
 
@@ -51,6 +52,6 @@ void closure PARAMS ((short *items, int n));
 void free_closure PARAMS ((void));
 
 extern short *itemset;
-extern short *itemsetend;
+extern int nitemset;
 
 #endif /* !CLOSURE_H_ */

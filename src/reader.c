@@ -1,5 +1,5 @@
 /* Input parser for bison
-   Copyright 1984, 1986, 1989, 1992, 1998, 2000
+   Copyright 1984, 1986, 1989, 1992, 1998, 2000, 2001
    Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
@@ -34,13 +34,11 @@
 #include "reader.h"
 #include "conflicts.h"
 
-/* Number of slots allocated (but not necessarily used yet) in `rline'  */
-static int rline_allocated;
-
 typedef struct symbol_list
 {
   struct symbol_list *next;
   bucket *sym;
+  int line;
   bucket *ruleprec;
 }
 symbol_list;
@@ -64,6 +62,19 @@ static int lastprec;
 
 static bucket *errtoken;
 static bucket *undeftoken;
+
+
+static symbol_list *
+symbol_list_new (bucket *sym)
+{
+  symbol_list *res = XMALLOC (symbol_list, 1);
+  res->next = NULL;
+  res->sym = sym;
+  res->line = lineno;
+  res->ruleprec = NULL;
+  return res;
+}
+
 
 
 /*===================\
@@ -121,7 +132,7 @@ read_signed_integer (FILE *stream)
 `--------------------------------------------------------------*/
 
 static char *
-get_type_name (int n, symbol_list * rule)
+get_type_name (int n, symbol_list *rule)
 {
   int i;
   symbol_list *rp;
@@ -539,7 +550,8 @@ parse_token_decl (symbol_class what_is, symbol_class what_is_not)
       else
 	{
 	  complain (_("`%s' is invalid in %s"),
-		    token_buffer, (what_is == token_sym) ? "%token" : "%nterm");
+		    token_buffer,
+		    (what_is == token_sym) ? "%token" : "%nterm");
 	  skip_to_char ('%');
 	}
     }
@@ -695,7 +707,6 @@ token_buffer);
 	}
 
       prev = t;
-
     }
 }
 
@@ -712,6 +723,13 @@ parse_union_decl (void)
 {
   int c;
   int count = 0;
+  const char *prologue = "\
+#ifndef YYSTYPE\n\
+typedef union";
+  const char *epilogue = "\
+ yystype;\n\
+# define YYSTYPE yystype\n\
+#endif\n";
 
   if (typed)
     complain (_("multiple %s declarations"), "%union");
@@ -724,9 +742,9 @@ parse_union_decl (void)
   else
     obstack_1grow (&attrs_obstack, '\n');
 
-  obstack_sgrow (&attrs_obstack, "typedef union");
+  obstack_sgrow (&attrs_obstack, prologue);
   if (defines_flag)
-    obstack_sgrow (&defines_obstack, "typedef union");
+    obstack_sgrow (&defines_obstack, prologue);
 
   c = getc (finput);
 
@@ -761,9 +779,9 @@ parse_union_decl (void)
 	  count--;
 	  if (count <= 0)
 	    {
-	      obstack_sgrow (&attrs_obstack, " YYSTYPE;\n");
+	      obstack_sgrow (&attrs_obstack, epilogue);
 	      if (defines_flag)
-		obstack_sgrow (&defines_obstack, " YYSTYPE;\n");
+		obstack_sgrow (&defines_obstack, epilogue);
 	      /* JF don't choke on trailing semi */
 	      c = skip_white_space ();
 	      if (c != ';')
@@ -821,7 +839,7 @@ parse_thong_decl (void)
   token_t token;
   struct bucket *symbol;
   char *typename = 0;
-  int usrtoknum;
+  int usrtoknum = SUNDEF;
 
   token = lex ();		/* fetch typename or first token */
   if (token == tok_typename)
@@ -852,8 +870,6 @@ parse_thong_decl (void)
       usrtoknum = numval;
       token = lex ();		/* okay, did number, now get literal */
     }
-  else
-    usrtoknum = 0;
 
   /* process literal string token */
 
@@ -875,10 +891,11 @@ parse_thong_decl (void)
 }
 
 
-/*-----------------------------------------------------------------------------.
-| Parse a double quoted parameter. It was used for %{source,header}_extension. |
-| For the moment, It is not used since extension features have been removed.   |
-`-----------------------------------------------------------------------------*/
+/*------------------------------------------------------------------.
+| Parse a double quoted parameter. It was used for                  |
+| %{source,header}_extension.  For the moment, It is not used since |
+| extension features have been removed.                             |
+`------------------------------------------------------------------*/
 
 #if 0
 
@@ -938,16 +955,13 @@ parse_dquoted_param (const char *from)
 static void
 read_declarations (void)
 {
-  int c;
-  int tok;
-
   for (;;)
     {
-      c = skip_white_space ();
+      int c = skip_white_space ();
 
       if (c == '%')
 	{
-	  tok = parse_percent_token ();
+	  token_t tok = parse_percent_token ();
 
 	  switch (tok)
 	    {
@@ -1001,6 +1015,13 @@ read_declarations (void)
 	    case tok_noop:
 	      break;
 
+	    case tok_stropt:
+	    case tok_intopt:
+	    case tok_obsolete:
+	      abort ();
+	      break;
+
+	    case tok_illegal:
 	    default:
 	      complain (_("unrecognized: %s"), token_buffer);
 	      skip_to_char ('%');
@@ -1104,7 +1125,13 @@ copy_action (symbol_list *rule, int stack_offset)
 	}
     }
 
-  obstack_sgrow (&action_obstack, ";\n    break;}");
+  /* As a Bison extension, add the ending semicolon.  Since some Yacc
+     don't do that, help people using bison as a Yacc finding their
+     missing semicolons.  */
+  if (yacc_flag)
+    obstack_sgrow (&action_obstack, "}\n    break;");
+  else
+    obstack_sgrow (&action_obstack, ";\n    break;}");
 }
 
 /*-------------------------------------------------------------------.
@@ -1205,20 +1232,6 @@ copy_guard (symbol_list *rule, int stack_offset)
     ungetc (c, finput);
 }
 
-
-static void
-record_rule_line (void)
-{
-  /* Record each rule's source line number in rline table.  */
-
-  if (nrules >= rline_allocated)
-    {
-      rline_allocated = nrules * 2;
-      rline = XREALLOC (rline, short, rline_allocated);
-    }
-  rline[nrules] = lineno;
-}
-
 
 /*-------------------------------------------------------------------.
 | Generate a dummy symbol, a nonterminal, whose name cannot conflict |
@@ -1362,10 +1375,7 @@ readgram (void)
 	  nrules++;
 	  nitems++;
 
-	  record_rule_line ();
-
-	  p = XCALLOC (symbol_list, 1);
-	  p->sym = lhs;
+	  p = symbol_list_new (lhs);
 
 	  crule1 = p1;
 	  if (p1)
@@ -1427,36 +1437,35 @@ readgram (void)
 	         non-terminal.  */
 	      if (action_flag)
 		{
-		  bucket *sdummy;
-
 		  /* Since the action was written out with this rule's
 		     number, we must give the new rule this number by
 		     inserting the new rule before it.  */
 
 		  /* Make a dummy nonterminal, a gensym.  */
-		  sdummy = gensym ();
+		  bucket *sdummy = gensym ();
 
-		  /* Make a new rule, whose body is empty,
-		     before the current one, so that the action
-		     just read can belong to it.  */
+		  /* Make a new rule, whose body is empty, before the
+		     current one, so that the action just read can
+		     belong to it.  */
 		  nrules++;
 		  nitems++;
-		  record_rule_line ();
-		  p = XCALLOC (symbol_list, 1);
+		  p = symbol_list_new (sdummy);
+		  /* Attach its lineno to that of the host rule. */
+		  p->line = crule->line;
 		  if (crule1)
 		    crule1->next = p;
 		  else
 		    grammar = p;
-		  p->sym = sdummy;
-		  crule1 = XCALLOC (symbol_list, 1);
-		  p->next = crule1;
+		  /* End of the rule. */
+		  crule1 = symbol_list_new (NULL);
 		  crule1->next = crule;
+
+		  p->next = crule1;
 
 		  /* Insert the dummy generated by that rule into this
 		     rule.  */
 		  nitems++;
-		  p = XCALLOC (symbol_list, 1);
-		  p->sym = sdummy;
+		  p = symbol_list_new (sdummy);
 		  p1->next = p;
 		  p1 = p;
 
@@ -1466,8 +1475,7 @@ readgram (void)
 	      if (t == tok_identifier)
 		{
 		  nitems++;
-		  p = XCALLOC (symbol_list, 1);
-		  p->sym = symval;
+		  p = symbol_list_new (symval);
 		  p1->next = p;
 		  p1 = p;
 		}
@@ -1481,7 +1489,7 @@ readgram (void)
 	    }			/* end of  read rhs of rule */
 
 	  /* Put an empty link in the list to mark the end of this rule  */
-	  p = XCALLOC (symbol_list, 1);
+	  p = symbol_list_new (NULL);
 	  p1->next = p;
 	  p1 = p;
 
@@ -1663,6 +1671,89 @@ output_token_defines (struct obstack *oout)
 }
 
 
+/*--------------------.
+| Output the header.  |
+`--------------------*/
+
+static void
+symbols_output (void)
+{
+  if (defines_flag)
+    {
+      output_token_defines (&defines_obstack);
+
+      if (!pure_parser)
+	{
+	  if (spec_name_prefix)
+	    obstack_fgrow1 (&defines_obstack, "\nextern YYSTYPE %slval;\n",
+			    spec_name_prefix);
+	  else
+	    obstack_sgrow (&defines_obstack,
+				 "\nextern YYSTYPE yylval;\n");
+	}
+
+      if (semantic_parser)
+	{
+	  int i;
+
+	  for (i = ntokens; i < nsyms; i++)
+	    {
+	      /* don't make these for dummy nonterminals made by gensym.  */
+	      if (*tags[i] != '@')
+		obstack_fgrow2 (&defines_obstack,
+				"# define\tNT%s\t%d\n", tags[i], i);
+	    }
+#if 0
+	  /* `fdefines' is now a temporary file, so we need to copy its
+	     contents in `done', so we can't close it here.  */
+	  fclose (fdefines);
+	  fdefines = NULL;
+#endif
+	}
+    }
+}
+
+
+/*------------------------------------------------------------------.
+| Set TOKEN_TRANSLATIONS.  Check that no two symbols share the same |
+| number.                                                           |
+`------------------------------------------------------------------*/
+
+static void
+token_translations_init (void)
+{
+  bucket *bp = NULL;
+  int i;
+
+  token_translations = XCALLOC (short, max_user_token_number + 1);
+
+  /* Initialize all entries for literal tokens to 2, the internal
+     token number for $undefined., which represents all invalid
+     inputs.  */
+  for (i = 0; i <= max_user_token_number; i++)
+    token_translations[i] = 2;
+
+  for (bp = firstsymbol; bp; bp = bp->next)
+    {
+      /* Non-terminal? */
+      if (bp->value >= ntokens)
+	continue;
+      /* A token string alias? */
+      if (bp->user_token_number == SALIAS)
+	continue;
+
+      assert (bp->user_token_number != SUNDEF);
+
+      /* A token which translation has already been set? */
+      if (token_translations[bp->user_token_number] != 2)
+	complain (_("tokens %s and %s both assigned number %d"),
+		  tags[token_translations[bp->user_token_number]],
+		  bp->tag, bp->user_token_number);
+      token_translations[bp->user_token_number] = bp->value;
+    }
+}
+
+
 /*------------------------------------------------------------------.
 | Assign symbol numbers, and write definition of token names into   |
 | FDEFINES.  Set up vectors TAGS and SPREC of names and precedences |
@@ -1674,19 +1765,18 @@ packsymbols (void)
 {
   bucket *bp = NULL;
   int tokno = 1;
-  int i, j;
   int last_user_token_number;
   static char DOLLAR[] = "$";
 
-  /* int lossage = 0; JF set but not used */
-
   tags = XCALLOC (char *, nsyms + 1);
-  tags[0] = DOLLAR;
   user_toknums = XCALLOC (short, nsyms + 1);
-  user_toknums[0] = 0;
 
   sprec = XCALLOC (short, nsyms);
   sassoc = XCALLOC (short, nsyms);
+
+  /* The EOF token. */
+  tags[0] = DOLLAR;
+  user_toknums[0] = 0;
 
   max_user_token_number = 256;
   last_user_token_number = 256;
@@ -1740,7 +1830,7 @@ packsymbols (void)
 
       if (bp->class == token_sym)
 	{
-	  if (!bp->user_token_number)
+	  if (bp->user_token_number == SUNDEF)
 	    bp->user_token_number = ++last_user_token_number;
 	  if (bp->user_token_number > max_user_token_number)
 	    max_user_token_number = bp->user_token_number;
@@ -1752,26 +1842,7 @@ packsymbols (void)
       sassoc[bp->value] = bp->assoc;
     }
 
-  token_translations = XCALLOC (short, max_user_token_number + 1);
-
-  /* initialize all entries for literal tokens to 2, the internal
-     token number for $undefined., which represents all invalid
-     inputs.  */
-  for (j = 0; j <= max_user_token_number; j++)
-    token_translations[j] = 2;
-
-  for (bp = firstsymbol; bp; bp = bp->next)
-    {
-      if (bp->value >= ntokens)
-	continue;		/* non-terminal */
-      if (bp->user_token_number == SALIAS)
-	continue;
-      if (token_translations[bp->user_token_number] != 2)
-	complain (_("tokens %s and %s both assigned number %d"),
-		  tags[token_translations[bp->user_token_number]],
-		  bp->tag, bp->user_token_number);
-      token_translations[bp->user_token_number] = bp->value;
-    }
+  token_translations_init ();
 
   error_token_number = errtoken->value;
 
@@ -1784,36 +1855,6 @@ packsymbols (void)
     fatal (_("the start symbol %s is a token"), startval->tag);
 
   start_symbol = startval->value;
-
-  if (defines_flag)
-    {
-      output_token_defines (&defines_obstack);
-
-      if (!pure_parser)
-	{
-	  if (spec_name_prefix)
-	    obstack_fgrow1 (&defines_obstack, "\nextern YYSTYPE %slval;\n",
-			    spec_name_prefix);
-	  else
-	    obstack_sgrow (&defines_obstack,
-				 "\nextern YYSTYPE yylval;\n");
-	}
-
-      if (semantic_parser)
-	for (i = ntokens; i < nsyms; i++)
-	  {
-	    /* don't make these for dummy nonterminals made by gensym.  */
-	    if (*tags[i] != '@')
-	       obstack_fgrow2 (&defines_obstack,
-			       "# define\tNT%s\t%d\n", tags[i], i);
-	  }
-#if 0
-      /* `fdefines' is now a temporary file, so we need to copy its
-         contents in `done', so we can't close it here.  */
-      fclose (fdefines);
-      fdefines = NULL;
-#endif
-    }
 }
 
 
@@ -1829,14 +1870,8 @@ packgram (void)
   int ruleno;
   symbol_list *p;
 
-  bucket *ruleprec;
-
   ritem = XCALLOC (short, nitems + 1);
-  rlhs = XCALLOC (short, nrules) - 1;
-  rrhs = XCALLOC (short, nrules) - 1;
-  rprec = XCALLOC (short, nrules) - 1;
-  rprecsym = XCALLOC (short, nrules) - 1;
-  rassoc = XCALLOC (short, nrules) - 1;
+  rule_table = XCALLOC (rule_t, nrules) - 1;
 
   itemno = 0;
   ruleno = 1;
@@ -1844,9 +1879,11 @@ packgram (void)
   p = grammar;
   while (p)
     {
-      rlhs[ruleno] = p->sym->value;
-      rrhs[ruleno] = itemno;
-      ruleprec = p->ruleprec;
+      bucket *ruleprec = p->ruleprec;
+      rule_table[ruleno].lhs = p->sym->value;
+      rule_table[ruleno].rhs = itemno;
+      rule_table[ruleno].line = p->line;
+      rule_table[ruleno].useful = TRUE;
 
       p = p->next;
       while (p && p->sym)
@@ -1856,8 +1893,8 @@ packgram (void)
 	     of the last token in it.  */
 	  if (p->sym->class == token_sym)
 	    {
-	      rprec[ruleno] = p->sym->prec;
-	      rassoc[ruleno] = p->sym->assoc;
+	      rule_table[ruleno].prec = p->sym->prec;
+	      rule_table[ruleno].assoc = p->sym->assoc;
 	    }
 	  if (p)
 	    p = p->next;
@@ -1867,9 +1904,9 @@ packgram (void)
          the specified symbol's precedence replaces the default.  */
       if (ruleprec)
 	{
-	  rprec[ruleno] = ruleprec->prec;
-	  rassoc[ruleno] = ruleprec->assoc;
-	  rprecsym[ruleno] = ruleprec->value;
+	  rule_table[ruleno].prec = ruleprec->prec;
+	  rule_table[ruleno].assoc = ruleprec->assoc;
+	  rule_table[ruleno].precsym = ruleprec->value;
 	}
 
       ritem[itemno++] = -ruleno;
@@ -1880,6 +1917,9 @@ packgram (void)
     }
 
   ritem[itemno] = 0;
+
+  if (trace_flag)
+    ritem_print (stderr);
 }
 
 /*-------------------------------------------------------------------.
@@ -1900,8 +1940,6 @@ reader (void)
   nvars = 0;
   nrules = 0;
   nitems = 0;
-  rline_allocated = 10;
-  rline = XCALLOC (short, rline_allocated);
 
   typed = 0;
   lastprec = 0;
@@ -1929,7 +1967,6 @@ reader (void)
   /* Read the declaration section.  Copy %{ ... %} groups to
      TABLE_OBSTACK and FDEFINES file.  Also notice any %token, %left,
      etc. found there.  */
-  obstack_1grow (&table_obstack, '\n');
   obstack_fgrow3 (&table_obstack, "\
 /* %s, made from %s\n\
    by GNU bison %s.  */\n\
@@ -1958,6 +1995,8 @@ reader (void)
   packsymbols ();
   /* Convert the grammar into the format described in gram.h.  */
   packgram ();
+  /* Output the headers. */
+  symbols_output ();
 }
 
 

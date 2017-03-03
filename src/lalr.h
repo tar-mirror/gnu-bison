@@ -49,12 +49,6 @@ extern short *goto_map;
 extern short *from_state;
 extern short *to_state;
 
-/* CONSISTENT[S] is nonzero if no lookahead is needed to decide what
-   to do in state S.  */
-
-extern char *consistent;
-
-
 /* LARULENO is a vector which records the rules that need lookahead in
    various states.  The elements of LARULENO that apply to state S are
    those from LOOKAHEADS[S] through LOOKAHEADS[S+1]-1.  Each element
@@ -72,15 +66,36 @@ extern short *LAruleno;
    it is a conflict.  */
 
 extern unsigned *LA;
+#define LA(Rule) (LA + (Rule) * tokensetsize)
 
+
+/* A structure decorating a state, with additional information. */
+typedef struct state_s
+{
+  /* A state.  */
+  core *state;
+
+  /* Its accessing symbol. */
+  short accessing_symbol;
+
+  shifts     *shifts;
+  reductions *reductions;
+  errs       *errs;
+
+  /* Nonzero if no lookahead is needed to decide what to do in state
+     S.  */
+  char consistent;
+
+  short lookaheads;
+} state_t;
+
+/* All the decorated states, indexed by the state number.  Warning:
+   there is a state_TABLE in LR0.c, but it is different and static.
+   */
+extern state_t *state_table;
 
 extern int tokensetsize;
-extern short *lookaheads;
-extern short *accessing_symbol;
-extern core **state_table;
-extern shifts **shift_table;
-extern reductions **reduction_table;
 
-
-
+/* The number of lookaheads. */
+extern size_t nlookaheads;
 #endif /* !LALR_H_ */

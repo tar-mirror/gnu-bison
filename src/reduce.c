@@ -1,5 +1,5 @@
 /* Grammar reduction for Bison.
-   Copyright 1988, 1989, 2000 Free Software Foundation, Inc.
+   Copyright 1988, 1989, 2000, 2001  Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -38,16 +38,23 @@ typedef unsigned *BSet;
 typedef short *rule;
 
 
-/* N is set of all nonterminals which are not useless.  P is set of
-   all rules which have no useless nonterminals in their RHS.  V is
-   the set of all accessible symbols.  */
+/* Set of all nonterminals which are not useless.  */
+static BSet N;
 
-static BSet N, P, V, V1;
+/* Set of all rules which have no useless nonterminals in their RHS.  */
+static BSet P;
+
+/* Set of all accessible symbols.  */
+static BSet V;
+
+/* Set of symbols used to define rule precedence (so they are
+   `useless', but no warning should be issued).  */
+static BSet V1;
 
 static int nuseful_productions;
 static int nuseless_productions;
 static int nuseful_nonterminals;
-static int nuseless_nonterminals;
+int nuseless_nonterminals;
 
 static bool
 bits_equal (BSet L, BSet R, int n)
@@ -100,7 +107,7 @@ useful_production (int i, BSet N0)
   /* A production is useful if all of the nonterminals in its appear
      in the set of useful nonterminals.  */
 
-  for (r = &ritem[rrhs[i]]; *r > 0; r++)
+  for (r = &ritem[rule_table[i].rhs]; *r > 0; r++)
     if (ISVAR (n = *r))
       if (!BITISSET (N0, n - ntokens))
 	return FALSE;
@@ -149,7 +156,7 @@ useless_nonterminals (void)
 	    {
 	      if (useful_production (i, N))
 		{
-		  SETBIT (Np, rlhs[i] - ntokens);
+		  SETBIT (Np, rule_table[i].lhs - ntokens);
 		  SETBIT (P, i);
 		}
 	    }
@@ -200,38 +207,33 @@ inaccessable_symbols (void)
   Pp = XCALLOC (unsigned, WORDSIZE (nrules + 1));
 
   /* If the start symbol isn't useful, then nothing will be useful. */
-  if (!BITISSET (N, start_symbol - ntokens))
-    goto end_iteration;
-
-  SETBIT (V, start_symbol);
-
-  while (1)
+  if (BITISSET (N, start_symbol - ntokens))
     {
-      for (i = WORDSIZE (nsyms) - 1; i >= 0; i--)
-	Vp[i] = V[i];
-      for (i = 1; i <= nrules; i++)
+      SETBIT (V, start_symbol);
+
+      while (1)
 	{
-	  if (!BITISSET (Pp, i) && BITISSET (P, i) && BITISSET (V, rlhs[i]))
+	  for (i = WORDSIZE (nsyms) - 1; i >= 0; i--)
+	    Vp[i] = V[i];
+	  for (i = 1; i <= nrules; i++)
 	    {
-	      for (r = &ritem[rrhs[i]]; *r >= 0; r++)
+	      if (!BITISSET (Pp, i)
+		  && BITISSET (P, i)
+		  && BITISSET (V, rule_table[i].lhs))
 		{
-		  if (ISTOKEN (t = *r) || BITISSET (N, t - ntokens))
-		    {
+		  for (r = &ritem[rule_table[i].rhs]; *r >= 0; r++)
+		    if (ISTOKEN (t = *r) || BITISSET (N, t - ntokens))
 		      SETBIT (Vp, t);
-		    }
+		  SETBIT (Pp, i);
 		}
-	      SETBIT (Pp, i);
 	    }
+	  if (bits_equal (V, Vp, WORDSIZE (nsyms)))
+	    break;
+	  Vs = Vp;
+	  Vp = V;
+	  V = Vs;
 	}
-      if (bits_equal (V, Vp, WORDSIZE (nsyms)))
-	{
-	  break;
-	}
-      Vs = Vp;
-      Vp = V;
-      V = Vs;
     }
-end_iteration:
 
   XFREE (V);
   V = Vp;
@@ -255,39 +257,46 @@ end_iteration:
 
   /* A token that was used in %prec should not be warned about.  */
   for (i = 1; i < nrules; i++)
-    if (rprecsym[i] != 0)
-      SETBIT (V1, rprecsym[i]);
+    if (rule_table[i].precsym != 0)
+      SETBIT (V1, rule_table[i].precsym);
 }
 
 static void
 reduce_grammar_tables (void)
 {
-/* This is turned off because we would need to change the numbers
-   in the case statements in the actions file.  */
-#if 0
-  /* remove useless productions */
-  if (nuseless_productions > 0)
-    {
-      short np, pn, ni, pi;
+  /* This is turned off because we would need to change the numbers in
+     the case statements in the actions file.
 
-      np = 0;
-      ni = 0;
-      for (pn = 1; pn <= nrules; pn++)
-	{
+     We don't disable it via CPP so that it is still checked with the
+     rest of the code, to avoid its becoming completely obsolete.
+
+     FIXME: I think the comment above demonstrates this code must be
+     turned off for *semantic* parser, not in the general case.  Try
+     to understand this better --akim.  */
+
+  if (0)
+    /* remove useless productions */
+    if (nuseless_productions > 0)
+      {
+	short np, pn, ni, pi;
+
+	np = 0;
+	ni = 0;
+	for (pn = 1; pn <= nrules; pn++)
 	  if (BITISSET (P, pn))
 	    {
 	      np++;
 	      if (pn != np)
 		{
-		  rlhs[np] = rlhs[pn];
-		  rline[np] = rline[pn];
-		  rprec[np] = rprec[pn];
-		  rassoc[np] = rassoc[pn];
-		  rrhs[np] = rrhs[pn];
-		  if (rrhs[np] != ni)
+		  rule_table[np].lhs   = rule_table[pn].lhs;
+		  rule_table[np].line  = rule_table[pn].line;
+		  rule_table[np].prec  = rule_table[pn].prec;
+		  rule_table[np].assoc = rule_table[pn].assoc;
+		  rule_table[np].rhs   = rule_table[pn].rhs;
+		  if (rule_table[np].rhs != ni)
 		    {
-		      pi = rrhs[np];
-		      rrhs[np] = ni;
+		      pi = rule_table[np].rhs;
+		      rule_table[np].rhs = ni;
 		      while (ritem[pi] >= 0)
 			ritem[ni++] = ritem[pi++];
 		      ritem[ni++] = -np;
@@ -298,214 +307,220 @@ reduce_grammar_tables (void)
 		  while (ritem[ni++] >= 0);
 		}
 	    }
-	}
-      ritem[ni] = 0;
-      nrules -= nuseless_productions;
-      nitems = ni;
 
-      /* Is it worth it to reduce the amount of memory for the
-         grammar? Probably not.  */
+	ritem[ni] = 0;
+	nrules -= nuseless_productions;
+	nitems = ni;
 
-    }
-#endif /* 0 */
-  /* Disable useless productions,
-     since they may contain useless nonterms
-     that would get mapped below to -1 and confuse everyone.  */
+	/* Is it worth it to reduce the amount of memory for the
+	   grammar? Probably not.  */
+      }
+
+  /* Disable useless productions. */
   if (nuseless_productions > 0)
     {
       int pn;
-
       for (pn = 1; pn <= nrules; pn++)
-	{
-	  if (!BITISSET (P, pn))
-	    {
-	      rlhs[pn] = -1;
-	    }
-	}
-    }
-
-  /* remove useless symbols */
-  if (nuseless_nonterminals > 0)
-    {
-
-      int i, n;
-/*      short  j; JF unused */
-      short *nontermmap;
-      rule r;
-
-      /* Create a map of nonterminal number to new nonterminal
-	 number. -1 in the map means it was useless and is being
-	 eliminated.  */
-
-      nontermmap = XCALLOC (short, nvars) - ntokens;
-      for (i = ntokens; i < nsyms; i++)
-	nontermmap[i] = -1;
-
-      n = ntokens;
-      for (i = ntokens; i < nsyms; i++)
-	if (BITISSET (V, i))
-	  nontermmap[i] = n++;
-
-      /* Shuffle elements of tables indexed by symbol number.  */
-
-      for (i = ntokens; i < nsyms; i++)
-	{
-	  n = nontermmap[i];
-	  if (n >= 0)
-	    {
-	      sassoc[n] = sassoc[i];
-	      sprec[n] = sprec[i];
-	      tags[n] = tags[i];
-	    }
-	  else
-	    {
-	      free (tags[i]);
-	    }
-	}
-
-      /* Replace all symbol numbers in valid data structures.  */
-
-      for (i = 1; i <= nrules; i++)
-	{
-	  /* Ignore the rules disabled above.  */
-	  if (rlhs[i] >= 0)
-	    rlhs[i] = nontermmap[rlhs[i]];
-	  if (ISVAR (rprecsym[i]))
-	    /* Can this happen?  */
-	    rprecsym[i] = nontermmap[rprecsym[i]];
-	}
-
-      for (r = ritem; *r; r++)
-	if (ISVAR (*r))
-	  *r = nontermmap[*r];
-
-      start_symbol = nontermmap[start_symbol];
-
-      nsyms -= nuseless_nonterminals;
-      nvars -= nuseless_nonterminals;
-
-      free (&nontermmap[ntokens]);
+	rule_table[pn].useful = BITISSET (P, pn);
     }
 }
 
-static void
-print_results (void)
-{
-  int i;
-/*  short j; JF unused */
-  rule r;
-  bool b;
 
+/*------------------------------.
+| Remove useless nonterminals.  |
+`------------------------------*/
+
+static void
+nonterminals_reduce (void)
+{
+  int i, n;
+  rule r;
+
+  /* Map the nonterminals to their new index: useful first, useless
+     afterwards.  Kept for later report.  */
+
+  short *nontermmap = XCALLOC (short, nvars) - ntokens;
+  n = ntokens;
+  for (i = ntokens; i < nsyms; i++)
+    if (BITISSET (V, i))
+      nontermmap[i] = n++;
+  for (i = ntokens; i < nsyms; i++)
+    if (!BITISSET (V, i))
+      nontermmap[i] = n++;
+
+
+  /* Shuffle elements of tables indexed by symbol number.  */
+  {
+    short *sassoc_sorted = XMALLOC (short, nvars) - ntokens;
+    short *sprec_sorted  = XMALLOC (short, nvars) - ntokens;
+    char **tags_sorted   = XMALLOC (char *, nvars) - ntokens;
+
+    for (i = ntokens; i < nsyms; i++)
+      {
+	n = nontermmap[i];
+	sassoc_sorted[n] = sassoc[i];
+	sprec_sorted[n]  = sprec[i];
+	tags_sorted[n]   = tags[i];
+      }
+    for (i = ntokens; i < nsyms; i++)
+      {
+	sassoc[i] = sassoc_sorted[i];
+	sprec[i]  = sprec_sorted[i];
+	tags[i]   = tags_sorted[i];
+      }
+    free (sassoc_sorted + ntokens);
+    free (sprec_sorted + ntokens);
+    free (tags_sorted + ntokens);
+  }
+
+  /* Replace all symbol numbers in valid data structures.  */
+
+  for (i = 1; i <= nrules; i++)
+    {
+      rule_table[i].lhs = nontermmap[rule_table[i].lhs];
+      if (ISVAR (rule_table[i].precsym))
+	/* Can this happen?  */
+	rule_table[i].precsym = nontermmap[rule_table[i].precsym];
+    }
+
+  for (r = ritem; *r; r++)
+    if (ISVAR (*r))
+      *r = nontermmap[*r];
+
+  start_symbol = nontermmap[start_symbol];
+
+  nsyms -= nuseless_nonterminals;
+  nvars -= nuseless_nonterminals;
+
+  free (nontermmap + ntokens);
+}
+
+
+/*------------------------------------------------------------------.
+| Output the detailed results of the reductions.  For FILE.output.  |
+`------------------------------------------------------------------*/
+
+void
+reduce_output (FILE *out)
+{
   if (nuseless_nonterminals > 0)
     {
-      obstack_sgrow (&output_obstack, _("Useless nonterminals:"));
-      obstack_sgrow (&output_obstack, "\n\n");
-      for (i = ntokens; i < nsyms; i++)
-	if (!BITISSET (V, i))
-	  obstack_fgrow1 (&output_obstack, "   %s\n", tags[i]);
+      int i;
+      fprintf (out, "%s\n\n", _("Useless nonterminals:"));
+      for (i = 0; i < nuseless_nonterminals; ++i)
+	fprintf (out, "   %s\n", tags[nsyms + i]);
+      fputs ("\n\n", out);
     }
-  b = FALSE;
-  for (i = 0; i < ntokens; i++)
-    {
+
+  {
+    bool b = FALSE;
+    int i;
+    for (i = 0; i < ntokens; i++)
       if (!BITISSET (V, i) && !BITISSET (V1, i))
 	{
 	  if (!b)
-	    {
-	      obstack_sgrow (&output_obstack, "\n\n");
-	      obstack_sgrow (&output_obstack,
-				   _("Terminals which are not used:"));
-	      obstack_sgrow (&output_obstack, "\n\n");
-	      b = TRUE;
-	    }
-	  obstack_fgrow1 (&output_obstack, "   %s\n", tags[i]);
+	    fprintf (out, "%s\n\n", _("Terminals which are not used:"));
+	  b = TRUE;
+	  fprintf (out, "   %s\n", tags[i]);
 	}
-    }
+    if (b)
+      fputs ("\n\n", out);
+  }
 
   if (nuseless_productions > 0)
     {
-      obstack_sgrow (&output_obstack, "\n\n");
-      obstack_sgrow (&output_obstack, _("Useless rules:"));
-      obstack_sgrow (&output_obstack, "\n\n");
+      int i;
+      fprintf (out, "%s\n\n", _("Useless rules:"));
       for (i = 1; i <= nrules; i++)
-	{
-	  if (!BITISSET (P, i))
-	    {
-	      obstack_fgrow1 (&output_obstack, "#%-4d  ", i);
-	      obstack_fgrow1 (&output_obstack, "%s :\t", tags[rlhs[i]]);
-	      for (r = &ritem[rrhs[i]]; *r >= 0; r++)
-		obstack_fgrow1 (&output_obstack, " %s", tags[*r]);
-	      obstack_sgrow (&output_obstack, ";\n");
-	    }
-	}
+	if (!rule_table[i].useful)
+	  {
+	    rule r;
+	    fprintf (out, "#%-4d  ", i);
+	    fprintf (out, "%s:", tags[rule_table[i].lhs]);
+	    for (r = &ritem[rule_table[i].rhs]; *r >= 0; r++)
+	      fprintf (out, " %s", tags[*r]);
+	    fputs (";\n", out);
+	  }
+      fputs ("\n\n", out);
     }
-  if (nuseless_nonterminals > 0 || nuseless_productions > 0 || b)
-    obstack_sgrow (&output_obstack, "\n\n");
 }
 
-#if 0				/* XXX currently unused.  */
 static void
-dump_grammar (void)
+dump_grammar (FILE *out)
 {
   int i;
   rule r;
 
-  obstack_fgrow5 (&output_obstack,
-	 "ntokens = %d, nvars = %d, nsyms = %d, nrules = %d, nitems = %d\n\n",
-	 ntokens, nvars, nsyms, nrules, nitems);
-  obstack_sgrow (&output_obstack,
-		       _("Variables\n---------\n\n"));
-  obstack_sgrow (&output_obstack,
-		       _("Value  Sprec    Sassoc    Tag\n"));
+  fprintf (out, "REDUCED GRAMMAR\n\n");
+  fprintf (out,
+	   "ntokens = %d, nvars = %d, nsyms = %d, nrules = %d, nitems = %d\n\n",
+	   ntokens, nvars, nsyms, nrules, nitems);
+  fprintf (out, "Variables\n---------\n\n");
+  fprintf (out, "Value  Sprec  Sassoc  Tag\n");
   for (i = ntokens; i < nsyms; i++)
-    obstack_fgrow4 (&output_obstack,
-		    "%5d  %5d  %5d  %s\n", i, sprec[i], sassoc[i], tags[i]);
-  obstack_sgrow (&output_obstack, "\n\n");
-  obstack_sgrow (&output_obstack, _("Rules\n-----\n\n"));
+    fprintf (out, "%5d  %5d   %5d  %s\n", i, sprec[i], sassoc[i], tags[i]);
+  fprintf (out, "\n\n");
+  fprintf (out, "Rules\n-----\n\n");
+  fprintf (out, "Num (Prec, Assoc, Useful, Ritem Range) Lhs -> Rhs (Ritem range) [Num]\n");
   for (i = 1; i <= nrules; i++)
     {
-      obstack_fgrow5 (&output_obstack, "%-5d(%5d%5d)%5d : (@%-5d)",
-		      i, rprec[i], rassoc[i], rlhs[i], rrhs[i]);
-      for (r = &ritem[rrhs[i]]; *r > 0; r++)
-	obstack_fgrow1 (&output_obstack, "%5d", *r);
-      obstack_fgrow1 (&output_obstack, " [%d]\n", -(*r));
+      int rhs_count = 0;
+      /* Find the last RHS index in ritems. */
+      for (r = &ritem[rule_table[i].rhs]; *r > 0; ++r)
+	++rhs_count;
+      fprintf (out, "%3d (%2d, %2d, %2d, %2d-%2d)   %2d ->",
+	       i,
+	       rule_table[i].prec, rule_table[i].assoc, rule_table[i].useful,
+	       rule_table[i].rhs, rule_table[i].rhs + rhs_count - 1,
+	       rule_table[i].lhs);
+      /* Dumped the RHS. */
+      for (r = &ritem[rule_table[i].rhs]; *r > 0; r++)
+	fprintf (out, "%3d", *r);
+      fprintf (out, "  [%d]\n", -(*r));
     }
-  obstack_sgrow (&output_obstack, "\n\n");
-  obstack_sgrow (&output_obstack,
-		       _("Rules interpreted\n-----------------\n\n"));
+  fprintf (out, "\n\n");
+  fprintf (out, "Rules interpreted\n-----------------\n\n");
   for (i = 1; i <= nrules; i++)
     {
-      obstack_fgrow2 (&output_obstack, "%-5d  %s :", i, tags[rlhs[i]]);
-      for (r = &ritem[rrhs[i]]; *r > 0; r++)
-	obstack_fgrow1 (&output_obstack, " %s", tags[*r]);
-      obstack_grow1 (&output_obstack, '\n');
+      fprintf (out, "%-5d  %s :", i, tags[rule_table[i].lhs]);
+      for (r = &ritem[rule_table[i].rhs]; *r > 0; r++)
+	fprintf (out, " %s", tags[*r]);
+      fputc ('\n', out);
     }
-  obstack_sgrow (&output_obstack, "\n\n");
+  fprintf (out, "\n\n");
 }
-#endif
 
+
+
+/*-------------------------------.
+| Report the results to STDERR.  |
+`-------------------------------*/
 
 static void
-print_notices (void)
+reduce_print (void)
 {
   if (yacc_flag && nuseless_productions)
-    fprintf (stderr, _("%d rules never reduced\n"), nuseless_productions);
+    fprintf (stderr, ngettext ("%d rule never reduced\n",
+			       "%d rules never reduced\n",
+			       nuseless_productions),
+	     nuseless_productions);
 
   fprintf (stderr, _("%s contains "), infile);
 
   if (nuseless_nonterminals > 0)
-    {
-      fprintf (stderr, _("%d useless nonterminal%s"),
-	       nuseless_nonterminals,
-	       (nuseless_nonterminals == 1 ? "" : "s"));
-    }
+    fprintf (stderr, ngettext ("%d useless nonterminal",
+			       "%d useless nonterminals",
+			       nuseless_nonterminals),
+	     nuseless_nonterminals);
+
   if (nuseless_nonterminals > 0 && nuseless_productions > 0)
     fprintf (stderr, _(" and "));
 
   if (nuseless_productions > 0)
-    {
-      fprintf (stderr, _("%d useless rule%s"),
-	       nuseless_productions, (nuseless_productions == 1 ? "" : "s"));
-    }
+    fprintf (stderr, ngettext ("%d useless rule",
+			       "%d useless rules",
+			       nuseless_productions),
+	     nuseless_productions);
   fprintf (stderr, "\n");
   fflush (stderr);
 }
@@ -527,42 +542,39 @@ reduce_grammar (void)
 
   reduced = (bool) (nuseless_nonterminals + nuseless_productions > 0);
 
-  if (verbose_flag)
-    print_results ();
+  if (!reduced)
+    return;
 
-  if (reduced == FALSE)
-    goto done_reducing;
-
-  print_notices ();
+  reduce_print ();
 
   if (!BITISSET (N, start_symbol - ntokens))
     fatal (_("Start symbol %s does not derive any sentence"),
 	   tags[start_symbol]);
 
   reduce_grammar_tables ();
-#if 0
-  if (verbose_flag)
+  if (nuseless_nonterminals > 0)
+    nonterminals_reduce ();
+
+  if (trace_flag)
     {
-      obstack_fgrow1 (&output_obstack, "REDUCED GRAMMAR\n\n");
-      dump_grammar ();
+      dump_grammar (stderr);
+
+      fprintf (stderr, "reduced %s defines %d terminals, %d nonterminals\
+, and %d productions.\n",
+	       infile, ntokens, nvars, nrules);
     }
-#endif
+}
 
-  if (statistics_flag)
-    fprintf (stderr, _("reduced %s defines %d terminal%s, %d nonterminal%s\
-, and %d production%s.\n"),
-	     infile,
-	     ntokens,
-	     (ntokens == 1 ? "" : "s"),
-	     nvars,
-	     (nvars == 1 ? "" : "s"),
-	     nrules,
-	     (nrules == 1 ? "" : "s"));
 
-done_reducing:
-  /* Free the global sets used to compute the reduced grammar */
+/*-----------------------------------------------------------.
+| Free the global sets used to compute the reduced grammar.  |
+`-----------------------------------------------------------*/
 
+void
+reduce_free (void)
+{
   XFREE (N);
   XFREE (V);
+  XFREE (V1);
   XFREE (P);
 }

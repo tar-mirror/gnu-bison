@@ -1,5 +1,5 @@
 /* Match rules with nonterminals for bison,
-   Copyright 1984, 1989, 2000 Free Software Foundation, Inc.
+   Copyright 1984, 1989, 2000, 2001  Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -19,50 +19,44 @@
    Boston, MA 02111-1307, USA.  */
 
 
-/* set_derives finds, for each variable (nonterminal), which rules can
-   derive it.  It sets up the value of derives so that derives[i -
-   ntokens] points to a vector of rule numbers, terminated with -1.
-   */
-
 #include "system.h"
+#include "getargs.h"
 #include "types.h"
+#include "reader.h"
 #include "gram.h"
 #include "derives.h"
 
-short **derives;
-
-#if DEBUG
+short **derives = NULL;
 
 static void
 print_derives (void)
 {
   int i;
-  short *sp;
 
-  fputs ("\n\n\n", stdout);
-  printf (_("DERIVES"));
-  fputs ("\n\n", stdout);
+  fputs ("DERIVES\n", stderr);
 
   for (i = ntokens; i < nsyms; i++)
     {
-      printf (_("%s derives"), tags[i]);
+      short *sp;
+      fprintf (stderr, "\t%s derives\n", tags[i]);
       for (sp = derives[i]; *sp > 0; sp++)
 	{
-	  printf ("  %d", *sp);
+	  short *rhsp;
+	  fprintf (stderr, "\t\t%d:", *sp);
+	  for (rhsp = ritem + rule_table[*sp].rhs; *rhsp > 0; ++rhsp)
+	    fprintf (stderr, " %s", tags[*rhsp]);
+	  fprintf (stderr, " (rule %d)\n", -*rhsp);
 	}
-      putchar ('\n');
     }
 
-  putchar ('\n');
+  fputs ("\n\n", stderr);
 }
 
-#endif
 
 void
 set_derives (void)
 {
   int i;
-  int lhs;
   shorts *p;
   short *q;
   shorts **dset;
@@ -73,16 +67,14 @@ set_derives (void)
 
   p = delts;
   for (i = nrules; i > 0; i--)
-    {
-      lhs = rlhs[i];
-      if (lhs >= 0)
-	{
-	  p->next = dset[lhs];
-	  p->value = i;
-	  dset[lhs] = p;
-	  p++;
-	}
-    }
+    if (rule_table[i].useful)
+      {
+	int lhs = rule_table[i].lhs;
+	p->next = dset[lhs];
+	p->value = i;
+	dset[lhs] = p;
+	p++;
+      }
 
   derives = XCALLOC (short *, nvars) - ntokens;
   q = XCALLOC (short, nvars + nrules);
@@ -99,9 +91,8 @@ set_derives (void)
       *q++ = -1;
     }
 
-#if DEBUG
-  print_derives ();
-#endif
+  if (trace_flag)
+    print_derives ();
 
   XFREE (dset + ntokens);
   XFREE (delts);

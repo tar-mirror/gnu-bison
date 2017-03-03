@@ -19,6 +19,7 @@
    02111-1307, USA.  */
 
 #include "system.h"
+#include "complain.h"
 #include "getargs.h"
 #include "files.h"
 #include "gram.h"
@@ -28,17 +29,12 @@
 #include "reader.h"
 #include "LR0.h"
 
-int any_conflicts = 0;
-errs **err_table = NULL;
-int expected_conflicts;
+/* -1 stands for not specified. */
+int expected_conflicts = -1;
 static char *conflicts = NULL;
 
 static unsigned *shiftset = NULL;
 static unsigned *lookaheadset = NULL;
-static int src_total;
-static int rrc_total;
-static int src_count;
-static int rrc_count;
 
 
 static inline void
@@ -60,21 +56,12 @@ Conflict in state %d between rule %d and token %s resolved as %s.\n"),
 static void
 flush_shift (int state, int token)
 {
-  shifts *shiftp;
-  int k, i;
+  shifts *shiftp = state_table[state].shifts;
+  int i;
 
-  shiftp = shift_table[state];
-
-  if (shiftp)
-    {
-      k = shiftp->nshifts;
-      for (i = 0; i < k; i++)
-	{
-	  if (shiftp->shifts[i]
-	      && token == accessing_symbol[shiftp->shifts[i]])
-	    (shiftp->shifts[i]) = 0;
-	}
-    }
+  for (i = 0; i < shiftp->nshifts; i++)
+    if (!SHIFT_IS_DISABLED (shiftp, i) && SHIFT_SYMBOL (shiftp, i) == token)
+      SHIFT_DISABLE (shiftp, i);
 }
 
 
@@ -89,95 +76,79 @@ static void
 resolve_sr_conflict (int state, int lookaheadnum)
 {
   int i;
-  int mask;
-  unsigned *fp1;
-  unsigned *fp2;
-  int redprec;
-  errs *errp = (errs *) xcalloc (sizeof (errs) + ntokens * sizeof (short), 1);
+  /* find the rule to reduce by to get precedence of reduction  */
+  int redprec = rule_table[LAruleno[lookaheadnum]].prec;
+  errs *errp = ERRS_ALLOC (ntokens + 1);
   short *errtokens = errp->errs;
 
-  /* find the rule to reduce by to get precedence of reduction  */
-  redprec = rprec[LAruleno[lookaheadnum]];
-
-  mask = 1;
-  fp1 = LA + lookaheadnum * tokensetsize;
-  fp2 = lookaheadset;
   for (i = 0; i < ntokens; i++)
-    {
-      if ((mask & *fp2 & *fp1) && sprec[i])
-	/* Shift-reduce conflict occurs for token number i
-	   and it has a precedence.
-	   The precedence of shifting is that of token i.  */
-	{
-	  if (sprec[i] < redprec)
-	    {
-	      log_resolution (state, lookaheadnum, i, _("reduce"));
-	      *fp2 &= ~mask;	/* flush the shift for this token */
-	      flush_shift (state, i);
-	    }
-	  else if (sprec[i] > redprec)
-	    {
-	      log_resolution (state, lookaheadnum, i, _("shift"));
-	      *fp1 &= ~mask;	/* flush the reduce for this token */
-	    }
-	  else
-	    {
-	      /* Matching precedence levels.
-	         For left association, keep only the reduction.
-	         For right association, keep only the shift.
-	         For nonassociation, keep neither.  */
+    if (BITISSET (LA (lookaheadnum), i)
+	&& BITISSET (lookaheadset, i)
+	&& sprec[i])
+      /* Shift-reduce conflict occurs for token number i
+	 and it has a precedence.
+	 The precedence of shifting is that of token i.  */
+      {
+	if (sprec[i] < redprec)
+	  {
+	    log_resolution (state, lookaheadnum, i, _("reduce"));
+	    /* flush the shift for this token */
+	    RESETBIT (lookaheadset, i);
+	    flush_shift (state, i);
+	  }
+	else if (sprec[i] > redprec)
+	  {
+	    log_resolution (state, lookaheadnum, i, _("shift"));
+	    /* flush the reduce for this token */
+	    RESETBIT (LA (lookaheadnum), i);
+	  }
+	else
+	  {
+	    /* Matching precedence levels.
+	       For left association, keep only the reduction.
+	       For right association, keep only the shift.
+	       For nonassociation, keep neither.  */
 
-	      switch (sassoc[i])
-		{
-		case right_assoc:
-		  log_resolution (state, lookaheadnum, i, _("shift"));
-		  break;
+	    switch (sassoc[i])
+	      {
+	      case right_assoc:
+		log_resolution (state, lookaheadnum, i, _("shift"));
+		break;
 
-		case left_assoc:
-		  log_resolution (state, lookaheadnum, i, _("reduce"));
-		  break;
+	      case left_assoc:
+		log_resolution (state, lookaheadnum, i, _("reduce"));
+		break;
 
-		case non_assoc:
-		  log_resolution (state, lookaheadnum, i, _("an error"));
-		  break;
-		}
+	      case non_assoc:
+		log_resolution (state, lookaheadnum, i, _("an error"));
+		break;
+	      }
 
-	      if (sassoc[i] != right_assoc)
-		{
-		  *fp2 &= ~mask;	/* flush the shift for this token */
-		  flush_shift (state, i);
-		}
-	      if (sassoc[i] != left_assoc)
-		{
-		  *fp1 &= ~mask;	/* flush the reduce for this token */
-		}
-	      if (sassoc[i] == non_assoc)
-		{
-		  /* Record an explicit error for this token.  */
-		  *errtokens++ = i;
-		}
-	    }
-	}
+	    if (sassoc[i] != right_assoc)
+	      {
+		/* flush the shift for this token */
+		RESETBIT (lookaheadset, i);
+		flush_shift (state, i);
+	      }
+	    if (sassoc[i] != left_assoc)
+	      {
+		/* flush the reduce for this token */
+		RESETBIT (LA (lookaheadnum), i);
+	      }
+	    if (sassoc[i] == non_assoc)
+	      {
+		/* Record an explicit error for this token.  */
+		*errtokens++ = i;
+	      }
+	  }
+      }
 
-      mask <<= 1;
-      if (mask == 0)
-	{
-	  mask = 1;
-	  fp2++;
-	  fp1++;
-	}
-    }
   errp->nerrs = errtokens - errp->errs;
-  if (errp->nerrs)
-    {
-      /* Some tokens have been explicitly made errors.  Allocate
-         a permanent errs structure for this state, to record them.  */
-      i = (char *) errtokens - (char *) errp;
-      err_table[state] = (errs *) xcalloc ((unsigned int) i, 1);
-      bcopy (errp, err_table[state], i);
-    }
-  else
-    err_table[state] = 0;
+  /* Some tokens have been explicitly made errors.  Allocate a
+     permanent errs structure for this state, to record them.  */
+  i = (char *) errtokens - (char *) errp;
+  state_table[state].errs = ERRS_ALLOC (i + 1);
+  memcpy (state_table[state].errs, errp, i);
   free (errp);
 }
 
@@ -185,80 +156,47 @@ resolve_sr_conflict (int state, int lookaheadnum)
 static void
 set_conflicts (int state)
 {
-  int i;
-  int k;
+  int i, j;
   shifts *shiftp;
-  unsigned *fp2;
-  unsigned *fp3;
-  unsigned *fp4;
-  unsigned *fp1;
-  int symbol;
 
-  if (consistent[state])
+  if (state_table[state].consistent)
     return;
 
   for (i = 0; i < tokensetsize; i++)
     lookaheadset[i] = 0;
 
-  shiftp = shift_table[state];
-  if (shiftp)
-    {
-      k = shiftp->nshifts;
-      for (i = 0; i < k; i++)
-	{
-	  symbol = accessing_symbol[shiftp->shifts[i]];
-	  if (ISVAR (symbol))
-	    break;
-	  SETBIT (lookaheadset, symbol);
-	}
-    }
-
-  k = lookaheads[state + 1];
-  fp4 = lookaheadset + tokensetsize;
+  shiftp = state_table[state].shifts;
+  for (i = 0; i < shiftp->nshifts && SHIFT_IS_SHIFT (shiftp, i); i++)
+    if (!SHIFT_IS_DISABLED (shiftp, i))
+      SETBIT (lookaheadset, SHIFT_SYMBOL (shiftp, i));
 
   /* Loop over all rules which require lookahead in this state.  First
      check for shift-reduce conflict, and try to resolve using
      precedence */
-  for (i = lookaheads[state]; i < k; i++)
-    if (rprec[LAruleno[i]])
-      {
-	fp1 = LA + i * tokensetsize;
-	fp2 = fp1;
-	fp3 = lookaheadset;
-
-	while (fp3 < fp4)
+  for (i = state_table[state].lookaheads;
+       i < state_table[state + 1].lookaheads;
+       ++i)
+    if (rule_table[LAruleno[i]].prec)
+      for (j = 0; j < tokensetsize; ++j)
+	if (LA (i)[j] & lookaheadset[j])
 	  {
-	    if (*fp2++ & *fp3++)
-	      {
-		resolve_sr_conflict (state, i);
-		break;
-	      }
+	    resolve_sr_conflict (state, i);
+	    break;
 	  }
-      }
 
 
   /* Loop over all rules which require lookahead in this state.  Check
      for conflicts not resolved above.  */
-  for (i = lookaheads[state]; i < k; i++)
+  for (i = state_table[state].lookaheads;
+       i < state_table[state + 1].lookaheads;
+       ++i)
     {
-      fp1 = LA + i * tokensetsize;
-      fp2 = fp1;
-      fp3 = lookaheadset;
+      for (j = 0; j < tokensetsize; ++j)
+	if (LA (i)[j] & lookaheadset[j])
+	  conflicts[state] = 1;
 
-      while (fp3 < fp4)
-	{
-	  if (*fp2++ & *fp3++)
-	    {
-	      conflicts[state] = 1;
-	      any_conflicts = 1;
-	    }
-	}
-
-      fp2 = fp1;
-      fp3 = lookaheadset;
-
-      while (fp3 < fp4)
-	*fp3++ |= *fp2++;
+      for (j = 0; j < tokensetsize; ++j)
+	lookaheadset[j] |= LA (i)[j];
     }
 }
 
@@ -271,10 +209,6 @@ solve_conflicts (void)
   shiftset = XCALLOC (unsigned, tokensetsize);
   lookaheadset = XCALLOC (unsigned, tokensetsize);
 
-  err_table = XCALLOC (errs *, nstates);
-
-  any_conflicts = 0;
-
   for (i = 0; i < nstates; i++)
     set_conflicts (i);
 }
@@ -284,23 +218,15 @@ solve_conflicts (void)
 | Count the number of shift/reduce conflicts.  |
 `---------------------------------------------*/
 
-static void
+static int
 count_sr_conflicts (int state)
 {
-  int i;
-  int k;
-  int mask;
-  shifts *shiftp;
-  unsigned *fp1;
-  unsigned *fp2;
-  unsigned *fp3;
-  int symbol;
+  int i, k;
+  int src_count = 0;
+  shifts *shiftp = state_table[state].shifts;
 
-  src_count = 0;
-
-  shiftp = shift_table[state];
   if (!shiftp)
-    return;
+    return 0;
 
   for (i = 0; i < tokensetsize; i++)
     {
@@ -308,49 +234,24 @@ count_sr_conflicts (int state)
       lookaheadset[i] = 0;
     }
 
-  k = shiftp->nshifts;
-  for (i = 0; i < k; i++)
-    {
-      if (!shiftp->shifts[i])
-	continue;
-      symbol = accessing_symbol[shiftp->shifts[i]];
-      if (ISVAR (symbol))
-	break;
-      SETBIT (shiftset, symbol);
-    }
+  for (i = 0; i < shiftp->nshifts && SHIFT_IS_SHIFT (shiftp, i); i++)
+    if (!SHIFT_IS_DISABLED (shiftp, i))
+      SETBIT (shiftset, SHIFT_SYMBOL (shiftp, i));
 
-  k = lookaheads[state + 1];
-  fp3 = lookaheadset + tokensetsize;
+  for (i = state_table[state].lookaheads;
+       i < state_table[state + 1].lookaheads;
+       ++i)
+    for (k = 0; k < tokensetsize; ++k)
+      lookaheadset[k] |= LA (i)[k];
 
-  for (i = lookaheads[state]; i < k; i++)
-    {
-      fp1 = LA + i * tokensetsize;
-      fp2 = lookaheadset;
+  for (k = 0; k < tokensetsize; ++k)
+    lookaheadset[k] &= shiftset[k];
 
-      while (fp2 < fp3)
-	*fp2++ |= *fp1++;
-    }
-
-  fp1 = shiftset;
-  fp2 = lookaheadset;
-
-  while (fp2 < fp3)
-    *fp2++ &= *fp1++;
-
-  mask = 1;
-  fp2 = lookaheadset;
   for (i = 0; i < ntokens; i++)
-    {
-      if (mask & *fp2)
-	src_count++;
+    if (BITISSET (lookaheadset, i))
+      src_count++;
 
-      mask <<= 1;
-      if (mask == 0)
-	{
-	  mask = 1;
-	  fp2++;
-	}
-    }
+  return src_count;
 }
 
 
@@ -358,51 +259,31 @@ count_sr_conflicts (int state)
 | Count the number of reduce/reduce conflicts.  |
 `----------------------------------------------*/
 
-static void
+static int
 count_rr_conflicts (int state)
 {
   int i;
-  int j;
-  int count;
-  unsigned mask;
-  unsigned *baseword;
-  unsigned *wordp;
-  int m;
-  int n;
+  int rrc_count = 0;
 
-  rrc_count = 0;
-
-  m = lookaheads[state];
-  n = lookaheads[state + 1];
+  int m = state_table[state].lookaheads;
+  int n = state_table[state + 1].lookaheads;
 
   if (n - m < 2)
-    return;
+    return 0;
 
-  mask = 1;
-  baseword = LA + m * tokensetsize;
   for (i = 0; i < ntokens; i++)
     {
-      wordp = baseword;
-
-      count = 0;
+      int count = 0;
+      int j;
       for (j = m; j < n; j++)
-	{
-	  if (mask & *wordp)
-	    count++;
-
-	  wordp += tokensetsize;
-	}
+	if (BITISSET (LA (j), i))
+	  count++;
 
       if (count >= 2)
 	rrc_count++;
-
-      mask <<= 1;
-      if (mask == 0)
-	{
-	  mask = 1;
-	  baseword++;
-	}
     }
+
+  return rrc_count;
 }
 
 /*--------------------------------------------------------------.
@@ -416,31 +297,23 @@ conflict_report (int src_num, int rrc_num)
   static char res[4096];
   char *cp = res;
 
-  if (src_num == 1)
+  if (src_num >= 1)
     {
-      sprintf (cp, _(" 1 shift/reduce conflict"));
-      cp += strlen (cp);
-    }
-  else if (src_num > 1)
-    {
-      sprintf (cp, _(" %d shift/reduce conflicts"), src_num);
+      sprintf (cp, ngettext ("%d shift/reduce conflict",
+			     "%d shift/reduce conflicts", src_num), src_num);
       cp += strlen (cp);
     }
 
   if (src_num > 0 && rrc_num > 0)
     {
-      sprintf (cp, _(" and"));
+      sprintf (cp, " %s ", _("and"));
       cp += strlen (cp);
     }
 
-  if (rrc_num == 1)
+  if (rrc_num >= 1)
     {
-      sprintf (cp, _(" 1 reduce/reduce conflict"));
-      cp += strlen (cp);
-    }
-  else if (rrc_num > 1)
-    {
-      sprintf (cp, _(" %d reduce/reduce conflicts"), rrc_num);
+      sprintf (cp, ngettext ("%d reduce/reduce conflict",
+			     "%d reduce/reduce conflicts", rrc_num), rrc_num);
       cp += strlen (cp);
     }
 
@@ -452,36 +325,59 @@ conflict_report (int src_num, int rrc_num)
 }
 
 
-/*---------------------------------------------.
-| Compute and give a report on the conflicts.  |
-`---------------------------------------------*/
+/*-----------------------------------------------------------.
+| Output the detailed description of states with conflicts.  |
+`-----------------------------------------------------------*/
 
 void
-print_conflicts (FILE *out)
+conflicts_output (FILE *out)
+{
+  bool printed_sth = FALSE;
+  int i;
+  for (i = 0; i < nstates; i++)
+    if (conflicts[i])
+      {
+	fprintf (out, _("State %d contains "), i);
+	fputs (conflict_report (count_sr_conflicts (i),
+				count_rr_conflicts (i)), out);
+	printed_sth = TRUE;
+      }
+  if (printed_sth)
+    fputs ("\n\n", out);
+}
+
+
+/*------------------------------------------.
+| Reporting the total number of conflicts.  |
+`------------------------------------------*/
+
+void
+conflicts_print (void)
 {
   int i;
 
-  src_total = 0;
-  rrc_total = 0;
+  /* Is the number of SR conflicts OK?  Either EXPECTED_CONFLICTS is
+     not set, and then we want 0 SR, or else it is specified, in which
+     case we want equality.  */
+  int src_ok = 0;
 
-  /* Count the total number of conflicts, and if wanted, give a
-     detailed report in FOUTPUT.  */
+  int src_total = 0;
+  int rrc_total = 0;
+
+  /* Conflicts by state.  */
   for (i = 0; i < nstates; i++)
-    {
-      if (conflicts[i])
-	{
-	  count_sr_conflicts (i);
-	  count_rr_conflicts (i);
-	  src_total += src_count;
-	  rrc_total += rrc_count;
+    if (conflicts[i])
+      {
+	src_total += count_sr_conflicts (i);
+	rrc_total += count_rr_conflicts (i);
+      }
 
-	  if (verbose_flag)
-	    {
-	      fprintf (out, _("State %d contains"), i);
-	      fputs (conflict_report (src_count, rrc_count), out);
-	    }
-	}
-    }
+  src_ok = src_total == (expected_conflicts == -1 ? 0 : expected_conflicts);
+
+  /* If there are no RR conflicts, and as many SR conflicts as
+     expected, then there is nothing to report.  */
+  if (!rrc_total && src_ok)
+    return;
 
   /* Report the total number of conflicts on STDERR.  */
   if (yacc_flag)
@@ -499,31 +395,34 @@ print_conflicts (FILE *out)
     }
   else
     {
-      fprintf (stderr, _("%s contains"), infile);
+      fprintf (stderr, _("%s contains "), infile);
       fputs (conflict_report (src_total, rrc_total), stderr);
+    }
+
+  if (expected_conflicts != -1 && !src_ok)
+    {
+      /* FIXME: BIG ATTROCIOUS HACK.  For flames, complaints and so
+	 on, see Bruno Haible.  GNU Gettext's plural.y's %expect is
+	 wrong, and newer Bison reject it.  But then, Bruno will be
+	 overwhelmed by bug reports, until a fixed Gettext is
+	 released.  So for the 1.3x generation only, we leave a puke
+	 puke hack.  */
+      if (!strsuffix (infile, "plural.y"))
+	complain_message_count++;
+      fprintf (stderr, ngettext ("expected %d shift/reduce conflict\n",
+				 "expected %d shift/reduce conflicts\n",
+				 expected_conflicts),
+	       expected_conflicts);
     }
 }
 
 
 void
-print_reductions (int state)
+print_reductions (FILE *out, int state)
 {
   int i;
-  int j;
-  int k;
-  unsigned *fp1;
-  unsigned *fp2;
-  unsigned *fp3;
-  unsigned *fp4;
-  int rule;
-  int symbol;
-  unsigned mask;
   int m;
   int n;
-  int default_LA;
-  int default_rule = 0;
-  int cmax;
-  int count;
   shifts *shiftp;
   errs *errp;
   int nodefault = 0;
@@ -531,106 +430,61 @@ print_reductions (int state)
   for (i = 0; i < tokensetsize; i++)
     shiftset[i] = 0;
 
-  shiftp = shift_table[state];
-  if (shiftp)
-    {
-      k = shiftp->nshifts;
-      for (i = 0; i < k; i++)
-	{
-	  if (!shiftp->shifts[i])
-	    continue;
-	  symbol = accessing_symbol[shiftp->shifts[i]];
-	  if (ISVAR (symbol))
-	    break;
-	  /* if this state has a shift for the error token,
-	     don't use a default rule.  */
-	  if (symbol == error_token_number)
-	    nodefault = 1;
-	  SETBIT (shiftset, symbol);
-	}
-    }
+  shiftp = state_table[state].shifts;
+  for (i = 0; i < shiftp->nshifts && SHIFT_IS_SHIFT (shiftp, i); i++)
+    if (!SHIFT_IS_DISABLED (shiftp, i))
+      {
+	/* if this state has a shift for the error token, don't use a
+	   default rule.  */
+	if (SHIFT_IS_ERROR (shiftp, i))
+	  nodefault = 1;
+	SETBIT (shiftset, SHIFT_SYMBOL (shiftp, i));
+      }
 
-  errp = err_table[state];
+  errp = state_table[state].errs;
   if (errp)
-    {
-      k = errp->nerrs;
-      for (i = 0; i < k; i++)
-	{
-	  if (!errp->errs[i])
-	    continue;
-	  symbol = errp->errs[i];
-	  SETBIT (shiftset, symbol);
-	}
-    }
+    for (i = 0; i < errp->nerrs; i++)
+      if (errp->errs[i])
+	SETBIT (shiftset, errp->errs[i]);
 
-  m = lookaheads[state];
-  n = lookaheads[state + 1];
+  m = state_table[state].lookaheads;
+  n = state_table[state + 1].lookaheads;
 
   if (n - m == 1 && !nodefault)
     {
-      default_rule = LAruleno[m];
+      int k;
+      int default_rule = LAruleno[m];
 
-      fp1 = LA + m * tokensetsize;
-      fp2 = shiftset;
-      fp3 = lookaheadset;
-      fp4 = lookaheadset + tokensetsize;
-
-      while (fp3 < fp4)
-	*fp3++ = *fp1++ & *fp2++;
-
-      mask = 1;
-      fp3 = lookaheadset;
+      for (k = 0; k < tokensetsize; ++k)
+	lookaheadset[k] = LA (m)[k] & shiftset[k];
 
       for (i = 0; i < ntokens; i++)
-	{
-	  if (mask & *fp3)
-	    obstack_fgrow3 (&output_obstack,
-			    _("    %-4s\t[reduce using rule %d (%s)]\n"),
-			    tags[i], default_rule, tags[rlhs[default_rule]]);
+	if (BITISSET (lookaheadset, i))
+	  fprintf (out, _("    %-4s\t[reduce using rule %d (%s)]\n"),
+		   tags[i], default_rule,
+		   tags[rule_table[default_rule].lhs]);
 
-	  mask <<= 1;
-	  if (mask == 0)
-	    {
-	      mask = 1;
-	      fp3++;
-	    }
-	}
-
-      obstack_fgrow2 (&output_obstack,
-		      _("    $default\treduce using rule %d (%s)\n\n"),
-		      default_rule, tags[rlhs[default_rule]]);
+      fprintf (out, _("    $default\treduce using rule %d (%s)\n\n"),
+	       default_rule, tags[rule_table[default_rule].lhs]);
     }
   else if (n - m >= 1)
     {
-      cmax = 0;
-      default_LA = -1;
-      fp4 = lookaheadset + tokensetsize;
+      int cmax = 0;
+      int default_LA = -1;
+      int default_rule = 0;
 
       if (!nodefault)
 	for (i = m; i < n; i++)
 	  {
-	    fp1 = LA + i * tokensetsize;
-	    fp2 = shiftset;
-	    fp3 = lookaheadset;
+	    int count = 0;
+	    int j, k;
 
-	    while (fp3 < fp4)
-	      *fp3++ = *fp1++ & (~(*fp2++));
+	    for (k = 0; k < tokensetsize; ++k)
+	      lookaheadset[k] = LA (i)[k] & ~shiftset[k];
 
-	    count = 0;
-	    mask = 1;
-	    fp3 = lookaheadset;
 	    for (j = 0; j < ntokens; j++)
-	      {
-		if (mask & *fp3)
-		  count++;
-
-		mask <<= 1;
-		if (mask == 0)
-		  {
-		    mask = 1;
-		    fp3++;
-		  }
-	      }
+	      if (BITISSET (lookaheadset, j))
+		count++;
 
 	    if (count > cmax)
 	      {
@@ -639,56 +493,35 @@ print_reductions (int state)
 		default_rule = LAruleno[i];
 	      }
 
-	    fp2 = shiftset;
-	    fp3 = lookaheadset;
-
-	    while (fp3 < fp4)
-	      *fp2++ |= *fp3++;
+	    for (k = 0; k < tokensetsize; ++k)
+	      shiftset[k] |= lookaheadset[k];
 	  }
 
       for (i = 0; i < tokensetsize; i++)
 	shiftset[i] = 0;
 
-      if (shiftp)
-	{
-	  k = shiftp->nshifts;
-	  for (i = 0; i < k; i++)
-	    {
-	      if (!shiftp->shifts[i])
-		continue;
-	      symbol = accessing_symbol[shiftp->shifts[i]];
-	      if (ISVAR (symbol))
-		break;
-	      SETBIT (shiftset, symbol);
-	    }
-	}
+      for (i = 0; i < shiftp->nshifts && SHIFT_IS_SHIFT (shiftp, i); i++)
+	if (!SHIFT_IS_DISABLED (shiftp, i))
+	  SETBIT (shiftset, SHIFT_SYMBOL (shiftp, i));
 
-      mask = 1;
-      fp1 = LA + m * tokensetsize;
-      fp2 = shiftset;
       for (i = 0; i < ntokens; i++)
 	{
+	  int j;
 	  int defaulted = 0;
+	  int count = BITISSET (shiftset, i);
 
-	  if (mask & *fp2)
-	    count = 1;
-	  else
-	    count = 0;
-
-	  fp3 = fp1;
 	  for (j = m; j < n; j++)
 	    {
-	      if (mask & *fp3)
+	      if (BITISSET (LA (j), i))
 		{
 		  if (count == 0)
 		    {
 		      if (j != default_LA)
-			{
-			  rule = LAruleno[j];
-			  obstack_fgrow3 (&output_obstack,
-				   _("    %-4s\treduce using rule %d (%s)\n"),
-				   tags[i], rule, tags[rlhs[rule]]);
-			}
+			fprintf (out,
+				 _("    %-4s\treduce using rule %d (%s)\n"),
+				 tags[i],
+				 LAruleno[j],
+				 tags[rule_table[LAruleno[j]].lhs]);
 		      else
 			defaulted = 1;
 
@@ -697,40 +530,25 @@ print_reductions (int state)
 		  else
 		    {
 		      if (defaulted)
-			{
-			  rule = LAruleno[default_LA];
-			  obstack_fgrow3 (&output_obstack,
-				   _("    %-4s\treduce using rule %d (%s)\n"),
-				   tags[i], rule, tags[rlhs[rule]]);
-			  defaulted = 0;
-			}
-		      rule = LAruleno[j];
-		      obstack_fgrow3 (&output_obstack,
+			fprintf (out,
+				 _("    %-4s\treduce using rule %d (%s)\n"),
+				 tags[i],
+				 LAruleno[default_LA],
+				 tags[rule_table[LAruleno[default_LA]].lhs]);
+		      defaulted = 0;
+		      fprintf (out,
 			       _("    %-4s\t[reduce using rule %d (%s)]\n"),
-			       tags[i], rule, tags[rlhs[rule]]);
+			       tags[i],
+			       LAruleno[j],
+			       tags[rule_table[LAruleno[j]].lhs]);
 		    }
 		}
-
-	      fp3 += tokensetsize;
-	    }
-
-	  mask <<= 1;
-	  if (mask == 0)
-	    {
-	      mask = 1;
-	      /* We tried incrementing just fp1, and just fp2; both seem wrong.
-	         It seems necessary to increment both in sync.  */
-	      fp1++;
-	      fp2++;
 	    }
 	}
 
       if (default_LA >= 0)
-	obstack_fgrow2 (&output_obstack,
-			_("    $default\treduce using rule %d (%s)\n"),
-			default_rule, tags[rlhs[default_rule]]);
-
-      obstack_1grow (&output_obstack, '\n');
+	fprintf (out, _("    $default\treduce using rule %d (%s)\n"),
+		 default_rule, tags[rule_table[default_rule].lhs]);
     }
 }
 

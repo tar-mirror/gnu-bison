@@ -21,6 +21,16 @@
 #include "system.h"
 #include "vcg.h"
 #include "vcg_defaults.h"
+#include "quotearg.h"
+
+/* Return an unambiguous printable representated, allocated in slot 0,
+   for NAME, suitable for C strings.  */
+static char const *
+quote (char const *name)
+{
+  return quotearg_n_style (0, c_quoting_style, name);
+}
+
 
 /* Initialize a graph with the default values. */
 void
@@ -232,7 +242,8 @@ get_color_str (enum color_e c)
     case orchid:	return "orchid";
     case black:		return "black";
     default:
-      assert (!"Not a default color.");
+#define A_known_default_color 0
+      assert (A_known_default_color);
     }
   return NULL;
 }
@@ -246,7 +257,8 @@ get_textmode_str (enum textmode_e t)
     case left_justify:	return "left_justify";
     case right_justify:	return "right_justify";
     default:
-      assert (!"Not a text mode.");
+#define A_known_text_mode 0
+      assert (A_known_text_mode);
     }
   return NULL;
 }
@@ -261,7 +273,8 @@ get_shape_str (enum shape_e s)
     case ellipse:	return "ellipse";
     case triangle:	return "triangle";
     default:
-      assert (!"Not a shape.");
+#define A_known_shape 0
+      assert (A_known_shape);
     }
   return NULL;
 }
@@ -286,7 +299,8 @@ get_layoutalgorithm_str (enum layoutalgorithm_e l)
     case dfs:		return "dfs";
     case tree:		return "tree";
     default:
-      assert (!"Not a layout algorithm.");
+#define A_known_layout_algorithm 0
+      assert (A_known_layout_algorithm);
     }
   return NULL;
 }
@@ -299,7 +313,8 @@ get_decision_str (enum decision_e d)
     case no:	return "no";
     case yes:	return "yes";
     default:
-      assert (!"Either yes nor no.");
+#define Either_yes_nor_no 0
+      assert (Either_yes_nor_no);
     }
   return NULL;
 }
@@ -314,7 +329,8 @@ get_orientation_str (enum orientation_e o)
     case left_to_right: return "left_to_right";
     case right_to_left: return "right_to_left";
     default:
-      assert (!"Not an orientation.");
+#define A_knownn_orientation 0
+      assert (A_knownn_orientation);
     }
   return NULL;
 }
@@ -328,7 +344,8 @@ get_node_alignement_str (enum alignement_e a)
     case top:		return "top";
     case bottom:	return "bottom";
     default:
-      assert (!"Not an alignement.");
+#define A_known_alignement 0
+      assert (A_known_alignement);
     }
   return NULL;
 }
@@ -341,7 +358,8 @@ get_arrow_mode_str (enum arrow_mode_e a)
     case fixed:		return "fixed";
     case free_a:	return "free";
     default:
-      assert (!"Not an arrow mode.");
+#define A_known_arrow_mode 0
+      assert (A_known_arrow_mode);
     }
   return NULL;
 }
@@ -356,7 +374,8 @@ get_crossing_type_str (enum crossing_type_e c)
     case barymedian:	return "barymedian";
     case medianbary:	return "medianbary";
     default:
-      assert (!"Not a crossing type.");
+#define A_known_crossing_type 0
+      assert (A_known_crossing_type);
     }
   return NULL;
 }
@@ -372,7 +391,8 @@ get_view_str (enum view_e v)
     case fcfish:	return "fcfish";
     case fpfish:	return "fpfish";
     default:
-      assert (!"Not a view.");
+#define A_known_view 0
+      assert (A_known_view);
     }
   return NULL;
 }
@@ -387,7 +407,8 @@ get_linestyle_str (enum linestyle_e l)
     case dotted:	return "dotted";
     case invisible:	return "invisible";
     default:
-      assert (!"Not a line style.");
+#define A_known_line_style 0
+      assert (A_known_line_style);
     }
   return NULL;
 }
@@ -401,7 +422,8 @@ get_arrowstyle_str (enum arrowstyle_e a)
     case line:	return "line";
     case none:	return "none";
     default:
-      assert (!"Not an arrow style.");
+#define A_known_arrow_style 0
+      assert (A_known_arrow_style);
     }
   return NULL;
 }
@@ -429,7 +451,7 @@ void
 add_classname (graph_t *g, int val, const char *name)
 {
   struct classname_s *classname;
-  
+
   classname = XMALLOC (struct classname_s, 1);
   classname->no = val;
   classname->name = name;
@@ -441,7 +463,7 @@ void
 add_infoname (graph_t *g, int integer, const char *string)
 {
   struct infoname_s *infoname;
-  
+
   infoname = XMALLOC (struct infoname_s, 1);
   infoname->integer = integer;
   infoname->string = string;
@@ -451,11 +473,11 @@ add_infoname (graph_t *g, int integer, const char *string)
 
 /* Build a colorentry struct and add it to the list.  */
 void
-add_colorentry (graph_t *g, int color_idx, int red_cp, 
+add_colorentry (graph_t *g, int color_idx, int red_cp,
 		int green_cp, int blue_cp)
 {
   struct colorentry_s *ce;
-  
+
   ce = XMALLOC (struct colorentry_s, 1);
   ce->color_index = color_idx;
   ce->red_cp = red_cp;
@@ -556,9 +578,9 @@ void
 output_node (node_t *node, FILE *fout)
 {
   if (node->title != N_TITLE)
-    fprintf (fout, "\t\ttitle:\t\"%s\"\n", node->title);
+    fprintf (fout, "\t\ttitle:\t%s\n", quote (node->title));
   if (node->label != N_LABEL)
-    fprintf (fout, "\t\tlabel:\t\"%s\"\n", node->label);
+    fprintf (fout, "\t\tlabel:\t%s\n", quote (node->label));
 
   if ((node->locx != N_LOCX) && (node->locy != N_LOCY))
     fprintf (fout, "\t\tloc { x: %d  y: %d }\t\n", node->locx, node->locy);
@@ -600,12 +622,13 @@ output_node (node_t *node, FILE *fout)
     fprintf (fout, "\t\tbordercolor:\t%s\n",
 	     get_color_str (node->bordercolor));
 
-  if (node->infos[0])
-    fprintf (fout, "\t\tinfo1:\t\"%s\"\n", node->infos[0]);
-  if (node->infos[1])
-    fprintf (fout, "\t\tinfo2:\t\"%s\"\n", node->infos[1]);
-  if (node->infos[2])
-    fprintf (fout, "\t\tinfo3:\t\"%s\"\n", node->infos[2]);
+  {
+    int i;
+    for (i = 0; i < 3; ++i)
+      if (node->infos[i])
+	fprintf (fout, "\t\tinfo%d:\t%s\n",
+		 i, quote (node->infos[i]));
+  }
 }
 
 void
@@ -614,16 +637,16 @@ output_edge (edge_t *edge, FILE *fout)
   /* FIXME: SOURCENAME and TARGETNAME are mandatory
      so it has to be fatal not to give these informations.  */
   if (edge->sourcename != E_SOURCENAME)
-    fprintf (fout, "\t\tsourcename:\t\"%s\"\n", edge->sourcename);
+    fprintf (fout, "\t\tsourcename:\t%s\n", quote (edge->sourcename));
   if (edge->targetname != E_TARGETNAME)
-    fprintf (fout, "\t\ttargetname:\t\"%s\"\n", edge->targetname);
+    fprintf (fout, "\t\ttargetname:\t%s\n", quote (edge->targetname));
 
   if (edge->label != E_LABEL)
-    fprintf (fout, "\t\tlabel:\t\"%s\"\n", edge->label);
+    fprintf (fout, "\t\tlabel:\t%s\n", quote (edge->label));
 
   if (edge->linestyle != E_LINESTYLE)
-    fprintf (fout, "\t\tlinestyle:\t\"%s\"\n", 
-	     get_linestyle_str(edge->linestyle));
+    fprintf (fout, "\t\tlinestyle:\t%s\n",
+	     quote (get_linestyle_str(edge->linestyle)));
 
   if (edge->thickness != E_THICKNESS)
     fprintf (fout, "\t\tthickness:\t%d\n", edge->thickness);
@@ -666,16 +689,16 @@ void
 output_graph (graph_t *graph, FILE *fout)
 {
   if (graph->title)
-    fprintf (fout, "\ttitle:\t\"%s\"\n", graph->title);
+    fprintf (fout, "\ttitle:\t%s\n", quote (graph->title));
   if (graph->label)
-    fprintf (fout, "\tlabel:\t\"%s\"\n", graph->label);
+    fprintf (fout, "\tlabel:\t%s\n", quote (graph->label));
 
-  if (graph->infos[0])
-    fprintf (fout, "\tinfo1:\t\"%s\"\n", graph->infos[0]);
-  if (graph->infos[1])
-    fprintf (fout, "\tinfo2:\t\"%s\"\n", graph->infos[1]);
-  if (graph->infos[2])
-    fprintf (fout, "\tinfo3:\t\"%s\"\n", graph->infos[2]);
+  {
+    int i;
+    for (i = 0; i < 3; ++i)
+      if (graph->infos[i])
+	fprintf (fout, "\tinfo%d:\t%s\n", i, quote (graph->infos[i]));
+  }
 
   if (graph->color != G_COLOR)
     fprintf (fout, "\tcolor:\t%s\n", get_color_str (graph->color));
@@ -711,11 +734,11 @@ output_graph (graph_t *graph, FILE *fout)
 
   if (graph->shape != G_SHAPE)
     fprintf (fout, "\tshape:\t%s\n", get_shape_str (graph->shape));
-  
+
   if (graph->vertical_order != G_VERTICAL_ORDER)
-    fprintf (fout, "\tvertical_order:\t%d\n", graph->vertical_order);  
+    fprintf (fout, "\tvertical_order:\t%d\n", graph->vertical_order);
   if (graph->horizontal_order != G_HORIZONTAL_ORDER)
-    fprintf (fout, "\thorizontal_order:\t%d\n", graph->horizontal_order);  
+    fprintf (fout, "\thorizontal_order:\t%d\n", graph->horizontal_order);
 
   if (graph->xmax != G_XMAX)
     fprintf (fout, "\txmax:\t%d\n", graph->xmax);
@@ -743,8 +766,8 @@ output_graph (graph_t *graph, FILE *fout)
 
   if (graph->hidden != G_HIDDEN)
     fprintf (fout, "\thidden:\t%d\n", graph->hidden);
-  
-  /* FIXME: Unallocate struct list if required.  
+
+  /* FIXME: Unallocate struct list if required.
      Maybe with a little function.  */
   if (graph->classname != G_CLASSNAME)
     {
@@ -765,15 +788,15 @@ output_graph (graph_t *graph, FILE *fout)
   if (graph->colorentry != G_COLORENTRY)
     {
       struct colorentry_s *ite;
-      
+
       for (ite = graph->colorentry; ite; ite = ite->next)
-	{	
-	  fprintf (fout, "\tcolorentry %d :\t%d %d %d\n", 
-		   ite->color_index, 
+	{
+	  fprintf (fout, "\tcolorentry %d :\t%d %d %d\n",
+		   ite->color_index,
 		   ite->red_cp,
 		   ite->green_cp,
 		   ite->blue_cp);
-	}    
+	}
     }
 
   if (graph->layoutalgorithm != G_LAYOUTALGORITHM)

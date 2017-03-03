@@ -1,5 +1,5 @@
 /* Print information on generated parser, for bison,
-   Copyright 1984, 1986, 1989, 2000 Free Software Foundation, Inc.
+   Copyright 1984, 1986, 1989, 2000, 2001 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -29,6 +29,8 @@
 #include "state.h"
 #include "reader.h"
 #include "print.h"
+#include "reduce.h"
+#include "closure.h"
 
 #if 0
 static void
@@ -47,65 +49,60 @@ static void
 print_core (FILE *out, int state)
 {
   int i;
-  int k;
-  int rule;
-  core *statep;
-  short *sp;
-  short *sp1;
+  short *sitems = state_table[state].state->items;
+  int snitems   = state_table[state].state->nitems;
 
-  statep = state_table[state];
-  k = statep->nitems;
-
-  if (k == 0)
-    return;
-
-  for (i = 0; i < k; i++)
+  /* New experimental feature: if TRACE_FLAGS output all the items of
+     a state, not only its kernel.  */
+  if (trace_flag)
     {
-      sp1 = sp = ritem + statep->items[i];
-
-      while (*sp > 0)
-	sp++;
-
-      rule = -(*sp);
-      fprintf (out, "    %s  ->  ", tags[rlhs[rule]]);
-
-      for (sp = ritem + rrhs[rule]; sp < sp1; sp++)
-	{
-	  fprintf (out, "%s ", tags[*sp]);
-	}
-
-      fputc ('.', out);
-
-      while (*sp > 0)
-	{
-	  fprintf (out, " %s", tags[*sp]);
-	  sp++;
-	}
-
-      fprintf (out, _("   (rule %d)"), rule);
-      fputc ('\n', out);
+      closure (sitems, snitems);
+      sitems = itemset;
+      snitems = nitemset;
     }
 
-  fputc ('\n', out);
+  if (snitems)
+    {
+      for (i = 0; i < snitems; i++)
+	{
+	  short *sp;
+	  short *sp1;
+	  int rule;
+
+	  sp1 = sp = ritem + sitems[i];
+
+	  while (*sp > 0)
+	    sp++;
+
+	  rule = -(*sp);
+	  fprintf (out, "    %s  ->  ", tags[rule_table[rule].lhs]);
+
+	  for (sp = ritem + rule_table[rule].rhs; sp < sp1; sp++)
+	    fprintf (out, "%s ", tags[*sp]);
+
+	  fputc ('.', out);
+
+	  for (/* Nothing */; *sp > 0; ++sp)
+	    fprintf (out, " %s", tags[*sp]);
+
+	  fprintf (out, _("   (rule %d)"), rule);
+	  fputc ('\n', out);
+	}
+
+      fputc ('\n', out);
+    }
 }
 
 static void
 print_actions (FILE *out, int state)
 {
   int i;
-  int k;
-  int state1;
-  int symbol;
-  shifts *shiftp;
-  errs *errp;
-  reductions *redp;
-  int rule;
 
-  shiftp = shift_table[state];
-  redp = reduction_table[state];
-  errp = err_table[state];
+  shifts   *shiftp = state_table[state].shifts;
+  reductions *redp = state_table[state].reductions;
+  errs       *errp = state_table[state].errs;
 
-  if (!shiftp && !redp)
+  if (!shiftp->nshifts && !redp)
     {
       if (final_state == state)
 	fprintf (out, _("    $default\taccept\n"));
@@ -114,48 +111,34 @@ print_actions (FILE *out, int state)
       return;
     }
 
-  if (shiftp)
-    {
-      k = shiftp->nshifts;
+  for (i = 0; i < shiftp->nshifts; i++)
+    if (!SHIFT_IS_DISABLED (shiftp, i))
+      {
+	int state1 = shiftp->shifts[i];
+	int symbol = state_table[state1].accessing_symbol;
+	/* The following line used to be turned off.  */
+	if (ISVAR (symbol))
+	  break;
+	if (symbol == 0)	/* I.e. strcmp(tags[symbol],"$")==0 */
+	  fprintf (out,
+		   _("    $   \tgo to state %d\n"), state1);
+	else
+	  fprintf (out,
+		   _("    %-4s\tshift, and go to state %d\n"),
+		   tags[symbol], state1);
+      }
 
-      for (i = 0; i < k; i++)
-	{
-	  if (!shiftp->shifts[i])
-	    continue;
-	  state1 = shiftp->shifts[i];
-	  symbol = accessing_symbol[state1];
-	  /* The following line used to be turned off.  */
-	  if (ISVAR (symbol))
-	    break;
-	  if (symbol == 0)	/* I.e. strcmp(tags[symbol],"$")==0 */
-	    fprintf (out,
-		     _("    $   \tgo to state %d\n"), state1);
-	  else
-	    fprintf (out,
-		     _("    %-4s\tshift, and go to state %d\n"),
-		     tags[symbol], state1);
-	}
-
-      if (i > 0)
-	fputc ('\n', out);
-    }
-  else
-    {
-      i = 0;
-      k = 0;
-    }
+  if (i > 0)
+    fputc ('\n', out);
 
   if (errp)
     {
-      int j, nerrs;
-
-      nerrs = errp->nerrs;
-
-      for (j = 0; j < nerrs; j++)
+      int j;
+      for (j = 0; j < errp->nerrs; j++)
 	{
-	  if (!errp->errs[j])
+	  int symbol = errp->errs[j];
+	  if (!symbol)
 	    continue;
-	  symbol = errp->errs[j];
 	  fprintf (out, _("    %-4s\terror (nonassociative)\n"),
 		   tags[symbol]);
 	}
@@ -164,29 +147,28 @@ print_actions (FILE *out, int state)
 	fputc ('\n', out);
     }
 
-  if (consistent[state] && redp)
+  if (state_table[state].consistent && redp)
     {
-      rule = redp->rules[0];
-      symbol = rlhs[rule];
+      int rule = redp->rules[0];
+      int symbol = rule_table[rule].lhs;
       fprintf (out, _("    $default\treduce using rule %d (%s)\n\n"),
 	       rule, tags[symbol]);
     }
   else if (redp)
     {
-      print_reductions (state);
+      print_reductions (out, state);
     }
 
-  if (i < k)
+  if (i < shiftp->nshifts)
     {
-      for (; i < k; i++)
-	{
-	  if (!shiftp->shifts[i])
-	    continue;
-	  state1 = shiftp->shifts[i];
-	  symbol = accessing_symbol[state1];
-	  fprintf (out, _("    %-4s\tgo to state %d\n"),
-		   tags[symbol], state1);
-	}
+      for (; i < shiftp->nshifts; i++)
+	if (!SHIFT_IS_DISABLED (shiftp, i))
+	  {
+	    int state1 = shiftp->shifts[i];
+	    int symbol = state_table[state1].accessing_symbol;
+	    fprintf (out, _("    %-4s\tgo to state %d\n"),
+		     tags[symbol], state1);
+	  }
 
       fputc ('\n', out);
     }
@@ -195,11 +177,11 @@ print_actions (FILE *out, int state)
 static void
 print_state (FILE *out, int state)
 {
-  fputs ("\n\n", out);
   fprintf (out, _("state %d"), state);
   fputs ("\n\n", out);
   print_core (out, state);
   print_actions (out, state);
+  fputs ("\n\n", out);
 }
 
 /*-----------------------------------------.
@@ -226,22 +208,27 @@ print_grammar (FILE *out)
   int column = 0;
 
   /* rule # : LHS -> RHS */
-  fprintf (out, "\n%s\n", _("Grammar"));
+  fprintf (out, "%s\n\n", _("Grammar"));
+  fprintf (out, "  %s\n", _("Number, Line, Rule"));
   for (i = 1; i <= nrules; i++)
     /* Don't print rules disabled in reduce_grammar_tables.  */
-    if (rlhs[i] >= 0)
+    if (rule_table[i].useful)
       {
-	fprintf (out, _("rule %-4d %s ->"), i, tags[rlhs[i]]);
-	rule = &ritem[rrhs[i]];
+	fprintf (out, _("  %3d %3d %s ->"),
+		 i, rule_table[i].line, tags[rule_table[i].lhs]);
+	rule = &ritem[rule_table[i].rhs];
 	if (*rule > 0)
 	  while (*rule > 0)
 	    fprintf (out, " %s", tags[*rule++]);
 	else
-	  fprintf (out, "		/* %s */\n", _("empty"));
+	  fprintf (out, " /* %s */", _("empty"));
+	fputc ('\n', out);
       }
+  fputs ("\n\n", out);
+
 
   /* TERMINAL (type #) : rule #s terminal is on RHS */
-  fprintf (out, "\n%s\n\n", _("Terminals, with rules where they appear"));
+  fprintf (out, "%s\n\n", _("Terminals, with rules where they appear"));
   fprintf (out, "%s (-1)\n", tags[0]);
 
   for (i = 0; i <= max_user_token_number; i++)
@@ -254,7 +241,7 @@ print_grammar (FILE *out)
 	sprintf (buffer, " (%d)", i);
 
 	for (j = 1; j <= nrules; j++)
-	  for (rule = &ritem[rrhs[j]]; *rule > 0; rule++)
+	  for (rule = &ritem[rule_table[j].rhs]; *rule > 0; rule++)
 	    if (*rule == token_translations[i])
 	      {
 		END_TEST (65);
@@ -263,18 +250,19 @@ print_grammar (FILE *out)
 	      }
 	fprintf (out, "%s\n", buffer);
       }
+  fputs ("\n\n", out);
 
-  fprintf (out, "\n%s\n\n",
-	   _("Nonterminals, with rules where they appear"));
+
+  fprintf (out, "%s\n\n", _("Nonterminals, with rules where they appear"));
   for (i = ntokens; i <= nsyms - 1; i++)
     {
       int left_count = 0, right_count = 0;
 
       for (j = 1; j <= nrules; j++)
 	{
-	  if (rlhs[j] == i)
+	  if (rule_table[j].lhs == i)
 	    left_count++;
-	  for (rule = &ritem[rrhs[j]]; *rule > 0; rule++)
+	  for (rule = &ritem[rule_table[j].rhs]; *rule > 0; rule++)
 	    if (*rule == i)
 	      {
 		right_count++;
@@ -296,7 +284,7 @@ print_grammar (FILE *out)
 	  for (j = 1; j <= nrules; j++)
 	    {
 	      END_TEST (65);
-	      if (rlhs[j] == i)
+	      if (rule_table[j].lhs == i)
 		sprintf (buffer + strlen (buffer), " %d", j);
 	    }
 	}
@@ -309,7 +297,7 @@ print_grammar (FILE *out)
 	  sprintf (buffer + strlen (buffer), _(" on right:"));
 	  for (j = 1; j <= nrules; j++)
 	    {
-	      for (rule = &ritem[rrhs[j]]; *rule > 0; rule++)
+	      for (rule = &ritem[rule_table[j].rhs]; *rule > 0; rule++)
 		if (*rule == i)
 		  {
 		    END_TEST (65);
@@ -320,6 +308,7 @@ print_grammar (FILE *out)
 	}
       fprintf (out, "%s\n", buffer);
     }
+  fputs ("\n\n", out);
 }
 
 void
@@ -335,14 +324,23 @@ print_results (void)
 
       size_t size = obstack_object_size (&output_obstack);
       fwrite (obstack_finish (&output_obstack), 1, size, out);
+      if (size)
+	fputs ("\n\n", out);
 
-      if (any_conflicts)
-	print_conflicts (out);
+      reduce_output (out);
+      conflicts_output (out);
 
       print_grammar (out);
 
+      /* New experimental feature: output all the items of a state,
+	 not only its kernel.  Requires to run closure, which need
+	 memory allocation/deallocation.  */
+      if (trace_flag)
+	new_closure (nitems);
       for (i = 0; i < nstates; i++)
 	print_state (out, i);
+      if (trace_flag)
+	free_closure ();
 
       xfclose (out);
     }
