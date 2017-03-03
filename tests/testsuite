@@ -1,10 +1,10 @@
 #! /bin/sh
-
 if expr a : '\(a\)' >/dev/null 2>&1; then
   as_expr=expr
 else
   as_expr=false
 fi
+
 
 
 ## --------------------- ##
@@ -285,7 +285,7 @@ at_times_file=$at_suite_dir/at-times
 # List of the tested programs.
 at_tested='bison'
 # List of the all the test groups.
-at_groups_all=' banner-1 1 2 banner-2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 banner-3 19 20 banner-4 21 22 23 24 banner-5 25 26 27 28 29 30 31 32 33 34 35 banner-6 36 37 38 39 banner-7 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55'
+at_groups_all=' banner-1 1 2 banner-2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 banner-3 20 21 banner-4 22 23 24 25 banner-5 26 27 28 29 30 31 32 33 34 35 36 banner-6 37 38 39 40 banner-7 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56'
 # As many dots as there are digits in the last test group number.
 # Used to normalize the test group numbers so that `ls' lists them in
 # numerical order.
@@ -309,43 +309,44 @@ at_help_all='1;input.at:28;Invalid $n;
 16;output.at:75;Output files: %defines %verbose  & -o foo.c.;
 17;output.at:79;Output files:  & --defines=foo.hpp -o foo.c++.;
 18;output.at:83;Output files:  & -o foo.c++ --graph=foo.gph.;
-19;sets.at:26;Nullable;
-20;sets.at:160;Broken Closure;
-21;reduce.at:26;Useless Terminals;
-22;reduce.at:70;Useless Nonterminals;
-23;reduce.at:116;Useless Rules;
-24;reduce.at:180;Underivable Rules;
-25;calc.at:385;Calculator ;
-26;calc.at:387;Calculator --defines;
-27;calc.at:388;Calculator --locations;
-28;calc.at:389;Calculator --name-prefix=calc;
-29;calc.at:390;Calculator --verbose;
-30;calc.at:391;Calculator --yacc;
-31;calc.at:392;Calculator --yyerror-verbose;
-32;calc.at:394;Calculator --locations --yyerror-verbose;
-33;calc.at:396;Calculator --defines --locations --name-prefix=calc --verbose --yacc --yyerror-verbose;
-34;calc.at:398;Calculator --debug;
-35;calc.at:399;Calculator --debug --defines --locations --name-prefix=calc --verbose --yacc --yyerror-verbose;
-36;torture.at:83;Exploding the Stack Size with Alloca;
-37;torture.at:104;Exploding the Stack Size with Malloc;
-38;torture.at:123;GNU AWK Grammar;
-39;torture.at:463;GNU Cim Grammar;
-40;regression.at:26;%nonassoc and eof;
-41;regression.at:102;braces parsing;
-42;regression.at:124;Duplicate string;
-43;regression.at:148;Unresolved SR Conflicts;
-44;regression.at:253;Solved SR Conflicts;
-45;regression.at:358;Rule Line Numbers;
-46;regression.at:502;%expect not enough;
-47;regression.at:522;%expect right;
-48;regression.at:539;%expect too much;
-49;regression.at:560;Mixing %token styles;
-50;regression.at:583;%union and --defines;
-51;regression.at:605;%union and C comments;
-52;regression.at:628;Invalid inputs;
-53;regression.at:658;Invalid %directive;
-54;regression.at:683;Web2c Report;
-55;regression.at:800;Web2c Actions;
+19;output.at:87;Clashing Output Files.;
+20;sets.at:26;Nullable;
+21;sets.at:160;Broken Closure;
+22;reduce.at:26;Useless Terminals;
+23;reduce.at:70;Useless Nonterminals;
+24;reduce.at:116;Useless Rules;
+25;reduce.at:180;Underivable Rules;
+26;calc.at:385;Calculator ;
+27;calc.at:387;Calculator --defines;
+28;calc.at:388;Calculator --locations;
+29;calc.at:389;Calculator --name-prefix=calc;
+30;calc.at:390;Calculator --verbose;
+31;calc.at:391;Calculator --yacc;
+32;calc.at:392;Calculator --yyerror-verbose;
+33;calc.at:394;Calculator --locations --yyerror-verbose;
+34;calc.at:396;Calculator --defines --locations --name-prefix=calc --verbose --yacc --yyerror-verbose;
+35;calc.at:398;Calculator --debug;
+36;calc.at:399;Calculator --debug --defines --locations --name-prefix=calc --verbose --yacc --yyerror-verbose;
+37;torture.at:83;Exploding the Stack Size with Alloca;
+38;torture.at:104;Exploding the Stack Size with Malloc;
+39;torture.at:123;GNU AWK Grammar;
+40;torture.at:463;GNU Cim Grammar;
+41;regression.at:26;%nonassoc and eof;
+42;regression.at:100;braces parsing;
+43;regression.at:122;Duplicate string;
+44;regression.at:146;Unresolved SR Conflicts;
+45;regression.at:251;Solved SR Conflicts;
+46;regression.at:356;Rule Line Numbers;
+47;regression.at:500;%expect not enough;
+48;regression.at:520;%expect right;
+49;regression.at:537;%expect too much;
+50;regression.at:558;Mixing %token styles;
+51;regression.at:581;%union and --defines;
+52;regression.at:603;%union and C comments;
+53;regression.at:626;Invalid inputs;
+54;regression.at:656;Invalid %directive;
+55;regression.at:681;Web2c Report;
+56;regression.at:798;Web2c Actions;
 '
 
 
@@ -360,7 +361,7 @@ while test $# -gt 0; do
         ;;
 
     --version | -V )
-        echo "$as_me (GNU Bison 1.33)"
+        echo "$as_me (GNU Bison 1.34)"
         exit 0
         ;;
 
@@ -505,7 +506,7 @@ fi
 # List of tests.
 if $at_list_p; then
   cat <<_ATEOF
-GNU Bison 1.33 test suite test groups:
+GNU Bison 1.34 test suite test groups:
 
  NUM: FILENAME:LINE      TEST-GROUP-NAME
       KEYWORDS
@@ -598,13 +599,13 @@ fi
 # Banners and logs.
 cat <<\_ASBOX
 ## -------------------------- ##
-## GNU Bison 1.33 test suite. ##
+## GNU Bison 1.34 test suite. ##
 ## -------------------------- ##
 _ASBOX
 {
   cat <<\_ASBOX
 ## -------------------------- ##
-## GNU Bison 1.33 test suite. ##
+## GNU Bison 1.34 test suite. ##
 ## -------------------------- ##
 _ASBOX
   echo
@@ -800,7 +801,7 @@ _ATEOF
 
 cat >input.y <<'_ATEOF'
 %%
-exp: { $$ = $1 ; }
+exp: { $$ = $1 ; };
 _ATEOF
 
 
@@ -841,7 +842,7 @@ $at_traceon
 
 cat >input.y <<'_ATEOF'
 %%
-exp: { @$ = @1 ; }
+exp: { @$ = @1 ; };
 _ATEOF
 
 
@@ -891,7 +892,7 @@ _ATEOF
 cat >foo.y <<'_ATEOF'
 
 %%
-foo: {}
+foo: {};
 _ATEOF
 
 
@@ -950,7 +951,7 @@ $at_traceon
 cat >foo.y <<'_ATEOF'
 
 %%
-foo: {}
+foo: {};
 _ATEOF
 
 
@@ -1009,7 +1010,7 @@ $at_traceon
 cat >foo.y <<'_ATEOF'
 
 %%
-foo: {}
+foo: {};
 _ATEOF
 
 
@@ -1068,7 +1069,7 @@ $at_traceon
 cat >foo.y <<'_ATEOF'
 
 %%
-foo: {}
+foo: {};
 _ATEOF
 
 
@@ -1127,7 +1128,7 @@ $at_traceon
 cat >foo.y <<'_ATEOF'
 
 %%
-foo: {}
+foo: {};
 _ATEOF
 
 
@@ -1186,7 +1187,7 @@ $at_traceon
 cat >foo.y <<'_ATEOF'
 
 %%
-foo: {}
+foo: {};
 _ATEOF
 
 
@@ -1245,7 +1246,7 @@ $at_traceon
 cat >foo.y <<'_ATEOF'
 %defines %verbose
 %%
-foo: {}
+foo: {};
 _ATEOF
 
 
@@ -1304,7 +1305,7 @@ $at_traceon
 cat >foo.y <<'_ATEOF'
 %defines %verbose %yacc
 %%
-foo: {}
+foo: {};
 _ATEOF
 
 
@@ -1363,7 +1364,7 @@ $at_traceon
 cat >foo.yy <<'_ATEOF'
 %defines %verbose %yacc
 %%
-foo: {}
+foo: {};
 _ATEOF
 
 
@@ -1422,7 +1423,7 @@ $at_traceon
 cat >foo.y <<'_ATEOF'
 %file-prefix="bar" %defines %verbose
 %%
-foo: {}
+foo: {};
 _ATEOF
 
 
@@ -1481,7 +1482,7 @@ $at_traceon
 cat >foo.y <<'_ATEOF'
 %output="bar.c" %defines %verbose %yacc
 %%
-foo: {}
+foo: {};
 _ATEOF
 
 
@@ -1540,7 +1541,7 @@ $at_traceon
 cat >foo.y <<'_ATEOF'
 %file-prefix="baz" %output="bar.c" %defines %verbose %yacc
 %%
-foo: {}
+foo: {};
 _ATEOF
 
 
@@ -1599,7 +1600,7 @@ $at_traceon
 cat >foo.yy <<'_ATEOF'
 %defines %verbose
 %%
-foo: {}
+foo: {};
 _ATEOF
 
 
@@ -1658,7 +1659,7 @@ $at_traceon
 cat >foo.yy <<'_ATEOF'
 %defines %verbose
 %%
-foo: {}
+foo: {};
 _ATEOF
 
 
@@ -1717,7 +1718,7 @@ $at_traceon
 cat >foo.yy <<'_ATEOF'
 
 %%
-foo: {}
+foo: {};
 _ATEOF
 
 
@@ -1776,7 +1777,7 @@ $at_traceon
 cat >foo.yy <<'_ATEOF'
 
 %%
-foo: {}
+foo: {};
 _ATEOF
 
 
@@ -1825,6 +1826,44 @@ $at_traceon
     at_status=$?
     ;;
 
+  19 ) # 19. output.at:87: Clashing Output Files.
+    at_setup_line='output.at:87'
+    $at_verbose "19. output.at:87: testing Clashing Output Files...."
+    $at_quiet $ECHO_N " 19: output.at:87      $ECHO_C"
+    (
+      $at_traceon
+
+cat >foo.y <<'_ATEOF'
+%% foo: {};
+_ATEOF
+
+
+$at_traceoff
+$at_verbose "output.at:94: bison -do foo.x foo.y"
+echo output.at:94 >$at_check_line_file
+( $at_traceon; bison -do foo.x foo.y ) >$at_stdout 2>$at_stder1
+at_status=$?
+egrep '^ *\+' $at_stder1 >&2
+egrep -v '^ *\+' $at_stder1 >$at_stderr
+at_failed=false
+echo >>$at_stderr; echo "foo.y:2: fatal error: header and parser would be both named \`foo.x'
+" | $at_diff - $at_stderr >&5 || at_failed=:
+$at_diff $at_devnull $at_stdout >&5 || at_failed=:
+case $at_status in
+   77) exit 77;;
+   1) ;;
+   *) $at_verbose "output.at:94: exit code was $at_status, expected 1" >&2
+      at_failed=:;;
+esac
+
+$at_failed && exit 1
+$at_traceon
+
+    $at_times >$at_times_file
+    )
+    at_status=$?
+    ;;
+
 
   banner-3 ) # Banner 3. sets.at:19
     cat <<\_ATEOF
@@ -1834,10 +1873,10 @@ Grammar Sets (Firsts etc.).
 _ATEOF
     ;;
 
-  19 ) # 19. sets.at:26: Nullable
+  20 ) # 20. sets.at:26: Nullable
     at_setup_line='sets.at:26'
-    $at_verbose "19. sets.at:26: testing Nullable..."
-    $at_quiet $ECHO_N " 19: sets.at:26        $ECHO_C"
+    $at_verbose "20. sets.at:26: testing Nullable..."
+    $at_quiet $ECHO_N " 20: sets.at:26        $ECHO_C"
     (
       $at_traceon
 
@@ -1956,24 +1995,24 @@ $at_traceon
     at_status=$?
     ;;
 
-  20 ) # 20. sets.at:160: Broken Closure
+  21 ) # 21. sets.at:160: Broken Closure
     at_setup_line='sets.at:160'
-    $at_verbose "20. sets.at:160: testing Broken Closure..."
-    $at_quiet $ECHO_N " 20: sets.at:160       $ECHO_C"
+    $at_verbose "21. sets.at:160: testing Broken Closure..."
+    $at_quiet $ECHO_N " 21: sets.at:160       $ECHO_C"
     (
       $at_traceon
 
 
 cat >input.y <<'_ATEOF'
 %%
-a: b
-b: c
-c: d
-d: e
-e: f
-f: g
-g: h
-h: 'h'
+a: b;
+b: c;
+c: d;
+d: e;
+e: f;
+f: g;
+g: h;
+h: 'h';
 _ATEOF
 
 
@@ -2028,10 +2067,10 @@ Grammar Reduction.
 _ATEOF
     ;;
 
-  21 ) # 21. reduce.at:26: Useless Terminals
+  22 ) # 22. reduce.at:26: Useless Terminals
     at_setup_line='reduce.at:26'
-    $at_verbose "21. reduce.at:26: testing Useless Terminals..."
-    $at_quiet $ECHO_N " 21: reduce.at:26      $ECHO_C"
+    $at_verbose "22. reduce.at:26: testing Useless Terminals..."
+    $at_quiet $ECHO_N " 22: reduce.at:26      $ECHO_C"
     (
       $at_traceon
 
@@ -2113,10 +2152,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  22 ) # 22. reduce.at:70: Useless Nonterminals
+  23 ) # 23. reduce.at:70: Useless Nonterminals
     at_setup_line='reduce.at:70'
-    $at_verbose "22. reduce.at:70: testing Useless Nonterminals..."
-    $at_quiet $ECHO_N " 22: reduce.at:70      $ECHO_C"
+    $at_verbose "23. reduce.at:70: testing Useless Nonterminals..."
+    $at_quiet $ECHO_N " 23: reduce.at:70      $ECHO_C"
     (
       $at_traceon
 
@@ -2199,10 +2238,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  23 ) # 23. reduce.at:116: Useless Rules
+  24 ) # 24. reduce.at:116: Useless Rules
     at_setup_line='reduce.at:116'
-    $at_verbose "23. reduce.at:116: testing Useless Rules..."
-    $at_quiet $ECHO_N " 23: reduce.at:116     $ECHO_C"
+    $at_verbose "24. reduce.at:116: testing Useless Rules..."
+    $at_quiet $ECHO_N " 24: reduce.at:116     $ECHO_C"
     (
       $at_traceon
 
@@ -2303,10 +2342,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  24 ) # 24. reduce.at:180: Underivable Rules
+  25 ) # 25. reduce.at:180: Underivable Rules
     at_setup_line='reduce.at:180'
-    $at_verbose "24. reduce.at:180: testing Underivable Rules..."
-    $at_quiet $ECHO_N " 24: reduce.at:180     $ECHO_C"
+    $at_verbose "25. reduce.at:180: testing Underivable Rules..."
+    $at_quiet $ECHO_N " 25: reduce.at:180     $ECHO_C"
     (
       $at_traceon
 
@@ -2386,10 +2425,10 @@ Simple Calculator.
 _ATEOF
     ;;
 
-  25 ) # 25. calc.at:385: Calculator
+  26 ) # 26. calc.at:385: Calculator
     at_setup_line='calc.at:385'
-    $at_verbose "25. calc.at:385: testing Calculator ..."
-    $at_quiet $ECHO_N " 25: calc.at:385       $ECHO_C"
+    $at_verbose "26. calc.at:385: testing Calculator ..."
+    $at_quiet $ECHO_N " 26: calc.at:385       $ECHO_C"
     (
       $at_traceon
 
@@ -3094,10 +3133,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  26 ) # 26. calc.at:387: Calculator --defines
+  27 ) # 27. calc.at:387: Calculator --defines
     at_setup_line='calc.at:387'
-    $at_verbose "26. calc.at:387: testing Calculator --defines..."
-    $at_quiet $ECHO_N " 26: calc.at:387       $ECHO_C"
+    $at_verbose "27. calc.at:387: testing Calculator --defines..."
+    $at_quiet $ECHO_N " 27: calc.at:387       $ECHO_C"
     (
       $at_traceon
 
@@ -3802,10 +3841,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  27 ) # 27. calc.at:388: Calculator --locations
+  28 ) # 28. calc.at:388: Calculator --locations
     at_setup_line='calc.at:388'
-    $at_verbose "27. calc.at:388: testing Calculator --locations..."
-    $at_quiet $ECHO_N " 27: calc.at:388       $ECHO_C"
+    $at_verbose "28. calc.at:388: testing Calculator --locations..."
+    $at_quiet $ECHO_N " 28: calc.at:388       $ECHO_C"
     (
       $at_traceon
 
@@ -4510,10 +4549,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  28 ) # 28. calc.at:389: Calculator --name-prefix=calc
+  29 ) # 29. calc.at:389: Calculator --name-prefix=calc
     at_setup_line='calc.at:389'
-    $at_verbose "28. calc.at:389: testing Calculator --name-prefix=calc..."
-    $at_quiet $ECHO_N " 28: calc.at:389       $ECHO_C"
+    $at_verbose "29. calc.at:389: testing Calculator --name-prefix=calc..."
+    $at_quiet $ECHO_N " 29: calc.at:389       $ECHO_C"
     (
       $at_traceon
 
@@ -5218,10 +5257,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  29 ) # 29. calc.at:390: Calculator --verbose
+  30 ) # 30. calc.at:390: Calculator --verbose
     at_setup_line='calc.at:390'
-    $at_verbose "29. calc.at:390: testing Calculator --verbose..."
-    $at_quiet $ECHO_N " 29: calc.at:390       $ECHO_C"
+    $at_verbose "30. calc.at:390: testing Calculator --verbose..."
+    $at_quiet $ECHO_N " 30: calc.at:390       $ECHO_C"
     (
       $at_traceon
 
@@ -5926,10 +5965,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  30 ) # 30. calc.at:391: Calculator --yacc
+  31 ) # 31. calc.at:391: Calculator --yacc
     at_setup_line='calc.at:391'
-    $at_verbose "30. calc.at:391: testing Calculator --yacc..."
-    $at_quiet $ECHO_N " 30: calc.at:391       $ECHO_C"
+    $at_verbose "31. calc.at:391: testing Calculator --yacc..."
+    $at_quiet $ECHO_N " 31: calc.at:391       $ECHO_C"
     (
       $at_traceon
 
@@ -6634,10 +6673,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  31 ) # 31. calc.at:392: Calculator --yyerror-verbose
+  32 ) # 32. calc.at:392: Calculator --yyerror-verbose
     at_setup_line='calc.at:392'
-    $at_verbose "31. calc.at:392: testing Calculator --yyerror-verbose..."
-    $at_quiet $ECHO_N " 31: calc.at:392       $ECHO_C"
+    $at_verbose "32. calc.at:392: testing Calculator --yyerror-verbose..."
+    $at_quiet $ECHO_N " 32: calc.at:392       $ECHO_C"
     (
       $at_traceon
 
@@ -7342,10 +7381,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  32 ) # 32. calc.at:394: Calculator --locations --yyerror-verbose
+  33 ) # 33. calc.at:394: Calculator --locations --yyerror-verbose
     at_setup_line='calc.at:394'
-    $at_verbose "32. calc.at:394: testing Calculator --locations --yyerror-verbose..."
-    $at_quiet $ECHO_N " 32: calc.at:394       $ECHO_C"
+    $at_verbose "33. calc.at:394: testing Calculator --locations --yyerror-verbose..."
+    $at_quiet $ECHO_N " 33: calc.at:394       $ECHO_C"
     (
       $at_traceon
 
@@ -8050,10 +8089,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  33 ) # 33. calc.at:396: Calculator --defines --locations --name-prefix=calc --verbose --yacc --yyerror-verbose
+  34 ) # 34. calc.at:396: Calculator --defines --locations --name-prefix=calc --verbose --yacc --yyerror-verbose
     at_setup_line='calc.at:396'
-    $at_verbose "33. calc.at:396: testing Calculator --defines --locations --name-prefix=calc --verbose --yacc --yyerror-verbose..."
-    $at_quiet $ECHO_N " 33: calc.at:396       $ECHO_C"
+    $at_verbose "34. calc.at:396: testing Calculator --defines --locations --name-prefix=calc --verbose --yacc --yyerror-verbose..."
+    $at_quiet $ECHO_N " 34: calc.at:396       $ECHO_C"
     (
       $at_traceon
 
@@ -8758,10 +8797,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  34 ) # 34. calc.at:398: Calculator --debug
+  35 ) # 35. calc.at:398: Calculator --debug
     at_setup_line='calc.at:398'
-    $at_verbose "34. calc.at:398: testing Calculator --debug..."
-    $at_quiet $ECHO_N " 34: calc.at:398       $ECHO_C"
+    $at_verbose "35. calc.at:398: testing Calculator --debug..."
+    $at_quiet $ECHO_N " 35: calc.at:398       $ECHO_C"
     (
       $at_traceon
 
@@ -9466,10 +9505,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  35 ) # 35. calc.at:399: Calculator --debug --defines --locations --name-prefix=calc --verbose --yacc --yyerror-verbose
+  36 ) # 36. calc.at:399: Calculator --debug --defines --locations --name-prefix=calc --verbose --yacc --yyerror-verbose
     at_setup_line='calc.at:399'
-    $at_verbose "35. calc.at:399: testing Calculator --debug --defines --locations --name-prefix=calc --verbose --yacc --yyerror-verbose..."
-    $at_quiet $ECHO_N " 35: calc.at:399       $ECHO_C"
+    $at_verbose "36. calc.at:399: testing Calculator --debug --defines --locations --name-prefix=calc --verbose --yacc --yyerror-verbose..."
+    $at_quiet $ECHO_N " 36: calc.at:399       $ECHO_C"
     (
       $at_traceon
 
@@ -10183,10 +10222,10 @@ Torture Tests.
 _ATEOF
     ;;
 
-  36 ) # 36. torture.at:83: Exploding the Stack Size with Alloca
+  37 ) # 37. torture.at:83: Exploding the Stack Size with Alloca
     at_setup_line='torture.at:83'
-    $at_verbose "36. torture.at:83: testing Exploding the Stack Size with Alloca..."
-    $at_quiet $ECHO_N " 36: torture.at:83     $ECHO_C"
+    $at_verbose "37. torture.at:83: testing Exploding the Stack Size with Alloca..."
+    $at_quiet $ECHO_N " 37: torture.at:83     $ECHO_C"
     (
       $at_traceon
 
@@ -10352,10 +10391,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  37 ) # 37. torture.at:104: Exploding the Stack Size with Malloc
+  38 ) # 38. torture.at:104: Exploding the Stack Size with Malloc
     at_setup_line='torture.at:104'
-    $at_verbose "37. torture.at:104: testing Exploding the Stack Size with Malloc..."
-    $at_quiet $ECHO_N " 37: torture.at:104    $ECHO_C"
+    $at_verbose "38. torture.at:104: testing Exploding the Stack Size with Malloc..."
+    $at_quiet $ECHO_N " 38: torture.at:104    $ECHO_C"
     (
       $at_traceon
 
@@ -10521,10 +10560,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  38 ) # 38. torture.at:123: GNU AWK Grammar
+  39 ) # 39. torture.at:123: GNU AWK Grammar
     at_setup_line='torture.at:123'
-    $at_verbose "38. torture.at:123: testing GNU AWK Grammar..."
-    $at_quiet $ECHO_N " 38: torture.at:123    $ECHO_C"
+    $at_verbose "39. torture.at:123: testing GNU AWK Grammar..."
+    $at_quiet $ECHO_N " 39: torture.at:123    $ECHO_C"
     (
       $at_traceon
 
@@ -10885,10 +10924,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  39 ) # 39. torture.at:463: GNU Cim Grammar
+  40 ) # 40. torture.at:463: GNU Cim Grammar
     at_setup_line='torture.at:463'
-    $at_verbose "39. torture.at:463: testing GNU Cim Grammar..."
-    $at_quiet $ECHO_N " 39: torture.at:463    $ECHO_C"
+    $at_verbose "40. torture.at:463: testing GNU Cim Grammar..."
+    $at_quiet $ECHO_N " 40: torture.at:463    $ECHO_C"
     (
       $at_traceon
 
@@ -11787,10 +11826,10 @@ Regression tests.
 _ATEOF
     ;;
 
-  40 ) # 40. regression.at:26: %nonassoc and eof
+  41 ) # 41. regression.at:26: %nonassoc and eof
     at_setup_line='regression.at:26'
-    $at_verbose "40. regression.at:26: testing %nonassoc and eof..."
-    $at_quiet $ECHO_N " 40: regression.at:26  $ECHO_C"
+    $at_verbose "41. regression.at:26: testing %nonassoc and eof..."
+    $at_quiet $ECHO_N " 41: regression.at:26  $ECHO_C"
     (
       $at_traceon
 
@@ -11799,9 +11838,7 @@ cat >input.y <<'_ATEOF'
 
 %{
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <error.h>
+
 #define YYERROR_VERBOSE 1
 #define yyerror(Msg) \
 do { \
@@ -11844,8 +11881,8 @@ _ATEOF
 
 # Specify the output files to avoid problems on different file systems.
 $at_traceoff
-$at_verbose "regression.at:75: bison input.y -o input.c"
-echo regression.at:75 >$at_check_line_file
+$at_verbose "regression.at:73: bison input.y -o input.c"
+echo regression.at:73 >$at_check_line_file
 ( $at_traceon; bison input.y -o input.c ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
@@ -11856,7 +11893,7 @@ $at_diff $at_devnull $at_stdout >&5 || at_failed=:
 case $at_status in
    77) exit 77;;
    0) ;;
-   *) $at_verbose "regression.at:75: exit code was $at_status, expected 0" >&2
+   *) $at_verbose "regression.at:73: exit code was $at_status, expected 0" >&2
       at_failed=:;;
 esac
 
@@ -11864,14 +11901,35 @@ $at_failed && exit 1
 $at_traceon
 
 $at_traceoff
-$at_verbose "regression.at:76: \$CC \$CFLAGS \$CPPFLAGS input.c -o input"
-echo regression.at:76 >$at_check_line_file
+$at_verbose "regression.at:74: \$CC \$CFLAGS \$CPPFLAGS input.c -o input"
+echo regression.at:74 >$at_check_line_file
 ( $at_traceon; $CC $CFLAGS $CPPFLAGS input.c -o input ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
 egrep -v '^ *\+' $at_stder1 >$at_stderr
 at_failed=false
 (echo stderr:; cat $at_stderr) >&5
+$at_diff $at_devnull $at_stdout >&5 || at_failed=:
+case $at_status in
+   77) exit 77;;
+   0) ;;
+   *) $at_verbose "regression.at:74: exit code was $at_status, expected 0" >&2
+      at_failed=:;;
+esac
+
+$at_failed && exit 1
+$at_traceon
+
+
+$at_traceoff
+$at_verbose "regression.at:76: ./input '0<0'"
+echo regression.at:76 >$at_check_line_file
+( $at_traceon; ./input '0<0' ) >$at_stdout 2>$at_stder1
+at_status=$?
+egrep '^ *\+' $at_stder1 >&2
+egrep -v '^ *\+' $at_stder1 >$at_stderr
+at_failed=false
+$at_diff $at_devnull $at_stderr >&5 || at_failed=:
 $at_diff $at_devnull $at_stdout >&5 || at_failed=:
 case $at_status in
    77) exit 77;;
@@ -11883,33 +11941,12 @@ esac
 $at_failed && exit 1
 $at_traceon
 
-
-$at_traceoff
-$at_verbose "regression.at:78: ./input '0<0'"
-echo regression.at:78 >$at_check_line_file
-( $at_traceon; ./input '0<0' ) >$at_stdout 2>$at_stder1
-at_status=$?
-egrep '^ *\+' $at_stder1 >&2
-egrep -v '^ *\+' $at_stder1 >$at_stderr
-at_failed=false
-$at_diff $at_devnull $at_stderr >&5 || at_failed=:
-$at_diff $at_devnull $at_stdout >&5 || at_failed=:
-case $at_status in
-   77) exit 77;;
-   0) ;;
-   *) $at_verbose "regression.at:78: exit code was $at_status, expected 0" >&2
-      at_failed=:;;
-esac
-
-$at_failed && exit 1
-$at_traceon
-
 # FIXME: This is an actual bug, but a new one, in the sense that
 # no one has ever spotted it!  The messages are *wrong*: there should
 # be nothing there, it should be expected eof.
 $at_traceoff
-$at_verbose "regression.at:84: ./input '0<0<0'"
-echo regression.at:84 >$at_check_line_file
+$at_verbose "regression.at:82: ./input '0<0<0'"
+echo regression.at:82 >$at_check_line_file
 ( $at_traceon; ./input '0<0<0' ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
@@ -11921,7 +11958,7 @@ $at_diff $at_devnull $at_stdout >&5 || at_failed=:
 case $at_status in
    77) exit 77;;
    1) ;;
-   *) $at_verbose "regression.at:84: exit code was $at_status, expected 1" >&2
+   *) $at_verbose "regression.at:82: exit code was $at_status, expected 1" >&2
       at_failed=:;;
 esac
 
@@ -11930,8 +11967,8 @@ $at_traceon
 
 
 $at_traceoff
-$at_verbose "regression.at:86: ./input '0>0'"
-echo regression.at:86 >$at_check_line_file
+$at_verbose "regression.at:84: ./input '0>0'"
+echo regression.at:84 >$at_check_line_file
 ( $at_traceon; ./input '0>0' ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
@@ -11942,7 +11979,7 @@ $at_diff $at_devnull $at_stdout >&5 || at_failed=:
 case $at_status in
    77) exit 77;;
    0) ;;
-   *) $at_verbose "regression.at:86: exit code was $at_status, expected 0" >&2
+   *) $at_verbose "regression.at:84: exit code was $at_status, expected 0" >&2
       at_failed=:;;
 esac
 
@@ -11950,8 +11987,8 @@ $at_failed && exit 1
 $at_traceon
 
 $at_traceoff
-$at_verbose "regression.at:89: ./input '0>0>0'"
-echo regression.at:89 >$at_check_line_file
+$at_verbose "regression.at:87: ./input '0>0>0'"
+echo regression.at:87 >$at_check_line_file
 ( $at_traceon; ./input '0>0>0' ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
@@ -11963,7 +12000,7 @@ $at_diff $at_devnull $at_stdout >&5 || at_failed=:
 case $at_status in
    77) exit 77;;
    1) ;;
-   *) $at_verbose "regression.at:89: exit code was $at_status, expected 1" >&2
+   *) $at_verbose "regression.at:87: exit code was $at_status, expected 1" >&2
       at_failed=:;;
 esac
 
@@ -11972,8 +12009,8 @@ $at_traceon
 
 
 $at_traceoff
-$at_verbose "regression.at:93: ./input '0<0>0'"
-echo regression.at:93 >$at_check_line_file
+$at_verbose "regression.at:91: ./input '0<0>0'"
+echo regression.at:91 >$at_check_line_file
 ( $at_traceon; ./input '0<0>0' ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
@@ -11985,7 +12022,7 @@ $at_diff $at_devnull $at_stdout >&5 || at_failed=:
 case $at_status in
    77) exit 77;;
    1) ;;
-   *) $at_verbose "regression.at:93: exit code was $at_status, expected 1" >&2
+   *) $at_verbose "regression.at:91: exit code was $at_status, expected 1" >&2
       at_failed=:;;
 esac
 
@@ -11998,10 +12035,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  41 ) # 41. regression.at:102: braces parsing
-    at_setup_line='regression.at:102'
-    $at_verbose "41. regression.at:102: testing braces parsing..."
-    $at_quiet $ECHO_N " 41: regression.at:102 $ECHO_C"
+  42 ) # 42. regression.at:100: braces parsing
+    at_setup_line='regression.at:100'
+    $at_verbose "42. regression.at:100: testing braces parsing..."
+    $at_quiet $ECHO_N " 42: regression.at:100 $ECHO_C"
     (
       $at_traceon
 
@@ -12010,20 +12047,41 @@ cat >input.y <<'_ATEOF'
 /* Bison used to swallow the character after `}'. */
 
 %%
-exp: { tests = {{{{{{{{{{}}}}}}}}}}; }
+exp: { tests = {{{{{{{{{{}}}}}}}}}}; };
 %%
 _ATEOF
 
 
 $at_traceoff
-$at_verbose "regression.at:112: bison -v input.y -o input.c"
-echo regression.at:112 >$at_check_line_file
+$at_verbose "regression.at:110: bison -v input.y -o input.c"
+echo regression.at:110 >$at_check_line_file
 ( $at_traceon; bison -v input.y -o input.c ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
 egrep -v '^ *\+' $at_stder1 >$at_stderr
 at_failed=false
 (echo stderr:; cat $at_stderr) >&5
+(echo stdout:; cat $at_stdout) >&5
+case $at_status in
+   77) exit 77;;
+   0) ;;
+   *) $at_verbose "regression.at:110: exit code was $at_status, expected 0" >&2
+      at_failed=:;;
+esac
+
+$at_failed && exit 1
+$at_traceon
+
+
+$at_traceoff
+$at_verbose "regression.at:112: fgrep 'tests = {{{{{{{{{{}}}}}}}}}};' input.c"
+echo regression.at:112 >$at_check_line_file
+( $at_traceon; fgrep 'tests = {{{{{{{{{{}}}}}}}}}};' input.c ) >$at_stdout 2>$at_stder1
+at_status=$?
+egrep '^ *\+' $at_stder1 >&2
+egrep -v '^ *\+' $at_stder1 >$at_stderr
+at_failed=false
+$at_diff $at_devnull $at_stderr >&5 || at_failed=:
 (echo stdout:; cat $at_stdout) >&5
 case $at_status in
    77) exit 77;;
@@ -12036,36 +12094,15 @@ $at_failed && exit 1
 $at_traceon
 
 
-$at_traceoff
-$at_verbose "regression.at:114: fgrep 'tests = {{{{{{{{{{}}}}}}}}}};' input.c"
-echo regression.at:114 >$at_check_line_file
-( $at_traceon; fgrep 'tests = {{{{{{{{{{}}}}}}}}}};' input.c ) >$at_stdout 2>$at_stder1
-at_status=$?
-egrep '^ *\+' $at_stder1 >&2
-egrep -v '^ *\+' $at_stder1 >$at_stderr
-at_failed=false
-$at_diff $at_devnull $at_stderr >&5 || at_failed=:
-(echo stdout:; cat $at_stdout) >&5
-case $at_status in
-   77) exit 77;;
-   0) ;;
-   *) $at_verbose "regression.at:114: exit code was $at_status, expected 0" >&2
-      at_failed=:;;
-esac
-
-$at_failed && exit 1
-$at_traceon
-
-
     $at_times >$at_times_file
     )
     at_status=$?
     ;;
 
-  42 ) # 42. regression.at:124: Duplicate string
-    at_setup_line='regression.at:124'
-    $at_verbose "42. regression.at:124: testing Duplicate string..."
-    $at_quiet $ECHO_N " 42: regression.at:124 $ECHO_C"
+  43 ) # 43. regression.at:122: Duplicate string
+    at_setup_line='regression.at:122'
+    $at_verbose "43. regression.at:122: testing Duplicate string..."
+    $at_quiet $ECHO_N " 43: regression.at:122 $ECHO_C"
     (
       $at_traceon
 
@@ -12085,8 +12122,8 @@ _ATEOF
 
 
 $at_traceoff
-$at_verbose "regression.at:139: bison -v duplicate.y -o duplicate.c"
-echo regression.at:139 >$at_check_line_file
+$at_verbose "regression.at:137: bison -v duplicate.y -o duplicate.c"
+echo regression.at:137 >$at_check_line_file
 ( $at_traceon; bison -v duplicate.y -o duplicate.c ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
@@ -12097,7 +12134,7 @@ at_failed=false
 case $at_status in
    77) exit 77;;
    0) ;;
-   *) $at_verbose "regression.at:139: exit code was $at_status, expected 0" >&2
+   *) $at_verbose "regression.at:137: exit code was $at_status, expected 0" >&2
       at_failed=:;;
 esac
 
@@ -12110,10 +12147,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  43 ) # 43. regression.at:148: Unresolved SR Conflicts
-    at_setup_line='regression.at:148'
-    $at_verbose "43. regression.at:148: testing Unresolved SR Conflicts..."
-    $at_quiet $ECHO_N " 43: regression.at:148 $ECHO_C"
+  44 ) # 44. regression.at:146: Unresolved SR Conflicts
+    at_setup_line='regression.at:146'
+    $at_verbose "44. regression.at:146: testing Unresolved SR Conflicts..."
+    $at_quiet $ECHO_N " 44: regression.at:146 $ECHO_C"
     (
       $at_traceon
 
@@ -12126,8 +12163,8 @@ _ATEOF
 
 
 $at_traceoff
-$at_verbose "regression.at:158: bison input.y -o input.c -v"
-echo regression.at:158 >$at_check_line_file
+$at_verbose "regression.at:156: bison input.y -o input.c -v"
+echo regression.at:156 >$at_check_line_file
 ( $at_traceon; bison input.y -o input.c -v ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
@@ -12139,7 +12176,7 @@ $at_diff $at_devnull $at_stdout >&5 || at_failed=:
 case $at_status in
    77) exit 77;;
    0) ;;
-   *) $at_verbose "regression.at:158: exit code was $at_status, expected 0" >&2
+   *) $at_verbose "regression.at:156: exit code was $at_status, expected 0" >&2
       at_failed=:;;
 esac
 
@@ -12149,8 +12186,8 @@ $at_traceon
 
 # Check the contents of the report.
 $at_traceoff
-$at_verbose "regression.at:244: cat input.output"
-echo regression.at:244 >$at_check_line_file
+$at_verbose "regression.at:242: cat input.output"
+echo regression.at:242 >$at_check_line_file
 ( $at_traceon; cat input.output ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
@@ -12243,7 +12280,7 @@ state 6
 case $at_status in
    77) exit 77;;
    0) ;;
-   *) $at_verbose "regression.at:244: exit code was $at_status, expected 0" >&2
+   *) $at_verbose "regression.at:242: exit code was $at_status, expected 0" >&2
       at_failed=:;;
 esac
 
@@ -12256,10 +12293,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  44 ) # 44. regression.at:253: Solved SR Conflicts
-    at_setup_line='regression.at:253'
-    $at_verbose "44. regression.at:253: testing Solved SR Conflicts..."
-    $at_quiet $ECHO_N " 44: regression.at:253 $ECHO_C"
+  45 ) # 45. regression.at:251: Solved SR Conflicts
+    at_setup_line='regression.at:251'
+    $at_verbose "45. regression.at:251: testing Solved SR Conflicts..."
+    $at_quiet $ECHO_N " 45: regression.at:251 $ECHO_C"
     (
       $at_traceon
 
@@ -12273,8 +12310,8 @@ _ATEOF
 
 
 $at_traceoff
-$at_verbose "regression.at:262: bison input.y -o input.c -v"
-echo regression.at:262 >$at_check_line_file
+$at_verbose "regression.at:260: bison input.y -o input.c -v"
+echo regression.at:260 >$at_check_line_file
 ( $at_traceon; bison input.y -o input.c -v ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
@@ -12285,7 +12322,7 @@ $at_diff $at_devnull $at_stdout >&5 || at_failed=:
 case $at_status in
    77) exit 77;;
    0) ;;
-   *) $at_verbose "regression.at:262: exit code was $at_status, expected 0" >&2
+   *) $at_verbose "regression.at:260: exit code was $at_status, expected 0" >&2
       at_failed=:;;
 esac
 
@@ -12295,8 +12332,8 @@ $at_traceon
 
 # Check the contents of the report.
 $at_traceoff
-$at_verbose "regression.at:347: cat input.output"
-echo regression.at:347 >$at_check_line_file
+$at_verbose "regression.at:345: cat input.output"
+echo regression.at:345 >$at_check_line_file
 ( $at_traceon; cat input.output ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
@@ -12388,7 +12425,7 @@ state 6
 case $at_status in
    77) exit 77;;
    0) ;;
-   *) $at_verbose "regression.at:347: exit code was $at_status, expected 0" >&2
+   *) $at_verbose "regression.at:345: exit code was $at_status, expected 0" >&2
       at_failed=:;;
 esac
 
@@ -12401,10 +12438,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  45 ) # 45. regression.at:358: Rule Line Numbers
-    at_setup_line='regression.at:358'
-    $at_verbose "45. regression.at:358: testing Rule Line Numbers..."
-    $at_quiet $ECHO_N " 45: regression.at:358 $ECHO_C"
+  46 ) # 46. regression.at:356: Rule Line Numbers
+    at_setup_line='regression.at:356'
+    $at_verbose "46. regression.at:356: testing Rule Line Numbers..."
+    $at_quiet $ECHO_N " 46: regression.at:356 $ECHO_C"
     (
       $at_traceon
 
@@ -12436,13 +12473,13 @@ expr:
 
 {
 
-}
+};
 _ATEOF
 
 
 $at_traceoff
-$at_verbose "regression.at:390: bison input.y -o input.c -v"
-echo regression.at:390 >$at_check_line_file
+$at_verbose "regression.at:388: bison input.y -o input.c -v"
+echo regression.at:388 >$at_check_line_file
 ( $at_traceon; bison input.y -o input.c -v ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
@@ -12453,7 +12490,7 @@ $at_diff $at_devnull $at_stdout >&5 || at_failed=:
 case $at_status in
    77) exit 77;;
    0) ;;
-   *) $at_verbose "regression.at:390: exit code was $at_status, expected 0" >&2
+   *) $at_verbose "regression.at:388: exit code was $at_status, expected 0" >&2
       at_failed=:;;
 esac
 
@@ -12463,8 +12500,8 @@ $at_traceon
 
 # Check the contents of the report.
 $at_traceoff
-$at_verbose "regression.at:492: cat input.output"
-echo regression.at:492 >$at_check_line_file
+$at_verbose "regression.at:490: cat input.output"
+echo regression.at:490 >$at_check_line_file
 ( $at_traceon; cat input.output ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
@@ -12573,7 +12610,7 @@ state 8
 case $at_status in
    77) exit 77;;
    0) ;;
-   *) $at_verbose "regression.at:492: exit code was $at_status, expected 0" >&2
+   *) $at_verbose "regression.at:490: exit code was $at_status, expected 0" >&2
       at_failed=:;;
 esac
 
@@ -12586,10 +12623,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  46 ) # 46. regression.at:502: %expect not enough
-    at_setup_line='regression.at:502'
-    $at_verbose "46. regression.at:502: testing %expect not enough..."
-    $at_quiet $ECHO_N " 46: regression.at:502 $ECHO_C"
+  47 ) # 47. regression.at:500: %expect not enough
+    at_setup_line='regression.at:500'
+    $at_verbose "47. regression.at:500: testing %expect not enough..."
+    $at_quiet $ECHO_N " 47: regression.at:500 $ECHO_C"
     (
       $at_traceon
 
@@ -12603,8 +12640,8 @@ _ATEOF
 
 
 $at_traceoff
-$at_verbose "regression.at:514: bison input.y -o input.c"
-echo regression.at:514 >$at_check_line_file
+$at_verbose "regression.at:512: bison input.y -o input.c"
+echo regression.at:512 >$at_check_line_file
 ( $at_traceon; bison input.y -o input.c ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
@@ -12617,7 +12654,7 @@ $at_diff $at_devnull $at_stdout >&5 || at_failed=:
 case $at_status in
    77) exit 77;;
    1) ;;
-   *) $at_verbose "regression.at:514: exit code was $at_status, expected 1" >&2
+   *) $at_verbose "regression.at:512: exit code was $at_status, expected 1" >&2
       at_failed=:;;
 esac
 
@@ -12629,10 +12666,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  47 ) # 47. regression.at:522: %expect right
-    at_setup_line='regression.at:522'
-    $at_verbose "47. regression.at:522: testing %expect right..."
-    $at_quiet $ECHO_N " 47: regression.at:522 $ECHO_C"
+  48 ) # 48. regression.at:520: %expect right
+    at_setup_line='regression.at:520'
+    $at_verbose "48. regression.at:520: testing %expect right..."
+    $at_quiet $ECHO_N " 48: regression.at:520 $ECHO_C"
     (
       $at_traceon
 
@@ -12646,8 +12683,8 @@ _ATEOF
 
 
 $at_traceoff
-$at_verbose "regression.at:531: bison input.y -o input.c"
-echo regression.at:531 >$at_check_line_file
+$at_verbose "regression.at:529: bison input.y -o input.c"
+echo regression.at:529 >$at_check_line_file
 ( $at_traceon; bison input.y -o input.c ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
@@ -12658,7 +12695,7 @@ $at_diff $at_devnull $at_stdout >&5 || at_failed=:
 case $at_status in
    77) exit 77;;
    0) ;;
-   *) $at_verbose "regression.at:531: exit code was $at_status, expected 0" >&2
+   *) $at_verbose "regression.at:529: exit code was $at_status, expected 0" >&2
       at_failed=:;;
 esac
 
@@ -12670,10 +12707,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  48 ) # 48. regression.at:539: %expect too much
-    at_setup_line='regression.at:539'
-    $at_verbose "48. regression.at:539: testing %expect too much..."
-    $at_quiet $ECHO_N " 48: regression.at:539 $ECHO_C"
+  49 ) # 49. regression.at:537: %expect too much
+    at_setup_line='regression.at:537'
+    $at_verbose "49. regression.at:537: testing %expect too much..."
+    $at_quiet $ECHO_N " 49: regression.at:537 $ECHO_C"
     (
       $at_traceon
 
@@ -12687,8 +12724,8 @@ _ATEOF
 
 
 $at_traceoff
-$at_verbose "regression.at:551: bison input.y -o input.c"
-echo regression.at:551 >$at_check_line_file
+$at_verbose "regression.at:549: bison input.y -o input.c"
+echo regression.at:549 >$at_check_line_file
 ( $at_traceon; bison input.y -o input.c ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
@@ -12701,7 +12738,7 @@ $at_diff $at_devnull $at_stdout >&5 || at_failed=:
 case $at_status in
    77) exit 77;;
    1) ;;
-   *) $at_verbose "regression.at:551: exit code was $at_status, expected 1" >&2
+   *) $at_verbose "regression.at:549: exit code was $at_status, expected 1" >&2
       at_failed=:;;
 esac
 
@@ -12713,10 +12750,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  49 ) # 49. regression.at:560: Mixing %token styles
-    at_setup_line='regression.at:560'
-    $at_verbose "49. regression.at:560: testing Mixing %token styles..."
-    $at_quiet $ECHO_N " 49: regression.at:560 $ECHO_C"
+  50 ) # 50. regression.at:558: Mixing %token styles
+    at_setup_line='regression.at:558'
+    $at_verbose "50. regression.at:558: testing Mixing %token styles..."
+    $at_quiet $ECHO_N " 50: regression.at:558 $ECHO_C"
     (
       $at_traceon
 
@@ -12733,8 +12770,8 @@ _ATEOF
 
 
 $at_traceoff
-$at_verbose "regression.at:572: bison -v input.y -o input.c"
-echo regression.at:572 >$at_check_line_file
+$at_verbose "regression.at:570: bison -v input.y -o input.c"
+echo regression.at:570 >$at_check_line_file
 ( $at_traceon; bison -v input.y -o input.c ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
@@ -12745,7 +12782,7 @@ at_failed=false
 case $at_status in
    77) exit 77;;
    0) ;;
-   *) $at_verbose "regression.at:572: exit code was $at_status, expected 0" >&2
+   *) $at_verbose "regression.at:570: exit code was $at_status, expected 0" >&2
       at_failed=:;;
 esac
 
@@ -12758,10 +12795,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  50 ) # 50. regression.at:583: %union and --defines
-    at_setup_line='regression.at:583'
-    $at_verbose "50. regression.at:583: testing %union and --defines..."
-    $at_quiet $ECHO_N " 50: regression.at:583 $ECHO_C"
+  51 ) # 51. regression.at:581: %union and --defines
+    at_setup_line='regression.at:581'
+    $at_verbose "51. regression.at:581: testing %union and --defines..."
+    $at_quiet $ECHO_N " 51: regression.at:581 $ECHO_C"
     (
       $at_traceon
 
@@ -12778,8 +12815,8 @@ _ATEOF
 
 
 $at_traceoff
-$at_verbose "regression.at:595: bison --defines union.y"
-echo regression.at:595 >$at_check_line_file
+$at_verbose "regression.at:593: bison --defines union.y"
+echo regression.at:593 >$at_check_line_file
 ( $at_traceon; bison --defines union.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
@@ -12790,7 +12827,7 @@ $at_diff $at_devnull $at_stdout >&5 || at_failed=:
 case $at_status in
    77) exit 77;;
    0) ;;
-   *) $at_verbose "regression.at:595: exit code was $at_status, expected 0" >&2
+   *) $at_verbose "regression.at:593: exit code was $at_status, expected 0" >&2
       at_failed=:;;
 esac
 
@@ -12803,10 +12840,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  51 ) # 51. regression.at:605: %union and C comments
-    at_setup_line='regression.at:605'
-    $at_verbose "51. regression.at:605: testing %union and C comments..."
-    $at_quiet $ECHO_N " 51: regression.at:605 $ECHO_C"
+  52 ) # 52. regression.at:603: %union and C comments
+    at_setup_line='regression.at:603'
+    $at_verbose "52. regression.at:603: testing %union and C comments..."
+    $at_quiet $ECHO_N " 52: regression.at:603 $ECHO_C"
     (
       $at_traceon
 
@@ -12823,8 +12860,8 @@ _ATEOF
 
 
 $at_traceoff
-$at_verbose "regression.at:617: bison union-comment.y"
-echo regression.at:617 >$at_check_line_file
+$at_verbose "regression.at:615: bison union-comment.y"
+echo regression.at:615 >$at_check_line_file
 ( $at_traceon; bison union-comment.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
@@ -12835,7 +12872,7 @@ $at_diff $at_devnull $at_stdout >&5 || at_failed=:
 case $at_status in
    77) exit 77;;
    0) ;;
-   *) $at_verbose "regression.at:617: exit code was $at_status, expected 0" >&2
+   *) $at_verbose "regression.at:615: exit code was $at_status, expected 0" >&2
       at_failed=:;;
 esac
 
@@ -12843,8 +12880,8 @@ $at_failed && exit 1
 $at_traceon
 
 $at_traceoff
-$at_verbose "regression.at:618: fgrep '//*' union-comment.tab.c"
-echo regression.at:618 >$at_check_line_file
+$at_verbose "regression.at:616: fgrep '//*' union-comment.tab.c"
+echo regression.at:616 >$at_check_line_file
 ( $at_traceon; fgrep '//*' union-comment.tab.c ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
@@ -12855,7 +12892,7 @@ $at_diff $at_devnull $at_stdout >&5 || at_failed=:
 case $at_status in
    77) exit 77;;
    1) ;;
-   *) $at_verbose "regression.at:618: exit code was $at_status, expected 1" >&2
+   *) $at_verbose "regression.at:616: exit code was $at_status, expected 1" >&2
       at_failed=:;;
 esac
 
@@ -12868,10 +12905,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  52 ) # 52. regression.at:628: Invalid inputs
-    at_setup_line='regression.at:628'
-    $at_verbose "52. regression.at:628: testing Invalid inputs..."
-    $at_quiet $ECHO_N " 52: regression.at:628 $ECHO_C"
+  53 ) # 53. regression.at:626: Invalid inputs
+    at_setup_line='regression.at:626'
+    $at_verbose "53. regression.at:626: testing Invalid inputs..."
+    $at_quiet $ECHO_N " 53: regression.at:626 $ECHO_C"
     (
       $at_traceon
 
@@ -12888,8 +12925,8 @@ _ATEOF
 
 
 $at_traceoff
-$at_verbose "regression.at:647: bison input.y"
-echo regression.at:647 >$at_check_line_file
+$at_verbose "regression.at:645: bison input.y"
+echo regression.at:645 >$at_check_line_file
 ( $at_traceon; bison input.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
@@ -12906,7 +12943,7 @@ $at_diff $at_devnull $at_stdout >&5 || at_failed=:
 case $at_status in
    77) exit 77;;
    1) ;;
-   *) $at_verbose "regression.at:647: exit code was $at_status, expected 1" >&2
+   *) $at_verbose "regression.at:645: exit code was $at_status, expected 1" >&2
       at_failed=:;;
 esac
 
@@ -12919,10 +12956,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  53 ) # 53. regression.at:658: Invalid %directive
-    at_setup_line='regression.at:658'
-    $at_verbose "53. regression.at:658: testing Invalid %directive..."
-    $at_quiet $ECHO_N " 53: regression.at:658 $ECHO_C"
+  54 ) # 54. regression.at:656: Invalid %directive
+    at_setup_line='regression.at:656'
+    $at_verbose "54. regression.at:656: testing Invalid %directive..."
+    $at_quiet $ECHO_N " 54: regression.at:656 $ECHO_C"
     (
       $at_traceon
 
@@ -12933,8 +12970,8 @@ _ATEOF
 
 
 $at_traceoff
-$at_verbose "regression.at:668: bison input.y"
-echo regression.at:668 >$at_check_line_file
+$at_verbose "regression.at:666: bison input.y"
+echo regression.at:666 >$at_check_line_file
 ( $at_traceon; bison input.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
@@ -12948,7 +12985,7 @@ $at_diff $at_devnull $at_stdout >&5 || at_failed=:
 case $at_status in
    77) exit 77;;
    1) ;;
-   *) $at_verbose "regression.at:668: exit code was $at_status, expected 1" >&2
+   *) $at_verbose "regression.at:666: exit code was $at_status, expected 1" >&2
       at_failed=:;;
 esac
 
@@ -12961,10 +12998,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  54 ) # 54. regression.at:683: Web2c Report
-    at_setup_line='regression.at:683'
-    $at_verbose "54. regression.at:683: testing Web2c Report..."
-    $at_quiet $ECHO_N " 54: regression.at:683 $ECHO_C"
+  55 ) # 55. regression.at:681: Web2c Report
+    at_setup_line='regression.at:681'
+    $at_verbose "55. regression.at:681: testing Web2c Report..."
+    $at_quiet $ECHO_N " 55: regression.at:681 $ECHO_C"
     (
       $at_traceon
 
@@ -12993,8 +13030,8 @@ _ATEOF
 
 
 $at_traceoff
-$at_verbose "regression.at:707: bison -v input.y"
-echo regression.at:707 >$at_check_line_file
+$at_verbose "regression.at:705: bison -v input.y"
+echo regression.at:705 >$at_check_line_file
 ( $at_traceon; bison -v input.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
@@ -13005,7 +13042,7 @@ $at_diff $at_devnull $at_stdout >&5 || at_failed=:
 case $at_status in
    77) exit 77;;
    0) ;;
-   *) $at_verbose "regression.at:707: exit code was $at_status, expected 0" >&2
+   *) $at_verbose "regression.at:705: exit code was $at_status, expected 0" >&2
       at_failed=:;;
 esac
 
@@ -13014,8 +13051,8 @@ $at_traceon
 
 
 $at_traceoff
-$at_verbose "regression.at:773: sed -n 's/  *\$//;/^\$/!p' input.output"
-echo regression.at:773 >$at_check_line_file
+$at_verbose "regression.at:771: sed -n 's/  *\$//;/^\$/!p' input.output"
+echo regression.at:771 >$at_check_line_file
 ( $at_traceon; sed -n 's/  *$//;/^$/!p' input.output ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
@@ -13089,7 +13126,7 @@ state 11
 case $at_status in
    77) exit 77;;
    0) ;;
-   *) $at_verbose "regression.at:773: exit code was $at_status, expected 0" >&2
+   *) $at_verbose "regression.at:771: exit code was $at_status, expected 0" >&2
       at_failed=:;;
 esac
 
@@ -13102,10 +13139,10 @@ $at_traceon
     at_status=$?
     ;;
 
-  55 ) # 55. regression.at:800: Web2c Actions
-    at_setup_line='regression.at:800'
-    $at_verbose "55. regression.at:800: testing Web2c Actions..."
-    $at_quiet $ECHO_N " 55: regression.at:800 $ECHO_C"
+  56 ) # 56. regression.at:798: Web2c Actions
+    at_setup_line='regression.at:798'
+    $at_verbose "56. regression.at:798: testing Web2c Actions..."
+    $at_quiet $ECHO_N " 56: regression.at:798 $ECHO_C"
     (
       $at_traceon
 
@@ -13121,8 +13158,8 @@ _ATEOF
 
 
 $at_traceoff
-$at_verbose "regression.at:811: bison -v input.y -o input.c"
-echo regression.at:811 >$at_check_line_file
+$at_verbose "regression.at:809: bison -v input.y -o input.c"
+echo regression.at:809 >$at_check_line_file
 ( $at_traceon; bison -v input.y -o input.c ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
@@ -13133,7 +13170,7 @@ $at_diff $at_devnull $at_stdout >&5 || at_failed=:
 case $at_status in
    77) exit 77;;
    0) ;;
-   *) $at_verbose "regression.at:811: exit code was $at_status, expected 0" >&2
+   *) $at_verbose "regression.at:809: exit code was $at_status, expected 0" >&2
       at_failed=:;;
 esac
 
@@ -13144,8 +13181,8 @@ $at_traceon
 # Check only the tables.  We don't use --no-parser, because it is
 # still to be implemented in the experimental branch of Bison.
 $at_traceoff
-$at_verbose "regression.at:898: sed -n 's/  *\$//;/^static const.*\\[\\] =/,/^}/p' input.c"
-echo regression.at:898 >$at_check_line_file
+$at_verbose "regression.at:896: sed -n 's/  *\$//;/^static const.*\\[\\] =/,/^}/p' input.c"
+echo regression.at:896 >$at_check_line_file
 ( $at_traceon; sed -n 's/  *$//;/^static const.*\[\] =/,/^}/p' input.c ) >$at_stdout 2>$at_stder1
 at_status=$?
 egrep '^ *\+' $at_stder1 >&2
@@ -13198,7 +13235,7 @@ static const short yyrline[] =
 static const char *const yytname[] =
 {
   \"\$\", \"error\", \"\$undefined.\", \"\\\"if\\\"\", \"\\\"const\\\"\", \"\\\"then\\\"\",
-  \"\\\"else\\\"\", \"statement\", \"struct_stat\", \"if\", \"else\", NULL
+  \"\\\"else\\\"\", \"statement\", \"struct_stat\", \"if\", \"else\", 0
 };
 static const short yyr1[] =
 {
@@ -13238,7 +13275,7 @@ static const short yycheck[] =
 case $at_status in
    77) exit 77;;
    0) ;;
-   *) $at_verbose "regression.at:898: exit code was $at_status, expected 0" >&2
+   *) $at_verbose "regression.at:896: exit code was $at_status, expected 0" >&2
       at_failed=:;;
 esac
 
@@ -13420,8 +13457,11 @@ _ASBOX
 _ASBOX
 
   echo
-  echo "Please send \`$as_me.log' to <bug-bison@gnu.org>,"
-  echo "along with all information you think might help."
+  echo "Please send \`$as_me.log' and all information you think might help:"
+  echo
+  echo "   To: <bug-bison@gnu.org>"
+  echo "   Subject: [GNU Bison 1.34] $as_me.log: $at_fail_count failures"
+  echo
   exit 1
 fi
 

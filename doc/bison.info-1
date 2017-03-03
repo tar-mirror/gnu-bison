@@ -1,4 +1,4 @@
-Ceci est le fichier Info bison.info, produit par Makeinfo version 4.0b
+Ceci est le fichier Info bison.info, produit par Makeinfo version 4.0j
 à partir bison.texinfo.
 
 START-INFO-DIR-ENTRY
@@ -34,7 +34,8 @@ File: bison.info,  Node: Top,  Next: Introduction,  Up: (dir)
 Bison
 *****
 
-   This manual documents version 1.33 of Bison, updated 5 January 2002.
+   This manual documents version 1.34 of Bison, updated 25 February
+2002.
 
 * Menu:
 
@@ -203,6 +204,8 @@ Invoking Bison
 * Bison Options::     All the options described in detail,
 			in alphabetical order by short options.
 * Option Cross Key::  Alphabetical list of long options.
+* Extension Limitations Under DOS::  Bison output files extension differences
+					depending on the DOS/Windows file system flavour used.
 * VMS Invocation::    Bison command syntax on VMS.
 
 Copying This Manual
@@ -237,7 +240,7 @@ Bison in detail.
 it Yacc-compatible.  Wilfred Hansen of Carnegie Mellon University added
 multi-character string literals and other features.
 
-   This edition corresponds to version 1.33 of Bison.
+   This edition corresponds to version 1.34 of Bison.
 
 
 File: bison.info,  Node: Conditions,  Next: Copying,  Prev: Introduction,  Up: Top
@@ -948,10 +951,8 @@ file except for the ones defined in this manual.
 those cases your code should respect the identifiers reserved by those
 headers.  On some non-GNU hosts, `<alloca.h>', `<stddef.h>', and
 `<stdlib.h>' are included as needed to declare memory allocators and
-related types.  In the same situation, C++ parsers may include
-`<cstddef>' and `<cstdlib>' instead.  Other system headers may be
-included if you define `YYDEBUG' to a nonzero value (*note Debugging
-Your Parser: Debugging.).
+related types.  Other system headers may be included if you define
+`YYDEBUG' to a nonzero value (*note Debugging Your Parser: Debugging.).
 
 
 File: bison.info,  Node: Stages,  Next: Grammar Layout,  Prev: Bison Parser,  Up: Concepts

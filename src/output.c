@@ -1,7 +1,7 @@
 /* Output the generated parsing program for bison,
 
-   Copyright (C) 1984, 1986, 1989, 1992, 2000, 2001 Free Software
-   Foundation, Inc.
+   Copyright (C) 1984, 1986, 1989, 1992, 2000, 2001, 2002
+   Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -452,7 +452,7 @@ output_rule_data (void)
       j += strsize;
     }
   /* add a NULL entry to list of tokens */
-  obstack_sgrow (&table_obstack, "NULL\n};\n");
+  obstack_sgrow (&table_obstack, "0\n};\n");
 
   if (!token_table_flag && !no_parser_flag)
     obstack_sgrow (&table_obstack, "#endif\n\n");

@@ -1,3 +1,107 @@
+2002-03-12  Akim Demaille  <akim@epita.fr>
+
+	Version 1.34.
+
+2002-03-04  Akim Demaille  <akim@epita.fr>
+
+	Version 1.33b.
+
+2002-03-04  Akim Demaille  <akim@epita.fr>
+
+	* tests/output.at (AT_CHECK_OUTPUT): Another test, making sure
+	bison fails when trying to output a parser and a header under the
+	same name.
+	* src/files.c (compute_output_file_names): Refuse when parser and
+	header have the same name.
+
+2002-03-04  Akim Demaille  <akim@epita.fr>
+
+	* src/reader.c (readgram): A missing `;' is a warning, not an
+	error!
+
+2002-03-04  Akim Demaille  <akim@epita.fr>
+
+	* tests/sets.at (Broken Closure): Add the ending `;'.
+	* tests/input.at (Invalid $n, Invalid @n): Likewise.
+	* tests/output.at (AT_CHECK_OUTPUT): Likewise.
+	* src/reader.at (readgram): Complain if a rule is not ended with a
+	semi-colon.
+
+2002-02-28  Akim Demaille  <akim@epita.fr>
+
+	* tests/Makefile.am (check_SCRIPTS): New.
+
+2002-02-28  Akim Demaille  <akim@epita.fr>
+
+	Version 1.33a.
+
+2002-02-25  Akim Demaille  <akim@epita.fr>
+
+	* src/bison.simple (yydebug): Fix the comment.
+	From Bruce Lilly.
+
+2002-02-21  Guerrero, Juan Manuel  <st001906@hrz1.hrz.tu-darmstadt.de>
+
+	* src/getargs.c [AS_FILE_NAME] [__DJGPP__]: New macro STRLWR.
+	Check that no NULL pointer is passed to strlwr.
+
+2002-02-14  Paul Eggert  <eggert@twinsun.com>
+
+	Remove the support for C++ namespace cleanliness; it was
+	causing more problems than it was curing, since it didn't work
+	properly on some nonstandard C++ compilers.  This can wait
+	for a proper C++ parser.
+
+	* NEWS: Document this.
+	* doc/bison.texinfo (Bison Parser, Debugging): Remove special mention
+	of C++, as it's treated like C now.
+	* src/bison.simple (YYSTD): Remove.
+	(YYSIZE_T, YYFPRINTF, YYPARSE_PARAM_ARG, YYPARSE_PARAM_DECL):
+	Treat C++ just like Standard C instead of trying to support
+	namespace cleanliness.
+
+2002-02-14  Akim Demaille  <akim@epita.fr>
+
+	* tests/regression.at (else): Adjust to Andreas' change.
+
+2002-02-13  Andreas Schwab  <schwab@suse.de>
+
+	* src/output.c (output_rule_data): Don't output NULL, it might
+	not be defined yet.
+
+2002-02-13  Guerrero, Juan Manuel  <st001906@hrz1.hrz.tu-darmstadt.de>
+
+	* doc/bison.texinfo:  Add DJGPP specific information about
+	file name extensions used on different file systems.
+
+	* src/files.c (output_files): MSDOS conditional removed.
+	New macro EXT_TYPE will provide at runtime the appropiate
+	output file extension.
+	(skeleton_find) [MSDOS]: __DJGPP__ conditional added to
+	inhibit the use of DOSish code.  POSIX like behaviour.
+
+	* src/getargs.c [AS_FILE_NAME]: __DJGPP__ conditional added.
+	Check at runtime if LFN-API (case preserving) is available or not.
+	Do not unconditionly convert upper case strings in lower case strings.
+
+	* src/system.h [MSDOS] [__GO32__]: __DJGPP__ conditional added.
+	__GO32__ is obsolete and its use is deprecated.
+	[MSDOS]: __DJGPP__ conditional added.  Use pathconf
+	to choose POSIX or DOS file extensions at run time.
+	[MSDOS] [__DJGPP__]: New macro EXT_TYPE.  If LFN-API is
+	available, the src or header file extension (.c or .h) will be
+	added to the output file name. If no LFN-API is available no src
+	or header file extension will be added to the output file name.
+	[MSDOS] [!__DJGPP__]: New macro EXT_TYPE. Src file and header
+        file extension will never be added to the output file name.
+	[!MSDOS]: New macro EXT_TYPE. Src file and header file
+	extensions will always be added to the output file name.
+
+2002-02-11  Akim Demaille  <akim@epita.fr>
+
+	* tests/regression.at (%nonassoc and eof): Don't include non
+	portable headers.
+
 2002-02-07  Akim Demaille  <akim@epita.fr>
 
 	Version 1.33.

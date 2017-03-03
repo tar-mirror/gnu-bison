@@ -22,6 +22,7 @@
 
 #include "system.h"
 #include "getargs.h"
+#include "quote.h"
 #include "files.h"
 #include "gram.h"
 #include "error.h"
@@ -214,7 +215,7 @@ skeleton_find (const char *envvar, const char *skeleton_name)
 {
   const char *res = getenv (envvar);
 
-#if defined (MSDOS) || defined (_WIN32)
+#if (defined (MSDOS) && !defined(__DJGPP__)) || defined (_WIN32)
   const char *cp = getenv ("INIT");
   if (!res)
     {
@@ -249,7 +250,7 @@ skeleton_find (const char *envvar, const char *skeleton_name)
 	  strcpy (res + (cp - program_name), skel_name);
 	}
     }
-#endif /* defined (MSDOS) || defined (_WIN32) */
+#endif /* (defined (MSDOS) && !defined (__DJGPP__)) || defined (_WIN32) */
   if (!res)
     res = skeleton_name;
 
@@ -419,7 +420,7 @@ compute_base_names (void)
 
       /* Computes the extensions from the grammar file name.  */
       filename_split (infile, &base, &tab, &ext);
-      
+
       if (ext && !yacc_flag)
 	compute_exts_from_gf (ext);
     }
@@ -445,6 +446,20 @@ compute_output_file_names (void)
   if (!spec_defines_file)
     spec_defines_file = stringappend (full_base_name, header_extension);
 
+  if (defines_flag)
+    {
+      /* This is really Q&D, but I don't want to spend time on issues
+	 which will be different with 1.50.  */
+      const char *parser_filename = NULL;
+      if (spec_outfile)
+	parser_filename = spec_outfile;
+      else
+	parser_filename = stringappend (full_base_name, src_extension);
+      if (!strcmp (spec_defines_file, parser_filename))
+	fatal ("header and parser would be both named %s",
+	       quote (parser_filename));
+    }
+
   /* It the graph filename if not given, we create it.  */
   if (!spec_graph_file)
     spec_graph_file = stringappend (short_base_name, ".vcg");
@@ -452,9 +467,7 @@ compute_output_file_names (void)
   spec_verbose_file = stringappend (short_base_name, EXT_OUTPUT);
 
   attrsfile = stringappend (short_base_name, EXT_STYPE_H);
-#ifndef MSDOS
-  attrsfile = stringappend (attrsfile, header_extension);
-#endif /* MSDOS */
+  attrsfile = stringappend (attrsfile, EXT_TYPE (header_extension));
 
 }
 
@@ -523,9 +536,7 @@ output_files (void)
       obstack_save (&attrs_obstack, attrsfile);
       obstack_free (&attrs_obstack, NULL);
       temp_name = stringappend (short_base_name, EXT_GUARD_C);
-#ifndef MSDOS
-      temp_name = stringappend (temp_name, src_extension);
-#endif /* MSDOS */
+      temp_name = stringappend (temp_name, EXT_TYPE (src_extension));
       obstack_save (&guard_obstack, temp_name);
       obstack_free (&guard_obstack, NULL);
     }

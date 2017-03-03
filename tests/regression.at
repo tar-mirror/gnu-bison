@@ -29,9 +29,7 @@ AT_DATA([input.y],
 [[
 %{
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <error.h>
+
 #define YYERROR_VERBOSE 1
 #define yyerror(Msg) \
 do { \
@@ -105,7 +103,7 @@ AT_DATA([input.y],
 [[/* Bison used to swallow the character after `}'. */
 
 %%
-exp: { tests = {{{{{{{{{{}}}}}}}}}}; }
+exp: { tests = {{{{{{{{{{}}}}}}}}}}; };
 %%
 ]])
 
@@ -384,7 +382,7 @@ expr:
 
 {
 
-}
+};
 ]])
 
 AT_CHECK([bison input.y -o input.c -v], 0, [], [])
@@ -859,7 +857,7 @@ static const short yyrline[] =
 static const char *const yytname[] =
 {
   "$", "error", "$undefined.", "\"if\"", "\"const\"", "\"then\"",
-  "\"else\"", "statement", "struct_stat", "if", "else", NULL
+  "\"else\"", "statement", "struct_stat", "if", "else", 0
 };
 static const short yyr1[] =
 {

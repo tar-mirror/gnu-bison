@@ -1,4 +1,4 @@
-Ceci est le fichier Info bison.info, produit par Makeinfo version 4.0b
+Ceci est le fichier Info bison.info, produit par Makeinfo version 4.0j
 à partir bison.texinfo.
 
 START-INFO-DIR-ENTRY
@@ -1067,9 +1067,7 @@ possible.
 `YYFPRINTF (stderr, FORMAT, ARGS)' where FORMAT and ARGS are the usual
 `printf' format and arguments.  If you define `YYDEBUG' to a nonzero
 value but do not define `YYFPRINTF', `<stdio.h>' is automatically
-included and `YYPRINTF' is defined to `fprintf'.  In the same
-situation, C++ parsers include `<cstdio>' and use `std::fprintf'
-instead.
+included and `YYPRINTF' is defined to `fprintf'.
 
    Once you have compiled the program with trace facilities, the way to
 request a trace is to store a nonzero value in the variable `yydebug'.
@@ -1161,6 +1159,8 @@ will produce `output.c++' and `outfile.h++'.
 			in alphabetical order by short options.
 * Environment Variables::  Variables which affect Bison execution.
 * Option Cross Key::  Alphabetical list of long options.
+* Extension Limitations Under DOS::  Bison output files extension differences
+					depending on the DOS/Windows file system flavour used.
 * VMS Invocation::    Bison command syntax on VMS.
 
 
