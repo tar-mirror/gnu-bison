@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bison 2.3b\n"
+"Project-Id-Version: bison 2.4\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2008-11-02 17:00-0500\n"
-"PO-Revision-Date: 2008-05-28 23:14-0500\n"
+"POT-Creation-Date: 2008-12-11 17:06-0500\n"
+"PO-Revision-Date: 2008-11-02 18:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -110,7 +110,7 @@ msgstr "ní féidir comhad a dhúnadh"
 #: src/files.c:357
 #, c-format
 msgid "refusing to overwrite the input file %s"
-msgstr ""
+msgstr "diúltaítear inchomhad %s a fhorscríobh"
 
 #: src/files.c:362
 #, c-format
@@ -172,7 +172,6 @@ msgstr ""
 "\n"
 
 #: src/getargs.c:272
-#, fuzzy
 msgid ""
 "Parser:\n"
 "  -L, --language=LANGUAGE    specify the output programming language\n"
@@ -187,6 +186,7 @@ msgid ""
 msgstr ""
 "Parsálaí:\n"
 "  -L, --language=TEANGA      socraigh an ríomhtheanga le haschur\n"
+"                             (gné thurgnamhach é seo)\n"
 "  -S, --skeleton=COMHAD      socraigh an chreatlach le húsáid\n"
 "  -t, --debug                ullmhaigh an parsálaí le haghaidh "
 "dífhabhtaithe\n"
@@ -498,24 +498,24 @@ msgid "Rules useless in grammar"
 msgstr "Rialacha gan tairbhe sa ghramadach"
 
 #: src/reduce.c:388
-#, fuzzy, c-format
+#, c-format
 msgid "%d nonterminal useless in grammar"
 msgid_plural "%d nonterminals useless in grammar"
-msgstr[0] "Sloinn inlaghdaithe gan tairbhe sa ghramadach"
-msgstr[1] "Sloinn inlaghdaithe gan tairbhe sa ghramadach"
-msgstr[2] "Sloinn inlaghdaithe gan tairbhe sa ghramadach"
-msgstr[3] "Sloinn inlaghdaithe gan tairbhe sa ghramadach"
-msgstr[4] "Sloinn inlaghdaithe gan tairbhe sa ghramadach"
+msgstr[0] "%d slonn inlaghdaithe gan tairbhe sa ghramadach"
+msgstr[1] "%d shlonn inlaghdaithe gan tairbhe sa ghramadach"
+msgstr[2] "%d shlonn inlaghdaithe gan tairbhe sa ghramadach"
+msgstr[3] "%d slonn inlaghdaithe gan tairbhe sa ghramadach"
+msgstr[4] "%d slonn inlaghdaithe gan tairbhe sa ghramadach"
 
 #: src/reduce.c:397
-#, fuzzy, c-format
+#, c-format
 msgid "%d rule useless in grammar"
 msgid_plural "%d rules useless in grammar"
-msgstr[0] "riail gan tairbhe sa ghramadach"
-msgstr[1] "riail gan tairbhe sa ghramadach"
-msgstr[2] "riail gan tairbhe sa ghramadach"
-msgstr[3] "riail gan tairbhe sa ghramadach"
-msgstr[4] "riail gan tairbhe sa ghramadach"
+msgstr[0] "%d riail gan tairbhe sa ghramadach"
+msgstr[1] "%d riail gan tairbhe sa ghramadach"
+msgstr[2] "%d riail gan tairbhe sa ghramadach"
+msgstr[3] "%d riail gan tairbhe sa ghramadach"
+msgstr[4] "%d riail gan tairbhe sa ghramadach"
 
 #: src/reduce.c:428
 #, c-format
@@ -532,27 +532,27 @@ msgstr "`$' ar strae"
 msgid "stray `@'"
 msgstr "`@' ar strae"
 
-#: src/scan-code.l:277
+#: src/scan-code.l:280
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr "cineál follasach i ngramadach gan chineálacha"
 
-#: src/scan-code.l:292
+#: src/scan-code.l:295
 #, c-format
 msgid "$$ for the midrule at $%d of `%s' has no declared type"
 msgstr "Níl aon chineál fógartha ag $$ na meánrialach ag $%d de `%s'"
 
-#: src/scan-code.l:297
+#: src/scan-code.l:300
 #, c-format
 msgid "$$ of `%s' has no declared type"
 msgstr "Níl aon chineál fógartha ag $$ de `%s'"
 
-#: src/scan-code.l:325
+#: src/scan-code.l:328
 #, c-format
 msgid "$%d of `%s' has no declared type"
 msgstr "Níl aon chineál fógartha ag $%d de `%s'"
 
-#: src/scan-code.l:340 src/scan-code.l:375 src/scan-gram.l:653
+#: src/scan-code.l:343 src/scan-code.l:378 src/scan-gram.l:653
 #, c-format
 msgid "integer out of range: %s"
 msgstr "slánuimhir as raon: %s"

@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the bison package.
 # Göran Uddeborg <goeran@uddeborg.se>, 2001-2006, 2008.
 #
-# $Revision: 1.20 $
+# $Revision: 1.22 $
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bison-runtime 2.3b\n"
+"Project-Id-Version: bison-runtime 2.4\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2008-11-02 17:00-0500\n"
-"PO-Revision-Date: 2008-05-31 20:28+0200\n"
+"POT-Creation-Date: 2008-12-11 17:06-0500\n"
+"PO-Revision-Date: 2008-11-11 14:39+0100\n"
 "Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"

@@ -80,7 +80,7 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/argmatch.m4 \
 	$(top_srcdir)/m4/strverscmp.m4 $(top_srcdir)/m4/subpipe.m4 \
 	$(top_srcdir)/m4/timevar.m4 $(top_srcdir)/m4/unistd-safer.m4 \
 	$(top_srcdir)/m4/unistd_h.m4 $(top_srcdir)/m4/unlocked-io.m4 \
-	$(top_srcdir)/m4/warning.m4 $(top_srcdir)/m4/wchar.m4 \
+	$(top_srcdir)/m4/warnings.m4 $(top_srcdir)/m4/wchar.m4 \
 	$(top_srcdir)/m4/wchar_t.m4 $(top_srcdir)/m4/wctype.m4 \
 	$(top_srcdir)/m4/wcwidth.m4 $(top_srcdir)/m4/wint_t.m4 \
 	$(top_srcdir)/m4/xalloc.m4 $(top_srcdir)/m4/xstrndup.m4 \
@@ -304,6 +304,7 @@ HAVE_WINT_T = @HAVE_WINT_T@
 HAVE__BOOL = @HAVE__BOOL@
 HELP2MAN = @HELP2MAN@
 INCLUDE_NEXT = @INCLUDE_NEXT@
+INCLUDE_NEXT_AS_FIRST_DIRECTIVE = @INCLUDE_NEXT_AS_FIRST_DIRECTIVE@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -392,8 +393,8 @@ USE_NLS = @USE_NLS@
 VALGRIND = @VALGRIND@
 VERSION = @VERSION@
 VOID_UNSETENV = @VOID_UNSETENV@
-WARNING_CFLAGS = @WARNING_CFLAGS@
-WARNING_CXXFLAGS = @WARNING_CXXFLAGS@
+WARN_CFLAGS = @WARN_CFLAGS@
+WARN_CXXFLAGS = @WARN_CXXFLAGS@
 WCHAR_H = @WCHAR_H@
 WCHAR_T_SUFFIX = @WCHAR_T_SUFFIX@
 WCTYPE_H = @WCTYPE_H@

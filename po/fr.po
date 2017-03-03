@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU bison 2.3a\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2008-11-02 17:00-0500\n"
+"POT-Creation-Date: 2008-12-11 17:06-0500\n"
 "PO-Revision-Date: 2006-09-27 08:00-0500\n"
 "Last-Translator: Michel Robitaille <robitail@IRO.UMontreal.CA>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -500,27 +500,27 @@ msgstr ""
 msgid "stray `@'"
 msgstr ""
 
-#: src/scan-code.l:277
+#: src/scan-code.l:280
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr ""
 
-#: src/scan-code.l:292
+#: src/scan-code.l:295
 #, fuzzy, c-format
 msgid "$$ for the midrule at $%d of `%s' has no declared type"
 msgstr "$%d de « %s » n'a pas de type déclaré"
 
-#: src/scan-code.l:297
+#: src/scan-code.l:300
 #, c-format
 msgid "$$ of `%s' has no declared type"
 msgstr "$$ de « %s » n'a pas son type déclaré"
 
-#: src/scan-code.l:325
+#: src/scan-code.l:328
 #, c-format
 msgid "$%d of `%s' has no declared type"
 msgstr "$%d de « %s » n'a pas de type déclaré"
 
-#: src/scan-code.l:340 src/scan-code.l:375 src/scan-gram.l:653
+#: src/scan-code.l:343 src/scan-code.l:378 src/scan-gram.l:653
 #, c-format
 msgid "integer out of range: %s"
 msgstr "entier hors limite: %s"

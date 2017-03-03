@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the bison package.
 # Göran Uddeborg <goeran@uddeborg.se>, 2001-2006, 2008.
 #
-# $Revision: 1.59 $
+# $Revision: 1.62 $
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bison 2.3b\n"
+"Project-Id-Version: bison 2.4\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2008-11-02 17:00-0500\n"
-"PO-Revision-Date: 2008-06-02 22:34+0200\n"
+"POT-Creation-Date: 2008-12-11 17:06-0500\n"
+"PO-Revision-Date: 2008-11-11 14:53+0100\n"
 "Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -99,7 +99,7 @@ msgstr "kan inte stänga fil"
 #: src/files.c:357
 #, c-format
 msgid "refusing to overwrite the input file %s"
-msgstr ""
+msgstr "vägrar att skriva över indatafilen %s"
 
 #: src/files.c:362
 #, c-format
@@ -162,7 +162,6 @@ msgstr ""
 "\n"
 
 #: src/getargs.c:272
-#, fuzzy
 msgid ""
 "Parser:\n"
 "  -L, --language=LANGUAGE    specify the output programming language\n"
@@ -177,6 +176,7 @@ msgid ""
 msgstr ""
 "Tolk:\n"
 "  -L, --language=SPRÅK       ange programspråk för utmatning\n"
+"                             (detta är en experimentell funktion)\n"
 "  -S, --skeleton=FIL         ange skelettfilen som skall användas\n"
 "  -t, --debug                instrumentera tolken för felsökning\n"
 "      --locations            aktivera lägesberäkning\n"
@@ -484,18 +484,18 @@ msgid "Rules useless in grammar"
 msgstr "Oanvändbara regler i grammatiken"
 
 #: src/reduce.c:388
-#, fuzzy, c-format
+#, c-format
 msgid "%d nonterminal useless in grammar"
 msgid_plural "%d nonterminals useless in grammar"
-msgstr[0] "Oanvändbara icketerminaler i grammatiken"
-msgstr[1] "Oanvändbara icketerminaler i grammatiken"
+msgstr[0] "%d oanvändbar icketerminal i grammatiken"
+msgstr[1] "%d oanvändbara icketerminaler i grammatiken"
 
 #: src/reduce.c:397
-#, fuzzy, c-format
+#, c-format
 msgid "%d rule useless in grammar"
 msgid_plural "%d rules useless in grammar"
-msgstr[0] "oanvändbar regel i grammatiken"
-msgstr[1] "oanvändbar regel i grammatiken"
+msgstr[0] "%d oanvändbar regel i grammatiken"
+msgstr[1] "%d oanvändbara regler i grammatiken"
 
 #: src/reduce.c:428
 #, c-format
@@ -512,27 +512,27 @@ msgstr "vilsekommet \"$\""
 msgid "stray `@'"
 msgstr "vilsekommet \"@\""
 
-#: src/scan-code.l:277
+#: src/scan-code.l:280
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr "explicit typ given i otypad grammatik"
 
-#: src/scan-code.l:292
+#: src/scan-code.l:295
 #, c-format
 msgid "$$ for the midrule at $%d of `%s' has no declared type"
 msgstr "$$ för mitt-i-regeln vid $%d av \"%s\" har ingen deklarerad typ"
 
-#: src/scan-code.l:297
+#: src/scan-code.l:300
 #, c-format
 msgid "$$ of `%s' has no declared type"
 msgstr "$$ för \"%s\" har ingen deklarerad typ"
 
-#: src/scan-code.l:325
+#: src/scan-code.l:328
 #, c-format
 msgid "$%d of `%s' has no declared type"
 msgstr "$%d för \"%s\" har ingen deklarerad typ"
 
-#: src/scan-code.l:340 src/scan-code.l:375 src/scan-gram.l:653
+#: src/scan-code.l:343 src/scan-code.l:378 src/scan-gram.l:653
 #, c-format
 msgid "integer out of range: %s"
 msgstr "heltal utanför intervall: %s"
@@ -866,21 +866,3 @@ msgstr " TOTALT                :"
 #, c-format
 msgid "time in %s: %ld.%06ld (%ld%%)\n"
 msgstr "tid i %s: %ld.%06ld (%ld%%)\n"
-
-#~ msgid "%d nonterminal"
-#~ msgid_plural "%d nonterminals"
-#~ msgstr[0] "%d icketerminal"
-#~ msgstr[1] "%d icketerminaler"
-
-#~ msgid " and "
-#~ msgstr " och "
-
-#~ msgid "%d rule"
-#~ msgid_plural "%d rules"
-#~ msgstr[0] "%d regel"
-#~ msgstr[1] "%d regler"
-
-# Detta är en trasig fortsättning på ovanstående meddelanden.
-# Felrapporterat till bug-bison@gnu.org.
-#~ msgid " useless in grammar"
-#~ msgstr " oanvändbara i grammatiken"

@@ -6,10 +6,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bison 2.3b\n"
+"Project-Id-Version: bison 2.4\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2008-11-02 17:00-0500\n"
-"PO-Revision-Date: 2008-06-02 14:25+0200\n"
+"POT-Creation-Date: 2008-12-11 17:06-0500\n"
+"PO-Revision-Date: 2008-11-04 08:55+0100\n"
 "Last-Translator: Michael Piefel <piefel@informatik.hu-berlin.de>\n"
 "Language-Team: German <translation-team-de@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -101,7 +101,7 @@ msgstr "kann Datei nicht schließen"
 #: src/files.c:357
 #, c-format
 msgid "refusing to overwrite the input file %s"
-msgstr ""
+msgstr "werde die Eingabedatei %s nicht überschreiben"
 
 #: src/files.c:362
 #, c-format
@@ -161,7 +161,6 @@ msgstr ""
 "  -W, --warnings[=KATEGORIE]  Warnungen, die in KATEGORIE fallen, anzeigen\n"
 
 #: src/getargs.c:272
-#, fuzzy
 msgid ""
 "Parser:\n"
 "  -L, --language=LANGUAGE    specify the output programming language\n"
@@ -176,14 +175,15 @@ msgid ""
 msgstr ""
 "Parser:\n"
 "  -L, --language=SPRACHE     die Ausgabesprache bestimmen\n"
+"                               (eine experimentelle Funktion)\n"
 "  -S, --skeleton=DATEI       zu benutzende Skelettdatei angeben\n"
 "  -t, --debug                den Parser auf Debugging-Unterstützung "
 "vorbereiten\n"
 "      --locations            Standortberechnung ermöglichen\n"
 "  -p, --name-prefix=PRÄFIX   PRÄFIX vor alle externen Symbole setzen\n"
 "  -l, --no-lines             keine „#line“-Direktiven erzeugen\n"
-"  -k, --token-table          einer Tabellen der Token-Namen mit "
-"einschließen\n"
+"  -k, --token-table          eine Tabelle der Token-Namen mit einschließen\n"
+"\n"
 
 #: src/getargs.c:287
 msgid ""
@@ -484,18 +484,18 @@ msgid "Rules useless in grammar"
 msgstr "Regeln, die in Grammatik nutzlos sind"
 
 #: src/reduce.c:388
-#, fuzzy, c-format
+#, c-format
 msgid "%d nonterminal useless in grammar"
 msgid_plural "%d nonterminals useless in grammar"
-msgstr[0] "Nicht-Terminale, die in Grammatik nutzlos sind"
-msgstr[1] "Nicht-Terminale, die in Grammatik nutzlos sind"
+msgstr[0] "%d Nicht-Terminal, das in Grammatik nutzlos ist"
+msgstr[1] "%d Nicht-Terminale, die in Grammatik nutzlos sind"
 
 #: src/reduce.c:397
-#, fuzzy, c-format
+#, c-format
 msgid "%d rule useless in grammar"
 msgid_plural "%d rules useless in grammar"
-msgstr[0] "Regeln nutzlos in Grammatik"
-msgstr[1] "Regeln nutzlos in Grammatik"
+msgstr[0] "%d Regel, die in Grammatik nutzlos ist"
+msgstr[1] "%d Regeln, die in Grammatik nutzlos sind"
 
 #: src/reduce.c:428
 #, c-format
@@ -512,27 +512,27 @@ msgstr "herumstreunendes „$“"
 msgid "stray `@'"
 msgstr "herumstreunendes „@“"
 
-#: src/scan-code.l:277
+#: src/scan-code.l:280
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr "expliziter Typ angegeben und ungetypter Grammatik"
 
-#: src/scan-code.l:292
+#: src/scan-code.l:295
 #, c-format
 msgid "$$ for the midrule at $%d of `%s' has no declared type"
 msgstr "$$ für Regelmitte bei $%d von „%s“ hat keinen deklarierten Typ"
 
-#: src/scan-code.l:297
+#: src/scan-code.l:300
 #, c-format
 msgid "$$ of `%s' has no declared type"
 msgstr "$$ von „%s“ hat keinen deklarierten Typ"
 
-#: src/scan-code.l:325
+#: src/scan-code.l:328
 #, c-format
 msgid "$%d of `%s' has no declared type"
 msgstr "$%d von „%s“ hat keinen deklarierten Typ"
 
-#: src/scan-code.l:340 src/scan-code.l:375 src/scan-gram.l:653
+#: src/scan-code.l:343 src/scan-code.l:378 src/scan-gram.l:653
 #, c-format
 msgid "integer out of range: %s"
 msgstr "Ganzzahl außerhalb des Wertebereichs: %s"
@@ -650,24 +650,24 @@ msgid "the start symbol %s is a token"
 msgstr "das Startsymbol %s ist ein Token"
 
 #: src/symtab.c:908
-#, fuzzy, c-format
+#, c-format
 msgid "redeclaration for default tagged %%destructor"
-msgstr "erneute Deklaration für voreingestellten %%destructor"
+msgstr "erneute Deklaration für voreingestellten markierten %%destructor"
 
 #: src/symtab.c:921
-#, fuzzy, c-format
+#, c-format
 msgid "redeclaration for default tagless %%destructor"
-msgstr "erneute Deklaration für voreingestellten %%destructor"
+msgstr "erneute Deklaration für voreingestellten nicht-markierten %%destructor"
 
 #: src/symtab.c:934
-#, fuzzy, c-format
+#, c-format
 msgid "redeclaration for default tagged %%printer"
-msgstr "erneute Deklaration für voreingestellten %%printer"
+msgstr "erneute Deklaration für voreingestellten markierten %%printer"
 
 #: src/symtab.c:947
-#, fuzzy, c-format
+#, c-format
 msgid "redeclaration for default tagless %%printer"
-msgstr "erneute Deklaration für voreingestellten %%printer"
+msgstr "erneute Deklaration für voreingestellten nicht-markierten %%printer"
 
 #: lib/argmatch.c:133
 #, c-format

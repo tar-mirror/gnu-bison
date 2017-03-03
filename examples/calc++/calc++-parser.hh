@@ -1,5 +1,5 @@
 
-/* A Bison parser, made by GNU Bison 2.4.  */
+/* A Bison parser, made by GNU Bison 2.4.1.  */
 
 /* Skeleton interface for Bison LALR(1) parsers in C++
    
@@ -40,7 +40,7 @@
 /* "%code requires" blocks.  */
 
 /* Line 300 of lalr1.cc  */
-#line 8436 "../../doc/bison.texinfo"
+#line 8438 "../../doc/bison.texinfo"
 
 # include <string>
 class calcxx_driver;
@@ -132,7 +132,7 @@ namespace yy {
     {
 
 /* Line 300 of lalr1.cc  */
-#line 8488 "../../doc/bison.texinfo"
+#line 8490 "../../doc/bison.texinfo"
 
   int          ival;
   std::string *sval;

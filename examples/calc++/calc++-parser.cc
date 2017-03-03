@@ -1,5 +1,5 @@
 
-/* A Bison parser, made by GNU Bison 2.4.  */
+/* A Bison parser, made by GNU Bison 2.4.1.  */
 
 /* Skeleton implementation for Bison LALR(1) parsers in C++
    
@@ -50,7 +50,7 @@
 /* Unqualified %code blocks.  */
 
 /* Line 318 of lalr1.cc  */
-#line 8501 "../../doc/bison.texinfo"
+#line 8503 "../../doc/bison.texinfo"
 
 # include "calc++-driver.hh"
 
@@ -199,7 +199,7 @@ namespace yy {
         case 4: /* "\"identifier\"" */
 
 /* Line 449 of lalr1.cc  */
-#line 8530 "../../doc/bison.texinfo"
+#line 8532 "../../doc/bison.texinfo"
 	{ debug_stream () << *(yyvaluep->sval); };
 
 /* Line 449 of lalr1.cc  */
@@ -208,7 +208,7 @@ namespace yy {
       case 5: /* "\"number\"" */
 
 /* Line 449 of lalr1.cc  */
-#line 8533 "../../doc/bison.texinfo"
+#line 8535 "../../doc/bison.texinfo"
 	{ debug_stream () << (yyvaluep->ival); };
 
 /* Line 449 of lalr1.cc  */
@@ -217,7 +217,7 @@ namespace yy {
       case 14: /* "exp" */
 
 /* Line 449 of lalr1.cc  */
-#line 8533 "../../doc/bison.texinfo"
+#line 8535 "../../doc/bison.texinfo"
 	{ debug_stream () << (yyvaluep->ival); };
 
 /* Line 449 of lalr1.cc  */
@@ -256,7 +256,7 @@ namespace yy {
         case 4: /* "\"identifier\"" */
 
 /* Line 480 of lalr1.cc  */
-#line 8531 "../../doc/bison.texinfo"
+#line 8533 "../../doc/bison.texinfo"
 	{ delete (yyvaluep->sval); };
 
 /* Line 480 of lalr1.cc  */
@@ -339,7 +339,7 @@ namespace yy {
     /* User initialization code.  */
     
 /* Line 559 of lalr1.cc  */
-#line 8464 "../../doc/bison.texinfo"
+#line 8466 "../../doc/bison.texinfo"
 {
   // Initialize the initial location.
   yylloc.begin.filename = yylloc.end.filename = &driver.file;
@@ -465,70 +465,70 @@ namespace yy {
 	  case 2:
 
 /* Line 678 of lalr1.cc  */
-#line 8543 "../../doc/bison.texinfo"
+#line 8545 "../../doc/bison.texinfo"
     { driver.result = (yysemantic_stack_[(2) - (2)].ival); }
     break;
 
   case 3:
 
 /* Line 678 of lalr1.cc  */
-#line 8545 "../../doc/bison.texinfo"
+#line 8547 "../../doc/bison.texinfo"
     {}
     break;
 
   case 4:
 
 /* Line 678 of lalr1.cc  */
-#line 8546 "../../doc/bison.texinfo"
+#line 8548 "../../doc/bison.texinfo"
     {}
     break;
 
   case 5:
 
 /* Line 678 of lalr1.cc  */
-#line 8550 "../../doc/bison.texinfo"
+#line 8552 "../../doc/bison.texinfo"
     { driver.variables[*(yysemantic_stack_[(3) - (1)].sval)] = (yysemantic_stack_[(3) - (3)].ival); delete (yysemantic_stack_[(3) - (1)].sval); }
     break;
 
   case 6:
 
 /* Line 678 of lalr1.cc  */
-#line 8554 "../../doc/bison.texinfo"
+#line 8556 "../../doc/bison.texinfo"
     { (yyval.ival) = (yysemantic_stack_[(3) - (1)].ival) + (yysemantic_stack_[(3) - (3)].ival); }
     break;
 
   case 7:
 
 /* Line 678 of lalr1.cc  */
-#line 8555 "../../doc/bison.texinfo"
+#line 8557 "../../doc/bison.texinfo"
     { (yyval.ival) = (yysemantic_stack_[(3) - (1)].ival) - (yysemantic_stack_[(3) - (3)].ival); }
     break;
 
   case 8:
 
 /* Line 678 of lalr1.cc  */
-#line 8556 "../../doc/bison.texinfo"
+#line 8558 "../../doc/bison.texinfo"
     { (yyval.ival) = (yysemantic_stack_[(3) - (1)].ival) * (yysemantic_stack_[(3) - (3)].ival); }
     break;
 
   case 9:
 
 /* Line 678 of lalr1.cc  */
-#line 8557 "../../doc/bison.texinfo"
+#line 8559 "../../doc/bison.texinfo"
     { (yyval.ival) = (yysemantic_stack_[(3) - (1)].ival) / (yysemantic_stack_[(3) - (3)].ival); }
     break;
 
   case 10:
 
 /* Line 678 of lalr1.cc  */
-#line 8558 "../../doc/bison.texinfo"
+#line 8560 "../../doc/bison.texinfo"
     { (yyval.ival) = driver.variables[*(yysemantic_stack_[(1) - (1)].sval)]; delete (yysemantic_stack_[(1) - (1)].sval); }
     break;
 
   case 11:
 
 /* Line 678 of lalr1.cc  */
-#line 8559 "../../doc/bison.texinfo"
+#line 8561 "../../doc/bison.texinfo"
     { (yyval.ival) = (yysemantic_stack_[(1) - (1)].ival); }
     break;
 
@@ -862,8 +862,8 @@ namespace yy {
   const unsigned short int
   calcxx_parser::yyrline_[] =
   {
-         0,  8543,  8543,  8545,  8546,  8549,  8554,  8555,  8556,  8557,
-    8558,  8559
+         0,  8545,  8545,  8547,  8548,  8551,  8556,  8557,  8558,  8559,
+    8560,  8561
   };
 
   // Print the state stack on the debug stream.
@@ -960,9 +960,9 @@ namespace yy {
 
 
 /* Line 1056 of lalr1.cc  */
-#line 8560 "../../doc/bison.texinfo"
+#line 8562 "../../doc/bison.texinfo"
 
-#line 8569 "../../doc/bison.texinfo"
+#line 8571 "../../doc/bison.texinfo"
 void
 yy::calcxx_parser::error (const yy::calcxx_parser::location_type& l,
                           const std::string& m)

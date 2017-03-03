@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bison 2.3b\n"
+"Project-Id-Version: bison 2.4\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2008-11-02 17:00-0500\n"
-"PO-Revision-Date: 2008-06-10 23:16+0200\n"
+"POT-Creation-Date: 2008-12-11 17:06-0500\n"
+"PO-Revision-Date: 2008-11-07 18:02+0100\n"
 "Last-Translator: Wojciech Polak <polak@gnu.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -106,7 +106,7 @@ msgstr "nie mo¿na zamkn±æ pliku"
 #: src/files.c:357
 #, c-format
 msgid "refusing to overwrite the input file %s"
-msgstr ""
+msgstr "odmowa nadpisania pliku wej¶ciowego %s"
 
 #: src/files.c:362
 #, c-format
@@ -167,7 +167,6 @@ msgstr ""
 "\n"
 
 #: src/getargs.c:272
-#, fuzzy
 msgid ""
 "Parser:\n"
 "  -L, --language=LANGUAGE    specify the output programming language\n"
@@ -232,6 +231,14 @@ msgid ""
 "  `error'           treat warnings as errors\n"
 "\n"
 msgstr ""
+"Kategorie ostrze¿eñ:\n"
+"  `midrule-values'  nieustawione lub nieu¿ywane warto¶ci regu³\n"
+"  `yacc'            niekompatybilno¶ci z POSIX YACC\n"
+"  `all'             wszystkie ostrze¿enia\n"
+"  `no-KATEGORIA'    wy³±cza ostrze¿enia w KATEGORII\n"
+"  `none'            wy³±cza wszystkie ostrze¿enia\n"
+"  `error'           traktuje ostrze¿enia jako b³êdy\n"
+"\n"
 
 #: src/getargs.c:313
 msgid ""
@@ -484,20 +491,20 @@ msgid "Rules useless in grammar"
 msgstr "Bezu¿yteczne regu³y w gramatyce"
 
 #: src/reduce.c:388
-#, fuzzy, c-format
+#, c-format
 msgid "%d nonterminal useless in grammar"
 msgid_plural "%d nonterminals useless in grammar"
-msgstr[0] "Symbole nieterminalne bezu¿yteczne w gramatyce"
-msgstr[1] "Symbole nieterminalne bezu¿yteczne w gramatyce"
-msgstr[2] "Symbole nieterminalne bezu¿yteczne w gramatyce"
+msgstr[0] "%d bezu¿yteczny symbol nieterminalny w gramatyce"
+msgstr[1] "%d bezu¿yteczne symbole nieterminalne w gramatyce"
+msgstr[2] "%d bezu¿ytecznych symboli nieterminalnych w gramatyce"
 
 #: src/reduce.c:397
-#, fuzzy, c-format
+#, c-format
 msgid "%d rule useless in grammar"
 msgid_plural "%d rules useless in grammar"
-msgstr[0] "regu³a bezu¿yteczna w gramatyce"
-msgstr[1] "regu³a bezu¿yteczna w gramatyce"
-msgstr[2] "regu³a bezu¿yteczna w gramatyce"
+msgstr[0] "%d bezu¿yteczna regu³a w gramatyce"
+msgstr[1] "%d bezu¿yteczne regu³y w gramatyce"
+msgstr[2] "%d bezu¿ytecznych regu³ w gramatyce"
 
 #: src/reduce.c:428
 #, c-format
@@ -514,29 +521,29 @@ msgstr "zab³±kany `$'"
 msgid "stray `@'"
 msgstr "zab³±kany `@'"
 
-#: src/scan-code.l:277
+#: src/scan-code.l:280
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr "jawny typ w gramatyce beztypowej"
 
-#: src/scan-code.l:292
+#: src/scan-code.l:295
 #, c-format
 msgid "$$ for the midrule at $%d of `%s' has no declared type"
 msgstr ""
 "$$ w pozycji $%d nale¿±cy do po¶redniej regu³y `%s' nie posiada "
 "zadeklarowanego typu"
 
-#: src/scan-code.l:297
+#: src/scan-code.l:300
 #, c-format
 msgid "$$ of `%s' has no declared type"
 msgstr "$$ nale¿±cy do `%s' nie posiada zadeklarowanego typu"
 
-#: src/scan-code.l:325
+#: src/scan-code.l:328
 #, c-format
 msgid "$%d of `%s' has no declared type"
 msgstr "$%d nale¿±cy do `%s' nie posiada zadeklarowanego typu"
 
-#: src/scan-code.l:340 src/scan-code.l:375 src/scan-gram.l:653
+#: src/scan-code.l:343 src/scan-code.l:378 src/scan-gram.l:653
 #, c-format
 msgid "integer out of range: %s"
 msgstr "liczba ca³kowita poza zakresem: %s"

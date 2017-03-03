@@ -1,6 +1,6 @@
 /* Bison Action Scanner                             -*- C -*-
 
-   Copyright (C) 2006, 2007 Free Software Foundation, Inc.
+   Copyright (C) 2006, 2007, 2008 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -170,12 +170,14 @@ splice	 (\\[ \f\t\v]*\n)*
 
   "{"  STRING_GROW; ++braces_level;
   "}"  {
-    bool outer_brace = --braces_level < 0;
+    bool outer_brace = --braces_level == 0;
 
     /* As an undocumented Bison extension, append `;' before the last
        brace in braced code, so that the user code can omit trailing
        `;'.  But do not append `;' if emulating Yacc, since Yacc does
-       not append one.
+       not append one.  Also, some output languages (like Java) do not
+       accept an extra semicolon, so don't append if the user specified
+       a skeleton or language.
 
        FIXME: Bison should warn if a semicolon seems to be necessary
        here, and should omit the semicolon if it seems unnecessary
@@ -186,7 +188,8 @@ splice	 (\\[ \f\t\v]*\n)*
        should also diagnose other Bison extensions like %yacc.
        Perhaps there should also be a GCC-style --pedantic-errors
        option, so that such warnings are diagnosed as errors.  */
-    if (outer_brace && ! yacc_flag)
+    if (outer_brace && !yacc_flag && language_prio == default_prio
+        && skeleton_prio == default_prio)
       obstack_1grow (&obstack_for_string, ';');
 
     STRING_GROW;

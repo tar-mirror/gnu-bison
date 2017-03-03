@@ -587,8 +587,8 @@ int code__flex_debug = 1;
 static yyconst flex_int16_t yy_rule_linenum[24] =
     {   0,
        99,  109,  110,  120,  125,  130,  135,  139,  143,  147,
-      155,  158,  162,  166,  171,  172,  198,  202,  215,  216,
-      217,  218,  225
+      155,  158,  162,  166,  171,  172,  201,  205,  218,  219,
+      220,  221,  228
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -602,7 +602,7 @@ char *code_text;
 #line 1 "scan-code.l"
 /* Bison Action Scanner                             -*- C -*-
 
-   Copyright (C) 2006, 2007 Free Software Foundation, Inc.
+   Copyright (C) 2006, 2007, 2008 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -1172,12 +1172,14 @@ case 16:
 YY_RULE_SETUP
 #line 172 "scan-code.l"
 {
-    bool outer_brace = --braces_level < 0;
+    bool outer_brace = --braces_level == 0;
 
     /* As an undocumented Bison extension, append `;' before the last
        brace in braced code, so that the user code can omit trailing
        `;'.  But do not append `;' if emulating Yacc, since Yacc does
-       not append one.
+       not append one.  Also, some output languages (like Java) do not
+       accept an extra semicolon, so don't append if the user specified
+       a skeleton or language.
 
        FIXME: Bison should warn if a semicolon seems to be necessary
        here, and should omit the semicolon if it seems unnecessary
@@ -1188,7 +1190,8 @@ YY_RULE_SETUP
        should also diagnose other Bison extensions like %yacc.
        Perhaps there should also be a GCC-style --pedantic-errors
        option, so that such warnings are diagnosed as errors.  */
-    if (outer_brace && ! yacc_flag)
+    if (outer_brace && !yacc_flag && language_prio == default_prio
+        && skeleton_prio == default_prio)
       obstack_1grow (&obstack_for_string, ';');
 
     STRING_GROW;
@@ -1199,7 +1202,7 @@ YY_RULE_SETUP
 
 case 17:
 YY_RULE_SETUP
-#line 198 "scan-code.l"
+#line 201 "scan-code.l"
 {
     obstack_sgrow (&obstack_for_string, "]b4_dollar_dollar[");
     self->is_value_used = true;
@@ -1207,7 +1210,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 202 "scan-code.l"
+#line 205 "scan-code.l"
 {
     obstack_sgrow (&obstack_for_string, "]b4_at_dollar[");
     locations_flag = true;
@@ -1221,22 +1224,22 @@ YY_RULE_SETUP
 
 case 19:
 YY_RULE_SETUP
-#line 215 "scan-code.l"
+#line 218 "scan-code.l"
 obstack_sgrow (&obstack_for_string, "$][");
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 216 "scan-code.l"
+#line 219 "scan-code.l"
 obstack_sgrow (&obstack_for_string, "@@");
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 217 "scan-code.l"
+#line 220 "scan-code.l"
 obstack_sgrow (&obstack_for_string, "@{");
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 218 "scan-code.l"
+#line 221 "scan-code.l"
 obstack_sgrow (&obstack_for_string, "@}");
 	YY_BREAK
 
@@ -1246,7 +1249,7 @@ obstack_sgrow (&obstack_for_string, "@}");
 case 23:
 /* rule 23 can match eol */
 YY_RULE_SETUP
-#line 225 "scan-code.l"
+#line 228 "scan-code.l"
 STRING_GROW;
 	YY_BREAK
 /* End of processing. */
@@ -1257,7 +1260,7 @@ case YY_STATE_EOF(SC_STRING):
 case YY_STATE_EOF(SC_CHARACTER):
 case YY_STATE_EOF(SC_RULE_ACTION):
 case YY_STATE_EOF(SC_SYMBOL_ACTION):
-#line 228 "scan-code.l"
+#line 231 "scan-code.l"
 {
                    STRING_FINISH;
                    return last_string;
@@ -1265,10 +1268,10 @@ case YY_STATE_EOF(SC_SYMBOL_ACTION):
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 233 "scan-code.l"
+#line 236 "scan-code.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 1272 "scan-code.c"
+#line 1275 "scan-code.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2355,7 +2358,7 @@ void code_free (void * ptr )
 
 /* %ok-for-header */
 
-#line 233 "scan-code.l"
+#line 236 "scan-code.l"
 
 
 

@@ -6,10 +6,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bison 2.3b\n"
+"Project-Id-Version: bison 2.4\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2008-11-02 17:00-0500\n"
-"PO-Revision-Date: 2008-05-29 11:13+0200\n"
+"POT-Creation-Date: 2008-12-11 17:06-0500\n"
+"PO-Revision-Date: 2008-11-05 10:00+0100\n"
 "Last-Translator: Tim Van Holder <tim.van.holder@telenet.be>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -95,10 +95,11 @@ msgstr "I/O-fout"
 msgid "cannot close file"
 msgstr "kan bestand niet sluiten"
 
+# Betere formulering (ik-vorm vermijden)?
 #: src/files.c:357
 #, c-format
 msgid "refusing to overwrite the input file %s"
-msgstr ""
+msgstr "ik weiger om invoerbestand %s te overschrijven"
 
 #: src/files.c:362
 #, c-format
@@ -162,7 +163,6 @@ msgstr ""
 # Correcte vervoeging van 'voorvoegen'?
 # Betere vertaling voor 'directives'?
 #: src/getargs.c:272
-#, fuzzy
 msgid ""
 "Parser:\n"
 "  -L, --language=LANGUAGE    specify the output programming language\n"
@@ -177,6 +177,7 @@ msgid ""
 msgstr ""
 "Parser:\n"
 "  -L, --language=TAAL        geef de te gebruiken programmeertaal op\n"
+"                             (dit is een experimenteel feature)\n"
 "  -S, --skeleton=BESTAND     geef het te gebruiken skeletbestand op\n"
 "  -t, --debug                maak de parser geschikt voor debugging\n"
 "      --locations            houd symboollokaties bij\n"
@@ -487,18 +488,18 @@ msgid "Rules useless in grammar"
 msgstr "Regels die nutteloos zijn in de grammatica"
 
 #: src/reduce.c:388
-#, fuzzy, c-format
+#, c-format
 msgid "%d nonterminal useless in grammar"
 msgid_plural "%d nonterminals useless in grammar"
-msgstr[0] "Niet-eindsymbolen die nutteloos zijn in de grammatica"
-msgstr[1] "Niet-eindsymbolen die nutteloos zijn in de grammatica"
+msgstr[0] "%d niet-eindsymbool is nutteloos in de grammatica"
+msgstr[1] "%d niet-eindsymbolen zijn nutteloos in de grammatica"
 
 #: src/reduce.c:397
-#, fuzzy, c-format
+#, c-format
 msgid "%d rule useless in grammar"
 msgid_plural "%d rules useless in grammar"
-msgstr[0] "regel is nutteloos in de grammatica"
-msgstr[1] "regel is nutteloos in de grammatica"
+msgstr[0] "%d regel is nutteloos in de grammatica"
+msgstr[1] "%d regels zijn nutteloos in de grammatica"
 
 # Ik _denk_ dat dit correct weergeeft wat er bedoeld wordt (m.a.w. er is geen regel voor het startsymbool)
 #: src/reduce.c:428
@@ -517,28 +518,28 @@ msgid "stray `@'"
 msgstr "losse `@'"
 
 # betere vertaling voor 'untyped'?
-#: src/scan-code.l:277
+#: src/scan-code.l:280
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr "expliciet type opgegeven in een typeloze grammatica"
 
-#: src/scan-code.l:292
+#: src/scan-code.l:295
 #, c-format
 msgid "$$ for the midrule at $%d of `%s' has no declared type"
 msgstr "$$ voor de midrule op $%d van `%s' heeft geen gedeclareerd type"
 
-#: src/scan-code.l:297
+#: src/scan-code.l:300
 #, c-format
 msgid "$$ of `%s' has no declared type"
 msgstr "$$ van `%s' heeft geen gedeclareerd type"
 
-#: src/scan-code.l:325
+#: src/scan-code.l:328
 #, c-format
 msgid "$%d of `%s' has no declared type"
 msgstr "$%d van `%s' heeft geen gedeclareerd type"
 
 # Hier zou wel het bereik bij vermeld mogen worden...
-#: src/scan-code.l:340 src/scan-code.l:375 src/scan-gram.l:653
+#: src/scan-code.l:343 src/scan-code.l:378 src/scan-gram.l:653
 #, c-format
 msgid "integer out of range: %s"
 msgstr "integer buiten bereik: %s"
@@ -872,19 +873,3 @@ msgstr " TOTAAL                :"
 #, c-format
 msgid "time in %s: %ld.%06ld (%ld%%)\n"
 msgstr "tijd in %s: %ld.%06ld (%ld%%)\n"
-
-#~ msgid "%d nonterminal"
-#~ msgid_plural "%d nonterminals"
-#~ msgstr[0] "%d niet-eindsymbool"
-#~ msgstr[1] "%d niet-eindsymbolen"
-
-#~ msgid " and "
-#~ msgstr " en "
-
-#~ msgid "%d rule"
-#~ msgid_plural "%d rules"
-#~ msgstr[0] "%d regel"
-#~ msgstr[1] "%d regels"
-
-#~ msgid " useless in grammar"
-#~ msgstr " nutteloos in de grammatica"

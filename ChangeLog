@@ -1,3 +1,132 @@
+2008-12-11  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Version 2.4.1.
+	* NEWS: Set version and date.
+	* lib/Makefile.am: Update copyright year.
+	* tests/atlocal.in: Update copyright year.
+
+2008-12-11  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Semicolon feature removal is not about future language support.
+	* NEWS: The semicolon feature is no longer active for newer languages,
+	so don't claim that it causes trouble for them.
+
+2008-12-11  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	* gnulib: Update submodule to HEAD.
+
+2008-12-09  Akim Demaille  <demaille@gostai.com>
+
+	Update data/README.
+	* data/README: Document glr.cc, lalr1.java, m4sugar and xslt.
+
+2008-12-05  Eric Blake  <ebb9@byu.net>
+
+	Build testsuite with newer autoconf.
+	* tests/output.at (m4_expand): Don't override in newer autoconf,
+	where the underlying implementation changed.
+	* tests/cxx-type.at (_AT_RESOLVED_GLR_OUTPUT)
+	(_AT_RESOLVED_GLR_OUTPUT_WITH_LOC, _AT_AMBIG_GLR_OUTPUT)
+	(_AT_AMBIG_GLR_OUTPUT_WITH_LOC, _AT_GLR_STDERR)
+	(_AT_VERBOSE_GLR_STDERR): Expand to double-quoted strings,
+	since some of them contain unbalanced ')'.
+
+2008-11-19  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	* NEWS: Clarify a little.
+
+2008-11-19  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	* NEWS: Update for recent changes.
+
+2008-11-18  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Fix unexpanded macros in GLR defines file.
+	Reported by Csaba Raduly at
+	<http://lists.gnu.org/archive/html/bug-bison/2008-11/msg00048.html>.
+	* THANKS (Csaba Raduly): Add.
+	* data/glr.c: Fix overquoting on b4_prefix for yylval and yylloc.
+	* tests/calc.at (_AT_DATA_CALC_Y): If %defines is specified, generate
+	lexer in a separate module that includes the defines file.
+	(AT_CHECK_CALC): Use AT_FULL_COMPILE and request compilation of lexer
+	source.
+	* tests/local.at (_AT_BISON_OPTION_PUSHDEFS): Push AT_DEFINES_IF.
+	Adjust AT_LOC and AT_VAL to use AT_NAME_PREFIX.
+	(AT_BISON_OPTION_POPDEFS): Pop AT_DEFINES_IF.
+	(AT_DATA_SOURCE_PROLOGUE): New.
+	(AT_DATA_GRAMMAR_PROLOGUE): Use AT_DATA_SOURCE_PROLOGUE.
+	(AT_DATA_SOURCE): New.
+	(AT_FULL_COMPILE): New, copied from master branch and extended to
+	support an additional source file.
+
+2008-11-17  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Don't let maintainer-*-check targets force a version update.
+	* cfg.mk (_is-dist-target): Implement.  maintainer-check* was already
+	handled.
+
+2008-11-17  Di-an Jan  <dianj@freeshell.org>
+
+	* doc/bison.texinfo: Synchronize ``Detail Node Listing''.
+	Align menus.  Adjust word wrapping.  Use node names for menu names.
+	(Examples): Don't abbreviate node names.
+	(LocalWords): Remove abbreviations.
+	(Copying): Make description a sentence.
+	(Java Action Features): Remove period to match the rest of menu.
+
+2008-11-11  Paolo Bonzini  <bonzini@gnu.org>
+
+	* bootstrap.conf: Replace m4/warning.m4 with warnings module.
+	* configure.ac: Adjust usage.
+	* lib/Makefile.am: Replace $(WARNING_CFLAGS) with $(WARN_CFLAGS).
+	* src/Makefile.am: Replace $(WARNING_CFLAGS) with $(WARN_CFLAGS).
+	* tests/atlocal.in: Replace $(WARNING_*FLAGS) with $(WARN_*FLAGS).
+
+2008-11-07  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Don't add a semicolon to actions for %skeleton or %language.
+	It breaks Java test cases as reported by Akim Demaille.
+	* src/scan-code.l: Implement.
+
+2008-11-07  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Clean up %skeleton and %language priority implementation.
+	* src/getargs.c (skeleton_prio): Use default_prio rather than 2, and
+	remove static qualifier because others will soon need to see it.
+	(language_prio): Likewise.
+	(getargs): Use command_line_prio rather than 0.
+	* src/getargs.h (command_line_prio, grammar_prio, default_prio): New
+	enum fields.
+	(skeleton_prio): Extern it.
+	(language_prio): Extern it.
+	* src/parse-gram.y: Use grammar_prio rather than 1.
+
+2008-11-04  Akim Demaille  <demaille@gostai.com>
+
+	* NEWS: Mention the trailing semicolon in action.
+
+2008-11-04  Akim Demaille  <demaille@gostai.com>
+
+	Reformat NEWS.
+	* NEWS: Use more outline-mode markup.
+	Suggested by Jim Meyering.
+
+2008-11-04  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Fix user actions without a trailing semicolon.
+	Reported by Sergei Steshenko at
+	<http://lists.gnu.org/archive/html/bug-bison/2008-11/msg00001.html>.
+	* THANKS (Sergei Steshenko): Add.
+	* src/scan-code.l (SC_RULE_ACTION): Fix it.
+	* tests/regression.at (Fix user actions without a trailing semicolon):
+	New test case.
+
+2008-11-02  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	Initiate further development.
+	* NEWS: Create an empty section for new entries.
+	* gnulib: Update submodule to HEAD.
+
 2008-11-02  Joel E. Denny  <jdenny@ces.clemson.edu>
 
 	* NEWS: Version 2.4.
@@ -184,9 +313,9 @@
 2008-08-29  Akim Demaille  <demaille@gostai.com>
 
 	Clarify UPDATED use.
-        * doc/bison.texinfo: It refers to the last edition of this file,
+	* doc/bison.texinfo: It refers to the last edition of this file,
 	not to the release date of Bison.
-        Reported by Joel E. Denny.
+	Reported by Joel E. Denny.
 
 2008-08-29  Akim Demaille  <demaille@gostai.com>
 
@@ -206,15 +335,15 @@
 2008-08-27  Akim Demaille  <demaille@gostai.com>
 
 	Check yyerrok in calc.at.
-        * tests/calc.at (calc.y): Use yyerrok on "( error )".
-        (AT_CHECK_CALC): Add a check that ensures that yyerrok works as
-        expected.
+	* tests/calc.at (calc.y): Use yyerrok on "( error )".
+	(AT_CHECK_CALC): Add a check that ensures that yyerrok works as
+	expected.
 
 2008-08-27  Akim Demaille  <demaille@gostai.com>
 
 	Support yyerrok in lalr1.cc.
 	YYBACKUP is still to import back into lalr1.cc.
-        * data/lalr1.cc (yyerrork, yyclearin, YYRECOVERING): Define.
+	* data/lalr1.cc (yyerrork, yyclearin, YYRECOVERING): Define.
 
 2008-08-26  Joel E. Denny  <jdenny@ces.clemson.edu>
 
