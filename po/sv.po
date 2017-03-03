@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the bison package.
 # Göran Uddeborg <goeran@uddeborg.se>, 2001-2006, 2008, 2010, 2011, 2012.
 #
-# $Revision: 1.77 $
+# $Revision: 1.80 $
 msgid ""
 msgstr ""
-"Project-Id-Version: bison 2.5.1-rc2\n"
+"Project-Id-Version: bison 2.5.90\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-06-05 10:07+0200\n"
-"PO-Revision-Date: 2012-05-27 22:58+0200\n"
+"POT-Creation-Date: 2012-07-19 15:26+0200\n"
+"PO-Revision-Date: 2012-07-05 22:29+0200\n"
 "Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -174,10 +174,11 @@ msgid ""
 "  -S, --skeleton=FILE              specify the skeleton to use\n"
 "  -t, --debug                      instrument the parser for debugging\n"
 "      --locations                  enable location support\n"
-"  -D, --define=NAME[=VALUE]        similar to `%define NAME \"VALUE\"'\n"
-"  -F, --force-define=NAME[=VALUE]  override `%define NAME \"VALUE\"'\n"
+"  -D, --define=NAME[=VALUE]        similar to '%define NAME \"VALUE\"'\n"
+"  -F, --force-define=NAME[=VALUE]  override '%define NAME \"VALUE\"'\n"
 "  -p, --name-prefix=PREFIX         prepend PREFIX to the external symbols\n"
-"  -l, --no-lines                   don't generate `#line' directives\n"
+"                                   deprecated by '-Dapi.prefix=PREFIX'\n"
+"  -l, --no-lines                   don't generate '#line' directives\n"
 "  -k, --token-table                include a table of token names\n"
 "\n"
 msgstr ""
@@ -190,11 +191,13 @@ msgstr ""
 "  -D, --define=NAMN[=VÄRDE]        motsvarar '%define NAMN \"VÄRDE\"'\n"
 "  -F, --force-define=NAMN[=VÄRDE]  åsidosätt '%define NAMN \"VÄRDE\"'\n"
 "  -p, --name-prefix=PREFIX         lägg till PREFIX före externa symboler\n"
+"                                   undanbedes till förmån för\n"
+"                                   '-Dapi.prefix=PREFIX'\n"
 "  -l, --no-lines                   generera inte \"#line\"-direktiv\n"
 "  -k, --token-table                inkludera en tabell över elementnamn\n"
 "\n"
 
-#: src/getargs.c:324
+#: src/getargs.c:325
 msgid ""
 "Output:\n"
 "      --defines[=FILE]       also produce a header file\n"
@@ -224,7 +227,7 @@ msgstr ""
 "                             (XML-schemat är experimentellt)\n"
 "\n"
 
-#: src/getargs.c:339
+#: src/getargs.c:340
 msgid ""
 "Warning categories include:\n"
 "  `midrule-values'  unset or unused midrule values\n"
@@ -250,7 +253,7 @@ msgstr ""
 "  \"error\"           behandla varningar som fel\n"
 "\n"
 
-#: src/getargs.c:353
+#: src/getargs.c:354
 msgid ""
 "THINGS is a list of comma separated words that can include:\n"
 "  `state'        describe the states\n"
@@ -268,7 +271,7 @@ msgstr ""
 "  \"all\"          inkludera all ovanstående information\n"
 "  \"none\"         avaktivera rapporten\n"
 
-#: src/getargs.c:363
+#: src/getargs.c:364
 #, c-format
 msgid ""
 "\n"
@@ -278,21 +281,21 @@ msgstr ""
 "Rapportera fel till <%s>.\n"
 "Rapportera synpunkter på översättningen till <tp-sv@listor.tp-sv.se>.\n"
 
-#: src/getargs.c:379
+#: src/getargs.c:380
 #, c-format
 msgid "bison (GNU Bison) %s"
 msgstr "bison (GNU Bison) %s"
 
-#: src/getargs.c:381
+#: src/getargs.c:382
 msgid "Written by Robert Corbett and Richard Stallman.\n"
 msgstr "Skriven av Robert Corbett och Richard Stallman.\n"
 
-#: src/getargs.c:385
+#: src/getargs.c:386
 #, c-format
 msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
 msgstr "Copyright © %d Free Software Foundation, Inc.\n"
 
-#: src/getargs.c:388
+#: src/getargs.c:389
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
@@ -301,26 +304,26 @@ msgstr ""
 "finns INGEN garanti, inte ens för SÄLJBARHET eller LÄMPLIGHET FÖR ETT\n"
 "SPECIELLT ÄNDAMÅL.\n"
 
-#: src/getargs.c:409
+#: src/getargs.c:410
 #, c-format
 msgid "multiple skeleton declarations are invalid"
 msgstr "flera skelettdeklarationer är inte tillåtet"
 
-#: src/getargs.c:427
+#: src/getargs.c:428
 #, c-format
 msgid "%s: invalid language"
 msgstr "%s: ogiltigt språk"
 
-#: src/getargs.c:430
+#: src/getargs.c:431
 msgid "multiple language declarations are invalid"
 msgstr "flera språkdeklarationer är inte tillåtet"
 
-#: src/getargs.c:692
+#: src/getargs.c:693
 #, c-format
 msgid "%s: missing operand"
 msgstr "%s: saknad operand"
 
-#: src/getargs.c:694
+#: src/getargs.c:695
 #, c-format
 msgid "extra operand %s"
 msgstr "extra operand %s"

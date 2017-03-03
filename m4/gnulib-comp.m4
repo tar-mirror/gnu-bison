@@ -93,7 +93,9 @@ AC_DEFUN([gl_EARLY],
   # Code from module gettext-h:
   # Code from module git-version-gen:
   # Code from module gitlog-to-changelog:
+  # Code from module gnu-web-doc-update:
   # Code from module gnumakefile:
+  # Code from module gnupload:
   # Code from module gpl-3.0:
   # Code from module hash:
   # Code from module havelib:
@@ -330,6 +332,10 @@ if test $HAVE_DECL_FREXPL = 0 || test $gl_func_frexpl_no_libm = no; then
   AC_LIBOBJ([frexpl])
 fi
 gl_MATH_MODULE_INDICATOR([frexpl])
+gl_FUNC_FSETERR
+if test $ac_cv_func___fseterr = no; then
+  AC_LIBOBJ([fseterr])
+fi
 gl_FUNC_FSTAT
 if test $REPLACE_FSTAT = 1; then
   AC_LIBOBJ([fstat])
@@ -877,6 +883,8 @@ AC_DEFUN([gl_FILE_LIST], [
   build-aux/gendocs.sh
   build-aux/git-version-gen
   build-aux/gitlog-to-changelog
+  build-aux/gnu-web-doc-update
+  build-aux/gnupload
   build-aux/javacomp.sh.in
   build-aux/javaexec.sh.in
   build-aux/snippet/_Noreturn.h
@@ -1136,6 +1144,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/fprintf-posix.m4
   m4/frexp.m4
   m4/frexpl.m4
+  m4/fseterr.m4
   m4/fstat.m4
   m4/getdtablesize.m4
   m4/getopt.m4

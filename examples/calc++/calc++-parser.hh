@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 2.5.1_rc2.2-9fbd.  */
+/* A Bison parser, made by GNU Bison 2.5.90.14-0e98.  */
 
 /* Skeleton interface for Bison LALR(1) parsers in C++
    
@@ -43,7 +43,7 @@
 /* "%code requires" blocks.  */
 
 /* Line 36 of lalr1.cc  */
-#line 9573 "../../doc/bison.texinfo"
+#line 9641 "../../doc/bison.texi"
 
 # include <string>
 class calcxx_driver;
@@ -59,37 +59,16 @@ class calcxx_driver;
 #include "stack.hh"
 #include "location.hh"
 
-# ifndef YY_NULL
-#  if defined __cplusplus && 201103L <= __cplusplus
-#   define YY_NULL nullptr
-#  else
-#   define YY_NULL 0
-#  endif
-# endif
-
 /* Enabling traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 1
-#endif
-
-/* Enabling verbose error messages.  */
-#ifdef YYERROR_VERBOSE
-# undef YYERROR_VERBOSE
-# define YYERROR_VERBOSE 1
-#else
-# define YYERROR_VERBOSE 1
-#endif
-
-/* Enabling the token table.  */
-#ifndef YYTOKEN_TABLE
-# define YYTOKEN_TABLE 0
 #endif
 
 
 namespace yy {
 
 /* Line 36 of lalr1.cc  */
-#line 93 "../../../../examples/calc++/calc++-parser.hh"
+#line 72 "../../../../examples/calc++/calc++-parser.hh"
 
   /// A Bison parser.
   class calcxx_parser
@@ -101,7 +80,7 @@ namespace yy {
     {
 
 /* Line 36 of lalr1.cc  */
-#line 9626 "../../doc/bison.texinfo"
+#line 9694 "../../doc/bison.texi"
 
   int          ival;
   std::string *sval;
@@ -109,7 +88,7 @@ namespace yy {
 
 
 /* Line 36 of lalr1.cc  */
-#line 113 "../../../../examples/calc++/calc++-parser.hh"
+#line 92 "../../../../examples/calc++/calc++-parser.hh"
     };
 #else
     typedef YYSTYPE semantic_type;
@@ -237,16 +216,14 @@ namespace yy {
     /// For a rule, its LHS.
     static const unsigned char yyr1_[];
     /// For a rule, its RHS length.
-    static const unsigned char yyr2_[];
-
-#if YYDEBUG || YYERROR_VERBOSE || YYTOKEN_TABLE
-    /// For a symbol, its name in clear.
-    static const char* const yytname_[];
-#endif
+    static const unsigned char yyr2_[]; 
 
     /// Convert the symbol name \a n to a form suitable for a diagnostic.
     static std::string yytnamerr_ (const char *n);
 
+
+    /// For a symbol, its name in clear.
+    static const char* const yytname_[];
 #if YYDEBUG
     /// A type to store symbol numbers and -1.
     typedef signed char rhs_number_type;
@@ -304,7 +281,7 @@ namespace yy {
 } // yy
 
 /* Line 36 of lalr1.cc  */
-#line 308 "../../../../examples/calc++/calc++-parser.hh"
+#line 285 "../../../../examples/calc++/calc++-parser.hh"
 
 
 

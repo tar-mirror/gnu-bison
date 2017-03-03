@@ -6,10 +6,10 @@
 # Frédéric Marchal <fmarchal@perso.be>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: GNU bison 2.5.1-rc2\n"
+"Project-Id-Version: GNU bison 2.5.90\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-06-05 10:07+0200\n"
-"PO-Revision-Date: 2012-05-27 20:17+0200\n"
+"POT-Creation-Date: 2012-07-19 15:26+0200\n"
+"PO-Revision-Date: 2012-07-06 10:11+0200\n"
 "Last-Translator: Frédéric Marchal <fmarchal@perso.be>\n"
 "Language-Team: French <traduc@traduc.org>\n"
 "Language: fr\n"
@@ -177,10 +177,11 @@ msgid ""
 "  -S, --skeleton=FILE              specify the skeleton to use\n"
 "  -t, --debug                      instrument the parser for debugging\n"
 "      --locations                  enable location support\n"
-"  -D, --define=NAME[=VALUE]        similar to `%define NAME \"VALUE\"'\n"
-"  -F, --force-define=NAME[=VALUE]  override `%define NAME \"VALUE\"'\n"
+"  -D, --define=NAME[=VALUE]        similar to '%define NAME \"VALUE\"'\n"
+"  -F, --force-define=NAME[=VALUE]  override '%define NAME \"VALUE\"'\n"
 "  -p, --name-prefix=PREFIX         prepend PREFIX to the external symbols\n"
-"  -l, --no-lines                   don't generate `#line' directives\n"
+"                                   deprecated by '-Dapi.prefix=PREFIX'\n"
+"  -l, --no-lines                   don't generate '#line' directives\n"
 "  -k, --token-table                include a table of token names\n"
 "\n"
 msgstr ""
@@ -195,11 +196,13 @@ msgstr ""
 "  -D, --define=NOM[=VALEUR]        similaire à « %define NOM \"VALEUR\" »\n"
 "  -F, --force-define=NOM[=VALEUR]  outrepasse « %define NOM \"VALEUR\" »\n"
 "  -p, --name-prefix=PREFIXE        accoler le PREFIXE aux symboles externes\n"
+"                                   rendu obsolète par « -Dapi."
+"prefix=PREFIXE »\n"
 "  -l, --no-lines                   ne pas générer les directives « #line »\n"
 "  -k, --token-table                inclure la table des noms de jetons\n"
 "\n"
 
-#: src/getargs.c:324
+#: src/getargs.c:325
 msgid ""
 "Output:\n"
 "      --defines[=FILE]       also produce a header file\n"
@@ -230,7 +233,7 @@ msgstr ""
 "                             (le schéma XML est expérimental)\n"
 "\n"
 
-#: src/getargs.c:339
+#: src/getargs.c:340
 msgid ""
 "Warning categories include:\n"
 "  `midrule-values'  unset or unused midrule values\n"
@@ -257,7 +260,7 @@ msgstr ""
 "  « error »           traite les avertissements comme des erreurs\n"
 "\n"
 
-#: src/getargs.c:353
+#: src/getargs.c:354
 msgid ""
 "THINGS is a list of comma separated words that can include:\n"
 "  `state'        describe the states\n"
@@ -275,7 +278,7 @@ msgstr ""
 "  `all'          inclure toutes les informations ci-haut\n"
 "  `none'         désactiver la génération de rapport\n"
 
-#: src/getargs.c:363
+#: src/getargs.c:364
 #, c-format
 msgid ""
 "\n"
@@ -284,21 +287,21 @@ msgstr ""
 "\n"
 "Rapportez toutes anomalies à <%s>.\n"
 
-#: src/getargs.c:379
+#: src/getargs.c:380
 #, c-format
 msgid "bison (GNU Bison) %s"
 msgstr "bison (GNU Bison) %s"
 
-#: src/getargs.c:381
+#: src/getargs.c:382
 msgid "Written by Robert Corbett and Richard Stallman.\n"
 msgstr "Écrit par Robert Corbett et Richard Stallman.\n"
 
-#: src/getargs.c:385
+#: src/getargs.c:386
 #, c-format
 msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
 msgstr "Copyright © %d Free Software Foundation, Inc.\n"
 
-#: src/getargs.c:388
+#: src/getargs.c:389
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
@@ -307,26 +310,26 @@ msgstr ""
 "reproduction. AUCUNE garantie n'est donnée; tant pour des raisons\n"
 "COMMERCIALES que pour RÉPONDRE À UN BESOIN PARTICULIER.\n"
 
-#: src/getargs.c:409
+#: src/getargs.c:410
 #, c-format
 msgid "multiple skeleton declarations are invalid"
 msgstr "déclarations multiples de squelettes sont inacceptables"
 
-#: src/getargs.c:427
+#: src/getargs.c:428
 #, c-format
 msgid "%s: invalid language"
 msgstr "%s: langage inacceptable"
 
-#: src/getargs.c:430
+#: src/getargs.c:431
 msgid "multiple language declarations are invalid"
 msgstr "les déclarations multiples du langage sont interdits"
 
-#: src/getargs.c:692
+#: src/getargs.c:693
 #, c-format
 msgid "%s: missing operand"
 msgstr "%s: opérande manquante"
 
-#: src/getargs.c:694
+#: src/getargs.c:695
 #, c-format
 msgid "extra operand %s"
 msgstr "opérande superflu %s"

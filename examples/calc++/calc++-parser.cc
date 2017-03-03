@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 2.5.1_rc2.2-9fbd.  */
+/* A Bison parser, made by GNU Bison 2.5.90.14-0e98.  */
 
 /* Skeleton implementation for Bison LALR(1) parsers in C++
    
@@ -34,7 +34,7 @@
 /* First part of user declarations.  */
 
 
-/* Line 298 of lalr1.cc  */
+/* Line 278 of lalr1.cc  */
 #line 39 "../../../../examples/calc++/calc++-parser.cc"
 
 
@@ -43,19 +43,28 @@
 /* User implementation prologue.  */
 
 
-/* Line 304 of lalr1.cc  */
+/* Line 284 of lalr1.cc  */
 #line 48 "../../../../examples/calc++/calc++-parser.cc"
 /* Unqualified %code blocks.  */
 
-/* Line 305 of lalr1.cc  */
-#line 9639 "../../doc/bison.texinfo"
+/* Line 285 of lalr1.cc  */
+#line 9707 "../../doc/bison.texi"
 
 # include "calc++-driver.hh"
 
 
 
-/* Line 305 of lalr1.cc  */
+/* Line 285 of lalr1.cc  */
 #line 59 "../../../../examples/calc++/calc++-parser.cc"
+
+
+# ifndef YY_NULL
+#  if defined __cplusplus && 201103L <= __cplusplus
+#   define YY_NULL nullptr
+#  else
+#   define YY_NULL 0
+#  endif
+# endif
 
 #ifndef YY_
 # if defined YYENABLE_NLS && YYENABLE_NLS
@@ -69,25 +78,26 @@
 # endif
 #endif
 
+#define YYRHSLOC(Rhs, K) ((Rhs)[K])
 /* YYLLOC_DEFAULT -- Set CURRENT to span from RHS[1] to RHS[N].
    If N is 0, then set CURRENT to the empty location which ends
    the previous symbol: RHS[0] (always defined).  */
 
-#define YYRHSLOC(Rhs, K) ((Rhs)[K])
-#ifndef YYLLOC_DEFAULT
-# define YYLLOC_DEFAULT(Current, Rhs, N)                               \
- do                                                                    \
-   if (N)                                                              \
-     {                                                                 \
-       (Current).begin = YYRHSLOC (Rhs, 1).begin;                      \
-       (Current).end   = YYRHSLOC (Rhs, N).end;                        \
-     }                                                                 \
-   else                                                                \
-     {                                                                 \
-       (Current).begin = (Current).end = YYRHSLOC (Rhs, 0).end;        \
-     }                                                                 \
- while (false)
-#endif
+# ifndef YYLLOC_DEFAULT
+#  define YYLLOC_DEFAULT(Current, Rhs, N)                               \
+    do                                                                  \
+      if (N)                                                            \
+        {                                                               \
+          (Current).begin  = YYRHSLOC (Rhs, 1).begin;                   \
+          (Current).end    = YYRHSLOC (Rhs, N).end;                     \
+        }                                                               \
+      else                                                              \
+        {                                                               \
+          (Current).begin = (Current).end = YYRHSLOC (Rhs, 0).end;      \
+        }                                                               \
+    while (/*CONSTCOND*/ false)
+# endif
+
 
 /* Suppress unused-variable warnings by "using" E.  */
 #define YYUSE(e) ((void) (e))
@@ -140,8 +150,8 @@ do {					\
 
 namespace yy {
 
-/* Line 387 of lalr1.cc  */
-#line 145 "../../../../examples/calc++/calc++-parser.cc"
+/* Line 352 of lalr1.cc  */
+#line 155 "../../../../examples/calc++/calc++-parser.cc"
 
   /* Return YYSTR after stripping away unnecessary quotes and
      backslashes, so that it's suitable for yyerror.  The heuristic is
@@ -214,30 +224,30 @@ namespace yy {
       {
         case 4: /* "\"identifier\"" */
 
-/* Line 457 of lalr1.cc  */
-#line 9668 "../../doc/bison.texinfo"
+/* Line 422 of lalr1.cc  */
+#line 9736 "../../doc/bison.texi"
 	{ yyoutput << *(yyvaluep->sval); };
 
-/* Line 457 of lalr1.cc  */
-#line 223 "../../../../examples/calc++/calc++-parser.cc"
+/* Line 422 of lalr1.cc  */
+#line 233 "../../../../examples/calc++/calc++-parser.cc"
 	break;
       case 5: /* "\"number\"" */
 
-/* Line 457 of lalr1.cc  */
-#line 9671 "../../doc/bison.texinfo"
+/* Line 422 of lalr1.cc  */
+#line 9739 "../../doc/bison.texi"
 	{ yyoutput << (yyvaluep->ival); };
 
-/* Line 457 of lalr1.cc  */
-#line 232 "../../../../examples/calc++/calc++-parser.cc"
+/* Line 422 of lalr1.cc  */
+#line 242 "../../../../examples/calc++/calc++-parser.cc"
 	break;
       case 14: /* "exp" */
 
-/* Line 457 of lalr1.cc  */
-#line 9671 "../../doc/bison.texinfo"
+/* Line 422 of lalr1.cc  */
+#line 9739 "../../doc/bison.texi"
 	{ yyoutput << (yyvaluep->ival); };
 
-/* Line 457 of lalr1.cc  */
-#line 241 "../../../../examples/calc++/calc++-parser.cc"
+/* Line 422 of lalr1.cc  */
+#line 251 "../../../../examples/calc++/calc++-parser.cc"
 	break;
        default:
 	  break;
@@ -271,12 +281,12 @@ namespace yy {
       {
         case 4: /* "\"identifier\"" */
 
-/* Line 488 of lalr1.cc  */
-#line 9669 "../../doc/bison.texinfo"
+/* Line 453 of lalr1.cc  */
+#line 9737 "../../doc/bison.texi"
 	{ delete (yyvaluep->sval); };
 
-/* Line 488 of lalr1.cc  */
-#line 280 "../../../../examples/calc++/calc++-parser.cc"
+/* Line 453 of lalr1.cc  */
+#line 290 "../../../../examples/calc++/calc++-parser.cc"
 	break;
 
 	default:
@@ -366,15 +376,15 @@ namespace yy {
 
     /* User initialization code.  */
     
-/* Line 573 of lalr1.cc  */
-#line 9601 "../../doc/bison.texinfo"
+/* Line 538 of lalr1.cc  */
+#line 9669 "../../doc/bison.texi"
 {
   // Initialize the initial location.
   yylloc.begin.filename = yylloc.end.filename = &driver.file;
 }
 
-/* Line 573 of lalr1.cc  */
-#line 378 "../../../../examples/calc++/calc++-parser.cc"
+/* Line 538 of lalr1.cc  */
+#line 388 "../../../../examples/calc++/calc++-parser.cc"
 
     /* Initialize the stacks.  The initial state will be pushed in
        yynewstate, since the latter expects the semantical and the
@@ -492,78 +502,78 @@ namespace yy {
       {
 	  case 2:
 
-/* Line 698 of lalr1.cc  */
-#line 9681 "../../doc/bison.texinfo"
+/* Line 663 of lalr1.cc  */
+#line 9749 "../../doc/bison.texi"
     { driver.result = (yysemantic_stack_[(2) - (2)].ival); }
     break;
 
   case 3:
 
-/* Line 698 of lalr1.cc  */
-#line 9684 "../../doc/bison.texinfo"
+/* Line 663 of lalr1.cc  */
+#line 9752 "../../doc/bison.texi"
     {}
     break;
 
   case 4:
 
-/* Line 698 of lalr1.cc  */
-#line 9685 "../../doc/bison.texinfo"
+/* Line 663 of lalr1.cc  */
+#line 9753 "../../doc/bison.texi"
     {}
     break;
 
   case 5:
 
-/* Line 698 of lalr1.cc  */
-#line 9689 "../../doc/bison.texinfo"
+/* Line 663 of lalr1.cc  */
+#line 9757 "../../doc/bison.texi"
     { driver.variables[*(yysemantic_stack_[(3) - (1)].sval)] = (yysemantic_stack_[(3) - (3)].ival); delete (yysemantic_stack_[(3) - (1)].sval); }
     break;
 
   case 6:
 
-/* Line 698 of lalr1.cc  */
-#line 9693 "../../doc/bison.texinfo"
+/* Line 663 of lalr1.cc  */
+#line 9761 "../../doc/bison.texi"
     { (yyval.ival) = (yysemantic_stack_[(3) - (1)].ival) + (yysemantic_stack_[(3) - (3)].ival); }
     break;
 
   case 7:
 
-/* Line 698 of lalr1.cc  */
-#line 9694 "../../doc/bison.texinfo"
+/* Line 663 of lalr1.cc  */
+#line 9762 "../../doc/bison.texi"
     { (yyval.ival) = (yysemantic_stack_[(3) - (1)].ival) - (yysemantic_stack_[(3) - (3)].ival); }
     break;
 
   case 8:
 
-/* Line 698 of lalr1.cc  */
-#line 9695 "../../doc/bison.texinfo"
+/* Line 663 of lalr1.cc  */
+#line 9763 "../../doc/bison.texi"
     { (yyval.ival) = (yysemantic_stack_[(3) - (1)].ival) * (yysemantic_stack_[(3) - (3)].ival); }
     break;
 
   case 9:
 
-/* Line 698 of lalr1.cc  */
-#line 9696 "../../doc/bison.texinfo"
+/* Line 663 of lalr1.cc  */
+#line 9764 "../../doc/bison.texi"
     { (yyval.ival) = (yysemantic_stack_[(3) - (1)].ival) / (yysemantic_stack_[(3) - (3)].ival); }
     break;
 
   case 10:
 
-/* Line 698 of lalr1.cc  */
-#line 9697 "../../doc/bison.texinfo"
+/* Line 663 of lalr1.cc  */
+#line 9765 "../../doc/bison.texi"
     { (yyval.ival) = driver.variables[*(yysemantic_stack_[(1) - (1)].sval)]; delete (yysemantic_stack_[(1) - (1)].sval); }
     break;
 
   case 11:
 
-/* Line 698 of lalr1.cc  */
-#line 9698 "../../doc/bison.texinfo"
+/* Line 663 of lalr1.cc  */
+#line 9766 "../../doc/bison.texi"
     { (yyval.ival) = (yysemantic_stack_[(1) - (1)].ival); }
     break;
 
 
 
-/* Line 698 of lalr1.cc  */
-#line 567 "../../../../examples/calc++/calc++-parser.cc"
+/* Line 663 of lalr1.cc  */
+#line 577 "../../../../examples/calc++/calc++-parser.cc"
 	default:
           break;
       }
@@ -923,7 +933,7 @@ namespace yy {
        1,     1
   };
 
-#if YYDEBUG || YYERROR_VERBOSE || YYTOKEN_TABLE
+
   /* YYTNAME[SYMBOL-NUM] -- String name of the symbol SYMBOL-NUM.
      First, the terminals, then, starting at \a yyntokens_, nonterminals.  */
   const char*
@@ -933,7 +943,6 @@ namespace yy {
   "\"number\"", "'+'", "'-'", "'*'", "'/'", "$accept", "unit",
   "assignments", "assignment", "exp", YY_NULL
   };
-#endif
 
 #if YYDEBUG
   /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
@@ -959,8 +968,8 @@ namespace yy {
   const unsigned short int
   calcxx_parser::yyrline_[] =
   {
-         0,  9681,  9681,  9684,  9685,  9688,  9693,  9694,  9695,  9696,
-    9697,  9698
+         0,  9749,  9749,  9752,  9753,  9756,  9761,  9762,  9763,  9764,
+    9765,  9766
   };
 
   // Print the state stack on the debug stream.
@@ -1049,13 +1058,13 @@ namespace yy {
 
 } // yy
 
-/* Line 1144 of lalr1.cc  */
-#line 1054 "../../../../examples/calc++/calc++-parser.cc"
+/* Line 1108 of lalr1.cc  */
+#line 1063 "../../../../examples/calc++/calc++-parser.cc"
 
-/* Line 1145 of lalr1.cc  */
-#line 9699 "../../doc/bison.texinfo"
+/* Line 1109 of lalr1.cc  */
+#line 9767 "../../doc/bison.texi"
 
-#line 9708 "../../doc/bison.texinfo"
+#line 9776 "../../doc/bison.texi"
 void
 yy::calcxx_parser::error (const yy::calcxx_parser::location_type& l,
                           const std::string& m)

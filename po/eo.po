@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bison 2.5\n"
+"Project-Id-Version: bison 2.5.90\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-06-05 10:07+0200\n"
-"PO-Revision-Date: 2012-01-28 21:37-0300\n"
+"POT-Creation-Date: 2012-07-19 15:26+0200\n"
+"PO-Revision-Date: 2012-07-05 20:47-0300\n"
 "Last-Translator: Felipe Castro <fefcas@gmail.com>\n"
 "Language-Team: Esperanto <translation-team-eo@lists.sourceforge.net>\n"
 "Language: eo\n"
@@ -81,14 +81,14 @@ msgstr[0] "estis atendata %d konflikto redukto/redukto"
 msgstr[1] "estis atendataj %d konfliktoj redukto/redukto"
 
 #: src/files.c:114
-#, fuzzy, c-format
+#, c-format
 msgid "%s: cannot open"
-msgstr "ne eblas malfermi dosieron '%s'"
+msgstr "%s: ne eblas malfermi"
 
 #: src/files.c:130
 #, c-format
 msgid "input/output error"
-msgstr ""
+msgstr "enig/eliga eraro"
 
 #: src/files.c:133
 #, c-format
@@ -169,10 +169,11 @@ msgid ""
 "  -S, --skeleton=FILE              specify the skeleton to use\n"
 "  -t, --debug                      instrument the parser for debugging\n"
 "      --locations                  enable location support\n"
-"  -D, --define=NAME[=VALUE]        similar to `%define NAME \"VALUE\"'\n"
-"  -F, --force-define=NAME[=VALUE]  override `%define NAME \"VALUE\"'\n"
+"  -D, --define=NAME[=VALUE]        similar to '%define NAME \"VALUE\"'\n"
+"  -F, --force-define=NAME[=VALUE]  override '%define NAME \"VALUE\"'\n"
 "  -p, --name-prefix=PREFIX         prepend PREFIX to the external symbols\n"
-"  -l, --no-lines                   don't generate `#line' directives\n"
+"                                   deprecated by '-Dapi.prefix=PREFIX'\n"
+"  -l, --no-lines                   don't generate '#line' directives\n"
 "  -k, --token-table                include a table of token names\n"
 "\n"
 msgstr ""
@@ -186,11 +187,13 @@ msgstr ""
 "  -F, --force-define=NOMO[=VALORO] anstataŭigi '%define NOMO \"VALORO\"'\n"
 "  -p, --name-prefix=PREFIKSO       antaŭmeti PREFIKSOn al la eksteraj "
 "simboloj\n"
+"                                   anstataŭiginde per '-Dapi."
+"prefix=PREFIKSO'\n"
 "  -l, --no-lines                   ne generi instrukciojn '#line'\n"
 "  -k, --token-table                inkluzivigi tabelon de ĵetono-nomoj\n"
 "\n"
 
-#: src/getargs.c:324
+#: src/getargs.c:325
 msgid ""
 "Output:\n"
 "      --defines[=FILE]       also produce a header file\n"
@@ -220,7 +223,7 @@ msgstr ""
 "                             (la XML-skemo estas eksperimenta)\n"
 "\n"
 
-#: src/getargs.c:339
+#: src/getargs.c:340
 msgid ""
 "Warning categories include:\n"
 "  `midrule-values'  unset or unused midrule values\n"
@@ -246,7 +249,7 @@ msgstr ""
 "  `error'           trakti avertojn kiel erarojn\n"
 "\n"
 
-#: src/getargs.c:353
+#: src/getargs.c:354
 msgid ""
 "THINGS is a list of comma separated words that can include:\n"
 "  `state'        describe the states\n"
@@ -264,7 +267,7 @@ msgstr ""
 "  `all'          inkluzivigi la tutan informaron supre\n"
 "  `none'         malebligi la raporton\n"
 
-#: src/getargs.c:363
+#: src/getargs.c:364
 #, c-format
 msgid ""
 "\n"
@@ -273,21 +276,21 @@ msgstr ""
 "\n"
 "Raportu misojn al <%s>.\n"
 
-#: src/getargs.c:379
+#: src/getargs.c:380
 #, c-format
 msgid "bison (GNU Bison) %s"
 msgstr "bison (GNU-a Bison) %s"
 
-#: src/getargs.c:381
+#: src/getargs.c:382
 msgid "Written by Robert Corbett and Richard Stallman.\n"
 msgstr "Verkita de Robert Corbett kaj Richard Stallman.\n"
 
-#: src/getargs.c:385
+#: src/getargs.c:386
 #, c-format
 msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
 msgstr "Kopirajto (C) %d Free Software Foundation, Inc.\n"
 
-#: src/getargs.c:388
+#: src/getargs.c:389
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
@@ -296,29 +299,29 @@ msgstr ""
 "Ekzistas NENIU\n"
 "garantio; eĉ ne por MERKATIGO aŭ TAŬGO POR PRIVATA CELO.\n"
 
-#: src/getargs.c:409
+#: src/getargs.c:410
 #, c-format
 msgid "multiple skeleton declarations are invalid"
 msgstr "multoblaj deklaroj de skeleto ne estas valide"
 
-#: src/getargs.c:427
-#, fuzzy, c-format
+#: src/getargs.c:428
+#, c-format
 msgid "%s: invalid language"
-msgstr "malvalida lingvo '%s'"
+msgstr "%s: malvalida lingvo"
 
-#: src/getargs.c:430
+#: src/getargs.c:431
 msgid "multiple language declarations are invalid"
 msgstr "multoblaj deklaroj de lingvo ne estas valide"
 
-#: src/getargs.c:692
-#, fuzzy, c-format
+#: src/getargs.c:693
+#, c-format
 msgid "%s: missing operand"
-msgstr "mankas argumento post '%s'"
+msgstr "%s: mankas argumento"
 
-#: src/getargs.c:694
-#, fuzzy, c-format
+#: src/getargs.c:695
+#, c-format
 msgid "extra operand %s"
-msgstr "kroma argumento '%s'"
+msgstr "kroma argumento %s"
 
 #: src/gram.c:112
 msgid "empty"
@@ -356,9 +359,9 @@ msgid "rule useless in parser due to conflicts"
 msgstr "regulo neutila en analizilo pro konfliktoj"
 
 #: src/muscle-tab.c:428
-#, fuzzy, c-format
+#, c-format
 msgid "%%define variable %s redefined"
-msgstr "'%%define'-variablo '%s' estis redifinata"
+msgstr "'%%define'-variablo %s estis redifinata"
 
 #: src/muscle-tab.c:431
 #, c-format
@@ -367,24 +370,24 @@ msgstr "antaŭa difino"
 
 #: src/muscle-tab.c:470 src/muscle-tab.c:484 src/muscle-tab.c:536
 #: src/muscle-tab.c:601
-#, fuzzy, c-format
+#, c-format
 msgid "%s: undefined %%define variable %s"
-msgstr "malvalida valoro por '%%define'-variablo '%s': '%s'"
+msgstr "%s: nedifinita '%%define'-variablo %s"
 
 #: src/muscle-tab.c:530
-#, fuzzy, c-format
+#, c-format
 msgid "invalid value for %%define Boolean variable %s"
-msgstr "malvalida valoro por bulea '%%define'-variablo '%s'"
+msgstr "malvalida valoro por bulea '%%define'-variablo %s"
 
 #: src/muscle-tab.c:588
-#, fuzzy, c-format
+#, c-format
 msgid "invalid value for %%define variable %s: %s"
-msgstr "malvalida valoro por '%%define'-variablo '%s': '%s'"
+msgstr "malvalida valoro por '%%define'-variablo %s: %s"
 
 #: src/muscle-tab.c:591
-#, fuzzy, c-format
+#, c-format
 msgid "accepted value: %s"
-msgstr "akceptita valoro: '%s'"
+msgstr "akceptita valoro: %s"
 
 #: src/parse-gram.y:734
 #, c-format
@@ -457,9 +460,9 @@ msgid "multiple %s declarations"
 msgstr "multoblaj deklaroj %s"
 
 #: src/reader.c:132
-#, fuzzy, c-format
+#, c-format
 msgid "result type clash on merge function %s: <%s> != <%s>"
-msgstr "kolizio de rezulto-tipo je la kunmiksa funkcio '%s': <%s> != <%s>"
+msgstr "kolizio de rezulto-tipo je la kunmiksa funkcio %s: <%s> != <%s>"
 
 #: src/reader.c:135 src/symtab.c:154 src/symtab.c:162 src/symtab.c:929
 #: src/symtab.c:942 src/symtab.c:955 src/symtab.c:968
@@ -567,22 +570,22 @@ msgid "start symbol %s does not derive any sentence"
 msgstr "ekiga simbolo %s ne derivas iun ajn frazon"
 
 #: src/scan-code.l:200
-#, fuzzy, c-format
+#, c-format
 msgid "stray '$'"
 msgstr "perdita '$'"
 
 #: src/scan-code.l:205
-#, fuzzy, c-format
+#, c-format
 msgid "stray '@'"
 msgstr "perdita '@'"
 
 #: src/scan-code.l:230
-#, fuzzy, c-format
+#, c-format
 msgid "a ';' might be needed at the end of action code"
 msgstr "';' povus esti neceza ĉe la fino de ago-kodo"
 
 #: src/scan-code.l:231
-#, fuzzy, c-format
+#, c-format
 msgid "future versions of Bison will not add the ';'"
 msgstr "estontaj versioj de Bison ne aldonos la ';'"
 
@@ -627,7 +630,7 @@ msgid "invalid reference: %s"
 msgstr "malvalida referenco: %s"
 
 #: src/scan-code.l:629
-#, fuzzy, c-format
+#, c-format
 msgid "syntax error after '%c', expecting integer, letter, '_', '[', or '$'"
 msgstr ""
 "sintaksa eraro post '%c', estas atendata entjero, litero, '_', '[' aŭ '$'"
@@ -658,22 +661,22 @@ msgid "explicit type given in untyped grammar"
 msgstr "malimplicita tipo liverita en netipigita gramatiko"
 
 #: src/scan-code.l:757
-#, fuzzy, c-format
+#, c-format
 msgid "$$ for the midrule at $%d of %s has no declared type"
-msgstr "$$ por la mezregulo ĉe $%d de '%s' havas neniun deklaritan tipon "
+msgstr "$$ por la mezregulo ĉe $%d de %s havas neniun deklaritan tipon "
 
 #: src/scan-code.l:762
-#, fuzzy, c-format
+#, c-format
 msgid "$$ of %s has no declared type"
-msgstr "$$ de '%s' havas neniun deklaritan tipon"
+msgstr "$$ de %s havas neniun deklaritan tipon"
 
 #: src/scan-code.l:784
-#, fuzzy, c-format
+#, c-format
 msgid "$%s of %s has no declared type"
-msgstr "$%s de '%s' havas neniun deklaritan tipon"
+msgstr "$%s de %s havas neniun deklaritan tipon"
 
 #: src/scan-gram.l:149
-#, fuzzy, c-format
+#, c-format
 msgid "stray ',' treated as white space"
 msgstr "perdita ',' traktita kiel blank-spacon"
 
@@ -733,14 +736,14 @@ msgid "invalid character after \\-escape: %s"
 msgstr "malvalida signo post \\-eskapo: %s"
 
 #: src/scan-gram.l:891
-#, fuzzy, c-format
+#, c-format
 msgid "missing %s at end of file"
-msgstr "mankas '%s' ĉe la dosierfino"
+msgstr "mankas %s ĉe la dosierfino"
 
 #: src/scan-gram.l:902
-#, fuzzy, c-format
+#, c-format
 msgid "missing %s at end of line"
-msgstr "mankas '%s' ĉe la linifino"
+msgstr "mankas %s ĉe la linifino"
 
 #: src/scan-skel.l:144
 #, c-format
@@ -805,14 +808,14 @@ msgstr ""
 "regulon"
 
 #: src/symtab.c:411
-#, fuzzy, c-format
+#, c-format
 msgid "symbol %s used more than once as a literal string"
-msgstr "simbolo '%s' estas uzata pli ol unufoje kiel literan ĉenon"
+msgstr "simbolo %s estas uzata pli ol unufoje kiel literan ĉenon"
 
 #: src/symtab.c:414
-#, fuzzy, c-format
+#, c-format
 msgid "symbol %s given more than one literal string"
-msgstr "al simbolo '%s' estis donata pli ol unu litera ĉeno"
+msgstr "al la simbolo %s estis donata pli ol unu litera ĉeno"
 
 #: src/symtab.c:530
 #, c-format
@@ -857,62 +860,62 @@ msgstr "redeklaro por apriore senmarka '%%printer'"
 #: djgpp/subpipe.c:63 djgpp/subpipe.c:286 djgpp/subpipe.c:288
 #, c-format
 msgid "removing of '%s' failed"
-msgstr ""
+msgstr "forigo de '%s' fiaskis"
 
 #: djgpp/subpipe.c:85 djgpp/subpipe.c:92
 #, c-format
 msgid "creation of a temporary file failed"
-msgstr ""
+msgstr "kreado de provizora dosiero fiaskis"
 
 #: djgpp/subpipe.c:127
 #, c-format
 msgid "saving stdin failed"
-msgstr ""
+msgstr "konservado de norm-enigo fiaskis"
 
 #: djgpp/subpipe.c:131
 #, c-format
 msgid "saving stdout failed"
-msgstr ""
+msgstr "konservado de norm-eligo fiaskis"
 
 #: djgpp/subpipe.c:153 djgpp/subpipe.c:197 djgpp/subpipe.c:258
-#, fuzzy, c-format
+#, c-format
 msgid "opening of tmpfile failed"
-msgstr "_open_osfhandle fiaskis"
+msgstr "malfermo de tmpfile fiaskis"
 
 #: djgpp/subpipe.c:157
 #, c-format
 msgid "redirecting bison's stdout to the temporary file failed"
-msgstr ""
+msgstr "redirektado de la norm-eligo de bison al la provizora dosiero fiaskis "
 
 #: djgpp/subpipe.c:201
 #, c-format
 msgid "redirecting m4's stdin from the temporary file failed"
-msgstr ""
+msgstr "redirektado de la norm-enigo de m4 de la provizora dosiero fiaskis"
 
 #: djgpp/subpipe.c:212
 #, c-format
 msgid "opening of a temporary file failed"
-msgstr ""
+msgstr "malfermo de provizora dosiero fiaskis"
 
 #: djgpp/subpipe.c:218
 #, c-format
 msgid "redirecting m4's stdout to a temporary file failed"
-msgstr ""
+msgstr "redirektado de la norm-eligo de m4 al provizora dosiero fiaskis"
 
 #: djgpp/subpipe.c:234
 #, c-format
 msgid "subsidiary program '%s' interrupted"
-msgstr ""
+msgstr "la helpa programo '%s' ĉesis"
 
 #: djgpp/subpipe.c:241
 #, c-format
 msgid "subsidiary program '%s' not found"
-msgstr ""
+msgstr "la helpa programo '%s' ne estis trovata"
 
 #: djgpp/subpipe.c:265
 #, c-format
 msgid "redirecting bison's stdin from the temporary file failed"
-msgstr ""
+msgstr "redirektado de la norm-enigo de bison al provizora dosiero fiaskis"
 
 #: lib/argmatch.c:133
 #, c-format
@@ -980,38 +983,34 @@ msgid "Accumulated runs = %u\n"
 msgstr "Akumulitaj ruloj = %u\n"
 
 #: lib/bitset_stats.c:259 lib/bitset_stats.c:264
-#, fuzzy
 msgid "cannot read stats file"
-msgstr "Ne eblis legi statistikan dosieron."
+msgstr "ne eblas legi statistikan dosieron"
 
 #: lib/bitset_stats.c:261
-#, fuzzy, c-format
+#, c-format
 msgid "bad stats file size\n"
-msgstr "Malĝusta grando de statistika dosiero.\n"
+msgstr "malĝusta grando de statistika dosiero\n"
 
 #: lib/bitset_stats.c:287 lib/bitset_stats.c:289
-#, fuzzy
 msgid "cannot write stats file"
-msgstr "Ne eblis skribi statistikan dosieron."
+msgstr "Ne eblas skribi statistikan dosieron"
 
 #: lib/bitset_stats.c:292
-#, fuzzy
 msgid "cannot open stats file for writing"
-msgstr "ne eblis malfermi statistikan dosieron por skribado."
+msgstr "ne eblas malfermi statistikan dosieron por skribado"
 
 #: lib/closeout.c:112
-#, fuzzy
 msgid "write error"
-msgstr "neriparebla eraro"
+msgstr "skriba eraro"
 
 #: lib/error.c:188
 msgid "Unknown system error"
 msgstr "Nekonata sistem-eraro"
 
 #: lib/getopt.c:547 lib/getopt.c:576
-#, fuzzy, c-format
+#, c-format
 msgid "%s: option '%s' is ambiguous; possibilities:"
-msgstr "%s: elektilo '%s' estas plursenca\n"
+msgstr "%s: elektilo '%s' estas plursenca; eblecoj:"
 
 #: lib/getopt.c:624 lib/getopt.c:628
 #, c-format

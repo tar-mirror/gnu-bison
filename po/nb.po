@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.0\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-06-05 10:07+0200\n"
+"POT-Creation-Date: 2012-07-19 15:26+0200\n"
 "PO-Revision-Date: 2005-03-01 10:06+0100\n"
 "Last-Translator: Trond Endrestøl <Trond.Endrestol@gtf.ol.no>\n"
 "Language-Team: Norwegian Bokmaal <i18n-nb@lister.ping.uio.no>\n"
@@ -171,10 +171,11 @@ msgid ""
 "  -S, --skeleton=FILE              specify the skeleton to use\n"
 "  -t, --debug                      instrument the parser for debugging\n"
 "      --locations                  enable location support\n"
-"  -D, --define=NAME[=VALUE]        similar to `%define NAME \"VALUE\"'\n"
-"  -F, --force-define=NAME[=VALUE]  override `%define NAME \"VALUE\"'\n"
+"  -D, --define=NAME[=VALUE]        similar to '%define NAME \"VALUE\"'\n"
+"  -F, --force-define=NAME[=VALUE]  override '%define NAME \"VALUE\"'\n"
 "  -p, --name-prefix=PREFIX         prepend PREFIX to the external symbols\n"
-"  -l, --no-lines                   don't generate `#line' directives\n"
+"                                   deprecated by '-Dapi.prefix=PREFIX'\n"
+"  -l, --no-lines                   don't generate '#line' directives\n"
 "  -k, --token-table                include a table of token names\n"
 "\n"
 msgstr ""
@@ -188,7 +189,7 @@ msgstr ""
 "  -n, --no-parser            bare generer tabellene\n"
 "  -k, --token-table          legg ved en tabell med tokennavnene\n"
 
-#: src/getargs.c:324
+#: src/getargs.c:325
 #, fuzzy
 msgid ""
 "Output:\n"
@@ -213,7 +214,7 @@ msgstr ""
 "  -o, --output=FIL           send output til FIL\n"
 "  -g, --graph                også lag en VCG-beskrivelse av automaten\n"
 
-#: src/getargs.c:339
+#: src/getargs.c:340
 msgid ""
 "Warning categories include:\n"
 "  `midrule-values'  unset or unused midrule values\n"
@@ -228,7 +229,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/getargs.c:353
+#: src/getargs.c:354
 #, fuzzy
 msgid ""
 "THINGS is a list of comma separated words that can include:\n"
@@ -247,28 +248,28 @@ msgstr ""
 "  «all»          inkludere alt av den overstående informasjonen\n"
 "  «none»         slå av all rapportering\n"
 
-#: src/getargs.c:363
+#: src/getargs.c:364
 #, fuzzy, c-format
 msgid ""
 "\n"
 "Report bugs to <%s>.\n"
 msgstr "Rapporter feil til <bug-bison@gnu.org>.\n"
 
-#: src/getargs.c:379
+#: src/getargs.c:380
 #, c-format
 msgid "bison (GNU Bison) %s"
 msgstr "bison (GNU Bison) %s"
 
-#: src/getargs.c:381
+#: src/getargs.c:382
 msgid "Written by Robert Corbett and Richard Stallman.\n"
 msgstr "Skrevet av Robert Corbett og Richard Stallman.\n"
 
-#: src/getargs.c:385
+#: src/getargs.c:386
 #, c-format
 msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
 msgstr "Copyright (C) %d Free Software Foundation, Inc.\n"
 
-#: src/getargs.c:388
+#: src/getargs.c:389
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
@@ -277,27 +278,27 @@ msgstr ""
 "Det er INGEN garanti; ikke en gang for SALGBARHET eller SKIKKETHET\n"
 "FOR ET BESTEMT FORMÅL.\n"
 
-#: src/getargs.c:409
+#: src/getargs.c:410
 #, fuzzy, c-format
 msgid "multiple skeleton declarations are invalid"
 msgstr "flere deklarasjoner av %s"
 
-#: src/getargs.c:427
+#: src/getargs.c:428
 #, fuzzy, c-format
 msgid "%s: invalid language"
 msgstr "ugyldig verdi: %s"
 
-#: src/getargs.c:430
+#: src/getargs.c:431
 #, fuzzy
 msgid "multiple language declarations are invalid"
 msgstr "flere deklarasjoner av %s"
 
-#: src/getargs.c:692
+#: src/getargs.c:693
 #, fuzzy, c-format
 msgid "%s: missing operand"
 msgstr "mangler operand etter «%s»"
 
-#: src/getargs.c:694
+#: src/getargs.c:695
 #, fuzzy, c-format
 msgid "extra operand %s"
 msgstr "ekstra operand «%s»"

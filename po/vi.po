@@ -6,10 +6,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bison-2.5.1-rc2\n"
+"Project-Id-Version: bison-2.5.90\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-06-05 10:07+0200\n"
-"PO-Revision-Date: 2012-05-27 08:49+0700\n"
+"POT-Creation-Date: 2012-07-19 15:26+0200\n"
+"PO-Revision-Date: 2012-07-06 07:12+0700\n"
 "Last-Translator: Trần Ngọc Quân <vnwildman@gmail.com>\n"
 "Language-Team: Vietnamese <translation-team-vi@lists.sourceforge.net>\n"
 "Language: vi\n"
@@ -105,7 +105,7 @@ msgstr "không thể đóng tập tin"
 #: src/files.c:352
 #, c-format
 msgid "refusing to overwrite the input file %s"
-msgstr "từ chối ghi đè lên tập tin nhập vào %s"
+msgstr "từ chối ghi đè lên tập tin đầu vào %s"
 
 #: src/files.c:362
 #, c-format
@@ -179,27 +179,30 @@ msgid ""
 "  -S, --skeleton=FILE              specify the skeleton to use\n"
 "  -t, --debug                      instrument the parser for debugging\n"
 "      --locations                  enable location support\n"
-"  -D, --define=NAME[=VALUE]        similar to `%define NAME \"VALUE\"'\n"
-"  -F, --force-define=NAME[=VALUE]  override `%define NAME \"VALUE\"'\n"
+"  -D, --define=NAME[=VALUE]        similar to '%define NAME \"VALUE\"'\n"
+"  -F, --force-define=NAME[=VALUE]  override '%define NAME \"VALUE\"'\n"
 "  -p, --name-prefix=PREFIX         prepend PREFIX to the external symbols\n"
-"  -l, --no-lines                   don't generate `#line' directives\n"
+"                                   deprecated by '-Dapi.prefix=PREFIX'\n"
+"  -l, --no-lines                   don't generate '#line' directives\n"
 "  -k, --token-table                include a table of token names\n"
 "\n"
 msgstr ""
-"Cơ chế phân tích cú pháp:\n"
+"Bộ phân tích cú pháp:\n"
 "  -L, --language=NGÔN_NGỮ    ghi rõ ngôn ngữ lập trình kết xuất\n"
 "                                   (đây là một tính năng vẫn còn thực "
 "nghiệm)\n"
-"  -S, --skeleton=TẬP_TIN        xác định khung sườn cần dùng\n"
+"  -S, --skeleton=TẬP_TIN        chỉ định khung sườn cần dùng\n"
 "  -t, --debug                thiết lập cơ chế phân tích để gỡ lỗi\n"
 "      --locations            cho phép hỗ trợ về vị trí\n"
 "  -D, --define=NAME[=VALUE]        tương tự như `%define NAME \"VALUE\"'\n"
 "  -F, --force-define=NAME[=VALUE]  đè lên `%define NAME \"VALUE\"'\n"
 "  -p, --name-prefix=TIỀN_TỐ    đặt tiền tố nào vào trước ký hiệu ngoài\n"
-"  -l, --no-lines             đừng tạo chỉ thị kiểu \"#line\"\n"
-"  -k, --token-table          thêm một bảng các tên hiệu bài\n"
+"                                   phản đối bởi '-Dapi.prefix=PREFIX'\n"
+"  -l, --no-lines             không tạo chỉ thị kiểu \"#line\"\n"
+"  -k, --token-table          bao gồm bảng các tên hiệu bài\n"
+"\n"
 
-#: src/getargs.c:324
+#: src/getargs.c:325
 msgid ""
 "Output:\n"
 "      --defines[=FILE]       also produce a header file\n"
@@ -229,7 +232,7 @@ msgstr ""
 "\t\t\t\t\t\t(giản đồ XML vẫn còn thực nghiệm)\n"
 "\n"
 
-#: src/getargs.c:339
+#: src/getargs.c:340
 msgid ""
 "Warning categories include:\n"
 "  `midrule-values'  unset or unused midrule values\n"
@@ -255,7 +258,7 @@ msgstr ""
 " • error           \txử lý cảnh báo dưới dạng lỗi\n"
 "\n"
 
-#: src/getargs.c:353
+#: src/getargs.c:354
 msgid ""
 "THINGS is a list of comma separated words that can include:\n"
 "  `state'        describe the states\n"
@@ -273,7 +276,7 @@ msgstr ""
 " • all          \tbao gồm tất cả thông tin trên\n"
 " • none\t\ttắt báo cáo\n"
 
-#: src/getargs.c:363
+#: src/getargs.c:364
 #, c-format
 msgid ""
 "\n"
@@ -282,21 +285,21 @@ msgstr ""
 "\n"
 "Hãy thông báo lỗi cho <%s>.\n"
 
-#: src/getargs.c:379
+#: src/getargs.c:380
 #, c-format
 msgid "bison (GNU Bison) %s"
 msgstr "bison (GNU Bison) %s"
 
-#: src/getargs.c:381
+#: src/getargs.c:382
 msgid "Written by Robert Corbett and Richard Stallman.\n"
 msgstr "Tác giả: Robert Corbett và Richard Stallman.\n"
 
-#: src/getargs.c:385
+#: src/getargs.c:386
 #, c-format
 msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
 msgstr "Bản quyền © %d Tổ chức Phần mềm Tự do.\n"
 
-#: src/getargs.c:388
+#: src/getargs.c:389
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
@@ -305,26 +308,26 @@ msgstr ""
 "KHÔNG CÓ BẢO HÀNH GÌ CẢ, THẬM CHÍ KHÔNG CÓ BẢO ĐẢM ĐƯỢC NGỤ Ý\n"
 "KHẢ NĂNG BÁN HAY KHẢ NĂNG LÀM ĐƯỢC VIỆC DỨT KHOÁT.\n"
 
-#: src/getargs.c:409
+#: src/getargs.c:410
 #, c-format
 msgid "multiple skeleton declarations are invalid"
 msgstr "chỉ cho phép một khai báo khung sườn"
 
-#: src/getargs.c:427
+#: src/getargs.c:428
 #, c-format
 msgid "%s: invalid language"
 msgstr "%s: ngôn ngữ không hợp lệ"
 
-#: src/getargs.c:430
+#: src/getargs.c:431
 msgid "multiple language declarations are invalid"
 msgstr "chỉ cho phép một khai báo ngôn ngữ"
 
-#: src/getargs.c:692
+#: src/getargs.c:693
 #, c-format
 msgid "%s: missing operand"
 msgstr "%s: thiếu toán hạng"
 
-#: src/getargs.c:694
+#: src/getargs.c:695
 #, c-format
 msgid "extra operand %s"
 msgstr "toán hạng bổ xung %s"

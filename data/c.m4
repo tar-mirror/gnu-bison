@@ -77,9 +77,6 @@ m4_define([b4_identification],
 
 /* Pull parsers.  */
 #define YYPULL ]b4_pull_flag])[
-
-/* Using locations.  */
-#define YYLSP_NEEDED ]b4_locations_flag[
 ]])
 
 
@@ -87,11 +84,24 @@ m4_define([b4_identification],
 ## Default values.  ##
 ## ---------------- ##
 
-# If the %union is not named, its name is YYSTYPE.
-m4_define_default([b4_union_name], [YYSTYPE])
+# b4_api_prefix, b4_api_PREFIX
+# ----------------------------
+# Corresponds to %define api.prefix
+b4_percent_define_default([[api.prefix]], [[yy]])
+m4_define([b4_api_prefix],
+[b4_percent_define_get([[api.prefix]])])
+m4_define([b4_api_PREFIX],
+[m4_toupper(b4_api_prefix)])
 
-# If the %name-prefix is not given, it is yy.
-m4_define_default([b4_prefix], [yy])
+
+# b4_prefix
+# ---------
+# If the %name-prefix is not given, it is api.prefix.
+m4_define_default([b4_prefix], [b4_api_prefix])
+
+# If the %union is not named, its name is YYSTYPE.
+m4_define_default([b4_union_name], [b4_api_PREFIX[]STYPE])
+
 
 ## ------------------------ ##
 ## Pure/impure interfaces.  ##
@@ -235,18 +245,18 @@ m4_define([b4_token_enum],
 # Output the definition of the tokens (if there are) as enums.
 m4_define([b4_token_enums],
 [m4_if([$#$1], [1], [],
-[/* Tokens.  */
-#ifndef YYTOKENTYPE
-# define YYTOKENTYPE
+[[/* Tokens.  */
+#ifndef ]b4_api_PREFIX[TOKENTYPE
+# define ]b4_api_PREFIX[TOKENTYPE
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
-   enum yytokentype {
-m4_map_sep([     b4_token_enum], [,
+   enum ]b4_api_prefix[tokentype {
+]m4_map_sep([     b4_token_enum], [,
 ],
-	   [$@])
+	   [$@])[
    };
 #endif
-])])
+]])])
 
 
 # b4_token_enums_defines(LIST-OF-PAIRS-TOKEN-NAME-TOKEN-NUMBER)
@@ -530,3 +540,102 @@ b4_locations_if([, yylocationp])[]b4_user_args[);
   YYFPRINTF (yyoutput, ")");
 }]dnl
 ])
+
+## -------------- ##
+## Declarations.  ##
+## -------------- ##
+
+# b4_declare_yylstype
+# -------------------
+# Declarations that might either go into the header (if --defines) or
+# in the parser body.  Declare YYSTYPE/YYLTYPE, and yylval/yylloc.
+m4_define([b4_declare_yylstype],
+[[#if ! defined ]b4_api_PREFIX[STYPE && ! defined ]b4_api_PREFIX[STYPE_IS_DECLARED
+]m4_ifdef([b4_stype],
+[[typedef union ]b4_union_name[
+{
+]b4_user_stype[
+} ]b4_api_PREFIX[STYPE;
+# define ]b4_api_PREFIX[STYPE_IS_TRIVIAL 1]],
+[m4_if(b4_tag_seen_flag, 0,
+[[typedef int ]b4_api_PREFIX[STYPE;
+# define ]b4_api_PREFIX[STYPE_IS_TRIVIAL 1]])])[
+# define ]b4_api_prefix[stype ]b4_api_PREFIX[STYPE /* obsolescent; will be withdrawn */
+# define ]b4_api_PREFIX[STYPE_IS_DECLARED 1
+#endif]b4_locations_if([[
+
+#if ! defined ]b4_api_PREFIX[LTYPE && ! defined ]b4_api_PREFIX[LTYPE_IS_DECLARED
+typedef struct ]b4_api_PREFIX[LTYPE
+{
+  int first_line;
+  int first_column;
+  int last_line;
+  int last_column;
+} ]b4_api_PREFIX[LTYPE;
+# define ]b4_api_prefix[ltype ]b4_api_PREFIX[LTYPE /* obsolescent; will be withdrawn */
+# define ]b4_api_PREFIX[LTYPE_IS_DECLARED 1
+# define ]b4_api_PREFIX[LTYPE_IS_TRIVIAL 1
+#endif]])
+
+b4_pure_if([], [[extern ]b4_api_PREFIX[STYPE ]b4_prefix[lval;
+]b4_locations_if([[extern ]b4_api_PREFIX[LTYPE ]b4_prefix[lloc;]])])[]dnl
+])
+
+# b4_YYDEBUG_define
+# ------------------
+m4_define([b4_YYDEBUG_define],
+[[/* Enabling traces.  */
+]m4_if(b4_api_prefix, [yy],
+[[#ifndef YYDEBUG
+# define YYDEBUG ]b4_debug_flag[
+#endif]],
+[[#ifndef ]b4_api_PREFIX[DEBUG
+# if defined YYDEBUG
+#  if YYDEBUG
+#   define ]b4_api_PREFIX[DEBUG 1
+#  else
+#   define ]b4_api_PREFIX[DEBUG 0
+#  endif
+# else /* ! defined YYDEBUG */
+#  define ]b4_api_PREFIX[DEBUG ]b4_debug_flag[
+# endif /* ! defined ]b4_api_PREFIX[DEBUG */
+#endif  /* ! defined ]b4_api_PREFIX[DEBUG */]])[]dnl
+])
+
+# b4_declare_yydebug
+# ------------------
+m4_define([b4_declare_yydebug],
+[b4_YYDEBUG_define[
+#if ]b4_api_PREFIX[DEBUG
+extern int ]b4_prefix[debug;
+#endif][]dnl
+])
+
+# b4_yylloc_default_define
+# ------------------------
+# Define YYLLOC_DEFAULT.
+m4_define([b4_yylloc_default_define],
+[[/* YYLLOC_DEFAULT -- Set CURRENT to span from RHS[1] to RHS[N].
+   If N is 0, then set CURRENT to the empty location which ends
+   the previous symbol: RHS[0] (always defined).  */
+
+#ifndef YYLLOC_DEFAULT
+# define YYLLOC_DEFAULT(Current, Rhs, N)                                \
+    do                                                                  \
+      if (YYID (N))                                                     \
+        {                                                               \
+          (Current).first_line   = YYRHSLOC (Rhs, 1).first_line;        \
+          (Current).first_column = YYRHSLOC (Rhs, 1).first_column;      \
+          (Current).last_line    = YYRHSLOC (Rhs, N).last_line;         \
+          (Current).last_column  = YYRHSLOC (Rhs, N).last_column;       \
+        }                                                               \
+      else                                                              \
+        {                                                               \
+          (Current).first_line   = (Current).last_line   =              \
+            YYRHSLOC (Rhs, 0).last_line;                                \
+          (Current).first_column = (Current).last_column =              \
+            YYRHSLOC (Rhs, 0).last_column;                              \
+        }                                                               \
+    while (YYID (0))
+#endif
+]])

@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 2.5.1_rc2.2-9fbd.  */
+/* A Bison parser, made by GNU Bison 2.5.90.14-0e98.  */
 
 /* Positions for Bison parsers in C++
    
@@ -38,9 +38,9 @@
 #ifndef YY_EXAMPLES_CALC_POSITION_HH
 # define YY_EXAMPLES_CALC_POSITION_HH
 
-# include <iostream>
+# include <algorithm> // std::max
+# include <iosfwd>
 # include <string>
-# include <algorithm>
 
 # ifndef YY_NULL
 #  if defined __cplusplus && 201103L <= __cplusplus

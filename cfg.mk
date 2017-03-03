@@ -1,5 +1,4 @@
 # Customize maint.mk                           -*- makefile -*-
-
 # Copyright (C) 2008-2012 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
@@ -15,19 +14,23 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Update version, then recompile so that tests/bison --version be
+# up-to-date, then compile our parser again with our up-to-date bison.
+.PHONY: regen
+regen: _version
+	$(MAKE) $(AM_MAKEFLAGS)
+	touch $(srcdir)/src/parse-gram.y
+	$(MAKE) $(AM_MAKEFLAGS)
+
+# Used in maint.mk's web-manual rule
+manual_title = The Yacc-compatible Parser Generator
+
 # It's useful to run maintainer-*check* targets during development, but we
 # don't want to wait on a recompile because of an update to $(VERSION).  Thus,
 # override the _is-dist-target from GNUmakefile so that maintainer-*check*
 # targets are filtered out.
 _is-dist-target = $(filter-out %clean maintainer-check% maintainer-%-check, \
   $(filter maintainer-% dist% alpha beta major,$(MAKECMDGOALS)))
-
-# Use alpha.gnu.org for alpha and beta releases.
-# Use ftp.gnu.org for major releases.
-gnu_ftp_host-alpha = alpha.gnu.org
-gnu_ftp_host-beta = alpha.gnu.org
-gnu_ftp_host-major = ftp.gnu.org
-gnu_rel_host = $(gnu_ftp_host-$(RELEASE_TYPE))
 
 url_dir_list = \
   ftp://$(gnu_rel_host)/gnu/bison
@@ -57,7 +60,8 @@ update-copyright: update-b4-copyright update-package-copyright-year
 update-copyright-env = \
   UPDATE_COPYRIGHT_FORCE=1 UPDATE_COPYRIGHT_USE_INTERVALS=1
 
-exclude = $(foreach a,$(1),$(eval exclude_file_name_regexp--sc_$(a)))
+exclude = \
+  $(foreach a,$(1),$(eval $(subst $$,$$$$,exclude_file_name_regexp--sc_$(a))))
 $(call exclude,								\
   bindtextdomain=^lib/main.c$$						\
   program_name=^lib/main.c$$						\
@@ -65,9 +69,10 @@ $(call exclude,								\
   prohibit_always-defined_macros+=?|^lib/timevar.c$$			\
   prohibit_always-defined_macros+=?|^src/(parse-gram.c|system.h)$$	\
   prohibit_always-defined_macros+=?|^tests/regression.at$$		\
+  prohibit_defined_have_decl_tests=?|^lib/timevar.c$$			\
   prohibit_empty_lines_at_EOF=^src/parse-gram.[ch]$$			\
   require_config_h_first=^(lib/yyerror|data/(glr|yacc))\.c$$		\
   space_tab=^tests/(input|c\+\+)\.at$$					\
   trailing_blank=^src/parse-gram.[ch]$$					\
-  unmarked_diagnostics=^djgpp/						\
+  unmarked_diagnostics=^(djgpp/|doc/bison.texi$$)			\
 )

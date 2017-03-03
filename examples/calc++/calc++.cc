@@ -1,4 +1,4 @@
-#line 9855 "../../doc/bison.texinfo"
+#line 9923 "../../doc/bison.texi"
 #include <iostream>
 #include "calc++-driver.hh"
 

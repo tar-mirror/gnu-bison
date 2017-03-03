@@ -183,21 +183,6 @@ m4_define([b4_fatal_at],
 m4_exit(1)])
 
 
-## ---------------- ##
-## Default values.  ##
-## ---------------- ##
-
-# m4_define_default([b4_lex_param], [])   dnl breaks other skeletons
-m4_define_default([b4_pre_prologue], [])
-m4_define_default([b4_post_prologue], [])
-m4_define_default([b4_epilogue], [])
-m4_define_default([b4_parse_param], [])
-
-# The initial column and line.
-m4_define_default([b4_location_initial_column], [1])
-m4_define_default([b4_location_initial_line],   [1])
-
-
 ## ------------ ##
 ## Data Types.  ##
 ## ------------ ##
@@ -233,9 +218,9 @@ m4_define([b4_define_flag_if],
 
 # _b4_define_flag_if($1, $2, FLAG)
 # --------------------------------
-# This macro works around the impossibility to define macros
-# inside macros, because issuing `[$1]' is not possible in M4 :(.
-# This sucks hard, GNU M4 should really provide M5 like $$1.
+# Work around the impossibility to define macros inside macros,
+# because issuing `[$1]' is not possible in M4.  GNU M4 should provide
+# $$1 a la M5/TeX.
 m4_define([_b4_define_flag_if],
 [m4_if([$1$2], $[1]$[2], [],
        [m4_fatal([$0: Invalid arguments: $@])])dnl
@@ -246,17 +231,17 @@ m4_define([b4_$3_if],
 # b4_FLAG_if(IF-TRUE, IF-FALSE)
 # -----------------------------
 # Expand IF-TRUE, if FLAG is true, IF-FALSE otherwise.
-b4_define_flag_if([defines])	        # Whether headers are requested.
-b4_define_flag_if([error_verbose])	# Whether error are verbose.
-b4_define_flag_if([glr])		# Whether a GLR parser is requested.
-b4_define_flag_if([locations])	        # Whether locations are tracked.
-b4_define_flag_if([nondeterministic])	# Whether conflicts should be handled.
-b4_define_flag_if([yacc])	        # Whether POSIX Yacc is emulated.
+b4_define_flag_if([defines])            # Whether headers are requested.
+b4_define_flag_if([error_verbose])      # Whether error are verbose.
+b4_define_flag_if([glr])                # Whether a GLR parser is requested.
+b4_define_flag_if([locations])          # Whether locations are tracked.
+b4_define_flag_if([nondeterministic])   # Whether conflicts should be handled.
+b4_define_flag_if([token_table])        # Whether yytoken_table is demanded.
+b4_define_flag_if([yacc])               # Whether POSIX Yacc is emulated.
 
+# yytoken_table is needed to support verbose errors.
+b4_error_verbose_if([m4_define([b4_token_table_flag], [1])])
 
-## ------------------------- ##
-## Assigning token numbers.  ##
-## ------------------------- ##
 
 
 ## ----------- ##
@@ -576,3 +561,26 @@ m4_wrap_lifo([
 b4_check_user_names_wrap([[define]], [[variable]])
 b4_check_user_names_wrap([[code]], [[qualifier]])
 ])
+
+
+## ---------------- ##
+## Default values.  ##
+## ---------------- ##
+
+# m4_define_default([b4_lex_param], [])   dnl breaks other skeletons
+m4_define_default([b4_pre_prologue], [])
+m4_define_default([b4_post_prologue], [])
+m4_define_default([b4_epilogue], [])
+m4_define_default([b4_parse_param], [])
+
+# The initial column and line.
+m4_define_default([b4_location_initial_column], [1])
+m4_define_default([b4_location_initial_line],   [1])
+
+# Sanity checks.
+b4_percent_define_ifdef([api.prefix],
+[m4_ifdef([b4_prefix],
+[b4_complain_at(b4_percent_define_get_loc([api.prefix]),
+                [['%s' and '%s' cannot be used together]],
+                [%name-prefix],
+                [%define api.prefix])])])
