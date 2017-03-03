@@ -1,1 +1,3 @@
-char *version_string = "GNU Bison version 1.25\n";
+#include <config.h>
+
+char *version_string = "GNU Bison version " VERSION "\n";

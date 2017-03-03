@@ -15,20 +15,30 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Bison; see the file COPYING.  If not, write to
-the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
+the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA.  */
 
 
 #include <stdio.h>
+#include "system.h"
 
+#if defined (__STDC__) || defined (_MSC_VER)
+extern void *calloc ();
+extern void *realloc ();
+#else
 extern char *calloc ();
 extern char *realloc ();
-extern void done ();
+#endif
+
+char *xmalloc PARAMS((register unsigned));
+char *xrealloc PARAMS((register char *, register unsigned));
+
+extern void done PARAMS((int));
 
 extern char *program_name;
 
 char *
-xmalloc (n)
-     register unsigned n;
+xmalloc (register unsigned n)
 {
   register char *block;
 
@@ -38,7 +48,7 @@ xmalloc (n)
   block = calloc (n, 1);
   if (block == NULL)
     {
-      fprintf (stderr, "%s: memory exhausted\n", program_name);
+      fprintf (stderr, _("%s: memory exhausted\n"), program_name);
       done (1);
     }
 
@@ -46,9 +56,7 @@ xmalloc (n)
 }
 
 char *
-xrealloc (block, n)
-     register char *block;
-     register unsigned n;
+xrealloc (register char *block, register unsigned n)
 {
   /* Avoid uncertainty about what an arg of 0 will do.  */
   if (n == 0)
@@ -56,7 +64,7 @@ xrealloc (block, n)
   block = realloc (block, n);
   if (block == NULL)
     {
-      fprintf (stderr, "%s: memory exhausted\n", program_name);
+      fprintf (stderr, _("%s: memory exhausted\n"), program_name);
       done (1);
     }
 
