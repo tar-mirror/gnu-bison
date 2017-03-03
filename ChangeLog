@@ -1,3 +1,24 @@
+2012-10-23  Akim Demaille  <akim@lrde.epita.fr>
+
+	version 2.6.4
+	* NEWS: Record release date.
+
+2012-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	regen
+
+2012-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	2.6.4: botched 2.6.3
+	* NEWS: here.
+
+2012-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	maint: post-release administrivia
+	* NEWS: Add header line for next release.
+	* .prev-version: Record previous version.
+	* cfg.mk (old_NEWS_hash): Auto-update.
+
 2012-10-22  Akim Demaille  <akim@lrde.epita.fr>
 
 	version 2.6.3
