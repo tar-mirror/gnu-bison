@@ -10,6 +10,10 @@
 @tab @option{-d}
 @tab @code{%defines [@var{"file"}]}
 
+@item @option{--feature[=@var{feature}]}
+@tab @option{-f [@var{feature}]}
+@tab
+
 @item @option{--file-prefix=@var{prefix}}
 @tab @option{-b @var{prefix}}
 @tab @code{%file-prefix @var{"prefix"}}

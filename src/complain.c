@@ -74,11 +74,15 @@ error_message (location *loc,
   vfprintf (stderr, message, args);
   {
     size_t l = strlen (message);
-    if (l < 2 || message[l-2] != ':' || message[l-1] != ' ') {
-      putc ('\n', stderr);
-      fflush (stderr);
-    }
+    if (l < 2 || message[l - 2] != ':' || message[l - 1] != ' ')
+      {
+        putc ('\n', stderr);
+        fflush (stderr);
+        if (loc && feature_flag & feature_caret)
+          location_caret (stderr, *loc);
+      }
   }
+  fflush (stderr);
 }
 
 /** Wrap error_message() with varargs handling. */
@@ -124,7 +128,7 @@ warn_at_indent (location loc, unsigned *indent,
     return;
   set_warning_issued ();
   indent_ptr = indent;
-  ERROR_MESSAGE (&loc, _("warning"), message);
+  ERROR_MESSAGE (&loc, *indent ? NULL : _("warning"), message);
 }
 
 void
@@ -144,7 +148,7 @@ warn (const char *message, ...)
 void
 complain_at (location loc, const char *message, ...)
 {
-  ERROR_MESSAGE (&loc, NULL, message);
+  ERROR_MESSAGE (&loc, _("error"), message);
   complaint_issued = true;
 }
 
@@ -153,14 +157,14 @@ complain_at_indent (location loc, unsigned *indent,
                     const char *message, ...)
 {
   indent_ptr = indent;
-  ERROR_MESSAGE (&loc, NULL, message);
+  ERROR_MESSAGE (&loc, *indent ? NULL : _("error"), message);
   complaint_issued = true;
 }
 
 void
 complain (const char *message, ...)
 {
-  ERROR_MESSAGE (NULL, NULL, message);
+  ERROR_MESSAGE (NULL, _("error"), message);
   complaint_issued = true;
 }
 

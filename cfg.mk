@@ -24,6 +24,7 @@ regen: _version
 
 # Used in maint.mk's web-manual rule
 manual_title = The Yacc-compatible Parser Generator
+gendocs_options_ = -I $(abs_top_srcdir)/doc -I $(abs_top_builddir)/doc
 
 # It's useful to run maintainer-*check* targets during development, but we
 # don't want to wait on a recompile because of an update to $(VERSION).  Thus,
@@ -60,6 +61,18 @@ update-copyright: update-b4-copyright update-package-copyright-year
 update-copyright-env = \
   UPDATE_COPYRIGHT_FORCE=1 UPDATE_COPYRIGHT_USE_INTERVALS=1
 
+# At least for Mac OS X's grep, the order between . and [ in "[^.[]"
+# matters:
+# $ LC_ALL=fr_FR grep -nE '[^[.]' /dev/null
+# $ LC_ALL=C grep -nE '[^[.]' /dev/null
+# grep: invalid collating element or class
+# $ LC_ALL=fr_FR grep -nE '[^.[]' /dev/null
+# $ LC_ALL=C grep -nE '[^.[]' /dev/null
+sc_at_parser_check:
+	@prohibit='AT_PARSER_CHECK\(\[+[^.[]|AT_CHECK\(\[+\./'		\
+	halt='use AT_PARSER_CHECK for and only for generated parsers'	\
+	  $(_sc_search_regexp)
+
 exclude = \
   $(foreach a,$(1),$(eval $(subst $$,$$$$,exclude_file_name_regexp--sc_$(a))))
 $(call exclude,								\
@@ -70,10 +83,11 @@ $(call exclude,								\
   prohibit_always-defined_macros+=?|^src/(parse-gram.c|system.h)$$	\
   prohibit_always-defined_macros+=?|^tests/regression.at$$		\
   prohibit_defined_have_decl_tests=?|^lib/timevar.c$$			\
+  prohibit_doubled_word=^tests/named-refs.at$$                          \
   prohibit_magic_number_exit=^doc/bison.texi$$				\
   prohibit_magic_number_exit+=?|^tests/(conflicts|regression).at$$	\
   require_config_h_first=^(lib/yyerror|data/(glr|yacc))\.c$$		\
   space_tab=^tests/(input|c\+\+)\.at$$					\
   trailing_blank=^src/parse-gram.[ch]$$					\
-  unmarked_diagnostics=^(djgpp/|doc/bison.texi$$)			\
+  unmarked_diagnostics=^(djgpp/|doc/bison.texi$$|tests/c\+\+\.at$$)	\
 )

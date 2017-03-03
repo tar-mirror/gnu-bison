@@ -155,7 +155,7 @@ export LC_ALL = C
 ## Sanity checks.  ##
 ## --------------- ##
 
-_cfg_mk := $(shell test -f $(srcdir)/cfg.mk && echo '$(srcdir)/cfg.mk')
+_cfg_mk := $(wildcard $(srcdir)/cfg.mk)
 
 # Collect the names of rules starting with 'sc_'.
 syntax-check-rules := $(sort $(shell sed -n 's/^\(sc_[a-zA-Z0-9_-]*\):.*/\1/p' \
@@ -1315,7 +1315,7 @@ announcement_mail_Cc_ ?= $(announcement_mail_Cc_$(release-type))
 announcement_mail_headers_ ?= $(announcement_mail_headers_$(release-type))
 announcement: NEWS ChangeLog $(rel-files)
 # Not $(AM_V_GEN) since the output of this command serves as
-# annoucement message: it would start with " GEN announcement".
+# announcement message: it would start with " GEN announcement".
 	$(AM_V_at)$(srcdir)/$(_build-aux)/announce-gen			\
 	    --mail-headers='$(announcement_mail_headers_)'		\
 	    --release-type=$(release-type)				\
@@ -1390,8 +1390,9 @@ submodule-checks ?= no-submodule-changes public-submodule-commit
 public-submodule-commit:
 	$(AM_V_GEN)if test -d $(srcdir)/.git; then			\
 	  cd $(srcdir) &&						\
-	  git submodule --quiet foreach test '$$(git rev-parse $$sha1)'	\
-	      = '$$(git merge-base origin $$sha1)'			\
+	  git submodule --quiet foreach					\
+	      test '"$$(git rev-parse "$$sha1")"'			\
+	      = '"$$(git merge-base origin "$$sha1")"'			\
 	    || { echo '$(ME): found non-public submodule commit' >&2;	\
 		 exit 1; };						\
 	else								\

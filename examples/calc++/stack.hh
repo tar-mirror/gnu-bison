@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 2.6.4.35-5a000.  */
+/* A Bison parser, made by GNU Bison 2.6.90.8-d4fe.  */
 
 /* Stack handling for Bison parsers in C++
    
@@ -42,7 +42,7 @@
 
 
 namespace yy {
-/* Line 37 of stack.hh  */
+/* Line 34 of stack.hh  */
 #line 47 "../../../../examples/calc++/stack.hh"
   template <class T, class S = std::deque<T> >
   class stack
@@ -127,7 +127,7 @@ namespace yy {
   };
 
 } // yy
-/* Line 119 of stack.hh  */
+/* Line 116 of stack.hh  */
 #line 132 "../../../../examples/calc++/stack.hh"
 
 #endif /* !YY_YY_EXAMPLES_CALC_STACK_HH_INCLUDED  */

@@ -138,7 +138,7 @@ m4_pushdef([AT_LEXPARAM_IF],
 m4_pushdef([AT_LOCATION_IF],
 [m4_bmatch([$3], [%locations], [$1], [$2])])
 m4_pushdef([AT_LOCATION_TYPE_IF],
-[m4_bmatch([$3], [%define location_type], [$1], [$2])])
+[m4_bmatch([$3], [%define \(api\.location\.type\|location_type\)], [$1], [$2])])
 m4_pushdef([AT_PARAM_IF],
 [m4_bmatch([$3], [%parse-param], [$1], [$2])])
 # Comma-terminated list of formals parse-parameters.
@@ -151,10 +151,6 @@ m4_pushdef([AT_PURE_IF],
 [m4_bmatch([$3], [%define  *api\.pure\|%pure-parser],
            [m4_bmatch([$3], [%define  *api\.pure *"?false"?], [$2], [$1])],
            [$2])])
-m4_pushdef([AT_PURE_AND_LOC_IF],
-[m4_bmatch([$3], [%locations], [AT_PURE_IF($@)], [$2])])
-m4_pushdef([AT_GLR_OR_PARAM_IF],
-[m4_bmatch([$3], [%glr-parser\|%parse-param], [$1], [$2])])
 m4_pushdef([AT_NAME_PREFIX],
 [m4_bmatch([$3], [\(%define api\.prefix\|%name-prefix\) ".*"],
            [m4_bregexp([$3], [\(%define api\.prefix\|%name-prefix\) "\([^""]*\)"], [\2])],
@@ -165,17 +161,29 @@ m4_pushdef([AT_API_prefix],
            [yy])])
 m4_pushdef([AT_API_PREFIX],
 [m4_toupper(AT_API_prefix)])
-# yyerror receives the location if %location & %pure & (%glr or %parse-param).
+# yyerror receives the location if %location, and if the parser is pure. For
+# historical reasons, with the "yacc.c" skeleton, the location is not passed
+# unless an additional "%parse-param" is present, or if the purity is defined
+# as "full".
 m4_pushdef([AT_YYERROR_ARG_LOC_IF],
-[AT_GLR_OR_PARAM_IF([AT_PURE_AND_LOC_IF([$1], [$2])],
-		    [$2])])
-# yyerror always sees the locations (when activated), except if
-# (yacc & pure & !param).  FIXME: This is wrong.  See the manual.
+[AT_LOCATION_IF([AT_PURE_IF([m4_bmatch([$3],
+                                       m4_quote(m4_join([\|],
+                                                        [%define api.pure "?full"?],
+                                                        [%glr-parser],
+                                                        [%parse-param],
+                                                        [%skeleton "?glr.c"?])),
+                                       [$1], [$2])],
+                            [$2])],
+                [$2])])
+
+# yyerror always sees the locations (when activated) if the parser is impure.
+# When the parser is pure, yyerror sees the location if it is received as an
+# argument.
 m4_pushdef([AT_YYERROR_SEES_LOC_IF],
-[AT_LOCATION_IF([AT_YACC_IF([AT_PURE_IF([AT_PARAM_IF([$1], [$2])],
-					[$1])],
-			    [$1])],
-		[$2])])
+[AT_LOCATION_IF([AT_YACC_IF([AT_PURE_IF([AT_YYERROR_ARG_LOC_IF([$1], [$2])],
+                                        [$1])],
+                            [$1])],
+                [$2])])
 
 # The interface is pure: either because %define api.pure, or because we
 # are using the C++ parsers.
@@ -244,8 +252,6 @@ m4_popdef([AT_YYERROR_ARG_LOC_IF])
 m4_popdef([AT_API_PREFIX])
 m4_popdef([AT_API_prefix])
 m4_popdef([AT_NAME_PREFIX])
-m4_popdef([AT_GLR_OR_PARAM_IF])
-m4_popdef([AT_PURE_AND_LOC_IF])
 m4_popdef([AT_LOCATION_TYPE_IF])
 m4_popdef([AT_LOCATION_IF])
 m4_popdef([AT_PARSE_PARAMS])
@@ -350,6 +356,7 @@ static
 }]dnl
 ])
 
+# AT_YYERROR_FORMALS
 # AT_YYERROR_PROTOTYPE
 # AT_YYERROR_DECLARE_EXTERN
 # AT_YYERROR_DECLARE
@@ -358,7 +365,7 @@ static
 # Must be called inside a AT_BISON_OPTION_PUSHDEFS/POPDEFS pair.
 m4_define([AT_YYERROR_FORMALS],
 [m4_case(AT_LANG,
-[c], [AT_YYERROR_ARG_LOC_IF([AT_YYLTYPE *llocp, ])AT_PARSE_PARAMS [const char *msg]])[]dnl
+[c], [AT_YYERROR_ARG_LOC_IF([AT_YYLTYPE const * const llocp, ])AT_PARSE_PARAMS [const char *msg]])[]dnl
 ])
 
 m4_define([AT_YYERROR_PROTOTYPE],
@@ -556,10 +563,10 @@ m4_define([AT_BISON_CHECK_XML],
   AT_CHECK([[$XSLTPROC \
              `]]AT_QUELL_VALGRIND[[ bison --print-datadir`/xslt/xml2text.xsl \
              xml-tests/test.xml]], [[0]], [expout])
-  [cp xml-tests/test.dot expout]
+  [sort xml-tests/test.dot > expout]
   AT_CHECK([[$XSLTPROC \
              `]]AT_QUELL_VALGRIND[[ bison --print-datadir`/xslt/xml2dot.xsl \
-             xml-tests/test.xml]], [[0]], [expout])
+             xml-tests/test.xml | sort]], [[0]], [expout])
   [rm -rf xml-tests expout]
   AT_RESTORE_SPECIAL_FILES
 [fi]])
@@ -593,9 +600,7 @@ m4_define([AT_QUELL_VALGRIND],
 # otherwise pass "-c"; this is a hack.  The default SOURCES is OUTPUT
 # with trailing .o removed, and ".c" appended.
 m4_define([AT_COMPILE],
-[AT_CHECK([case $POSIXLY_CORRECT_IS_EXPORTED:$C_COMPILER_POSIXLY_CORRECT in
-  true:false) echo 'cannot compile properly with POSIXLY_CORRECT' && exit 77;;
-esac])
+[AT_CHECK([$BISON_C_WORKS], 0, ignore, ignore)
 AT_CHECK(m4_join([ ],
                   [$CC $CFLAGS $CPPFLAGS],
                   [m4_bmatch([$1], [[.]], [-c], [$LDFLAGS])],
@@ -716,7 +721,7 @@ AT_COMPILE([c-only.o], [c-only.c])
 AT_COMPILE_CXX([cxx-only.o], [cxx-only.cc])
 AT_CHECK([$CXX $CXXFLAGS $CPPFLAGS $LDFLAGS c-only.o cxx-only.o -o c-and-cxx ||
           exit 77], [ignore], [ignore])
-AT_CHECK([./c-and-cxx])
+AT_PARSER_CHECK([./c-and-cxx])
 ])
 
 
@@ -868,9 +873,9 @@ m4_if(m4_index(m4_quote($3), [no-xml]), -1,
                                [0], [], m4_dquote($7))
 
 m4_if(m4_index(m4_quote($3), [last-state]), -1,
-      [AT_CHECK([[sed -n '/^state 0$/,$p' input.output]], [[0]],
+      [AT_CHECK([[sed -n '/^State 0$/,$p' input.output]], [[0]],
                 m4_dquote($8))],
-      [AT_CHECK([[sed -n 's/^state //p' input.output | tail -1]], [[0]],
+      [AT_CHECK([[sed -n 's/^State //p' input.output | tail -1]], [[0]],
                 m4_dquote($8)[[
 ]])])
 

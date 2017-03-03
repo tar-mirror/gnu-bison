@@ -293,7 +293,7 @@ $@2 (9)
     on left: 3, on right: 4
 
 
-state 0
+State 0
 
     0 $accept: . expr $end
 
@@ -305,7 +305,7 @@ state 0
     $@2   go to state 3
 
 
-state 1
+State 1
 
     2 expr: 'a' . $@1 'b'
 
@@ -314,42 +314,42 @@ state 1
     $@1  go to state 4
 
 
-state 2
+State 2
 
     0 $accept: expr . $end
 
     $end  shift, and go to state 5
 
 
-state 3
+State 3
 
     4 expr: $@2 . 'c'
 
     'c'  shift, and go to state 6
 
 
-state 4
+State 4
 
     2 expr: 'a' $@1 . 'b'
 
     'b'  shift, and go to state 7
 
 
-state 5
+State 5
 
     0 $accept: expr $end .
 
     $default  accept
 
 
-state 6
+State 6
 
     4 expr: $@2 'c' .
 
     $default  reduce using rule 4 (expr)
 
 
-state 7
+State 7
 
     2 expr: 'a' $@1 'b' .
 
@@ -378,6 +378,58 @@ exp: ;
 ]])
 
 AT_BISON_CHECK([-v -o input.c input.y])
+
+AT_CLEANUP
+
+
+
+## ---------------- ##
+## Invalid inputs.  ##
+## ---------------- ##
+
+
+AT_SETUP([Invalid inputs])
+
+AT_DATA([input.y],
+[[%%
+?
+default: 'a' }
+%&
+%a-does-not-exist
+%-
+%{
+]])
+
+AT_BISON_CHECK([input.y], [1], [],
+[[input.y:2.1: error: invalid character: '?'
+input.y:3.14: error: invalid character: '}'
+input.y:4.1: error: invalid character: '%'
+input.y:4.2: error: invalid character: '&'
+input.y:5.1-17: error: invalid directive: '%a-does-not-exist'
+input.y:6.1: error: invalid character: '%'
+input.y:6.2: error: invalid character: '-'
+input.y:7.1-8.0: error: missing '%}' at end of file
+input.y:7.1-8.0: error: syntax error, unexpected %{...%}
+]])
+
+AT_CLEANUP
+
+
+AT_SETUP([Invalid inputs with {}])
+
+AT_DATA([input.y],
+[[
+%destructor
+%initial-action
+%lex-param
+%parse-param
+%printer
+%union
+]])
+
+AT_BISON_CHECK([input.y], [1], [],
+[[input.y:3.1-15: error: syntax error, unexpected %initial-action, expecting {...}
+]])
 
 AT_CLEANUP
 
@@ -428,6 +480,14 @@ AT_BISON_OPTION_POPDEFS
 AT_BISON_CHECK([-o input.c input.y], [[0]], [[]],
 [[input.y:22.8-14: warning: symbol SPECIAL redeclared
 input.y:22.8-63: warning: symbol "\\'?\"\a\b\f\n\r\t\v\001\201\001\201??!" used more than once as a literal string
+]])
+AT_BISON_CHECK([-fcaret -o input.c input.y], [[0]], [[]],
+[[input.y:22.8-14: warning: symbol SPECIAL redeclared
+ %token SPECIAL "\\\'\?\"\a\b\f\n\r\t\v\001\201\x001\x000081??!"
+        ^^^^^^^
+input.y:22.8-63: warning: symbol "\\'?\"\a\b\f\n\r\t\v\001\201\001\201??!" used more than once as a literal string
+ %token SPECIAL "\\\'\?\"\a\b\f\n\r\t\v\001\201\x001\x000081??!"
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ]])
 AT_COMPILE([input])
 
@@ -546,7 +606,7 @@ $@1 (11)
     on left: 4, on right: 5
 
 
-state 0
+State 0
 
     0 $accept: . CONST_DEC_PART $end
 
@@ -558,14 +618,14 @@ state 0
     $@1             go to state 4
 
 
-state 1
+State 1
 
     0 $accept: CONST_DEC_PART . $end
 
     $end  shift, and go to state 5
 
 
-state 2
+State 2
 
     1 CONST_DEC_PART: CONST_DEC_LIST .
     3 CONST_DEC_LIST: CONST_DEC_LIST . CONST_DEC
@@ -577,56 +637,56 @@ state 2
     $@1        go to state 4
 
 
-state 3
+State 3
 
     2 CONST_DEC_LIST: CONST_DEC .
 
     $default  reduce using rule 2 (CONST_DEC_LIST)
 
 
-state 4
+State 4
 
     5 CONST_DEC: $@1 . undef_id_tok '=' const_id_tok ';'
 
     undef_id_tok  shift, and go to state 7
 
 
-state 5
+State 5
 
     0 $accept: CONST_DEC_PART $end .
 
     $default  accept
 
 
-state 6
+State 6
 
     3 CONST_DEC_LIST: CONST_DEC_LIST CONST_DEC .
 
     $default  reduce using rule 3 (CONST_DEC_LIST)
 
 
-state 7
+State 7
 
     5 CONST_DEC: $@1 undef_id_tok . '=' const_id_tok ';'
 
     '='  shift, and go to state 8
 
 
-state 8
+State 8
 
     5 CONST_DEC: $@1 undef_id_tok '=' . const_id_tok ';'
 
     const_id_tok  shift, and go to state 9
 
 
-state 9
+State 9
 
     5 CONST_DEC: $@1 undef_id_tok '=' const_id_tok . ';'
 
     ';'  shift, and go to state 10
 
 
-state 10
+State 10
 
     5 CONST_DEC: $@1 undef_id_tok '=' const_id_tok ';' .
 
@@ -1073,8 +1133,8 @@ a: 'a' ;
 ]])
 
 AT_BISON_CHECK([[--report=all input.y]])
-AT_CHECK([[sed -n '/^state 1$/,/^state 2$/p' input.output]], [[0]],
-[[state 1
+AT_CHECK([[sed -n '/^State 1$/,/^State 2$/p' input.output]], [[0]],
+[[State 1
 
     2 start: 'a' . a 'a'
     3 a: . 'a'
@@ -1087,7 +1147,7 @@ AT_CHECK([[sed -n '/^state 1$/,/^state 2$/p' input.output]], [[0]],
     a  go to state 5
 
 
-state 2
+State 2
 ]])
 
 AT_CLEANUP
@@ -1593,7 +1653,7 @@ main (void)
 ]])
 
 AT_FULL_COMPILE([input])
-AT_CHECK([./input], 0, [[x: 1, y: 2
+AT_PARSER_CHECK([./input], 0, [[x: 1, y: 2
 ]])
 AT_BISON_OPTION_POPDEFS
 

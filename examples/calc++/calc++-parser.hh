@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 2.6.4.35-5a000.  */
+/* A Bison parser, made by GNU Bison 2.6.90.8-d4fe.  */
 
 /* Skeleton interface for Bison LALR(1) parsers in C++
    
@@ -41,14 +41,14 @@
 # define YY_YY_EXAMPLES_CALC_CALC_PARSER_HH_INCLUDED
 
 /* "%code requires" blocks.  */
-/* Line 36 of lalr1.cc  */
-#line 9669 "../../doc/bison.texi"
+/* Line 33 of lalr1.cc  */
+#line 10214 "../../doc/bison.texi"
 
 # include <string>
 class calcxx_driver;
 
 
-/* Line 36 of lalr1.cc  */
+/* Line 33 of lalr1.cc  */
 #line 53 "../../../../examples/calc++/calc++-parser.hh"
 
 
@@ -64,7 +64,7 @@ class calcxx_driver;
 
 
 namespace yy {
-/* Line 36 of lalr1.cc  */
+/* Line 33 of lalr1.cc  */
 #line 69 "../../../../examples/calc++/calc++-parser.hh"
 
   /// A Bison parser.
@@ -75,14 +75,14 @@ namespace yy {
 #ifndef YYSTYPE
     union semantic_type
     {
-/* Line 36 of lalr1.cc  */
-#line 9722 "../../doc/bison.texi"
+/* Line 33 of lalr1.cc  */
+#line 10267 "../../doc/bison.texi"
 
   int          ival;
   std::string *sval;
 
 
-/* Line 36 of lalr1.cc  */
+/* Line 33 of lalr1.cc  */
 #line 87 "../../../../examples/calc++/calc++-parser.hh"
     };
 #else
@@ -245,6 +245,7 @@ namespace yy {
 
     /// \brief Reclaim the memory associated to a symbol.
     /// \param yymsg        Why this token is reclaimed.
+    ///                     If null, do not display the symbol, just free it.
     /// \param yytype       The symbol type.
     /// \param yyvaluep     Its semantic value.
     /// \param yylocationp  Its location.
@@ -274,8 +275,8 @@ namespace yy {
   };
 
 } // yy
-/* Line 36 of lalr1.cc  */
-#line 279 "../../../../examples/calc++/calc++-parser.hh"
+/* Line 33 of lalr1.cc  */
+#line 280 "../../../../examples/calc++/calc++-parser.hh"
 
 
 

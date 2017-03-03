@@ -639,8 +639,8 @@ int code__flex_debug = 1;
 static yyconst flex_int16_t yy_rule_linenum[29] =
     {   0,
       132,  142,  143,  153,  158,  163,  169,  174,  179,  183,
-      187,  192,  200,  207,  215,  216,  217,  240,  242,  243,
-      244,  248,  256,  258,  263,  271,  281,  284
+      187,  192,  200,  207,  215,  216,  217,  244,  246,  247,
+      248,  252,  260,  262,  267,  275,  285,  288
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -1276,12 +1276,16 @@ YY_RULE_SETUP
     /* As an undocumented Bison extension, append ';' before the last
        brace in braced code, so that the user code can omit trailing
        ';'.  But do not append ';' if emulating Yacc, since Yacc does
-       not append one.  */
+       not append one.  This is deprecated since release 2.4.1.  */
     if (outer_brace && !yacc_flag && language_prio == default_prio
         && skeleton_prio == default_prio && need_semicolon && ! in_cpp)
       {
-        warn_at (*loc, _("a ';' might be needed at the end of action code"));
-        warn_at (*loc, _("future versions of Bison will not add the ';'"));
+        unsigned int indent = 0;
+        warn_at_indent (*loc, &indent,
+                       _("a ';' might be needed at the end of action code"));
+        indent += SUB_INDENT;
+        warn_at_indent (*loc, &indent,
+                       _("future versions of Bison will not add the ';'"));
         obstack_1grow (&obstack_for_string, ';');
       }
 
@@ -1295,31 +1299,31 @@ YY_RULE_SETUP
      '#define' directives anyway, so don't bother with begin of line.  */
 case 18:
 YY_RULE_SETUP
-#line 240 "scan-code.l"
+#line 244 "scan-code.l"
 STRING_GROW; in_cpp = true;
 	YY_BREAK
 case 19:
 /* rule 19 can match eol */
 YY_RULE_SETUP
-#line 242 "scan-code.l"
+#line 246 "scan-code.l"
 STRING_GROW;
 	YY_BREAK
 case 20:
 /* rule 20 can match eol */
 YY_RULE_SETUP
-#line 243 "scan-code.l"
+#line 247 "scan-code.l"
 STRING_GROW; if (in_cpp) in_cpp = need_semicolon = false;
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 244 "scan-code.l"
+#line 248 "scan-code.l"
 STRING_GROW;
 	YY_BREAK
 /* YYFAIL is undocumented and was formally deprecated in Bison
      2.4.2.  */
 case 22:
 YY_RULE_SETUP
-#line 248 "scan-code.l"
+#line 252 "scan-code.l"
 {
     STRING_GROW; need_semicolon = true;
     warn_at (*loc, _("use of YYFAIL, which is deprecated and will be"
@@ -1330,12 +1334,12 @@ YY_RULE_SETUP
      contain YYFAIL don't produce the above warning.  */
 case 23:
 YY_RULE_SETUP
-#line 256 "scan-code.l"
+#line 260 "scan-code.l"
 STRING_GROW; need_semicolon = true;
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 258 "scan-code.l"
+#line 262 "scan-code.l"
 STRING_GROW; need_semicolon = true;
 	YY_BREAK
 
@@ -1343,7 +1347,7 @@ STRING_GROW; need_semicolon = true;
 
 case 25:
 YY_RULE_SETUP
-#line 263 "scan-code.l"
+#line 267 "scan-code.l"
 {
     const char *type_name = NULL;
     fetch_type_name (code_text + 1, &type_name, *loc)[-1] = 0;
@@ -1355,7 +1359,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 271 "scan-code.l"
+#line 275 "scan-code.l"
 {
     obstack_sgrow (&obstack_for_string, "]b4_at_dollar[");
     locations_flag = true;
@@ -1367,14 +1371,14 @@ YY_RULE_SETUP
 /* Escape M4 quoting characters in C code.  */
 case 27:
 YY_RULE_SETUP
-#line 281 "scan-code.l"
+#line 285 "scan-code.l"
 obstack_escape (&obstack_for_string, code_text);
 	YY_BREAK
 /* By default, grow the string obstack with the input.  */
 case 28:
 /* rule 28 can match eol */
 YY_RULE_SETUP
-#line 284 "scan-code.l"
+#line 288 "scan-code.l"
 STRING_GROW;
 	YY_BREAK
 /* End of processing. */
@@ -1385,16 +1389,16 @@ case YY_STATE_EOF(SC_STRING):
 case YY_STATE_EOF(SC_CHARACTER):
 case YY_STATE_EOF(SC_RULE_ACTION):
 case YY_STATE_EOF(SC_SYMBOL_ACTION):
-#line 287 "scan-code.l"
+#line 291 "scan-code.l"
 STRING_FINISH; return last_string;
 	YY_BREAK
 
 case 29:
 YY_RULE_SETUP
-#line 290 "scan-code.l"
+#line 294 "scan-code.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 1398 "scan-code.c"
+#line 1402 "scan-code.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2474,7 +2478,7 @@ void code_free (void * ptr )
 
 /* %ok-for-header */
 
-#line 290 "scan-code.l"
+#line 294 "scan-code.l"
 
 
 
@@ -2677,9 +2681,6 @@ show_sub_messages (const char* cp, bool explicit_bracketing,
 /* Returned from "parse_ref" when the reference
    points to LHS ($$) of the current rule or midrule. */
 #define LHS_REF (INT_MIN + 1)
-
-/* Sub-messages indent. */
-#define SUB_INDENT (4)
 
 /* Parse named or positional reference. In case of positional
    references, can return negative values for $-n "deep" stack

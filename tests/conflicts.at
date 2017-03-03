@@ -41,6 +41,12 @@ AT_BISON_CHECK([-o input.c input.y], 0, [],
 [[input.y:4.9: warning: rule useless in parser due to conflicts: e: /* empty */
 ]])
 
+AT_BISON_CHECK([-fcaret -o input.c input.y], 0, [],
+[[input.y:4.9: warning: rule useless in parser due to conflicts
+ e: 'e' | /* Nothing. */;
+         ^
+]])
+
 AT_CLEANUP
 
 
@@ -580,7 +586,7 @@ exp (6)
     on left: 1 2, on right: 0 1
 
 
-state 0
+State 0
 
     0 $accept: . exp $end
     1 exp: . exp OP exp
@@ -591,14 +597,14 @@ state 0
     exp  go to state 2
 
 
-state 1
+State 1
 
     2 exp: NUM .
 
     $default  reduce using rule 2 (exp)
 
 
-state 2
+State 2
 
     0 $accept: exp . $end
     1 exp: exp . OP exp
@@ -607,14 +613,14 @@ state 2
     OP    shift, and go to state 4
 
 
-state 3
+State 3
 
     0 $accept: exp $end .
 
     $default  accept
 
 
-state 4
+State 4
 
     1 exp: . exp OP exp
     1    | exp OP . exp
@@ -625,7 +631,7 @@ state 4
     exp  go to state 5
 
 
-state 5
+State 5
 
     1 exp: exp . OP exp
     1    | exp OP exp .  [$end, OP]
@@ -683,7 +689,7 @@ exp (6)
     on left: 1 2, on right: 0 1
 
 
-state 0
+State 0
 
     0 $accept: . exp $end
     1 exp: . exp OP exp
@@ -694,14 +700,14 @@ state 0
     exp  go to state 2
 
 
-state 1
+State 1
 
     2 exp: NUM .
 
     $default  reduce using rule 2 (exp)
 
 
-state 2
+State 2
 
     0 $accept: exp . $end
     1 exp: exp . OP exp
@@ -710,14 +716,14 @@ state 2
     OP    shift, and go to state 4
 
 
-state 3
+State 3
 
     0 $accept: exp $end .
 
     $default  accept
 
 
-state 4
+State 4
 
     1 exp: . exp OP exp
     1    | exp OP . exp
@@ -728,7 +734,7 @@ state 4
     exp  go to state 5
 
 
-state 5
+State 5
 
     1 exp: exp . OP exp
     1    | exp OP exp .  [$end, OP]
@@ -823,7 +829,7 @@ id (7)
     on left: 4, on right: 2
 
 
-state 0
+State 0
 
     0 $accept: . exp $end
     1 exp: . num
@@ -838,7 +844,7 @@ state 0
     id   go to state 4
 
 
-state 1
+State 1
 
     3 num: '0' .  [$end]
     4 id: '0' .  [$end]
@@ -848,28 +854,28 @@ state 1
     $default  reduce using rule 3 (num)
 
 
-state 2
+State 2
 
     0 $accept: exp . $end
 
     $end  shift, and go to state 5
 
 
-state 3
+State 3
 
     1 exp: num .
 
     $default  reduce using rule 1 (exp)
 
 
-state 4
+State 4
 
     2 exp: id .
 
     $default  reduce using rule 2 (exp)
 
 
-state 5
+State 5
 
     0 $accept: exp $end .
 
@@ -896,7 +902,7 @@ exp: exp OP exp | NUM;
 
 AT_BISON_CHECK([-o input.c input.y], 1, [],
 [input.y: conflicts: 1 shift/reduce
-input.y: expected 0 shift/reduce conflicts
+input.y: error: expected 0 shift/reduce conflicts
 ])
 AT_CLEANUP
 
@@ -933,7 +939,7 @@ exp: exp OP exp | NUM;
 
 AT_BISON_CHECK([-o input.c input.y], 1, [],
 [input.y: conflicts: 1 shift/reduce
-input.y: expected 2 shift/reduce conflicts
+input.y: error: expected 2 shift/reduce conflicts
 ])
 AT_CLEANUP
 
@@ -953,7 +959,7 @@ a: 'a';
 
 AT_BISON_CHECK([-o input.c input.y], 1, [],
 [input.y: conflicts: 1 reduce/reduce
-input.y: expected 0 reduce/reduce conflicts
+input.y: error: expected 0 reduce/reduce conflicts
 ])
 AT_CLEANUP
 
@@ -1170,7 +1176,7 @@ reported_conflicts (9)
     on left: 8 9 10, on right: 1
 
 
-state 0
+State 0
 
     0 $accept: . start $end
     1 start: . resolved_conflict 'a' reported_conflicts 'a'
@@ -1185,28 +1191,28 @@ state 0
     Conflict between rule 3 and token 'a' resolved as reduce (%left 'a').
 
 
-state 1
+State 1
 
     0 $accept: start . $end
 
     $end  shift, and go to state 3
 
 
-state 2
+State 2
 
     1 start: resolved_conflict . 'a' reported_conflicts 'a'
 
     'a'  shift, and go to state 4
 
 
-state 3
+State 3
 
     0 $accept: start $end .
 
     $default  accept
 
 
-state 4
+State 4
 
     1 start: resolved_conflict 'a' . reported_conflicts 'a'
     8 reported_conflicts: . 'a'
@@ -1220,7 +1226,7 @@ state 4
     reported_conflicts  go to state 6
 
 
-state 5
+State 5
 
     8 reported_conflicts: 'a' .  ['a']
     9                   | 'a' .  ['a']
@@ -1230,14 +1236,14 @@ state 5
     $default  reduce using rule 8 (reported_conflicts)
 
 
-state 6
+State 6
 
     1 start: resolved_conflict 'a' reported_conflicts . 'a'
 
     'a'  shift, and go to state 7
 
 
-state 7
+State 7
 
     1 start: resolved_conflict 'a' reported_conflicts 'a' .
 
@@ -1291,8 +1297,8 @@ empty_c2: %prec 'c' ;
 empty_c3: %prec 'd' ;
 ]])
 AT_BISON_CHECK([[--report=all -o input.c input.y]], 0, [], [ignore])
-AT_CHECK([[cat input.output | sed -n '/^state 0$/,/^state 1$/p']], 0,
-[[state 0
+AT_CHECK([[cat input.output | sed -n '/^State 0$/,/^State 1$/p']], 0,
+[[State 0
 
     0 $accept: . start $end
     1 start: . 'a'
@@ -1328,7 +1334,7 @@ AT_CHECK([[cat input.output | sed -n '/^state 0$/,/^state 1$/p']], 0,
     Conflict between rule 13 and token 'c' resolved as reduce ('c' < 'd').
 
 
-state 1
+State 1
 ]])
 
 AT_CLEANUP
@@ -1367,8 +1373,8 @@ empty_c3: %prec 'c' ;
 ]])
 
 AT_BISON_CHECK([[--report=all -o input.c input.y]], 0, [], [ignore])
-AT_CHECK([[cat input.output | sed -n '/^state 0$/,/^state 1$/p']], 0,
-[[state 0
+AT_CHECK([[cat input.output | sed -n '/^State 0$/,/^State 1$/p']], 0,
+[[State 0
 
     0 $accept: . start $end
     1 start: . 'a'
@@ -1404,7 +1410,7 @@ AT_CHECK([[cat input.output | sed -n '/^state 0$/,/^state 1$/p']], 0,
     Conflict between rule 11 and token 'c' resolved as an error (%nonassoc 'c').
 
 
-state 1
+State 1
 ]])
 AT_CLEANUP
 
@@ -1494,11 +1500,11 @@ AT_BISON_CHECK([[-Wno-conflicts-rr sr-rr.y]], [[0]], [[]],
         echo "$file: conflicts: $conflicts" > experr
         if test $sr_count -ne $sr_exp; then
           if test $sr_exp -ne 1; then s=s; else s= ; fi
-          echo "$file: expected $sr_exp shift/reduce conflict$s" >> experr
+          echo "$file: error: expected $sr_exp shift/reduce conflict$s" >> experr
         fi
         if test $rr_count -ne $rr_exp; then
           if test $rr_exp -ne 1; then s=s; else s= ; fi
-          echo "$file: expected $rr_exp reduce/reduce conflict$s" >> experr
+          echo "$file: error: expected $rr_exp reduce/reduce conflict$s" >> experr
         fi
         ]AT_BISON_CHECK([[-Wnone $file]], [[1]], [[]], [[experr]])[
         ]AT_BISON_CHECK([[-Werror $file]], [[1]], [[]], [[experr]])[

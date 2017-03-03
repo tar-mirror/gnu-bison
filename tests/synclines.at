@@ -47,13 +47,14 @@ m4_define([AT_SYNCLINES_COMPILE],
 # =>
 #   input.y:4: #error "8"
 #
-# The message may include a caret-error:
+# The message may include a caret-error (indented by GCC 4.8,
+# not by clang 3.2):
 #
 #   input.y:1:2: error: #error "1"
 #    #error "1"
 #     ^
 #
-# And possibly distcc adds its bits.
+# Possibly distcc adds its bits.
 #
 #   distcc[33187] ERROR: compile (null) on localhost failed
 #   syncline.c:1:2: error: #error "1"
@@ -63,13 +64,38 @@ m4_define([AT_SYNCLINES_COMPILE],
 #
 #   distcc[35882] (dcc_connect_by_name) ERROR: failed to look up host "chrisimac": Unknown host
 #   distcc[35882] Warning: failed to distribute input.c to chrisimac/4, running locally instead
+#
+# The compiler might end by the number of messages issued (Clang 3.2):
+#
+#    syncline.c:1:2: error: "1"
+#    #error "1"
+#     ^
+#    1 error generated.
+#
+# When c++ is used to compiler C, we might have more messages (Clang 3.2):
+#
+#    clang: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated
 
 AT_CHECK([[$PERL -p -0777 - stderr <<\EOF
+  # 1. Remove useless lines.
+
+  # distcc clutter.
   s/^distcc\[\d+\] .*\n//gm;
-  s/^([^:]+:\d+)[.:][^:]+:(.+)$/$][1:$][2/gm;
-  s/^([^:]+:\d+):[^#]*( #error)/$][1:$][2/gm;
+  # c vs. c++.
+  s/^clang: warning: treating 'c' input as 'c\+\+'.*\n//gm;
+  # Function context.
   s/^[^:]*: In function '[^']+':\n//gm;
-  s/^\ +#error.*\n\ *\^\n//gm;
+  # Caret error.
+  s/^ *#error.*\n *\^\n//gm;
+  # Number of errors.
+  s/^1 error generated\.\n//gm;
+
+  # 2. Normalize the lines we kept.
+
+  # Remove column.
+  s/^([^:]+:\d+)[.:][^:]+:(.+)$/$][1:$][2/gm;
+  # Map all combinations of "error: " and "#error: " to "#error ".
+  s/^([^:]+:\d+):( |#error|error|:)+/$][1: #error /gm;
 EOF
 ]],
   0, [stdout])
@@ -101,7 +127,7 @@ AT_BISON_OPTION_PUSHDEFS
 
 AT_DATA([syncline.c],
 [[#error "1"
-int i; // avoids -pedantic warning about an empty translation unit
+int i; /* avoids -pedantic warning about an empty translation unit. */
 ]])
 
 AT_SYNCLINES_COMPILE([syncline.c])

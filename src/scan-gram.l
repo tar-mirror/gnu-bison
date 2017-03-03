@@ -103,9 +103,9 @@ static void unexpected_newline (boundary, char const *);
  /* Bracketed identifiers support. */
 %x SC_BRACKETED_ID SC_RETURN_BRACKETED_ID
 
-letter	  [.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_]
+letter	   [.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_]
+notletter [^.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_]{-}[%\{]
 id	  {letter}({letter}|[-0-9])*
-directive %{id}
 int	  [0-9]+
 
 /* POSIX says that a tag must be both an id and a C union member, but
@@ -148,7 +148,7 @@ splice	 (\\[ \f\t\v]*\n)*
   /* Comments and white space.  */
   ","          warn_at (*loc, _("stray ',' treated as white space"));
   [ \f\n\t\v]  |
-  "//".*       ;
+  "//".*       continue;
   "/*" {
     token_start = loc->start;
     context_state = YY_START;
@@ -157,7 +157,7 @@ splice	 (\\[ \f\t\v]*\n)*
 
   /* #line directives are not documented, and may be withdrawn or
      modified in future versions of Bison.  */
-  ^"#line "{int}" \"".*"\"\n" {
+  ^"#line "{int}(" \"".*"\"")?"\n" {
     handle_syncline (yytext + sizeof "#line " - 1, *loc);
   }
 }
@@ -218,7 +218,7 @@ splice	 (\\[ \f\t\v]*\n)*
   "%verbose"                        return PERCENT_VERBOSE;
   "%yacc"                           return PERCENT_YACC;
 
-  {directive} {
+  "%"{id}|"%"{notletter}([[:graph:]])+ {
     complain_at (*loc, _("invalid directive: %s"), quote (yytext));
   }
 
@@ -290,8 +290,10 @@ splice	 (\\[ \f\t\v]*\n)*
     BEGIN SC_BRACKETED_ID;
   }
 
-  . {
-    complain_at (*loc, _("invalid character: %s"), quote_mem (yytext, yyleng));
+  [^\[%A-Za-z0-9_<>{}\"\'*;|=/, \f\n\t\v]+|. {
+    complain_at (*loc, "%s: %s",
+                 ngettext ("invalid character", "invalid characters", yyleng),
+                 quote_mem (yytext, yyleng));
   }
 
   <<EOF>> {
@@ -373,10 +375,14 @@ splice	 (\\[ \f\t\v]*\n)*
     else
       complain_at (*loc, _("an identifier expected"));
   }
-  . {
-    complain_at (*loc, _("invalid character in bracketed name: %s"),
-		 quote_mem (yytext, yyleng));
+
+  [^\].A-Za-z0-9_/ \f\n\t\v]+|. {
+    complain_at (*loc, "%s: %s",
+                 ngettext ("invalid character in bracketed name",
+                           "invalid characters in bracketed name", yyleng),
+                 quote_mem (yytext, yyleng));
   }
+
   <<EOF>> {
     BEGIN bracketed_id_context_state;
     unexpected_eof (bracketed_id_start, "]");
@@ -403,7 +409,7 @@ splice	 (\\[ \f\t\v]*\n)*
 <SC_YACC_COMMENT>
 {
   "*/"     BEGIN context_state;
-  .|\n	   ;
+  .|\n	   continue;
   <<EOF>>  unexpected_eof (token_start, "*/"); BEGIN context_state;
 }
 
@@ -839,23 +845,27 @@ convert_ucn_to_byte (char const *ucn)
 }
 
 
-/*----------------------------------------------------------------.
-| Handle '#line INT "FILE"'.  ARGS has already skipped '#line '.  |
-`----------------------------------------------------------------*/
+/*---------------------------------------------------------------------.
+| Handle '#line INT( "FILE")?\n'.  ARGS has already skipped '#line '.  |
+`---------------------------------------------------------------------*/
 
 static void
 handle_syncline (char *args, location loc)
 {
-  char *after_num;
-  unsigned long int lineno = strtoul (args, &after_num, 10);
-  char *file = mbschr (after_num, '"') + 1;
-  *mbschr (file, '"') = '\0';
+  char *file;
+  unsigned long int lineno = strtoul (args, &file, 10);
   if (INT_MAX <= lineno)
     {
       warn_at (loc, _("line number overflow"));
       lineno = INT_MAX;
     }
-  current_file = uniqstr_new (file);
+
+  file = mbschr (file, '"');
+  if (file)
+    {
+      *mbschr (file + 1, '"') = '\0';
+      current_file = uniqstr_new (file + 1);
+    }
   boundary_set (&scanner_cursor, current_file, lineno, 1);
 }
 
@@ -873,7 +883,7 @@ unexpected_end (boundary start, char const *msgid, char const *token_end)
   loc.start = start;
   loc.end = scanner_cursor;
   token_end = quote (token_end);
-  // Instead of '\'', display "'".
+  /* Instead of '\'', display "'".  */
   if (!strcmp (token_end, "'\\''"))
     token_end = "\"'\"";
   complain_at (loc, _(msgid), token_end);

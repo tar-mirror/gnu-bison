@@ -142,8 +142,14 @@
 /* Define to 1 when the gnulib module fstat should be tested. */
 #undef GNULIB_TEST_FSTAT
 
+/* Define to 1 when the gnulib module getdelim should be tested. */
+#undef GNULIB_TEST_GETDELIM
+
 /* Define to 1 when the gnulib module getdtablesize should be tested. */
 #undef GNULIB_TEST_GETDTABLESIZE
+
+/* Define to 1 when the gnulib module getline should be tested. */
+#undef GNULIB_TEST_GETLINE
 
 /* Define to 1 when the gnulib module getopt-gnu should be tested. */
 #undef GNULIB_TEST_GETOPT_GNU
@@ -417,9 +423,17 @@
    don't. */
 #undef HAVE_DECL_GETC_UNLOCKED
 
+/* Define to 1 if you have the declaration of `getdelim', and to 0 if you
+   don't. */
+#undef HAVE_DECL_GETDELIM
+
 /* Define to 1 if you have the declaration of `getenv', and to 0 if you don't.
    */
 #undef HAVE_DECL_GETENV
+
+/* Define to 1 if you have the declaration of `getline', and to 0 if you
+   don't. */
+#undef HAVE_DECL_GETLINE
 
 /* Define to 1 if you have the declaration of `getrusage', and to 0 if you
    don't. */
@@ -525,11 +539,20 @@
 /* Define to 1 if you have the <features.h> header file. */
 #undef HAVE_FEATURES_H
 
+/* Define to 1 if you have the `flockfile' function. */
+#undef HAVE_FLOCKFILE
+
 /* Define if the frexpl function is available in libc. */
 #undef HAVE_FREXPL_IN_LIBC
 
 /* Define if the frexp function is available in libc. */
 #undef HAVE_FREXP_IN_LIBC
+
+/* Define to 1 if you have the `funlockfile' function. */
+#undef HAVE_FUNLOCKFILE
+
+/* Define to 1 if you have the `getdelim' function. */
+#undef HAVE_GETDELIM
 
 /* Define to 1 if you have the `getdtablesize' function. */
 #undef HAVE_GETDTABLESIZE
@@ -545,11 +568,6 @@
 
 /* Define if you have the iconv() function and it works. */
 #undef HAVE_ICONV
-
-/* Define to 1 if the compiler supports one of the keywords 'inline',
-   '__inline__', '__inline' and effectively inlines functions marked as such.
-   */
-#undef HAVE_INLINE
 
 /* Define if you have the 'intmax_t' type in <stdint.h> or <inttypes.h>. */
 #undef HAVE_INTMAX_T
@@ -2112,13 +2130,19 @@
      when FOO is an inline function in the header; see
      <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=54113>.
    _GL_INLINE_HEADER_END contains useful stuff to put
-     in the same include file, after uses of _GL_INLINE.  */
-#if (__GNUC__ \
-     ? defined __GNUC_STDC_INLINE__ && __GNUC_STDC_INLINE__ \
-     : 199901L <= __STDC_VERSION__)
+     in the same include file, after uses of _GL_INLINE.
+
+   Suppress the use of extern inline on Apple's platforms,
+   as Libc-825.25 (2012-09-19) is incompatible with it; see
+   <http://lists.gnu.org/archive/html/bug-gnulib/2012-12/msg00023.html>.
+   Perhaps Apple will fix this some day.  */
+#if ((__GNUC__ \
+      ? defined __GNUC_STDC_INLINE__ && __GNUC_STDC_INLINE__ \
+      : 199901L <= __STDC_VERSION__) \
+     && !defined __APPLE__)
 # define _GL_INLINE inline
 # define _GL_EXTERN_INLINE extern inline
-#elif 2 < __GNUC__ + (7 <= __GNUC_MINOR__)
+#elif 2 < __GNUC__ + (7 <= __GNUC_MINOR__) && !defined __APPLE__
 # if __GNUC_GNU_INLINE__
    /* __gnu_inline__ suppresses a GCC 4.2 diagnostic.  */
 #  define _GL_INLINE extern inline __attribute__ ((__gnu_inline__))
@@ -2127,8 +2151,8 @@
 # endif
 # define _GL_EXTERN_INLINE extern
 #else
-# define _GL_INLINE static inline
-# define _GL_EXTERN_INLINE static inline
+# define _GL_INLINE static _GL_UNUSED
+# define _GL_EXTERN_INLINE static _GL_UNUSED
 #endif
 
 #if 4 < __GNUC__ + (6 <= __GNUC_MINOR__)

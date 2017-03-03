@@ -532,7 +532,7 @@ int yy_flex_debug = 1;
 
 static yyconst flex_int16_t yy_rule_linenum[8] =
     {   0,
-       37,   38,   44,   45,   46,   54,   55
+       37,   38,   44,   46,   49,   60,   66
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -942,37 +942,40 @@ return yy::calcxx_parser::token_type (yytext[0]);
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 45 "calc++-scanner.ll"
+#line 46 "calc++-scanner.ll"
 return token::ASSIGN;
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 46 "calc++-scanner.ll"
+#line 49 "calc++-scanner.ll"
 {
-  errno = 0;
-  long n = strtol (yytext, NULL, 10);
-  if (! (INT_MIN <= n && n <= INT_MAX && errno != ERANGE))
-    driver.error (*yylloc, "integer is out of range");
-  yylval->ival = n;
-  return token::NUMBER;
-}
+           errno = 0;
+           long n = strtol (yytext, NULL, 10);
+           if (! (INT_MIN <= n && n <= INT_MAX && errno != ERANGE))
+             driver.error (*yylloc, "integer is out of range");
+           yylval->ival = n;
+           return token::NUMBER;
+         }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 54 "calc++-scanner.ll"
-yylval->sval = new std::string (yytext); return token::IDENTIFIER;
+#line 60 "calc++-scanner.ll"
+{
+           yylval->sval = new std::string (yytext);
+           return token::IDENTIFIER;
+         }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 55 "calc++-scanner.ll"
+#line 66 "calc++-scanner.ll"
 driver.error (*yylloc, "invalid character");
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 56 "calc++-scanner.ll"
+#line 67 "calc++-scanner.ll"
 ECHO;
 	YY_BREAK
-#line 976 "calc++-scanner.cc"
+#line 979 "calc++-scanner.cc"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2054,7 +2057,7 @@ void yyfree (void * ptr )
 
 /* %ok-for-header */
 
-#line 56 "calc++-scanner.ll"
+#line 67 "calc++-scanner.ll"
 
 
 

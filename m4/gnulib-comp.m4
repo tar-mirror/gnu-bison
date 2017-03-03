@@ -87,7 +87,9 @@ AC_DEFUN([gl_EARLY],
   # Code from module fseterr:
   # Code from module fstat:
   # Code from module gendocs:
+  # Code from module getdelim:
   # Code from module getdtablesize:
+  # Code from module getline:
   # Code from module getopt-gnu:
   # Code from module getopt-posix:
   # Code from module gettext:
@@ -101,7 +103,6 @@ AC_DEFUN([gl_EARLY],
   # Code from module hash:
   # Code from module havelib:
   # Code from module include_next:
-  # Code from module inline:
   # Code from module intprops:
   # Code from module inttypes:
   # Code from module inttypes-incomplete:
@@ -256,7 +257,6 @@ AC_DEFUN([gl_INIT],
   gl_source_base='lib'
   gl_FUNC_ALLOCA
   gl_ASSERT
-  AC_REQUIRE([AC_C_INLINE])
   gl_FUNC_CALLOC_POSIX
   if test $REPLACE_CALLOC = 1; then
     AC_LIBOBJ([calloc])
@@ -344,12 +344,24 @@ AC_DEFUN([gl_INIT],
     gl_PREREQ_FSTAT
   fi
   gl_SYS_STAT_MODULE_INDICATOR([fstat])
+  gl_FUNC_GETDELIM
+  if test $HAVE_GETDELIM = 0 || test $REPLACE_GETDELIM = 1; then
+    AC_LIBOBJ([getdelim])
+    gl_PREREQ_GETDELIM
+  fi
+  gl_STDIO_MODULE_INDICATOR([getdelim])
   gl_FUNC_GETDTABLESIZE
   if test $HAVE_GETDTABLESIZE = 0; then
     AC_LIBOBJ([getdtablesize])
     gl_PREREQ_GETDTABLESIZE
   fi
   gl_UNISTD_MODULE_INDICATOR([getdtablesize])
+  gl_FUNC_GETLINE
+  if test $REPLACE_GETLINE = 1; then
+    AC_LIBOBJ([getline])
+    gl_PREREQ_GETLINE
+  fi
+  gl_STDIO_MODULE_INDICATOR([getline])
   gl_FUNC_GETOPT_GNU
   if test $REPLACE_GETOPT = 1; then
     AC_LIBOBJ([getopt])
@@ -383,7 +395,6 @@ AC_DEFUN([gl_INIT],
           m4_defn([m4_PACKAGE_VERSION])), [1], [],
         [AC_CONFIG_LINKS([$GNUmakefile:$GNUmakefile], [],
           [GNUmakefile=$GNUmakefile])])
-  gl_INLINE
   gl_INTTYPES_H
   gl_INTTYPES_INCOMPLETE
   gl_ISNAN
@@ -912,6 +923,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/basename.c
   lib/binary-io.c
   lib/binary-io.h
+  lib/bitrotate.c
   lib/bitrotate.h
   lib/c-ctype.c
   lib/c-ctype.h
@@ -962,7 +974,9 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/fseterr.c
   lib/fseterr.h
   lib/fstat.c
+  lib/getdelim.c
   lib/getdtablesize.c
+  lib/getline.c
   lib/getopt.c
   lib/getopt.in.h
   lib/getopt1.c
@@ -988,6 +1002,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/localcharset.c
   lib/localcharset.h
   lib/malloc.c
+  lib/math.c
   lib/math.in.h
   lib/mbchar.c
   lib/mbchar.h
@@ -1035,6 +1050,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/ref-add.sin
   lib/ref-del.sin
   lib/sched.in.h
+  lib/sig-handler.c
   lib/sig-handler.h
   lib/sigaction.c
   lib/signal.in.h
@@ -1067,6 +1083,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/stdio--.h
   lib/stdio-impl.h
   lib/stdio-safer.h
+  lib/stdio.c
   lib/stdio.in.h
   lib/stdlib.in.h
   lib/stpcpy.c
@@ -1093,6 +1110,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/time.in.h
   lib/unistd--.h
   lib/unistd-safer.h
+  lib/unistd.c
   lib/unistd.in.h
   lib/unitypes.in.h
   lib/uniwidth.in.h
@@ -1111,6 +1129,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/wait-process.h
   lib/waitpid.c
   lib/wchar.in.h
+  lib/wctype-h.c
   lib/wctype.in.h
   lib/wcwidth.c
   lib/xalloc-die.c
@@ -1158,7 +1177,9 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/frexpl.m4
   m4/fseterr.m4
   m4/fstat.m4
+  m4/getdelim.m4
   m4/getdtablesize.m4
+  m4/getline.m4
   m4/getopt.m4
   m4/gettext.m4
   m4/glibc2.m4
@@ -1166,7 +1187,6 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/gnulib-common.m4
   m4/iconv.m4
   m4/include_next.m4
-  m4/inline.m4
   m4/intdiv0.m4
   m4/intl.m4
   m4/intldir.m4

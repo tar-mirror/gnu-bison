@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.4.1\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-11-07 18:23+0100\n"
+"POT-Creation-Date: 2012-12-12 16:09+0100\n"
 "PO-Revision-Date: 2009-02-04 19:44+0200\n"
 "Last-Translator: Pavel Maryanov <acid_jack@ukr.net>\n"
 "Language-Team: Russian <gnu@mx.ru>\n"
@@ -21,12 +21,17 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: src/complain.c:116 src/complain.c:127 src/complain.c:136 src/complain.c:184
-#: src/complain.c:194
+#: src/complain.c:120 src/complain.c:131 src/complain.c:140 src/complain.c:188
+#: src/complain.c:198
 msgid "warning"
 msgstr "предупреждение"
 
-#: src/complain.c:204 src/complain.c:211
+#: src/complain.c:151 src/complain.c:160 src/complain.c:167
+#, fuzzy
+msgid "error"
+msgstr "ошибка ввода-вывода"
+
+#: src/complain.c:208 src/complain.c:215
 msgid "fatal error"
 msgstr "фатальная ошибка"
 
@@ -111,17 +116,17 @@ msgstr "отказ перезаписи входного файла %s"
 msgid "conflicting outputs to file %s"
 msgstr "конфликт вывода в файл %s"
 
-#: src/getargs.c:271
+#: src/getargs.c:292
 #, c-format
 msgid "Try `%s --help' for more information.\n"
 msgstr "Используйте «%s --help» для дополнительной информации.\n"
 
-#: src/getargs.c:280
+#: src/getargs.c:301
 #, c-format
 msgid "Usage: %s [OPTION]... FILE\n"
 msgstr "Использование: %s [КЛЮЧИ]... ФАЙЛ\n"
 
-#: src/getargs.c:281
+#: src/getargs.c:302
 msgid ""
 "Generate a deterministic LR or generalized LR (GLR) parser employing\n"
 "LALR(1), IELR(1), or canonical LR(1) parser tables.  IELR(1) and\n"
@@ -129,16 +134,16 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/getargs.c:288
+#: src/getargs.c:309
 msgid ""
 "Mandatory arguments to long options are mandatory for short options too.\n"
 msgstr "Соответствующие длянные опции также соответствуют и коротким опциям.\n"
 
-#: src/getargs.c:291
+#: src/getargs.c:312
 msgid "The same is true for optional arguments.\n"
 msgstr "То-же допустимо для опциональных параметров.\n"
 
-#: src/getargs.c:295
+#: src/getargs.c:316
 #, fuzzy
 msgid ""
 "\n"
@@ -150,6 +155,7 @@ msgid ""
 "      --print-datadir        output directory containing skeletons and XSLT\n"
 "  -y, --yacc                 emulate POSIX Yacc\n"
 "  -W, --warnings[=CATEGORY]  report the warnings falling in CATEGORY\n"
+"  -f, --feature[=FEATURE]    activate miscellaneous features\n"
 "\n"
 msgstr ""
 "\n"
@@ -164,12 +170,11 @@ msgstr ""
 "КАТЕГОРИЕЙ\n"
 "\n"
 
-#: src/getargs.c:307
+#: src/getargs.c:329
 #, fuzzy, c-format
 msgid ""
 "Parser:\n"
 "  -L, --language=LANGUAGE          specify the output programming language\n"
-"                                   (this is an experimental feature)\n"
 "  -S, --skeleton=FILE              specify the skeleton to use\n"
 "  -t, --debug                      instrument the parser for debugging\n"
 "      --locations                  enable location support\n"
@@ -179,7 +184,6 @@ msgid ""
 "                                   deprecated by '-Dapi.prefix=PREFIX'\n"
 "  -l, --no-lines                   don't generate '#line' directives\n"
 "  -k, --token-table                include a table of token names\n"
-"\n"
 msgstr ""
 "Анализатор:\n"
 "  -L, --language=ЯЗЫК        указать выходной язык программирования\n"
@@ -192,7 +196,8 @@ msgstr ""
 "  -k, --token-table          включить таблицу имен лексем\n"
 "\n"
 
-#: src/getargs.c:325
+#: src/getargs.c:346
+#, fuzzy
 msgid ""
 "Output:\n"
 "      --defines[=FILE]       also produce a header file\n"
@@ -206,7 +211,6 @@ msgid ""
 "  -g, --graph[=FILE]         also output a graph of the automaton\n"
 "  -x, --xml[=FILE]           also output an XML report of the automaton\n"
 "                             (the XML schema is experimental)\n"
-"\n"
 msgstr ""
 "Вывод:\n"
 "      --defines[=ФАЙЛ]       создать также файл заголовков\n"
@@ -222,7 +226,7 @@ msgstr ""
 "                             (сценарий XML - эксперементальный)\n"
 "\n"
 
-#: src/getargs.c:340
+#: src/getargs.c:361
 #, fuzzy
 msgid ""
 "Warning categories include:\n"
@@ -230,12 +234,12 @@ msgid ""
 "  `yacc'            incompatibilities with POSIX Yacc\n"
 "  `conflicts-sr'    S/R conflicts (enabled by default)\n"
 "  `conflicts-rr'    R/R conflicts (enabled by default)\n"
+"  `deprecated'      obsolete constructs\n"
 "  `other'           all other warnings (enabled by default)\n"
 "  `all'             all the warnings\n"
 "  `no-CATEGORY'     turn off warnings in CATEGORY\n"
 "  `none'            turn off all the warnings\n"
 "  `error'           treat warnings as errors\n"
-"\n"
 msgstr ""
 "Категории предупреждения включают:\n"
 "  «midrule-values»  неназначенные или неиспользуемые значения в правилах\n"
@@ -246,7 +250,7 @@ msgstr ""
 "  «error»           воспринимать все предупреждения как ошибки\n"
 "\n"
 
-#: src/getargs.c:354
+#: src/getargs.c:376
 msgid ""
 "THINGS is a list of comma separated words that can include:\n"
 "  `state'        describe the states\n"
@@ -264,19 +268,28 @@ msgstr ""
 "  «all»          включить всю эту информацию\n"
 "  «none»         отключить отчет\n"
 
-#: src/getargs.c:365
+#: src/getargs.c:387
+msgid ""
+"FEATURE is a list of comma separated words that can include:\n"
+"  `caret'        show errors with carets\n"
+"  `all'          all of the above\n"
+"  `none'         disable all of the above\n"
+"  "
+msgstr ""
+
+#: src/getargs.c:395
 #, fuzzy, c-format
 msgid "Report bugs to <%s>.\n"
 msgstr ""
 "\n"
 "Ошибки сообщайте по адресу <%s>.\n"
 
-#: src/getargs.c:366
+#: src/getargs.c:396
 #, c-format
 msgid "%s home page: <%s>.\n"
 msgstr ""
 
-#: src/getargs.c:367
+#: src/getargs.c:397
 msgid "General help using GNU software: <http://www.gnu.org/gethelp/>.\n"
 msgstr ""
 
@@ -285,29 +298,29 @@ msgstr ""
 #. form one of the URLs at http://translationproject.org/team/.
 #. Otherwise, replace the entire URL with your translation team's
 #. email address.
-#: src/getargs.c:380
+#: src/getargs.c:410
 msgid "Report translation bugs to <http://translationproject.org/team/>.\n"
 msgstr ""
 
-#: src/getargs.c:382
+#: src/getargs.c:412
 msgid "For complete documentation, run: info bison.\n"
 msgstr ""
 
-#: src/getargs.c:398
+#: src/getargs.c:428
 #, c-format
 msgid "bison (GNU Bison) %s"
 msgstr "bison (GNU Bison) %s"
 
-#: src/getargs.c:400
+#: src/getargs.c:430
 msgid "Written by Robert Corbett and Richard Stallman.\n"
 msgstr "Авторы: Роберт Корбет и Ричард Столмен.\n"
 
-#: src/getargs.c:404
+#: src/getargs.c:434
 #, c-format
 msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
 msgstr "Copyright (C) %d Free Software Foundation, Inc.\n"
 
-#: src/getargs.c:407
+#: src/getargs.c:437
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
@@ -318,26 +331,26 @@ msgstr ""
 "ПРИГОДНОСТИ\n"
 "ДЛЯ ОПРЕДЕЛЕННОЙ ЦЕЛИ.\n"
 
-#: src/getargs.c:428
+#: src/getargs.c:458
 #, c-format
 msgid "multiple skeleton declarations are invalid"
 msgstr "множественные описания скелета не применимо"
 
-#: src/getargs.c:446
+#: src/getargs.c:476
 #, fuzzy, c-format
 msgid "%s: invalid language"
 msgstr "недопустимый язык «%s»"
 
-#: src/getargs.c:449
+#: src/getargs.c:479
 msgid "multiple language declarations are invalid"
 msgstr "множественные описания языка не применимо"
 
-#: src/getargs.c:711
+#: src/getargs.c:747
 #, fuzzy, c-format
 msgid "%s: missing operand"
 msgstr "после «%s» пропущен операнд"
 
-#: src/getargs.c:713
+#: src/getargs.c:749
 #, fuzzy, c-format
 msgid "extra operand %s"
 msgstr "лишний операнд «%s»"
@@ -350,7 +363,7 @@ msgstr "пусто"
 msgid "Grammar"
 msgstr "Грамматика"
 
-#: src/graphviz.c:43
+#: src/graphviz.c:45
 #, c-format
 msgid ""
 "// Generated by %s.\n"
@@ -359,7 +372,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/location.c:93 src/scan-gram.l:855
+#: src/location.c:93 src/scan-gram.l:859
 #, c-format
 msgid "line number overflow"
 msgstr "переполнение номера строки"
@@ -373,33 +386,33 @@ msgstr "переполнение номера столбца"
 msgid "rule useless in parser due to conflicts"
 msgstr "правило не применимо в парсере из-за конфликтов"
 
-#: src/muscle-tab.c:436
+#: src/muscle-tab.c:450
 #, fuzzy, c-format
 msgid "%%define variable %s redefined"
 msgstr "повторное определение символа %s"
 
-#: src/muscle-tab.c:439
-#, fuzzy, c-format
+#: src/muscle-tab.c:453
+#, fuzzy
 msgid "previous definition"
 msgstr "предыдущее описание"
 
-#: src/muscle-tab.c:478 src/muscle-tab.c:492 src/muscle-tab.c:544
-#: src/muscle-tab.c:609
+#: src/muscle-tab.c:490 src/muscle-tab.c:504 src/muscle-tab.c:556
+#: src/muscle-tab.c:624
 #, c-format
 msgid "%s: undefined %%define variable %s"
 msgstr ""
 
-#: src/muscle-tab.c:538
+#: src/muscle-tab.c:550
 #, c-format
 msgid "invalid value for %%define Boolean variable %s"
 msgstr ""
 
-#: src/muscle-tab.c:596
+#: src/muscle-tab.c:609
 #, c-format
 msgid "invalid value for %%define variable %s: %s"
 msgstr ""
 
-#: src/muscle-tab.c:599
+#: src/muscle-tab.c:613
 #, fuzzy, c-format
 msgid "accepted value: %s"
 msgstr "неиспользуемая переменная: $%d"
@@ -442,10 +455,10 @@ msgstr "принять"
 msgid "$default"
 msgstr "$default"
 
-#: src/print.c:373
-#, c-format
-msgid "state %d"
-msgstr "состояние %d"
+#: src/print.c:373 src/print_graph.c:78
+#, fuzzy, c-format
+msgid "State %d"
+msgstr "Состояние %d "
 
 #: src/print.c:409
 msgid "Terminals, with rules where they appear"
@@ -474,73 +487,72 @@ msgstr "Правило не применимо в парсере из-за ко�
 msgid "multiple %s declarations"
 msgstr "множественное описание %s"
 
-#: src/reader.c:132
+#: src/reader.c:133
 #, fuzzy, c-format
 msgid "result type clash on merge function %s: <%s> != <%s>"
 msgstr "конфликт типов результата при слиянии функции «%s»: <%s> != <%s>"
 
-#: src/reader.c:135 src/symtab.c:154 src/symtab.c:162 src/symtab.c:929
-#: src/symtab.c:942 src/symtab.c:955 src/symtab.c:968
-#, c-format
+#: src/reader.c:139 src/symtab.c:156 src/symtab.c:166 src/symtab.c:938
+#: src/symtab.c:953 src/symtab.c:968 src/symtab.c:983
 msgid "previous declaration"
 msgstr "предыдущее описание"
 
-#: src/reader.c:201
+#: src/reader.c:205
 #, c-format
 msgid "duplicated symbol name for %s ignored"
 msgstr ""
 
-#: src/reader.c:245
+#: src/reader.c:249
 #, c-format
 msgid "rule given for %s, which is a token"
 msgstr "правило задано для %s, который является лексемой"
 
-#: src/reader.c:300
+#: src/reader.c:304
 #, c-format
 msgid "type clash on default action: <%s> != <%s>"
 msgstr "конфликт типов на действии по умолчанию: <%s> != <%s>"
 
-#: src/reader.c:306
+#: src/reader.c:310
 #, c-format
 msgid "empty rule for typed nonterminal, and no action"
 msgstr ""
 "пустое правило для типизированного нетерминального символа, и нет действия"
 
-#: src/reader.c:324
+#: src/reader.c:328
 #, c-format
 msgid "unused value: $%d"
 msgstr "неиспользуемая переменная: $%d"
 
-#: src/reader.c:326
+#: src/reader.c:330
 msgid "unset value: $$"
 msgstr "неуказанное значение: $$"
 
-#: src/reader.c:337
+#: src/reader.c:341
 #, c-format
 msgid "token for %%prec is not defined: %s"
 msgstr ""
 
-#: src/reader.c:427 src/reader.c:441 src/reader.c:454
+#: src/reader.c:431 src/reader.c:445 src/reader.c:458
 #, c-format
 msgid "only one %s allowed per rule"
 msgstr "только одно %s разрешено на правило"
 
-#: src/reader.c:437 src/reader.c:452
+#: src/reader.c:441 src/reader.c:456
 #, c-format
 msgid "%s affects only GLR parsers"
 msgstr "%s влияет только на GLR парсеры"
 
-#: src/reader.c:439
+#: src/reader.c:443
 #, c-format
 msgid "%s must be followed by positive number"
 msgstr "за %s должно следовать положительное число"
 
-#: src/reader.c:550
+#: src/reader.c:554
 #, c-format
 msgid "rule is too long"
 msgstr "слишком длинное правило"
 
-#: src/reader.c:668
+#: src/reader.c:672
 #, c-format
 msgid "no rules in the input grammar"
 msgstr "отсутствуют правила во входной грамматике"
@@ -592,97 +604,95 @@ msgstr "начальный символ %s не выводит ни одного
 msgid "stray '%s'"
 msgstr "некорректный «$»"
 
-#: src/scan-code.l:227
-#, c-format
+#: src/scan-code.l:229
 msgid "a ';' might be needed at the end of action code"
 msgstr ""
 
-#: src/scan-code.l:228
-#, c-format
+#: src/scan-code.l:232
 msgid "future versions of Bison will not add the ';'"
 msgstr ""
 
-#: src/scan-code.l:250
+#: src/scan-code.l:254
 #, c-format
 msgid "use of YYFAIL, which is deprecated and will be removed"
 msgstr ""
 
-#: src/scan-code.l:427 src/scan-code.l:430
+#: src/scan-code.l:431 src/scan-code.l:434
 #, c-format
 msgid "refers to: %c%s at %s"
 msgstr ""
 
-#: src/scan-code.l:446
+#: src/scan-code.l:450
 #, c-format
 msgid "possibly meant: %c"
 msgstr ""
 
-#: src/scan-code.l:455
+#: src/scan-code.l:459
 #, c-format
 msgid ", hiding %c"
 msgstr ""
 
-#: src/scan-code.l:463
+#: src/scan-code.l:467
 #, c-format
 msgid " at %s"
 msgstr ""
 
-#: src/scan-code.l:468
+#: src/scan-code.l:472
 #, c-format
 msgid ", cannot be accessed from mid-rule action at $%d"
 msgstr ""
 
-#: src/scan-code.l:520 src/scan-gram.l:777
+#: src/scan-code.l:521 src/scan-gram.l:783
 #, c-format
 msgid "integer out of range: %s"
 msgstr "выход за границы диапазона целого: %s"
 
-#: src/scan-code.l:609
+#: src/scan-code.l:610
 #, fuzzy, c-format
 msgid "invalid reference: %s"
 msgstr "неверная директива: %s"
 
-#: src/scan-code.l:618
+#: src/scan-code.l:619
 #, c-format
 msgid "syntax error after '%c', expecting integer, letter, '_', '[', or '$'"
 msgstr ""
 
-#: src/scan-code.l:625
+#: src/scan-code.l:626
 #, c-format
 msgid "symbol not found in production before $%d: %.*s"
 msgstr ""
 
-#: src/scan-code.l:632
+#: src/scan-code.l:633
 #, c-format
 msgid "symbol not found in production: %.*s"
 msgstr ""
 
-#: src/scan-code.l:647
+#: src/scan-code.l:648
 #, fuzzy, c-format
 msgid "misleading reference: %s"
 msgstr "переопределение приоритета для %s"
 
-#: src/scan-code.l:662
+#: src/scan-code.l:663
 #, fuzzy, c-format
 msgid "ambiguous reference: %s"
 msgstr "неоднозначный аргумент %s для %s"
 
-#: src/scan-code.l:699
+#: src/scan-code.l:700
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr "указан тип в нетипизированной грамматике"
 
-#: src/scan-code.l:758
+#: src/scan-code.l:759
 #, fuzzy, c-format
 msgid "$$ for the midrule at $%d of %s has no declared type"
 msgstr "$$ для правила $%d из «%s» не имеет описанного типа"
 
-#: src/scan-code.l:763
+#: src/scan-code.l:764
 #, fuzzy, c-format
 msgid "$$ of %s has no declared type"
 msgstr "$$ в «%s» не имеет описанного типа"
 
-#: src/scan-code.l:785
+#: src/scan-code.l:786
 #, fuzzy, c-format
 msgid "$%s of %s has no declared type"
 msgstr "$%d из «%s» не имеет описанного типа"
@@ -702,57 +712,63 @@ msgstr "неверная директива: %s"
 msgid "invalid identifier: %s"
 msgstr "неверная директива: %s"
 
-#: src/scan-gram.l:294
-#, c-format
-msgid "invalid character: %s"
-msgstr "недопустимый символ: %s"
+#: src/scan-gram.l:295
+#, fuzzy
+msgid "invalid character"
+msgid_plural "invalid characters"
+msgstr[0] "недопустимый символ: %s"
+msgstr[1] "недопустимый символ: %s"
+msgstr[2] "недопустимый символ: %s"
 
-#: src/scan-gram.l:352
+#: src/scan-gram.l:354
 #, fuzzy, c-format
 msgid "unexpected identifier in bracketed name: %s"
 msgstr "неожиданный элемент: %s"
 
-#: src/scan-gram.l:374
+#: src/scan-gram.l:376
 #, c-format
 msgid "an identifier expected"
 msgstr ""
 
-#: src/scan-gram.l:377
-#, fuzzy, c-format
-msgid "invalid character in bracketed name: %s"
-msgstr "недопустимый символ: %s"
+#: src/scan-gram.l:381
+#, fuzzy
+msgid "invalid character in bracketed name"
+msgid_plural "invalid characters in bracketed name"
+msgstr[0] "недопустимый символ: %s"
+msgstr[1] "недопустимый символ: %s"
+msgstr[2] "недопустимый символ: %s"
 
-#: src/scan-gram.l:475 src/scan-gram.l:496
+#: src/scan-gram.l:481 src/scan-gram.l:502
 #, c-format
 msgid "empty character literal"
 msgstr ""
 
-#: src/scan-gram.l:480 src/scan-gram.l:501
+#: src/scan-gram.l:486 src/scan-gram.l:507
 #, c-format
 msgid "extra characters in character literal"
 msgstr ""
 
-#: src/scan-gram.l:512
+#: src/scan-gram.l:518
 #, c-format
 msgid "invalid null character"
 msgstr "недопустимый нулевой символ"
 
-#: src/scan-gram.l:525 src/scan-gram.l:535 src/scan-gram.l:555
+#: src/scan-gram.l:531 src/scan-gram.l:541 src/scan-gram.l:561
 #, fuzzy, c-format
 msgid "invalid number after \\-escape: %s"
 msgstr "недопустимый нулевой символ: %s"
 
-#: src/scan-gram.l:567
+#: src/scan-gram.l:573
 #, fuzzy, c-format
 msgid "invalid character after \\-escape: %s"
 msgstr "недопустимый символ: %s"
 
-#: src/scan-gram.l:891
+#: src/scan-gram.l:901
 #, fuzzy, c-format
 msgid "missing %s at end of file"
 msgstr "отсутствует «%s» в конце файла"
 
-#: src/scan-gram.l:902
+#: src/scan-gram.l:912
 #, fuzzy, c-format
 msgid "missing %s at end of line"
 msgstr "отсутствует «%s» в конце строки"
@@ -787,82 +803,82 @@ msgstr ""
 msgid "too many symbols in input grammar (limit is %d)"
 msgstr "слишком много символов во входящей грамматике (максимально %d)"
 
-#: src/symtab.c:153
+#: src/symtab.c:154
 #, c-format
 msgid "%s redeclaration for %s"
 msgstr "повторное описание %s для %s"
 
-#: src/symtab.c:161
+#: src/symtab.c:164
 #, c-format
 msgid "%s redeclaration for <%s>"
 msgstr "%s повторно описан для <%s>"
 
-#: src/symtab.c:328
+#: src/symtab.c:332
 #, c-format
 msgid "symbol %s redefined"
 msgstr "повторное определение символа %s"
 
-#: src/symtab.c:342
+#: src/symtab.c:346
 #, c-format
 msgid "symbol %s redeclared"
 msgstr "переопределение символа %s"
 
-#: src/symtab.c:363
+#: src/symtab.c:367
 #, c-format
 msgid "redefining user token number of %s"
 msgstr "переопределение номера лексемы пользователя для %s"
 
-#: src/symtab.c:391
+#: src/symtab.c:395
 #, c-format
 msgid "symbol %s is used, but is not defined as a token and has no rules"
 msgstr "символ %s используется, но не определен как лексема и не имеет правил"
 
-#: src/symtab.c:411
+#: src/symtab.c:415
 #, fuzzy, c-format
 msgid "symbol %s used more than once as a literal string"
 msgstr "символ «%s» используется более одного раза как строка литерала"
 
-#: src/symtab.c:414
+#: src/symtab.c:418
 #, fuzzy, c-format
 msgid "symbol %s given more than one literal string"
 msgstr "символ «%s» указан более одной строки литерала"
 
-#: src/symtab.c:530
+#: src/symtab.c:535
 #, fuzzy, c-format
 msgid "user token number %d redeclaration for %s"
 msgstr "повторное описание типа для %s"
 
-#: src/symtab.c:532
+#: src/symtab.c:539
 #, fuzzy, c-format
 msgid "previous declaration for %s"
 msgstr "предыдущее описание"
 
-#: src/symtab.c:908
+#: src/symtab.c:915
 #, c-format
 msgid "the start symbol %s is undefined"
 msgstr "начальный символ %s не определен"
 
-#: src/symtab.c:912
+#: src/symtab.c:919
 #, c-format
 msgid "the start symbol %s is a token"
 msgstr "начальный символ %s является лексемой"
 
-#: src/symtab.c:927
+#: src/symtab.c:935
 #, c-format
 msgid "redeclaration for default tagged %%destructor"
 msgstr "переопределение для стандартного назначенного %%destructor"
 
-#: src/symtab.c:940
+#: src/symtab.c:950
 #, c-format
 msgid "redeclaration for default tagless %%destructor"
 msgstr "переопределение для стандартного неназначенного %%destructor"
 
-#: src/symtab.c:953
+#: src/symtab.c:965
 #, c-format
 msgid "redeclaration for default tagged %%printer"
 msgstr "переопределение для стандартного назначенного %%printer"
 
-#: src/symtab.c:966
+#: src/symtab.c:980
 #, c-format
 msgid "redeclaration for default tagless %%printer"
 msgstr "переопределение для стандартного неназначенного %%printer"
@@ -1080,13 +1096,13 @@ msgstr "%s: ключ «%s» должен использоваться с арг�
 msgid "memory exhausted"
 msgstr "память исчерпана"
 
-#: lib/spawn-pipe.c:138 lib/spawn-pipe.c:141 lib/spawn-pipe.c:262
-#: lib/spawn-pipe.c:265
+#: lib/spawn-pipe.c:140 lib/spawn-pipe.c:143 lib/spawn-pipe.c:264
+#: lib/spawn-pipe.c:267
 #, fuzzy, c-format
 msgid "cannot create pipe"
 msgstr "не удается закрыть файл"
 
-#: lib/spawn-pipe.c:232 lib/spawn-pipe.c:346 lib/wait-process.c:282
+#: lib/spawn-pipe.c:234 lib/spawn-pipe.c:348 lib/wait-process.c:282
 #: lib/wait-process.c:356
 #, c-format
 msgid "%s subprocess failed"
@@ -1158,9 +1174,8 @@ msgstr ""
 msgid "%s subprocess got fatal signal %d"
 msgstr ""
 
-#, fuzzy
-#~ msgid "error"
-#~ msgstr "ошибка ввода-вывода"
+#~ msgid "state %d"
+#~ msgstr "состояние %d"
 
 #, fuzzy
 #~ msgid "stray '@'"

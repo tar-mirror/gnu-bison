@@ -1,8 +1,9 @@
 Bison was originally written by Robert Corbett.  It would not be what
 it is today without the invaluable help of these people:
 
+Аскар Сафин              safinaskar@mail.ru
 Airy Andre                Airy.Andre@edf.fr
-Akim Demaille             akim@freefriends.org
+Akim Demaille             akim@lrde.epita.fr
 Albert Chin-A-Young       china@thewrittenword.com
 Alexander Belopolsky      alexb@rentec.com
 Alexandre Duret-Lutz      adl@lrde.epita.fr
@@ -31,6 +32,7 @@ Dagobert Michelsen        dam@baltic-online.de
 Daniel Hagerty            hag@gnu.org
 David J. MacKenzie        djm@gnu.org
 David Kastrup             dak@gnu.org
+Dennis Clarke             dclarke@blastwave.org
 Derek M. Jones            derek@knosof.co.uk
 Di-an Jan                 dianj@freeshell.org
 Dick Streefland           dick.streefland@altium.nl
@@ -56,6 +58,7 @@ Jim Kent                  jkent@arch.sel.sony.com
 Jim Meyering              jim@meyering.net
 Joel E. Denny             joeldenny@joeldenny.org
 Johan van Selst           johans@stack.nl
+Jonathan Fabrizio         jonathan.fabrizio@lrde.epita.fr
 Jonathan Nieder           jrnieder@gmail.com
 Juan Manuel Guerrero      juan.guerrero@gmx.de
 Kees Zeelenberg           kzlg@users.sourceforge.net
@@ -65,6 +68,7 @@ Lie Yan                   lie.yan@kaust.edu.sa
 Magnus Fromreide          magfr@lysator.liu.se
 Marc Autret               autret_m@epita.fr
 Marc Mendiola             mmendiol@usc.edu
+Mark Boyall               wolfeinstein@gmail.com
 Martin Jacobs             martin.jacobs@arcor.de
 Martin Mokrejs            mmokrejs@natur.cuni.cz
 Martin Nylin              martin.nylin@linuxmail.org
@@ -81,11 +85,13 @@ Nicolas Tisserand         nicolas.tisserand@epita.fr
 Noah Friedman             friedman@gnu.org
 Odd Arild Olsen           oao@fibula.no
 Oleg Smolsky              oleg.smolsky@pacific-simulators.co.nz
+Oleksii Taran             oleksii.taran@gmail.com
 Paolo Bonzini             bonzini@gnu.org
 Pascal Bart               pascal.bart@epita.fr
 Paul Eggert               eggert@cs.ucla.edu
 Paul Hilfinger            Hilfinger@CS.Berkeley.EDU
 Per Allansson             per@appgate.com
+Peter Eisentraut          peter_e@gmx.net
 Peter Fales               psfales@lucent.com
 Peter Hamorsky            hamo@upjs.sk
 Peter Simons              simons@cryp.to
@@ -105,6 +111,7 @@ Shura                     debil_urod@ngs.ru
 Stefano Lattarini         stefano.lattarini@gmail.com
 Steve Murphy              murf@parsetree.com
 Sum Wu                    sum@geekhouse.org
+Théophile Ranquet         theophile.ranquet@gmail.com
 Thiru Ramakrishnan        thiru.ramakrishnan@gmail.com
 Tim Josling               tej@melbpc.org.au
 Tim Landscheidt           tim@tim-landscheidt.de
@@ -128,6 +135,7 @@ thank them!  Please, help us keeping this list up to date.
 
 Local Variables:
 mode: text
+coding: utf-8
 End:
 
 -----

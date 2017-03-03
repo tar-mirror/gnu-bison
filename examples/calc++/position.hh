@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 2.6.4.35-5a000.  */
+/* A Bison parser, made by GNU Bison 2.6.90.8-d4fe.  */
 
 /* Positions for Bison parsers in C++
    
@@ -52,7 +52,7 @@
 
 
 namespace yy {
-/* Line 38 of location.cc  */
+/* Line 36 of location.cc  */
 #line 57 "../../../../examples/calc++/position.hh"
   /// Abstract a position.
   class position
@@ -156,8 +156,9 @@ namespace yy {
    ** \param ostr the destination output stream
    ** \param pos a reference to the position to redirect
    */
-  inline std::ostream&
-  operator<< (std::ostream& ostr, const position& pos)
+  template <typename YYChar>
+  inline std::basic_ostream<YYChar>&
+  operator<< (std::basic_ostream<YYChar>& ostr, const position& pos)
   {
     if (pos.filename)
       ostr << *pos.filename << ':';
@@ -166,6 +167,6 @@ namespace yy {
 
 
 } // yy
-/* Line 149 of location.cc  */
-#line 171 "../../../../examples/calc++/position.hh"
+/* Line 148 of location.cc  */
+#line 172 "../../../../examples/calc++/position.hh"
 #endif /* !YY_YY_EXAMPLES_CALC_POSITION_HH_INCLUDED  */

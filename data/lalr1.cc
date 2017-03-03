@@ -24,17 +24,14 @@ m4_define([b4_parser_class_name],
 b4_defines_if([],
               [b4_fatal([b4_skeleton[: using %%defines is mandatory]])])
 
-b4_percent_define_ifdef([[location_type]], [],
+b4_percent_define_ifdef([[api.location.type]], [],
   [# Backward compatibility.
   m4_define([b4_location_constructors])
   m4_include(b4_pkgdatadir/[location.cc])])
 m4_include(b4_pkgdatadir/[stack.hh])
 
-# We do want M4 expansion after # for CPP macros.
-m4_changecom()
-m4_divert_push(0)dnl
 b4_defines_if(
-[@output(b4_spec_defines_file@)@
+[b4_output_begin([b4_spec_defines_file])
 b4_copyright([Skeleton interface for Bison LALR(1) parsers in C++],
              [2002-2012])
 [
@@ -52,7 +49,7 @@ b4_copyright([Skeleton interface for Bison LALR(1) parsers in C++],
 #include <string>
 #include <iostream>
 #include "stack.hh"
-]b4_percent_define_ifdef([[location_type]], [],
+]b4_percent_define_ifdef([[api.location.type]], [],
                          [[#include "location.hh"]])[
 
 ]b4_YYDEBUG_define[
@@ -77,7 +74,7 @@ b4_user_stype
     typedef ]b4_api_PREFIX[STYPE semantic_type;
 #endif
     /// Symbol locations.
-    typedef ]b4_percent_define_get([[location_type]],
+    typedef ]b4_percent_define_get([[api.location.type]],
                                    [[location]])[ location_type;
     /// Tokens.
     struct token
@@ -227,6 +224,7 @@ b4_user_stype
 
     /// \brief Reclaim the memory associated to a symbol.
     /// \param yymsg        Why this token is reclaimed.
+    ///                     If null, do not display the symbol, just free it.
     /// \param yytype       The symbol type.
     /// \param yyvaluep     Its semantic value.
     /// \param yylocationp  Its location.
@@ -264,8 +262,11 @@ b4_user_stype
 ])[
 ]b4_percent_code_get([[provides]])[
 ]b4_cpp_guard_close([b4_spec_defines_file])
-])dnl
-@output(b4_parser_file_name@)@
+b4_output_end()
+])
+
+
+b4_output_begin([b4_parser_file_name])
 b4_copyright([Skeleton implementation for Bison LALR(1) parsers in C++],
              [2002-2012])
 b4_percent_code_get([[top]])[]dnl
@@ -335,9 +336,9 @@ do {					\
 #else /* !]b4_api_PREFIX[DEBUG */
 
 # define YYCDEBUG if (false) std::cerr
-# define YY_SYMBOL_PRINT(Title, Type, Value, Location)
-# define YY_REDUCE_PRINT(Rule)
-# define YY_STACK_PRINT()
+# define YY_SYMBOL_PRINT(Title, Type, Value, Location) YYUSE(Type)
+# define YY_REDUCE_PRINT(Rule)        static_cast<void>(0)
+# define YY_STACK_PRINT()             static_cast<void>(0)
 
 #endif /* !]b4_api_PREFIX[DEBUG */
 
@@ -446,7 +447,8 @@ do {					\
     YYUSE (yymsg);
     YYUSE (yyvaluep);
 
-    YY_SYMBOL_PRINT (yymsg, yytype, yyvaluep, yylocationp);
+    if (yymsg)
+      YY_SYMBOL_PRINT (yymsg, yytype, yyvaluep, yylocationp);
 
     switch (yytype)
       {
@@ -534,6 +536,10 @@ do {					\
 
     int yyresult;
 
+    // FIXME: This shoud be completely indented.  It is not yet to
+    // avoid gratuitous conflicts when merging into the master branch.
+    try
+      {
     YYCDEBUG << "Starting parse" << std::endl;
 
 ]m4_ifdef([b4_initial_action], [
@@ -574,9 +580,9 @@ b4_dollar_popdef])[]dnl
     /* Read a lookahead token.  */
     if (yychar == yyempty_)
       {
-	YYCDEBUG << "Reading a token: ";
-	yychar = ]b4_c_function_call([yylex], [int],
-				     [b4_api_PREFIX[STYPE*], [&yylval]][]dnl
+        YYCDEBUG << "Reading a token: ";
+        yychar = ]b4_c_function_call([yylex], [int],
+                                     [b4_api_PREFIX[STYPE*], [&yylval]][]dnl
 b4_locations_if([, [[location*], [&yylloc]]])dnl
 m4_ifdef([b4_lex_param], [, ]b4_lex_param))[;
       }
@@ -651,17 +657,21 @@ m4_ifdef([b4_lex_param], [, ]b4_lex_param))[;
     else
       yyval = yysemantic_stack_[0];
 
+    // Compute the default @@$.
     {
       slice<location_type, location_stack_type> slice (yylocation_stack_, yylen);
       YYLLOC_DEFAULT (yyloc, slice, yylen);
     }
+
+    // Perform the reduction.
     YY_REDUCE_PRINT (yyn);
     switch (yyn)
       {
-	]b4_user_actions[
-	default:
-          break;
+        ]b4_user_actions[
+      default:
+        break;
       }
+
     /* User semantic actions sometimes alter yychar, and that requires
        that yytoken be updated with the new translation.  We take the
        approach of translating immediately before every use of yytoken.
@@ -712,20 +722,19 @@ m4_ifdef([b4_lex_param], [, ]b4_lex_param))[;
     yyerror_range[1] = yylloc;
     if (yyerrstatus_ == 3)
       {
-	/* If just tried and failed to reuse lookahead token after an
-	 error, discard it.  */
-
-	if (yychar <= yyeof_)
-	  {
-	  /* Return failure if at end of input.  */
-	  if (yychar == yyeof_)
-	    YYABORT;
-	  }
-	else
-	  {
-	    yydestruct_ ("Error: discarding", yytoken, &yylval, &yylloc);
-	    yychar = yyempty_;
-	  }
+        /* If just tried and failed to reuse lookahead token after an
+           error, discard it.  */
+        if (yychar <= yyeof_)
+          {
+            /* Return failure if at end of input.  */
+            if (yychar == yyeof_)
+              YYABORT;
+          }
+        else
+          {
+            yydestruct_ ("Error: discarding", yytoken, &yylval, &yylloc);
+            yychar = yyempty_;
+          }
       }
 
     /* Else will try to reuse lookahead token after shifting the error
@@ -774,7 +783,7 @@ m4_ifdef([b4_lex_param], [, ]b4_lex_param))[;
 
 	/* Pop the current state because it cannot handle the error token.  */
 	if (yystate_stack_.height () == 1)
-	YYABORT;
+	  YYABORT;
 
 	yyerror_range[1] = yylocation_stack_[0];
 	yydestruct_ ("Error: popping",
@@ -822,16 +831,42 @@ m4_ifdef([b4_lex_param], [, ]b4_lex_param))[;
     /* Do not reclaim the symbols of the rule which action triggered
        this YYABORT or YYACCEPT.  */
     yypop_ (yylen);
-    while (yystate_stack_.height () != 1)
+    while (1 < yystate_stack_.height ())
       {
-	yydestruct_ ("Cleanup: popping",
-		   yystos_[yystate_stack_[0]],
-		   &yysemantic_stack_[0],
-		   &yylocation_stack_[0]);
-	yypop_ ();
+        yydestruct_ ("Cleanup: popping",
+                     yystos_[yystate_stack_[0]],
+                     &yysemantic_stack_[0],
+                     &yylocation_stack_[0]);
+        yypop_ ();
       }
 
     return yyresult;
+    }
+    catch (...)
+      {
+        YYCDEBUG << "Exception caught: cleaning lookahead and stack"
+                 << std::endl;
+        // Do not try to display the values of the reclaimed symbols,
+        // as their printer might throw an exception.
+        if (yychar != yyempty_)
+          {
+            /* Make sure we have latest lookahead translation.  See
+               comments at user semantic actions for why this is
+               necessary.  */
+            yytoken = yytranslate_ (yychar);
+            yydestruct_ (YY_NULL, yytoken, &yylval, &yylloc);
+          }
+
+        while (1 < yystate_stack_.height ())
+          {
+            yydestruct_ (YY_NULL,
+                         yystos_[yystate_stack_[0]],
+                         &yysemantic_stack_[0],
+                         &yylocation_stack_[0]);
+            yypop_ ();
+          }
+        throw;
+      }
   }
 
   // Generate an error message.
@@ -1105,4 +1140,4 @@ b4_error_verbose_if([int yystate, int yytoken],
 
 ]b4_namespace_close[
 ]b4_epilogue[]dnl
-m4_divert_pop(0)
+b4_output_end()

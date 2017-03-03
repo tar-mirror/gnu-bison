@@ -73,24 +73,24 @@ AT_CLEANUP
 ## Initial location.  ##
 ## ------------------ ##
 
-# AT_TEST(SKELETON-NAME, DIRECTIVES)
-# ----------------------------------
+# AT_TEST(SKELETON-NAME, DIRECTIVES, [MORE-DIRECTIVES], [LOCATION = 1.1])
+# -----------------------------------------------------------------------
 # Check that the initial location is correct.
 m4_pushdef([AT_TEST],
 [AT_SETUP([Initial location: $1 $2])
 
-AT_BISON_OPTION_PUSHDEFS([%locations %skeleton "$1" $2 %parse-param { int x }])
+AT_BISON_OPTION_PUSHDEFS([%locations %skeleton "$1" $2])
 AT_DATA_GRAMMAR([[input.y]],
 [[%defines /* FIXME: Required by lalr1.cc in Bison 2.6. */
 %locations
 %debug
 %skeleton "$1"
-$2
-%parse-param { int x } // Useless, but used to force yyerror purity.
+]$2[
+]$3[
 %code
 {
 # include <stdio.h>
-# include <stdlib.h> // getenv
+# include <stdlib.h> /* getenv */
 ]AT_YYERROR_DECLARE[
 ]AT_YYLEX_DECLARE[
 }
@@ -112,18 +112,18 @@ exp: { ]AT_SKEL_CC_IF([[std::cerr << @$ << std::endl]],
 int
 main (void)
 {]AT_SKEL_CC_IF([[
-  yy::parser p (0);
+  yy::parser p;
   p.set_debug_level (!!getenv("YYDEBUG"));
   return p.parse ();]], [[
   yydebug = !!getenv("YYDEBUG");
-  return !!yyparse (0);]])[
+  return !!yyparse (]AT_PARAM_IF([0])[);]])[
 }
 ]])
 
 AT_FULL_COMPILE([input])
 AT_PARSER_CHECK([./input], 1, [],
-[[1.1
-1.1: syntax error
+[m4_default([$4], [1.1])
+m4_default([$4], [1.1])[: syntax error
 ]])
 AT_BISON_OPTION_POPDEFS
 AT_CLEANUP
@@ -131,12 +131,120 @@ AT_CLEANUP
 
 ## FIXME: test Java, and iterate over skeletons.
 AT_TEST([yacc.c])
-AT_TEST([yacc.c], [%define api.pure])
+AT_TEST([yacc.c], [%define api.pure full])
+AT_TEST([yacc.c], [%define api.pure %parse-param { int x }])
 AT_TEST([yacc.c], [%define api.push-pull both])
-AT_TEST([yacc.c], [%define api.push-pull both %define api.pure])
+AT_TEST([yacc.c], [%define api.push-pull both %define api.pure full])
 AT_TEST([glr.c])
+AT_TEST([glr.c], [%define api.pure])
 AT_TEST([lalr1.cc])
 AT_TEST([glr.cc])
+
+## A very different test, based on PostgreSQL's implementation of the
+## locations.  See
+## http://lists.gnu.org/archive/html/bug-bison/2012-11/msg00023.html
+##
+## Weirdly enough, to trigger the warning with GCC 4.7, we must not
+## use fprintf, so run the test twice: once to check the warning
+## (absence thereof), and another time to check the value.
+AT_TEST([yacc.c], [%define api.pure full],
+[[%{
+# define YYLTYPE int
+# define YY_LOCATION_PRINT(Stream, Loc)      \
+   (void) (Loc)
+# define YYLLOC_DEFAULT(Current, Rhs, N)    \
+  (Current) = ((Rhs)[N ? 1 : 0])
+%}
+]],
+[@&t@])
+
+AT_TEST([yacc.c], [%define api.pure full],
+[[%{
+# define YYLTYPE int
+# define YY_LOCATION_PRINT(Stream, Loc)      \
+    fprintf ((Stream), "%d", (Loc))
+# define YYLLOC_DEFAULT(Current, Rhs, N)    \
+  (Current) = ((Rhs)[N ? 1 : 0])
+%}
+]],
+[0])
+
+
+m4_popdef([AT_TEST])
+
+
+
+## ---------------- ##
+## Location Print.  ##
+## ---------------- ##
+
+# AT_TEST(SKELETON-NAME, DIRECTIVES, [MORE-DIRECTIVES], [LOCATION = 1.1])
+# -----------------------------------------------------------------------
+# Check that the initial location is correct.
+m4_pushdef([AT_TEST],
+[AT_SETUP([Location print: $1 $2])
+
+AT_BISON_OPTION_PUSHDEFS([%locations %skeleton "$1" $2])
+AT_DATA_GRAMMAR([[input.y]],
+[[%defines /* FIXME: Required by lalr1.cc in Bison 2.6. */
+%locations
+%debug
+%skeleton "$1"
+]$2[
+]$3[
+%code
+{
+# include <stdio.h>
+# include <stdlib.h> /* getenv */
+]AT_YYERROR_DECLARE[
+]AT_YYLEX_DECLARE[
+}
+%%
+exp:;
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE[
+
+int
+main (void)
+{
+#define TEST(L1, C1, L2, C2)          \
+  ]AT_LOC_FIRST_LINE[ = L1;           \
+  ]AT_LOC_FIRST_COLUMN[ = C1;         \
+  ]AT_LOC_LAST_LINE[ = L2;            \
+  ]AT_LOC_LAST_COLUMN[ = C2;          \
+  ]YY_LOCATION_PRINT(stdout, AT_LOC)[;\
+  putchar ('\n');
+
+  TEST(1, 1, 1, 1);
+  TEST(2, 1, 2, 10);
+  TEST(3, 1, 4, 1);
+  TEST(5, 1, 6, 10);
+
+  TEST(7, 2, 0, 2);
+  TEST(8, 0, 8, 0);
+  return 0;
+}
+]])
+
+AT_FULL_COMPILE([input])
+AT_PARSER_CHECK([./input], 0,
+[[1.1
+2.1-9
+3.1-4.0
+5.1-6.9
+7.2
+8.0
+]])
+AT_BISON_OPTION_POPDEFS
+AT_CLEANUP
+])
+
+## FIXME: test Java, and iterate over skeletons.
+AT_TEST([yacc.c])
+AT_TEST([glr.c])
+#AT_TEST([lalr1.cc])
+#AT_TEST([glr.cc])
 
 m4_popdef([AT_TEST])
 
@@ -333,7 +441,7 @@ input:
       V(input, $$, @$, ": /* Nothing */\n");
     }
 | line input /* Right recursive to load the stack so that popping at
-		END can	be exercised.  */
+                END can be exercised.  */
     {
       $$ = 2;
       V(input, $$, @$, ": ");
@@ -1194,7 +1302,16 @@ AT_BISON_OPTION_POPDEFS
 
 AT_BISON_CHECK([-o input.c input.y], 0,,
 [[input.y:33.3-23: warning: unset value: $$
-input.y:30.3-35.37: warning: unused value: $3
+input.y:32.3-23: warning: unused value: $3
+]])
+
+AT_BISON_CHECK([-fcaret -o input.c input.y], 0,,
+[[input.y:33.3-23: warning: unset value: $$
+   {           @$ = 4; } // Only used.
+   ^^^^^^^^^^^^^^^^^^^^^
+input.y:32.3-23: warning: unused value: $3
+   { USE ($$); @$ = 3; } // Only set.
+   ^^^^^^^^^^^^^^^^^^^^^
 ]])
 
 AT_COMPILE([input])
@@ -1479,41 +1596,41 @@ AT_BISON_OPTION_POPDEFS
 
 AT_BISON_CHECK([[-o input.c input.y]], [0], [],
 [[input.y:8.48: warning: a ';' might be needed at the end of action code
-input.y:8.48: warning: future versions of Bison will not add the ';'
+input.y:8.48:     future versions of Bison will not add the ';'
 input.y:9.48: warning: a ';' might be needed at the end of action code
-input.y:9.48: warning: future versions of Bison will not add the ';'
+input.y:9.48:     future versions of Bison will not add the ';'
 input.y:10.48: warning: a ';' might be needed at the end of action code
-input.y:10.48: warning: future versions of Bison will not add the ';'
+input.y:10.48:     future versions of Bison will not add the ';'
 input.y:11.48: warning: a ';' might be needed at the end of action code
-input.y:11.48: warning: future versions of Bison will not add the ';'
+input.y:11.48:     future versions of Bison will not add the ';'
 input.y:12.48: warning: a ';' might be needed at the end of action code
-input.y:12.48: warning: future versions of Bison will not add the ';'
+input.y:12.48:     future versions of Bison will not add the ';'
 input.y:13.48: warning: a ';' might be needed at the end of action code
-input.y:13.48: warning: future versions of Bison will not add the ';'
+input.y:13.48:     future versions of Bison will not add the ';'
 input.y:20.1: warning: a ';' might be needed at the end of action code
-input.y:20.1: warning: future versions of Bison will not add the ';'
+input.y:20.1:     future versions of Bison will not add the ';'
 input.y:21.1: warning: a ';' might be needed at the end of action code
-input.y:21.1: warning: future versions of Bison will not add the ';'
+input.y:21.1:     future versions of Bison will not add the ';'
 input.y:22.1: warning: a ';' might be needed at the end of action code
-input.y:22.1: warning: future versions of Bison will not add the ';'
+input.y:22.1:     future versions of Bison will not add the ';'
 input.y:23.1: warning: a ';' might be needed at the end of action code
-input.y:23.1: warning: future versions of Bison will not add the ';'
+input.y:23.1:     future versions of Bison will not add the ';'
 input.y:24.1: warning: a ';' might be needed at the end of action code
-input.y:24.1: warning: future versions of Bison will not add the ';'
+input.y:24.1:     future versions of Bison will not add the ';'
 input.y:25.1: warning: a ';' might be needed at the end of action code
-input.y:25.1: warning: future versions of Bison will not add the ';'
+input.y:25.1:     future versions of Bison will not add the ';'
 input.y:31.1: warning: a ';' might be needed at the end of action code
-input.y:31.1: warning: future versions of Bison will not add the ';'
+input.y:31.1:     future versions of Bison will not add the ';'
 input.y:32.1: warning: a ';' might be needed at the end of action code
-input.y:32.1: warning: future versions of Bison will not add the ';'
+input.y:32.1:     future versions of Bison will not add the ';'
 input.y:33.1: warning: a ';' might be needed at the end of action code
-input.y:33.1: warning: future versions of Bison will not add the ';'
+input.y:33.1:     future versions of Bison will not add the ';'
 input.y:34.1: warning: a ';' might be needed at the end of action code
-input.y:34.1: warning: future versions of Bison will not add the ';'
+input.y:34.1:     future versions of Bison will not add the ';'
 input.y:35.1: warning: a ';' might be needed at the end of action code
-input.y:35.1: warning: future versions of Bison will not add the ';'
+input.y:35.1:     future versions of Bison will not add the ';'
 input.y:36.1: warning: a ';' might be needed at the end of action code
-input.y:36.1: warning: future versions of Bison will not add the ';'
+input.y:36.1:     future versions of Bison will not add the ';'
 ]])
 
 AT_MATCHES_CHECK([input.c], [[/\* TEST:N:2 \*/ \}$]],       [[3]])

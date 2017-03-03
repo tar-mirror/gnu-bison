@@ -39,20 +39,16 @@ default: 'a' }
 AT_CHECK([[$PERL -pi -e 's/\\(\d{3})/chr(oct($1))/ge' input.y || exit 77]])
 
 AT_BISON_CHECK([input.y], [1], [],
-[[input.y:1.1: invalid character: '\0'
-input.y:1.1: invalid character: '\001'
-input.y:1.1: invalid character: '\002'
-input.y:1.1: invalid character: '\377'
-input.y:1.2: invalid character: '?'
-input.y:3.1: invalid character: '?'
-input.y:4.14: invalid character: '}'
-input.y:5.1: invalid character: '%'
-input.y:5.2: invalid character: '&'
-input.y:6.1-17: invalid directive: '%a-does-not-exist'
-input.y:7.1: invalid character: '%'
-input.y:7.2: invalid character: '-'
-input.y:8.1-9.0: missing '%}' at end of file
-input.y:8.1-9.0: syntax error, unexpected %{...%}
+[[input.y:1.1-2: error: invalid characters: '\0\001\002\377?'
+input.y:3.1: error: invalid character: '?'
+input.y:4.14: error: invalid character: '}'
+input.y:5.1: error: invalid character: '%'
+input.y:5.2: error: invalid character: '&'
+input.y:6.1-17: error: invalid directive: '%a-does-not-exist'
+input.y:7.1: error: invalid character: '%'
+input.y:7.2: error: invalid character: '-'
+input.y:8.1-9.0: error: missing '%}' at end of file
+input.y:8.1-9.0: error: syntax error, unexpected %{...%}
 ]])
 
 AT_CLEANUP
@@ -74,7 +70,7 @@ AT_DATA([input.y],
 ]])
 
 AT_BISON_CHECK([input.y], [1], [],
-[[input.y:3.1-15: syntax error, unexpected %initial-action, expecting {...}
+[[input.y:3.1-15: error: syntax error, unexpected %initial-action, expecting {...}
 ]])
 
 AT_CLEANUP
@@ -94,8 +90,8 @@ exp: { @$ = @1 ; };
 ]])
 
 AT_BISON_CHECK([input.y], [1], [],
-[[input.y:2.13-14: integer out of range: '$1'
-input.y:3.13-14: integer out of range: '@1'
+[[input.y:2.13-14: error: integer out of range: '$1'
+input.y:3.13-14: error: integer out of range: '@1'
 ]])
 
 AT_CLEANUP
@@ -119,8 +115,8 @@ exp: foo { $$; } foo { $2; } foo
 ]])
 
 AT_BISON_CHECK([input.y], [1], [],
-[[input.y:5.12-13: $$ for the midrule at $2 of 'exp' has no declared type
-input.y:5.24-25: $2 of 'exp' has no declared type
+[[input.y:5.12-13: error: $$ for the midrule at $2 of 'exp' has no declared type
+input.y:5.24-25: error: $2 of 'exp' has no declared type
 input.y:5.6-32: warning: type clash on default action: <bar> != <>
 input.y:6.6-8: warning: type clash on default action: <bar> != <>
 input.y:7.5: warning: empty rule for typed nonterminal, and no action
@@ -178,42 +174,109 @@ l: INT | INT { $<integer>$ = $<integer>1; } INT { $<integer>$ = $<integer>2 + $<
 _AT_UNUSED_VALUES_DECLARATIONS])
 )
 
-AT_BISON_CHECK(m4_ifval($2, [ --warnings=midrule-values ])[ input.y], [0], [],
-[[input.y:11.10-32: warning: unset value: $]$[
-input.y:11.10-32: warning: unused value: $]1[
-input.y:11.10-32: warning: unused value: $]3[
-input.y:11.10-32: warning: unused value: $]5[
+AT_BISON_CHECK(m4_ifval($2, [--warnings=midrule-values ])[-fcaret input.y],
+               [0], [],
+[[input.y:11.10-32: warning: unset value: $][$
+ a: INT | INT { } INT { } INT { };
+          ^^^^^^^^^^^^^^^^^^^^^^^
+input.y:11.10-12: warning: unused value: $][1
+ a: INT | INT { } INT { } INT { };
+          ^^^
+input.y:11.18-20: warning: unused value: $][3
+ a: INT | INT { } INT { } INT { };
+                  ^^^
+input.y:11.26-28: warning: unused value: $][5
+ a: INT | INT { } INT { } INT { };
+                          ^^^
 input.y:12.9: warning: empty rule for typed nonterminal, and no action
-]]m4_ifval($2, [[[input.y:13.14-20: warning: unset value: $$
-input.y:13.26-41: warning: unset value: $$
-]]])[[input.y:13.10-62: warning: unset value: $]$[
-input.y:13.10-62: warning: unused value: $]3[
-input.y:13.10-62: warning: unused value: $]5[
-]]m4_ifval($2, [[[input.y:14.14-16: warning: unset value: $$
-]]])[[input.y:14.10-49: warning: unset value: $]$[
-input.y:14.10-49: warning: unused value: $]3[
-input.y:14.10-49: warning: unused value: $]5[
-input.y:15.10-37: warning: unset value: $]$[
-input.y:15.10-37: warning: unused value: $]3[
-input.y:15.10-37: warning: unused value: $]5[
-input.y:17.10-58: warning: unset value: $]$[
-input.y:17.10-58: warning: unused value: $]1[
-]]m4_ifval($2, [[[input.y:17.10-58: warning: unused value: $]2[
-]]])[[input.y:17.10-58: warning: unused value: $]3[
-]]m4_ifval($2, [[[input.y:17.10-58: warning: unused value: $]4[
-]]])[[input.y:17.10-58: warning: unused value: $]5[
-input.y:18.10-72: warning: unset value: $]$[
-input.y:18.10-72: warning: unused value: $]1[
-input.y:18.10-72: warning: unused value: $]3[
-]]m4_ifval($2, [[[input.y:18.10-72: warning: unused value: $]4[
-]]])[[input.y:18.10-72: warning: unused value: $]5[
-]]m4_ifval($2, [[[input.y:20.10-55: warning: unused value: $]3[
-]]])[[input.y:21.10-68: warning: unset value: $]$[
-input.y:21.10-68: warning: unused value: $]1[
-input.y:21.10-68: warning: unused value: $]2[
-]]m4_ifval($2, [[[input.y:21.10-68: warning: unused value: $]4[
-]]]))])
-
+ b: INT | /* empty */;
+         ^
+]]m4_ifval($2, [[[input.y:13.14-20: warning: unset value: $][$
+ c: INT | INT { $][1; } INT { $<integer>2; } INT { $<integer>4; };
+              ^^^^^^^
+input.y:13.26-41: warning: unset value: $][$
+ c: INT | INT { $][1; } INT { $<integer>2; } INT { $<integer>4; };
+                          ^^^^^^^^^^^^^^^^
+]]])[[input.y:13.10-62: warning: unset value: $][$
+ c: INT | INT { $][1; } INT { $<integer>2; } INT { $<integer>4; };
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+input.y:13.22-24: warning: unused value: $][3
+ c: INT | INT { $][1; } INT { $<integer>2; } INT { $<integer>4; };
+                      ^^^
+input.y:13.43-45: warning: unused value: $][5
+ c: INT | INT { $][1; } INT { $<integer>2; } INT { $<integer>4; };
+                                           ^^^
+]]m4_ifval($2, [[[input.y:14.14-16: warning: unset value: $][$
+ d: INT | INT { } INT { $][1; } INT { $<integer>2; };
+              ^^^
+]]])[[input.y:14.10-49: warning: unset value: $][$
+ d: INT | INT { } INT { $][1; } INT { $<integer>2; };
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+input.y:14.18-20: warning: unused value: $][3
+ d: INT | INT { } INT { $][1; } INT { $<integer>2; };
+                  ^^^
+input.y:14.30-32: warning: unused value: $][5
+ d: INT | INT { } INT { $][1; } INT { $<integer>2; };
+                              ^^^
+input.y:15.10-37: warning: unset value: $][$
+ e: INT | INT { } INT {  } INT { $][1; };
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+input.y:15.18-20: warning: unused value: $][3
+ e: INT | INT { } INT {  } INT { $][1; };
+                  ^^^
+input.y:15.27-29: warning: unused value: $][5
+ e: INT | INT { } INT {  } INT { $][1; };
+                           ^^^
+input.y:17.10-58: warning: unset value: $][$
+ g: INT | INT { $<integer>$; } INT { $<integer>$; } INT { };
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+input.y:17.10-12: warning: unused value: $][1
+ g: INT | INT { $<integer>$; } INT { $<integer>$; } INT { };
+          ^^^
+]]m4_ifval($2, [[[input.y:17.14-29: warning: unused value: $][2
+ g: INT | INT { $<integer>$; } INT { $<integer>$; } INT { };
+              ^^^^^^^^^^^^^^^^
+]]])[[input.y:17.31-33: warning: unused value: $][3
+ g: INT | INT { $<integer>$; } INT { $<integer>$; } INT { };
+                               ^^^
+]]m4_ifval($2, [[[input.y:17.35-50: warning: unused value: $][4
+ g: INT | INT { $<integer>$; } INT { $<integer>$; } INT { };
+                                   ^^^^^^^^^^^^^^^^
+]]])[[input.y:17.52-54: warning: unused value: $][5
+ g: INT | INT { $<integer>$; } INT { $<integer>$; } INT { };
+                                                    ^^^
+input.y:18.10-72: warning: unset value: $][$
+ h: INT | INT { $<integer>$; } INT { $<integer>$ = $<integer>2; } INT { };
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+input.y:18.10-12: warning: unused value: $][1
+ h: INT | INT { $<integer>$; } INT { $<integer>$ = $<integer>2; } INT { };
+          ^^^
+input.y:18.31-33: warning: unused value: $][3
+ h: INT | INT { $<integer>$; } INT { $<integer>$ = $<integer>2; } INT { };
+                               ^^^
+]]m4_ifval($2, [[[input.y:18.35-64: warning: unused value: $][4
+ h: INT | INT { $<integer>$; } INT { $<integer>$ = $<integer>2; } INT { };
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+]]])[[input.y:18.66-68: warning: unused value: $][5
+ h: INT | INT { $<integer>$; } INT { $<integer>$ = $<integer>2; } INT { };
+                                                                  ^^^
+]]m4_ifval($2, [[[input.y:20.18-37: warning: unused value: $][3
+ j: INT | INT INT { $<integer>$ = 1; } { $][$ = $][1 + $][2; };
+                  ^^^^^^^^^^^^^^^^^^^^
+]]])[[input.y:21.10-68: warning: unset value: $][$
+ k: INT | INT INT { $<integer>$; } { $<integer>$ = $<integer>3; } { };
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+input.y:21.10-12: warning: unused value: $][1
+ k: INT | INT INT { $<integer>$; } { $<integer>$ = $<integer>3; } { };
+          ^^^
+input.y:21.14-16: warning: unused value: $][2
+ k: INT | INT INT { $<integer>$; } { $<integer>$ = $<integer>3; } { };
+              ^^^
+]]m4_ifval($2, [[[input.y:21.35-64: warning: unused value: $][4
+ k: INT | INT INT { $<integer>$; } { $<integer>$ = $<integer>3; } { };
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+]]]))
+])
 
 ## --------------- ##
 ## Unused values.  ##
@@ -266,30 +329,30 @@ start: ;
 ]])
 
 AT_BISON_CHECK([input.y], [1], [],
-[[input.y:1.13-29: redeclaration for default tagged %destructor
-input.y:1.13-29: previous declaration
-input.y:2.10-24: redeclaration for default tagged %printer
-input.y:2.10-24: previous declaration
-input.y:4.13-29: redeclaration for default tagged %destructor
-input.y:1.13-29: previous declaration
-input.y:5.10-24: redeclaration for default tagged %printer
-input.y:2.10-24: previous declaration
-input.y:7.13-29: redeclaration for default tagless %destructor
-input.y:7.13-29: previous declaration
-input.y:8.10-24: redeclaration for default tagless %printer
-input.y:8.10-24: previous declaration
-input.y:10.13-29: redeclaration for default tagless %destructor
-input.y:7.13-29: previous declaration
-input.y:11.10-24: redeclaration for default tagless %printer
-input.y:8.10-24: previous declaration
-input.y:17.13-29: redeclaration for default tagged %destructor
-input.y:4.13-29: previous declaration
-input.y:18.10-24: redeclaration for default tagged %printer
-input.y:5.10-24: previous declaration
-input.y:20.13-29: redeclaration for default tagless %destructor
-input.y:10.13-29: previous declaration
-input.y:21.10-24: redeclaration for default tagless %printer
-input.y:11.10-24: previous declaration
+[[input.y:1.13-29: error: redeclaration for default tagged %destructor
+input.y:1.13-29:     previous declaration
+input.y:2.10-24: error: redeclaration for default tagged %printer
+input.y:2.10-24:     previous declaration
+input.y:4.13-29: error: redeclaration for default tagged %destructor
+input.y:1.13-29:     previous declaration
+input.y:5.10-24: error: redeclaration for default tagged %printer
+input.y:2.10-24:     previous declaration
+input.y:7.13-29: error: redeclaration for default tagless %destructor
+input.y:7.13-29:     previous declaration
+input.y:8.10-24: error: redeclaration for default tagless %printer
+input.y:8.10-24:     previous declaration
+input.y:10.13-29: error: redeclaration for default tagless %destructor
+input.y:7.13-29:      previous declaration
+input.y:11.10-24: error: redeclaration for default tagless %printer
+input.y:8.10-24:      previous declaration
+input.y:17.13-29: error: redeclaration for default tagged %destructor
+input.y:4.13-29:      previous declaration
+input.y:18.10-24: error: redeclaration for default tagged %printer
+input.y:5.10-24:      previous declaration
+input.y:20.13-29: error: redeclaration for default tagless %destructor
+input.y:10.13-29:     previous declaration
+input.y:21.10-24: error: redeclaration for default tagless %printer
+input.y:11.10-24:     previous declaration
 ]])
 
 AT_CLEANUP
@@ -317,22 +380,22 @@ start: ;
 ]])
 
 AT_BISON_CHECK([input.y], [1], [],
-[[input.y:4.13-29: %destructor redeclaration for <field1>
-input.y:1.13-29: previous declaration
-input.y:4.13-29: %destructor redeclaration for <field1>
-input.y:4.13-29: previous declaration
-input.y:5.10-24: %printer redeclaration for <field2>
-input.y:2.10-24: previous declaration
-input.y:5.10-24: %printer redeclaration for <field2>
-input.y:5.10-24: previous declaration
-input.y:11.13-29: %destructor redeclaration for <field1>
-input.y:4.13-29: previous declaration
-input.y:11.13-29: %destructor redeclaration for <field2>
-input.y:1.13-29: previous declaration
-input.y:12.10-24: %printer redeclaration for <field1>
-input.y:2.10-24: previous declaration
-input.y:12.10-24: %printer redeclaration for <field2>
-input.y:5.10-24: previous declaration
+[[input.y:4.13-29: error: %destructor redeclaration for <field1>
+input.y:1.13-29:     previous declaration
+input.y:4.13-29: error: %destructor redeclaration for <field1>
+input.y:4.13-29:     previous declaration
+input.y:5.10-24: error: %printer redeclaration for <field2>
+input.y:2.10-24:     previous declaration
+input.y:5.10-24: error: %printer redeclaration for <field2>
+input.y:5.10-24:     previous declaration
+input.y:11.13-29: error: %destructor redeclaration for <field1>
+input.y:4.13-29:      previous declaration
+input.y:11.13-29: error: %destructor redeclaration for <field2>
+input.y:1.13-29:      previous declaration
+input.y:12.10-24: error: %printer redeclaration for <field1>
+input.y:2.10-24:      previous declaration
+input.y:12.10-24: error: %printer redeclaration for <field2>
+input.y:5.10-24:      previous declaration
 ]])
 
 AT_CLEANUP
@@ -357,7 +420,7 @@ tagged: { } ;
 
 AT_BISON_CHECK([input.y], [0], [],
 [[input.y:6.8-45: warning: unset value: $$
-input.y:6.8-45: warning: unused value: $2
+input.y:6.12-14: warning: unused value: $2
 input.y:7.6-8: warning: unset value: $$
 ]])
 
@@ -373,7 +436,7 @@ tagged: { } ;
 ]])
 
 AT_BISON_CHECK([input.y], [0], [],
-[[input.y:6.8-45: warning: unused value: $4
+[[input.y:6.23-28: warning: unused value: $4
 input.y:8.9-11: warning: unset value: $$
 ]])
 
@@ -398,7 +461,7 @@ end: { }  ;
 
 AT_BISON_CHECK([input.y], [0], [],
 [[input.y:6.8-22: warning: unset value: $$
-input.y:6.8-22: warning: unused value: $2
+input.y:6.12-14: warning: unused value: $2
 input.y:7.6-8: warning: unset value: $$
 ]])
 
@@ -429,14 +492,14 @@ exp: foo;
 ]])
 
 AT_BISON_CHECK([input.y], [1], [],
-[[input.y:8.7-11: %type redeclaration for foo
-input.y:3.7-11: previous declaration
-input.y:10.13-17: %destructor redeclaration for foo
-input.y:5.13-17: previous declaration
-input.y:9.10-14: %printer redeclaration for foo
-input.y:4.10-14: previous declaration
-input.y:11.1-5: %left redeclaration for foo
-input.y:6.1-5: previous declaration
+[[input.y:8.7-11: error: %type redeclaration for foo
+input.y:3.7-11:     previous declaration
+input.y:10.13-17: error: %destructor redeclaration for foo
+input.y:5.13-17:      previous declaration
+input.y:9.10-14: error: %printer redeclaration for foo
+input.y:4.10-14:     previous declaration
+input.y:11.1-5: error: %left redeclaration for foo
+input.y:6.1-5:      previous declaration
 ]])
 
 AT_CLEANUP
@@ -455,7 +518,7 @@ AT_SETUP([Torturing the Scanner])
 AT_BISON_OPTION_PUSHDEFS
 AT_DATA([input.y], [])
 AT_BISON_CHECK([input.y], [1], [],
-[[input.y:1.1: syntax error, unexpected end of file
+[[input.y:1.1: error: syntax error, unexpected end of file
 ]])
 
 
@@ -463,7 +526,7 @@ AT_DATA([input.y],
 [{}
 ])
 AT_BISON_CHECK([input.y], [1], [],
-[[input.y:1.1-2: syntax error, unexpected {...}
+[[input.y:1.1-2: error: syntax error, unexpected {...}
 ]])
 
 
@@ -729,9 +792,9 @@ AT_DATA_GRAMMAR([input.y],
 start: .GOOD GOOD
 ]])
 AT_BISON_CHECK([-o input.c input.y], [1], [],
-[[input.y:10.10: invalid character: '-'
-input.y:11.10-16: invalid identifier: '1NV4L1D'
-input.y:12.10: invalid character: '-'
+[[input.y:10.10: error: invalid character: '-'
+input.y:11.10-16: error: invalid identifier: '1NV4L1D'
+input.y:12.10: error: invalid character: '-'
 ]])
 
 AT_CLEANUP
@@ -753,10 +816,10 @@ start: DECIMAL_1 HEXADECIMAL_2;
 ]])
 
 AT_BISON_CHECK([redecl.y], [1], [],
-[[redecl.y:10.10-22: user token number 11259375 redeclaration for HEXADECIMAL_1
-redecl.y:9.8-16: previous declaration for DECIMAL_1
-redecl.y:12.10-18: user token number 16702650 redeclaration for DECIMAL_2
-redecl.y:11.10-22: previous declaration for HEXADECIMAL_2
+[[redecl.y:10.10-22: error: user token number 11259375 redeclaration for HEXADECIMAL_1
+redecl.y:9.8-16:       previous declaration for DECIMAL_1
+redecl.y:12.10-18: error: user token number 16702650 redeclaration for DECIMAL_2
+redecl.y:11.10-22:     previous declaration for HEXADECIMAL_2
 ]])
 
 AT_DATA_GRAMMAR([too-large.y],
@@ -768,8 +831,8 @@ start: TOO_LARGE_DEC TOO_LARGE_HEX
 ]])
 
 AT_BISON_CHECK([too-large.y], [1], [],
-[[too-large.y:9.22-42: integer out of range: '999999999999999999999'
-too-large.y:10.24-44: integer out of range: '0xFFFFFFFFFFFFFFFFFFF'
+[[too-large.y:9.22-42: error: integer out of range: '999999999999999999999'
+too-large.y:10.24-44: error: integer out of range: '0xFFFFFFFFFFFFFFFFFFF'
 ]])
 
 AT_CLEANUP
@@ -809,12 +872,31 @@ start: ;
 ]])
 
 AT_BISON_CHECK([-o input.c input.y], 1, [],
-[[input.y:1.10-2.0: missing '"' at end of line
-input.y:4.10-5.0: missing "'" at end of line
-input.y:14.11-15.0: missing "'" at end of line
-input.y:16.11-17.0: missing '"' at end of line
-input.y:19.13-20.0: missing '}' at end of file
-input.y:20.1: syntax error, unexpected end of file
+[[input.y:1.10-2.0: error: missing '"' at end of line
+input.y:4.10-5.0: error: missing "'" at end of line
+input.y:14.11-15.0: error: missing "'" at end of line
+input.y:16.11-17.0: error: missing '"' at end of line
+input.y:19.13-20.0: error: missing '}' at end of file
+input.y:20.1: error: syntax error, unexpected end of file
+]])
+
+AT_BISON_CHECK([-fcaret -o input.c input.y], 1, [],
+[[input.y:1.10-2.0: error: missing '"' at end of line
+ %token A "a
+          ^^
+input.y:4.10-5.0: error: missing "'" at end of line
+ %token C '1
+          ^^
+input.y:14.11-15.0: error: missing "'" at end of line
+ %type <f> 'a
+           ^^
+input.y:16.11-17.0: error: missing '"' at end of line
+ %type <f> "a
+           ^^
+input.y:19.13-20.0: error: missing '}' at end of file
+ %destructor { free ($$)
+             ^^^^^^^^^^^
+input.y:20.1: error: syntax error, unexpected end of file
 ]])
 
 AT_CLEANUP
@@ -856,7 +938,7 @@ PREC: ;
 ]])
 
 AT_BISON_CHECK([input.y], [1], [],
-[[input.y:3.1-4: rule given for PREC, which is a token
+[[input.y:3.1-4: error: rule given for PREC, which is a token
 ]])
 
 AT_CLEANUP
@@ -897,10 +979,10 @@ AT_DATA([input-c.y],
 start: ;
 ]])
 AT_BISON_CHECK([[input-c.y]], [[1]], [],
-[[input-c.y:1.7: %code qualifier 'q' is not used
-input-c.y:2.7-9: %code qualifier 'bad' is not used
-input-c.y:3.7-9: %code qualifier 'bad' is not used
-input-c.y:4.7-12: %code qualifier 'format' is not used
+[[input-c.y:1.7: error: %code qualifier 'q' is not used
+input-c.y:2.7-9: error: %code qualifier 'bad' is not used
+input-c.y:3.7-9: error: %code qualifier 'bad' is not used
+input-c.y:4.7-12: error: %code qualifier 'format' is not used
 ]])
 
 AT_DATA([input-c-glr.y],
@@ -911,9 +993,9 @@ AT_DATA([input-c-glr.y],
 start: ;
 ]])
 AT_BISON_CHECK([[input-c-glr.y]], [[1]], [],
-[[input-c-glr.y:1.7: %code qualifier 'q' is not used
-input-c-glr.y:2.7-9: %code qualifier 'bad' is not used
-input-c-glr.y:3.8-10: %code qualifier 'bad' is not used
+[[input-c-glr.y:1.7: error: %code qualifier 'q' is not used
+input-c-glr.y:2.7-9: error: %code qualifier 'bad' is not used
+input-c-glr.y:3.8-10: error: %code qualifier 'bad' is not used
 ]])
 
 AT_DATA([input-c++.y],
@@ -924,9 +1006,9 @@ AT_DATA([input-c++.y],
 start: ;
 ]])
 AT_BISON_CHECK([[input-c++.y]], [[1]], [],
-[[input-c++.y:1.7: %code qualifier 'q' is not used
-input-c++.y:2.7-9: %code qualifier 'bad' is not used
-input-c++.y:3.8: %code qualifier 'q' is not used
+[[input-c++.y:1.7: error: %code qualifier 'q' is not used
+input-c++.y:2.7-9: error: %code qualifier 'bad' is not used
+input-c++.y:3.8: error: %code qualifier 'q' is not used
 ]])
 
 AT_DATA([input-c++-glr.y],
@@ -937,9 +1019,9 @@ AT_DATA([input-c++-glr.y],
 start: ;
 ]])
 AT_BISON_CHECK([[input-c++-glr.y]], [[1]], [],
-[[input-c++-glr.y:1.7-9: %code qualifier 'bad' is not used
-input-c++-glr.y:2.7: %code qualifier 'q' is not used
-input-c++-glr.y:3.7: %code qualifier 'q' is not used
+[[input-c++-glr.y:1.7-9: error: %code qualifier 'bad' is not used
+input-c++-glr.y:2.7: error: %code qualifier 'q' is not used
+input-c++-glr.y:3.7: error: %code qualifier 'q' is not used
 ]])
 
 AT_DATA([special-char-@@.y],
@@ -950,9 +1032,9 @@ AT_DATA([special-char-@@.y],
 start: ;
 ]])
 AT_BISON_CHECK([[special-char-@@.y]], [[1]], [],
-[[special-char-@@.y:1.7-9: %code qualifier 'bad' is not used
-special-char-@@.y:2.7: %code qualifier 'q' is not used
-special-char-@@.y:3.7: %code qualifier 'q' is not used
+[[special-char-@@.y:1.7-9: error: %code qualifier 'bad' is not used
+special-char-@@.y:2.7: error: %code qualifier 'q' is not used
+special-char-@@.y:3.7: error: %code qualifier 'q' is not used
 ]])
 
 AT_DATA([special-char-@:>@.y],
@@ -963,9 +1045,9 @@ AT_DATA([special-char-@:>@.y],
 start: ;
 ]])
 AT_BISON_CHECK([[special-char-@:>@.y]], [[1]], [],
-[[special-char-@:>@.y:1.7-9: %code qualifier 'bad' is not used
-special-char-@:>@.y:2.7: %code qualifier 'q' is not used
-special-char-@:>@.y:3.7: %code qualifier 'q' is not used
+[[special-char-@:>@.y:1.7-9: error: %code qualifier 'bad' is not used
+special-char-@:>@.y:2.7: error: %code qualifier 'q' is not used
+special-char-@:>@.y:3.7: error: %code qualifier 'q' is not used
 ]])
 
 AT_CLEANUP
@@ -988,10 +1070,10 @@ start: ;
 ]])
 
 AT_BISON_CHECK([[input-redefined.y]], [[1]], [],
-[[input-redefined.y:2.9-11: %define variable 'var' redefined
-input-redefined.y:1.9-11: previous definition
-input-redefined.y:3.10-12: %define variable 'var' redefined
-input-redefined.y:2.9-11: previous definition
+[[input-redefined.y:2.9-11: error: %define variable 'var' redefined
+input-redefined.y:1.9-11:     previous definition
+input-redefined.y:3.10-12: error: %define variable 'var' redefined
+input-redefined.y:2.9-11:      previous definition
 ]])
 
 AT_DATA([input-unused.y],
@@ -1001,7 +1083,7 @@ start: ;
 ]])
 
 AT_BISON_CHECK([[input-unused.y]], [[1]], [],
-[[input-unused.y:1.9-11: %define variable 'var' is not used
+[[input-unused.y:1.9-11: error: %define variable 'var' is not used
 ]])
 
 AT_CLEANUP
@@ -1045,8 +1127,20 @@ AT_DATA([[input-dg.y]],
 start: ;
 ]])
 AT_BISON_CHECK([[-Dvar=cmd-d input-dg.y]], [[1]], [],
-[[input-dg.y:1.9-11: %define variable 'var' redefined
-<command line>:2: previous definition
+[[input-dg.y:1.9-11: error: %define variable 'var' redefined
+<command line>:1:      previous definition
+]])
+
+AT_DATA([[input-dg.y]],
+[[%define var "gram"
+%%
+start: ;
+]])
+AT_BISON_CHECK([[-fcaret -Dvar=cmd-d input-dg.y]], [[1]], [],
+[[input-dg.y:1.9-11: error: %define variable 'var' redefined
+ %define var "gram"
+         ^^^
+<command line>:2:      previous definition
 ]])
 
 AT_DATA([[input-unused.y]],
@@ -1054,8 +1148,8 @@ AT_DATA([[input-unused.y]],
 start: ;
 ]])
 AT_BISON_CHECK([[-Dunused-d -Funused-f input-unused.y]], [[1]], [],
-[[<command line>:2: %define variable 'unused-d' is not used
-<command line>:3: %define variable 'unused-f' is not used
+[[<command line>:1: error: %define variable 'unused-d' is not used
+<command line>:2: error: %define variable 'unused-f' is not used
 ]])
 
 AT_CLEANUP
@@ -1075,7 +1169,7 @@ start: ;
 ]])
 
 AT_BISON_CHECK([[Input.y]], [1], [],
-[[Input.y:2.9-14: invalid value for %define Boolean variable 'public'
+[[Input.y:2.9-14: error: invalid value for %define Boolean variable 'public'
 ]])
 
 AT_CLEANUP
@@ -1093,23 +1187,24 @@ AT_DATA([[input.y]],
 start: ;
 ]])
 AT_BISON_CHECK([[input.y]], [[1]], [[]],
-[[input.y:1.9-29: invalid value for %define variable 'lr.default-reductions': 'bogus'
-input.y:1.9-29: accepted value: 'most'
-input.y:1.9-29: accepted value: 'consistent'
-input.y:1.9-29: accepted value: 'accepting'
+[[input.y:1.9-29: error: invalid value for %define variable 'lr.default-reductions': 'bogus'
+input.y:1.9-29:     accepted value: 'most'
+input.y:1.9-29:     accepted value: 'consistent'
+input.y:1.9-29:     accepted value: 'accepting'
 ]])
 
 # Back-end.
+# FIXME: these should be indented, but we shouldn't mess with the m4 yet
 AT_DATA([[input.y]],
 [[%define api.push-pull neither
 %%
 start: ;
 ]])
 AT_BISON_CHECK([[input.y]], [1], [],
-[[input.y:1.9-21: invalid value for %define variable 'api.push-pull': 'neither'
-input.y:1.9-21: accepted value: 'pull'
-input.y:1.9-21: accepted value: 'push'
-input.y:1.9-21: accepted value: 'both'
+[[input.y:1.9-21: error: invalid value for %define variable 'api.push-pull': 'neither'
+input.y:1.9-21: error: accepted value: 'pull'
+input.y:1.9-21: error: accepted value: 'push'
+input.y:1.9-21: error: accepted value: 'both'
 ]])
 
 AT_CLEANUP
@@ -1129,10 +1224,10 @@ AT_DATA([[input.y]],
 start: ;
 ]])
 AT_BISON_CHECK([[input.y]], [1], [],
-[[input.y:1.9-21: invalid value for %define variable 'api.push-pull': 'neither'
-input.y:1.9-21: accepted value: 'pull'
-input.y:1.9-21: accepted value: 'push'
-input.y:1.9-21: accepted value: 'both'
+[[input.y:1.9-21: error: invalid value for %define variable 'api.push-pull': 'neither'
+input.y:1.9-21: error: accepted value: 'pull'
+input.y:1.9-21: error: accepted value: 'push'
+input.y:1.9-21: error: accepted value: 'both'
 ]])
 
 AT_DATA([[input.y]],
@@ -1141,7 +1236,7 @@ AT_DATA([[input.y]],
 start: ;
 ]])
 AT_BISON_CHECK([[input.y]], [1], [],
-[[input.y:1.9-34: invalid value for %define Boolean variable 'lr.keep-unreachable-states'
+[[input.y:1.9-34: error: invalid value for %define Boolean variable 'lr.keep-unreachable-states'
 ]])
 
 AT_DATA([[input.y]],
@@ -1150,7 +1245,7 @@ AT_DATA([[input.y]],
 start: ;
 ]])
 AT_BISON_CHECK([[input.y]], [[1]], [],
-[[input.y:1.9-15: %define variable 'foo_bar' is not used
+[[input.y:1.9-15: error: %define variable 'foo_bar' is not used
 ]])
 
 AT_CLEANUP
@@ -1175,7 +1270,7 @@ start: ;
 ]])
 
 AT_BISON_CHECK([[input.y]], [[1]], [],
-[[input.y:1.9-16: %define variable 'api.pure' is not used
+[[input.y:1.9-16: error: %define variable 'api.pure' is not used
 ]])
 ])
 
@@ -1209,7 +1304,7 @@ start: ;
 
 AT_BISON_CHECK([[input.y]], [1], [],
 [m4_foreach([b4_arg], m4_dquote(m4_shift($@)),
-[[input.y:3.9-17: ]b4_arg[
+[[input.y:3.9-17: error: ]b4_arg[
 ]])])
 ])
 
@@ -1260,9 +1355,9 @@ AT_CHECK([[$PERL -e "print 'start: \'';" >> empty.y || exit 77]])
 AT_BISON_CHECK([empty.y], [1], [],
 [[empty.y:2.8-9: warning: empty character literal
 empty.y:3.8-4.0: warning: empty character literal
-empty.y:3.8-4.0: missing "'" at end of line
+empty.y:3.8-4.0: error: missing "'" at end of line
 empty.y:4.8: warning: empty character literal
-empty.y:4.8: missing "'" at end of file
+empty.y:4.8: error: missing "'" at end of file
 ]])
 
 AT_DATA([two.y],
@@ -1275,9 +1370,9 @@ AT_CHECK([[$PERL -e "print 'start: \'ab';" >> two.y || exit 77]])
 AT_BISON_CHECK([two.y], [1], [],
 [[two.y:2.8-11: warning: extra characters in character literal
 two.y:3.8-4.0: warning: extra characters in character literal
-two.y:3.8-4.0: missing "'" at end of line
+two.y:3.8-4.0: error: missing "'" at end of line
 two.y:4.8-10: warning: extra characters in character literal
-two.y:4.8-10: missing "'" at end of file
+two.y:4.8-10: error: missing "'" at end of file
 ]])
 
 AT_DATA([three.y],
@@ -1290,9 +1385,9 @@ AT_CHECK([[$PERL -e "print 'start: \'abc';" >> three.y || exit 77]])
 AT_BISON_CHECK([three.y], [1], [],
 [[three.y:2.8-12: warning: extra characters in character literal
 three.y:3.8-4.0: warning: extra characters in character literal
-three.y:3.8-4.0: missing "'" at end of line
+three.y:3.8-4.0: error: missing "'" at end of line
 three.y:4.8-11: warning: extra characters in character literal
-three.y:4.8-11: missing "'" at end of file
+three.y:4.8-11: error: missing "'" at end of file
 ]])
 
 AT_CLEANUP
@@ -1318,30 +1413,30 @@ AT_CHECK([[$PERL -e 'print "start: \"\\\t\\\f\\\0\\\1\" ;";' >> input.y \
            || exit 77]])
 
 AT_BISON_CHECK([input.y], [1], [],
-[[input.y:2.9-12: invalid number after \-escape: 777
+[[input.y:2.9-12: error: invalid number after \-escape: 777
 input.y:2.8-13: warning: empty character literal
-input.y:2.16-17: invalid number after \-escape: 0
+input.y:2.16-17: error: invalid number after \-escape: 0
 input.y:2.15-18: warning: empty character literal
-input.y:2.21-25: invalid number after \-escape: xfff
+input.y:2.21-25: error: invalid number after \-escape: xfff
 input.y:2.20-26: warning: empty character literal
-input.y:2.29-31: invalid number after \-escape: x0
+input.y:2.29-31: error: invalid number after \-escape: x0
 input.y:2.28-32: warning: empty character literal
-input.y:3.9-14: invalid number after \-escape: uffff
+input.y:3.9-14: error: invalid number after \-escape: uffff
 input.y:3.8-15: warning: empty character literal
-input.y:3.18-23: invalid number after \-escape: u0000
+input.y:3.18-23: error: invalid number after \-escape: u0000
 input.y:3.17-24: warning: empty character literal
-input.y:3.27-36: invalid number after \-escape: Uffffffff
+input.y:3.27-36: error: invalid number after \-escape: Uffffffff
 input.y:3.26-37: warning: empty character literal
-input.y:3.40-49: invalid number after \-escape: U00000000
+input.y:3.40-49: error: invalid number after \-escape: U00000000
 input.y:3.39-50: warning: empty character literal
-input.y:4.9-10: invalid character after \-escape: ' '
+input.y:4.9-10: error: invalid character after \-escape: ' '
 input.y:4.8-11: warning: empty character literal
-input.y:4.14-15: invalid character after \-escape: A
+input.y:4.14-15: error: invalid character after \-escape: A
 input.y:4.13-16: warning: empty character literal
-input.y:5.9-16: invalid character after \-escape: \t
-input.y:5.17: invalid character after \-escape: \f
-input.y:5.18: invalid character after \-escape: \0
-input.y:5.19: invalid character after \-escape: \001
+input.y:5.9-16: error: invalid character after \-escape: \t
+input.y:5.17: error: invalid character after \-escape: \f
+input.y:5.18: error: invalid character after \-escape: \0
+input.y:5.19: error: invalid character after \-escape: \001
 ]])
 
 AT_CLEANUP
@@ -1360,11 +1455,11 @@ start: ;
 # parse.lac.* options are useless if LAC isn't actually activated.
 AT_BISON_CHECK([[-Dparse.lac.es-capacity-initial=1 input.y]],
                [[1]], [],
-[[<command line>:2: %define variable 'parse.lac.es-capacity-initial' is not used
+[[<command line>:1: error: %define variable 'parse.lac.es-capacity-initial' is not used
 ]])
 AT_BISON_CHECK([[-Dparse.lac.memory-trace=full input.y]],
                [[1]], [],
-[[<command line>:2: %define variable 'parse.lac.memory-trace' is not used
+[[<command line>:1: error: %define variable 'parse.lac.memory-trace' is not used
 ]])
 
 AT_CLEANUP
@@ -1418,13 +1513,13 @@ m4_pushdef([AT_TEST],
 exp:;
 ]])
 AT_BISON_CHECK([[$2 input.y]], [[1]], [[]],
-[[$3: '%name-prefix' and '%define api.prefix' cannot be used together
+[[$3: error: '%name-prefix' and '%define api.prefix' cannot be used together
 ]])
 ])
 
 AT_TEST([%define api.prefix foo %name-prefix "bar"], [], [input.y:1.9-18])
-AT_TEST([], [-Dapi.prefix=foo -p bar], [<command line>:2])
-AT_TEST([%name-prefix "bar"], [-Dapi.prefix=foo], [<command line>:2])
+AT_TEST([], [-Dapi.prefix=foo -p bar], [<command line>:1])
+AT_TEST([%name-prefix "bar"], [-Dapi.prefix=foo], [<command line>:1])
 AT_TEST([%define api.prefix foo], [-p bar], [input.y:1.9-18])
 
 m4_popdef([AT_TEST])

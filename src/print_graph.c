@@ -39,11 +39,32 @@
 | Construct the node labels.  |
 `----------------------------*/
 
+/* Print the lhs of a rule in such a manner that there is no vertical
+   repetition, like in *.output files. */
+
+static void
+print_lhs (struct obstack *oout, rule *previous_rule, rule *r)
+{
+  if (previous_rule && STREQ (previous_rule->lhs->tag, r->lhs->tag))
+    {
+      int i;
+      for (i = 0; i < strlen (r->lhs->tag); ++i)
+        obstack_1grow (oout, ' ');
+      obstack_1grow (oout, '|');
+    }
+  else
+    {
+      obstack_sgrow (oout, escape (r->lhs->tag));
+      obstack_1grow (oout, ':');
+    }
+}
+
 static void
 print_core (struct obstack *oout, state *s)
 {
-  size_t i;
   item_number *sitems = s->items;
+  rule *previous_rule = NULL;
+  size_t i;
   size_t snritems = s->nitems;
 
   /* Output all the items of a state, not only its kernel.  */
@@ -54,7 +75,8 @@ print_core (struct obstack *oout, state *s)
       snritems = nitemset;
     }
 
-  obstack_printf (oout, "%d", s->number);
+  obstack_printf (oout, _("State %d"), s->number);
+  obstack_sgrow (oout, "\\n\\l");
   for (i = 0; i < snritems; i++)
     {
       item_number *sp;
@@ -64,43 +86,47 @@ print_core (struct obstack *oout, state *s)
       sp1 = sp = ritem + sitems[i];
 
       while (*sp >= 0)
-	sp++;
+        sp++;
 
       r = item_number_as_rule_number (*sp);
 
-      obstack_printf (oout, "\n%s -> ", rules[r].lhs->tag);
+      obstack_printf (oout, "%3d ", r);
+      print_lhs (oout, previous_rule, &rules[r]);
+      previous_rule = &rules[r];
 
       for (sp = rules[r].rhs; sp < sp1; sp++)
-	obstack_printf (oout, "%s ", symbols[*sp]->tag);
+        obstack_printf (oout, " %s", escape (symbols[*sp]->tag));
 
-      obstack_1grow (oout, '.');
+      obstack_sgrow (oout, " .");
 
       for (/* Nothing */; *sp >= 0; ++sp)
-	obstack_printf (oout, " %s", symbols[*sp]->tag);
+        obstack_printf (oout, " %s", escape (symbols[*sp]->tag));
 
       /* Experimental feature: display the lookahead tokens. */
       if (report_flag & report_lookahead_tokens
           && item_number_is_rule_number (*sp1))
-	{
-	  /* Find the reduction we are handling.  */
-	  reductions *reds = s->reductions;
-	  int redno = state_reduction_find (s, &rules[r]);
+        {
+          /* Find the reduction we are handling.  */
+          reductions *reds = s->reductions;
+          int redno = state_reduction_find (s, &rules[r]);
 
-	  /* Print them if there are.  */
-	  if (reds->lookahead_tokens && redno != -1)
-	    {
-	      bitset_iterator biter;
-	      int k;
-	      char const *sep = "";
-	      obstack_sgrow (oout, "[");
-	      BITSET_FOR_EACH (biter, reds->lookahead_tokens[redno], k, 0)
-		{
-		  obstack_printf (oout, "%s%s", sep, symbols[k]->tag);
-		  sep = ", ";
-		}
-	      obstack_sgrow (oout, "]");
-	    }
-	}
+          /* Print them if there are.  */
+          if (reds->lookahead_tokens && redno != -1)
+            {
+              bitset_iterator biter;
+              int k;
+              char const *sep = "";
+              obstack_sgrow (oout, "  [");
+              BITSET_FOR_EACH (biter, reds->lookahead_tokens[redno], k, 0)
+                {
+                  obstack_sgrow (oout, sep);
+                  obstack_sgrow (oout, escape (symbols[k]->tag));
+                  sep = ", ";
+                }
+              obstack_1grow (oout, ']');
+            }
+        }
+      obstack_sgrow (oout, "\\l");
     }
 }
 
@@ -113,9 +139,8 @@ print_core (struct obstack *oout, state *s)
 static void
 print_actions (state const *s, FILE *fgraph)
 {
-  int i;
-
   transitions const *trans = s->transitions;
+  int i;
 
   if (!trans->num && !s->reductions)
     return;
@@ -139,6 +164,8 @@ print_actions (state const *s, FILE *fgraph)
 		     TRANSITION_IS_ERROR (trans, i) ? NULL : symbols[sym]->tag,
 		     style, fgraph);
       }
+  /* Display reductions. */
+  output_red (s, s->reductions, fgraph);
 }
 
 

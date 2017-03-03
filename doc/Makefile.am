@@ -96,6 +96,37 @@ PREPATH = $(top_builddir)/src
 
 nodist_man_MANS = yacc.1
 
+## ------------------------------ ##
+## Graphviz examples generation.  ##
+## ------------------------------ ##
+
+CLEANDIRS += figs
+FIGS_DOT = figs/example.dot figs/example-reduce.dot figs/example-shift.dot
+EXTRA_DIST +=								\
+  figs/example.y							\
+  $(FIGS_DOT)								\
+  $(FIGS_DOT:.dot=.eps) $(FIGS_DOT:.dot=.pdf) $(FIGS_DOT:.dot=.png)
+SUFFIXES += .dot .eps .pdf .png
+
+bison.dvi:  $(FIGS_DOT:.dot=.eps)
+bison.html: $(FIGS_DOT:.dot=.png)
+bison.pdf:  $(FIGS_DOT:.dot=.pdf)
+
+.dot.eps:
+	$(AM_V_GEN) $(MKDIR_P) `echo "./$@" | sed -e 's,/[^/]*$$,,'`
+	$(AM_V_at) $(DOT) -Gmargin=0 -Teps $< >$@.tmp
+	$(AM_V_at) mv $@.tmp $@
+
+.dot.pdf:
+	$(AM_V_GEN) $(MKDIR_P) `echo "./$@" | sed -e 's,/[^/]*$$,,'`
+	$(AM_V_at) $(DOT) -Gmargin=0 -Tpdf $< >$@.tmp
+	$(AM_V_at) mv $@.tmp $@
+
+.dot.png:
+	$(AM_V_GEN) $(MKDIR_P) `echo "./$@" | sed -e 's,/[^/]*$$,,'`
+	$(AM_V_at) $(DOT) -Gmargin=0 -Tpng $< >$@.tmp
+	$(AM_V_at) mv $@.tmp $@
+
 ## -------------- ##
 ## Doxygenation.  ##
 ## -------------- ##

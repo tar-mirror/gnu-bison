@@ -40,19 +40,30 @@ blank [ \t]
 %{
   typedef yy::calcxx_parser::token token;
 %}
-           /* Convert ints to the actual type of tokens.  */
-[-+*/]     return yy::calcxx_parser::token_type (yytext[0]);
-":="       return token::ASSIGN;
-{int}      {
-  errno = 0;
-  long n = strtol (yytext, NULL, 10);
-  if (! (INT_MIN <= n && n <= INT_MAX && errno != ERANGE))
-    driver.error (*yylloc, "integer is out of range");
-  yylval->ival = n;
-  return token::NUMBER;
-}
-{id}       yylval->sval = new std::string (yytext); return token::IDENTIFIER;
-.          driver.error (*yylloc, "invalid character");
+         /* Convert ints to the actual type of tokens.  */
+[-+*/]   return yy::calcxx_parser::token_type (yytext[0]);
+
+":="     return token::ASSIGN;
+
+
+{int}    {
+           errno = 0;
+           long n = strtol (yytext, NULL, 10);
+           if (! (INT_MIN <= n && n <= INT_MAX && errno != ERANGE))
+             driver.error (*yylloc, "integer is out of range");
+           yylval->ival = n;
+           return token::NUMBER;
+         }
+
+
+
+{id}     {
+           yylval->sval = new std::string (yytext);
+           return token::IDENTIFIER;
+         }
+
+
+.        driver.error (*yylloc, "invalid character");
 %%
 
 
