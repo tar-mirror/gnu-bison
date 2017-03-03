@@ -215,6 +215,7 @@ skeleton_find (const char *envvar, const char *skeleton_name)
   const char *res = getenv (envvar);
 
 #if defined (MSDOS) || defined (_WIN32)
+  const char *cp = getenv ("INIT");
   if (!res)
     {
       /* Skeleton file name without path */
@@ -227,7 +228,6 @@ skeleton_find (const char *envvar, const char *skeleton_name)
         ++skel_name;
 
       /* File doesn't exist in current directory; try in INIT directory.  */
-      const char *cp = getenv ("INIT");
       if (cp)
 	{
 	  res = XMALLOC (char, strlen (cp) + strlen (skel_name) + 2);
@@ -419,8 +419,9 @@ compute_base_names (void)
 
       /* Computes the extensions from the grammar file name.  */
       filename_split (infile, &base, &tab, &ext);
-      if (ext)
- 	compute_exts_from_gf (ext);
+      
+      if (ext && !yacc_flag)
+	compute_exts_from_gf (ext);
     }
 }
 

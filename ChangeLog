@@ -1,3 +1,47 @@
+2002-01-23  Akim Demaille  <akim@epita.fr>
+
+	Version 1.32.
+
+2002-01-23  Akim Demaille  <akim@epita.fr>
+
+	* src/getargs.c (version): Bump to 2002.
+	Patch the PO files to help translators.
+
+2002-01-22  Akim Demaille  <akim@epita.fr>
+
+	Bison dumps core when trying to complain about broken input files.
+	Reported by Cris van Pelt.
+
+	* src/lex.c (parse_percent_token): Be sure to set token_buffer.
+	* tests/regression.at (Invalid input: 1, Invalid input: 2): Merge
+	into...
+	(Invalid inputs): Strengthen: exercise parse_percent_token.
+
+2002-01-21  Paolo Bonzini <bonzini@gnu.org>
+
+	* po/it.po: New.
+
+2002-01-21  Kees Zeelenberg  <kzlg@users.sourceforge.net>
+
+	* src/files.c (skeleton_find) [MSDOS]: Fix cp definition.
+
+2002-01-20  Marc Autret  <marc@gnu.org>
+
+	* src/system.h: Need to	define __attribute__ away for non-GCC
+	compilers as well (i.e.	the vendor C compiler).
+	Suggested by Albert Chin-A-Young.
+
+2002-01-19  Marc Autret  <marc@gnu.org>
+
+	* tests/output.at: New test.
+	* src/files.c (compute_base_names): Don't map extensions when
+	the YACC flag is set, use defaults.
+	Reported by Evgeny Stambulchik.
+
+2002-01-19  Marc Autret  <marc@gnu.org>
+
+	* configure.in, doc/version.texi: Bump to 1.31a.
+
 2002-01-14  Akim Demaille  <akim@epita.fr>
 
 	Version 1.31.
