@@ -331,9 +331,9 @@ Copying This Manual
 @unnumbered Introduction
 @cindex introduction
 
-@dfn{Bison} is a general-purpose parser generator that converts a grammar
-description for an @acronym{LALR}(1) or @acronym{GLR} context-free grammar
-into a C or C++ program to parse that grammar.  Once you are proficient with
+@dfn{Bison} is a general-purpose parser generator that converts an
+annotated context-free grammar into an @acronym{LALR}(1) or
+@acronym{GLR} parser for that grammar.  Once you are proficient with
 Bison, you can use it to develop a wide range of language parsers, from those
 used in simple desk calculators to complex programming languages.
 
@@ -3067,6 +3067,8 @@ specify some other type, define @code{YYSTYPE} as a macro, like this:
 @end example
 
 @noindent
+@code{YYSTYPE}'s replacement list should be a type name
+that does not contain parentheses or square brackets.
 This macro definition must go in the prologue of the grammar file
 (@pxref{Grammar Outline, ,Outline of a Bison Grammar}).
 
@@ -3463,7 +3465,9 @@ actions to take when rules are matched.
 Defining a data type for locations is much simpler than for semantic values,
 since all tokens and groupings always use the same type.
 
-The type of locations is specified by defining a macro called @code{YYLTYPE}.
+You can specify the type of locations by defining a macro called
+@code{YYLTYPE}, just as you can specify the semantic value type by
+defining @code{YYSTYPE} (@pxref{Value Type}).
 When @code{YYLTYPE} is not defined, Bison uses a default structure type with
 four members:
 
@@ -4888,8 +4892,9 @@ the @samp{YYERROR;} statement.  @xref{Error Recovery}.
 @end deffn
 
 @deffn {Macro} YYRECOVERING
-This macro stands for an expression that has the value 1 when the parser
-is recovering from a syntax error, and 0 the rest of the time.
+@findex YYRECOVERING
+The expression @code{YYRECOVERING ()} yields 1 when the parser
+is recovering from a syntax error, and 0 otherwise.
 @xref{Error Recovery}.
 @end deffn
 
@@ -5999,10 +6004,10 @@ probably correct.  The previous look-ahead token ought to be discarded
 with @samp{yyclearin;}.
 
 @vindex YYRECOVERING
-The macro @code{YYRECOVERING} stands for an expression that has the
-value 1 when the parser is recovering from a syntax error, and 0 the
-rest of the time.  A value of 1 indicates that error messages are
-currently suppressed for new syntax errors.
+The expression @code{YYRECOVERING ()} yields 1 when the parser
+is recovering from a syntax error, and 0 otherwise.
+Syntax error diagnostics are suppressed while recovering from a syntax
+error.
 
 @node Context Dependency
 @chapter Handling Context Dependencies
@@ -8465,8 +8470,9 @@ Conventions for Pure Parsers}.
 @end deffn
 
 @deffn {Macro} YYRECOVERING
-Macro whose value indicates whether the parser is recovering from a
-syntax error.  @xref{Action Features, ,Special Features for Use in Actions}.
+The expression @code{YYRECOVERING ()} yields 1 when the parser
+is recovering from a syntax error, and 0 otherwise.
+@xref{Action Features, ,Special Features for Use in Actions}.
 @end deffn
 
 @deffn {Macro} YYSTACK_USE_ALLOCA

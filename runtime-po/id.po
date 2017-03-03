@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison-runtime 2.0b.id\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2006-05-19 14:49-0700\n"
+"POT-Creation-Date: 2006-06-05 00:32-0700\n"
 "PO-Revision-Date: 2005-09-14 20:39+0700\n"
 "Last-Translator: Tedi Heriyanto <tedi_heriyanto@yahoo.com>\n"
 "Language-Team: Indonesian <translation-team-id@lists.sourceforge.net>\n"
@@ -26,12 +26,12 @@ msgstr "kesalahan sintaks: tidak dapat membackup"
 msgid "syntax is ambiguous"
 msgstr "sintaks rancu"
 
-#: data/glr.c:2162 data/glr.c:2168 data/glr.c:2422 data/lalr1.cc:878
+#: data/glr.c:2168 data/glr.c:2174 data/glr.c:2428 data/lalr1.cc:878
 #: data/yacc.c:1304 data/yacc.c:1332
 msgid "syntax error"
 msgstr "kesalahan sintaks"
 
-#: data/glr.c:2482 data/yacc.c:1114 data/yacc.c:1456
+#: data/glr.c:2488 data/yacc.c:1114 data/yacc.c:1456
 msgid "memory exhausted"
 msgstr "memori habis"
 

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison-runtime 2.1\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2006-05-19 14:49-0700\n"
+"POT-Creation-Date: 2006-06-05 00:32-0700\n"
 "PO-Revision-Date: 2005-09-20 12:00-0500\n"
 "Last-Translator: Laurentiu Buzdugan <lbuz@rolix.org>\n"
 "Language-Team: Romanian <translation-team-ro@lists.sourceforge.net>\n"
@@ -27,12 +27,12 @@ msgstr "eroare de sintaxã: nu pot da înapoi"
 msgid "syntax is ambiguous"
 msgstr "sintaxa este ambiguã"
 
-#: data/glr.c:2162 data/glr.c:2168 data/glr.c:2422 data/lalr1.cc:878
+#: data/glr.c:2168 data/glr.c:2174 data/glr.c:2428 data/lalr1.cc:878
 #: data/yacc.c:1304 data/yacc.c:1332
 msgid "syntax error"
 msgstr "eroare de sintaxã"
 
-#: data/glr.c:2482 data/yacc.c:1114 data/yacc.c:1456
+#: data/glr.c:2488 data/yacc.c:1114 data/yacc.c:1456
 msgid "memory exhausted"
 msgstr "memorie epuizatã"
 

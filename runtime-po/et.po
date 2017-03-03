@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison-runtime 2.0b\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2006-05-19 14:49-0700\n"
+"POT-Creation-Date: 2006-06-05 00:32-0700\n"
 "PO-Revision-Date: 2005-08-02 08:28+0300\n"
 "Last-Translator: Toomas Soome <Toomas.Soome@microlink.ee>\n"
 "Language-Team: Estonian <et@li.org>\n"
@@ -23,12 +23,12 @@ msgstr "süntaksi viga: ei saa toetada"
 msgid "syntax is ambiguous"
 msgstr "süntaks on segane"
 
-#: data/glr.c:2162 data/glr.c:2168 data/glr.c:2422 data/lalr1.cc:878
+#: data/glr.c:2168 data/glr.c:2174 data/glr.c:2428 data/lalr1.cc:878
 #: data/yacc.c:1304 data/yacc.c:1332
 msgid "syntax error"
 msgstr "süntaksi viga"
 
-#: data/glr.c:2482 data/yacc.c:1114 data/yacc.c:1456
+#: data/glr.c:2488 data/yacc.c:1114 data/yacc.c:1456
 msgid "memory exhausted"
 msgstr "mälu on otsas"
 

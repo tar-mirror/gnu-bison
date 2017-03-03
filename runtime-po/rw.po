@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.0\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2006-05-19 14:49-0700\n"
+"POT-Creation-Date: 2006-06-05 00:32-0700\n"
 "PO-Revision-Date: 2005-04-04 10:55-0700\n"
 "Last-Translator: Steven Michael Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -33,12 +33,12 @@ msgstr ""
 msgid "syntax is ambiguous"
 msgstr ""
 
-#: data/glr.c:2162 data/glr.c:2168 data/glr.c:2422 data/lalr1.cc:878
+#: data/glr.c:2168 data/glr.c:2174 data/glr.c:2428 data/lalr1.cc:878
 #: data/yacc.c:1304 data/yacc.c:1332
 msgid "syntax error"
 msgstr ""
 
-#: data/glr.c:2482 data/yacc.c:1114 data/yacc.c:1456
+#: data/glr.c:2488 data/yacc.c:1114 data/yacc.c:1456
 msgid "memory exhausted"
 msgstr "Ububiko"
 

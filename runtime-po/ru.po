@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 1.875\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2006-05-19 14:49-0700\n"
+"POT-Creation-Date: 2006-06-05 00:32-0700\n"
 "PO-Revision-Date: 2003-01-01 20:35+0300\n"
 "Last-Translator: Dmitry S. Sivachenko <mitya@cavia.pp.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -24,12 +24,12 @@ msgstr ""
 msgid "syntax is ambiguous"
 msgstr ""
 
-#: data/glr.c:2162 data/glr.c:2168 data/glr.c:2422 data/lalr1.cc:878
+#: data/glr.c:2168 data/glr.c:2174 data/glr.c:2428 data/lalr1.cc:878
 #: data/yacc.c:1304 data/yacc.c:1332
 msgid "syntax error"
 msgstr ""
 
-#: data/glr.c:2482 data/yacc.c:1114 data/yacc.c:1456
+#: data/glr.c:2488 data/yacc.c:1114 data/yacc.c:1456
 msgid "memory exhausted"
 msgstr "память исчерпана"
 

@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 2.2.  */
+/* A Bison parser, made by GNU Bison 2.3.  */
 
 /* Skeleton implementation for Bison LALR(1) parsers in C++
 
@@ -36,7 +36,7 @@
 #include "calc++-parser.hh"
 
 /* User implementation prologue.  */
-#line 7497 "../../doc/bison.texinfo"
+#line 7502 "../../doc/bison.texinfo"
 
 # include "calc++-driver.hh"
 
@@ -170,17 +170,17 @@ namespace yy
     switch (yytype)
       {
         case 4: /* "\"identifier\"" */
-#line 7526 "../../doc/bison.texinfo"
+#line 7531 "../../doc/bison.texinfo"
 	{ debug_stream () << *(yyvaluep->sval); };
 #line 176 "./calc++-parser.cc"
 	break;
       case 5: /* "\"number\"" */
-#line 7529 "../../doc/bison.texinfo"
+#line 7534 "../../doc/bison.texinfo"
 	{ debug_stream () << (yyvaluep->ival); };
 #line 181 "./calc++-parser.cc"
 	break;
       case 6: /* "\"expression\"" */
-#line 7529 "../../doc/bison.texinfo"
+#line 7534 "../../doc/bison.texinfo"
 	{ debug_stream () << (yyvaluep->ival); };
 #line 186 "./calc++-parser.cc"
 	break;
@@ -215,7 +215,7 @@ namespace yy
     switch (yytype)
       {
         case 4: /* "\"identifier\"" */
-#line 7527 "../../doc/bison.texinfo"
+#line 7532 "../../doc/bison.texinfo"
 	{ delete (yyvaluep->sval); };
 #line 221 "./calc++-parser.cc"
 	break;
@@ -293,7 +293,7 @@ namespace yy
 
 
     /* User initialization code.  */
-    #line 7460 "../../doc/bison.texinfo"
+    #line 7465 "../../doc/bison.texinfo"
 {
   // Initialize the initial location.
   yylloc.begin.filename = yylloc.end.filename = &driver.file;
@@ -415,52 +415,52 @@ namespace yy
     switch (yyn)
       {
 	  case 2:
-#line 7539 "../../doc/bison.texinfo"
+#line 7544 "../../doc/bison.texinfo"
     { driver.result = (yysemantic_stack_[(2) - (2)].ival); ;}
     break;
 
   case 3:
-#line 7541 "../../doc/bison.texinfo"
+#line 7546 "../../doc/bison.texinfo"
     {;}
     break;
 
   case 4:
-#line 7542 "../../doc/bison.texinfo"
+#line 7547 "../../doc/bison.texinfo"
     {;}
     break;
 
   case 5:
-#line 7544 "../../doc/bison.texinfo"
+#line 7549 "../../doc/bison.texinfo"
     { driver.variables[*(yysemantic_stack_[(3) - (1)].sval)] = (yysemantic_stack_[(3) - (3)].ival); ;}
     break;
 
   case 6:
-#line 7548 "../../doc/bison.texinfo"
+#line 7553 "../../doc/bison.texinfo"
     { (yyval.ival) = (yysemantic_stack_[(3) - (1)].ival) + (yysemantic_stack_[(3) - (3)].ival); ;}
     break;
 
   case 7:
-#line 7549 "../../doc/bison.texinfo"
+#line 7554 "../../doc/bison.texinfo"
     { (yyval.ival) = (yysemantic_stack_[(3) - (1)].ival) - (yysemantic_stack_[(3) - (3)].ival); ;}
     break;
 
   case 8:
-#line 7550 "../../doc/bison.texinfo"
+#line 7555 "../../doc/bison.texinfo"
     { (yyval.ival) = (yysemantic_stack_[(3) - (1)].ival) * (yysemantic_stack_[(3) - (3)].ival); ;}
     break;
 
   case 9:
-#line 7551 "../../doc/bison.texinfo"
+#line 7556 "../../doc/bison.texinfo"
     { (yyval.ival) = (yysemantic_stack_[(3) - (1)].ival) / (yysemantic_stack_[(3) - (3)].ival); ;}
     break;
 
   case 10:
-#line 7552 "../../doc/bison.texinfo"
+#line 7557 "../../doc/bison.texinfo"
     { (yyval.ival) = driver.variables[*(yysemantic_stack_[(1) - (1)].sval)]; ;}
     break;
 
   case 11:
-#line 7553 "../../doc/bison.texinfo"
+#line 7558 "../../doc/bison.texinfo"
     { (yyval.ival) = (yysemantic_stack_[(1) - (1)].ival); ;}
     break;
 
@@ -796,8 +796,8 @@ namespace yy
   const unsigned short int
   calcxx_parser::yyrline_[] =
   {
-         0,  7539,  7539,  7541,  7542,  7544,  7548,  7549,  7550,  7551,
-    7552,  7553
+         0,  7544,  7544,  7546,  7547,  7549,  7553,  7554,  7555,  7556,
+    7557,  7558
   };
 
   // Print the state stack on the debug stream.
@@ -885,9 +885,9 @@ namespace yy
 
 } // namespace yy
 
-#line 7554 "../../doc/bison.texinfo"
+#line 7559 "../../doc/bison.texinfo"
 
-#line 7563 "../../doc/bison.texinfo"
+#line 7568 "../../doc/bison.texinfo"
 void
 yy::calcxx_parser::error (const yy::calcxx_parser::location_type& l,
                           const std::string& m)

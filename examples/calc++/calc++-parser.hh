@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 2.2.  */
+/* A Bison parser, made by GNU Bison 2.3.  */
 
 /* Skeleton interface for Bison LALR(1) parsers in C++
 
@@ -48,7 +48,7 @@ namespace yy
 }
 
 /* First part of user declarations.  */
-#line 7432 "../../doc/bison.texinfo"
+#line 7437 "../../doc/bison.texinfo"
 
 # include <string>
 class calcxx_driver;
@@ -106,7 +106,7 @@ namespace yy
     /// Symbol semantic values.
 #ifndef YYSTYPE
     union semantic_type
-#line 7484 "../../doc/bison.texinfo"
+#line 7489 "../../doc/bison.texinfo"
 {
   int          ival;
   std::string *sval;

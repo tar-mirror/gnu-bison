@@ -1,6 +1,6 @@
 This is bison.info, produced by makeinfo version 4.8 from bison.texinfo.
 
-   This manual is for GNU Bison (version 2.2, 14 May 2006), the GNU
+   This manual is for GNU Bison (version 2.3, 30 May 2006), the GNU
 parser generator.
 
    Copyright (C) 1988, 1989, 1990, 1991, 1992, 1993, 1995, 1998, 1999,
@@ -29,7 +29,7 @@ File: bison.info,  Node: Top,  Next: Introduction,  Up: (dir)
 Bison
 *****
 
-This manual is for GNU Bison (version 2.2, 14 May 2006), the GNU parser
+This manual is for GNU Bison (version 2.3, 30 May 2006), the GNU parser
 generator.
 
    Copyright (C) 1988, 1989, 1990, 1991, 1992, 1993, 1995, 1998, 1999,
@@ -292,11 +292,11 @@ File: bison.info,  Node: Introduction,  Next: Conditions,  Prev: Top,  Up: Top
 Introduction
 ************
 
-"Bison" is a general-purpose parser generator that converts a grammar
-description for an LALR(1) or GLR context-free grammar into a C or C++
-program to parse that grammar.  Once you are proficient with Bison, you
-can use it to develop a wide range of language parsers, from those used
-in simple desk calculators to complex programming languages.
+"Bison" is a general-purpose parser generator that converts an
+annotated context-free grammar into an LALR(1) or GLR parser for that
+grammar.  Once you are proficient with Bison, you can use it to develop
+a wide range of language parsers, from those used in simple desk
+calculators to complex programming languages.
 
    Bison is upward compatible with Yacc: all properly-written Yacc
 grammars ought to work with Bison with no change.  Anyone familiar with
@@ -314,7 +314,7 @@ Bison in detail.
 it Yacc-compatible.  Wilfred Hansen of Carnegie Mellon University added
 multi-character string literals and other features.
 
-   This edition corresponds to version 2.2 of Bison.
+   This edition corresponds to version 2.3 of Bison.
 
 
 File: bison.info,  Node: Conditions,  Next: Copying,  Prev: Introduction,  Up: Top
@@ -3076,8 +3076,10 @@ specify some other type, define `YYSTYPE' as a macro, like this:
 
      #define YYSTYPE double
 
-This macro definition must go in the prologue of the grammar file
-(*note Outline of a Bison Grammar: Grammar Outline.).
+`YYSTYPE''s replacement list should be a type name that does not
+contain parentheses or square brackets.  This macro definition must go
+in the prologue of the grammar file (*note Outline of a Bison Grammar:
+Grammar Outline.).
 
 
 File: bison.info,  Node: Multiple Types,  Next: Actions,  Prev: Value Type,  Up: Semantics
@@ -3402,9 +3404,10 @@ File: bison.info,  Node: Location Type,  Next: Actions and Locations,  Up: Locat
 Defining a data type for locations is much simpler than for semantic
 values, since all tokens and groupings always use the same type.
 
-   The type of locations is specified by defining a macro called
-`YYLTYPE'.  When `YYLTYPE' is not defined, Bison uses a default
-structure type with four members:
+   You can specify the type of locations by defining a macro called
+`YYLTYPE', just as you can specify the semantic value type by defining
+`YYSTYPE' (*note Value Type::).  When `YYLTYPE' is not defined, Bison
+uses a default structure type with four members:
 
      typedef struct YYLTYPE
      {
@@ -4609,9 +4612,9 @@ useful in actions.
      Recovery::.
 
  -- Macro: YYRECOVERING
-     This macro stands for an expression that has the value 1 when the
-     parser is recovering from a syntax error, and 0 the rest of the
-     time.  *Note Error Recovery::.
+     The expression `YYRECOVERING ()' yields 1 when the parser is
+     recovering from a syntax error, and 0 otherwise.  *Note Error
+     Recovery::.
 
  -- Variable: yychar
      Variable containing either the look-ahead token, or `YYEOF' when
@@ -5541,10 +5544,9 @@ parsing should once again commence.  The next symbol returned by the
 lexical scanner is probably correct.  The previous look-ahead token
 ought to be discarded with `yyclearin;'.
 
-   The macro `YYRECOVERING' stands for an expression that has the value
-1 when the parser is recovering from a syntax error, and 0 the rest of
-the time.  A value of 1 indicates that error messages are currently
-suppressed for new syntax errors.
+   The expression `YYRECOVERING ()' yields 1 when the parser is
+recovering from a syntax error, and 0 otherwise.  Syntax error
+diagnostics are suppressed while recovering from a syntax error.
 
 
 File: bison.info,  Node: Context Dependency,  Next: Debugging,  Prev: Error Recovery,  Up: Top
@@ -7705,9 +7707,9 @@ Appendix A Bison Symbols
      Conventions for Pure Parsers: Pure Calling.
 
  -- Macro: YYRECOVERING
-     Macro whose value indicates whether the parser is recovering from a
-     syntax error.  *Note Special Features for Use in Actions: Action
-     Features.
+     The expression `YYRECOVERING ()' yields 1 when the parser is
+     recovering from a syntax error, and 0 otherwise.  *Note Special
+     Features for Use in Actions: Action Features.
 
  -- Macro: YYSTACK_USE_ALLOCA
      Macro used to control the use of `alloca' when the C LALR(1)
@@ -8864,144 +8866,144 @@ Index
 Tag Table:
 Node: Top1110
 Node: Introduction12389
-Node: Conditions13680
-Node: Copying15571
-Node: Concepts34749
-Node: Language and Grammar35903
-Node: Grammar in Bison41796
-Node: Semantic Values43725
-Node: Semantic Actions45831
-Node: GLR Parsers47018
-Node: Simple GLR Parsers49769
-Node: Merging GLR Parses56424
-Node: GLR Semantic Actions60993
-Node: Compiler Requirements62887
-Node: Locations Overview63623
-Node: Bison Parser65076
-Node: Stages68016
-Node: Grammar Layout69304
-Node: Examples70636
-Node: RPN Calc71810
-Node: Rpcalc Decls72789
-Node: Rpcalc Rules74710
-Node: Rpcalc Input76519
-Node: Rpcalc Line77994
-Node: Rpcalc Expr79122
-Node: Rpcalc Lexer81089
-Node: Rpcalc Main83676
-Node: Rpcalc Error84083
-Node: Rpcalc Gen85111
-Node: Rpcalc Compile86241
-Node: Infix Calc87115
-Node: Simple Error Recovery89878
-Node: Location Tracking Calc91773
-Node: Ltcalc Decls92460
-Node: Ltcalc Rules93413
-Node: Ltcalc Lexer95422
-Node: Multi-function Calc97745
-Node: Mfcalc Decl99318
-Node: Mfcalc Rules101357
-Node: Mfcalc Symtab102738
-Node: Exercises108908
-Node: Grammar File109422
-Node: Grammar Outline110271
-Node: Prologue111031
-Node: Bison Declarations112457
-Node: Grammar Rules112872
-Node: Epilogue113343
-Node: Symbols114359
-Node: Rules121062
-Node: Recursion123541
-Node: Semantics125259
-Node: Value Type126358
-Node: Multiple Types127025
-Node: Actions128055
-Node: Action Types131471
-Node: Mid-Rule Actions132783
-Node: Locations139232
-Node: Location Type139883
-Node: Actions and Locations140475
-Node: Location Default Action142937
-Node: Declarations146657
-Node: Require Decl148136
-Node: Token Decl148455
-Node: Precedence Decl150563
-Node: Union Decl152123
-Node: Type Decl153438
-Node: Initial Action Decl154364
-Node: Destructor Decl155136
-Node: Expect Decl157411
-Node: Start Decl159404
-Node: Pure Decl159792
-Node: Decl Summary161478
-Node: Multiple Parsers168804
-Node: Interface170313
-Node: Parser Function171286
-Node: Lexical173289
-Node: Calling Convention174700
-Node: Token Values177660
-Node: Token Locations178824
-Node: Pure Calling179718
-Node: Error Reporting181587
-Node: Action Features185705
-Node: Internationalization190052
-Node: Algorithm192593
-Node: Look-Ahead194960
-Node: Shift/Reduce197178
-Node: Precedence200075
-Node: Why Precedence200731
-Node: Using Precedence202605
-Node: Precedence Examples203582
-Node: How Precedence204292
-Node: Contextual Precedence205451
-Node: Parser States207247
-Node: Reduce/Reduce208495
-Node: Mystery Conflicts212036
-Node: Generalized LR Parsing215745
-Node: Memory Management220366
-Node: Error Recovery222579
-Node: Context Dependency227938
-Node: Semantic Tokens228787
-Node: Lexical Tie-ins231857
-Node: Tie-in Recovery233434
-Node: Debugging235611
-Node: Understanding236277
-Node: Tracing247423
-Node: Invocation251507
-Node: Bison Options252913
-Node: Option Cross Key257505
-Node: Yacc Library258327
-Node: C++ Language Interface259152
-Node: C++ Parsers259440
-Node: C++ Bison Interface259898
-Node: C++ Semantic Values261191
-Ref: C++ Semantic Values-Footnote-1262133
-Node: C++ Location Values262286
-Node: C++ Parser Interface264661
-Node: C++ Scanner Interface266381
-Node: A Complete C++ Example267048
-Node: Calc++ --- C++ Calculator267987
-Node: Calc++ Parsing Driver268497
-Node: Calc++ Parser272232
-Node: Calc++ Scanner276000
-Node: Calc++ Top Level279325
-Node: FAQ279992
-Node: Memory Exhausted280941
-Node: How Can I Reset the Parser281251
-Node: Strings are Destroyed283527
-Node: Implementing Gotos/Loops285116
-Node: Multiple start-symbols286399
-Node: Secure? Conform?287944
-Node: I can't build Bison288392
-Node: Where can I find help?289110
-Node: Bug Reports289903
-Node: Other Languages291365
-Node: Beta Testing291716
-Node: Mailing Lists292591
-Node: Table of Symbols292802
-Node: Glossary305015
-Node: Copying This Manual311916
-Node: GNU Free Documentation License312147
-Node: Index334556
+Node: Conditions13650
+Node: Copying15541
+Node: Concepts34719
+Node: Language and Grammar35873
+Node: Grammar in Bison41766
+Node: Semantic Values43695
+Node: Semantic Actions45801
+Node: GLR Parsers46988
+Node: Simple GLR Parsers49739
+Node: Merging GLR Parses56394
+Node: GLR Semantic Actions60963
+Node: Compiler Requirements62857
+Node: Locations Overview63593
+Node: Bison Parser65046
+Node: Stages67986
+Node: Grammar Layout69274
+Node: Examples70606
+Node: RPN Calc71780
+Node: Rpcalc Decls72759
+Node: Rpcalc Rules74680
+Node: Rpcalc Input76489
+Node: Rpcalc Line77964
+Node: Rpcalc Expr79092
+Node: Rpcalc Lexer81059
+Node: Rpcalc Main83646
+Node: Rpcalc Error84053
+Node: Rpcalc Gen85081
+Node: Rpcalc Compile86211
+Node: Infix Calc87085
+Node: Simple Error Recovery89848
+Node: Location Tracking Calc91743
+Node: Ltcalc Decls92430
+Node: Ltcalc Rules93383
+Node: Ltcalc Lexer95392
+Node: Multi-function Calc97715
+Node: Mfcalc Decl99288
+Node: Mfcalc Rules101327
+Node: Mfcalc Symtab102708
+Node: Exercises108878
+Node: Grammar File109392
+Node: Grammar Outline110241
+Node: Prologue111001
+Node: Bison Declarations112427
+Node: Grammar Rules112842
+Node: Epilogue113313
+Node: Symbols114329
+Node: Rules121032
+Node: Recursion123511
+Node: Semantics125229
+Node: Value Type126328
+Node: Multiple Types127101
+Node: Actions128131
+Node: Action Types131547
+Node: Mid-Rule Actions132859
+Node: Locations139308
+Node: Location Type139959
+Node: Actions and Locations140646
+Node: Location Default Action143108
+Node: Declarations146828
+Node: Require Decl148307
+Node: Token Decl148626
+Node: Precedence Decl150734
+Node: Union Decl152294
+Node: Type Decl153609
+Node: Initial Action Decl154535
+Node: Destructor Decl155307
+Node: Expect Decl157582
+Node: Start Decl159575
+Node: Pure Decl159963
+Node: Decl Summary161649
+Node: Multiple Parsers168975
+Node: Interface170484
+Node: Parser Function171457
+Node: Lexical173460
+Node: Calling Convention174871
+Node: Token Values177831
+Node: Token Locations178995
+Node: Pure Calling179889
+Node: Error Reporting181758
+Node: Action Features185876
+Node: Internationalization190197
+Node: Algorithm192738
+Node: Look-Ahead195105
+Node: Shift/Reduce197323
+Node: Precedence200220
+Node: Why Precedence200876
+Node: Using Precedence202750
+Node: Precedence Examples203727
+Node: How Precedence204437
+Node: Contextual Precedence205596
+Node: Parser States207392
+Node: Reduce/Reduce208640
+Node: Mystery Conflicts212181
+Node: Generalized LR Parsing215890
+Node: Memory Management220511
+Node: Error Recovery222724
+Node: Context Dependency228030
+Node: Semantic Tokens228879
+Node: Lexical Tie-ins231949
+Node: Tie-in Recovery233526
+Node: Debugging235703
+Node: Understanding236369
+Node: Tracing247515
+Node: Invocation251599
+Node: Bison Options253005
+Node: Option Cross Key257597
+Node: Yacc Library258419
+Node: C++ Language Interface259244
+Node: C++ Parsers259532
+Node: C++ Bison Interface259990
+Node: C++ Semantic Values261283
+Ref: C++ Semantic Values-Footnote-1262225
+Node: C++ Location Values262378
+Node: C++ Parser Interface264753
+Node: C++ Scanner Interface266473
+Node: A Complete C++ Example267140
+Node: Calc++ --- C++ Calculator268079
+Node: Calc++ Parsing Driver268589
+Node: Calc++ Parser272324
+Node: Calc++ Scanner276092
+Node: Calc++ Top Level279417
+Node: FAQ280084
+Node: Memory Exhausted281033
+Node: How Can I Reset the Parser281343
+Node: Strings are Destroyed283619
+Node: Implementing Gotos/Loops285208
+Node: Multiple start-symbols286491
+Node: Secure? Conform?288036
+Node: I can't build Bison288484
+Node: Where can I find help?289202
+Node: Bug Reports289995
+Node: Other Languages291457
+Node: Beta Testing291808
+Node: Mailing Lists292683
+Node: Table of Symbols292894
+Node: Glossary305135
+Node: Copying This Manual312036
+Node: GNU Free Documentation License312267
+Node: Index334676
 
 End Tag Table

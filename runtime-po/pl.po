@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison-runtime 2.1\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2006-05-19 14:49-0700\n"
+"POT-Creation-Date: 2006-06-05 00:32-0700\n"
 "PO-Revision-Date: 2005-09-20 19:28+0200\n"
 "Last-Translator: Wojciech Polak <polak@gnu.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -25,12 +25,12 @@ msgstr "b³±d sk³adni: nie mo¿na cofn±æ przesuniêcia symbolu leksykalnego"
 msgid "syntax is ambiguous"
 msgstr "sk³adnia jest niejednoznaczna"
 
-#: data/glr.c:2162 data/glr.c:2168 data/glr.c:2422 data/lalr1.cc:878
+#: data/glr.c:2168 data/glr.c:2174 data/glr.c:2428 data/lalr1.cc:878
 #: data/yacc.c:1304 data/yacc.c:1332
 msgid "syntax error"
 msgstr "b³±d sk³adni"
 
-#: data/glr.c:2482 data/yacc.c:1114 data/yacc.c:1456
+#: data/glr.c:2488 data/yacc.c:1114 data/yacc.c:1456
 msgid "memory exhausted"
 msgstr "pamiêæ wyczerpana"
 

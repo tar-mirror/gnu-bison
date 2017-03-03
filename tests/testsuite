@@ -317,7 +317,7 @@ at_help_all='1;input.at:28;Invalid dollar-n;;
 6;input.at:198;Torturing the Scanner;;
 7;input.at:357;Typed symbol aliases;;
 8;input.at:393;Require 1.0;;
-9;input.at:394;Require 2.2;;
+9;input.at:394;Require 2.3;;
 10;input.at:396;Require 100.0;;
 11;output.at:43;Output files:  -dv ;;
 12;output.at:46;Output files:  -dv >&-;;
@@ -422,23 +422,23 @@ at_help_all='1;input.at:28;Invalid dollar-n;;
 111;existing.at:364;GNU Cim Grammar;;
 112;existing.at:980;GNU pic Grammar;;
 113;regression.at:28;Trivial grammars;;
-114;regression.at:55;Early token definitions;;
-115;regression.at:93;Braces parsing;;
-116;regression.at:115;Duplicate string;;
-117;regression.at:141;Rule Line Numbers;report;
-118;regression.at:285;Mixing %token styles;;
-119;regression.at:308;Invalid inputs;;
-120;regression.at:334;Invalid inputs with {};;
-121;regression.at:361;Token definitions;;
-122;regression.at:414;Characters Escapes;;
-123;regression.at:445;Web2c Report;report;
-124;regression.at:622;Web2c Actions;report;
-125;regression.at:864;Dancer ;;
-126;regression.at:865;Dancer %glr-parser;;
-127;regression.at:866;Dancer %skeleton "lalr1.cc";c++;
-128;regression.at:961;Expecting two tokens ;;
-129;regression.at:962;Expecting two tokens %glr-parser;;
-130;regression.at:963;Expecting two tokens %skeleton "lalr1.cc";c++;
+114;regression.at:57;Early token definitions;;
+115;regression.at:95;Braces parsing;;
+116;regression.at:117;Duplicate string;;
+117;regression.at:143;Rule Line Numbers;report;
+118;regression.at:287;Mixing %token styles;;
+119;regression.at:310;Invalid inputs;;
+120;regression.at:336;Invalid inputs with {};;
+121;regression.at:363;Token definitions;;
+122;regression.at:416;Characters Escapes;;
+123;regression.at:447;Web2c Report;report;
+124;regression.at:624;Web2c Actions;report;
+125;regression.at:866;Dancer ;;
+126;regression.at:867;Dancer %glr-parser;;
+127;regression.at:868;Dancer %skeleton "lalr1.cc";c++;
+128;regression.at:963;Expecting two tokens ;;
+129;regression.at:964;Expecting two tokens %glr-parser;;
+130;regression.at:965;Expecting two tokens %skeleton "lalr1.cc";c++;
 131;c++.at:102;Doxygen Public Documentation;;
 132;c++.at:103;Doxygen Private Documentation;;
 133;cxx-type.at:412;GLR: Resolve ambiguity, impure, no locations;;
@@ -493,7 +493,7 @@ do
 	;;
 
     --version | -V )
-	echo "$as_me (GNU Bison 2.2)"
+	echo "$as_me (GNU Bison 2.3)"
 	exit 0
 	;;
 
@@ -649,7 +649,7 @@ fi
 # List of tests.
 if $at_list_p; then
   cat <<_ATEOF
-GNU Bison 2.2 test suite test groups:
+GNU Bison 2.3 test suite test groups:
 
  NUM: FILENAME:LINE      TEST-GROUP-NAME
       KEYWORDS
@@ -731,13 +731,13 @@ exec 5>$at_suite_log
 # Banners and logs.
 cat <<\_ASBOX
 ## ------------------------- ##
-## GNU Bison 2.2 test suite. ##
+## GNU Bison 2.3 test suite. ##
 ## ------------------------- ##
 _ASBOX
 {
   cat <<\_ASBOX
 ## ------------------------- ##
-## GNU Bison 2.2 test suite. ##
+## GNU Bison 2.3 test suite. ##
 ## ------------------------- ##
 _ASBOX
   echo
@@ -1732,10 +1732,10 @@ $at_traceon
     at_status=`cat $at_status_file`
     ;;
 
-  9 ) # 9. input.at:394: Require 2.2
+  9 ) # 9. input.at:394: Require 2.3
     at_setup_line='input.at:394'
-    at_desc='Require 2.2'
-    $at_quiet $ECHO_N "  9: Require 2.2                                  $ECHO_C"
+    at_desc='Require 2.3'
+    $at_quiet $ECHO_N "  9: Require 2.3                                  $ECHO_C"
     at_xfail=no
     (
       echo "9. input.at:394: testing ..."
@@ -1752,7 +1752,7 @@ cat >input.y <<'_ATEOF'
 #endif
 %}
 
-%require "2.2";
+%require "2.3";
 %%
 empty_file:;
 _ATEOF
@@ -56568,6 +56568,7 @@ cat >input.y <<'_ATEOF'
 %{
 void yyerror (char const *);
 int yylex (void);
+#define YYSTYPE int *
 %}
 
 %error-verbose
@@ -56580,8 +56581,8 @@ _ATEOF
 
 
 $at_traceoff
-echo "regression.at:43: bison -o input.c input.y"
-echo regression.at:43 >$at_check_line_file
+echo "regression.at:44: bison -o input.c input.y"
+echo regression.at:44 >$at_check_line_file
 ( $at_traceon; bison -o input.c input.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -56593,7 +56594,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:43: exit code was $at_status, expected 0"
+   *) echo "regression.at:44: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -56605,8 +56606,8 @@ fi
 $at_traceon
 
 $at_traceoff
-echo "regression.at:44: \$CC \$CFLAGS \$CPPFLAGS -o input.o -c input.c"
-echo regression.at:44 >$at_check_line_file
+echo "regression.at:45: \$CC \$CFLAGS \$CPPFLAGS -o input.o -c input.c"
+echo regression.at:45 >$at_check_line_file
 ( $at_traceon; $CC $CFLAGS $CPPFLAGS -o input.o -c input.c ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -56618,7 +56619,32 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:44: exit code was $at_status, expected 0"
+   *) echo "regression.at:45: exit code was $at_status, expected 0"
+      at_failed=:;;
+esac
+if $at_failed; then
+
+  echo 1 > $at_status_file
+  exit 1
+fi
+
+$at_traceon
+
+$at_traceoff
+echo "regression.at:46: \$CC \$CFLAGS \$CPPFLAGS -o input.o -DYYDEBUG -c input.c"
+echo regression.at:46 >$at_check_line_file
+( $at_traceon; $CC $CFLAGS $CPPFLAGS -o input.o -DYYDEBUG -c input.c ) >$at_stdout 2>$at_stder1
+at_status=$?
+grep '^ *+' $at_stder1 >&2
+grep -v '^ *+' $at_stder1 >$at_stderr
+at_failed=false
+echo stderr:; cat $at_stderr
+echo stdout:; cat $at_stdout
+case $at_status in
+   77) echo 77 > $at_status_file
+            exit 77;;
+   0) ;;
+   *) echo "regression.at:46: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -56636,13 +56662,13 @@ $at_traceon
     at_status=`cat $at_status_file`
     ;;
 
-  114 ) # 114. regression.at:55: Early token definitions
-    at_setup_line='regression.at:55'
+  114 ) # 114. regression.at:57: Early token definitions
+    at_setup_line='regression.at:57'
     at_desc='Early token definitions'
     $at_quiet $ECHO_N "114: Early token definitions                      $ECHO_C"
     at_xfail=no
     (
-      echo "114. regression.at:55: testing ..."
+      echo "114. regression.at:57: testing ..."
       $at_traceon
 
 
@@ -56683,8 +56709,8 @@ _ATEOF
 
 
 $at_traceoff
-echo "regression.at:81: bison -o input.c input.y"
-echo regression.at:81 >$at_check_line_file
+echo "regression.at:83: bison -o input.c input.y"
+echo regression.at:83 >$at_check_line_file
 ( $at_traceon; bison -o input.c input.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -56696,7 +56722,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:81: exit code was $at_status, expected 0"
+   *) echo "regression.at:83: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -56708,8 +56734,8 @@ fi
 $at_traceon
 
 $at_traceoff
-echo "regression.at:82: \$CC \$CFLAGS \$CPPFLAGS -o input.o -c input.c"
-echo regression.at:82 >$at_check_line_file
+echo "regression.at:84: \$CC \$CFLAGS \$CPPFLAGS -o input.o -c input.c"
+echo regression.at:84 >$at_check_line_file
 ( $at_traceon; $CC $CFLAGS $CPPFLAGS -o input.o -c input.c ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -56721,7 +56747,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:82: exit code was $at_status, expected 0"
+   *) echo "regression.at:84: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -56739,13 +56765,13 @@ $at_traceon
     at_status=`cat $at_status_file`
     ;;
 
-  115 ) # 115. regression.at:93: Braces parsing
-    at_setup_line='regression.at:93'
+  115 ) # 115. regression.at:95: Braces parsing
+    at_setup_line='regression.at:95'
     at_desc='Braces parsing'
     $at_quiet $ECHO_N "115: Braces parsing                               $ECHO_C"
     at_xfail=no
     (
-      echo "115. regression.at:93: testing ..."
+      echo "115. regression.at:95: testing ..."
       $at_traceon
 
 
@@ -56759,8 +56785,8 @@ _ATEOF
 
 
 $at_traceoff
-echo "regression.at:103: bison -v -o input.c input.y"
-echo regression.at:103 >$at_check_line_file
+echo "regression.at:105: bison -v -o input.c input.y"
+echo regression.at:105 >$at_check_line_file
 ( $at_traceon; bison -v -o input.c input.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -56768,32 +56794,6 @@ grep -v '^ *+' $at_stder1 >$at_stderr
 at_failed=false
 $at_diff $at_devnull $at_stderr || at_failed=:
 $at_diff $at_devnull $at_stdout || at_failed=:
-case $at_status in
-   77) echo 77 > $at_status_file
-            exit 77;;
-   0) ;;
-   *) echo "regression.at:103: exit code was $at_status, expected 0"
-      at_failed=:;;
-esac
-if $at_failed; then
-
-  echo 1 > $at_status_file
-  exit 1
-fi
-
-$at_traceon
-
-
-$at_traceoff
-echo "regression.at:105: grep 'tests = {{{{{{{{{{}}}}}}}}}};' input.c"
-echo regression.at:105 >$at_check_line_file
-( $at_traceon; grep 'tests = {{{{{{{{{{}}}}}}}}}};' input.c ) >$at_stdout 2>$at_stder1
-at_status=$?
-grep '^ *+' $at_stder1 >&2
-grep -v '^ *+' $at_stder1 >$at_stderr
-at_failed=false
-$at_diff $at_devnull $at_stderr || at_failed=:
-echo stdout:; cat $at_stdout
 case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
@@ -56810,19 +56810,45 @@ fi
 $at_traceon
 
 
+$at_traceoff
+echo "regression.at:107: grep 'tests = {{{{{{{{{{}}}}}}}}}};' input.c"
+echo regression.at:107 >$at_check_line_file
+( $at_traceon; grep 'tests = {{{{{{{{{{}}}}}}}}}};' input.c ) >$at_stdout 2>$at_stder1
+at_status=$?
+grep '^ *+' $at_stder1 >&2
+grep -v '^ *+' $at_stder1 >$at_stderr
+at_failed=false
+$at_diff $at_devnull $at_stderr || at_failed=:
+echo stdout:; cat $at_stdout
+case $at_status in
+   77) echo 77 > $at_status_file
+            exit 77;;
+   0) ;;
+   *) echo "regression.at:107: exit code was $at_status, expected 0"
+      at_failed=:;;
+esac
+if $at_failed; then
+
+  echo 1 > $at_status_file
+  exit 1
+fi
+
+$at_traceon
+
+
       $at_traceoff
       $at_times_p && times >$at_times_file
     ) 5>&1 2>&1 | eval $at_tee_pipe
     at_status=`cat $at_status_file`
     ;;
 
-  116 ) # 116. regression.at:115: Duplicate string
-    at_setup_line='regression.at:115'
+  116 ) # 116. regression.at:117: Duplicate string
+    at_setup_line='regression.at:117'
     at_desc='Duplicate string'
     $at_quiet $ECHO_N "116: Duplicate string                             $ECHO_C"
     at_xfail=no
     (
-      echo "116. regression.at:115: testing ..."
+      echo "116. regression.at:117: testing ..."
       $at_traceon
 
 
@@ -56841,8 +56867,8 @@ _ATEOF
 
 
 $at_traceoff
-echo "regression.at:132: bison -v -o input.c input.y"
-echo regression.at:132 >$at_check_line_file
+echo "regression.at:134: bison -v -o input.c input.y"
+echo regression.at:134 >$at_check_line_file
 ( $at_traceon; bison -v -o input.c input.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -56855,7 +56881,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:132: exit code was $at_status, expected 0"
+   *) echo "regression.at:134: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -56873,13 +56899,13 @@ $at_traceon
     at_status=`cat $at_status_file`
     ;;
 
-  117 ) # 117. regression.at:141: Rule Line Numbers
-    at_setup_line='regression.at:141'
+  117 ) # 117. regression.at:143: Rule Line Numbers
+    at_setup_line='regression.at:143'
     at_desc='Rule Line Numbers'
     $at_quiet $ECHO_N "117: Rule Line Numbers                            $ECHO_C"
     at_xfail=no
     (
-      echo "117. regression.at:141: testing ..."
+      echo "117. regression.at:143: testing ..."
       $at_traceon
 
 
@@ -56917,8 +56943,8 @@ _ATEOF
 
 
 $at_traceoff
-echo "regression.at:175: bison -o input.c -v input.y"
-echo regression.at:175 >$at_check_line_file
+echo "regression.at:177: bison -o input.c -v input.y"
+echo regression.at:177 >$at_check_line_file
 ( $at_traceon; bison -o input.c -v input.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -56930,7 +56956,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:175: exit code was $at_status, expected 0"
+   *) echo "regression.at:177: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -56944,8 +56970,8 @@ $at_traceon
 
 # Check the contents of the report.
 $at_traceoff
-echo "regression.at:274: cat input.output"
-echo regression.at:274 >$at_check_line_file
+echo "regression.at:276: cat input.output"
+echo regression.at:276 >$at_check_line_file
 ( $at_traceon; cat input.output ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -57052,7 +57078,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:274: exit code was $at_status, expected 0"
+   *) echo "regression.at:276: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -57070,13 +57096,13 @@ $at_traceon
     at_status=`cat $at_status_file`
     ;;
 
-  118 ) # 118. regression.at:285: Mixing %token styles
-    at_setup_line='regression.at:285'
+  118 ) # 118. regression.at:287: Mixing %token styles
+    at_setup_line='regression.at:287'
     at_desc='Mixing %token styles'
     $at_quiet $ECHO_N "118: Mixing %token styles                         $ECHO_C"
     at_xfail=no
     (
-      echo "118. regression.at:285: testing ..."
+      echo "118. regression.at:287: testing ..."
       $at_traceon
 
 
@@ -57092,8 +57118,8 @@ _ATEOF
 
 
 $at_traceoff
-echo "regression.at:297: bison -v -o input.c input.y"
-echo regression.at:297 >$at_check_line_file
+echo "regression.at:299: bison -v -o input.c input.y"
+echo regression.at:299 >$at_check_line_file
 ( $at_traceon; bison -v -o input.c input.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -57105,7 +57131,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:297: exit code was $at_status, expected 0"
+   *) echo "regression.at:299: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -57123,13 +57149,13 @@ $at_traceon
     at_status=`cat $at_status_file`
     ;;
 
-  119 ) # 119. regression.at:308: Invalid inputs
-    at_setup_line='regression.at:308'
+  119 ) # 119. regression.at:310: Invalid inputs
+    at_setup_line='regression.at:310'
     at_desc='Invalid inputs'
     $at_quiet $ECHO_N "119: Invalid inputs                               $ECHO_C"
     at_xfail=no
     (
-      echo "119. regression.at:308: testing ..."
+      echo "119. regression.at:310: testing ..."
       $at_traceon
 
 
@@ -57145,8 +57171,8 @@ _ATEOF
 
 
 $at_traceoff
-echo "regression.at:329: bison input.y"
-echo regression.at:329 >$at_check_line_file
+echo "regression.at:331: bison input.y"
+echo regression.at:331 >$at_check_line_file
 ( $at_traceon; bison input.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -57166,7 +57192,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    1) ;;
-   *) echo "regression.at:329: exit code was $at_status, expected 1"
+   *) echo "regression.at:331: exit code was $at_status, expected 1"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -57184,13 +57210,13 @@ $at_traceon
     at_status=`cat $at_status_file`
     ;;
 
-  120 ) # 120. regression.at:334: Invalid inputs with {}
-    at_setup_line='regression.at:334'
+  120 ) # 120. regression.at:336: Invalid inputs with {}
+    at_setup_line='regression.at:336'
     at_desc='Invalid inputs with {}'
     $at_quiet $ECHO_N "120: Invalid inputs with {}                       $ECHO_C"
     at_xfail=no
     (
-      echo "120. regression.at:334: testing ..."
+      echo "120. regression.at:336: testing ..."
       $at_traceon
 
 
@@ -57206,8 +57232,8 @@ _ATEOF
 
 
 $at_traceoff
-echo "regression.at:350: bison input.y"
-echo regression.at:350 >$at_check_line_file
+echo "regression.at:352: bison input.y"
+echo regression.at:352 >$at_check_line_file
 ( $at_traceon; bison input.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -57222,7 +57248,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    1) ;;
-   *) echo "regression.at:350: exit code was $at_status, expected 1"
+   *) echo "regression.at:352: exit code was $at_status, expected 1"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -57240,13 +57266,13 @@ $at_traceon
     at_status=`cat $at_status_file`
     ;;
 
-  121 ) # 121. regression.at:361: Token definitions
-    at_setup_line='regression.at:361'
+  121 ) # 121. regression.at:363: Token definitions
+    at_setup_line='regression.at:363'
     at_desc='Token definitions'
     $at_quiet $ECHO_N "121: Token definitions                            $ECHO_C"
     at_xfail=no
     (
-      echo "121. regression.at:361: testing ..."
+      echo "121. regression.at:363: testing ..."
       $at_traceon
 
 
@@ -57299,8 +57325,8 @@ _ATEOF
 
 
 $at_traceoff
-echo "regression.at:399: bison -o input.c input.y"
-echo regression.at:399 >$at_check_line_file
+echo "regression.at:401: bison -o input.c input.y"
+echo regression.at:401 >$at_check_line_file
 ( $at_traceon; bison -o input.c input.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -57312,7 +57338,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:399: exit code was $at_status, expected 0"
+   *) echo "regression.at:401: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -57324,8 +57350,8 @@ fi
 $at_traceon
 
 $at_traceoff
-echo "regression.at:400: \$CC \$CFLAGS \$CPPFLAGS \$LDFLAGS -o input input.c \$LIBS"
-echo regression.at:400 >$at_check_line_file
+echo "regression.at:402: \$CC \$CFLAGS \$CPPFLAGS \$LDFLAGS -o input input.c \$LIBS"
+echo regression.at:402 >$at_check_line_file
 ( $at_traceon; $CC $CFLAGS $CPPFLAGS $LDFLAGS -o input input.c $LIBS ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -57337,7 +57363,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:400: exit code was $at_status, expected 0"
+   *) echo "regression.at:402: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -57353,8 +57379,8 @@ syntax error, unexpected "\\'?\"\a\b\f\n\r\t\v\001\201\001\201?\?!", expecting a
 _ATEOF
 
 $at_traceoff
-echo "regression.at:404: \$PREPARSER ./input"
-echo regression.at:404 >$at_check_line_file
+echo "regression.at:406: \$PREPARSER ./input"
+echo regression.at:406 >$at_check_line_file
 ( $at_traceon; $PREPARSER ./input ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -57366,7 +57392,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    1) ;;
-   *) echo "regression.at:404: exit code was $at_status, expected 1"
+   *) echo "regression.at:406: exit code was $at_status, expected 1"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -57383,13 +57409,13 @@ $at_traceon
     at_status=`cat $at_status_file`
     ;;
 
-  122 ) # 122. regression.at:414: Characters Escapes
-    at_setup_line='regression.at:414'
+  122 ) # 122. regression.at:416: Characters Escapes
+    at_setup_line='regression.at:416'
     at_desc='Characters Escapes'
     $at_quiet $ECHO_N "122: Characters Escapes                           $ECHO_C"
     at_xfail=no
     (
-      echo "122. regression.at:414: testing ..."
+      echo "122. regression.at:416: testing ..."
       $at_traceon
 
 
@@ -57420,8 +57446,8 @@ _ATEOF
 # Pacify font-lock-mode: "
 
 $at_traceoff
-echo "regression.at:430: bison -o input.c input.y"
-echo regression.at:430 >$at_check_line_file
+echo "regression.at:432: bison -o input.c input.y"
+echo regression.at:432 >$at_check_line_file
 ( $at_traceon; bison -o input.c input.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -57433,7 +57459,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:430: exit code was $at_status, expected 0"
+   *) echo "regression.at:432: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -57445,8 +57471,8 @@ fi
 $at_traceon
 
 $at_traceoff
-echo "regression.at:431: \$CC \$CFLAGS \$CPPFLAGS -o input.o -c input.c"
-echo regression.at:431 >$at_check_line_file
+echo "regression.at:433: \$CC \$CFLAGS \$CPPFLAGS -o input.o -c input.c"
+echo regression.at:433 >$at_check_line_file
 ( $at_traceon; $CC $CFLAGS $CPPFLAGS -o input.o -c input.c ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -57458,7 +57484,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:431: exit code was $at_status, expected 0"
+   *) echo "regression.at:433: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -57475,13 +57501,13 @@ $at_traceon
     at_status=`cat $at_status_file`
     ;;
 
-  123 ) # 123. regression.at:445: Web2c Report
-    at_setup_line='regression.at:445'
+  123 ) # 123. regression.at:447: Web2c Report
+    at_setup_line='regression.at:447'
     at_desc='Web2c Report'
     $at_quiet $ECHO_N "123: Web2c Report                                 $ECHO_C"
     at_xfail=no
     (
-      echo "123. regression.at:445: testing ..."
+      echo "123. regression.at:447: testing ..."
       $at_traceon
 
 
@@ -57510,8 +57536,8 @@ _ATEOF
 
 
 $at_traceoff
-echo "regression.at:470: bison -v input.y"
-echo regression.at:470 >$at_check_line_file
+echo "regression.at:472: bison -v input.y"
+echo regression.at:472 >$at_check_line_file
 ( $at_traceon; bison -v input.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -57523,7 +57549,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:470: exit code was $at_status, expected 0"
+   *) echo "regression.at:472: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -57535,8 +57561,8 @@ fi
 $at_traceon
 
 $at_traceoff
-echo "regression.at:595: cat input.output"
-echo regression.at:595 >$at_check_line_file
+echo "regression.at:597: cat input.output"
+echo regression.at:597 >$at_check_line_file
 ( $at_traceon; cat input.output ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -57671,7 +57697,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:595: exit code was $at_status, expected 0"
+   *) echo "regression.at:597: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -57689,13 +57715,13 @@ $at_traceon
     at_status=`cat $at_status_file`
     ;;
 
-  124 ) # 124. regression.at:622: Web2c Actions
-    at_setup_line='regression.at:622'
+  124 ) # 124. regression.at:624: Web2c Actions
+    at_setup_line='regression.at:624'
     at_desc='Web2c Actions'
     $at_quiet $ECHO_N "124: Web2c Actions                                $ECHO_C"
     at_xfail=no
     (
-      echo "124. regression.at:622: testing ..."
+      echo "124. regression.at:624: testing ..."
       $at_traceon
 
 
@@ -57712,8 +57738,8 @@ _ATEOF
 
 
 $at_traceoff
-echo "regression.at:635: bison -v -o input.c input.y"
-echo regression.at:635 >$at_check_line_file
+echo "regression.at:637: bison -v -o input.c input.y"
+echo regression.at:637 >$at_check_line_file
 ( $at_traceon; bison -v -o input.c input.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -57725,7 +57751,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:635: exit code was $at_status, expected 0"
+   *) echo "regression.at:637: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -57742,8 +57768,8 @@ $at_traceon
 sed -n 's/  *$//;/^static const.*\[\] =/,/^}/p' input.c >tables.c
 
 $at_traceoff
-echo "regression.at:733: cat tables.c"
-echo regression.at:733 >$at_check_line_file
+echo "regression.at:735: cat tables.c"
+echo regression.at:735 >$at_check_line_file
 ( $at_traceon; cat tables.c ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -57846,7 +57872,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:733: exit code was $at_status, expected 0"
+   *) echo "regression.at:735: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -57864,13 +57890,13 @@ $at_traceon
     at_status=`cat $at_status_file`
     ;;
 
-  125 ) # 125. regression.at:864: Dancer
-    at_setup_line='regression.at:864'
+  125 ) # 125. regression.at:866: Dancer
+    at_setup_line='regression.at:866'
     at_desc='Dancer '
     $at_quiet $ECHO_N "125: Dancer                                       $ECHO_C"
     at_xfail=no
     (
-      echo "125. regression.at:864: testing ..."
+      echo "125. regression.at:866: testing ..."
       $at_traceon
 
 
@@ -57992,8 +58018,8 @@ _ATEOF
 
 
 $at_traceoff
-echo "regression.at:864: bison -o dancer.c dancer.y"
-echo regression.at:864 >$at_check_line_file
+echo "regression.at:866: bison -o dancer.c dancer.y"
+echo regression.at:866 >$at_check_line_file
 ( $at_traceon; bison -o dancer.c dancer.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -58005,7 +58031,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:864: exit code was $at_status, expected 0"
+   *) echo "regression.at:866: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -58017,8 +58043,8 @@ fi
 $at_traceon
 
 $at_traceoff
-echo "regression.at:864: bison -o dancer.c dancer.y"
-echo regression.at:864 >$at_check_line_file
+echo "regression.at:866: bison -o dancer.c dancer.y"
+echo regression.at:866 >$at_check_line_file
 ( $at_traceon; bison -o dancer.c dancer.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -58030,7 +58056,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:864: exit code was $at_status, expected 0"
+   *) echo "regression.at:866: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -58042,8 +58068,8 @@ fi
 $at_traceon
 
    $at_traceoff
-echo "regression.at:864: \$CC \$CFLAGS \$CPPFLAGS \$LDFLAGS -o dancer dancer.c \$LIBS"
-echo regression.at:864 >$at_check_line_file
+echo "regression.at:866: \$CC \$CFLAGS \$CPPFLAGS \$LDFLAGS -o dancer dancer.c \$LIBS"
+echo regression.at:866 >$at_check_line_file
 ( $at_traceon; $CC $CFLAGS $CPPFLAGS $LDFLAGS -o dancer dancer.c $LIBS ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -58055,7 +58081,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:864: exit code was $at_status, expected 0"
+   *) echo "regression.at:866: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -58067,8 +58093,8 @@ fi
 $at_traceon
 
 $at_traceoff
-echo "regression.at:864: \$PREPARSER ./dancer"
-echo regression.at:864 >$at_check_line_file
+echo "regression.at:866: \$PREPARSER ./dancer"
+echo regression.at:866 >$at_check_line_file
 ( $at_traceon; $PREPARSER ./dancer ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -58081,7 +58107,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    1) ;;
-   *) echo "regression.at:864: exit code was $at_status, expected 1"
+   *) echo "regression.at:866: exit code was $at_status, expected 1"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -58119,13 +58145,13 @@ $at_traceon
     at_status=`cat $at_status_file`
     ;;
 
-  126 ) # 126. regression.at:865: Dancer %glr-parser
-    at_setup_line='regression.at:865'
+  126 ) # 126. regression.at:867: Dancer %glr-parser
+    at_setup_line='regression.at:867'
     at_desc='Dancer %glr-parser'
     $at_quiet $ECHO_N "126: Dancer %glr-parser                           $ECHO_C"
     at_xfail=no
     (
-      echo "126. regression.at:865: testing ..."
+      echo "126. regression.at:867: testing ..."
       $at_traceon
 
 
@@ -58247,8 +58273,8 @@ _ATEOF
 
 
 $at_traceoff
-echo "regression.at:865: bison -o dancer.c dancer.y"
-echo regression.at:865 >$at_check_line_file
+echo "regression.at:867: bison -o dancer.c dancer.y"
+echo regression.at:867 >$at_check_line_file
 ( $at_traceon; bison -o dancer.c dancer.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -58260,7 +58286,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:865: exit code was $at_status, expected 0"
+   *) echo "regression.at:867: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -58272,8 +58298,8 @@ fi
 $at_traceon
 
 $at_traceoff
-echo "regression.at:865: bison -o dancer.c dancer.y"
-echo regression.at:865 >$at_check_line_file
+echo "regression.at:867: bison -o dancer.c dancer.y"
+echo regression.at:867 >$at_check_line_file
 ( $at_traceon; bison -o dancer.c dancer.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -58285,7 +58311,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:865: exit code was $at_status, expected 0"
+   *) echo "regression.at:867: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -58297,8 +58323,8 @@ fi
 $at_traceon
 
    $at_traceoff
-echo "regression.at:865: \$CC \$CFLAGS \$CPPFLAGS \$LDFLAGS -o dancer dancer.c \$LIBS"
-echo regression.at:865 >$at_check_line_file
+echo "regression.at:867: \$CC \$CFLAGS \$CPPFLAGS \$LDFLAGS -o dancer dancer.c \$LIBS"
+echo regression.at:867 >$at_check_line_file
 ( $at_traceon; $CC $CFLAGS $CPPFLAGS $LDFLAGS -o dancer dancer.c $LIBS ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -58310,7 +58336,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:865: exit code was $at_status, expected 0"
+   *) echo "regression.at:867: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -58322,8 +58348,8 @@ fi
 $at_traceon
 
 $at_traceoff
-echo "regression.at:865: \$PREPARSER ./dancer"
-echo regression.at:865 >$at_check_line_file
+echo "regression.at:867: \$PREPARSER ./dancer"
+echo regression.at:867 >$at_check_line_file
 ( $at_traceon; $PREPARSER ./dancer ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -58336,7 +58362,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    1) ;;
-   *) echo "regression.at:865: exit code was $at_status, expected 1"
+   *) echo "regression.at:867: exit code was $at_status, expected 1"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -58374,13 +58400,13 @@ $at_traceon
     at_status=`cat $at_status_file`
     ;;
 
-  127 ) # 127. regression.at:866: Dancer %skeleton "lalr1.cc"
-    at_setup_line='regression.at:866'
+  127 ) # 127. regression.at:868: Dancer %skeleton "lalr1.cc"
+    at_setup_line='regression.at:868'
     at_desc='Dancer %skeleton "lalr1.cc"'
     $at_quiet $ECHO_N "127: Dancer %skeleton "lalr1.cc"                  $ECHO_C"
     at_xfail=no
     (
-      echo "127. regression.at:866: testing ..."
+      echo "127. regression.at:868: testing ..."
       $at_traceon
 
 
@@ -58511,8 +58537,8 @@ _ATEOF
 
 
 $at_traceoff
-echo "regression.at:866: bison -o dancer.c dancer.y"
-echo regression.at:866 >$at_check_line_file
+echo "regression.at:868: bison -o dancer.c dancer.y"
+echo regression.at:868 >$at_check_line_file
 ( $at_traceon; bison -o dancer.c dancer.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -58524,7 +58550,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:866: exit code was $at_status, expected 0"
+   *) echo "regression.at:868: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -58536,8 +58562,8 @@ fi
 $at_traceon
 
 $at_traceoff
-echo "regression.at:866: bison -o dancer.cc dancer.y"
-echo regression.at:866 >$at_check_line_file
+echo "regression.at:868: bison -o dancer.cc dancer.y"
+echo regression.at:868 >$at_check_line_file
 ( $at_traceon; bison -o dancer.cc dancer.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -58549,7 +58575,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:866: exit code was $at_status, expected 0"
+   *) echo "regression.at:868: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -58562,8 +58588,8 @@ $at_traceon
 
 
 $at_traceoff
-echo "regression.at:866: \$BISON_CXX_WORKS"
-echo regression.at:866 >$at_check_line_file
+echo "regression.at:868: \$BISON_CXX_WORKS"
+echo regression.at:868 >$at_check_line_file
 ( $at_traceon; $BISON_CXX_WORKS ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -58575,7 +58601,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:866: exit code was $at_status, expected 0"
+   *) echo "regression.at:868: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -58587,8 +58613,8 @@ fi
 $at_traceon
 
 $at_traceoff
-echo "regression.at:866: \$CXX \$CXXFLAGS \$CPPFLAGS \$LDFLAGS -o dancer dancer.cc \$LIBS"
-echo regression.at:866 >$at_check_line_file
+echo "regression.at:868: \$CXX \$CXXFLAGS \$CPPFLAGS \$LDFLAGS -o dancer dancer.cc \$LIBS"
+echo regression.at:868 >$at_check_line_file
 ( $at_traceon; $CXX $CXXFLAGS $CPPFLAGS $LDFLAGS -o dancer dancer.cc $LIBS ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -58600,7 +58626,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:866: exit code was $at_status, expected 0"
+   *) echo "regression.at:868: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -58612,8 +58638,8 @@ fi
 $at_traceon
 
 $at_traceoff
-echo "regression.at:866: \$PREPARSER ./dancer"
-echo regression.at:866 >$at_check_line_file
+echo "regression.at:868: \$PREPARSER ./dancer"
+echo regression.at:868 >$at_check_line_file
 ( $at_traceon; $PREPARSER ./dancer ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -58626,7 +58652,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    1) ;;
-   *) echo "regression.at:866: exit code was $at_status, expected 1"
+   *) echo "regression.at:868: exit code was $at_status, expected 1"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -58664,13 +58690,13 @@ $at_traceon
     at_status=`cat $at_status_file`
     ;;
 
-  128 ) # 128. regression.at:961: Expecting two tokens
-    at_setup_line='regression.at:961'
+  128 ) # 128. regression.at:963: Expecting two tokens
+    at_setup_line='regression.at:963'
     at_desc='Expecting two tokens '
     $at_quiet $ECHO_N "128: Expecting two tokens                         $ECHO_C"
     at_xfail=no
     (
-      echo "128. regression.at:961: testing ..."
+      echo "128. regression.at:963: testing ..."
       $at_traceon
 
 
@@ -58763,8 +58789,8 @@ _ATEOF
 
 
 $at_traceoff
-echo "regression.at:961: bison -o expect2.c expect2.y"
-echo regression.at:961 >$at_check_line_file
+echo "regression.at:963: bison -o expect2.c expect2.y"
+echo regression.at:963 >$at_check_line_file
 ( $at_traceon; bison -o expect2.c expect2.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -58776,7 +58802,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:961: exit code was $at_status, expected 0"
+   *) echo "regression.at:963: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -58788,8 +58814,8 @@ fi
 $at_traceon
 
 $at_traceoff
-echo "regression.at:961: bison -o expect2.c expect2.y"
-echo regression.at:961 >$at_check_line_file
+echo "regression.at:963: bison -o expect2.c expect2.y"
+echo regression.at:963 >$at_check_line_file
 ( $at_traceon; bison -o expect2.c expect2.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -58801,7 +58827,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:961: exit code was $at_status, expected 0"
+   *) echo "regression.at:963: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -58813,8 +58839,8 @@ fi
 $at_traceon
 
    $at_traceoff
-echo "regression.at:961: \$CC \$CFLAGS \$CPPFLAGS \$LDFLAGS -o expect2 expect2.c \$LIBS"
-echo regression.at:961 >$at_check_line_file
+echo "regression.at:963: \$CC \$CFLAGS \$CPPFLAGS \$LDFLAGS -o expect2 expect2.c \$LIBS"
+echo regression.at:963 >$at_check_line_file
 ( $at_traceon; $CC $CFLAGS $CPPFLAGS $LDFLAGS -o expect2 expect2.c $LIBS ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -58826,7 +58852,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:961: exit code was $at_status, expected 0"
+   *) echo "regression.at:963: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -58838,8 +58864,8 @@ fi
 $at_traceon
 
 $at_traceoff
-echo "regression.at:961: \$PREPARSER ./expect2"
-echo regression.at:961 >$at_check_line_file
+echo "regression.at:963: \$PREPARSER ./expect2"
+echo regression.at:963 >$at_check_line_file
 ( $at_traceon; $PREPARSER ./expect2 ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -58852,7 +58878,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    1) ;;
-   *) echo "regression.at:961: exit code was $at_status, expected 1"
+   *) echo "regression.at:963: exit code was $at_status, expected 1"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -58890,13 +58916,13 @@ $at_traceon
     at_status=`cat $at_status_file`
     ;;
 
-  129 ) # 129. regression.at:962: Expecting two tokens %glr-parser
-    at_setup_line='regression.at:962'
+  129 ) # 129. regression.at:964: Expecting two tokens %glr-parser
+    at_setup_line='regression.at:964'
     at_desc='Expecting two tokens %glr-parser'
     $at_quiet $ECHO_N "129: Expecting two tokens %glr-parser             $ECHO_C"
     at_xfail=no
     (
-      echo "129. regression.at:962: testing ..."
+      echo "129. regression.at:964: testing ..."
       $at_traceon
 
 
@@ -58989,8 +59015,8 @@ _ATEOF
 
 
 $at_traceoff
-echo "regression.at:962: bison -o expect2.c expect2.y"
-echo regression.at:962 >$at_check_line_file
+echo "regression.at:964: bison -o expect2.c expect2.y"
+echo regression.at:964 >$at_check_line_file
 ( $at_traceon; bison -o expect2.c expect2.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -59002,7 +59028,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:962: exit code was $at_status, expected 0"
+   *) echo "regression.at:964: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -59014,8 +59040,8 @@ fi
 $at_traceon
 
 $at_traceoff
-echo "regression.at:962: bison -o expect2.c expect2.y"
-echo regression.at:962 >$at_check_line_file
+echo "regression.at:964: bison -o expect2.c expect2.y"
+echo regression.at:964 >$at_check_line_file
 ( $at_traceon; bison -o expect2.c expect2.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -59027,7 +59053,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:962: exit code was $at_status, expected 0"
+   *) echo "regression.at:964: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -59039,8 +59065,8 @@ fi
 $at_traceon
 
    $at_traceoff
-echo "regression.at:962: \$CC \$CFLAGS \$CPPFLAGS \$LDFLAGS -o expect2 expect2.c \$LIBS"
-echo regression.at:962 >$at_check_line_file
+echo "regression.at:964: \$CC \$CFLAGS \$CPPFLAGS \$LDFLAGS -o expect2 expect2.c \$LIBS"
+echo regression.at:964 >$at_check_line_file
 ( $at_traceon; $CC $CFLAGS $CPPFLAGS $LDFLAGS -o expect2 expect2.c $LIBS ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -59052,7 +59078,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:962: exit code was $at_status, expected 0"
+   *) echo "regression.at:964: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -59064,8 +59090,8 @@ fi
 $at_traceon
 
 $at_traceoff
-echo "regression.at:962: \$PREPARSER ./expect2"
-echo regression.at:962 >$at_check_line_file
+echo "regression.at:964: \$PREPARSER ./expect2"
+echo regression.at:964 >$at_check_line_file
 ( $at_traceon; $PREPARSER ./expect2 ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -59078,7 +59104,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    1) ;;
-   *) echo "regression.at:962: exit code was $at_status, expected 1"
+   *) echo "regression.at:964: exit code was $at_status, expected 1"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -59116,13 +59142,13 @@ $at_traceon
     at_status=`cat $at_status_file`
     ;;
 
-  130 ) # 130. regression.at:963: Expecting two tokens %skeleton "lalr1.cc"
-    at_setup_line='regression.at:963'
+  130 ) # 130. regression.at:965: Expecting two tokens %skeleton "lalr1.cc"
+    at_setup_line='regression.at:965'
     at_desc='Expecting two tokens %skeleton "lalr1.cc"'
     $at_quiet $ECHO_N "130: Expecting two tokens %skeleton "lalr1.cc"    $ECHO_C"
     at_xfail=no
     (
-      echo "130. regression.at:963: testing ..."
+      echo "130. regression.at:965: testing ..."
       $at_traceon
 
 
@@ -59223,8 +59249,8 @@ _ATEOF
 
 
 $at_traceoff
-echo "regression.at:963: bison -o expect2.c expect2.y"
-echo regression.at:963 >$at_check_line_file
+echo "regression.at:965: bison -o expect2.c expect2.y"
+echo regression.at:965 >$at_check_line_file
 ( $at_traceon; bison -o expect2.c expect2.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -59236,7 +59262,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:963: exit code was $at_status, expected 0"
+   *) echo "regression.at:965: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -59248,8 +59274,8 @@ fi
 $at_traceon
 
 $at_traceoff
-echo "regression.at:963: bison -o expect2.cc expect2.y"
-echo regression.at:963 >$at_check_line_file
+echo "regression.at:965: bison -o expect2.cc expect2.y"
+echo regression.at:965 >$at_check_line_file
 ( $at_traceon; bison -o expect2.cc expect2.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -59261,7 +59287,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:963: exit code was $at_status, expected 0"
+   *) echo "regression.at:965: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -59274,8 +59300,8 @@ $at_traceon
 
 
 $at_traceoff
-echo "regression.at:963: \$BISON_CXX_WORKS"
-echo regression.at:963 >$at_check_line_file
+echo "regression.at:965: \$BISON_CXX_WORKS"
+echo regression.at:965 >$at_check_line_file
 ( $at_traceon; $BISON_CXX_WORKS ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -59287,7 +59313,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:963: exit code was $at_status, expected 0"
+   *) echo "regression.at:965: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -59299,8 +59325,8 @@ fi
 $at_traceon
 
 $at_traceoff
-echo "regression.at:963: \$CXX \$CXXFLAGS \$CPPFLAGS \$LDFLAGS -o expect2 expect2.cc \$LIBS"
-echo regression.at:963 >$at_check_line_file
+echo "regression.at:965: \$CXX \$CXXFLAGS \$CPPFLAGS \$LDFLAGS -o expect2 expect2.cc \$LIBS"
+echo regression.at:965 >$at_check_line_file
 ( $at_traceon; $CXX $CXXFLAGS $CPPFLAGS $LDFLAGS -o expect2 expect2.cc $LIBS ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -59312,7 +59338,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "regression.at:963: exit code was $at_status, expected 0"
+   *) echo "regression.at:965: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -59324,8 +59350,8 @@ fi
 $at_traceon
 
 $at_traceoff
-echo "regression.at:963: \$PREPARSER ./expect2"
-echo regression.at:963 >$at_check_line_file
+echo "regression.at:965: \$PREPARSER ./expect2"
+echo regression.at:965 >$at_check_line_file
 ( $at_traceon; $PREPARSER ./expect2 ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -59338,7 +59364,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    1) ;;
-   *) echo "regression.at:963: exit code was $at_status, expected 1"
+   *) echo "regression.at:965: exit code was $at_status, expected 1"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -67089,17 +67115,22 @@ cat >glr-regr17.y <<'_ATEOF'
 
 %%
 
+/* Tests the case of an empty RHS that has inherited the location of the
+   previous nonterminal, which is unresolved.  That location is reported as the
+   last position of the ambiguity.  */
+start: ambig1 empty1 | ambig2 empty2 ;
+
 /* Tests multiple levels of yyresolveLocations recursion.  */
-start: ambig1 | ambig2 ;
 ambig1: sub_ambig1 | sub_ambig2 ;
 ambig2: sub_ambig1 | sub_ambig2 ;
 
-/* Tests non-empty RHS as well as empty RHS with either initial location or
-   location of previous token.  Both empty RHS locations are printed in the
-   error message.  */
-sub_ambig1: empty 'a' 'b' empty ;
-sub_ambig2: empty 'a' 'b' empty ;
-empty: ;
+/* Tests the case of a non-empty RHS as well as the case of an empty RHS that
+   has inherited the initial location.  The empty RHS's location is reported as
+   the first position in the ambiguity.  */
+sub_ambig1: empty1 'a' 'b' ;
+sub_ambig2: empty2 'a' 'b' ;
+empty1: ;
+empty2: ;
 
 %%
 
@@ -67132,8 +67163,8 @@ _ATEOF
 
 
 $at_traceoff
-echo "glr-regression.at:1651: bison -o glr-regr17.c glr-regr17.y"
-echo glr-regression.at:1651 >$at_check_line_file
+echo "glr-regression.at:1656: bison -o glr-regr17.c glr-regr17.y"
+echo glr-regression.at:1656 >$at_check_line_file
 ( $at_traceon; bison -o glr-regr17.c glr-regr17.y ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -67146,7 +67177,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "glr-regression.at:1651: exit code was $at_status, expected 0"
+   *) echo "glr-regression.at:1656: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -67158,8 +67189,8 @@ fi
 $at_traceon
 
 $at_traceoff
-echo "glr-regression.at:1652: \$CC \$CFLAGS \$CPPFLAGS \$LDFLAGS -o glr-regr17 glr-regr17.c \$LIBS"
-echo glr-regression.at:1652 >$at_check_line_file
+echo "glr-regression.at:1657: \$CC \$CFLAGS \$CPPFLAGS \$LDFLAGS -o glr-regr17 glr-regr17.c \$LIBS"
+echo glr-regression.at:1657 >$at_check_line_file
 ( $at_traceon; $CC $CFLAGS $CPPFLAGS $LDFLAGS -o glr-regr17 glr-regr17.c $LIBS ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -67171,7 +67202,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "glr-regression.at:1652: exit code was $at_status, expected 0"
+   *) echo "glr-regression.at:1657: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -67184,8 +67215,8 @@ $at_traceon
 
 
 $at_traceoff
-echo "glr-regression.at:1656: ./glr-regr17"
-echo glr-regression.at:1656 >$at_check_line_file
+echo "glr-regression.at:1661: ./glr-regr17"
+echo glr-regression.at:1661 >$at_check_line_file
 ( $at_traceon; ./glr-regr17 ) >$at_stdout 2>$at_stder1
 at_status=$?
 grep '^ *+' $at_stder1 >&2
@@ -67198,7 +67229,7 @@ case $at_status in
    77) echo 77 > $at_status_file
             exit 77;;
    0) ;;
-   *) echo "glr-regression.at:1656: exit code was $at_status, expected 0"
+   *) echo "glr-regression.at:1661: exit code was $at_status, expected 0"
       at_failed=:;;
 esac
 if $at_failed; then
@@ -67484,7 +67515,7 @@ _ASBOX
   echo "Please send \`$as_me.log' and all information you think might help:"
   echo
   echo "   To: <bug-bison@gnu.org>"
-  echo "   Subject: [GNU Bison 2.2] $as_me:$at_fail_list${at_fail_list:+ failed${at_xpass_list:+,}}$at_xpass_list${at_xpass_list:+ passed unexpectedly}"
+  echo "   Subject: [GNU Bison 2.3] $as_me:$at_fail_list${at_fail_list:+ failed${at_xpass_list:+,}}$at_xpass_list${at_xpass_list:+ passed unexpectedly}"
   echo
   if test $at_debug_p = false; then
     echo

@@ -111,6 +111,10 @@
    don't. */
 #undef HAVE_DECL_STRERROR_R
 
+/* Define to 1 if you have the declaration of `strndup', and to 0 if you
+   don't. */
+#undef HAVE_DECL_STRNDUP
+
 /* Define to 1 if you have the declaration of `strnlen', and to 0 if you
    don't. */
 #undef HAVE_DECL_STRNLEN
@@ -217,7 +221,7 @@
 /* Define to 1 if you have the <string.h> header file. */
 #undef HAVE_STRING_H
 
-/* Define to 1 if you have the `strndup' function. */
+/* Define if you have the strndup() function and it works. */
 #undef HAVE_STRNDUP
 
 /* Define to 1 if you have the `strtol' function. */
@@ -394,6 +398,9 @@
 
 /* Define to `int' if <sys/types.h> does not define. */
 #undef pid_t
+
+/* Define to rpl_strndup if the replacement function should be used, */
+#undef strndup
 
 /* Define to rpl_strnlen if the replacement function should be used. */
 #undef strnlen
