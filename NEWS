@@ -1,5 +1,61 @@
 GNU Bison NEWS
 
+* Noteworthy changes in release 3.0.3 (2015-01-15) [stable]
+
+** Bug fixes
+
+*** C++ with Variants (lalr1.cc)
+
+  Problems with %destructor and '%define parse.assert' have been fixed.
+
+*** Named %union support (yacc.c, glr.c)
+
+  Bison 3.0 introduced a regression on named %union such as
+
+    %union foo { int ival; };
+
+  The possibility to use a name was introduced "for Yacc compatibility".
+  It is however not required by POSIX Yacc, and its usefulness is not clear.
+
+*** %define api.value.type union with %defines (yacc.c, glr.c)
+
+  The C parsers were broken when %defines was used together with "%define
+  api.value.type union".
+
+*** Redeclarations are reported in proper order
+
+  On
+
+    %token FOO "foo"
+    %printer {} "foo"
+    %printer {} FOO
+
+  bison used to report:
+
+    /tmp/foo.yy:2.10-11: error: %printer redeclaration for FOO
+     %printer {} "foo"
+              ^^
+    /tmp/foo.yy:3.10-11:     previous declaration
+     %printer {} FOO
+              ^^
+
+  Now, the "previous" declaration is always the first one.
+
+
+** Documentation
+
+  Bison now installs various files in its docdir (which defaults to
+  '/usr/local/share/doc/bison'), including the three fully blown examples
+  extracted from the documentation:
+
+   - rpcalc
+     Reverse polish calculator, a simple introductory example.
+   - mfcalc
+     Multi-function Calc, a calculator with memory and functions and located
+     error messages.
+   - calc++
+     a calculator in C++ using variant support and token constructors.
+
 * Noteworthy changes in release 3.0.2 (2013-12-05) [stable]
 
 ** Bug fixes
@@ -2680,7 +2736,7 @@ Output file does not redefine const for C++.
 
 -----
 
-Copyright (C) 1995-2013 Free Software Foundation, Inc.
+Copyright (C) 1995-2015 Free Software Foundation, Inc.
 
 This file is part of Bison, the GNU Parser Generator.
 

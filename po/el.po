@@ -5,10 +5,10 @@
 # Lefteris Dimitroulakis <ledimitro@gmail.com>, 2008, 2013.
 msgid ""
 msgstr ""
-"Project-Id-Version: bison-3.0\n"
+"Project-Id-Version: bison-3.0.2\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2013-12-05 14:59+0100\n"
-"PO-Revision-Date: 2013-11-10 16:37+0200\n"
+"POT-Creation-Date: 2015-01-15 10:07+0100\n"
+"PO-Revision-Date: 2013-12-19 18:14+0200\n"
 "Last-Translator: Lefteris Dimitroulakis <ledimitro@gmail.com>\n"
 "Language-Team: Greek <team@lists.gnome.gr>\n"
 "Language: el\n"
@@ -43,9 +43,9 @@ msgstr "οδηγία υπό κατάργηση: %s, χρησιμοποίησε %
 #: src/complain.c:400
 #, c-format
 msgid "only one %s allowed per rule"
-msgstr "μόνο ένα %s ανά κανόνα έχει επιτρέπεται"
+msgstr "μόνο ένα %s ανά κανόνα επιτρέπεται"
 
-#: src/complain.c:402 src/reader.c:140 src/symtab.c:217 src/symtab.c:229
+#: src/complain.c:402 src/reader.c:140 src/symtab.c:253 src/symtab.c:266
 #, c-format
 msgid "previous declaration"
 msgstr "προηγούμενη δήλωση"
@@ -313,7 +313,6 @@ msgstr ""
 "  `none'         απενεργοποίηση αναφοράς\n"
 
 #: src/getargs.c:350
-#, fuzzy
 msgid ""
 "FEATURE is a list of comma separated words that can include:\n"
 "  'caret'        show errors with carets\n"
@@ -326,6 +325,7 @@ msgstr ""
 "  «caret»        εμφάνιση σφαλμάτων με carets\n"
 "  «all»          όλα τα παραπάνω\n"
 "  «none»         απενεργοποίηση όλων των παραπάνω\n"
+"  "
 
 #: src/getargs.c:358
 #, c-format
@@ -418,7 +418,7 @@ msgstr ""
 "// Home page: <%s>.\n"
 "\n"
 
-#: src/location.c:93 src/scan-gram.l:926
+#: src/location.c:93 src/scan-gram.l:932
 #, c-format
 msgid "line number overflow"
 msgstr "υπερχείλιση αριθμού γραμμών"
@@ -462,7 +462,7 @@ msgstr "μη έγκυρη τιμή για %%καθόρισε τη μεταβλη
 msgid "accepted value: %s"
 msgstr "αποδεκτή τιμή: %s"
 
-#: src/parse-gram.y:809
+#: src/parse-gram.y:811
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "το όνομα λείπει στη δήλωση παραμέτρου"
@@ -672,7 +672,7 @@ msgstr "σε %s"
 msgid ", cannot be accessed from mid-rule action at $%d"
 msgstr ", cannot be accessed from mid-rule action at $%d"
 
-#: src/scan-code.l:440 src/scan-gram.l:849
+#: src/scan-code.l:440 src/scan-gram.l:855
 #, c-format
 msgid "integer out of range: %s"
 msgstr "ακέραιος εκτός ορίων: %s"
@@ -728,74 +728,74 @@ msgstr "$$ του «%s» δεν έχει δηλωμένο τύπο"
 msgid "$%s of %s has no declared type"
 msgstr "$%s του %s δεν έχει δηλωμένο τύπο"
 
-#: src/scan-gram.l:180
+#: src/scan-gram.l:186
 #, c-format
 msgid "stray ',' treated as white space"
 msgstr "μοναχικό « , » θεωρήθηκε ως λευκό διάστημα"
 
-#: src/scan-gram.l:270
+#: src/scan-gram.l:276
 #, c-format
 msgid "invalid directive: %s"
 msgstr "μη έγκυρη οδηγία: %s"
 
-#: src/scan-gram.l:296
+#: src/scan-gram.l:302
 #, c-format
 msgid "invalid identifier: %s"
 msgstr "μη έγκυρη οδηγία: %s"
 
-#: src/scan-gram.l:348
+#: src/scan-gram.l:354
 msgid "invalid character"
 msgid_plural "invalid characters"
 msgstr[0] "μη έγκυρος χαρακτήρας: %s"
 msgstr[1] "μη έγκυροι χαρακτήρες: %s"
 
-#: src/scan-gram.l:366
+#: src/scan-gram.l:372
 #, c-format
 msgid "invalid null character"
 msgstr "μη έγκυρος μηδενικός χαρακτήρας"
 
-#: src/scan-gram.l:419
+#: src/scan-gram.l:425
 #, c-format
 msgid "unexpected identifier in bracketed name: %s"
 msgstr "μη αναμενόμενο identifier στο όνομα εντός αγκυλών: %s"
 
-#: src/scan-gram.l:441
+#: src/scan-gram.l:447
 #, c-format
 msgid "an identifier expected"
 msgstr "αναμενόταν identifier"
 
-#: src/scan-gram.l:446
+#: src/scan-gram.l:452
 msgid "invalid character in bracketed name"
 msgid_plural "invalid characters in bracketed name"
 msgstr[0] "μη έγκυρος χαρακτήρας: %s"
 msgstr[1] "μη έγκυροι χαρακτήρες: %s"
 
-#: src/scan-gram.l:538
+#: src/scan-gram.l:544
 #, c-format
 msgid "empty character literal"
 msgstr "κενό character literal"
 
-#: src/scan-gram.l:544
+#: src/scan-gram.l:550
 #, c-format
 msgid "extra characters in character literal"
 msgstr "έξτρα χαρακτήρες σε character literal"
 
-#: src/scan-gram.l:590 src/scan-gram.l:600 src/scan-gram.l:620
+#: src/scan-gram.l:596 src/scan-gram.l:606 src/scan-gram.l:626
 #, c-format
 msgid "invalid number after \\-escape: %s"
 msgstr "μη έγκυρος μηδενικός χαρακτήρας: %s"
 
-#: src/scan-gram.l:632
+#: src/scan-gram.l:638
 #, c-format
 msgid "invalid character after \\-escape: %s"
 msgstr "μη έγκυρος χαρακτήρας: %s"
 
-#: src/scan-gram.l:978
+#: src/scan-gram.l:984
 #, c-format
 msgid "missing %s at end of file"
 msgstr "στο τέλος του αρχείου λείπει «%s»"
 
-#: src/scan-gram.l:989
+#: src/scan-gram.l:995
 #, c-format
 msgid "missing %s at end of line"
 msgstr "στο τέλος της γραμμής λείπει «%s»"
@@ -815,11 +815,6 @@ msgstr "πολύ λίγα ορίσματα για την οδηγία %s στο 
 msgid "too many arguments for %s directive in skeleton"
 msgstr "πάρα πολλά ορίσματα για την οδηγία %s στο σκελετό"
 
-#: src/symlist.c:204
-#, c-format
-msgid "invalid $ value: $%d"
-msgstr "τιμή $ μη έγκυρη: $%d"
-
 #: src/symtab.c:75
 #, c-format
 msgid "POSIX Yacc forbids dashes in symbol names: %s"
@@ -830,93 +825,93 @@ msgstr "POSIX Yacc απαγορεύει τις παύλες στα ονόματ�
 msgid "too many symbols in input grammar (limit is %d)"
 msgstr "πάρα πολλά σύμβολα στη γραμματική εισόδου (το όριο είναι %d)"
 
-#: src/symtab.c:214
+#: src/symtab.c:250
 #, c-format
 msgid "%s redeclaration for %s"
 msgstr "δήλωση ξανά του %s για %s"
 
-#: src/symtab.c:226
+#: src/symtab.c:263
 #, c-format
 msgid "%s redeclaration for <%s>"
 msgstr "δήλωση ξανά του %s για <%s>"
 
-#: src/symtab.c:355
+#: src/symtab.c:392
 #, c-format
 msgid "symbol %s redefined"
 msgstr "το σύμβολο %s ανακαθορίστηκε"
 
-#: src/symtab.c:370
+#: src/symtab.c:407
 #, c-format
 msgid "symbol %s redeclared"
 msgstr "το σύμβολο %s ξαναδηλώθηκε"
 
-#: src/symtab.c:392
+#: src/symtab.c:429
 #, c-format
 msgid "redefining user token number of %s"
 msgstr "ορισμός ξανά του αριθμού λεκτικής μονάδας του %s"
 
-#: src/symtab.c:422
+#: src/symtab.c:459
 #, c-format
 msgid "symbol %s is used, but is not defined as a token and has no rules"
 msgstr ""
 "το σύμβολο %s χρησιμοποιείται, αλλά δεν καθορίζεται ως λεκτική μονάδα και "
 "δεν διαθέτει κανόνες"
 
-#: src/symtab.c:460
+#: src/symtab.c:497
 #, c-format
 msgid "useless %s for type <%s>"
 msgstr "άχρηστο %s για τύπο <%s>"
 
-#: src/symtab.c:465
+#: src/symtab.c:502
 #, c-format
 msgid "type <%s> is used, but is not associated to any symbol"
 msgstr ""
 "το σύμβολο %s χρησιμοποιείται, αλλά δεν καθορίζεται ως λεκτική μονάδα και "
 "δεν διαθέτει κανόνες"
 
-#: src/symtab.c:490
+#: src/symtab.c:527
 #, c-format
 msgid "symbol %s used more than once as a literal string"
 msgstr ""
 "το σύμβολο «%s» χρησιμοποιήθηκε περισσότερες από μια φορές ως κυριολεκτικό "
 "αλφαριθμητικό"
 
-#: src/symtab.c:493
+#: src/symtab.c:530
 #, c-format
 msgid "symbol %s given more than one literal string"
 msgstr "το σύμβολο «%s» έδωσε περισσότερα του ενός κυριολεκτικά αλφαριθμητικά"
 
-#: src/symtab.c:602
+#: src/symtab.c:629
 #, c-format
 msgid "user token number %d redeclaration for %s"
 msgstr "δήλωση ξανά του αριθμού λεκτικής μονάδας %d για %s"
 
-#: src/symtab.c:606
+#: src/symtab.c:633
 #, c-format
 msgid "previous declaration for %s"
 msgstr "προηγούμενη δήλωση για %s"
 
-#: src/symtab.c:987
+#: src/symtab.c:1014
 #, c-format
 msgid "the start symbol %s is undefined"
 msgstr "το σύμβολο εκκίνησης %s δεν είναι καθορισμένο"
 
-#: src/symtab.c:991
+#: src/symtab.c:1018
 #, c-format
 msgid "the start symbol %s is a token"
 msgstr "το σύμβολο εκκίνησης  %s είναι λεκτική μονάδα"
 
-#: src/symtab.c:1166
+#: src/symtab.c:1193
 #, c-format
 msgid "useless precedence and associativity for %s"
 msgstr "άχρηστη προτεραιότητα και προσεταιριστικότητα για %s"
 
-#: src/symtab.c:1169
+#: src/symtab.c:1196
 #, c-format
 msgid "useless precedence for %s"
 msgstr "άχρηστη προτεραιότητα για %s"
 
-#: src/symtab.c:1173
+#: src/symtab.c:1200
 #, c-format
 msgid "useless associativity for %s, use %%precedence"
 msgstr "άχρηστη προσεταιριστικότητα για %s, χρήση προτεραιότητας %%"
@@ -1067,7 +1062,7 @@ msgstr "Δεν μπόρεσα να ανοίξω για γράψιμο το αρ�
 msgid "write error"
 msgstr "σφάλμα εγγραφής"
 
-#: lib/error.c:188
+#: lib/error.c:191
 msgid "Unknown system error"
 msgstr "Άγνωστο σφάλμα συστήματος"
 
@@ -1126,17 +1121,17 @@ msgstr "%s: η επιλογή «-W %s» δεν επιτρέπει όρισμα\n
 msgid "%s: option '-W %s' requires an argument\n"
 msgstr "%s: η επιλογή '-W %s' απαιτεί ένα όρισμα\n"
 
-#: lib/obstack.c:413 lib/obstack.c:415 lib/xalloc-die.c:34
+#: lib/obstack.c:338 lib/obstack.c:340 lib/xalloc-die.c:34
 msgid "memory exhausted"
 msgstr "εξαντλημένη μνήμη"
 
-#: lib/spawn-pipe.c:140 lib/spawn-pipe.c:143 lib/spawn-pipe.c:264
-#: lib/spawn-pipe.c:267
+#: lib/spawn-pipe.c:135 lib/spawn-pipe.c:138 lib/spawn-pipe.c:259
+#: lib/spawn-pipe.c:262
 #, c-format
 msgid "cannot create pipe"
 msgstr "δεν μπορώ να κλείσω το αρχείο"
 
-#: lib/spawn-pipe.c:234 lib/spawn-pipe.c:348 lib/wait-process.c:282
+#: lib/spawn-pipe.c:229 lib/spawn-pipe.c:343 lib/wait-process.c:282
 #: lib/wait-process.c:356
 #, c-format
 msgid "%s subprocess failed"
@@ -1207,3 +1202,6 @@ msgstr " υποδιεργασία %s"
 #, c-format
 msgid "%s subprocess got fatal signal %d"
 msgstr "υποδιεργασία %s δέχτηκε μοιραίο σήμα %d"
+
+#~ msgid "invalid $ value: $%d"
+#~ msgstr "τιμή $ μη έγκυρη: $%d"

@@ -1,4 +1,4 @@
-# Copyright (C) 2005, 2008-2013 Free Software Foundation, Inc.
+# Copyright (C) 2005, 2008-2015 Free Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,7 +25,10 @@ AM_CXXFLAGS =							\
 
 doc = $(top_srcdir)/doc/bison.texi
 extexi = $(top_srcdir)/%D%/extexi
-extract = VERSION="$(VERSION)" $(PERL) $(extexi) $(doc) --
+if ENABLE_GCC_WARNINGS
+extexiFLAGS = --synclines
+endif
+extract = VERSION="$(VERSION)" $(PERL) $(extexi) $(extexiFLAGS) $(doc) --
 extracted =
 CLEANFILES += $(extracted) %D%/extracted.stamp
 %D%/extracted.stamp: $(doc) $(extexi)

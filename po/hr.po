@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.7.1\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2013-12-05 14:59+0100\n"
+"POT-Creation-Date: 2015-01-15 10:07+0100\n"
 "PO-Revision-Date: 2013-04-18 00:00+0200\n"
 "Last-Translator: Tomislav Krznar <tomislav.krznar@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
@@ -47,7 +47,7 @@ msgstr "neispravan propis: %s"
 msgid "only one %s allowed per rule"
 msgstr "samo je jedan %s dozvoljen po pravilu"
 
-#: src/complain.c:402 src/reader.c:140 src/symtab.c:217 src/symtab.c:229
+#: src/complain.c:402 src/reader.c:140 src/symtab.c:253 src/symtab.c:266
 #, c-format
 msgid "previous declaration"
 msgstr "prethodna deklaracija"
@@ -414,7 +414,7 @@ msgstr ""
 "// Početna stranica: <%s>.\n"
 "\n"
 
-#: src/location.c:93 src/scan-gram.l:926
+#: src/location.c:93 src/scan-gram.l:932
 #, c-format
 msgid "line number overflow"
 msgstr "preljev broja redaka"
@@ -458,7 +458,7 @@ msgstr "neispravna vrijednost %%define varijable %s: %s"
 msgid "accepted value: %s"
 msgstr "prihvaćena vrijednost: %s"
 
-#: src/parse-gram.y:809
+#: src/parse-gram.y:811
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "nedostaje identifikator u deklaraciji paremetra"
@@ -670,7 +670,7 @@ msgstr " na %s"
 msgid ", cannot be accessed from mid-rule action at $%d"
 msgstr ", ne može mu pristupiti mid-rule radnja na $%d"
 
-#: src/scan-code.l:440 src/scan-gram.l:849
+#: src/scan-code.l:440 src/scan-gram.l:855
 #, c-format
 msgid "integer out of range: %s"
 msgstr "cijeli broj izvan granica: %s"
@@ -726,76 +726,76 @@ msgstr "$$ od %s nema deklariranu vrstu"
 msgid "$%s of %s has no declared type"
 msgstr "$%s od %s nema deklariranu vrstu"
 
-#: src/scan-gram.l:180
+#: src/scan-gram.l:186
 #, c-format
 msgid "stray ',' treated as white space"
 msgstr "postupam sa zalutalim „,” kao praznim prostorom"
 
-#: src/scan-gram.l:270
+#: src/scan-gram.l:276
 #, c-format
 msgid "invalid directive: %s"
 msgstr "neispravan propis: %s"
 
-#: src/scan-gram.l:296
+#: src/scan-gram.l:302
 #, c-format
 msgid "invalid identifier: %s"
 msgstr "neispravan identifikator: %s"
 
-#: src/scan-gram.l:348
+#: src/scan-gram.l:354
 msgid "invalid character"
 msgid_plural "invalid characters"
 msgstr[0] "neispravan znak"
 msgstr[1] "neispravni znakovi"
 msgstr[2] "neispravni znakovi"
 
-#: src/scan-gram.l:366
+#: src/scan-gram.l:372
 #, c-format
 msgid "invalid null character"
 msgstr "neispravan prazan znak"
 
-#: src/scan-gram.l:419
+#: src/scan-gram.l:425
 #, c-format
 msgid "unexpected identifier in bracketed name: %s"
 msgstr "neočekivani identifikator u zagrađenom imenu: %s"
 
-#: src/scan-gram.l:441
+#: src/scan-gram.l:447
 #, c-format
 msgid "an identifier expected"
 msgstr "očekujem identifikator"
 
-#: src/scan-gram.l:446
+#: src/scan-gram.l:452
 msgid "invalid character in bracketed name"
 msgid_plural "invalid characters in bracketed name"
 msgstr[0] "neispravan znak u zagrađenom imenu"
 msgstr[1] "neispravni znakovi u zagrađenom imenu"
 msgstr[2] "neispravni znakovi u zagrađenom imenu"
 
-#: src/scan-gram.l:538
+#: src/scan-gram.l:544
 #, c-format
 msgid "empty character literal"
 msgstr "prazna znakovna konstanta"
 
-#: src/scan-gram.l:544
+#: src/scan-gram.l:550
 #, c-format
 msgid "extra characters in character literal"
 msgstr "višak znakova u znakovnoj konstanti"
 
-#: src/scan-gram.l:590 src/scan-gram.l:600 src/scan-gram.l:620
+#: src/scan-gram.l:596 src/scan-gram.l:606 src/scan-gram.l:626
 #, c-format
 msgid "invalid number after \\-escape: %s"
 msgstr "neispravan broj nakon \\-izlaza: %s"
 
-#: src/scan-gram.l:632
+#: src/scan-gram.l:638
 #, c-format
 msgid "invalid character after \\-escape: %s"
 msgstr "neispravan znak nakon \\-izlaza: %s"
 
-#: src/scan-gram.l:978
+#: src/scan-gram.l:984
 #, c-format
 msgid "missing %s at end of file"
 msgstr "nedostaje %s na kraju datoteke"
 
-#: src/scan-gram.l:989
+#: src/scan-gram.l:995
 #, c-format
 msgid "missing %s at end of line"
 msgstr "nedostaje %s na kraju retka"
@@ -815,11 +815,6 @@ msgstr "premalo argumenata %s propisa u predlošku"
 msgid "too many arguments for %s directive in skeleton"
 msgstr "premalo argumenata %s propisa u predlošku"
 
-#: src/symlist.c:204
-#, c-format
-msgid "invalid $ value: $%d"
-msgstr "neispravna $ vrijednost: $%d"
-
 #: src/symtab.c:75
 #, c-format
 msgid "POSIX Yacc forbids dashes in symbol names: %s"
@@ -830,87 +825,87 @@ msgstr "POSIX Yacc zabranjuje povlake u imenima simbola: %s"
 msgid "too many symbols in input grammar (limit is %d)"
 msgstr "previše simbola u ulaznoj gramatici (ograničenje je %d)"
 
-#: src/symtab.c:214
+#: src/symtab.c:250
 #, c-format
 msgid "%s redeclaration for %s"
 msgstr "ponovna deklaracija %s za %s"
 
-#: src/symtab.c:226
+#: src/symtab.c:263
 #, c-format
 msgid "%s redeclaration for <%s>"
 msgstr "ponovna deklaracija %s za <%s>"
 
-#: src/symtab.c:355
+#: src/symtab.c:392
 #, c-format
 msgid "symbol %s redefined"
 msgstr "simbol %s ponovo definiran"
 
-#: src/symtab.c:370
+#: src/symtab.c:407
 #, c-format
 msgid "symbol %s redeclared"
 msgstr "simbol %s ponovo deklariran"
 
-#: src/symtab.c:392
+#: src/symtab.c:429
 #, c-format
 msgid "redefining user token number of %s"
 msgstr "ponovo definiram broj korisničkog simbola od %s"
 
-#: src/symtab.c:422
+#: src/symtab.c:459
 #, c-format
 msgid "symbol %s is used, but is not defined as a token and has no rules"
 msgstr "simbol %s je korišten, ali nije definiran kao simbol i nema pravila"
 
-#: src/symtab.c:460
+#: src/symtab.c:497
 #, c-format
 msgid "useless %s for type <%s>"
 msgstr ""
 
-#: src/symtab.c:465
+#: src/symtab.c:502
 #, fuzzy, c-format
 msgid "type <%s> is used, but is not associated to any symbol"
 msgstr "simbol %s je korišten, ali nije definiran kao simbol i nema pravila"
 
-#: src/symtab.c:490
+#: src/symtab.c:527
 #, c-format
 msgid "symbol %s used more than once as a literal string"
 msgstr "simbol %s je korišten više puta kao konstantan niz"
 
-#: src/symtab.c:493
+#: src/symtab.c:530
 #, c-format
 msgid "symbol %s given more than one literal string"
 msgstr "simbolu %s je dano više od jednog konstantnog niza"
 
-#: src/symtab.c:602
+#: src/symtab.c:629
 #, c-format
 msgid "user token number %d redeclaration for %s"
 msgstr "ponovna deklaracija broja korisničkog simbola %d za %s"
 
-#: src/symtab.c:606
+#: src/symtab.c:633
 #, c-format
 msgid "previous declaration for %s"
 msgstr "prethodna deklaracija za %s"
 
-#: src/symtab.c:987
+#: src/symtab.c:1014
 #, c-format
 msgid "the start symbol %s is undefined"
 msgstr "početni simbol %s nije definiran"
 
-#: src/symtab.c:991
+#: src/symtab.c:1018
 #, c-format
 msgid "the start symbol %s is a token"
 msgstr "početni simbol %s je simbol"
 
-#: src/symtab.c:1166
+#: src/symtab.c:1193
 #, c-format
 msgid "useless precedence and associativity for %s"
 msgstr ""
 
-#: src/symtab.c:1169
+#: src/symtab.c:1196
 #, fuzzy, c-format
 msgid "useless precedence for %s"
 msgstr "konflikt u prethodnici za %s and %s"
 
-#: src/symtab.c:1173
+#: src/symtab.c:1200
 #, c-format
 msgid "useless associativity for %s, use %%precedence"
 msgstr ""
@@ -1069,7 +1064,7 @@ msgstr "ne mogu otvoriti datoteku stanja za pisanje"
 msgid "write error"
 msgstr "greška pisanja"
 
-#: lib/error.c:188
+#: lib/error.c:191
 msgid "Unknown system error"
 msgstr "Nepoznata greška sustava"
 
@@ -1128,17 +1123,17 @@ msgstr "%s: opcija „-W %s” ne dozvoljava argument\n"
 msgid "%s: option '-W %s' requires an argument\n"
 msgstr "%s: opcija „-W %s” zahtijeva argument\n"
 
-#: lib/obstack.c:413 lib/obstack.c:415 lib/xalloc-die.c:34
+#: lib/obstack.c:338 lib/obstack.c:340 lib/xalloc-die.c:34
 msgid "memory exhausted"
 msgstr "memorija iscrpljena"
 
-#: lib/spawn-pipe.c:140 lib/spawn-pipe.c:143 lib/spawn-pipe.c:264
-#: lib/spawn-pipe.c:267
+#: lib/spawn-pipe.c:135 lib/spawn-pipe.c:138 lib/spawn-pipe.c:259
+#: lib/spawn-pipe.c:262
 #, c-format
 msgid "cannot create pipe"
 msgstr "ne mogu napraviti cjevovod"
 
-#: lib/spawn-pipe.c:234 lib/spawn-pipe.c:348 lib/wait-process.c:282
+#: lib/spawn-pipe.c:229 lib/spawn-pipe.c:343 lib/wait-process.c:282
 #: lib/wait-process.c:356
 #, c-format
 msgid "%s subprocess failed"
@@ -1209,6 +1204,9 @@ msgstr "%s potproces"
 #, c-format
 msgid "%s subprocess got fatal signal %d"
 msgstr "%s potproces je primio kobni signal %d"
+
+#~ msgid "invalid $ value: $%d"
+#~ msgstr "neispravna $ vrijednost: $%d"
 
 #~ msgid "expected %d shift/reduce conflict"
 #~ msgid_plural "expected %d shift/reduce conflicts"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.7.90\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2013-12-05 14:59+0100\n"
+"POT-Creation-Date: 2015-01-15 10:07+0100\n"
 "PO-Revision-Date: 2013-06-17 21:11+0200\n"
 "Last-Translator: Wojciech Polak <polak@gnu.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -45,7 +45,7 @@ msgstr "przestarzała dyrektywa: %s, użyj %s"
 msgid "only one %s allowed per rule"
 msgstr "tylko jedno %s dozwolone na jedną regułę"
 
-#: src/complain.c:402 src/reader.c:140 src/symtab.c:217 src/symtab.c:229
+#: src/complain.c:402 src/reader.c:140 src/symtab.c:253 src/symtab.c:266
 #, c-format
 msgid "previous declaration"
 msgstr "poprzednia deklaracja"
@@ -422,7 +422,7 @@ msgstr ""
 "// Strona domowa: <%s>.\n"
 "\n"
 
-#: src/location.c:93 src/scan-gram.l:926
+#: src/location.c:93 src/scan-gram.l:932
 #, c-format
 msgid "line number overflow"
 msgstr "przepełnienie numeru linii"
@@ -466,7 +466,7 @@ msgstr "nieprawidłowa wartość dla zmiennej %%define %s: %s"
 msgid "accepted value: %s"
 msgstr "zaakceptowana wartość: %s"
 
-#: src/parse-gram.y:809
+#: src/parse-gram.y:811
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "brakujący identyfikator w deklaracji parametrów"
@@ -679,7 +679,7 @@ msgstr " w %s"
 msgid ", cannot be accessed from mid-rule action at $%d"
 msgstr ", nie jest dostępne z akcji mid-rule w $%d"
 
-#: src/scan-code.l:440 src/scan-gram.l:849
+#: src/scan-code.l:440 src/scan-gram.l:855
 #, c-format
 msgid "integer out of range: %s"
 msgstr "liczba całkowita poza zakresem: %s"
@@ -738,76 +738,76 @@ msgstr "$$ należący do %s nie posiada zadeklarowanego typu"
 msgid "$%s of %s has no declared type"
 msgstr "$%s należący do %s nie posiada zadeklarowanego typu"
 
-#: src/scan-gram.l:180
+#: src/scan-gram.l:186
 #, c-format
 msgid "stray ',' treated as white space"
 msgstr "zabłąkany znak ',' potraktowany jako biały znak"
 
-#: src/scan-gram.l:270
+#: src/scan-gram.l:276
 #, c-format
 msgid "invalid directive: %s"
 msgstr "nieprawidłowa dyrektywa: %s"
 
-#: src/scan-gram.l:296
+#: src/scan-gram.l:302
 #, c-format
 msgid "invalid identifier: %s"
 msgstr "nieprawidłowy identyfikator: %s"
 
-#: src/scan-gram.l:348
+#: src/scan-gram.l:354
 msgid "invalid character"
 msgid_plural "invalid characters"
 msgstr[0] "nieprawidłowy znak"
 msgstr[1] "nieprawidłowe znaki"
 msgstr[2] "nieprawidłowych znaków"
 
-#: src/scan-gram.l:366
+#: src/scan-gram.l:372
 #, c-format
 msgid "invalid null character"
 msgstr "nieprawidłowy pusty znak"
 
-#: src/scan-gram.l:419
+#: src/scan-gram.l:425
 #, c-format
 msgid "unexpected identifier in bracketed name: %s"
 msgstr "niespodziewany identyfikator w nazwie: %s"
 
-#: src/scan-gram.l:441
+#: src/scan-gram.l:447
 #, c-format
 msgid "an identifier expected"
 msgstr "oczekiwano identyfikatora"
 
-#: src/scan-gram.l:446
+#: src/scan-gram.l:452
 msgid "invalid character in bracketed name"
 msgid_plural "invalid characters in bracketed name"
 msgstr[0] "nieprawidłowy znak w nazwie"
 msgstr[1] "nieprawidłowe znaki w nazwie"
 msgstr[2] "nieprawidłowych znaków w nazwie"
 
-#: src/scan-gram.l:538
+#: src/scan-gram.l:544
 #, c-format
 msgid "empty character literal"
 msgstr "pusty literalny znak"
 
-#: src/scan-gram.l:544
+#: src/scan-gram.l:550
 #, c-format
 msgid "extra characters in character literal"
 msgstr "dodatkowe znaki w literalnym znaku"
 
-#: src/scan-gram.l:590 src/scan-gram.l:600 src/scan-gram.l:620
+#: src/scan-gram.l:596 src/scan-gram.l:606 src/scan-gram.l:626
 #, c-format
 msgid "invalid number after \\-escape: %s"
 msgstr "nieprawidłowa liczba po \\-escape: %s"
 
-#: src/scan-gram.l:632
+#: src/scan-gram.l:638
 #, c-format
 msgid "invalid character after \\-escape: %s"
 msgstr "nieprawidłowy znak po \\-escape: %s"
 
-#: src/scan-gram.l:978
+#: src/scan-gram.l:984
 #, c-format
 msgid "missing %s at end of file"
 msgstr "brakujący %s na końcu pliku"
 
-#: src/scan-gram.l:989
+#: src/scan-gram.l:995
 #, c-format
 msgid "missing %s at end of line"
 msgstr "brakujący %s na końcu linii"
@@ -827,11 +827,6 @@ msgstr "za mało argumentów dla dyrektywy %s w szkielecie"
 msgid "too many arguments for %s directive in skeleton"
 msgstr "za dużo argumentów dla dyrektywy %s w szkielecie"
 
-#: src/symlist.c:204
-#, c-format
-msgid "invalid $ value: $%d"
-msgstr "nieprawidłowa wartość $: $%d"
-
 #: src/symtab.c:75
 #, c-format
 msgid "POSIX Yacc forbids dashes in symbol names: %s"
@@ -842,89 +837,89 @@ msgstr "POSIX Yacc zabrania myślników w nazwach symboli: %s"
 msgid "too many symbols in input grammar (limit is %d)"
 msgstr "zbyt dużo symboli w gramatyce wejściowej (limit wynosi %d)"
 
-#: src/symtab.c:214
+#: src/symtab.c:250
 #, c-format
 msgid "%s redeclaration for %s"
 msgstr "%s redeklaracja dla %s"
 
-#: src/symtab.c:226
+#: src/symtab.c:263
 #, c-format
 msgid "%s redeclaration for <%s>"
 msgstr "%s redeklaracja dla <%s>"
 
-#: src/symtab.c:355
+#: src/symtab.c:392
 #, c-format
 msgid "symbol %s redefined"
 msgstr "zredefiniowany symbol %s"
 
-#: src/symtab.c:370
+#: src/symtab.c:407
 #, c-format
 msgid "symbol %s redeclared"
 msgstr "zredefiniowany symbol %s"
 
-#: src/symtab.c:392
+#: src/symtab.c:429
 #, c-format
 msgid "redefining user token number of %s"
 msgstr "przedefiniowanie numeru symbolu leksykalnego %s"
 
-#: src/symtab.c:422
+#: src/symtab.c:459
 #, c-format
 msgid "symbol %s is used, but is not defined as a token and has no rules"
 msgstr ""
 "użyty symbol %s nie jest zdefiniowany jako symbol leksykalny i nie posiada "
 "reguł"
 
-#: src/symtab.c:460
+#: src/symtab.c:497
 #, c-format
 msgid "useless %s for type <%s>"
 msgstr "bezużyteczny %s dla typu <%s>"
 
-#: src/symtab.c:465
+#: src/symtab.c:502
 #, c-format
 msgid "type <%s> is used, but is not associated to any symbol"
 msgstr "użyty typ <%s> nie jest powiązany z żadnym symbolem"
 
-#: src/symtab.c:490
+#: src/symtab.c:527
 #, c-format
 msgid "symbol %s used more than once as a literal string"
 msgstr "symbol %s użyty więcej niż jeden raz jako łańcuch literalny"
 
-#: src/symtab.c:493
+#: src/symtab.c:530
 #, c-format
 msgid "symbol %s given more than one literal string"
 msgstr "symbol %s podany więcej niż jeden łańcuch literalny"
 
-#: src/symtab.c:602
+#: src/symtab.c:629
 #, c-format
 msgid "user token number %d redeclaration for %s"
 msgstr "redeklaracja numeru symbolu leksykalnego %d dla %s"
 
-#: src/symtab.c:606
+#: src/symtab.c:633
 #, c-format
 msgid "previous declaration for %s"
 msgstr "poprzednia deklaracja dla %s"
 
-#: src/symtab.c:987
+#: src/symtab.c:1014
 #, c-format
 msgid "the start symbol %s is undefined"
 msgstr "symbol początkowy %s jest niezdefiniowany"
 
-#: src/symtab.c:991
+#: src/symtab.c:1018
 #, c-format
 msgid "the start symbol %s is a token"
 msgstr "symbol początkowy %s jest symbolem leksykalnym"
 
-#: src/symtab.c:1166
+#: src/symtab.c:1193
 #, c-format
 msgid "useless precedence and associativity for %s"
 msgstr "bezużyteczne pierwszeństwo i asocjacja dla %s"
 
-#: src/symtab.c:1169
+#: src/symtab.c:1196
 #, c-format
 msgid "useless precedence for %s"
 msgstr "bezużyteczne pierwszeństwo dla %s"
 
-#: src/symtab.c:1173
+#: src/symtab.c:1200
 #, c-format
 msgid "useless associativity for %s, use %%precedence"
 msgstr "bezużyteczna asocjacja dla %s, użyj %%precedence"
@@ -1075,7 +1070,7 @@ msgstr "nie można otworzyć pliku statystyk do zapisu"
 msgid "write error"
 msgstr "błąd zapisu"
 
-#: lib/error.c:188
+#: lib/error.c:191
 msgid "Unknown system error"
 msgstr "Nieznany błąd systemu"
 
@@ -1134,17 +1129,17 @@ msgstr "%s: opcja '-W %s' nie może mieć argumentów\n"
 msgid "%s: option '-W %s' requires an argument\n"
 msgstr "%s: opcja '-W %s' wymaga argumentu\n"
 
-#: lib/obstack.c:413 lib/obstack.c:415 lib/xalloc-die.c:34
+#: lib/obstack.c:338 lib/obstack.c:340 lib/xalloc-die.c:34
 msgid "memory exhausted"
 msgstr "pamięć wyczerpana"
 
-#: lib/spawn-pipe.c:140 lib/spawn-pipe.c:143 lib/spawn-pipe.c:264
-#: lib/spawn-pipe.c:267
+#: lib/spawn-pipe.c:135 lib/spawn-pipe.c:138 lib/spawn-pipe.c:259
+#: lib/spawn-pipe.c:262
 #, c-format
 msgid "cannot create pipe"
 msgstr "nie można utworzyć potoku"
 
-#: lib/spawn-pipe.c:234 lib/spawn-pipe.c:348 lib/wait-process.c:282
+#: lib/spawn-pipe.c:229 lib/spawn-pipe.c:343 lib/wait-process.c:282
 #: lib/wait-process.c:356
 #, c-format
 msgid "%s subprocess failed"
@@ -1215,6 +1210,9 @@ msgstr "podproces %s"
 #, c-format
 msgid "%s subprocess got fatal signal %d"
 msgstr "podproces %s otrzymał nieprawidłowy sygnał %d"
+
+#~ msgid "invalid $ value: $%d"
+#~ msgstr "nieprawidłowa wartość $: $%d"
 
 #~ msgid "empty"
 #~ msgstr "pusta"

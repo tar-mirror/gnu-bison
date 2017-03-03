@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.5\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2013-12-05 14:59+0100\n"
+"POT-Creation-Date: 2015-01-15 10:07+0100\n"
 "PO-Revision-Date: 2012-05-22 18:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -45,7 +45,7 @@ msgstr "luach neamhbhailí ar athróg %%define `%s': `%s'"
 msgid "only one %s allowed per rule"
 msgstr "ní cheadaítear ach %s amháin an riail"
 
-#: src/complain.c:402 src/reader.c:140 src/symtab.c:217 src/symtab.c:229
+#: src/complain.c:402 src/reader.c:140 src/symtab.c:253 src/symtab.c:266
 #, c-format
 msgid "previous declaration"
 msgstr "fógra roimhe seo"
@@ -420,7 +420,7 @@ msgstr ""
 "// Leathanach baile: <%s>.\n"
 "\n"
 
-#: src/location.c:93 src/scan-gram.l:926
+#: src/location.c:93 src/scan-gram.l:932
 #, c-format
 msgid "line number overflow"
 msgstr "líne-uimhir thar maoil"
@@ -464,7 +464,7 @@ msgstr "luach neamhbhailí ar athróg %%define `%s': `%s'"
 msgid "accepted value: %s"
 msgstr "luach glactha: `%s'"
 
-#: src/parse-gram.y:809
+#: src/parse-gram.y:811
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "aitheantóir ar iarraidh i bhfógra paraiméadair"
@@ -684,7 +684,7 @@ msgstr " ag %s"
 msgid ", cannot be accessed from mid-rule action at $%d"
 msgstr ", níl aon fháil air ó ghníomh meánrialach ag $%d"
 
-#: src/scan-code.l:440 src/scan-gram.l:849
+#: src/scan-code.l:440 src/scan-gram.l:855
 #, c-format
 msgid "integer out of range: %s"
 msgstr "slánuimhir as raon: %s"
@@ -741,22 +741,22 @@ msgstr "Níl aon chineál fógartha ag $$ de `%s'"
 msgid "$%s of %s has no declared type"
 msgstr "Níl aon chineál fógartha ag $%s de `%s'"
 
-#: src/scan-gram.l:180
+#: src/scan-gram.l:186
 #, fuzzy, c-format
 msgid "stray ',' treated as white space"
 msgstr "`,' ar seachrán, caith leis mar spás bán"
 
-#: src/scan-gram.l:270
+#: src/scan-gram.l:276
 #, c-format
 msgid "invalid directive: %s"
 msgstr "treoir neamhbhailí: %s"
 
-#: src/scan-gram.l:296
+#: src/scan-gram.l:302
 #, c-format
 msgid "invalid identifier: %s"
 msgstr "aitheantóir neamhbhailí: %s"
 
-#: src/scan-gram.l:348
+#: src/scan-gram.l:354
 #, fuzzy
 msgid "invalid character"
 msgid_plural "invalid characters"
@@ -766,22 +766,22 @@ msgstr[2] "carachtar neamhbhailí: %s"
 msgstr[3] "carachtar neamhbhailí: %s"
 msgstr[4] "carachtar neamhbhailí: %s"
 
-#: src/scan-gram.l:366
+#: src/scan-gram.l:372
 #, c-format
 msgid "invalid null character"
 msgstr "carachtar neamhbhailí nialasach"
 
-#: src/scan-gram.l:419
+#: src/scan-gram.l:425
 #, c-format
 msgid "unexpected identifier in bracketed name: %s"
 msgstr "aitheantóir gan súil leis in ainm idir lúibíní: %s"
 
-#: src/scan-gram.l:441
+#: src/scan-gram.l:447
 #, c-format
 msgid "an identifier expected"
 msgstr "bhíothas ag súil le haitheantóir"
 
-#: src/scan-gram.l:446
+#: src/scan-gram.l:452
 #, fuzzy
 msgid "invalid character in bracketed name"
 msgid_plural "invalid characters in bracketed name"
@@ -791,32 +791,32 @@ msgstr[2] "carachtar neamhbhailí in ainm idir lúibíní: %s"
 msgstr[3] "carachtar neamhbhailí in ainm idir lúibíní: %s"
 msgstr[4] "carachtar neamhbhailí in ainm idir lúibíní: %s"
 
-#: src/scan-gram.l:538
+#: src/scan-gram.l:544
 #, c-format
 msgid "empty character literal"
 msgstr "carachtar litriúil folamh"
 
-#: src/scan-gram.l:544
+#: src/scan-gram.l:550
 #, c-format
 msgid "extra characters in character literal"
 msgstr "carachtair bhreise i gcarachtar litriúil"
 
-#: src/scan-gram.l:590 src/scan-gram.l:600 src/scan-gram.l:620
+#: src/scan-gram.l:596 src/scan-gram.l:606 src/scan-gram.l:626
 #, c-format
 msgid "invalid number after \\-escape: %s"
 msgstr "uimhir neamhbhailí tar éis éalúcháin-\\: %s"
 
-#: src/scan-gram.l:632
+#: src/scan-gram.l:638
 #, c-format
 msgid "invalid character after \\-escape: %s"
 msgstr "carachtar neamhbhailí tar éis éalúcháin-\\: %s"
 
-#: src/scan-gram.l:978
+#: src/scan-gram.l:984
 #, fuzzy, c-format
 msgid "missing %s at end of file"
 msgstr "`%s' ar iarraidh ag críoch an chomhaid"
 
-#: src/scan-gram.l:989
+#: src/scan-gram.l:995
 #, fuzzy, c-format
 msgid "missing %s at end of line"
 msgstr "`%s' ar iarraidh ag críoch na líne"
@@ -836,11 +836,6 @@ msgstr "easpa argóintí do threoir %s i gcreatlach"
 msgid "too many arguments for %s directive in skeleton"
 msgstr "an iomarca argóintí do threoir %s i gcreatlach"
 
-#: src/symlist.c:204
-#, c-format
-msgid "invalid $ value: $%d"
-msgstr "luach neamhbhailí $: $%d"
-
 #: src/symtab.c:75
 #, c-format
 msgid "POSIX Yacc forbids dashes in symbol names: %s"
@@ -851,91 +846,91 @@ msgstr "Ní cheadaíonn Yacc POSIX daiseanna in ainmneacha: %s"
 msgid "too many symbols in input grammar (limit is %d)"
 msgstr "an iomarca siombailí sa ghramadach ionchurtha (uasmhéid %d)"
 
-#: src/symtab.c:214
+#: src/symtab.c:250
 #, c-format
 msgid "%s redeclaration for %s"
 msgstr "athfhógra %s ar %s"
 
-#: src/symtab.c:226
+#: src/symtab.c:263
 #, c-format
 msgid "%s redeclaration for <%s>"
 msgstr "athfhógra %s ar <%s>"
 
-#: src/symtab.c:355
+#: src/symtab.c:392
 #, c-format
 msgid "symbol %s redefined"
 msgstr "sainmhíniú nua ar shiombail %s"
 
-#: src/symtab.c:370
+#: src/symtab.c:407
 #, c-format
 msgid "symbol %s redeclared"
 msgstr "athfhógra ar shiombail %s"
 
-#: src/symtab.c:392
+#: src/symtab.c:429
 #, c-format
 msgid "redefining user token number of %s"
 msgstr "sainmhíniú nua ar an uimhir theaghráin do %s"
 
-#: src/symtab.c:422
+#: src/symtab.c:459
 #, c-format
 msgid "symbol %s is used, but is not defined as a token and has no rules"
 msgstr ""
 "tá siombail %s in úsáid, ach níl sé ina teaghrán comharthach agus níl aon "
 "riail aici"
 
-#: src/symtab.c:460
+#: src/symtab.c:497
 #, c-format
 msgid "useless %s for type <%s>"
 msgstr ""
 
-#: src/symtab.c:465
+#: src/symtab.c:502
 #, fuzzy, c-format
 msgid "type <%s> is used, but is not associated to any symbol"
 msgstr ""
 "tá siombail %s in úsáid, ach níl sé ina teaghrán comharthach agus níl aon "
 "riail aici"
 
-#: src/symtab.c:490
+#: src/symtab.c:527
 #, fuzzy, c-format
 msgid "symbol %s used more than once as a literal string"
 msgstr "siombail `%s' in úsáid níos mó ná uair amháin mar theaghrán litriúil"
 
-#: src/symtab.c:493
+#: src/symtab.c:530
 #, fuzzy, c-format
 msgid "symbol %s given more than one literal string"
 msgstr "tá níos mó ná aon teaghrán litriúil amháin ag an tsiombail `%s'"
 
-#: src/symtab.c:602
+#: src/symtab.c:629
 #, c-format
 msgid "user token number %d redeclaration for %s"
 msgstr "athfhógra ar uimhir theaghráin %d do %s"
 
-#: src/symtab.c:606
+#: src/symtab.c:633
 #, c-format
 msgid "previous declaration for %s"
 msgstr "fógra roimhe seo ar %s"
 
-#: src/symtab.c:987
+#: src/symtab.c:1014
 #, c-format
 msgid "the start symbol %s is undefined"
 msgstr "siombail tosaigh %s gan sainmhíniú"
 
-#: src/symtab.c:991
+#: src/symtab.c:1018
 #, c-format
 msgid "the start symbol %s is a token"
 msgstr "is teaghrán comharthach í an tsiombail tosaigh %s"
 
-#: src/symtab.c:1166
+#: src/symtab.c:1193
 #, c-format
 msgid "useless precedence and associativity for %s"
 msgstr ""
 
-#: src/symtab.c:1169
+#: src/symtab.c:1196
 #, fuzzy, c-format
 msgid "useless precedence for %s"
 msgstr "tosaíochtaí contrártha idir %s agus %s"
 
-#: src/symtab.c:1173
+#: src/symtab.c:1200
 #, c-format
 msgid "useless associativity for %s, use %%precedence"
 msgstr ""
@@ -1090,7 +1085,7 @@ msgstr "Níorbh fhéidir an comhad staitistice a oscailt chun scríobh ann."
 msgid "write error"
 msgstr "earráid mharfach"
 
-#: lib/error.c:188
+#: lib/error.c:191
 msgid "Unknown system error"
 msgstr "Earráid chórais anaithnid"
 
@@ -1149,17 +1144,17 @@ msgstr "%s: ní cheadaítear argóint i ndiaidh na rogha '-W %s'\n"
 msgid "%s: option '-W %s' requires an argument\n"
 msgstr "%s: tá argóint de dhíth i ndiaidh na rogha '-W %s'\n"
 
-#: lib/obstack.c:413 lib/obstack.c:415 lib/xalloc-die.c:34
+#: lib/obstack.c:338 lib/obstack.c:340 lib/xalloc-die.c:34
 msgid "memory exhausted"
 msgstr "cuimhne ídithe"
 
-#: lib/spawn-pipe.c:140 lib/spawn-pipe.c:143 lib/spawn-pipe.c:264
-#: lib/spawn-pipe.c:267
+#: lib/spawn-pipe.c:135 lib/spawn-pipe.c:138 lib/spawn-pipe.c:259
+#: lib/spawn-pipe.c:262
 #, c-format
 msgid "cannot create pipe"
 msgstr "ní féidir píopa a chruthú"
 
-#: lib/spawn-pipe.c:234 lib/spawn-pipe.c:348 lib/wait-process.c:282
+#: lib/spawn-pipe.c:229 lib/spawn-pipe.c:343 lib/wait-process.c:282
 #: lib/wait-process.c:356
 #, c-format
 msgid "%s subprocess failed"
@@ -1230,6 +1225,9 @@ msgstr "fophróiseas %s"
 #, c-format
 msgid "%s subprocess got fatal signal %d"
 msgstr "fuair fophróiseas %s comhartha marfach %d"
+
+#~ msgid "invalid $ value: $%d"
+#~ msgstr "luach neamhbhailí $: $%d"
 
 #, fuzzy
 #~ msgid "a ';' might be needed at the end of action code"

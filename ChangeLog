@@ -1,3 +1,377 @@
+2015-01-15  Akim Demaille  <akim@lrde.epita.fr>
+
+	version 3.0.3
+	* NEWS: Record release date.
+
+2015-01-15  Akim Demaille  <akim@lrde.epita.fr>
+
+	gnulib: update
+
+2015-01-13  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: split a large test case into several smaller ones
+	* tests/conflicts.at (AT_CONSISTENT_ERRORS_CHECK): Move AT_SETUP/AT_CLEANUP
+	into it, so that we don't skip non Java tests following a test case in Java.
+
+2015-01-12  Akim Demaille  <akim@lrde.epita.fr>
+
+	package: a bit of trouble shooting indications
+	* README-hacking: here.
+
+2015-01-12  Akim Demaille  <akim@lrde.epita.fr>
+
+	doc: liby's main arms the internationalization
+	Reported by Nicolas Bedon.
+	<https://lists.gnu.org/archive/html/bug-bison/2014-11/msg00005.html>
+
+	* doc/bison.texi (Yacc Library): Document the call the setlocale.
+
+2015-01-09  Akim Demaille  <akim@lrde.epita.fr>
+
+	bison: avoid warnings from static code analysis
+	A static analysis tool reports that some callers of symbol_list_n_get
+	might get NULL and not handle it properly.  This is not the case, yet
+	we can suppress this pattern.
+
+	Reported by Mike Sullivan.
+	<https://lists.gnu.org/archive/html/bug-bison/2013-12/msg00027.html>
+
+	* src/symlist.c (symbol_list_n_get): Actually it is never called
+	to return 0.  Enforce this postcondition via aver.
+	(symbol_list_n_type_name_get): Simplify accordingly.  In particular,
+	discards a (translated) useless error message.
+	* src/symlist.h: Adjust documentation.
+	* src/scan-code.l: Style change.
+
+2015-01-09  Akim Demaille  <akim@lrde.epita.fr>
+
+	c++: fix the use of destructors when variants are enabled
+	When using variants, destructors generate invalid code.
+	<http://lists.gnu.org/archive/html/bug-bison/2014-09/msg00005.html>
+	Reported by Michael Catanzaro.
+
+	* data/c++.m4 (~basic_symbol): b4_symbol_foreach works on yysym:
+	define it.
+	* tests/c++.at (Variants): Check it.
+
+2015-01-08  Akim Demaille  <akim@lrde.epita.fr>
+
+	style: tests: simplify the handling of some C++ tests
+	* tests/c++.at: here.
+	(Doxygen): Pass %define, so that files such as position.hh etc.
+	are generated, instead of putting everything into input.hh.
+
+2015-01-08  Akim Demaille  <akim@lrde.epita.fr>
+
+	c++: symbols can be empty, so use it
+	The previous patches ensure that symbols (symbol_type and
+	stack_symbol_type) can be empty, cleared, and their emptiness can be
+	checked.  Therefore, yyempty, which codes whether yyla is empty or
+	not, is now useless.
+
+	In C skeletons (e.g., yacc.c), the fact that the lookahead is empty is
+	coded by "yychar = YYEMPTY", which is exactly what this patch
+	restores, since yychar/yytoken corresponds to yyla.type.
+
+	* data/lalr1.cc (yyempty): Remove.
+	Rather, depend on yyla.empty ().
+
+2015-01-08  Akim Demaille  <akim@lrde.epita.fr>
+
+	c++: variants: don't leak the lookahead in error recovery
+	During error recovery, when discarding the lookeahead, we don't
+	destroy it, which is caught by parse.assert assertions.
+
+	Reported by Antonio Silva Correia.
+	With an analysis and suggested patch from Michel d'Hooge.
+	<http://savannah.gnu.org/support/?108481>
+
+	* tests/c++.at (Variants): Strengthen the test to try syntax errors
+	with discarded lookahead.
+
+2015-01-08  Akim Demaille  <akim@lrde.epita.fr>
+
+	c++: provide a means to clear symbols
+	The symbol destructor is currently the only means to clear a symbol.
+	Unfortunately during error recovery we might have to clear the
+	lookahead, which is a local variable (yyla) that has not yet reached
+	its end of scope.
+
+	Rather that duplicating the code to destroy a symbol, or rather than
+	destroying and recreating yyla, let's provide a means to clear a
+	symbol.
+
+	Reported by Antonio Silva Correia, with an analysis from Michel d'Hooge.
+	<http://savannah.gnu.org/support/?108481>
+
+	* data/c++.m4, data/lalr1.cc (basis_symbol::clear, by_state::clear)
+	(by_type::clear): New.
+	(basic_symbol::~basic_symbol): Use clear.
+
+2015-01-08  Akim Demaille  <akim@lrde.epita.fr>
+
+	c++: clean up the handling of empty symbols
+	* data/c++.m4, data/lalr1.cc (yyempty_): Remove, replaced by...
+	(empty_symbol, by_state::empty_state): these.
+	(basic_symbol::empty): New.
+
+2015-01-08  Akim Demaille  <akim@lrde.epita.fr>
+
+	c++: comment and style changes
+	* data/c++.m4, data/lalr1.cc: More documentation.
+	Tidy.
+	* tests/c++.at (string_cast): Rename as...
+	(to_string): this C++11 name.
+
+2015-01-07  Akim Demaille  <akim@lrde.epita.fr>
+
+	c++: variants: comparing addresses of typeid.name() is undefined
+	Instead of storing and comparing pointers to names of types, store
+	pointers to the typeids, and compares the typeids.
+	Reported by Thomas Jahns.
+	<http://lists.gnu.org/archive/html/bug-bison/2014-03/msg00001.html>
+
+	* data/variant.hh (yytname_): Replace with...
+	(yytypeid_): this.
+
+2015-01-05  Akim Demaille  <akim@lrde.epita.fr>
+
+	c++: locations: complete the API and fix comments
+	There are no support for += between locations, and some comments are wrong.
+	Reported by Alexandre Duret-Lutz.
+
+	* data/location.cc: Fix.
+	* doc/bison.texi: Document.
+	* tests/c++.at: Check.
+
+2015-01-05  Akim Demaille  <akim@lrde.epita.fr>
+
+	build: do not clean figure sources in make clean
+	"make clean && make" fails in in-tree builds.
+
+	* doc/local.mk (CLEANDIRS): Replace with...
+	(CLEANFILES): this safer list of files to clean.
+
+2015-01-05  Akim Demaille  <akim@lrde.epita.fr>
+
+	build: don't try to generate docs when cross-compiling
+	When cross-compiling don't run the generated bison to update the docs.
+	Reported by Aaro Koskinen.
+	<http://lists.gnu.org/archive/html/bison-patches/2014-03/msg00000.html>
+
+	* configure.ac (CROSS_COMPILING): New.
+	* doc/local.mk: Use it.
+
+2015-01-04  Akim Demaille  <akim@lrde.epita.fr>
+
+	package: fix a reporter's name
+	* THANKS, build-aux/git-log-fix: s/Bernd Edligner/Bernd Edlinger/.
+
+2015-01-04  Akim Demaille  <akim@lrde.epita.fr>
+
+	%union: fix the support for named %union
+	Bison supports a union tag, for obscure reasons.  But it does a poor
+	job at it, especially since Bison 3.0.
+	Reported by Stephen Cameron and Tobias Frost.
+
+	It did not ensure that the name was not given several times.  An easy
+	way to do this is to make the %union tag be handled as a %define
+	variable, as they cannot be defined several times.
+
+	Since Bison 3.0, the synclines were wrongly placed, resulting in
+	invalid code.  Addressing this issue, because of the way the union tag
+	was stored (as a code muscle), would have been tedious.  Unless we
+	rather define the %union tag as a %percent variable, whose synclines
+	are easier to manipulate.
+
+	So replace the b4_union_name muscle by the api.value.union.name
+	%define variable, document, and check.
+
+	* data/bison.m4: Make sure that api.value.union.name has a keyword value.
+	* data/c++.m4: Make sure that api.value.union.name is not defined.
+	* data/c.m4 (b4_union_name): No longer use it, use api.value.union.name.
+	* doc/bison.texi (%define Summary): Document it.
+	* src/parse-gram.y (union_name): No longer define b4_uion_name, but
+	api.value.union.name.
+	* tests/input.at (Redefined %union name): New.
+	* tests/synclines.at (%union name syncline): New.
+	* tests/types.at: Check named %unions.
+
+2015-01-04  Akim Demaille  <akim@lrde.epita.fr>
+
+	package: bump to 2015
+	Which also requires:
+
+	* gnulib: Update.
+
+2014-12-31  Akim Demaille  <akim@lrde.epita.fr>
+
+	flex: don't trust YY_USER_INIT
+	Reported by Bernd Edlinger and others.
+
+	* src/scan-gram.l: here.
+
+2014-12-31  Akim Demaille  <akim@lrde.epita.fr>
+
+	yacc.c: fix broken union when api.value.type=union and %defines are used
+	Reported by Rich Wilson.
+
+	* data/c.m4 (b4_symbol_type_register): Append to b4_union_members,
+	not b4_user_union_members.
+	The latter invokes the former, but it is the former which is reinitialized
+	to empty by b4_value_type_setup_union.
+	* tests/types.at: Check it.
+
+	This reveals another bug, this time in the case of glr.c parsers.
+
+	* data/glr.c: Generate the header file before the implementation file,
+	to be sure that the setup is run before what depends on it.
+
+2014-12-31  Akim Demaille  <akim@lrde.epita.fr>
+
+	doc: fix missing xref
+	Reported by xolodho.
+
+	* doc/bison.texi (Printer Decl): here.
+
+2014-12-29  Akim Demaille  <akim@lrde.epita.fr>
+
+	gnulib: update
+
+2014-02-03  Akim Demaille  <akim@lrde.epita.fr>
+
+	location: remove some ugly debugging code traces
+	* data/location.cc: here.
+
+2014-02-03  Akim Demaille  <akim@lrde.epita.fr>
+
+	build: use abort to pacify compiler errors
+	clang, with -DNDEBUG and -Werror fails on some functions that might
+	lack a return.  This is because aver is just another assert, discarded
+	with -DNDEBUG.  So use abort.
+
+	* src/muscle-tab.c, src/scan-skel.l: here.
+
+2014-02-03  Akim Demaille  <akim@lrde.epita.fr>
+
+	package: bump to 2014
+	* AUTHORS, ChangeLog-2012, Makefile.am, NEWS, PACKAGING, README,
+	* README-alpha, README-hacking, THANKS, TODO, bootstrap.conf,
+	* build-aux/darwin11.4.0.valgrind, build-aux/local.mk,
+	* build-aux/update-b4-copyright,
+	* build-aux/update-package-copyright-year, cfg.mk, configure.ac,
+	* data/README, data/bison.m4, data/c++-skel.m4, data/c++.m4,
+	* data/c-like.m4, data/c-skel.m4, data/c.m4, data/glr.c, data/glr.cc,
+	* data/java-skel.m4, data/java.m4, data/lalr1.cc, data/lalr1.java,
+	* data/local.mk, data/location.cc, data/stack.hh, data/variant.hh,
+	* data/xslt/bison.xsl, data/xslt/xml2dot.xsl, data/xslt/xml2text.xsl,
+	* data/xslt/xml2xhtml.xsl, data/yacc.c, djgpp/Makefile.maint,
+	* djgpp/README.in, djgpp/config.bat, djgpp/config.sed,
+	* djgpp/config.site, djgpp/config_h.sed, djgpp/djunpack.bat,
+	* djgpp/local.mk, djgpp/subpipe.c, djgpp/subpipe.h,
+	* djgpp/testsuite.sed, doc/bison.texi, doc/local.mk, doc/refcard.tex,
+	* etc/README, etc/bench.pl.in, etc/local.mk,
+	* examples/calc++/calc++.test, examples/calc++/local.mk,
+	* examples/extexi, examples/local.mk, examples/mfcalc/local.mk,
+	* examples/mfcalc/mfcalc.test, examples/rpcalc/local.mk,
+	* examples/rpcalc/rpcalc.test, examples/test, examples/variant.yy,
+	* lib/abitset.c, lib/abitset.h, lib/bbitset.h, lib/bitset.c,
+	* lib/bitset.h, lib/bitset_stats.c, lib/bitset_stats.h,
+	* lib/bitsetv-print.c, lib/bitsetv-print.h, lib/bitsetv.c,
+	* lib/bitsetv.h, lib/ebitset.c, lib/ebitset.h, lib/get-errno.c,
+	* lib/get-errno.h, lib/lbitset.c, lib/lbitset.h, lib/libiberty.h,
+	* lib/local.mk, lib/main.c, lib/timevar.c, lib/timevar.def,
+	* lib/timevar.h, lib/vbitset.c, lib/vbitset.h, lib/yyerror.c,
+	* m4/bison-i18n.m4, m4/c-working.m4, m4/cxx.m4, m4/flex.m4,
+	* m4/timevar.m4, src/AnnotationList.c, src/AnnotationList.h,
+	* src/InadequacyList.c, src/InadequacyList.h, src/LR0.c, src/LR0.h,
+	* src/Sbitset.c, src/Sbitset.h, src/assoc.c, src/assoc.h,
+	* src/closure.c, src/closure.h, src/complain.c, src/complain.h,
+	* src/conflicts.c, src/conflicts.h, src/derives.c, src/derives.h,
+	* src/files.c, src/files.h, src/flex-scanner.h, src/getargs.c,
+	* src/getargs.h, src/gram.c, src/gram.h, src/graphviz.c,
+	* src/graphviz.h, src/ielr.c, src/ielr.h, src/lalr.c, src/lalr.h,
+	* src/local.mk, src/location.c, src/location.h, src/main.c,
+	* src/muscle-tab.c, src/muscle-tab.h, src/named-ref.c,
+	* src/named-ref.h, src/nullable.c, src/nullable.h, src/output.c,
+	* src/output.h, src/parse-gram.c, src/parse-gram.y, src/print-xml.c,
+	* src/print-xml.h, src/print.c, src/print.h, src/print_graph.c,
+	* src/print_graph.h, src/reader.c, src/reader.h, src/reduce.c,
+	* src/reduce.h, src/relation.c, src/relation.h, src/scan-code.h,
+	* src/scan-code.l, src/scan-gram.h, src/scan-gram.l, src/scan-skel.h,
+	* src/scan-skel.l, src/state.c, src/state.h, src/symlist.c,
+	* src/symlist.h, src/symtab.c, src/symtab.h, src/system.h,
+	* src/tables.c, src/tables.h, src/uniqstr.c, src/uniqstr.h,
+	* tests/actions.at, tests/atlocal.in, tests/bison.in, tests/c++.at,
+	* tests/calc.at, tests/conflicts.at, tests/cxx-type.at,
+	* tests/existing.at, tests/glr-regression.at, tests/headers.at,
+	* tests/input.at, tests/java.at, tests/javapush.at, tests/local.at,
+	* tests/local.mk, tests/named-refs.at, tests/output.at, tests/push.at,
+	* tests/reduce.at, tests/regression.at, tests/sets.at,
+	* tests/skeletons.at, tests/synclines.at, tests/testsuite.at,
+	* tests/torture.at, tests/types.at:
+	here.
+
+2014-01-03  Paul Eggert  <eggert@cs.ucla.edu>
+
+	doc: specify documentation encoding
+	* doc/bison.texi: Add '@documentencoding UTF-8'; needed since the
+	manual contains UTF-8 characters.  This will cause the .info files
+	to contain UTF-8 quotes and the like, which should be OK nowadays.
+	Add @documentlanguage while we're at it.
+
+2013-12-09  Akim Demaille  <akim@lrde.epita.fr>
+
+	package: install the examples
+	Currently, we do not install the various examples extracted from the
+	documentation.  Let's do it, as they are useful starting points.
+
+	* configure.ac: When --enable-gcc-warnings is set, enable ENABLE_GCC_WARNINGS.
+	* examples/extexi: No longer issue synclines by default.
+	* examples/local.mk: Except if ENABLE_GCC_WARNINGS.
+	* examples/calc++/local.mk, examples/mfcalc/local.mk,
+	* examples/rpcalc/local.mk: Install the example files.
+
+2013-12-09  Akim Demaille  <akim@lrde.epita.fr>
+
+	package: install README and the like in docdir
+	* Makefile.am: here.
+
+2013-12-09  Akim Demaille  <akim@lrde.epita.fr>
+
+	diagnostics: fix the order of multiple declarations reports
+	On
+
+	  %token FOO "foo"
+	  %printer {} "foo"
+	  %printer {} FOO
+
+	we report
+
+	  /tmp/foo.yy:2.10-11: error: %printer redeclaration for FOO
+	   %printer {} "foo"
+	            ^^
+	  /tmp/foo.yy:3.10-11:     previous declaration
+	   %printer {} FOO
+	            ^^
+
+	* src/symtab.c (locations_sort): New.
+	Use it.
+	* tests/input.at (Invalid Aliases): Stress the order of diagnostics.
+
+2013-12-09  Akim Demaille  <akim@lrde.epita.fr>
+
+	symbol: provide an easy means to compare them in source order
+	* src/symtab.c (symbols_sort): New.
+	(user_token_number_redeclaration): Taken from here.
+
+2013-12-05  Akim Demaille  <akim@lrde.epita.fr>
+
+	maint: post-release administrivia
+	* NEWS: Add header line for next release.
+	* .prev-version: Record previous version.
+	* cfg.mk (old_NEWS_hash): Auto-update.
+
 2013-12-05  Akim Demaille  <akim@lrde.epita.fr>
 
 	version 3.0.2

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU bison 2.5.1\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2013-12-05 14:59+0100\n"
+"POT-Creation-Date: 2015-01-15 10:07+0100\n"
 "PO-Revision-Date: 2012-06-10 18:47+0900\n"
 "Last-Translator: Takeshi Hamasaki <hmatrjp@users.sourceforge.jp>\n"
 "Language-Team: Japanese <translation-team-ja@lists.sourceforge.net>\n"
@@ -46,7 +46,7 @@ msgstr "警告: 未定義の変数 `%.*s'"
 msgid "only one %s allowed per rule"
 msgstr "一つの条件部につき一つしか `else' を使えません"
 
-#: src/complain.c:402 src/reader.c:140 src/symtab.c:217 src/symtab.c:229
+#: src/complain.c:402 src/reader.c:140 src/symtab.c:253 src/symtab.c:266
 #, fuzzy, c-format
 msgid "previous declaration"
 msgstr "スコープの宣言"
@@ -356,7 +356,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/location.c:93 src/scan-gram.l:926
+#: src/location.c:93 src/scan-gram.l:932
 #, c-format
 msgid "line number overflow"
 msgstr "行番号がオーバーフローしました"
@@ -400,7 +400,7 @@ msgstr "アイコン型として不適切な値 '%s'"
 msgid "accepted value: %s"
 msgstr "無効な値\n"
 
-#: src/parse-gram.y:809
+#: src/parse-gram.y:811
 #, fuzzy, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "マクロ仮引数リストに ')' がありません"
@@ -614,7 +614,7 @@ msgstr "%s (%s) at "
 msgid ", cannot be accessed from mid-rule action at $%d"
 msgstr ""
 
-#: src/scan-code.l:440 src/scan-gram.l:849
+#: src/scan-code.l:440 src/scan-gram.l:855
 #, c-format
 msgid "integer out of range: %s"
 msgstr "整数が値の範囲外です: %s"
@@ -670,74 +670,74 @@ msgstr "`%s' の $$ に宣言のない型があります"
 msgid "$%s of %s has no declared type"
 msgstr "`%s' の $$ に宣言のない型があります"
 
-#: src/scan-gram.l:180
+#: src/scan-gram.l:186
 #, c-format
 msgid "stray ',' treated as white space"
 msgstr ""
 
-#: src/scan-gram.l:270
+#: src/scan-gram.l:276
 #, fuzzy, c-format
 msgid "invalid directive: %s"
 msgstr "無効な #%s 指示です"
 
-#: src/scan-gram.l:296
+#: src/scan-gram.l:302
 #, fuzzy, c-format
 msgid "invalid identifier: %s"
 msgstr "不正なURN %1: 不適切な名前空間識別子"
 
-#: src/scan-gram.l:348
+#: src/scan-gram.l:354
 #, fuzzy
 msgid "invalid character"
 msgid_plural "invalid characters"
 msgstr[0] "無効な文字: `%s'"
 
-#: src/scan-gram.l:366
+#: src/scan-gram.l:372
 #, c-format
 msgid "invalid null character"
 msgstr "無効な null 文字"
 
-#: src/scan-gram.l:419
+#: src/scan-gram.l:425
 #, fuzzy, c-format
 msgid "unexpected identifier in bracketed name: %s"
 msgstr "識別子 \"%s\" は C++ の特別な演算子名です"
 
-#: src/scan-gram.l:441
+#: src/scan-gram.l:447
 #, fuzzy, c-format
 msgid "an identifier expected"
 msgstr "識別子が期待されています."
 
-#: src/scan-gram.l:446
+#: src/scan-gram.l:452
 #, fuzzy
 msgid "invalid character in bracketed name"
 msgid_plural "invalid characters in bracketed name"
 msgstr[0] "無効なユーザ名 \"%s\" が %s:%d にあります。中断します"
 
-#: src/scan-gram.l:538
+#: src/scan-gram.l:544
 #, c-format
 msgid "empty character literal"
 msgstr "空の文字定数"
 
-#: src/scan-gram.l:544
+#: src/scan-gram.l:550
 #, fuzzy, c-format
 msgid "extra characters in character literal"
 msgstr "リテラル中で null 文字が確保されました"
 
-#: src/scan-gram.l:590 src/scan-gram.l:600 src/scan-gram.l:620
+#: src/scan-gram.l:596 src/scan-gram.l:606 src/scan-gram.l:626
 #, fuzzy, c-format
 msgid "invalid number after \\-escape: %s"
 msgstr "-q= の後に番号が期待されますが、%s が与えられました\n"
 
-#: src/scan-gram.l:632
+#: src/scan-gram.l:638
 #, fuzzy, c-format
 msgid "invalid character after \\-escape: %s"
 msgstr "エスケープキャラクタを決定できません"
 
-#: src/scan-gram.l:978
+#: src/scan-gram.l:984
 #, c-format
 msgid "missing %s at end of file"
 msgstr "ファイル末尾に %s がありません"
 
-#: src/scan-gram.l:989
+#: src/scan-gram.l:995
 #, c-format
 msgid "missing %s at end of line"
 msgstr "行末に %s がありません"
@@ -757,11 +757,6 @@ msgstr ""
 msgid "too many arguments for %s directive in skeleton"
 msgstr ""
 
-#: src/symlist.c:204
-#, c-format
-msgid "invalid $ value: $%d"
-msgstr "無効な $ 値: $%d"
-
 #: src/symtab.c:75
 #, c-format
 msgid "POSIX Yacc forbids dashes in symbol names: %s"
@@ -772,91 +767,91 @@ msgstr ""
 msgid "too many symbols in input grammar (limit is %d)"
 msgstr "シンボルが多すぎます (トークン + 非終端アイテム) -- 最大 %d"
 
-#: src/symtab.c:214
+#: src/symtab.c:250
 #, fuzzy, c-format
 msgid "%s redeclaration for %s"
 msgstr "\"%s\" のラベル:"
 
-#: src/symtab.c:226
+#: src/symtab.c:263
 #, fuzzy, c-format
 msgid "%s redeclaration for <%s>"
 msgstr "\"%s\" のラベル:"
 
-#: src/symtab.c:355
+#: src/symtab.c:392
 #, c-format
 msgid "symbol %s redefined"
 msgstr "シンボル %s が再定義されました"
 
-#: src/symtab.c:370
+#: src/symtab.c:407
 #, c-format
 msgid "symbol %s redeclared"
 msgstr "シンボル %s が再宣言されました"
 
-#: src/symtab.c:392
+#: src/symtab.c:429
 #, fuzzy, c-format
 msgid "redefining user token number of %s"
 msgstr "%s に先行した再定義です"
 
-#: src/symtab.c:422
+#: src/symtab.c:459
 #, c-format
 msgid "symbol %s is used, but is not defined as a token and has no rules"
 msgstr ""
 "シンボル %s が使われていますが、トークンとして定義されておらず、規則を持ちま"
 "せん"
 
-#: src/symtab.c:460
+#: src/symtab.c:497
 #, c-format
 msgid "useless %s for type <%s>"
 msgstr ""
 
-#: src/symtab.c:465
+#: src/symtab.c:502
 #, fuzzy, c-format
 msgid "type <%s> is used, but is not associated to any symbol"
 msgstr ""
 "シンボル %s が使われていますが、トークンとして定義されておらず、規則を持ちま"
 "せん"
 
-#: src/symtab.c:490
+#: src/symtab.c:527
 #, fuzzy, c-format
 msgid "symbol %s used more than once as a literal string"
 msgstr "シンボル `%s' はリテラル文字列として複数回使われました"
 
-#: src/symtab.c:493
+#: src/symtab.c:530
 #, fuzzy, c-format
 msgid "symbol %s given more than one literal string"
 msgstr "シンボル `%s' は複数のリテラル文字列が与えられました"
 
-#: src/symtab.c:602
+#: src/symtab.c:629
 #, fuzzy, c-format
 msgid "user token number %d redeclaration for %s"
 msgstr "%s の型が再定義されました"
 
-#: src/symtab.c:606
+#: src/symtab.c:633
 #, c-format
 msgid "previous declaration for %s"
 msgstr "%s に対する以前の宣言"
 
-#: src/symtab.c:987
+#: src/symtab.c:1014
 #, c-format
 msgid "the start symbol %s is undefined"
 msgstr "開始シンボル %s は定義されていません"
 
-#: src/symtab.c:991
+#: src/symtab.c:1018
 #, c-format
 msgid "the start symbol %s is a token"
 msgstr "開始シンボル %s はトークンです"
 
-#: src/symtab.c:1166
+#: src/symtab.c:1193
 #, c-format
 msgid "useless precedence and associativity for %s"
 msgstr ""
 
-#: src/symtab.c:1169
+#: src/symtab.c:1196
 #, c-format
 msgid "useless precedence for %s"
 msgstr ""
 
-#: src/symtab.c:1173
+#: src/symtab.c:1200
 #, c-format
 msgid "useless associativity for %s, use %%precedence"
 msgstr ""
@@ -1020,7 +1015,7 @@ msgstr "バックアップファイル \"%s\" を書き込み用に開くこと�
 msgid "write error"
 msgstr "書き込みエラー"
 
-#: lib/error.c:188
+#: lib/error.c:191
 msgid "Unknown system error"
 msgstr "不明なシステムエラー"
 
@@ -1079,17 +1074,17 @@ msgstr "%s: オプション '-W %s' は引数を取ることができません\n
 msgid "%s: option '-W %s' requires an argument\n"
 msgstr "%s: オプション '-W %s' には引数が必要です\n"
 
-#: lib/obstack.c:413 lib/obstack.c:415 lib/xalloc-die.c:34
+#: lib/obstack.c:338 lib/obstack.c:340 lib/xalloc-die.c:34
 msgid "memory exhausted"
 msgstr "メモリを使い果たしました"
 
-#: lib/spawn-pipe.c:140 lib/spawn-pipe.c:143 lib/spawn-pipe.c:264
-#: lib/spawn-pipe.c:267
+#: lib/spawn-pipe.c:135 lib/spawn-pipe.c:138 lib/spawn-pipe.c:259
+#: lib/spawn-pipe.c:262
 #, c-format
 msgid "cannot create pipe"
 msgstr "パイプを作成できません"
 
-#: lib/spawn-pipe.c:234 lib/spawn-pipe.c:348 lib/wait-process.c:282
+#: lib/spawn-pipe.c:229 lib/spawn-pipe.c:343 lib/wait-process.c:282
 #: lib/wait-process.c:356
 #, c-format
 msgid "%s subprocess failed"
@@ -1160,6 +1155,9 @@ msgstr "%s 子プロセス"
 #, c-format
 msgid "%s subprocess got fatal signal %d"
 msgstr "%s 子プロセスが致命的なシグナル %d を受信しました"
+
+#~ msgid "invalid $ value: $%d"
+#~ msgstr "無効な $ 値: $%d"
 
 #~ msgid "future versions of Bison will not add the ';'"
 #~ msgstr "将来のバージョンの Bison は ';' を追加しません"

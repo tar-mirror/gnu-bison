@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.7.90\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2013-12-05 14:59+0100\n"
+"POT-Creation-Date: 2015-01-15 10:07+0100\n"
 "PO-Revision-Date: 2013-06-04 09:47-0300\n"
 "Last-Translator: Felipe Castro <fefcas@gmail.com>\n"
 "Language-Team: Esperanto <translation-team-eo@lists.sourceforge.net>\n"
@@ -44,7 +44,7 @@ msgstr "evitinda instrukcio: %s, uzu %s"
 msgid "only one %s allowed per rule"
 msgstr "nur po unu %s por regulo estas permesata"
 
-#: src/complain.c:402 src/reader.c:140 src/symtab.c:217 src/symtab.c:229
+#: src/complain.c:402 src/reader.c:140 src/symtab.c:253 src/symtab.c:266
 #, c-format
 msgid "previous declaration"
 msgstr "antaŭa deklaro"
@@ -410,7 +410,7 @@ msgstr ""
 "// Hejmpaĝo: <%s>.\n"
 "\n"
 
-#: src/location.c:93 src/scan-gram.l:926
+#: src/location.c:93 src/scan-gram.l:932
 #, c-format
 msgid "line number overflow"
 msgstr "troa lini-numero"
@@ -454,7 +454,7 @@ msgstr "malvalida valoro por '%%define'-variablo %s: %s"
 msgid "accepted value: %s"
 msgstr "akceptita valoro: %s"
 
-#: src/parse-gram.y:809
+#: src/parse-gram.y:811
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "mankas identigilo en deklaro de parametro"
@@ -664,7 +664,7 @@ msgstr " ĉe %s"
 msgid ", cannot be accessed from mid-rule action at $%d"
 msgstr ", ne povas esti alirata el mez-regula ago ĉe $%d"
 
-#: src/scan-code.l:440 src/scan-gram.l:849
+#: src/scan-code.l:440 src/scan-gram.l:855
 #, c-format
 msgid "integer out of range: %s"
 msgstr "entjero for de intervalo: %s"
@@ -720,74 +720,74 @@ msgstr "$$ de %s havas neniun deklaritan tipon"
 msgid "$%s of %s has no declared type"
 msgstr "$%s de %s havas neniun deklaritan tipon"
 
-#: src/scan-gram.l:180
+#: src/scan-gram.l:186
 #, c-format
 msgid "stray ',' treated as white space"
 msgstr "perdita ',' traktita kiel blank-spaco"
 
-#: src/scan-gram.l:270
+#: src/scan-gram.l:276
 #, c-format
 msgid "invalid directive: %s"
 msgstr "malvalida instrukcio: %s"
 
-#: src/scan-gram.l:296
+#: src/scan-gram.l:302
 #, c-format
 msgid "invalid identifier: %s"
 msgstr "malvalida identigilo: %s"
 
-#: src/scan-gram.l:348
+#: src/scan-gram.l:354
 msgid "invalid character"
 msgid_plural "invalid characters"
 msgstr[0] "malvalida signo"
 msgstr[1] "malvalidaj signoj"
 
-#: src/scan-gram.l:366
+#: src/scan-gram.l:372
 #, c-format
 msgid "invalid null character"
 msgstr "malvalida nul-signo"
 
-#: src/scan-gram.l:419
+#: src/scan-gram.l:425
 #, c-format
 msgid "unexpected identifier in bracketed name: %s"
 msgstr "neatendata identigilo en rekt-krampigita nomo: %s"
 
-#: src/scan-gram.l:441
+#: src/scan-gram.l:447
 #, c-format
 msgid "an identifier expected"
 msgstr "identigilo estas atendata"
 
-#: src/scan-gram.l:446
+#: src/scan-gram.l:452
 msgid "invalid character in bracketed name"
 msgid_plural "invalid characters in bracketed name"
 msgstr[0] "malvalida signo en rekt-krampigita nomo"
 msgstr[1] "malvalidaj signoj en rekt-krampigita nomo"
 
-#: src/scan-gram.l:538
+#: src/scan-gram.l:544
 #, c-format
 msgid "empty character literal"
 msgstr "vaka signo-litero"
 
-#: src/scan-gram.l:544
+#: src/scan-gram.l:550
 #, c-format
 msgid "extra characters in character literal"
 msgstr "kromaj signoj en signo-litero"
 
-#: src/scan-gram.l:590 src/scan-gram.l:600 src/scan-gram.l:620
+#: src/scan-gram.l:596 src/scan-gram.l:606 src/scan-gram.l:626
 #, c-format
 msgid "invalid number after \\-escape: %s"
 msgstr "malvalida numero post \\-eskapo: %s"
 
-#: src/scan-gram.l:632
+#: src/scan-gram.l:638
 #, c-format
 msgid "invalid character after \\-escape: %s"
 msgstr "malvalida signo post \\-eskapo: %s"
 
-#: src/scan-gram.l:978
+#: src/scan-gram.l:984
 #, c-format
 msgid "missing %s at end of file"
 msgstr "mankas %s ĉe la dosierfino"
 
-#: src/scan-gram.l:989
+#: src/scan-gram.l:995
 #, c-format
 msgid "missing %s at end of line"
 msgstr "mankas %s ĉe la linifino"
@@ -807,11 +807,6 @@ msgstr "tro malmultaj argumentoj por instrukcio %s en skeleto"
 msgid "too many arguments for %s directive in skeleton"
 msgstr "tro multaj argumentoj por instrukcio %s en skeleto"
 
-#: src/symlist.c:204
-#, c-format
-msgid "invalid $ value: $%d"
-msgstr "malvalida valoro $: $%d"
-
 #: src/symtab.c:75
 #, c-format
 msgid "POSIX Yacc forbids dashes in symbol names: %s"
@@ -822,91 +817,91 @@ msgstr "POSIX Yacc malpermesas strekojn en simbol-nomoj: %s"
 msgid "too many symbols in input grammar (limit is %d)"
 msgstr "tro multaj simboloj en eniga gramatiko (limo estas %d)"
 
-#: src/symtab.c:214
+#: src/symtab.c:250
 #, c-format
 msgid "%s redeclaration for %s"
 msgstr "redeklaro de %s por %s"
 
-#: src/symtab.c:226
+#: src/symtab.c:263
 #, c-format
 msgid "%s redeclaration for <%s>"
 msgstr "redeklaro de %s por <%s>"
 
-#: src/symtab.c:355
+#: src/symtab.c:392
 #, c-format
 msgid "symbol %s redefined"
 msgstr "simbolo %s estas redifinita"
 
-#: src/symtab.c:370
+#: src/symtab.c:407
 #, c-format
 msgid "symbol %s redeclared"
 msgstr "simbolo %s estas redeklarita"
 
-#: src/symtab.c:392
+#: src/symtab.c:429
 #, c-format
 msgid "redefining user token number of %s"
 msgstr "redifinado de uzant-ĵetona nombro da %s"
 
-#: src/symtab.c:422
+#: src/symtab.c:459
 #, c-format
 msgid "symbol %s is used, but is not defined as a token and has no rules"
 msgstr ""
 "simbolo %s estas uzata, sed ne estas difinita kiel ĵetono kaj havas neniun "
 "regulon"
 
-#: src/symtab.c:460
+#: src/symtab.c:497
 #, c-format
 msgid "useless %s for type <%s>"
 msgstr "neutila %s por tipo <%s>"
 
-#: src/symtab.c:465
+#: src/symtab.c:502
 #, c-format
 msgid "type <%s> is used, but is not associated to any symbol"
 msgstr ""
 "simbolo <%s> estas uzata, sed ne estas difinita kiel ĵetono kaj havas neniun "
 "regulon"
 
-#: src/symtab.c:490
+#: src/symtab.c:527
 #, c-format
 msgid "symbol %s used more than once as a literal string"
 msgstr "simbolo %s estas uzata pli ol unufoje kiel litera ĉeno"
 
-#: src/symtab.c:493
+#: src/symtab.c:530
 #, c-format
 msgid "symbol %s given more than one literal string"
 msgstr "al la simbolo %s estis donata pli ol unu litera ĉeno"
 
-#: src/symtab.c:602
+#: src/symtab.c:629
 #, c-format
 msgid "user token number %d redeclaration for %s"
 msgstr "redeklaro de uzant-ĵetono numero %d por %s"
 
-#: src/symtab.c:606
+#: src/symtab.c:633
 #, c-format
 msgid "previous declaration for %s"
 msgstr "antaŭa deklaro por %s"
 
-#: src/symtab.c:987
+#: src/symtab.c:1014
 #, c-format
 msgid "the start symbol %s is undefined"
 msgstr "la ekiga simbolo %s estas nedifinita"
 
-#: src/symtab.c:991
+#: src/symtab.c:1018
 #, c-format
 msgid "the start symbol %s is a token"
 msgstr "la ekiga simbolo %s estas ĵetono"
 
-#: src/symtab.c:1166
+#: src/symtab.c:1193
 #, c-format
 msgid "useless precedence and associativity for %s"
 msgstr "neutila prioritato kaj asocieco por %s"
 
-#: src/symtab.c:1169
+#: src/symtab.c:1196
 #, c-format
 msgid "useless precedence for %s"
 msgstr "neutila prioritato por %s"
 
-#: src/symtab.c:1173
+#: src/symtab.c:1200
 #, c-format
 msgid "useless associativity for %s, use %%precedence"
 msgstr "neutila asocieco por %s, uzu '%%precedence'"
@@ -1057,7 +1052,7 @@ msgstr "ne eblas malfermi statistikan dosieron por skribado"
 msgid "write error"
 msgstr "skrib-eraro"
 
-#: lib/error.c:188
+#: lib/error.c:191
 msgid "Unknown system error"
 msgstr "Nekonata sistem-eraro"
 
@@ -1116,17 +1111,17 @@ msgstr "%s: modifilo '-W %s' ne permesas argumenton\n"
 msgid "%s: option '-W %s' requires an argument\n"
 msgstr "%s: modifilo '-W %s' postulas argumenton\n"
 
-#: lib/obstack.c:413 lib/obstack.c:415 lib/xalloc-die.c:34
+#: lib/obstack.c:338 lib/obstack.c:340 lib/xalloc-die.c:34
 msgid "memory exhausted"
 msgstr "memoro estas plenigita"
 
-#: lib/spawn-pipe.c:140 lib/spawn-pipe.c:143 lib/spawn-pipe.c:264
-#: lib/spawn-pipe.c:267
+#: lib/spawn-pipe.c:135 lib/spawn-pipe.c:138 lib/spawn-pipe.c:259
+#: lib/spawn-pipe.c:262
 #, c-format
 msgid "cannot create pipe"
 msgstr "ne eblas krei dukton"
 
-#: lib/spawn-pipe.c:234 lib/spawn-pipe.c:348 lib/wait-process.c:282
+#: lib/spawn-pipe.c:229 lib/spawn-pipe.c:343 lib/wait-process.c:282
 #: lib/wait-process.c:356
 #, c-format
 msgid "%s subprocess failed"
@@ -1197,6 +1192,9 @@ msgstr "subprocezo %s"
 #, c-format
 msgid "%s subprocess got fatal signal %d"
 msgstr "subprocezo %s ricevis neripareblan signalon %d"
+
+#~ msgid "invalid $ value: $%d"
+#~ msgstr "malvalida valoro $: $%d"
 
 #~ msgid "empty"
 #~ msgstr "malplena"

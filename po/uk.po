@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.7.90\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2013-12-05 14:59+0100\n"
+"POT-Creation-Date: 2015-01-15 10:07+0100\n"
 "PO-Revision-Date: 2013-05-30 22:18+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <translation-team-uk@lists.sourceforge.net>\n"
@@ -47,7 +47,7 @@ msgstr "застаріла інструкція: %s, скористайтеся 
 msgid "only one %s allowed per rule"
 msgstr "у правилі допускається лише один %s"
 
-#: src/complain.c:402 src/reader.c:140 src/symtab.c:217 src/symtab.c:229
+#: src/complain.c:402 src/reader.c:140 src/symtab.c:253 src/symtab.c:266
 #, c-format
 msgid "previous declaration"
 msgstr "попереднє оголошення"
@@ -428,7 +428,7 @@ msgstr ""
 "// Домашня сторінка: <%s>.\n"
 "\n"
 
-#: src/location.c:93 src/scan-gram.l:926
+#: src/location.c:93 src/scan-gram.l:932
 #, c-format
 msgid "line number overflow"
 msgstr "переповнення номеру рядка"
@@ -472,7 +472,7 @@ msgstr "некоректне значення змінної %%define %s: %s"
 msgid "accepted value: %s"
 msgstr "прийняте значення: %s"
 
-#: src/parse-gram.y:809
+#: src/parse-gram.y:811
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "у описі параметра відсутній ідентифікатор"
@@ -687,7 +687,7 @@ msgstr " у %s"
 msgid ", cannot be accessed from mid-rule action at $%d"
 msgstr ", доступ з дії проміжного правила неможливий у $%d"
 
-#: src/scan-code.l:440 src/scan-gram.l:849
+#: src/scan-code.l:440 src/scan-gram.l:855
 #, c-format
 msgid "integer out of range: %s"
 msgstr "вихід за межі діапазону цілого числа: %s"
@@ -744,22 +744,22 @@ msgstr "$$ %s не має оголошеного типу"
 msgid "$%s of %s has no declared type"
 msgstr "$%s %s не має оголошеного типу"
 
-#: src/scan-gram.l:180
+#: src/scan-gram.l:186
 #, c-format
 msgid "stray ',' treated as white space"
 msgstr "зайва кома, вважатиметься пробілом"
 
-#: src/scan-gram.l:270
+#: src/scan-gram.l:276
 #, c-format
 msgid "invalid directive: %s"
 msgstr "некоректна директива: %s"
 
-#: src/scan-gram.l:296
+#: src/scan-gram.l:302
 #, c-format
 msgid "invalid identifier: %s"
 msgstr "некоректний ідентифікатор: %s"
 
-#: src/scan-gram.l:348
+#: src/scan-gram.l:354
 msgid "invalid character"
 msgid_plural "invalid characters"
 msgstr[0] "некоректні символи"
@@ -767,22 +767,22 @@ msgstr[1] "некоректні символи"
 msgstr[2] "некоректні символи"
 msgstr[3] "некоректний символ"
 
-#: src/scan-gram.l:366
+#: src/scan-gram.l:372
 #, c-format
 msgid "invalid null character"
 msgstr "неприпустимий null-символ"
 
-#: src/scan-gram.l:419
+#: src/scan-gram.l:425
 #, c-format
 msgid "unexpected identifier in bracketed name: %s"
 msgstr "неочікуваний ідентифікатор у назву у дужках: %s"
 
-#: src/scan-gram.l:441
+#: src/scan-gram.l:447
 #, c-format
 msgid "an identifier expected"
 msgstr "мало бути вказано ідентифікатор"
 
-#: src/scan-gram.l:446
+#: src/scan-gram.l:452
 msgid "invalid character in bracketed name"
 msgid_plural "invalid characters in bracketed name"
 msgstr[0] "некоректні символи у назві у дужках"
@@ -790,32 +790,32 @@ msgstr[1] "некоректні символи у назві у дужках"
 msgstr[2] "некоректні символи у назві у дужках"
 msgstr[3] "некоректний символ у назві у дужках"
 
-#: src/scan-gram.l:538
+#: src/scan-gram.l:544
 #, c-format
 msgid "empty character literal"
 msgstr "порожня символьна стала"
 
-#: src/scan-gram.l:544
+#: src/scan-gram.l:550
 #, c-format
 msgid "extra characters in character literal"
 msgstr "зайві символи у символьній сталій"
 
-#: src/scan-gram.l:590 src/scan-gram.l:600 src/scan-gram.l:620
+#: src/scan-gram.l:596 src/scan-gram.l:606 src/scan-gram.l:626
 #, c-format
 msgid "invalid number after \\-escape: %s"
 msgstr "некоректне число після екранування \\: %s"
 
-#: src/scan-gram.l:632
+#: src/scan-gram.l:638
 #, c-format
 msgid "invalid character after \\-escape: %s"
 msgstr "некоректний символ після екранування \\: %s"
 
-#: src/scan-gram.l:978
+#: src/scan-gram.l:984
 #, c-format
 msgid "missing %s at end of file"
 msgstr "не вистачає %s наприкінці файла"
 
-#: src/scan-gram.l:989
+#: src/scan-gram.l:995
 #, c-format
 msgid "missing %s at end of line"
 msgstr "не вистачає %s наприкінці рядка"
@@ -835,11 +835,6 @@ msgstr "занадто мало аргументів у інструкції %s 
 msgid "too many arguments for %s directive in skeleton"
 msgstr "занадто багато аргументів у інструкції %s шаблона"
 
-#: src/symlist.c:204
-#, c-format
-msgid "invalid $ value: $%d"
-msgstr "некоректне $ значення: $%d"
-
 #: src/symtab.c:75
 #, c-format
 msgid "POSIX Yacc forbids dashes in symbol names: %s"
@@ -850,88 +845,88 @@ msgstr "Yacc POSIX забороняє використання дефісів у
 msgid "too many symbols in input grammar (limit is %d)"
 msgstr "надто багато символів (лексеми плюс нетермінали); максимально %d"
 
-#: src/symtab.c:214
+#: src/symtab.c:250
 #, c-format
 msgid "%s redeclaration for %s"
 msgstr "повторний опис %s для %s"
 
-#: src/symtab.c:226
+#: src/symtab.c:263
 #, c-format
 msgid "%s redeclaration for <%s>"
 msgstr "повторний опис %s для <%s>"
 
-#: src/symtab.c:355
+#: src/symtab.c:392
 #, c-format
 msgid "symbol %s redefined"
 msgstr "повторне визначення символу %s"
 
-#: src/symtab.c:370
+#: src/symtab.c:407
 #, c-format
 msgid "symbol %s redeclared"
 msgstr "символ %s визначений повторно"
 
-#: src/symtab.c:392
+#: src/symtab.c:429
 #, c-format
 msgid "redefining user token number of %s"
 msgstr "перевизначення номера лексеми користувача для %s"
 
-#: src/symtab.c:422
+#: src/symtab.c:459
 #, c-format
 msgid "symbol %s is used, but is not defined as a token and has no rules"
 msgstr ""
 "символ %s використовується, але не визначений як лексема та не має правил"
 
-#: src/symtab.c:460
+#: src/symtab.c:497
 #, c-format
 msgid "useless %s for type <%s>"
 msgstr "непотрібне %s для типу <%s>"
 
-#: src/symtab.c:465
+#: src/symtab.c:502
 #, c-format
 msgid "type <%s> is used, but is not associated to any symbol"
 msgstr "використано тип <%s>, але його не пов’язано з жодним символом"
 
-#: src/symtab.c:490
+#: src/symtab.c:527
 #, c-format
 msgid "symbol %s used more than once as a literal string"
 msgstr "символ %s використано декілька разів як сталий рядок символів"
 
-#: src/symtab.c:493
+#: src/symtab.c:530
 #, c-format
 msgid "symbol %s given more than one literal string"
 msgstr "символ %s вказано декілька сталих рядків (літералів)"
 
-#: src/symtab.c:602
+#: src/symtab.c:629
 #, c-format
 msgid "user token number %d redeclaration for %s"
 msgstr "повторне оголошення елемента користувача з номером %d для %s"
 
-#: src/symtab.c:606
+#: src/symtab.c:633
 #, c-format
 msgid "previous declaration for %s"
 msgstr "попереднє оголошення %s"
 
-#: src/symtab.c:987
+#: src/symtab.c:1014
 #, c-format
 msgid "the start symbol %s is undefined"
 msgstr "початковий символ %s невизначений"
 
-#: src/symtab.c:991
+#: src/symtab.c:1018
 #, c-format
 msgid "the start symbol %s is a token"
 msgstr "початковий символ %s є лексемою"
 
-#: src/symtab.c:1166
+#: src/symtab.c:1193
 #, c-format
 msgid "useless precedence and associativity for %s"
 msgstr "непотрібна пріоритетність або прив’язка для %s"
 
-#: src/symtab.c:1169
+#: src/symtab.c:1196
 #, c-format
 msgid "useless precedence for %s"
 msgstr "непотрібна пріоритетність для %s"
 
-#: src/symtab.c:1173
+#: src/symtab.c:1200
 #, c-format
 msgid "useless associativity for %s, use %%precedence"
 msgstr "непотрібна прив’язка для %s, скористайтеся %%precedence"
@@ -1090,7 +1085,7 @@ msgstr "не вдалося відкрити файл статистичних �
 msgid "write error"
 msgstr "помилка запису"
 
-#: lib/error.c:188
+#: lib/error.c:191
 msgid "Unknown system error"
 msgstr "Невідома системна помилка"
 
@@ -1149,17 +1144,17 @@ msgstr "%s: додавання аргументів до параметра «-W
 msgid "%s: option '-W %s' requires an argument\n"
 msgstr "%s: до параметра «-W %s» слід додати аргумент\n"
 
-#: lib/obstack.c:413 lib/obstack.c:415 lib/xalloc-die.c:34
+#: lib/obstack.c:338 lib/obstack.c:340 lib/xalloc-die.c:34
 msgid "memory exhausted"
 msgstr "пам'ять вичерпано"
 
-#: lib/spawn-pipe.c:140 lib/spawn-pipe.c:143 lib/spawn-pipe.c:264
-#: lib/spawn-pipe.c:267
+#: lib/spawn-pipe.c:135 lib/spawn-pipe.c:138 lib/spawn-pipe.c:259
+#: lib/spawn-pipe.c:262
 #, c-format
 msgid "cannot create pipe"
 msgstr "не вдалося створити канал"
 
-#: lib/spawn-pipe.c:234 lib/spawn-pipe.c:348 lib/wait-process.c:282
+#: lib/spawn-pipe.c:229 lib/spawn-pipe.c:343 lib/wait-process.c:282
 #: lib/wait-process.c:356
 #, c-format
 msgid "%s subprocess failed"
@@ -1230,6 +1225,9 @@ msgstr "Підпроцес %s"
 #, c-format
 msgid "%s subprocess got fatal signal %d"
 msgstr "Підпроцесом %s отримано сигнал щодо аварійного завершення %d"
+
+#~ msgid "invalid $ value: $%d"
+#~ msgstr "некоректне $ значення: $%d"
 
 #~ msgid "empty"
 #~ msgstr "порожній"
