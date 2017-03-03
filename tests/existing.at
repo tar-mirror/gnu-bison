@@ -1,22 +1,20 @@
 # Exercising Bison on actual grammars.                   -*- Autotest -*-
 
-# Copyright (C) 1989, 1990, 1991, 1992, 2000, 2001, 2002, 2003, 2004, 2005
-# Free Software Foundation, Inc.
+# Copyright (C) 1989, 1990, 1991, 1992, 2000, 2001, 2002, 2003, 2004, 2005,
+# 2007 Free Software Foundation, Inc.
 
-# This program is free software; you can redistribute it and/or modify
+# This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2, or (at your option)
-# any later version.
-
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-
+#
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-# 02110-1301, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 AT_BANNER([[Existing Grammars.]])
 ## ----------------- ##
@@ -353,7 +351,7 @@ comma	: ',' opt_nls
 # Pass plenty of options, to exercise plenty of code, even if we
 # don't actually check the output.  But SEGV is watching us, and
 # so might do dmalloc.
-AT_CHECK([[bison --verbose --defines input.y]])
+AT_BISON_CHECK([[--verbose --defines input.y]])
 
 AT_CLEANUP
 
@@ -955,7 +953,7 @@ ARGUMENT_LIST   :       EXPRESSION
 # Pass plenty of options, to exercise plenty of code, even if we
 # don't actually check the output.  But SEGV is watching us, and
 # so might do dmalloc.
-AT_CHECK([[bison --verbose --defines input.y]], 0, [],
+AT_BISON_CHECK([[--verbose --defines input.y]], 0, [],
 [[input.y: conflicts: 78 shift/reduce, 10 reduce/reduce
 ]])
 
@@ -1268,7 +1266,7 @@ element:
 	| LABEL ':' optional_separator element
 	| LABEL ':' optional_separator position_not_place
 	| LABEL ':' optional_separator place
-	| '{}'
+	| '{' {} element_list '}'
 		{}
 	  optional_element
 	| placeless_element
@@ -1520,6 +1518,8 @@ expr:
 # Pass plenty of options, to exercise plenty of code, even if we
 # don't actually check the output.  But SEGV is watching us, and
 # so might do dmalloc.
-AT_CHECK([[bison --verbose --defines input.y]], 0, [], [])
+AT_BISON_CHECK([[--verbose --defines input.y]], 0, [],
+[[input.y:453.11-48: warning: rule useless in parser due to conflicts: path: ORDINAL LAST object_type relative_path
+]])
 
 AT_CLEANUP

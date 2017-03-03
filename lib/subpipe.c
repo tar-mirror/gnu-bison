@@ -2,10 +2,10 @@
 
    Copyright (C) 2002, 2004, 2005, 2006 Free Software Foundation, Inc.
 
-   This program is free software; you can redistribute it and/or modify
+   This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
-   any later version.
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -13,15 +13,12 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software Foundation,
-   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.  */
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* Written by Paul Eggert <eggert@twinsun.com>
    and Florian Krohm <florian@edamail.fishkill.ibm.com>.  */
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
+#include <config.h>
 
 #include "subpipe.h"
 
@@ -34,9 +31,7 @@
 
 #include <stdlib.h>
 
-#if HAVE_UNISTD_H
-# include <unistd.h>
-#endif
+#include <unistd.h>
 #ifndef STDIN_FILENO
 # define STDIN_FILENO 0
 #endif
@@ -113,19 +108,15 @@ create_subpipe (char const * const *argv, int fd[2])
   int child_fd[2];
   pid_t pid;
 
-  if (pipe (child_fd) != 0
-      || (child_fd[0] = fd_safer (child_fd[0])) < 0
-      || (fd[0] = fd_safer (child_fd[1])) < 0
-      || pipe (pipe_fd) != 0
-      || (fd[1] = fd_safer (pipe_fd[0])) < 0
-      || (child_fd[1] = fd_safer (pipe_fd[1])) < 0)
-    error (EXIT_FAILURE, errno,
-	   "pipe");
+  if (pipe_safer (child_fd) != 0 || pipe_safer (pipe_fd) != 0)
+    error (EXIT_FAILURE, errno, "pipe");
+  fd[0] = child_fd[1];
+  fd[1] = pipe_fd[0];
+  child_fd[1] = pipe_fd[1];
 
   pid = vfork ();
   if (pid < 0)
-    error (EXIT_FAILURE, errno,
-	   "fork");
+    error (EXIT_FAILURE, errno, "fork");
 
   if (! pid)
     {
@@ -160,8 +151,7 @@ reap_subpipe (pid_t pid, char const *program)
 #if HAVE_WAITPID || defined waitpid
   int wstatus;
   if (waitpid (pid, &wstatus, 0) < 0)
-    error (EXIT_FAILURE, errno,
-	   "waitpid");
+    error (EXIT_FAILURE, errno, "waitpid");
   else
     {
       int status = WIFEXITED (wstatus) ? WEXITSTATUS (wstatus) : -1;

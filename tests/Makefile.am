@@ -2,23 +2,21 @@
 
 ## Makefile for Bison testsuite.
 
-## Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software
-## Foundation, Inc.
+## Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Free
+## Software Foundation, Inc.
 
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation; either version 2, or (at your option)
-## any later version.
-
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-
-## You should have received a copy of the GNU General Public License
-## along with this program; if not, write to the Free Software
-## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-## 02110-1301, USA.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 EXTRA_DIST = $(TESTSUITE_AT) testsuite package.m4
 
@@ -29,7 +27,7 @@ MAINTAINERCLEANFILES = Makefile.in $(TESTSUITE)
 ## package.m4.  ##
 ## ------------ ##
 
-$(srcdir)/package.m4: $(top_srcdir)/configure.ac
+$(srcdir)/package.m4: $(top_srcdir)/configure
 	{ \
 	  echo '# Signature of the current package.'; \
 	  echo 'm4_define([AT_PACKAGE_NAME],      [$(PACKAGE_NAME)])'; \
@@ -47,12 +45,14 @@ TESTSUITE_AT = \
 	local.at \
 	testsuite.at \
 	input.at \
-	output.at sets.at reduce.at \
+	output.at sets.at reduce.at skeletons.at \
 	synclines.at headers.at actions.at conflicts.at \
 	calc.at \
         torture.at existing.at regression.at \
         c++.at \
-	cxx-type.at glr-regression.at
+        java.at \
+	cxx-type.at glr-regression.at \
+	push.at
 
 TESTSUITE = $(srcdir)/testsuite
 
@@ -88,7 +88,16 @@ maintainer-check-posix: $(TESTSUITE)
 .PHONY: maintainer-check-valgrind
 maintainer-check-valgrind: $(TESTSUITE)
 	test -z '$(VALGRIND)' || \
+	   VALGRIND_OPTS='--leak-check=full --show-reachable=yes' \
 	   $(TESTSUITE) PREBISON='$(VALGRIND) -q' PREPARSER='$(VALGRIND) -q'
 
 .PHONY: maintainer-check
 maintainer-check: maintainer-check-posix maintainer-check-valgrind maintainer-check-g++
+
+.PHONY: maintainer-push-check
+maintainer-push-check:
+	BISON_USE_PUSH_FOR_PULL=1 $(MAKE) $(AM_MAKEFLAGS) maintainer-check
+
+.PHONY: maintainer-xml-check
+maintainer-xml-check:
+	BISON_TEST_XML=1 $(MAKE) $(AM_MAKEFLAGS) maintainer-check

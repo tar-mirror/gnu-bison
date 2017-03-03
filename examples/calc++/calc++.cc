@@ -1,4 +1,4 @@
-#line 7704 "../../doc/bison.texinfo"
+#line 8710 "../../doc/bison.texinfo"
 #include <iostream>
 #include "calc++-driver.hh"
 
@@ -11,9 +11,6 @@ main (int argc, char *argv[])
       driver.trace_parsing = true;
     else if (*argv == std::string ("-s"))
       driver.trace_scanning = true;
-    else
-      {
-	driver.parse (*argv);
-	std::cout << driver.result << std::endl;
-      }
+    else if (!driver.parse (*argv))
+      std::cout << driver.result << std::endl;
 }

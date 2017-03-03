@@ -1,11 +1,11 @@
-# getopt.m4 serial 12
-dnl Copyright (C) 2002, 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
+# getopt.m4 serial 14
+dnl Copyright (C) 2002-2006, 2008 Free Software Foundation, Inc.
 dnl This file is free software; the Free Software Foundation
 dnl gives unlimited permission to copy and/or distribute it,
 dnl with or without modifications, as long as this notice is preserved.
 
 # The getopt module assume you want GNU getopt, with getopt_long etc,
-# rather than vanilla POSIX getopt.  This means your your code should
+# rather than vanilla POSIX getopt.  This means your code should
 # always include <getopt.h> for the getopt prototypes.
 
 AC_DEFUN([gl_GETOPT_SUBSTITUTE],
@@ -46,7 +46,7 @@ AC_DEFUN([gl_GETOPT_CHECK_HEADERS],
   if test -z "$GETOPT_H"; then
     AC_CACHE_CHECK([for working GNU getopt function], [gl_cv_func_gnu_getopt],
       [AC_RUN_IFELSE(
-	[AC_LANG_PROGRAM([#include <getopt.h>],
+	[AC_LANG_PROGRAM([[#include <getopt.h>]],
 	   [[
 	     char *myargv[3];
 	     myargv[0] = "conftest";

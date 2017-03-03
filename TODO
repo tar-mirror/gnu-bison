@@ -12,6 +12,8 @@ They should not: it is not documented.  But if they need to, let's
 find something clean (not like YYLSP_NEEDED...).
 
 
+* Installation
+
 * Documentation
 Before releasing, make sure the documentation ("Understanding your
 parser") refers to the current `output' format.
@@ -27,7 +29,7 @@ Catch up with yacc.c.
 
 **  GLR
 How would Paul like to display the conflicted actions?  In particular,
-what when two reductions are possible on a given look-ahead token, but one is
+what when two reductions are possible on a given lookahead token, but one is
 part of $default.  Should we make the two reductions explicit, or just
 keep $default?  See the following point.
 
@@ -46,6 +48,9 @@ features, or should we have several very small grammars?
 Provide better assistance for understanding the conflicts by providing
 a sample text exhibiting the (LALR) ambiguity.  See the paper from
 DeRemer and Penello: they already provide the algorithm.
+
+** Statically check for potential ambiguities in GLR grammars.  See
+<http://www.i3s.unice.fr/~schmitz/papers.html#expamb> for an approach.
 
 
 * Extensions
@@ -142,23 +147,6 @@ Are there any Texinfo standards for bibliography?
 * Java, Fortran, etc.
 
 
-** Java
-
-There are a couple of proposed outputs:
-
-- BYACC/J
-  which is based on Byacc.
-  <http://troi.lincom-asg.com/~rjamison/byacc/>
-
-- Bison Java
-  which is based on Bison.
-  <http://www.goice.co.jp/member/mo/hack-progs/bison-java.html>
-
-Sebastien Serrurier (serrur_s@epita.fr) is working on this: he is
-expected to contact the authors, design the output, and implement it
-into Bison.
-
-
 * Coding system independence
 Paul notes:
 
@@ -180,10 +168,9 @@ Paul notes:
 Show reductions.
 
 * Broken options ?
-** %no-parser
 ** %token-table
 ** Skeleton strategy
-Must we keep %no-parser?  %token-table?
+Must we keep %token-table?
 
 * src/print_graph.c
 Find the best graph parameters.
@@ -218,9 +205,6 @@ Have them support yysymprint, yydestruct and so forth.
 It is unfortunate that there is a total order for precedence.  It
 makes it impossible to have modular precedence information.  We should
 move to partial orders (sounds like series/parallel orders to me).
-
-This will be possible with a Bison parser for the grammar, as it will
-make it much easier to extend the grammar.
 
 ** Correlation b/w precedence and associativity
 Also, I fail to understand why we have to assign the same
@@ -301,9 +285,8 @@ at the proper place to bison.simple. Ditto for YYACT_PROLOGUE.
 I was wondering what you think about adding YYACT_PROLOGUE/EPILOGUE
 to bison. If you're interested, I'll work on a patch.
 
-* Move to Graphviz
-Well, VCG seems really dead.  Move to Graphviz instead.  Also, equip
-the parser with a means to create the (visual) parse tree.
+* Better graphics
+Equip the parser with a means to create the (visual) parse tree.
 
 -----
 
@@ -312,17 +295,15 @@ Inc.
 
 This file is part of Bison, the GNU Compiler Compiler.
 
-Bison is free software; you can redistribute it and/or modify
+This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2, or (at your option)
-any later version.
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-Bison is distributed in the hope that it will be useful,
+This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Bison; see the file COPYING.  If not, write to
-the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-Boston, MA 02110-1301, USA.
+along with this program.  If not, see <http://www.gnu.org/licenses/>.

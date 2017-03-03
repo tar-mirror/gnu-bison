@@ -1,12 +1,12 @@
 /* System-dependent definitions for Bison.
 
-   Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free
+   Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Free
    Software Foundation, Inc.
 
-   This program is free software; you can redistribute it and/or modify
+   This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
-   any later version.
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -14,8 +14,7 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software Foundation,
-   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.  */
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #ifndef BISON_SYSTEM_H
 #define BISON_SYSTEM_H
@@ -41,41 +40,27 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "unlocked-io.h"
-
 #if HAVE_SYS_TYPES_H
 # include <sys/types.h>
 #endif
 
-#if HAVE_UNISTD_H
-# include <unistd.h>
-#endif
+#include <unistd.h>
+#include <inttypes.h>
 
-#if HAVE_INTTYPES_H
-# include <inttypes.h>
-#endif
-#if HAVE_STDINT_H
-# include <stdint.h>
-#endif
-
-#if ! HAVE_UINTPTR_T
+#ifndef UINTPTR_MAX
 /* This isn't perfect, but it's good enough for Bison, which needs
    only to hash pointers.  */
 typedef size_t uintptr_t;
 #endif
 
+
+/*---------.
+| Gnulib.  |
+`---------*/
+
+#include <unlocked-io.h>
 #include <verify.h>
 #include <xalloc.h>
-
-
-/*---------------------.
-| Missing prototypes.  |
-`---------------------*/
-
-#include <stpcpy.h>
-
-/* From lib/basename.c. */
-char *base_name (char const *name);
 
 
 /*-----------------.
@@ -113,6 +98,8 @@ char *base_name (char const *name);
 # define ATTRIBUTE_UNUSED __attribute__ ((__unused__))
 #endif
 
+#define FUNCTION_PRINT() fprintf (stderr, "%s: ", __func__)
+
 /*------.
 | NLS.  |
 `------*/
@@ -124,20 +111,26 @@ char *base_name (char const *name);
 #define N_(Msgid) (Msgid)
 
 
-/*-------------------------------.
-| Fix broken compilation flags.  |
-`-------------------------------*/
-
-#ifndef LOCALEDIR
-# define LOCALEDIR "/usr/local/share/locale"
-#endif
-
-
 /*-----------.
 | Booleans.  |
 `-----------*/
 
 #include <stdbool.h>
+
+
+
+/*-------------.
+| Assertions.  |
+`-------------*/
+
+/* <assert.h>'s assertions are too heavyweight, and can be disabled
+   too easily, so use aver rather than assert.  */
+static inline void
+aver (bool assertion)
+{
+  if (! assertion)
+    abort ();
+}
 
 
 /*-----------.
@@ -212,11 +205,6 @@ do {						\
       free (_node);				\
     }						\
 } while (0)
-
-
-/* Assertions.  <assert.h>'s assertions are too heavyweight, and can
-   be disabled too easily, so implement it separately here.  */
-#define assert(x) ((void) ((x) || (abort (), 0)))
 
 
 /*---------------------------------------------.

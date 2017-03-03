@@ -1,22 +1,20 @@
 /* Locations for Bison
-   Copyright (C) 2002, 2004, 2005, 2006 Free Software Foundation, Inc.
+   Copyright (C) 2002, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
-   Bison is free software; you can redistribute it and/or modify
+   This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
-   any later version.
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
-   Bison is distributed in the hope that it will be useful,
+   This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with Bison; see the file COPYING.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.  */
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #ifndef LOCATION_H_
 # define LOCATION_H_
@@ -40,6 +38,15 @@ typedef struct
 
 } boundary;
 
+/* Set the position of \a a. */
+static inline void
+boundary_set (boundary *b, const char *f, int l, int c)
+{
+  b->file = f;
+  b->line = l;
+  b->column = c;
+}
+
 /* Return nonzero if A and B are equal boundaries.  */
 static inline bool
 equal_boundaries (boundary a, boundary b)
@@ -62,8 +69,17 @@ typedef struct
 
 #define YYLTYPE location
 
+#define EMPTY_LOCATION_INIT {{NULL, 0, 0}, {NULL, 0, 0}}
 extern location const empty_location;
 
+/* Set *LOC and adjust scanner cursor to account for token TOKEN of
+   size SIZE.  */
+void location_compute (location *loc,
+		       boundary *cur, char const *token, size_t size);
+
 void location_print (FILE *out, location loc);
+
+/* LOC_STR must be formatted as `file:line.column', it will be modified.  */
+void boundary_set_from_string (boundary *bound, char *loc_str);
 
 #endif /* ! defined LOCATION_H_ */

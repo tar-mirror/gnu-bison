@@ -1,11 +1,13 @@
+/* -*- buffer-read-only: t -*- vi: set ro: */
+/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 /* Compare strings while treating digits characters numerically.
-   Copyright (C) 1997, 2000, 2002, 2004 Free Software Foundation, Inc.
+   Copyright (C) 1997, 2000, 2002, 2004, 2006 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Jean-François Bignolles <bignolle@ecoledoc.ibp.fr>, 1997.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
+   the Free Software Foundation; either version 3, or (at your option)
    any later version.
 
    This program is distributed in the hope that it will be useful,
@@ -17,7 +19,7 @@
    with this program; if not, write to the Free Software Foundation,
    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.  */
 
-#ifdef HAVE_CONFIG_H
+#if !_LIBC
 # include <config.h>
 #endif
 
@@ -37,11 +39,11 @@
 
 
 /* ISDIGIT differs from isdigit, as follows:
-   - Its arg may be any int or unsigned int; it need not be an unsigned char.
-   - It's guaranteed to evaluate its argument exactly once.
+   - Its arg may be any int or unsigned int; it need not be an unsigned char
+     or EOF.
    - It's typically faster.
    POSIX says that only '0' through '9' are digits.  Prefer ISDIGIT to
-   ISDIGIT_LOCALE unless it's important to use the locale's definition
+   isdigit unless it's important to use the locale's definition
    of `digit' even when the host does not conform to POSIX.  */
 #define ISDIGIT(c) ((unsigned int) (c) - '0' <= 9)
 

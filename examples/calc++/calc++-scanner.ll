@@ -57,8 +57,13 @@ void
 calcxx_driver::scan_begin ()
 {
   yy_flex_debug = trace_scanning;
-  if (!(yyin = fopen (file.c_str (), "r")))
-    error (std::string ("cannot open ") + file);
+  if (file == "-")
+    yyin = stdin;
+  else if (!(yyin = fopen (file.c_str (), "r")))
+    {
+      error (std::string ("cannot open ") + file);
+      exit (1);
+    }
 }
 
 void

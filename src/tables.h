@@ -3,20 +3,18 @@
 
    This file is part of Bison, the GNU Compiler Compiler.
 
-   Bison is free software; you can redistribute it and/or modify it
-   under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
-   any later version.
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
-   Bison is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with Bison; see the file COPYING.  If not, write to the Free
-   Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-   02110-1301, USA.  */
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #ifndef TABLES_H_
 # define TABLES_H_
@@ -56,7 +54,7 @@
    something else to do.
 
    YYPACT[S] = index in YYTABLE of the portion describing state S.
-   The look-ahead token's type is used to index that portion to find
+   The lookahead token's type is used to index that portion to find
    out what to do.
 
    If the value in YYTABLE is positive, we shift the token and go to

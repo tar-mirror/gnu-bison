@@ -1,22 +1,20 @@
 # Bison Regressions.                               -*- Autotest -*-
 
-# Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006 Free Software
+# Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Free Software
 # Foundation, Inc.
 
-# This program is free software; you can redistribute it and/or modify
+# This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2, or (at your option)
-# any later version.
-
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-
+#
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-# 02110-1301, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 AT_BANNER([[Regression tests.]])
 
@@ -41,7 +39,7 @@ int yylex (void);
 program: 'x';
 ]])
 
-AT_CHECK([bison -o input.c input.y])
+AT_BISON_CHECK([-o input.c input.y])
 AT_COMPILE([input.o], [-c input.c])
 AT_COMPILE([input.o], [-DYYDEBUG -c input.c])
 
@@ -49,12 +47,39 @@ AT_CLEANUP
 
 
 
-## ------------------------- ##
-## Early token definitions.  ##
-## ------------------------- ##
+## ----------------- ##
+## YYSTYPE typedef.  ##
+## ----------------- ##
+
+AT_SETUP([YYSTYPE typedef])
+
+AT_DATA_GRAMMAR([input.y],
+[[%{
+void yyerror (char const *);
+int yylex (void);
+typedef union { char const *val; } YYSTYPE;
+%}
+
+%type <val> program
+
+%%
+
+program: { $$ = ""; };
+]])
+
+AT_BISON_CHECK([-o input.c input.y])
+AT_COMPILE([input.o], [-c input.c])
+
+AT_CLEANUP
 
 
-AT_SETUP([Early token definitions])
+
+## ------------------------------------- ##
+## Early token definitions with --yacc.  ##
+## ------------------------------------- ##
+
+
+AT_SETUP([Early token definitions with --yacc])
 
 # Found in GCJ: they expect the tokens to be defined before the user
 # prologue, so that they can use the token definitions in it.
@@ -80,7 +105,50 @@ exp: MY_TOKEN;
 %%
 ]])
 
-AT_CHECK([bison -o input.c input.y])
+AT_BISON_CHECK([-y -o input.c input.y])
+AT_COMPILE([input.o], [-c input.c])
+
+AT_CLEANUP
+
+
+
+## ---------------------------------------- ##
+## Early token definitions without --yacc.  ##
+## ---------------------------------------- ##
+
+
+AT_SETUP([Early token definitions without --yacc])
+
+# Found in GCJ: they expect the tokens to be defined before the user
+# prologue, so that they can use the token definitions in it.
+
+AT_DATA_GRAMMAR([input.y],
+[[%{
+#include <stdio.h>
+void yyerror (const char *s);
+int yylex (void);
+void print_my_token (void);
+%}
+
+%union
+{
+  int val;
+};
+%{
+void
+print_my_token (void)
+{
+  enum yytokentype my_token = MY_TOKEN;
+  printf ("%d\n", my_token);
+}
+%}
+%token MY_TOKEN
+%%
+exp: MY_TOKEN;
+%%
+]])
+
+AT_BISON_CHECK([-o input.c input.y])
 AT_COMPILE([input.o], [-c input.c])
 
 AT_CLEANUP
@@ -102,7 +170,7 @@ exp: { tests = {{{{{{{{{{}}}}}}}}}}; };
 %%
 ]])
 
-AT_CHECK([bison -v -o input.c input.y])
+AT_BISON_CHECK([-v -o input.c input.y])
 
 AT_CHECK([grep 'tests = {{{{{{{{{{}}}}}}}}}};' input.c], 0, [ignore])
 
@@ -129,7 +197,7 @@ exp: '(' exp ')' | NUM ;
 %%
 ]])
 
-AT_CHECK([bison -v -o input.c input.y], 0, [],
+AT_BISON_CHECK([-v -o input.c input.y], 0, [],
 [[input.y:6.8-14: warning: symbol `"<="' used more than once as a literal string
 ]])
 
@@ -174,7 +242,7 @@ expr:
 };
 ]])
 
-AT_CHECK([bison -o input.c -v input.y])
+AT_BISON_CHECK([-o input.c -v input.y])
 
 # Check the contents of the report.
 AT_CHECK([cat input.output], [],
@@ -182,13 +250,13 @@ AT_CHECK([cat input.output], [],
 
     0 $accept: expr $end
 
-    1 @1: /* empty */
+    1 $@1: /* empty */
 
-    2 expr: 'a' @1 'b'
+    2 expr: 'a' $@1 'b'
 
-    3 @2: /* empty */
+    3 $@2: /* empty */
 
-    4 expr: @2 'c'
+    4 expr: $@2 'c'
 
 
 Terminals, with rules where they appear
@@ -206,9 +274,9 @@ $accept (6)
     on left: 0
 expr (7)
     on left: 2 4, on right: 0
-@1 (8)
+$@1 (8)
     on left: 1, on right: 2
-@2 (9)
+$@2 (9)
     on left: 3, on right: 4
 
 
@@ -218,19 +286,19 @@ state 0
 
     'a'  shift, and go to state 1
 
-    $default  reduce using rule 3 (@2)
+    $default  reduce using rule 3 ($@2)
 
     expr  go to state 2
-    @2    go to state 3
+    $@2   go to state 3
 
 
 state 1
 
-    2 expr: 'a' . @1 'b'
+    2 expr: 'a' . $@1 'b'
 
-    $default  reduce using rule 1 (@1)
+    $default  reduce using rule 1 ($@1)
 
-    @1  go to state 4
+    $@1  go to state 4
 
 
 state 2
@@ -242,14 +310,14 @@ state 2
 
 state 3
 
-    4 expr: @2 . 'c'
+    4 expr: $@2 . 'c'
 
     'c'  shift, and go to state 6
 
 
 state 4
 
-    2 expr: 'a' @1 . 'b'
+    2 expr: 'a' $@1 . 'b'
 
     'b'  shift, and go to state 7
 
@@ -263,14 +331,14 @@ state 5
 
 state 6
 
-    4 expr: @2 'c' .
+    4 expr: $@2 'c' .
 
     $default  reduce using rule 4 (expr)
 
 
 state 7
 
-    2 expr: 'a' @1 'b' .
+    2 expr: 'a' $@1 'b' .
 
     $default  reduce using rule 2 (expr)
 ]])
@@ -296,7 +364,7 @@ exp: ;
 %%
 ]])
 
-AT_CHECK([bison -v -o input.c input.y])
+AT_BISON_CHECK([-v -o input.c input.y])
 
 AT_CLEANUP
 
@@ -319,7 +387,7 @@ default: 'a' }
 %{
 ]])
 
-AT_CHECK([bison input.y], [1], [],
+AT_BISON_CHECK([input.y], [1], [],
 [[input.y:2.1: invalid character: `?'
 input.y:3.14: invalid character: `}'
 input.y:4.1: invalid character: `%'
@@ -328,6 +396,7 @@ input.y:5.1-17: invalid directive: `%a-does-not-exist'
 input.y:6.1: invalid character: `%'
 input.y:6.2: invalid character: `-'
 input.y:7.1-8.0: missing `%}' at end of file
+input.y:7.1-8.0: syntax error, unexpected %{...%}
 ]])
 
 AT_CLEANUP
@@ -345,10 +414,8 @@ AT_DATA([input.y],
 %union
 ]])
 
-AT_CHECK([bison input.y], [1], [],
-[[input.y:3.1: missing `{' in "%destructor {...}"
-input.y:4.1: missing `{' in "%initial-action {...}"
-input.y:4.1: syntax error, unexpected %initial-action {...}, expecting string or identifier
+AT_BISON_CHECK([input.y], [1], [],
+[[input.y:3.1-15: syntax error, unexpected %initial-action, expecting {...}
 ]])
 
 AT_CLEANUP
@@ -365,6 +432,7 @@ AT_SETUP([Token definitions])
 # Bison managed, when fed with `%token 'f' "f"' to #define 'f'!
 AT_DATA_GRAMMAR([input.y],
 [%{
+#include <stdlib.h>
 #include <stdio.h>
 void yyerror (const char *s);
 int yylex (void);
@@ -375,6 +443,7 @@ int yylex (void);
 %token B_TOKEN "b"
 %token C_TOKEN 'c'
 %token 'd' D_TOKEN
+%token SPECIAL "\\\'\?\"\a\b\f\n\r\t\v\001\201\x001\x000081??!"
 %token SPECIAL "\\\'\?\"\a\b\f\n\r\t\v\001\201\x001\x000081??!"
 %%
 exp: "a" "\\\'\?\"\a\b\f\n\r\t\v\001\201\x001\x000081??!";
@@ -388,6 +457,9 @@ yyerror (char const *s)
 int
 yylex (void)
 {
+  static int called;
+  if (called++)
+    abort ();
   return SPECIAL;
 }
 
@@ -398,10 +470,22 @@ main (void)
 }
 ]])
 
-AT_CHECK([bison -o input.c input.y])
+# Checking the warning message guarantees that the trigraph "??!" isn't
+# unnecessarily escaped here even though it would need to be if encoded in a
+# C-string literal.  Also notice that unnecessary escaping, such as "\?", from
+# the user specification is eliminated.
+AT_BISON_CHECK([-o input.c input.y], [[0]], [[]],
+[[input.y:22.8-14: warning: symbol SPECIAL redeclared
+input.y:22.8-63: warning: symbol `"\\'?\"\a\b\f\n\r\t\v\001\201\001\201??!"' used more than once as a literal string
+]])
 AT_COMPILE([input])
+
+# Checking the error message here guarantees that yytname, which does contain
+# C-string literals, does have the trigraph escaped correctly.  Thus, the
+# symbol name reported by the parser is exactly the same as that reported by
+# Bison itself.
 AT_DATA([experr],
-[[syntax error, unexpected "\\'?\"\a\b\f\n\r\t\v\001\201\001\201?\?!", expecting a
+[[syntax error, unexpected "\\'?\"\a\b\f\n\r\t\v\001\201\001\201??!", expecting a
 ]])
 AT_PARSER_CHECK([./input], 1, [], [experr])
 AT_CLEANUP
@@ -429,7 +513,7 @@ exp:
 ]])
 # Pacify font-lock-mode: "
 
-AT_CHECK([bison -o input.c input.y])
+AT_BISON_CHECK([-o input.c input.y])
 AT_COMPILE([input.o], [-c input.c])
 AT_CLEANUP
 
@@ -469,7 +553,7 @@ CONST_DEC:
 %%
 ]])
 
-AT_CHECK([bison -v input.y])
+AT_BISON_CHECK([-v input.y])
 AT_CHECK([cat input.output], 0,
 [[Grammar
 
@@ -480,9 +564,9 @@ AT_CHECK([cat input.output], 0,
     2 CONST_DEC_LIST: CONST_DEC
     3               | CONST_DEC_LIST CONST_DEC
 
-    4 @1: /* empty */
+    4 $@1: /* empty */
 
-    5 CONST_DEC: @1 undef_id_tok '=' const_id_tok ';'
+    5 CONST_DEC: $@1 undef_id_tok '=' const_id_tok ';'
 
 
 Terminals, with rules where they appear
@@ -505,7 +589,7 @@ CONST_DEC_LIST (9)
     on left: 2 3, on right: 1 3
 CONST_DEC (10)
     on left: 5, on right: 2 3
-@1 (11)
+$@1 (11)
     on left: 4, on right: 5
 
 
@@ -513,12 +597,12 @@ state 0
 
     0 $accept: . CONST_DEC_PART $end
 
-    $default  reduce using rule 4 (@1)
+    $default  reduce using rule 4 ($@1)
 
     CONST_DEC_PART  go to state 1
     CONST_DEC_LIST  go to state 2
     CONST_DEC       go to state 3
-    @1              go to state 4
+    $@1             go to state 4
 
 
 state 1
@@ -533,11 +617,11 @@ state 2
     1 CONST_DEC_PART: CONST_DEC_LIST .
     3 CONST_DEC_LIST: CONST_DEC_LIST . CONST_DEC
 
-    undef_id_tok  reduce using rule 4 (@1)
+    undef_id_tok  reduce using rule 4 ($@1)
     $default      reduce using rule 1 (CONST_DEC_PART)
 
     CONST_DEC  go to state 6
-    @1         go to state 4
+    $@1        go to state 4
 
 
 state 3
@@ -549,7 +633,7 @@ state 3
 
 state 4
 
-    5 CONST_DEC: @1 . undef_id_tok '=' const_id_tok ';'
+    5 CONST_DEC: $@1 . undef_id_tok '=' const_id_tok ';'
 
     undef_id_tok  shift, and go to state 7
 
@@ -570,28 +654,28 @@ state 6
 
 state 7
 
-    5 CONST_DEC: @1 undef_id_tok . '=' const_id_tok ';'
+    5 CONST_DEC: $@1 undef_id_tok . '=' const_id_tok ';'
 
     '='  shift, and go to state 8
 
 
 state 8
 
-    5 CONST_DEC: @1 undef_id_tok '=' . const_id_tok ';'
+    5 CONST_DEC: $@1 undef_id_tok '=' . const_id_tok ';'
 
     const_id_tok  shift, and go to state 9
 
 
 state 9
 
-    5 CONST_DEC: @1 undef_id_tok '=' const_id_tok . ';'
+    5 CONST_DEC: $@1 undef_id_tok '=' const_id_tok . ';'
 
     ';'  shift, and go to state 10
 
 
 state 10
 
-    5 CONST_DEC: @1 undef_id_tok '=' const_id_tok ';' .
+    5 CONST_DEC: $@1 undef_id_tok '=' const_id_tok ';' .
 
     $default  reduce using rule 5 (CONST_DEC)
 ]])
@@ -634,10 +718,9 @@ else: "else" statement;
 %%
 ]])
 
-AT_CHECK([bison -v -o input.c input.y])
+AT_BISON_CHECK([-v -o input.c input.y])
 
-# Check only the tables.  We don't use --no-parser, because it is
-# still to be implemented in the experimental branch of Bison.
+# Check only the tables.
 [sed -n 's/  *$//;/^static const.*\[\] =/,/^}/p' input.c >tables.c]
 
 AT_CHECK([[cat tables.c]], 0,
@@ -753,7 +836,8 @@ m4_define([_AT_DATA_DANCER_Y],
 [%{
 static int yylex (AT_LALR1_CC_IF([int *], [void]));
 AT_LALR1_CC_IF([],
-[#include <stdio.h>
+[#include <stdlib.h>
+#include <stdio.h>
 static void yyerror (const char *);])
 %}
 $1
@@ -812,7 +896,9 @@ int
 yyparse ()
 {
   yy::parser parser;
-  parser.set_debug_level (!!YYDEBUG);
+#if YYDEBUG
+  parser.set_debug_level (YYDEBUG);
+#endif
   return parser.parse ();
 }
 ],
@@ -825,12 +911,14 @@ yyerror (const char *s)
 static int
 yylex (AT_LALR1_CC_IF([int *lval], [void]))
 [{
-  static int toknum = 0;
-  static int tokens[] =
+  static int const tokens[] =
     {
       ':', -1
     };
+  static size_t toknum;
   ]AT_LALR1_CC_IF([*lval = 0; /* Pacify GCC.  */])[
+  if (! (toknum < sizeof tokens / sizeof *tokens))
+    abort ();
   return tokens[toknum++];
 }]
 
@@ -850,11 +938,11 @@ m4_define([AT_CHECK_DANCER],
 [AT_SETUP([Dancer $1])
 AT_BISON_OPTION_PUSHDEFS([$1])
 _AT_DATA_DANCER_Y([$1])
-AT_CHECK([bison -o dancer.c dancer.y])
+AT_BISON_CHECK([-o dancer.c dancer.y])
 AT_LALR1_CC_IF(
-  [AT_CHECK([bison -o dancer.cc dancer.y])
+  [AT_BISON_CHECK([-o dancer.cc dancer.y])
    AT_COMPILE_CXX([dancer])],
-  [AT_CHECK([bison -o dancer.c dancer.y])
+  [AT_BISON_CHECK([-o dancer.c dancer.y])
    AT_COMPILE([dancer])])
 AT_PARSER_CHECK([./dancer], 1, [],
 [syntax error, unexpected ':'
@@ -881,6 +969,7 @@ m4_define([_AT_DATA_EXPECT2_Y],
 static int yylex (AT_LALR1_CC_IF([int *], [void]));
 AT_LALR1_CC_IF([],
 [#include <stdio.h>
+#include <stdlib.h>
 static void yyerror (const char *);])
 %}
 $1
@@ -922,12 +1011,14 @@ yyerror (const char *s)
 static int
 yylex (AT_LALR1_CC_IF([int *lval], [void]))
 [{
-  static int toknum = 0;
-  static int tokens[] =
+  static int const tokens[] =
     {
       1000, '+', '+', -1
     };
+  static size_t toknum;
   ]AT_LALR1_CC_IF([*lval = 0; /* Pacify GCC.  */])[
+  if (! (toknum < sizeof tokens / sizeof *tokens))
+    abort ();
   return tokens[toknum++];
 }]
 
@@ -947,11 +1038,11 @@ m4_define([AT_CHECK_EXPECT2],
 [AT_SETUP([Expecting two tokens $1])
 AT_BISON_OPTION_PUSHDEFS([$1])
 _AT_DATA_EXPECT2_Y([$1])
-AT_CHECK([bison -o expect2.c expect2.y])
+AT_BISON_CHECK([-o expect2.c expect2.y])
 AT_LALR1_CC_IF(
-  [AT_CHECK([bison -o expect2.cc expect2.y])
+  [AT_BISON_CHECK([-o expect2.cc expect2.y])
    AT_COMPILE_CXX([expect2])],
-  [AT_CHECK([bison -o expect2.c expect2.y])
+  [AT_BISON_CHECK([-o expect2.c expect2.y])
    AT_COMPILE([expect2])])
 AT_PARSER_CHECK([./expect2], 1, [],
 [syntax error, unexpected '+', expecting A or B
@@ -963,3 +1054,204 @@ AT_CLEANUP
 AT_CHECK_EXPECT2()
 AT_CHECK_EXPECT2([%glr-parser])
 AT_CHECK_EXPECT2([%skeleton "lalr1.cc"])
+
+
+
+## --------------------------------------------- ##
+## Braced code in declaration in rules section.  ##
+## --------------------------------------------- ##
+
+AT_SETUP([Braced code in declaration in rules section])
+
+# Bison once mistook braced code in a declaration in the rules section to be a
+# rule action.
+
+AT_DATA_GRAMMAR([input.y],
+[[%{
+#include <stdio.h>
+static void yyerror (char const *msg);
+static int yylex (void);
+%}
+
+%error-verbose
+
+%%
+
+start:
+  {
+    printf ("Bison would once convert this action to a midrule because of the"
+	    " subsequent braced code.\n");
+  }
+  ;
+
+%destructor { fprintf (stderr, "DESTRUCTOR\n"); } 'a';
+%printer { fprintf (yyoutput, "PRINTER"); } 'a';
+
+%%
+
+static void
+yyerror (char const *msg)
+{
+  fprintf (stderr, "%s\n", msg);
+}
+
+static int
+yylex (void)
+{
+  return 'a';
+}
+
+int
+main (void)
+{
+  yydebug = 1;
+  return !yyparse ();
+}
+]])
+
+AT_BISON_CHECK([-t -o input.c input.y])
+AT_COMPILE([input])
+AT_PARSER_CHECK([./input], 0,
+[[Bison would once convert this action to a midrule because of the subsequent braced code.
+]],
+[[Starting parse
+Entering state 0
+Reducing stack by rule 1 (line 20):
+-> $$ = nterm start ()
+Stack now 0
+Entering state 1
+Reading a token: Next token is token 'a' (PRINTER)
+syntax error, unexpected 'a', expecting $end
+Error: popping nterm start ()
+Stack now 0
+Cleanup: discarding lookahead token 'a' (PRINTER)
+DESTRUCTOR
+Stack now 0
+]])
+
+AT_CLEANUP
+
+
+
+## --------------------------------- ##
+## String alias declared after use.  ##
+## --------------------------------- ##
+
+AT_SETUP([String alias declared after use])
+
+# Bison once incorrectly asserted that the symbol number for either a token or
+# its alias was the highest symbol number so far at the point of the alias
+# declaration.  That was true unless the declaration appeared after their first
+# uses and other tokens appeared in between.
+
+AT_DATA([input.y],
+[[%%
+start: 'a' "A" 'b';
+%token 'a' "A";
+]])
+
+AT_BISON_CHECK([-t -o input.c input.y])
+
+AT_CLEANUP
+
+
+
+## -------------------------------- ##
+## Extra lookahead sets in report.  ##
+## -------------------------------- ##
+
+AT_SETUP([[Extra lookahead sets in report]])
+
+# Bison prints each reduction's lookahead set only next to the associated
+# state's one item that (1) is associated with the same rule as the reduction
+# and (2) has its dot at the end of its RHS.  Previously, Bison also
+# erroneously printed the lookahead set next to all of the state's other items
+# associated with the same rule.  This bug affected only the `.output' file and
+# not the generated parser source code.
+
+AT_DATA([[input.y]],
+[[%%
+start: a | 'a' a 'a' ;
+a: 'a' ;
+]])
+
+AT_BISON_CHECK([[--report=all input.y]])
+AT_CHECK([[sed -n '/^state 1$/,/^state 2$/p' input.output]], [[0]],
+[[state 1
+
+    2 start: 'a' . a 'a'
+    3 a: . 'a'
+    3  | 'a' .  [$end]
+
+    'a'  shift, and go to state 4
+
+    $default  reduce using rule 3 (a)
+
+    a  go to state 5
+
+
+state 2
+]])
+
+AT_CLEANUP
+
+
+
+## ---------------------------------------- ##
+## Token number in precedence declaration.  ##
+## ---------------------------------------- ##
+
+AT_SETUP([[Token number in precedence declaration.]])
+
+# POSIX says token numbers can be declared in %left, %right, and %nonassoc, but
+# we lost this in Bison 1.50.
+
+AT_DATA_GRAMMAR([input.y],
+[[%{
+  #include <stdio.h>
+  void yyerror (char const *);
+  int yylex (void);
+%}
+
+%error-verbose
+%left TK1 1 TK2 2 "tok alias" 3
+
+%%
+
+start: TK1 sr_conflict "tok alias" ;
+
+sr_conflict:
+  TK2
+  | TK2 "tok alias"
+  ;
+
+%%
+
+void
+yyerror (char const *msg)
+{
+  fprintf (stderr, "%s\n", msg);
+}
+
+int
+yylex (void)
+{
+  static int const input[] = { 1, 2, 3, 0 };
+  static int const *inputp = input;
+  return *inputp++;
+}
+
+int
+main (void)
+{
+  return yyparse ();
+}
+]])
+
+AT_BISON_CHECK([[-o input.c input.y]], [[0]],,
+[[input.y:24.5-19: warning: rule useless in parser due to conflicts: sr_conflict: TK2 "tok alias"
+]])
+AT_COMPILE([[input]])
+AT_PARSER_CHECK([[./input]])
+
+AT_CLEANUP

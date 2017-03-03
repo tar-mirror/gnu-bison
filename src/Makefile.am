@@ -1,31 +1,30 @@
-## Copyright (C) 2001, 2002, 2003, 2004, 2005 Free Software Foundation, Inc.
+# Make bison/src.
 
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation; either version 2 of the License, or
-## (at your option) any later version.
+# Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Free Software
+# Foundation, Inc.
 
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-
-## You should have received a copy of the GNU General Public License
-## along with this program; if not, write to the Free Software
-## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-## 02110-1301  USA
-
-DEFS += -DPKGDATADIR=\"$(pkgdatadir)\" -DLOCALEDIR=\"$(datadir)/locale\"
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 AM_CFLAGS = $(WARNING_CFLAGS) $(WERROR_CFLAGS)
-AM_CPPFLAGS = -I$(top_srcdir)/lib -I../lib
+AM_CPPFLAGS = -I$(top_srcdir)/lib
 AM_YFLAGS = "-dv"
 
 LDADD = ../lib/libbison.a $(LIBINTL)
 
 # Use our own Bison to build the parser.  Of course, you ought to
 # keep a sane version of Bison nearby...
-YACC = ../tests/bison -y
+YACC = ../tests/bison -y --warnings=all,error
 
 bin_PROGRAMS = bison
 bin_SCRIPTS = $(YACC_SCRIPT)
@@ -39,6 +38,7 @@ bison_SOURCES =					  \
 	conflicts.c conflicts.h			  \
 	derives.c derives.h			  \
 	files.c files.h				  \
+	flex-scanner.h				  \
 	getargs.c getargs.h			  \
 	gram.c gram.h				  \
 	lalr.h lalr.c				  \
@@ -50,29 +50,34 @@ bison_SOURCES =					  \
 	parse-gram.h parse-gram.y		  \
 	print.c print.h				  \
 	print_graph.c print_graph.h		  \
+	print-xml.c print-xml.h			  \
 	reader.c reader.h			  \
 	reduce.c reduce.h			  \
 	relation.c relation.h			  \
-	scan-gram-c.c				  \
-	scan-skel-c.c scan-skel.h		  \
+	scan-code.h scan-code-c.c		  \
+	scan-gram.h scan-gram-c.c		  \
+	scan-skel.h scan-skel-c.c		  \
 	state.c state.h				  \
 	symlist.c symlist.h			  \
 	symtab.c symtab.h			  \
 	system.h				  \
 	tables.h tables.c			  \
 	uniqstr.c uniqstr.h			  \
-	vcg.c vcg.h				  \
-	vcg_defaults.h
+	graphviz.c graphviz.h
 
-EXTRA_bison_SOURCES = scan-skel.l scan-gram.l
+EXTRA_bison_SOURCES = scan-code.l scan-skel.l scan-gram.l
 
-BUILT_SOURCES = scan-skel.c scan-gram.c parse-gram.c parse-gram.h
+BUILT_SOURCES =					\
+parse-gram.c parse-gram.h			\
+scan-code.c					\
+scan-skel.c					\
+scan-gram.c
 
 MOSTLYCLEANFILES = yacc
 
 yacc:
 	echo '#! /bin/sh' >$@
-	echo 'exec $(bindir)/bison -y "$$@"' >>$@
+	echo "exec '$(bindir)/bison' -y "'"$$@"' >>$@
 	chmod a+x $@
 
 echo:

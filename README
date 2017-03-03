@@ -1,16 +1,20 @@
-This directory contains the Bison parser generator.
+This package contains the GNU Bison parser generator.
 
 See the file INSTALL for generic compilation and installation instructions.
-See the file doc/FAQ for frequently asked questions.
 
-Bison requires GNU m4 1.4.3 or later.  See:
+See the section FAQ in the documentation (doc/bison.info) for
+frequently asked questions.  The documentation is also available in
+PDF and HTML, provided you have a recent version of Texinfo installed:
+run "make pdf" or "make html".
 
-ftp://ftp.gnu.org/gnu/m4/m4-1.4.3.tar.gz
+Bison requires GNU m4 1.4.6 or later.  See:
 
-Bison can work with pre-1.4.3 distributions of GNU m4 if they are
+ftp://ftp.gnu.org/gnu/m4/m4-1.4.6.tar.gz
+
+Bison can work with pre-1.4.6 distributions of GNU m4 if they are
 sufficiently patched, but if you encounter a bug with an older
 distribution and report a bug we will probably suggest that you
-upgrade to 1.4.3 as the first step in trying to fix it.
+upgrade to 1.4.6 as the first step in trying to fix it.
 
 Please send bug reports to <bug-bison@gnu.org>.  Please include the
 version number from `bison --version', and a complete, self-contained
@@ -21,21 +25,19 @@ not answer them, please send mail to <help-bison@gnu.org>.
 
 -----
 
-Copyright (C) 1992, 1998, 1999, 2003, 2004, 2005 Free Software Foundation, Inc.
+Copyright (C) 1992, 1998, 1999, 2003, 2004, 2005, 2008 Free Software Foundation, Inc.
 
 This file is part of Bison, the GNU Compiler Compiler.
 
-Bison is free software; you can redistribute it and/or modify
+This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2, or (at your option)
-any later version.
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-Bison is distributed in the hope that it will be useful,
+This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with autoconf; see the file COPYING.  If not, write to
-the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-Boston, MA 02110-1301, USA.
+along with this program.  If not, see <http://www.gnu.org/licenses/>.

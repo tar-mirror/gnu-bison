@@ -1,34 +1,41 @@
-#serial 5
+# malloc.m4 serial 8
+dnl Copyright (C) 2007 Free Software Foundation, Inc.
+dnl This file is free software; the Free Software Foundation
+dnl gives unlimited permission to copy and/or distribute it,
+dnl with or without modifications, as long as this notice is preserved.
 
-dnl From Jim Meyering.
-dnl Determine whether malloc accepts 0 as its argument.
-dnl If it doesn't, arrange to use the replacement function.
-dnl
-
-AC_DEFUN([jm_FUNC_MALLOC],
+# gl_FUNC_MALLOC_POSIX
+# --------------------
+# Test whether 'malloc' is POSIX compliant (sets errno to ENOMEM when it
+# fails), and replace malloc if it is not.
+AC_DEFUN([gl_FUNC_MALLOC_POSIX],
 [
- dnl xmalloc.c requires that this symbol be defined so it doesn't
- dnl mistakenly use a broken malloc -- as it might if this test were omitted.
- AC_DEFINE(HAVE_DONE_WORKING_MALLOC_CHECK, 1,
-           [Define if the malloc check has been performed. ])
-
- AC_CACHE_CHECK([for working malloc], jm_cv_func_working_malloc,
-  [AC_TRY_RUN([
-    char *malloc ();
-    int
-    main ()
-    {
-      exit (malloc (0) ? 0 : 1);
-    }
-	  ],
-	 jm_cv_func_working_malloc=yes,
-	 jm_cv_func_working_malloc=no,
-	 dnl When crosscompiling, assume malloc is broken.
-	 jm_cv_func_working_malloc=no)
-  ])
-  if test $jm_cv_func_working_malloc = no; then
-    AC_LIBOBJ(malloc)
-    AC_DEFINE(malloc, rpl_malloc,
-      [Define to rpl_malloc if the replacement function should be used.])
+  AC_REQUIRE([gl_CHECK_MALLOC_POSIX])
+  if test $gl_cv_func_malloc_posix = yes; then
+    HAVE_MALLOC_POSIX=1
+    AC_DEFINE([HAVE_MALLOC_POSIX], 1,
+      [Define if the 'malloc' function is POSIX compliant.])
+  else
+    AC_LIBOBJ([malloc])
+    HAVE_MALLOC_POSIX=0
   fi
+  AC_SUBST([HAVE_MALLOC_POSIX])
+])
+
+# Test whether malloc, realloc, calloc are POSIX compliant,
+# Set gl_cv_func_malloc_posix to yes or no accordingly.
+AC_DEFUN([gl_CHECK_MALLOC_POSIX],
+[
+  AC_CACHE_CHECK([whether malloc, realloc, calloc are POSIX compliant],
+    [gl_cv_func_malloc_posix],
+    [
+      dnl It is too dangerous to try to allocate a large amount of memory:
+      dnl some systems go to their knees when you do that. So assume that
+      dnl all Unix implementations of the function are POSIX compliant.
+      AC_TRY_COMPILE([],
+        [#if (defined _WIN32 || defined __WIN32__) && ! defined __CYGWIN__
+         choke me
+         #endif
+        ], [gl_cv_func_malloc_posix=yes], [gl_cv_func_malloc_posix=no])
+    ])
 ])

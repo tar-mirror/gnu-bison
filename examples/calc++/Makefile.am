@@ -1,20 +1,18 @@
 ## Process this file with automake to produce Makefile.in -*-Makefile-*-
 ## Copyright (C) 2005, 2006 Free Software Foundation, Inc.
 
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation; either version 2 of the License, or
-## (at your option) any later version.
-
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-
-## You should have received a copy of the GNU General Public License
-## along with this program; if not, write to the Free Software
-## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-## 02110-1301  USA
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ## ------------------------------------- ##
 ## Running the bison from this tarball.  ##
@@ -35,8 +33,8 @@ extexi = $(top_srcdir)/examples/extexi
 # Extract in src.
 $(calc_extracted): $(doc) $(extexi)
 	cd $(srcdir) && \
-	   $(AWK) -f ../extexi ../../doc/bison.texinfo -- \
-	     calc++-parser.yy \
+	   $(AWK) -f ../extexi -v VERSION="$(VERSION)" \
+	     ../../doc/bison.texinfo -- calc++-parser.yy \
 	     calc++-scanner.ll calc++.cc calc++-driver.hh calc++-driver.cc
 
 
@@ -44,6 +42,7 @@ $(calc_extracted): $(doc) $(extexi)
 ## Parser generation.  ##
 ## ------------------- ##
 
+DEFAULT_INCLUDES = -I. -I$(srcdir)
 BUILT_SOURCES = $(calc_extracted) $(calc_sources_generated)
 CLEANFILES = $(srcdir)/*.output *.tmp
 MAINTAINERCLEANFILES = $(srcdir)/*.stamp $(BUILT_SOURCES)

@@ -1,22 +1,21 @@
-m4_divert(-1)                                                       -*- C -*-
+                                                                    -*- C -*-
 
 # GLR skeleton for Bison
-# Copyright (C) 2002, 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
+# Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008 Free Software Foundation,
+# Inc.
 
-# This program is free software; you can redistribute it and/or modify
+# This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-
+#
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-# 02110-1301  USA
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 m4_include(b4_pkgdatadir/[c.m4])
@@ -35,6 +34,13 @@ m4_define_default([b4_stack_depth_init],  [200])
 ## Pure/impure interfaces.  ##
 ## ------------------------ ##
 
+b4_define_flag_if([pure])
+# If glr.cc is including this file and thus has already set b4_pure_flag, don't
+# change the value of b4_pure_flag, and don't record a use of api.pure.
+m4_ifndef([b4_pure_flag],
+[b4_percent_define_default([[api.pure]], [[false]])
+ m4_define([b4_pure_flag],
+           [b4_percent_define_flag_if([[api.pure]], [[1]], [[0]])])])
 
 # b4_user_formals
 # ---------------
@@ -67,7 +73,7 @@ m4_ifset([b4_parse_param], [b4_c_args(b4_parse_param), ])])
 
 # b4_lyyerror_args
 # ----------------
-# Same as above, but on the look-ahead, hence &yylloc instead of yylocp.
+# Same as above, but on the lookahead, hence &yylloc instead of yylocp.
 m4_define([b4_lyyerror_args],
 [b4_pure_if([b4_locations_if([&yylloc, ])])dnl
 m4_ifset([b4_parse_param], [b4_c_args(b4_parse_param), ])])
@@ -82,7 +88,7 @@ m4_define([b4_pure_args],
 
 # b4_lpure_args
 # -------------
-# Same as above, but on the look-ahead, hence &yylloc instead of yylocp.
+# Same as above, but on the lookahead, hence &yylloc instead of yylocp.
 m4_define([b4_lpure_args],
 [b4_pure_if([b4_locations_if([, &yylloc])])[]b4_user_args])
 
@@ -141,8 +147,8 @@ m4_define([b4_rhs_location],
 
 # We do want M4 expansion after # for CPP macros.
 m4_changecom()
-m4_divert(0)dnl
-@output @output_parser_name@
+m4_divert_push(0)dnl
+@output(b4_parser_file_name@)
 b4_copyright([Skeleton implementation for Bison GLR parsers in C],
   [2002, 2003, 2004, 2005, 2006])
 [
@@ -150,6 +156,7 @@ b4_copyright([Skeleton implementation for Bison GLR parsers in C],
 
 ]b4_identification
 
+b4_percent_code_get([[top]])[]dnl
 m4_if(b4_prefix, [yy], [],
 [/* Substitute the variable and function names.  */
 #define yyparse b4_prefix[]parse
@@ -159,28 +166,30 @@ m4_if(b4_prefix, [yy], [],
 #define yychar  b4_prefix[]char
 #define yydebug b4_prefix[]debug
 #define yynerrs b4_prefix[]nerrs
-#define yylloc  b4_prefix[]lloc])
+#define yylloc  b4_prefix[]lloc])[
+
+/* Copy the first part of user declarations.  */
+]b4_user_pre_prologue
 
 dnl # b4_shared_declarations
 dnl # ----------------------
 dnl # Declaration that might either go into the header (if --defines)
 dnl # or open coded in the parser body.
 m4_define([b4_shared_declarations],
-[b4_token_enums(b4_tokens)[
+[b4_percent_code_get([[requires]])[]dnl
 
-/* Copy the first part of user declarations.  */
-]b4_pre_prologue[
+b4_token_enums(b4_tokens)
 
-#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
+[#ifndef YYSTYPE
 ]m4_ifdef([b4_stype],
-[typedef union m4_bregexp(b4_stype, [^{], [YYSTYPE ])
-b4_stype
-/* Line __line__ of glr.c.  */
-b4_syncline([@oline@], [@ofile@])
-	YYSTYPE;],
-[typedef int YYSTYPE;])[
-# define YYSTYPE_IS_DECLARED 1
-# define YYSTYPE_IS_TRIVIAL 1
+[[typedef union ]b4_union_name[
+{
+]b4_user_stype[
+} YYSTYPE;
+# define YYSTYPE_IS_TRIVIAL 1]],
+[m4_if(b4_tag_seen_flag, 0,
+[[typedef int YYSTYPE;
+# define YYSTYPE_IS_TRIVIAL 1]])])[
 #endif
 
 #if ! defined YYLTYPE && ! defined YYLTYPE_IS_DECLARED
@@ -198,9 +207,11 @@ typedef struct YYLTYPE
 # define YYLTYPE_IS_DECLARED 1
 # define YYLTYPE_IS_TRIVIAL 1
 #endif
-]])
 
-b4_defines_if([#include @output_header_name@],
+]b4_percent_code_get([[provides]])[]dnl
+])
+
+b4_defines_if([[#include "@basename(]b4_spec_defines_file[@)"]],
 	      [b4_shared_declarations])[
 
 /* Enabling traces.  */
@@ -229,15 +240,12 @@ b4_defines_if([#include @output_header_name@],
 static YYSTYPE yyval_default;
 
 /* Copy the second part of user declarations.  */
-]b4_post_prologue[
+]b4_user_post_prologue
+b4_percent_code_get[]dnl
 
-]/* Line __line__ of glr.c.  */
-b4_syncline([@oline@], [@ofile@])
-[
-#include <stdio.h>
+[#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdarg.h>
 
 #ifndef YY_
 # if YYENABLE_NLS
@@ -342,8 +350,7 @@ b4_syncline([@oline@], [@ofile@])
 #define YYMAXUTOK   ]b4_user_token_number_max[
 
 #define YYTRANSLATE(YYX)						\
-  ((YYX <= 0) ? YYEOF :							\
-   (unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
+  ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
 
 /* YYTRANSLATE[YYLEX] -- Bison symbol number corresponding to YYLEX.  */
 static const ]b4_int_type_for([b4_translate])[ yytranslate[] =
@@ -926,9 +933,7 @@ yyuserAction (yyRuleNum yyn, int yyrhslen, yyGLRStackItem* yyvsp,
 ]])[
   switch (yyn)
     {
-      ]b4_actions
-/* Line __line__ of glr.c.  */
-b4_syncline([@oline@], [@ofile@])[
+      ]b4_user_actions[
       default: break;
     }
 
@@ -1439,12 +1444,12 @@ yy_reduce_print (yyGLRStack* yystackp, size_t yyk, yyRuleNum yyrule,
   /* The symbols being reduced.  */
   for (yyi = 0; yyi < yynrhs; yyi++)
     {
-      fprintf (stderr, "   $%d = ", yyi + 1);
+      YYFPRINTF (stderr, "   $%d = ", yyi + 1);
       yy_symbol_print (stderr, yyrhs[yyprhs[yyrule] + yyi],
 		       &]b4_rhs_value(yynrhs, yyi + 1)[
 		       ]b4_locations_if([, &]b4_rhs_location(yynrhs, yyi + 1))[]dnl
 		       b4_user_args[);
-      fprintf (stderr, "\n");
+      YYFPRINTF (stderr, "\n");
     }
 }
 #endif
@@ -2038,11 +2043,19 @@ yyprocessOneStack (yyGLRStack* yystackp, size_t yyk,
 	    {
 	      YYDPRINTF ((stderr, "Reading a token: "));
 	      yychar = YYLEX;
+	    }
+
+	  if (yychar <= YYEOF)
+	    {
+	      yychar = yytoken = YYEOF;
+	      YYDPRINTF ((stderr, "Now at end of input.\n"));
+	    }
+	  else
+	    {
 	      yytoken = YYTRANSLATE (yychar);
 	      YY_SYMBOL_PRINT ("Next token is", yytoken, &yylval, &yylloc);
 	    }
-	  else
-	    yytoken = YYTRANSLATE (yychar);
+
 	  yygetLRActions (yystate, yytoken, &yyaction, &yyconflicts);
 
 	  while (*yyconflicts != 0)
@@ -2178,7 +2191,7 @@ yyreportSyntaxError (yyGLRStack* yystackp]b4_user_formals[)
 
 /* Recover from a syntax error on *YYSTACKP, assuming that *YYSTACKP->YYTOKENP,
    yylval, and yylloc are the syntactic category, semantic value, and location
-   of the look-ahead.  */
+   of the lookahead.  */
 /*ARGSUSED*/ static void
 yyrecoverSyntaxError (yyGLRStack* yystackp]b4_user_formals[)
 {
@@ -2208,8 +2221,16 @@ yyrecoverSyntaxError (yyGLRStack* yystackp]b4_user_formals[)
 	  }
 	YYDPRINTF ((stderr, "Reading a token: "));
 	yychar = YYLEX;
-	yytoken = YYTRANSLATE (yychar);
-	YY_SYMBOL_PRINT ("Next token is", yytoken, &yylval, &yylloc);
+	if (yychar <= YYEOF)
+	  {
+	    yychar = yytoken = YYEOF;
+	    YYDPRINTF ((stderr, "Now at end of input.\n"));
+	  }
+	else
+	  {
+	    yytoken = YYTRANSLATE (yychar);
+	    YY_SYMBOL_PRINT ("Next token is", yytoken, &yylval, &yylloc);
+	  }
 	yyj = yypact[yystackp->yytops.yystates[0]->yylrState];
 	if (yyis_pact_ninf (yyj))
 	  return;
@@ -2259,7 +2280,8 @@ yyrecoverSyntaxError (yyGLRStack* yystackp]b4_user_formals[)
 	    }
 	}
 ]b4_locations_if([[      yystackp->yyerror_range[1].yystate.yyloc = yys->yyloc;]])[
-      yydestroyGLRState ("Error: popping", yys]b4_user_args[);
+      if (yys->yypred != NULL)
+	yydestroyGLRState ("Error: popping", yys]b4_user_args[);
       yystackp->yytops.yystates[0] = yys->yypred;
       yystackp->yynextFree -= 1;
       yystackp->yyspaceLeft += 1;
@@ -2302,19 +2324,17 @@ yyrecoverSyntaxError (yyGLRStack* yystackp]b4_user_formals[)
   yylval = yyval_default;
 ]b4_locations_if([
 #if YYLTYPE_IS_TRIVIAL
-  yylloc.first_line   = yylloc.last_line   = 1;
-  yylloc.first_column = yylloc.last_column = 0;
+  yylloc.first_line   = yylloc.last_line   = ]b4_location_initial_line[;
+  yylloc.first_column = yylloc.last_column = ]b4_location_initial_column[;
 #endif
 ])
 m4_ifdef([b4_initial_action], [
 m4_pushdef([b4_at_dollar],     [yylloc])dnl
 m4_pushdef([b4_dollar_dollar], [yylval])dnl
   /* User initialization code.  */
-  b4_initial_action
+  b4_user_initial_action
 m4_popdef([b4_dollar_dollar])dnl
-m4_popdef([b4_at_dollar])dnl
-/* Line __line__ of glr.c.  */
-b4_syncline([@oline@], [@ofile@])])dnl
+m4_popdef([b4_at_dollar])])dnl
 [
   if (! yyinitGLRStack (yystackp, YYINITDEPTH))
     goto yyexhaustedlab;
@@ -2362,19 +2382,26 @@ b4_syncline([@oline@], [@ofile@])])dnl
 		{
 		  YYDPRINTF ((stderr, "Reading a token: "));
 		  yychar = YYLEX;
+		}
+
+	      if (yychar <= YYEOF)
+		{
+		  yychar = yytoken = YYEOF;
+		  YYDPRINTF ((stderr, "Now at end of input.\n"));
+		}
+	      else
+		{
 		  yytoken = YYTRANSLATE (yychar);
 		  YY_SYMBOL_PRINT ("Next token is", yytoken, &yylval, &yylloc);
 		}
-	      else
-		yytoken = YYTRANSLATE (yychar);
+
 	      yygetLRActions (yystate, yytoken, &yyaction, &yyconflicts);
 	      if (*yyconflicts != 0)
 		break;
 	      if (yyisShiftAction (yyaction))
 		{
 		  YY_SYMBOL_PRINT ("Shifting", yytoken, &yylval, &yylloc);
-		  if (yychar != YYEOF)
-		    yychar = YYEMPTY;
+		  yychar = YYEMPTY;
 		  yyposn += 1;
 		  yyglrShift (&yystack, 0, yyaction, yyposn, &yylval, &yylloc);
 		  if (0 < yystack.yyerrState)
@@ -2490,7 +2517,7 @@ b4_syncline([@oline@], [@ofile@])])dnl
   goto yyreturn;
 
  yyreturn:
-  if (yychar != YYEOF && yychar != YYEMPTY)
+  if (yychar != YYEMPTY)
     yydestruct ("Cleanup: discarding lookahead",
 		YYTRANSLATE (yychar),
 		&yylval]b4_locations_if([, &yylloc])[]b4_user_args[);
@@ -2512,7 +2539,8 @@ b4_syncline([@oline@], [@ofile@])])dnl
 		  {
 		    yyGLRState *yys = yystates[yyk];
 ]b4_locations_if([[		    yystack.yyerror_range[1].yystate.yyloc = yys->yyloc;]]
-)[		    yydestroyGLRState ("Cleanup: popping", yys]b4_user_args[);
+)[		    if (yys->yypred != NULL)
+		      yydestroyGLRState ("Cleanup: popping", yys]b4_user_args[);
 		    yystates[yyk] = yys->yypred;
 		    yystack.yynextFree -= 1;
 		    yystack.yyspaceLeft += 1;
@@ -2528,7 +2556,7 @@ b4_syncline([@oline@], [@ofile@])])dnl
 }
 
 /* DEBUGGING ONLY */
-#ifdef YYDEBUG
+#if YYDEBUG
 static void yypstack (yyGLRStack* yystackp, size_t yyk)
   __attribute__ ((__unused__));
 static void yypdumpstack (yyGLRStack* yystackp) __attribute__ ((__unused__));
@@ -2539,19 +2567,20 @@ yy_yypstack (yyGLRState* yys)
   if (yys->yypred)
     {
       yy_yypstack (yys->yypred);
-      fprintf (stderr, " -> ");
+      YYFPRINTF (stderr, " -> ");
     }
-  fprintf (stderr, "%d@@%lu", yys->yylrState, (unsigned long int) yys->yyposn);
+  YYFPRINTF (stderr, "%d@@%lu", yys->yylrState,
+             (unsigned long int) yys->yyposn);
 }
 
 static void
 yypstates (yyGLRState* yyst)
 {
   if (yyst == NULL)
-    fprintf (stderr, "<null>");
+    YYFPRINTF (stderr, "<null>");
   else
     yy_yypstack (yyst);
-  fprintf (stderr, "\n");
+  YYFPRINTF (stderr, "\n");
 }
 
 static void
@@ -2571,46 +2600,54 @@ yypdumpstack (yyGLRStack* yystackp)
   size_t yyi;
   for (yyp = yystackp->yyitems; yyp < yystackp->yynextFree; yyp += 1)
     {
-      fprintf (stderr, "%3lu. ", (unsigned long int) (yyp - yystackp->yyitems));
+      YYFPRINTF (stderr, "%3lu. ",
+                 (unsigned long int) (yyp - yystackp->yyitems));
       if (*(yybool *) yyp)
 	{
-	  fprintf (stderr, "Res: %d, LR State: %d, posn: %lu, pred: %ld",
-		   yyp->yystate.yyresolved, yyp->yystate.yylrState,
-		   (unsigned long int) yyp->yystate.yyposn,
-		   (long int) YYINDEX (yyp->yystate.yypred));
+	  YYFPRINTF (stderr, "Res: %d, LR State: %d, posn: %lu, pred: %ld",
+		     yyp->yystate.yyresolved, yyp->yystate.yylrState,
+		     (unsigned long int) yyp->yystate.yyposn,
+		     (long int) YYINDEX (yyp->yystate.yypred));
 	  if (! yyp->yystate.yyresolved)
-	    fprintf (stderr, ", firstVal: %ld",
-		     (long int) YYINDEX (yyp->yystate.yysemantics.yyfirstVal));
+	    YYFPRINTF (stderr, ", firstVal: %ld",
+		       (long int) YYINDEX (yyp->yystate
+                                             .yysemantics.yyfirstVal));
 	}
       else
 	{
-	  fprintf (stderr, "Option. rule: %d, state: %ld, next: %ld",
-		   yyp->yyoption.yyrule - 1,
-		   (long int) YYINDEX (yyp->yyoption.yystate),
-		   (long int) YYINDEX (yyp->yyoption.yynext));
+	  YYFPRINTF (stderr, "Option. rule: %d, state: %ld, next: %ld",
+		     yyp->yyoption.yyrule - 1,
+		     (long int) YYINDEX (yyp->yyoption.yystate),
+		     (long int) YYINDEX (yyp->yyoption.yynext));
 	}
-      fprintf (stderr, "\n");
+      YYFPRINTF (stderr, "\n");
     }
-  fprintf (stderr, "Tops:");
+  YYFPRINTF (stderr, "Tops:");
   for (yyi = 0; yyi < yystackp->yytops.yysize; yyi += 1)
-    fprintf (stderr, "%lu: %ld; ", (unsigned long int) yyi,
-	     (long int) YYINDEX (yystackp->yytops.yystates[yyi]));
-  fprintf (stderr, "\n");
+    YYFPRINTF (stderr, "%lu: %ld; ", (unsigned long int) yyi,
+	       (long int) YYINDEX (yystackp->yytops.yystates[yyi]));
+  YYFPRINTF (stderr, "\n");
 }
 #endif
 ]
 
 b4_epilogue
-b4_defines_if(
-[@output @output_header_name@
+dnl
+dnl glr.cc produces its own header.
+dnl
+m4_if(b4_skeleton, ["glr.c"],
+[b4_defines_if(
+[@output(b4_spec_defines_file@)
 b4_copyright([Skeleton interface for Bison GLR parsers in C],
   [2002, 2003, 2004, 2005, 2006])
 
 b4_shared_declarations
 
-extern YYSTYPE b4_prefix[]lval;
+b4_pure_if([],
+[[extern YYSTYPE b4_prefix][lval;]])
 
 b4_locations_if([b4_pure_if([],
 [extern YYLTYPE b4_prefix[]lloc;])
 ])
-])
+])])
+m4_divert_pop(0)

@@ -1,22 +1,21 @@
-m4_divert(-1)                                                       -*- C -*-
+                                                                    -*- C -*-
 
 # C++ GLR skeleton for Bison
-# Copyright (C) 2002, 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
+# Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007 Free Software Foundation,
+# Inc.
 
-# This program is free software; you can redistribute it and/or modify
+# This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-
+#
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-# 02110-1301  USA
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 # This skeleton produces a C++ class that encapsulates a C glr parser.
@@ -52,11 +51,13 @@ m4_define([b4_pure_flag],      [1])
 
 # The header is mandatory.
 b4_defines_if([],
-              [m4_fatal(b4_skeleton[: using %defines is mandatory])])
+              [b4_fatal([b4_skeleton[: using %%defines is mandatory]])])
 
 m4_include(b4_pkgdatadir/[c++.m4])
 m4_include(b4_pkgdatadir/[location.cc])
 
+m4_define([b4_parser_class_name],
+          [b4_percent_define_get([[parser_class_name]])])
 
 # Save the parse parameters.
 m4_define([b4_parse_param_orig], m4_defn([b4_parse_param]))
@@ -76,9 +77,9 @@ m4_define([b4_yy_symbol_print_generate],
     [static void],
     [[FILE *],               []],
     [[int yytype],           [yytype]],
-    [[const b4_namespace::b4_parser_class_name::semantic_type *yyvaluep],
+    [[const b4_namespace_ref::b4_parser_class_name::semantic_type *yyvaluep],
 			     [yyvaluep]],
-    [[const b4_namespace::b4_parser_class_name::location_type *yylocationp],
+    [[const b4_namespace_ref::b4_parser_class_name::location_type *yylocationp],
 			     [yylocationp]],
     b4_parse_param)[
 {
@@ -90,27 +91,25 @@ m4_define([b4_yy_symbol_print_generate],
 
 # Declare yyerror.
 m4_append([b4_post_prologue],
-[/* Line __line__ of glr.cc.  */
-b4_syncline([@oline@], [@ofile@])
+[b4_syncline([@oline@], [@ofile@])
 
 b4_c_ansi_function_decl([yyerror],
     [static void],
-    [[b4_namespace::b4_parser_class_name::location_type *yylocationp], [yylocationp]],
+    [[b4_namespace_ref::b4_parser_class_name::location_type *yylocationp], [yylocationp]],
     b4_parse_param,
     [[const char* msg], [msg]])])
 
 
 # Define yyerror.
 m4_append([b4_epilogue],
-[/* Line __line__ of glr.cc.  */
-b4_syncline([@oline@], [@ofile@])[
+[b4_syncline([@oline@], [@ofile@])[
 /*------------------.
 | Report an error.  |
 `------------------*/
 
 ]b4_c_ansi_function_def([yyerror],
     [static void],
-    [[b4_namespace::b4_parser_class_name::location_type *yylocationp], [yylocationp]],
+    [[b4_namespace_ref::b4_parser_class_name::location_type *yylocationp], [yylocationp]],
     b4_parse_param,
     [[const char* msg], [msg]])[
 {
@@ -119,13 +118,16 @@ b4_syncline([@oline@], [@ofile@])[
 }
 
 
-namespace ]b4_namespace[
-{
+]b4_namespace_open[
 ]dnl In this section, the parse param are the original parse_params.
 m4_pushdef([b4_parse_param], m4_defn([b4_parse_param_orig]))dnl
 [  /// Build a parser object.
-  ]b4_parser_class_name::b4_parser_class_name[ (]b4_parse_param_decl[)
-    : yycdebug_ (&std::cerr)]b4_parse_param_cons[
+  ]b4_parser_class_name::b4_parser_class_name[ (]b4_parse_param_decl[)]m4_ifset([b4_parse_param], [
+    :])[
+#if YYDEBUG
+    ]m4_ifset([b4_parse_param], [  ], [ :])[yydebug_ (false),
+      yycdebug_ (&std::cerr)]m4_ifset([b4_parse_param], [,])[
+#endif]b4_parse_param_cons[
   {
   }
 
@@ -187,18 +189,18 @@ m4_pushdef([b4_parse_param], m4_defn([b4_parse_param_orig]))dnl
   ]b4_parser_class_name[::debug_level_type
   ]b4_parser_class_name[::debug_level () const
   {
-    return ::yydebug;
+    return yydebug_;
   }
 
   void
   ]b4_parser_class_name[::set_debug_level (debug_level_type l)
   {
-    ::yydebug = l;
+    yydebug_ = l;
   }
 
-#endif /* ! YYDEBUG */
+#endif
 ]m4_popdef([b4_parse_param])dnl
-[} // namespace ]b4_namespace[
+b4_namespace_close[
 
 ]])
 
@@ -206,16 +208,16 @@ m4_pushdef([b4_parse_param], m4_defn([b4_parse_param_orig]))dnl
 # Let glr.c believe that the user arguments include the parser itself.
 m4_ifset([b4_parse_param],
 [m4_pushdef([b4_parse_param],
-	    m4_dquote([[[b4_namespace::b4_parser_class_name& yyparser], [[yyparser]]],]
+	    m4_dquote([[[b4_namespace_ref::b4_parser_class_name& yyparser], [[yyparser]]],]
 m4_defn([b4_parse_param])))],
 [m4_pushdef([b4_parse_param],
-	    [[[[b4_namespace::b4_parser_class_name& yyparser], [[yyparser]]]]])
+	    [[[[b4_namespace_ref::b4_parser_class_name& yyparser], [[yyparser]]]]])
 ])
 m4_include(b4_pkgdatadir/[glr.c])
 m4_popdef([b4_parse_param])
 
-
-@output @output_header_name@
+m4_divert_push(0)
+@output(b4_spec_defines_file@)
 b4_copyright([Skeleton interface for Bison GLR parsers in C++],
   [2002, 2003, 2004, 2005, 2006])[
 
@@ -224,42 +226,24 @@ b4_copyright([Skeleton interface for Bison GLR parsers in C++],
 #ifndef PARSER_HEADER_H
 # define PARSER_HEADER_H
 
+]b4_percent_code_get([[requires]])[
+
 #include <string>
 #include <iostream>
 
 /* Using locations.  */
 #define YYLSP_NEEDED ]b4_locations_flag[
 
-namespace ]b4_namespace[
-{
+]b4_namespace_open[
   class position;
   class location;
-}
-
-/* Copy the first part of user declarations.  */
-]b4_pre_prologue[
-
-]/* Line __line__ of glr.cc.  */
-b4_syncline([@oline@], [@ofile@])[
+]b4_namespace_close[
 
 #include "location.hh"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG ]b4_debug_flag[
-#endif
-
-/* Enabling verbose error messages.  */
-#ifdef YYERROR_VERBOSE
-# undef YYERROR_VERBOSE
-# define YYERROR_VERBOSE 1
-#else
-# define YYERROR_VERBOSE ]b4_error_verbose_flag[
-#endif
-
-/* Enabling the token table.  */
-#ifndef YYTOKEN_TABLE
-# define YYTOKEN_TABLE ]b4_token_table[
 #endif
 
 /* YYLLOC_DEFAULT -- Set CURRENT to span from RHS[1] to RHS[N].
@@ -281,8 +265,7 @@ b4_syncline([@oline@], [@ofile@])[
     while (/*CONSTCOND*/ 0)
 #endif
 
-namespace ]b4_namespace[
-{
+]b4_namespace_open[
   /// A Bison parser.
   class ]b4_parser_class_name[
   {
@@ -291,16 +274,17 @@ namespace ]b4_namespace[
 #ifndef YYSTYPE
 ]m4_ifdef([b4_stype],
 [    union semantic_type
-b4_stype
-/* Line __line__ of lalr1.cc.  */
-b4_syncline([@oline@], [@ofile@])
-	;],
-[    typedef int semantic_type;])[
+    {
+b4_user_stype
+    };],
+[m4_if(b4_tag_seen_flag, 0,
+[[    typedef int semantic_type;]],
+[[    typedef YYSTYPE semantic_type;]])])[
 #else
     typedef YYSTYPE semantic_type;
 #endif
     /// Symbol locations.
-    typedef ]b4_location_type[ location_type;
+    typedef ]b4_percent_define_get([[location_type]])[ location_type;
     /// Tokens.
     struct token
     {
@@ -355,7 +339,10 @@ b4_syncline([@oline@], [@ofile@])
 				   const semantic_type* yyvaluep,
 				   const location_type* yylocationp);
   private:
-#endif /* ! YYDEBUG */
+    /* Debugging.  */
+    int yydebug_;
+    std::ostream* yycdebug_;
+#endif
 
 
     /// \brief Reclaim the memory associated to a symbol.
@@ -368,22 +355,23 @@ b4_syncline([@oline@], [@ofile@])
 			     semantic_type* yyvaluep,
 			     location_type* yylocationp);
 
-    /* Debugging.  */
-    std::ostream* yycdebug_;
 ]b4_parse_param_vars[
   };
 
 ]dnl Redirections for glr.c.
-m4_ifset([b4_global_tokens_and_yystype],
+b4_percent_define_flag_if([[global_tokens_and_yystype]],
 [b4_token_defines(b4_tokens)])
 [
 #ifndef YYSTYPE
-# define YYSTYPE ]b4_namespace[::]b4_parser_class_name[::semantic_type
+# define YYSTYPE ]b4_namespace_ref[::]b4_parser_class_name[::semantic_type
 #endif
 #ifndef YYLTYPE
-# define YYLTYPE ]b4_namespace[::]b4_parser_class_name[::location_type
+# define YYLTYPE ]b4_namespace_ref[::]b4_parser_class_name[::location_type
 #endif
 
-}
+]b4_namespace_close[
 
-#endif /* ! defined PARSER_HEADER_H */]
+]b4_percent_code_get([[provides]])[]dnl
+
+[#endif /* ! defined PARSER_HEADER_H */]
+m4_divert_pop(0)

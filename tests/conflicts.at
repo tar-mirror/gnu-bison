@@ -1,21 +1,19 @@
 # Exercising Bison on conflicts.                         -*- Autotest -*-
 
-# Copyright (C) 2002, 2003, 2004, 2005 Free Software Foundation, Inc.
+# Copyright (C) 2002, 2003, 2004, 2005, 2007 Free Software Foundation, Inc.
 
-# This program is free software; you can redistribute it and/or modify
+# This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2, or (at your option)
-# any later version.
-
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-
+#
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-# 02110-1301, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 AT_BANNER([[Conflicts.]])
 
@@ -38,8 +36,8 @@ exp: e 'e';
 e: 'e' | /* Nothing. */;
 ]])
 
-AT_CHECK([bison -o input.c input.y], 0, [],
-[[input.y:4.9: warning: rule never reduced because of conflicts: e: /* empty */
+AT_BISON_CHECK([-o input.c input.y], 0, [],
+[[input.y:4.9: warning: rule useless in parser due to conflicts: e: /* empty */
 ]])
 
 AT_CLEANUP
@@ -56,6 +54,7 @@ AT_DATA_GRAMMAR([input.y],
 %{
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define YYERROR_VERBOSE 1
 static void
@@ -65,16 +64,15 @@ yyerror (const char *msg)
 }
 
 /* The current argument. */
-static const char *input = NULL;
+static const char *input;
 
 static int
 yylex (void)
 {
-  /* No token stands for end of file. */
-  if (input && *input)
-    return *input++;
-  else
-    return 0;
+  static size_t toknum;
+  if (! (toknum <= strlen (input)))
+    abort ();
+  return input[toknum++];
 }
 
 %}
@@ -90,14 +88,13 @@ expr: expr '<' expr
 int
 main (int argc, const char *argv[])
 {
-  if (argc > 1)
-    input = argv[1];
+  input = argc <= 1 ? "" : argv[1];
   return yyparse ();
 }
 ]])
 
 # Specify the output files to avoid problems on different file systems.
-AT_CHECK([bison -o input.c input.y])
+AT_BISON_CHECK([-o input.c input.y])
 AT_COMPILE([input])
 
 AT_PARSER_CHECK([./input '0<0'])
@@ -135,7 +132,7 @@ AT_DATA([input.y],
 exp: exp OP exp | NUM;
 ]])
 
-AT_CHECK([bison -o input.c --report=all input.y], 0, [],
+AT_BISON_CHECK([-o input.c --report=all input.y], 0, [],
 [input.y: conflicts: 1 shift/reduce
 ])
 
@@ -215,7 +212,7 @@ state 4
 
 state 5
 
-    1 exp: exp . OP exp  [$end, OP]
+    1 exp: exp . OP exp
     1    | exp OP exp .  [$end, OP]
 
     OP  shift, and go to state 4
@@ -243,7 +240,7 @@ AT_DATA([input.y],
 exp: exp OP exp | NUM;
 ]])
 
-AT_CHECK([bison -o input.c --report=all input.y])
+AT_BISON_CHECK([-o input.c --report=all input.y])
 
 # Check the contents of the report.
 AT_CHECK([cat input.output], [],
@@ -318,7 +315,7 @@ state 4
 
 state 5
 
-    1 exp: exp . OP exp  [$end, OP]
+    1 exp: exp . OP exp
     1    | exp OP exp .  [$end, OP]
 
     $default  reduce using rule 1 (exp)
@@ -365,14 +362,14 @@ id : '0';
 %%
 ]])
 
-AT_CHECK([bison -o input.c --report=all input.y], 0, [],
+AT_BISON_CHECK([-o input.c --report=all input.y], 0, [],
 [[input.y: conflicts: 1 reduce/reduce
-input.y:4.6-8: warning: rule never reduced because of conflicts: id: '0'
+input.y:4.6-8: warning: rule useless in parser due to conflicts: id: '0'
 ]])
 
 # Check the contents of the report.
 AT_CHECK([cat input.output], [],
-[[Rules never reduced
+[[Rules useless in parser due to conflicts
 
     4 id: '0'
 
@@ -482,7 +479,7 @@ AT_DATA([input.y],
 exp: exp OP exp | NUM;
 ]])
 
-AT_CHECK([bison -o input.c input.y], 1, [],
+AT_BISON_CHECK([-o input.c input.y], 1, [],
 [input.y: conflicts: 1 shift/reduce
 input.y: expected 0 shift/reduce conflicts
 ])
@@ -502,7 +499,7 @@ AT_DATA([input.y],
 exp: exp OP exp | NUM;
 ]])
 
-AT_CHECK([bison -o input.c input.y])
+AT_BISON_CHECK([-o input.c input.y])
 AT_CLEANUP
 
 
@@ -519,7 +516,7 @@ AT_DATA([input.y],
 exp: exp OP exp | NUM;
 ]])
 
-AT_CHECK([bison -o input.c input.y], 1, [],
+AT_BISON_CHECK([-o input.c input.y], 1, [],
 [input.y: conflicts: 1 shift/reduce
 input.y: expected 2 shift/reduce conflicts
 ])
@@ -539,7 +536,7 @@ program: a 'a' | a a;
 a: 'a';
 ]])
 
-AT_CHECK([bison -o input.c input.y], 1, [],
+AT_BISON_CHECK([-o input.c input.y], 1, [],
 [input.y: conflicts: 1 reduce/reduce
 input.y: expected 0 reduce/reduce conflicts
 ])
@@ -566,7 +563,7 @@ e:   e '+' e
    ;
 ]])
 
-AT_CHECK([bison -o input.c input.y], 0, [],
+AT_BISON_CHECK([-o input.c input.y], 0, [],
 [[input.y: conflicts: 4 shift/reduce
 ]])
 AT_CLEANUP
@@ -592,7 +589,7 @@ e:   e '+' e %prec '+'
    ;
 ]])
 
-AT_CHECK([bison -o input.c input.y])
+AT_BISON_CHECK([-o input.c input.y])
 AT_CLEANUP
 
 
@@ -616,5 +613,365 @@ e:   e '+' e
    ;
 ]])
 
-AT_CHECK([bison -o input.c input.y])
+AT_BISON_CHECK([-o input.c input.y])
+AT_CLEANUP
+
+
+## ---------------------------------------------- ##
+## Unreachable States After Conflict Resolution.  ##
+## ---------------------------------------------- ##
+
+AT_SETUP([[Unreachable States After Conflict Resolution]])
+
+# If conflict resolution makes states unreachable, remove those states, report
+# rules that are then unused, and don't report conflicts in those states.  Test
+# what happens when a nonterminal becomes useless as a result of state removal
+# since that causes lalr.o's goto map to be rewritten.
+
+AT_DATA([[input.y]],
+[[%output "input.c"
+%left 'a'
+
+%%
+
+start: resolved_conflict 'a' reported_conflicts 'a' ;
+
+/* S/R conflict resolved as reduce, so the state with item
+ * (resolved_conflict: 'a' . unreachable1) and all it transition successors are
+ * unreachable, and the associated production is useless.  */
+resolved_conflict:
+    'a' unreachable1
+  | %prec 'a'
+  ;
+
+/* S/R conflict that need not be reported since it is unreachable because of
+ * the previous conflict resolution.  Nonterminal unreachable1 and all its
+ * productions are useless.  */
+unreachable1:
+    'a' unreachable2
+  |
+  ;
+
+/* Likewise for a R/R conflict and nonterminal unreachable2.  */
+unreachable2: | ;
+
+/* Make sure remaining S/R and R/R conflicts are still reported correctly even
+ * when their states are renumbered due to state removal.  */
+reported_conflicts:
+    'a'
+  | 'a'
+  |
+  ;
+
+]])
+
+AT_BISON_CHECK([[--report=all input.y]], 0, [],
+[[input.y: conflicts: 1 shift/reduce, 1 reduce/reduce
+input.y:12.5-20: warning: rule useless in parser due to conflicts: resolved_conflict: 'a' unreachable1
+input.y:20.5-20: warning: rule useless in parser due to conflicts: unreachable1: 'a' unreachable2
+input.y:21.4: warning: rule useless in parser due to conflicts: unreachable1: /* empty */
+input.y:25.13: warning: rule useless in parser due to conflicts: unreachable2: /* empty */
+input.y:25.16: warning: rule useless in parser due to conflicts: unreachable2: /* empty */
+input.y:31.5-7: warning: rule useless in parser due to conflicts: reported_conflicts: 'a'
+input.y:32.4: warning: rule useless in parser due to conflicts: reported_conflicts: /* empty */
+]])
+
+AT_CHECK([[cat input.output]], 0,
+[[Rules useless in parser due to conflicts
+
+    2 resolved_conflict: 'a' unreachable1
+
+    4 unreachable1: 'a' unreachable2
+    5             | /* empty */
+
+    6 unreachable2: /* empty */
+    7             | /* empty */
+
+    9 reported_conflicts: 'a'
+   10                   | /* empty */
+
+
+State 4 conflicts: 1 shift/reduce
+State 5 conflicts: 1 reduce/reduce
+
+
+Grammar
+
+    0 $accept: start $end
+
+    1 start: resolved_conflict 'a' reported_conflicts 'a'
+
+    2 resolved_conflict: 'a' unreachable1
+    3                  | /* empty */
+
+    4 unreachable1: 'a' unreachable2
+    5             | /* empty */
+
+    6 unreachable2: /* empty */
+    7             | /* empty */
+
+    8 reported_conflicts: 'a'
+    9                   | 'a'
+   10                   | /* empty */
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'a' (97) 1 2 4 8 9
+error (256)
+
+
+Nonterminals, with rules where they appear
+
+$accept (4)
+    on left: 0
+start (5)
+    on left: 1, on right: 0
+resolved_conflict (6)
+    on left: 2 3, on right: 1
+unreachable1 (7)
+    on left: 4 5, on right: 2
+unreachable2 (8)
+    on left: 6 7, on right: 4
+reported_conflicts (9)
+    on left: 8 9 10, on right: 1
+
+
+state 0
+
+    0 $accept: . start $end
+    1 start: . resolved_conflict 'a' reported_conflicts 'a'
+    2 resolved_conflict: . 'a' unreachable1
+    3                  | .  ['a']
+
+    $default  reduce using rule 3 (resolved_conflict)
+
+    start              go to state 1
+    resolved_conflict  go to state 2
+
+    Conflict between rule 3 and token 'a' resolved as reduce (%left 'a').
+
+
+state 1
+
+    0 $accept: start . $end
+
+    $end  shift, and go to state 3
+
+
+state 2
+
+    1 start: resolved_conflict . 'a' reported_conflicts 'a'
+
+    'a'  shift, and go to state 4
+
+
+state 3
+
+    0 $accept: start $end .
+
+    $default  accept
+
+
+state 4
+
+    1 start: resolved_conflict 'a' . reported_conflicts 'a'
+    8 reported_conflicts: . 'a'
+    9                   | . 'a'
+   10                   | .  ['a']
+
+    'a'  shift, and go to state 5
+
+    'a'  [reduce using rule 10 (reported_conflicts)]
+
+    reported_conflicts  go to state 6
+
+
+state 5
+
+    8 reported_conflicts: 'a' .  ['a']
+    9                   | 'a' .  ['a']
+
+    'a'       reduce using rule 8 (reported_conflicts)
+    'a'       [reduce using rule 9 (reported_conflicts)]
+    $default  reduce using rule 8 (reported_conflicts)
+
+
+state 6
+
+    1 start: resolved_conflict 'a' reported_conflicts . 'a'
+
+    'a'  shift, and go to state 7
+
+
+state 7
+
+    1 start: resolved_conflict 'a' reported_conflicts 'a' .
+
+    $default  reduce using rule 1 (start)
+]])
+
+AT_DATA([[input-keep.y]],
+[[%define lr.keep_unreachable_states
+]])
+AT_CHECK([[cat input.y >> input-keep.y]])
+
+AT_BISON_CHECK([[input-keep.y]], 0, [],
+[[input-keep.y: conflicts: 2 shift/reduce, 2 reduce/reduce
+input-keep.y:22.4: warning: rule useless in parser due to conflicts: unreachable1: /* empty */
+input-keep.y:26.16: warning: rule useless in parser due to conflicts: unreachable2: /* empty */
+input-keep.y:32.5-7: warning: rule useless in parser due to conflicts: reported_conflicts: 'a'
+input-keep.y:33.4: warning: rule useless in parser due to conflicts: reported_conflicts: /* empty */
+]])
+
+AT_CLEANUP
+
+
+## ------------------------------------------------------------ ##
+## Solved conflicts report for multiple reductions in a state.  ##
+## ------------------------------------------------------------ ##
+
+AT_SETUP([[Solved conflicts report for multiple reductions in a state]])
+
+# Used to lose earlier solved conflict messages even within a single S/R/R.
+
+AT_DATA([[input.y]],
+[[%left 'a'
+%right 'b'
+%right 'c'
+%right 'd'
+%%
+start:
+    'a'
+  | empty_a 'a'
+  | 'b'
+  | empty_b 'b'
+  | 'c'
+  | empty_c1 'c'
+  | empty_c2 'c'
+  | empty_c3 'c'
+  ;
+empty_a: %prec 'a' ;
+empty_b: %prec 'b' ;
+empty_c1: %prec 'c' ;
+empty_c2: %prec 'c' ;
+empty_c3: %prec 'd' ;
+]])
+AT_BISON_CHECK([[--report=all -o input.c input.y]], 0, [], [ignore])
+AT_CHECK([[cat input.output | sed -n '/^state 0$/,/^state 1$/p']], 0,
+[[state 0
+
+    0 $accept: . start $end
+    1 start: . 'a'
+    2      | . empty_a 'a'
+    3      | . 'b'
+    4      | . empty_b 'b'
+    5      | . 'c'
+    6      | . empty_c1 'c'
+    7      | . empty_c2 'c'
+    8      | . empty_c3 'c'
+    9 empty_a: .  ['a']
+   10 empty_b: .  []
+   11 empty_c1: .  []
+   12 empty_c2: .  []
+   13 empty_c3: .  ['c']
+
+    'b'  shift, and go to state 1
+ 
+    'c'       reduce using rule 13 (empty_c3)
+    $default  reduce using rule 9 (empty_a)
+
+    start     go to state 2
+    empty_a   go to state 3
+    empty_b   go to state 4
+    empty_c1  go to state 5
+    empty_c2  go to state 6
+    empty_c3  go to state 7
+
+    Conflict between rule 9 and token 'a' resolved as reduce (%left 'a').
+    Conflict between rule 10 and token 'b' resolved as shift (%right 'b').
+    Conflict between rule 11 and token 'c' resolved as shift (%right 'c').
+    Conflict between rule 12 and token 'c' resolved as shift (%right 'c').
+    Conflict between rule 13 and token 'c' resolved as reduce ('c' < 'd').
+
+
+state 1
+]])
+
+AT_CLEANUP
+
+
+## ------------------------------------------------------------ ##
+## %nonassoc error actions for multiple reductions in a state.  ##
+## ------------------------------------------------------------ ##
+
+# Used to abort when trying to resolve conflicts as %nonassoc error actions for
+# multiple reductions in a state.
+
+# For a %nonassoc error action token, used to print the first remaining
+# reduction on that token without brackets.
+
+AT_SETUP([[%nonassoc error actions for multiple reductions in a state]])
+
+AT_DATA([[input.y]],
+[[%nonassoc 'a' 'b' 'c'
+%%
+start:
+    'a'
+  | empty_a 'a'
+  | 'b'
+  | empty_b 'b'
+  | 'c'
+  | empty_c1 'c'
+  | empty_c2 'c'
+  | empty_c3 'c'
+  ;
+empty_a: %prec 'a' ;
+empty_b: %prec 'b' ;
+empty_c1: %prec 'c' ;
+empty_c2: %prec 'c' ;
+empty_c3: %prec 'c' ;
+]])
+
+AT_BISON_CHECK([[--report=all -o input.c input.y]], 0, [], [ignore])
+AT_CHECK([[cat input.output | sed -n '/^state 0$/,/^state 1$/p']], 0,
+[[state 0
+
+    0 $accept: . start $end
+    1 start: . 'a'
+    2      | . empty_a 'a'
+    3      | . 'b'
+    4      | . empty_b 'b'
+    5      | . 'c'
+    6      | . empty_c1 'c'
+    7      | . empty_c2 'c'
+    8      | . empty_c3 'c'
+    9 empty_a: .  []
+   10 empty_b: .  []
+   11 empty_c1: .  []
+   12 empty_c2: .  ['c']
+   13 empty_c3: .  ['c']
+
+    'a'  error (nonassociative)
+    'b'  error (nonassociative)
+    'c'  error (nonassociative)
+
+    'c'  [reduce using rule 12 (empty_c2)]
+    'c'  [reduce using rule 13 (empty_c3)]
+
+    start     go to state 1
+    empty_a   go to state 2
+    empty_b   go to state 3
+    empty_c1  go to state 4
+    empty_c2  go to state 5
+    empty_c3  go to state 6
+
+    Conflict between rule 9 and token 'a' resolved as an error (%nonassoc 'a').
+    Conflict between rule 10 and token 'b' resolved as an error (%nonassoc 'b').
+    Conflict between rule 11 and token 'c' resolved as an error (%nonassoc 'c').
+
+
+state 1
+]])
 AT_CLEANUP

@@ -1,24 +1,22 @@
 /* Output the generated parsing program for Bison.
 
    Copyright (C) 1984, 1986, 1989, 1992, 2000, 2001, 2002, 2003, 2004,
-   2005 Free Software Foundation, Inc.
+   2005, 2006 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
-   Bison is free software; you can redistribute it and/or modify it
-   under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
-   any later version.
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
-   Bison is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with Bison; see the file COPYING.  If not, write to the Free
-   Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-   02110-1301, USA.  */
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
 #include "system.h"
@@ -198,18 +196,18 @@ conflict_row (state *s)
 	/* Find all reductions for token J, and record all that do not
 	   match ACTROW[J].  */
 	for (i = 0; i < reds->num; i += 1)
-	  if (bitset_test (reds->look_ahead_tokens[i], j)
+	  if (bitset_test (reds->lookahead_tokens[i], j)
 	      && (actrow[j]
 		  != rule_number_as_item_number (reds->rules[i]->number)))
 	    {
-	      assert (0 < conflict_list_free);
+	      aver (0 < conflict_list_free);
 	      conflict_list[conflict_list_cnt] = reds->rules[i]->number + 1;
 	      conflict_list_cnt += 1;
 	      conflict_list_free -= 1;
 	    }
 
 	/* Leave a 0 at the end.  */
-	assert (0 < conflict_list_free);
+	aver (0 < conflict_list_free);
 	conflict_list[conflict_list_cnt] = 0;
 	conflict_list_cnt += 1;
 	conflict_list_free -= 1;
@@ -219,7 +217,7 @@ conflict_row (state *s)
 
 /*------------------------------------------------------------------.
 | Decide what to do for each type of token if seen as the           |
-| look-ahead in specified state.  The value returned is used as the |
+| lookahead in specified state.  The value returned is used as the  |
 | default action (yydefact) for the state.  In addition, ACTROW is  |
 | filled with what to do for each kind of token, index by symbol    |
 | number, with zero meaning do the default action.  The value       |
@@ -227,7 +225,7 @@ conflict_row (state *s)
 | situation is an error.  The parser recognizes this value	    |
 | specially.							    |
 |                                                                   |
-| This is where conflicts are resolved.  The loop over look-ahead   |
+| This is where conflicts are resolved.  The loop over lookahead    |
 | rules considered lower-numbered rules last, and the last rule     |
 | considered that likes a token gets to handle it.                  |
 |                                                                   |
@@ -252,17 +250,17 @@ action_row (state *s)
   for (i = 0; i < ntokens; i++)
     actrow[i] = conflrow[i] = 0;
 
-  if (reds->look_ahead_tokens)
+  if (reds->lookahead_tokens)
     {
       int j;
       bitset_iterator biter;
       /* loop over all the rules available here which require
-	 look-ahead (in reverse order to give precedence to the first
+	 lookahead (in reverse order to give precedence to the first
 	 rule) */
       for (i = reds->num - 1; i >= 0; --i)
 	/* and find each token which the rule finds acceptable
 	   to come next */
-	BITSET_FOR_EACH (biter, reds->look_ahead_tokens[i], j, 0)
+	BITSET_FOR_EACH (biter, reds->lookahead_tokens[i], j, 0)
 	{
 	  /* and record this rule as the rule to use if that
 	     token follows.  */
@@ -410,7 +408,7 @@ save_row (state_number s)
 
 /*------------------------------------------------------------------.
 | Figure out the actions for the specified state, indexed by        |
-| look-ahead token type.                                            |
+| lookahead token type.                                             |
 |                                                                   |
 | The YYDEFACT table is output now.  The detailed info is saved for |
 | putting into YYTABLE later.                                       |
@@ -673,14 +671,14 @@ pack_vector (vector_number vector)
   base_number *to = tos[i];
   unsigned int *conflict_to = conflict_tos[i];
 
-  assert (t);
+  aver (t != 0);
 
   for (j = lowzero - from[0]; ; j++)
     {
       int k;
       bool ok = true;
 
-      assert (j < table_size);
+      aver (j < table_size);
 
       for (k = 0; ok && k < t; k++)
 	{
@@ -713,7 +711,7 @@ pack_vector (vector_number vector)
 	  if (loc > high)
 	    high = loc;
 
-	  assert (BASE_MINIMUM <= j && j <= BASE_MAXIMUM);
+	  aver (BASE_MINIMUM <= j && j <= BASE_MAXIMUM);
 	  return j;
 	}
     }

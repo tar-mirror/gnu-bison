@@ -1,23 +1,22 @@
-m4_divert(-1)                                               -*- Autoconf -*-
+                                                            -*- Autoconf -*-
 
 # C++ skeleton for Bison
 
-# Copyright (C) 2002, 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
+# Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008 Free Software Foundation,
+# Inc.
 
-# This program is free software; you can redistribute it and/or modify
+# This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-
+#
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-# 02110-1301  USA
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 m4_include(b4_pkgdatadir/[c.m4])
 
@@ -26,10 +25,59 @@ m4_include(b4_pkgdatadir/[c.m4])
 ## ---------------- ##
 
 # Default parser class name.
-m4_define_default([b4_parser_class_name], [parser])
-m4_define_default([b4_location_type], [location])
-m4_define_default([b4_filename_type], [std::string])
-m4_define_default([b4_namespace], m4_defn([b4_prefix]))
+b4_percent_define_default([[parser_class_name]], [[parser]])
+b4_percent_define_default([[location_type]], [[location]])
+b4_percent_define_default([[filename_type]], [[std::string]])
+b4_percent_define_default([[namespace]], m4_defn([b4_prefix]))
+b4_percent_define_default([[global_tokens_and_yystype]], [[false]])
+b4_percent_define_default([[define_location_comparison]],
+                          [m4_if(b4_percent_define_get([[filename_type]]),
+                                 [std::string], [[true]], [[false]])])
+
+
+## ----------- ##
+## Namespace.  ##
+## ----------- ##
+
+m4_define([b4_namespace_ref], [b4_percent_define_get([[namespace]])])
+
+# Don't permit an empty b4_namespace_ref.  Any `::parser::foo' appended to it
+# would compile as an absolute reference with `parser' in the global namespace.
+# b4_namespace_open would open an anonymous namespace and thus establish
+# internal linkage.  This would compile.  However, it's cryptic, and internal
+# linkage for the parser would be specified in all translation units that
+# include the header, which is always generated.  If we ever need to permit
+# internal linkage somehow, surely we can find a cleaner approach.
+m4_if(m4_bregexp(b4_namespace_ref, [^[	 ]*$]), [-1], [],
+[b4_complain_at(b4_percent_define_get_loc([[namespace]]),
+                [[namespace reference is empty]])])
+
+# Instead of assuming the C++ compiler will do it, Bison should reject any
+# invalid b4_namepsace_ref that would be converted to a valid
+# b4_namespace_open.  The problem is that Bison doesn't always output
+# b4_namespace_ref to uncommented code but should reserve the ability to do so
+# in future releases without risking breaking any existing user grammars.
+# Specifically, don't allow empty names as b4_namespace_open would just convert
+# those into anonymous namespaces, and that might tempt some users.
+m4_if(m4_bregexp(b4_namespace_ref, [::[	 ]*::]), [-1], [],
+[b4_complain_at(b4_percent_define_get_loc([[namespace]]),
+                [[namespace reference has consecutive "::"]])])
+m4_if(m4_bregexp(b4_namespace_ref, [::[	 ]*$]), [-1], [],
+[b4_complain_at(b4_percent_define_get_loc([[namespace]]),
+                [[namespace reference has a trailing "::"]])])
+
+m4_define([b4_namespace_open],
+[b4_user_code([b4_percent_define_get_syncline([[namespace]])
+[namespace ]m4_bpatsubst(m4_dquote(m4_bpatsubst(m4_dquote(b4_namespace_ref),
+                                                [^\(.\)[	 ]*::], [\1])),
+                         [::], [ { namespace ])[ {]])])
+
+m4_define([b4_namespace_close],
+[b4_user_code([b4_percent_define_get_syncline([[namespace]])
+m4_bpatsubst(m4_dquote(m4_bpatsubst(m4_dquote(b4_namespace_ref),
+                                    [^\(.\)[	 ]*\(::\)?\([^][:]\|:[^][:]\)*],
+                                    [\1])),
+             [::\([^][:]\|:[^][:]\)*], [} ])[} // ]b4_namespace_ref])])
 
 
 # b4_token_enums(LIST-OF-PAIRS-TOKEN-NAME-TOKEN-NUMBER)
@@ -99,7 +147,7 @@ m4_define([b4_parse_param_decl_1],
 # Extra initialisations of the constructor.
 m4_define([b4_parse_param_cons],
           [m4_ifset([b4_parse_param],
-		    [,
+		    [
       b4_cc_constructor_calls(b4_parse_param)])])
 m4_define([b4_cc_constructor_calls],
 	  [m4_map_sep([b4_cc_constructor_call], [,

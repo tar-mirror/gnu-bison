@@ -1,4 +1,4 @@
-#line 7372 "../../doc/bison.texinfo"
+#line 8368 "../../doc/bison.texinfo"
 #include "calc++-driver.hh"
 #include "calc++-parser.hh"
 
@@ -13,15 +13,16 @@ calcxx_driver::~calcxx_driver ()
 {
 }
 
-void
+int
 calcxx_driver::parse (const std::string &f)
 {
   file = f;
   scan_begin ();
   yy::calcxx_parser parser (*this);
   parser.set_debug_level (trace_parsing);
-  parser.parse ();
+  int res = parser.parse ();
   scan_end ();
+  return res;
 }
 
 void

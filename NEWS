@@ -1,6 +1,319 @@
 Bison News
 ----------
 
+Changes in version 2.4 (2008-11-02):
+
+* %language is an experimental feature.
+
+  We first introduced this feature in test release 2.3b as a cleaner
+  alternative to %skeleton.  Since then, we have discussed the possibility of
+  modifying its effect on Bison's output file names.  Thus, in this release,
+  we consider %language to be an experimental feature that will likely evolve
+  in future releases.
+
+* Forward compatibility with GNU M4 has been improved.
+
+* Several bugs in the C++ skeleton and the experimental Java skeleton have been
+  fixed.
+
+Changes in version 2.3b (2008-05-27):
+
+* The quotes around NAME that used to be required in the following directive
+  are now deprecated:
+
+    %define NAME "VALUE"
+
+* The directive `%pure-parser' is now deprecated in favor of:
+
+    %define api.pure
+
+  which has the same effect except that Bison is more careful to warn about
+  unreasonable usage in the latter case.
+
+* Push Parsing
+
+  Bison can now generate an LALR(1) parser in C with a push interface.  That
+  is, instead of invoking `yyparse', which pulls tokens from `yylex', you can
+  push one token at a time to the parser using `yypush_parse', which will
+  return to the caller after processing each token.  By default, the push
+  interface is disabled.  Either of the following directives will enable it:
+
+    %define api.push_pull "push" // Just push; does not require yylex.
+    %define api.push_pull "both" // Push and pull; requires yylex.
+
+  See the new section `A Push Parser' in the Bison manual for details.
+
+  The current push parsing interface is experimental and may evolve.  More user
+  feedback will help to stabilize it.
+
+* The -g and --graph options now output graphs in Graphviz DOT format,
+  not VCG format.  Like --graph, -g now also takes an optional FILE argument
+  and thus cannot be bundled with other short options.
+
+* Java
+
+  Bison can now generate an LALR(1) parser in Java.  The skeleton is
+  `data/lalr1.java'.  Consider using the new %language directive instead of
+  %skeleton to select it.
+
+  See the new section `Java Parsers' in the Bison manual for details.
+
+  The current Java interface is experimental and may evolve.  More user
+  feedback will help to stabilize it.
+
+* %language
+
+  This new directive specifies the programming language of the generated
+  parser, which can be C (the default), C++, or Java.  Besides the skeleton
+  that Bison uses, the directive affects the names of the generated files if
+  the grammar file's name ends in ".y".
+
+* XML Automaton Report
+
+  Bison can now generate an XML report of the LALR(1) automaton using the new
+  `--xml' option.  The current XML schema is experimental and may evolve.  More
+  user feedback will help to stabilize it.
+
+* The grammar file may now specify the name of the parser header file using
+  %defines.  For example:
+
+    %defines "parser.h"
+
+* When reporting useless rules, useless nonterminals, and unused terminals,
+  Bison now employs the terms "useless in grammar" instead of "useless",
+  "useless in parser" instead of "never reduced", and "unused in grammar"
+  instead of "unused".
+
+* Unreachable State Removal
+
+  Previously, Bison sometimes generated parser tables containing unreachable
+  states.  A state can become unreachable during conflict resolution if Bison
+  disables a shift action leading to it from a predecessor state.  Bison now:
+
+    1. Removes unreachable states.
+
+    2. Does not report any conflicts that appeared in unreachable states.
+       WARNING: As a result, you may need to update %expect and %expect-rr
+       directives in existing grammar files.
+
+    3. For any rule used only in such states, Bison now reports the rule as
+       "useless in parser due to conflicts".
+
+  This feature can be disabled with the following directive:
+
+    %define lr.keep_unreachable_states
+
+  See the %define entry in the `Bison Declaration Summary' in the Bison manual
+  for further discussion.
+
+* Lookahead Set Correction in the `.output' Report
+
+  When instructed to generate a `.output' file including lookahead sets
+  (using `--report=lookahead', for example), Bison now prints each reduction's
+  lookahead set only next to the associated state's one item that (1) is
+  associated with the same rule as the reduction and (2) has its dot at the end
+  of its RHS.  Previously, Bison also erroneously printed the lookahead set
+  next to all of the state's other items associated with the same rule.  This
+  bug affected only the `.output' file and not the generated parser source
+  code.
+
+* --report-file=FILE is a new option to override the default `.output' file
+  name.
+
+* The `=' that used to be required in the following directives is now
+  deprecated:
+
+    %file-prefix "parser"
+    %name-prefix "c_"
+    %output "parser.c"
+
+* An Alternative to `%{...%}' -- `%code QUALIFIER {CODE}'
+
+  Bison 2.3a provided a new set of directives as a more flexible alternative to
+  the traditional Yacc prologue blocks.  Those have now been consolidated into
+  a single %code directive with an optional qualifier field, which identifies
+  the purpose of the code and thus the location(s) where Bison should generate
+  it:
+
+    1. `%code          {CODE}' replaces `%after-header  {CODE}'
+    2. `%code requires {CODE}' replaces `%start-header  {CODE}'
+    3. `%code provides {CODE}' replaces `%end-header    {CODE}'
+    4. `%code top      {CODE}' replaces `%before-header {CODE}'
+
+  See the %code entries in section `Bison Declaration Summary' in the Bison
+  manual for a summary of the new functionality.  See the new section `Prologue
+  Alternatives' for a detailed discussion including the advantages of %code
+  over the traditional Yacc prologues.
+
+  The prologue alternatives are experimental.  More user feedback will help to
+  determine whether they should become permanent features.
+
+* Revised warning: unset or unused mid-rule values
+
+  Since Bison 2.2, Bison has warned about mid-rule values that are set but not
+  used within any of the actions of the parent rule.  For example, Bison warns
+  about unused $2 in:
+
+    exp: '1' { $$ = 1; } '+' exp { $$ = $1 + $4; };
+
+  Now, Bison also warns about mid-rule values that are used but not set.  For
+  example, Bison warns about unset $$ in the mid-rule action in:
+
+    exp: '1' { $1 = 1; } '+' exp { $$ = $2 + $4; };
+
+  However, Bison now disables both of these warnings by default since they
+  sometimes prove to be false alarms in existing grammars employing the Yacc
+  constructs $0 or $-N (where N is some positive integer).
+
+  To enable these warnings, specify the option `--warnings=midrule-values' or
+  `-W', which is a synonym for `--warnings=all'.
+
+* Default %destructor or %printer with `<*>' or `<>'
+
+  Bison now recognizes two separate kinds of default %destructor's and
+  %printer's:
+
+    1. Place `<*>' in a %destructor/%printer symbol list to define a default
+       %destructor/%printer for all grammar symbols for which you have formally
+       declared semantic type tags.
+
+    2. Place `<>' in a %destructor/%printer symbol list to define a default
+       %destructor/%printer for all grammar symbols without declared semantic
+       type tags.
+
+  Bison no longer supports the `%symbol-default' notation from Bison 2.3a.
+  `<*>' and `<>' combined achieve the same effect with one exception: Bison no
+  longer applies any %destructor to a mid-rule value if that mid-rule value is
+  not actually ever referenced using either $$ or $n in a semantic action.
+
+  The default %destructor's and %printer's are experimental.  More user
+  feedback will help to determine whether they should become permanent
+  features.
+
+  See the section `Freeing Discarded Symbols' in the Bison manual for further
+  details.
+
+* %left, %right, and %nonassoc can now declare token numbers.  This is required
+  by POSIX.  However, see the end of section `Operator Precedence' in the Bison
+  manual for a caveat concerning the treatment of literal strings.
+
+* The nonfunctional --no-parser, -n, and %no-parser options have been
+  completely removed from Bison.
+
+Changes in version 2.3a, 2006-09-13:
+
+* Instead of %union, you can define and use your own union type
+  YYSTYPE if your grammar contains at least one <type> tag.
+  Your YYSTYPE need not be a macro; it can be a typedef.
+  This change is for compatibility with other Yacc implementations,
+  and is required by POSIX.
+
+* Locations columns and lines start at 1.
+  In accordance with the GNU Coding Standards and Emacs.
+
+* You may now declare per-type and default %destructor's and %printer's:
+
+  For example:
+
+    %union { char *string; }
+    %token <string> STRING1
+    %token <string> STRING2
+    %type  <string> string1
+    %type  <string> string2
+    %union { char character; }
+    %token <character> CHR
+    %type  <character> chr
+    %destructor { free ($$); } %symbol-default
+    %destructor { free ($$); printf ("%d", @$.first_line); } STRING1 string1
+    %destructor { } <character>
+
+  guarantees that, when the parser discards any user-defined symbol that has a
+  semantic type tag other than `<character>', it passes its semantic value to
+  `free'.  However, when the parser discards a `STRING1' or a `string1', it
+  also prints its line number to `stdout'.  It performs only the second
+  `%destructor' in this case, so it invokes `free' only once.
+
+  [Although we failed to mention this here in the 2.3a release, the default
+  %destructor's and %printer's were experimental, and they were rewritten in
+  future versions.]
+
+* Except for LALR(1) parsers in C with POSIX Yacc emulation enabled (with `-y',
+  `--yacc', or `%yacc'), Bison no longer generates #define statements for
+  associating token numbers with token names.  Removing the #define statements
+  helps to sanitize the global namespace during preprocessing, but POSIX Yacc
+  requires them.  Bison still generates an enum for token names in all cases.
+
+* Handling of traditional Yacc prologue blocks is now more consistent but
+  potentially incompatible with previous releases of Bison.
+
+  As before, you declare prologue blocks in your grammar file with the
+  `%{ ... %}' syntax.  To generate the pre-prologue, Bison concatenates all
+  prologue blocks that you've declared before the first %union.  To generate
+  the post-prologue, Bison concatenates all prologue blocks that you've
+  declared after the first %union.
+
+  Previous releases of Bison inserted the pre-prologue into both the header
+  file and the code file in all cases except for LALR(1) parsers in C.  In the
+  latter case, Bison inserted it only into the code file.  For parsers in C++,
+  the point of insertion was before any token definitions (which associate
+  token numbers with names).  For parsers in C, the point of insertion was
+  after the token definitions.
+
+  Now, Bison never inserts the pre-prologue into the header file.  In the code
+  file, it always inserts it before the token definitions.
+
+* Bison now provides a more flexible alternative to the traditional Yacc
+  prologue blocks: %before-header, %start-header, %end-header, and
+  %after-header.
+
+  For example, the following declaration order in the grammar file reflects the
+  order in which Bison will output these code blocks.  However, you are free to
+  declare these code blocks in your grammar file in whatever order is most
+  convenient for you:
+
+    %before-header {
+      /* Bison treats this block like a pre-prologue block: it inserts it into
+       * the code file before the contents of the header file.  It does *not*
+       * insert it into the header file.  This is a good place to put
+       * #include's that you want at the top of your code file.  A common
+       * example is `#include "system.h"'.  */
+    }
+    %start-header {
+      /* Bison inserts this block into both the header file and the code file.
+       * In both files, the point of insertion is before any Bison-generated
+       * token, semantic type, location type, and class definitions.  This is a
+       * good place to define %union dependencies, for example.  */
+    }
+    %union {
+      /* Unlike the traditional Yacc prologue blocks, the output order for the
+       * new %*-header blocks is not affected by their declaration position
+       * relative to any %union in the grammar file.  */
+    }
+    %end-header {
+      /* Bison inserts this block into both the header file and the code file.
+       * In both files, the point of insertion is after the Bison-generated
+       * definitions.  This is a good place to declare or define public
+       * functions or data structures that depend on the Bison-generated
+       * definitions.  */
+    }
+    %after-header {
+      /* Bison treats this block like a post-prologue block: it inserts it into
+       * the code file after the contents of the header file.  It does *not*
+       * insert it into the header file.  This is a good place to declare or
+       * define internal functions or data structures that depend on the
+       * Bison-generated definitions.  */
+    }
+
+  If you have multiple occurrences of any one of the above declarations, Bison
+  will concatenate the contents in declaration order.
+
+  [Although we failed to mention this here in the 2.3a release, the prologue
+  alternatives were experimental, and they were rewritten in future versions.]
+
+* The option `--report=look-ahead' has been changed to `--report=lookahead'.
+  The old spelling still works, but is not documented and may be removed
+  in a future release.
+
 Changes in version 2.3, 2006-06-05:
 
 * GLR grammars should now use `YYRECOVERING ()' instead of `YYRECOVERING',
@@ -159,8 +472,7 @@ Changes in version 2.0, 2004-12-25:
     This is a GNU extension.
 
   - The option `--report=lookahead' was changed to `--report=look-ahead'.
-    The old spelling still works, but is not documented and will be
-    removed.
+    [However, this was changed back after 2.3.]
 
   - Experimental %destructor support has been added to lalr1.cc.
 
@@ -427,8 +739,8 @@ Changes in version 1.50, 2002-10-04:
   produces additional information:
   - itemset
     complete the core item sets with their closure
-  - lookahead [changed to `look-ahead' in 1.875e and later]
-    explicitly associate look-ahead tokens to items
+  - lookahead [changed to `look-ahead' in 1.875e through 2.3, but changed back]
+    explicitly associate lookahead tokens to items
   - solved
     describe shift/reduce conflicts solving.
     Bison used to systematically output this information on top of
@@ -712,21 +1024,19 @@ End:
 -----
 
 Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003,
-2004, 2005, 2006 Free Software Foundation, Inc.
+2004, 2005, 2006, 2007, 2008 Free Software Foundation, Inc.
 
 This file is part of Bison, the GNU Compiler Compiler.
 
-Bison is free software; you can redistribute it and/or modify
+This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2, or (at your option)
-any later version.
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-Bison is distributed in the hope that it will be useful,
+This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with autoconf; see the file COPYING.  If not, write to
-the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-Boston, MA 02110-1301, USA.
+along with this program.  If not, see <http://www.gnu.org/licenses/>.

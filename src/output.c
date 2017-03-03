@@ -1,28 +1,27 @@
 /* Output the generated parsing program for Bison.
 
    Copyright (C) 1984, 1986, 1989, 1992, 2000, 2001, 2002, 2003, 2004,
-   2005, 2006 Free Software Foundation, Inc.
+   2005, 2006, 2007, 2008 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
-   Bison is free software; you can redistribute it and/or modify it
-   under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
-   any later version.
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
-   Bison is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with Bison; see the file COPYING.  If not, write to the Free
-   Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-   02110-1301, USA.  */
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
 #include "system.h"
 
+#include <configmake.h>
 #include <error.h>
 #include <get-errno.h>
 #include <quotearg.h>
@@ -36,6 +35,7 @@
 #include "muscle_tab.h"
 #include "output.h"
 #include "reader.h"
+#include "scan-code.h"    /* max_left_semantic_context */
 #include "scan-skel.h"
 #include "symtab.h"
 #include "tables.h"
@@ -156,9 +156,12 @@ prepare_symbols (void)
     int i;
     /* We assume that the table will be output starting at column 2. */
     int j = 2;
+    struct quoting_options *qo = clone_quoting_options (0);
+    set_quoting_style (qo, c_quoting_style);
+    set_quoting_flags (qo, QA_SPLIT_TRIGRAPHS);
     for (i = 0; i < nsyms; i++)
       {
-	char const *cp = quotearg_style (c_quoting_style, symbols[i]->tag);
+	char *cp = quotearg_alloc (symbols[i]->tag, -1, qo);
 	/* Width of the next token, including the two quotes, the
 	   comma and the space.  */
 	int width = strlen (cp) + 2;
@@ -172,12 +175,12 @@ prepare_symbols (void)
 	if (i)
 	  obstack_1grow (&format_obstack, ' ');
 	MUSCLE_OBSTACK_SGROW (&format_obstack, cp);
+        free (cp);
 	obstack_1grow (&format_obstack, ',');
 	j += width;
       }
-    /* Add a NULL entry to list of tokens (well, 0, as NULL might not be
-       defined).  */
-    obstack_sgrow (&format_obstack, " 0");
+    free (qo);
+    obstack_sgrow (&format_obstack, " ]b4_null[");
 
     /* Finish table and store. */
     obstack_1grow (&format_obstack, 0);
@@ -236,7 +239,7 @@ prepare_rules (void)
       /* Merger-function index (GLR).  */
       merger[r] = rules[r].merger;
     }
-  assert (i == nritems);
+  aver (i == nritems);
 
   muscle_insert_item_number_table ("rhs", rhs, ritem[0], 1, nritems);
   muscle_insert_unsigned_int_table ("prhs", prhs, 0, 0, nrules);
@@ -289,20 +292,16 @@ user_actions_output (FILE *out)
 {
   rule_number r;
 
-  fputs ("m4_define([b4_actions], \n[[", out);
+  fputs ("m4_define([b4_actions], \n[", out);
   for (r = 0; r < nrules; ++r)
     if (rules[r].action)
       {
-	fprintf (out, "  case %d:\n", r + 1);
-
-	fprintf (out, "]b4_syncline(%d, ",
+	fprintf (out, "b4_case(%d, [b4_syncline(%d, ", r + 1,
 		 rules[r].action_location.start.line);
 	escaped_output (out, rules[r].action_location.start.file);
-	fprintf (out, ")[\n");
-	fprintf (out, "    %s\n    break;\n\n",
-		 rules[r].action);
+	fprintf (out, ")\n[    %s]])\n\n", rules[r].action);
       }
-  fputs ("]])\n\n", out);
+  fputs ("])\n\n", out);
 }
 
 /*--------------------------------------.
@@ -347,7 +346,7 @@ token_definitions_output (FILE *out)
       /* At this stage, if there are literal aliases, they are part of
 	 SYMBOLS, so we should not find symbols which are the aliases
 	 here.  */
-      assert (number != USER_NUMBER_ALIAS);
+      aver (number != USER_NUMBER_ALIAS);
 
       /* Skip error token.  */
       if (sym == errtoken)
@@ -377,68 +376,41 @@ token_definitions_output (FILE *out)
 }
 
 
-/*---------------------------------------.
-| Output the symbol destructors to OUT.  |
-`---------------------------------------*/
+/*---------------------------------------------------.
+| Output the symbol destructors or printers to OUT.  |
+`---------------------------------------------------*/
 
 static void
-symbol_destructors_output (FILE *out)
+symbol_code_props_output (FILE *out, char const *what,
+                          code_props const *(*get)(symbol const *))
 {
   int i;
   char const *sep = "";
 
-  fputs ("m4_define([b4_symbol_destructors], \n[", out);
+  fputs ("m4_define([b4_symbol_", out);
+  fputs (what, out);
+  fputs ("], \n[", out);
   for (i = 0; i < nsyms; ++i)
-    if (symbols[i]->destructor)
-      {
-	symbol *sym = symbols[i];
-
-	/* Filename, lineno,
-	   Symbol-name, Symbol-number,
-	   destructor, optional typename.  */
-	fprintf (out, "%s[", sep);
-	sep = ",\n";
-	escaped_output (out, sym->destructor_location.start.file);
-	fprintf (out, ", %d, ", sym->destructor_location.start.line);
-	escaped_output (out, sym->tag);
-	fprintf (out, ", %d, [[%s]]", sym->number, sym->destructor);
-	if (sym->type_name)
-	  fprintf (out, ", [[%s]]", sym->type_name);
-	fputc (']', out);
-      }
-  fputs ("])\n\n", out);
-}
-
-
-/*------------------------------------.
-| Output the symbol printers to OUT.  |
-`------------------------------------*/
-
-static void
-symbol_printers_output (FILE *out)
-{
-  int i;
-  char const *sep = "";
-
-  fputs ("m4_define([b4_symbol_printers], \n[", out);
-  for (i = 0; i < nsyms; ++i)
-    if (symbols[i]->printer)
-      {
-	symbol *sym = symbols[i];
-
-	/* Filename, lineno,
-	   Symbol-name, Symbol-number,
-	   printer, optional typename.  */
-	fprintf (out, "%s[", sep);
-	sep = ",\n";
-	escaped_output (out, sym->printer_location.start.file);
-	fprintf (out, ", %d, ", sym->printer_location.start.line);
-	escaped_output (out, sym->tag);
-	fprintf (out, ", %d, [[%s]]", sym->number, sym->printer);
-	if (sym->type_name)
-	  fprintf (out, ", [[%s]]", sym->type_name);
-	fputc (']', out);
-      }
+    {
+      symbol *sym = symbols[i];
+      char const *code = (*get) (sym)->code;
+      if (code)
+        {
+          location loc = (*get) (sym)->location;
+          /* Filename, lineno,
+             Symbol-name, Symbol-number,
+             code, optional typename.  */
+          fprintf (out, "%s[", sep);
+          sep = ",\n";
+          escaped_output (out, loc.start.file);
+          fprintf (out, ", %d, ", loc.start.line);
+          escaped_output (out, sym->tag);
+          fprintf (out, ", %d, [[%s]]", sym->number, code);
+          if (sym->type_name)
+            fprintf (out, ", [[%s]]", sym->type_name);
+          fputc (']', out);
+        }
+    }
   fputs ("])\n\n", out);
 }
 
@@ -447,7 +419,7 @@ static void
 prepare_actions (void)
 {
   /* Figure out the actions for the specified state, indexed by
-     look-ahead token type.  */
+     lookahead token type.  */
 
   muscle_insert_rule_number_table ("defact", yydefact,
 				   yydefact[0], 1, nstates);
@@ -501,19 +473,18 @@ output_skeleton (void)
   FILE *in;
   FILE *out;
   int filter_fd[2];
-  char const *argv[6];
+  char const *argv[9];
   pid_t pid;
 
-  /* Compute the names of the package data dir and skeleton file.
-     Test whether m4sugar.m4 is readable, to check for proper
-     installation.  A faulty installation can cause deadlock, so a
-     cheap sanity check is worthwhile.  */
+  /* Compute the names of the package data dir and skeleton files.  */
   char const m4sugar[] = "m4sugar/m4sugar.m4";
+  char const m4bison[] = "bison.m4";
   char *full_m4sugar;
+  char *full_m4bison;
   char *full_skeleton;
   char const *p;
   char const *m4 = (p = getenv ("M4")) ? p : M4;
-  char const *pkgdatadir = (p = getenv ("BISON_PKGDATADIR")) ? p : PKGDATADIR;
+  char const *pkgdatadir = compute_pkgdatadir ();
   size_t skeleton_size = strlen (skeleton) + 1;
   size_t pkgdatadirlen = strlen (pkgdatadir);
   while (pkgdatadirlen && pkgdatadir[pkgdatadirlen - 1] == '/')
@@ -521,29 +492,71 @@ output_skeleton (void)
   full_skeleton = xmalloc (pkgdatadirlen + 1
 			   + (skeleton_size < sizeof m4sugar
 			      ? sizeof m4sugar : skeleton_size));
-  strcpy (full_skeleton, pkgdatadir);
+  strncpy (full_skeleton, pkgdatadir, pkgdatadirlen);
   full_skeleton[pkgdatadirlen] = '/';
   strcpy (full_skeleton + pkgdatadirlen + 1, m4sugar);
   full_m4sugar = xstrdup (full_skeleton);
-  strcpy (full_skeleton + pkgdatadirlen + 1, skeleton);
+  strcpy (full_skeleton + pkgdatadirlen + 1, m4bison);
+  full_m4bison = xstrdup (full_skeleton);
+  if (strchr (skeleton, '/'))
+    strcpy (full_skeleton, skeleton);
+  else
+    strcpy (full_skeleton + pkgdatadirlen + 1, skeleton);
+
+  /* Test whether m4sugar.m4 is readable, to check for proper
+     installation.  A faulty installation can cause deadlock, so a
+     cheap sanity check is worthwhile.  */
   xfclose (xfopen (full_m4sugar, "r"));
 
   /* Create an m4 subprocess connected to us via two pipes.  */
 
   if (trace_flag & trace_tools)
-    fprintf (stderr, "running: %s %s - %s\n",
-	     m4, full_m4sugar, full_skeleton);
+    fprintf (stderr, "running: %s %s - %s %s\n",
+             m4, full_m4sugar, full_m4bison, full_skeleton);
 
-  argv[0] = m4;
-  argv[1] = full_m4sugar;
-  argv[2] = "-";
-  argv[3] = full_skeleton;
-  argv[4] = trace_flag & trace_m4 ? "-dV" : NULL;
-  argv[5] = NULL;
+  /* Some future version of GNU M4 (most likely 1.6) may treat the -dV in a
+     position-dependent manner.  Keep it as the first argument so that all
+     files are traced.
 
+     See the thread starting at
+     <http://lists.gnu.org/archive/html/bug-bison/2008-07/msg00000.html>
+     for details.  */
+  {
+    int i = 0;
+    argv[i++] = m4;
+    argv[i++] = "-I";
+    argv[i++] = pkgdatadir;
+    if (trace_flag & trace_m4)
+      argv[i++] = "-dV";
+    argv[i++] = full_m4sugar;
+    argv[i++] = "-";
+    argv[i++] = full_m4bison;
+    argv[i++] = full_skeleton;
+    argv[i++] = NULL;
+  }
+  /* When POSIXLY_CORRECT is set, some future versions of GNU M4 (most likely
+     2.0) may drop some of the GNU extensions that Bison's skeletons depend
+     upon.  So that the next release of Bison is forward compatible with those
+     future versions of GNU M4, we unset POSIXLY_CORRECT here.
+
+     FIXME: A user might set POSIXLY_CORRECT to affect processes run from
+     macros like m4_syscmd in a custom skeleton.  For now, Bison makes no
+     promises about the behavior of custom skeletons, so this scenario is not a
+     concern.  However, we eventually want to eliminate this shortcoming.  The
+     next release of GNU M4 (1.4.12 or 1.6) will accept the -g command-line
+     option as a no-op, and later releases will accept it to indicate that
+     POSIXLY_CORRECT should be ignored.  Once the GNU M4 versions that accept
+     -g are pervasive, Bison should use -g instead of unsetting
+     POSIXLY_CORRECT.
+
+     See the thread starting at
+     <http://lists.gnu.org/archive/html/bug-bison/2008-07/msg00000.html>
+     for details.  */
+  unsetenv ("POSIXLY_CORRECT");
   init_subpipe ();
   pid = create_subpipe (argv, filter_fd);
   free (full_m4sugar);
+  free (full_m4bison);
   free (full_skeleton);
 
   out = fdopen (filter_fd[0], "w");
@@ -557,13 +570,10 @@ output_skeleton (void)
   user_actions_output (out);
   merger_output (out);
   token_definitions_output (out);
-  symbol_destructors_output (out);
-  symbol_printers_output (out);
+  symbol_code_props_output (out, "destructors", &symbol_destructor_get);
+  symbol_code_props_output (out, "printers", &symbol_printer_get);
 
   muscles_m4_output (out);
-
-  fputs ("m4_wrap([m4_divert_pop(0)])\n", out);
-  fputs ("m4_divert_push(0)dnl\n", out);
   xfclose (out);
 
   /* Read and process m4's output.  */
@@ -582,16 +592,33 @@ output_skeleton (void)
 static void
 prepare (void)
 {
+  /* BISON_USE_PUSH_FOR_PULL is for the test suite and should not be documented
+     for the user.  */
+  char const *use_push_for_pull_env = getenv ("BISON_USE_PUSH_FOR_PULL");
+  bool use_push_for_pull_flag = false;
+  if (use_push_for_pull_env != NULL
+      && use_push_for_pull_env[0] != '\0'
+      && 0 != strcmp (use_push_for_pull_env, "0"))
+    use_push_for_pull_flag = true;
+
   /* Flags. */
   MUSCLE_INSERT_BOOL ("debug_flag", debug_flag);
   MUSCLE_INSERT_BOOL ("defines_flag", defines_flag);
   MUSCLE_INSERT_BOOL ("error_verbose_flag", error_verbose);
+  MUSCLE_INSERT_BOOL ("glr_flag", glr_parser);
   MUSCLE_INSERT_BOOL ("locations_flag", locations_flag);
-  MUSCLE_INSERT_BOOL ("pure_flag", pure_parser);
+  MUSCLE_INSERT_BOOL ("nondeterministic_flag", nondeterministic_parser);
   MUSCLE_INSERT_BOOL ("synclines_flag", !no_lines_flag);
+  MUSCLE_INSERT_BOOL ("tag_seen_flag", tag_seen);
+  MUSCLE_INSERT_BOOL ("use_push_for_pull_flag", use_push_for_pull_flag);
+  MUSCLE_INSERT_BOOL ("yacc_flag", yacc_flag);
 
   /* File names.  */
-  MUSCLE_INSERT_STRING ("prefix", spec_name_prefix ? spec_name_prefix : "yy");
+  if (spec_name_prefix)
+    MUSCLE_INSERT_STRING ("prefix", spec_name_prefix);
+
+  MUSCLE_INSERT_STRING ("file_name_all_but_ext", all_but_ext);
+
 #define DEFINE(Name) MUSCLE_INSERT_STRING (#Name, Name ? Name : "")
   DEFINE (dir_prefix);
   DEFINE (parser_file_name);
@@ -603,26 +630,18 @@ prepare (void)
   DEFINE (spec_verbose_file);
 #undef DEFINE
 
-  /* User Code.  */
-  obstack_1grow (&pre_prologue_obstack, 0);
-  obstack_1grow (&post_prologue_obstack, 0);
-  muscle_insert ("pre_prologue", obstack_finish (&pre_prologue_obstack));
-  muscle_insert ("post_prologue", obstack_finish (&post_prologue_obstack));
-
-  /* Find the right skeleton file.  */
-  if (!skeleton)
-    {
-      if (glr_parser || nondeterministic_parser)
-	skeleton = "glr.c";
-      else
-	skeleton = "yacc.c";
-    }
-
-  /* About the skeletons. */
-  {
-    char const *pkgdatadir = getenv ("BISON_PKGDATADIR");
-    MUSCLE_INSERT_STRING ("pkgdatadir", pkgdatadir ? pkgdatadir : PKGDATADIR);
+  /* Find the right skeleton file, and add muscles about the skeletons.  */
+  if (skeleton)
     MUSCLE_INSERT_C_STRING ("skeleton", skeleton);
+  else
+    skeleton = language->skeleton;
+
+  /* About the skeletons.  */
+  {
+    /* b4_pkgdatadir is used inside m4_include in the skeletons, so digraphs
+       would never be expanded.  Hopefully no one has M4-special characters in
+       his Bison installation path.  */
+    MUSCLE_INSERT_STRING_RAW ("pkgdatadir", compute_pkgdatadir ());
   }
 }
 
@@ -647,6 +666,11 @@ output (void)
   output_skeleton ();
 
   obstack_free (&format_obstack, NULL);
-  obstack_free (&pre_prologue_obstack, NULL);
-  obstack_free (&post_prologue_obstack, NULL);
+}
+
+char const *
+compute_pkgdatadir (void)
+{
+  char const *pkgdatadir = getenv ("BISON_PKGDATADIR");
+  return pkgdatadir ? pkgdatadir : PKGDATADIR;
 }

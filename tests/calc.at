@@ -1,22 +1,20 @@
 # Simple calculator.                         -*- Autotest -*-
 
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Free Software
 # Foundation, Inc.
 
-# This program is free software; you can redistribute it and/or modify
+# This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2, or (at your option)
-# any later version.
-
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-
+#
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-# 02110-1301, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ## ---------------------------------------------------- ##
 ## Compile the grammar described in the documentation.  ##
@@ -41,7 +39,7 @@ AT_DATA_GRAMMAR([calc.y],
 [[/* Infix notation calculator--calc */
 ]$4
 AT_SKEL_CC_IF(
-[%define "global_tokens_and_yystype"])[
+[%define global_tokens_and_yystype])[
 %{
 #include <stdio.h>
 
@@ -141,7 +139,7 @@ exp:
 | '-' exp  %prec NEG { $$ = -$2;            }
 | exp '^' exp        { $$ = power ($1, $3); }
 | '(' exp ')'        { $$ = $2;             }
-| '(' error ')'      { $$ = 1111;           }
+| '(' error ')'      { $$ = 1111; yyerrok;  }
 | '!'                { $$ = 0; YYERROR;     }
 | '-' error          { $$ = 0; YYERROR;     }
 ;
@@ -162,7 +160,9 @@ int
 yyparse (AT_PARAM_IF([semantic_value *result, int *count]))
 {
   AT_NAME_PREFIX::parser parser[]AT_PARAM_IF([ (result, count)]);
-  parser.set_debug_level (!!YYDEBUG);
+#if YYDEBUG
+  parser.set_debug_level (1);
+#endif
   return parser.parse ();
 }
 ],
@@ -199,7 +199,7 @@ get_char (]AT_LEX_FORMALS[)
   if (res == '\n')
     {
       AT_LOC.last_line++;
-      AT_LOC.last_column = 0;
+      AT_LOC.last_column = 1;
     }
   else
     AT_LOC.last_column++;
@@ -262,7 +262,7 @@ yylex (]AT_LEX_FORMALS[)
     {
       init = 0;
 ]AT_LOCATION_IF([
-      AT_LOC.last_column = 0;
+      AT_LOC.last_column = 1;
       AT_LOC.last_line = 1;
 ])[
     }
@@ -334,7 +334,8 @@ main (int argc, const char **argv)
 
 ]AT_SKEL_CC_IF([], [m4_bmatch([$4], [%debug],
 [  yydebug = 1;])])[
-  status = yyparse (]AT_PARAM_IF([&result, &count])[);
+  status = yyparse (]AT_PARAM_IF([[&result, &count]])[);
+  fclose (input);
   if (global_result != result)
     abort ();
   if (global_count != count)
@@ -410,11 +411,13 @@ sed '/^Starting/d
 /^Stack/d
 /^Reading/d
 /^Reducing/d
+/^Return/d
 /^Shifting/d
 /^state/d
 /^Cleanup:/d
 /^Error:/d
 /^Next/d
+/^Now/d
 /^Discarding/d
 / \$[[0-9$]]* = /d
 /^yydestructor:/d' stderr >at-stderr
@@ -452,9 +455,9 @@ AT_BISON_OPTION_PUSHDEFS([$1])
 AT_DATA_CALC_Y([$1])
 
 AT_SKEL_CC_IF(
-  [AT_CHECK([bison -o calc.cc calc.y])
+  [AT_BISON_CHECK([-o calc.cc calc.y])
    AT_COMPILE_CXX([calc])],
-  [AT_CHECK([bison -o calc.c calc.y])
+  [AT_BISON_CHECK([-o calc.c calc.y])
    AT_COMPILE([calc])])
 
 # Test the priorities.
@@ -476,21 +479,21 @@ _AT_CHECK_CALC([$1],
 
 # Some syntax errors.
 _AT_CHECK_CALC_ERROR([$1], [1], [0 0], [15],
-                     [1.2: syntax error, unexpected number])
+                     [1.3: syntax error, unexpected number])
 _AT_CHECK_CALC_ERROR([$1], [1], [1//2], [20],
-                     [1.2: syntax error, unexpected '/', expecting number or '-' or '(' or '!'])
+                     [1.3: syntax error, unexpected '/', expecting number or '-' or '(' or '!'])
 _AT_CHECK_CALC_ERROR([$1], [1], [error], [5],
-                     [1.0: syntax error, unexpected $undefined])
+                     [1.1: syntax error, unexpected $undefined])
 _AT_CHECK_CALC_ERROR([$1], [1], [1 = 2 = 3], [30],
-                     [1.6: syntax error, unexpected '='])
+                     [1.7: syntax error, unexpected '='])
 _AT_CHECK_CALC_ERROR([$1], [1],
                      [
 +1],
                      [20],
-                     [2.0: syntax error, unexpected '+'])
+                     [2.1: syntax error, unexpected '+'])
 # Exercise error messages with EOF: work on an empty file.
 _AT_CHECK_CALC_ERROR([$1], [1], [/dev/null], [4],
-                     [1.0: syntax error, unexpected end of input])
+                     [1.1: syntax error, unexpected end of input])
 
 # Exercise the error token: without it, we die at the first error,
 # hence be sure to
@@ -503,29 +506,37 @@ _AT_CHECK_CALC_ERROR([$1], [1], [/dev/null], [4],
 #
 # - test the action associated to `error'
 #
-# - check the look-ahead that triggers an error is not discarded
-#   when we enter error recovery.  Below, the look-ahead causing the
+# - check the lookahead that triggers an error is not discarded
+#   when we enter error recovery.  Below, the lookahead causing the
 #   first error is ")", which is needed to recover from the error and
 #   produce the "0" that triggers the "0 != 1" error.
 #
 _AT_CHECK_CALC_ERROR([$1], [0],
                      [() + (1 + 1 + 1 +) + (* * *) + (1 * 2 * *) = 1],
                      [250],
-[1.1: syntax error, unexpected ')', expecting number or '-' or '(' or '!'
-1.17: syntax error, unexpected ')', expecting number or '-' or '(' or '!'
-1.22: syntax error, unexpected '*', expecting number or '-' or '(' or '!'
-1.40: syntax error, unexpected '*', expecting number or '-' or '(' or '!'
+[1.2: syntax error, unexpected ')', expecting number or '-' or '(' or '!'
+1.18: syntax error, unexpected ')', expecting number or '-' or '(' or '!'
+1.23: syntax error, unexpected '*', expecting number or '-' or '(' or '!'
+1.41: syntax error, unexpected '*', expecting number or '-' or '(' or '!'
 calc: error: 4444 != 1])
 
 # The same, but this time exercising explicitly triggered syntax errors.
-# POSIX says the look-ahead causing the error should not be discarded.
+# POSIX says the lookahead causing the error should not be discarded.
 _AT_CHECK_CALC_ERROR([$1], [0], [(!) + (0 0) = 1], [102],
-[1.9: syntax error, unexpected number
+[1.10: syntax error, unexpected number
 calc: error: 2222 != 1])
 _AT_CHECK_CALC_ERROR([$1], [0], [(- *) + (0 0) = 1], [113],
-[1.3: syntax error, unexpected '*', expecting number or '-' or '(' or '!'
-1.11: syntax error, unexpected number
+[1.4: syntax error, unexpected '*', expecting number or '-' or '(' or '!'
+1.12: syntax error, unexpected number
 calc: error: 2222 != 1])
+
+# Check that yyerrok works properly: second error is not reported,
+# third and fourth are.  Parse status is succesfull.
+_AT_CHECK_CALC_ERROR([$1], [0], [(* *) + (*) + (*)], [113],
+[1.2: syntax error, unexpected '*', expecting number or '-' or '(' or '!'
+1.10: syntax error, unexpected '*', expecting number or '-' or '(' or '!'
+1.16: syntax error, unexpected '*', expecting number or '-' or '(' or '!'])
+
 AT_BISON_OPTION_POPDEFS
 
 AT_CLEANUP
@@ -551,22 +562,24 @@ AT_CHECK_CALC_LALR()
 
 AT_CHECK_CALC_LALR([%defines])
 AT_CHECK_CALC_LALR([%locations])
-AT_CHECK_CALC_LALR([%name-prefix="calc"])
+AT_CHECK_CALC_LALR([%name-prefix="calc"]) dnl test deprecated `='
 AT_CHECK_CALC_LALR([%verbose])
 AT_CHECK_CALC_LALR([%yacc])
 AT_CHECK_CALC_LALR([%error-verbose])
 
-AT_CHECK_CALC_LALR([%pure-parser %locations])
+AT_CHECK_CALC_LALR([%define api.pure %locations])
+AT_CHECK_CALC_LALR([%define api.push_pull "both" %define api.pure %locations])
 AT_CHECK_CALC_LALR([%error-verbose %locations])
 
-AT_CHECK_CALC_LALR([%error-verbose %locations %defines %name-prefix="calc" %verbose %yacc])
+AT_CHECK_CALC_LALR([%error-verbose %locations %defines %name-prefix "calc" %verbose %yacc])
 
 AT_CHECK_CALC_LALR([%debug])
-AT_CHECK_CALC_LALR([%error-verbose %debug %locations %defines %name-prefix="calc" %verbose %yacc])
+AT_CHECK_CALC_LALR([%error-verbose %debug %locations %defines %name-prefix "calc" %verbose %yacc])
 
-AT_CHECK_CALC_LALR([%pure-parser %error-verbose %debug %locations %defines %name-prefix="calc" %verbose %yacc])
+AT_CHECK_CALC_LALR([%define api.pure %error-verbose %debug %locations %defines %name-prefix "calc" %verbose %yacc])
+AT_CHECK_CALC_LALR([%define api.push_pull "both" %define api.pure %error-verbose %debug %locations %defines %name-prefix "calc" %verbose %yacc])
 
-AT_CHECK_CALC_LALR([%pure-parser %error-verbose %debug %locations %defines %name-prefix="calc" %verbose %yacc %parse-param {semantic_value *result} %parse-param {int *count}])
+AT_CHECK_CALC_LALR([%define api.pure %error-verbose %debug %locations %defines %name-prefix "calc" %verbose %yacc %parse-param {semantic_value *result} %parse-param {int *count}])
 
 
 # ----------------------- #
@@ -587,22 +600,22 @@ AT_CHECK_CALC_GLR()
 
 AT_CHECK_CALC_GLR([%defines])
 AT_CHECK_CALC_GLR([%locations])
-AT_CHECK_CALC_GLR([%name-prefix="calc"])
+AT_CHECK_CALC_GLR([%name-prefix "calc"])
 AT_CHECK_CALC_GLR([%verbose])
 AT_CHECK_CALC_GLR([%yacc])
 AT_CHECK_CALC_GLR([%error-verbose])
 
-AT_CHECK_CALC_GLR([%pure-parser %locations])
+AT_CHECK_CALC_GLR([%define api.pure %locations])
 AT_CHECK_CALC_GLR([%error-verbose %locations])
 
-AT_CHECK_CALC_GLR([%error-verbose %locations %defines %name-prefix="calc" %verbose %yacc])
+AT_CHECK_CALC_GLR([%error-verbose %locations %defines %name-prefix "calc" %verbose %yacc])
 
 AT_CHECK_CALC_GLR([%debug])
-AT_CHECK_CALC_GLR([%error-verbose %debug %locations %defines %name-prefix="calc" %verbose %yacc])
+AT_CHECK_CALC_GLR([%error-verbose %debug %locations %defines %name-prefix "calc" %verbose %yacc])
 
-AT_CHECK_CALC_GLR([%pure-parser %error-verbose %debug %locations %defines %name-prefix="calc" %verbose %yacc])
+AT_CHECK_CALC_GLR([%define api.pure %error-verbose %debug %locations %defines %name-prefix "calc" %verbose %yacc])
 
-AT_CHECK_CALC_GLR([%pure-parser %error-verbose %debug %locations %defines %name-prefix="calc" %verbose %yacc %parse-param {semantic_value *result} %parse-param {int *count}])
+AT_CHECK_CALC_GLR([%define api.pure %error-verbose %debug %locations %defines %name-prefix "calc" %verbose %yacc %parse-param {semantic_value *result} %parse-param {int *count}])
 
 
 # ----------------------------- #
@@ -611,21 +624,24 @@ AT_CHECK_CALC_GLR([%pure-parser %error-verbose %debug %locations %defines %name-
 
 AT_BANNER([[Simple LALR(1) C++ Calculator.]])
 
+# First let's try using %skeleton
+AT_CHECK_CALC([%skeleton "lalr1.cc" %defines %locations])
+
 # AT_CHECK_CALC_LALR1_CC([BISON-OPTIONS])
 # ---------------------------------------
 # Start a testing chunk which compiles `calc' grammar with
 # the C++ skeleton, and performs several tests over the parser.
 m4_define([AT_CHECK_CALC_LALR1_CC],
-[AT_CHECK_CALC([%skeleton "lalr1.cc" %defines %locations] $@)])
+[AT_CHECK_CALC([%language "C++" %defines %locations] $@)])
 
 AT_CHECK_CALC_LALR1_CC([])
-AT_CHECK_CALC_LALR1_CC([%error-verbose %name-prefix="calc" %verbose %yacc])
+AT_CHECK_CALC_LALR1_CC([%error-verbose %name-prefix "calc" %verbose %yacc])
 
-AT_CHECK_CALC_LALR1_CC([%error-verbose %debug %name-prefix="calc" %verbose %yacc])
+AT_CHECK_CALC_LALR1_CC([%error-verbose %debug %name-prefix "calc" %verbose %yacc])
 
-AT_CHECK_CALC_LALR1_CC([%pure-parser %error-verbose %debug %name-prefix="calc" %verbose %yacc])
+AT_CHECK_CALC_LALR1_CC([%pure-parser %error-verbose %debug %name-prefix "calc" %verbose %yacc])
 
-AT_CHECK_CALC_LALR1_CC([%pure-parser %error-verbose %debug %name-prefix="calc" %verbose %yacc %parse-param {semantic_value *result} %parse-param {int *count}])
+AT_CHECK_CALC_LALR1_CC([%pure-parser %error-verbose %debug %name-prefix "calc" %verbose %yacc %parse-param {semantic_value *result} %parse-param {int *count}])
 
 
 
@@ -635,19 +651,22 @@ AT_CHECK_CALC_LALR1_CC([%pure-parser %error-verbose %debug %name-prefix="calc" %
 
 AT_BANNER([[Simple GLR C++ Calculator.]])
 
+# Again, we try also using %skeleton.
+AT_CHECK_CALC([%skeleton "glr.cc" %defines %locations])
+
 # AT_CHECK_CALC_GLR_CC([BISON-OPTIONS])
 # -------------------------------------
 # Start a testing chunk which compiles `calc' grammar with
 # the GLR C++ skeleton, and performs several tests over the parser.
 m4_define([AT_CHECK_CALC_GLR_CC],
-[AT_CHECK_CALC([%skeleton "glr.cc" %defines %locations] $@)])
+[AT_CHECK_CALC([%language "C++" %glr-parser %defines %locations] $@)])
 
-#AT_CHECK_CALC_GLR_CC([])
-#AT_CHECK_CALC_GLR_CC([%error-verbose %name-prefix="calc" %verbose %yacc])
+AT_CHECK_CALC_GLR_CC([])
+AT_CHECK_CALC_GLR_CC([%error-verbose %name-prefix "calc" %verbose %yacc])
 
-# AT_CHECK_CALC_GLR_CC([%debug])
-#AT_CHECK_CALC_GLR_CC([%error-verbose %debug %name-prefix="calc" %verbose %yacc])
+AT_CHECK_CALC_GLR_CC([%debug])
+AT_CHECK_CALC_GLR_CC([%error-verbose %debug %name-prefix "calc" %verbose %yacc])
 
-AT_CHECK_CALC_GLR_CC([%pure-parser %error-verbose %debug %name-prefix="calc" %verbose %yacc])
+AT_CHECK_CALC_GLR_CC([%pure-parser %error-verbose %debug %name-prefix "calc" %verbose %yacc])
 
-AT_CHECK_CALC_GLR_CC([%pure-parser %error-verbose %debug %name-prefix="calc" %verbose %yacc %parse-param {semantic_value *result} %parse-param {int *count}])
+AT_CHECK_CALC_GLR_CC([%pure-parser %error-verbose %debug %name-prefix "calc" %verbose %yacc %parse-param {semantic_value *result} %parse-param {int *count}])

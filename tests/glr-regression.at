@@ -1,20 +1,18 @@
 # Checking GLR Parsing: Regression Tests           -*- Autotest -*-
-# Copyright (C) 2002, 2003, 2005, 2006 Free Software Foundation, Inc.
+# Copyright (C) 2002, 2003, 2005, 2006, 2007 Free Software Foundation, Inc.
 
-# This program is free software; you can redistribute it and/or modify
+# This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2, or (at your option)
-# any later version.
-
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-
+#
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-# 02110-1301, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 AT_BANNER([[GLR Regression Tests]])
 
@@ -30,6 +28,7 @@ AT_DATA_GRAMMAR([glr-regr1.y],
 
 %{
 #include <stdio.h>
+#include <stdlib.h>
 
 #define YYSTYPE int
 static YYSTYPE exprMerge (YYSTYPE x0, YYSTYPE x1);
@@ -82,7 +81,10 @@ yylex (void)
 {
   for (;;)
     {
-      int ch = getchar ();
+      int ch;
+      if (feof (stdin))
+	abort ();
+      ch = getchar ();
       if (ch == EOF)
 	return 0;
       else if (ch == 'B' || ch == 'P')
@@ -91,11 +93,11 @@ yylex (void)
 }
 ]])
 
-AT_CHECK([[bison -o glr-regr1.c glr-regr1.y]], 0, [],
+AT_BISON_CHECK([[-o glr-regr1.c glr-regr1.y]], 0, [],
 [glr-regr1.y: conflicts: 1 shift/reduce
 ])
 AT_COMPILE([glr-regr1])
-AT_CHECK([[echo BPBPB | ./glr-regr1]], 0,
+AT_PARSER_CHECK([[echo BPBPB | ./glr-regr1]], 0,
 [[E -> 'B'
 E -> 'B'
 E -> E 'P' E
@@ -168,13 +170,15 @@ var_printer: 'v'
 
 %%
 
-FILE *input = NULL;
+FILE *input;
 
 int
 yylex (void)
 {
   char buf[50];
   char *s;
+  if (feof (stdin))
+    abort ();
   switch (fscanf (input, " %1[a-z,]", buf)) {
   case 1:
     return buf[0];
@@ -207,18 +211,19 @@ main (int argc, char **argv)
 }
 ]])
 
-AT_CHECK([[bison -o glr-regr2a.c glr-regr2a.y]], 0, [],
+AT_BISON_CHECK([[-o glr-regr2a.c glr-regr2a.y]], 0, [],
 [glr-regr2a.y: conflicts: 2 shift/reduce
 ])
 AT_COMPILE([glr-regr2a])
 
-AT_CHECK([[echo s VARIABLE_1 t v x q | ./glr-regr2a]], 0,
+AT_PARSER_CHECK([[echo s VARIABLE_1 t v x q | ./glr-regr2a]], 0,
 [[Variable: 'VARIABLE_1'
 ]], [])
-AT_CHECK([[echo s VARIABLE_1 , ANOTHER_VARIABLE_2 t e | ./glr-regr2a]], 0,
+AT_PARSER_CHECK([[echo s VARIABLE_1 , ANOTHER_VARIABLE_2 t e | ./glr-regr2a]],
+0,
 [[Varlist: 'VARIABLE_1,ANOTHER_VARIABLE_2'
 ]])
-AT_CHECK([[echo s VARIABLE_3 t v x | ./glr-regr2a]], 0,
+AT_PARSER_CHECK([[echo s VARIABLE_3 t v x | ./glr-regr2a]], 0,
 [[Variable: 'VARIABLE_3'
 ]], [])
 
@@ -237,6 +242,7 @@ AT_DATA_GRAMMAR([glr-regr3.y],
 
 %{
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdarg.h>
 
 static int MergeRule (int x0, int x1);
@@ -299,6 +305,8 @@ int T[] = { T1, T2, T3, T4 };
 int yylex (void)
 {
   char inp[3];
+  if (feof (stdin))
+    abort ();
   if (fscanf (input, "%2s", inp) == EOF)
     return 0;
   switch (inp[0])
@@ -317,12 +325,13 @@ int main(int argc, char* argv[]) {
 }
 ]])
 
-AT_CHECK([[bison -o glr-regr3.c glr-regr3.y]], 0, [],
+AT_BISON_CHECK([[-o glr-regr3.c glr-regr3.y]], 0, [],
 [glr-regr3.y: conflicts: 1 shift/reduce, 1 reduce/reduce
 ])
 AT_COMPILE([glr-regr3])
 
-AT_CHECK([[echo p1 t4 o2 p1 p1 t1 o1 t2 p2 o1 t3 p2 p2 | ./glr-regr3]], 0,
+AT_PARSER_CHECK([[echo p1 t4 o2 p1 p1 t1 o1 t2 p2 o1 t3 p2 p2 | ./glr-regr3]],
+0,
 [[Result: 1c04
 ]], [])
 
@@ -350,6 +359,8 @@ AT_DATA_GRAMMAR([glr-regr4.y],
   static char *make_value (char const *, char const *);
   static void yyerror (char const *);
   static int yylex (void);
+  static char *ptrs[100];
+  static char **ptrs_next = ptrs;
 %}
 
 %%
@@ -375,21 +386,27 @@ B:  'a' { $$ = make_value ("B", "'a'");  } ;
 static int
 yylex (void)
 {
-  static char const *input = "a";
-  return *input++;
+  static char const input[] = "a";
+  static size_t toknum;
+  if (! (toknum < sizeof input))
+    abort ();
+  return input[toknum++];
 }
 
 int
 main (void)
 {
-  return yyparse ();
+  int status = yyparse ();
+  while (ptrs_next != ptrs)
+    free (*--ptrs_next);
+  return status;
 }
 
 static char *
 make_value (char const *parent, char const *child)
 {
   char const format[] = "%s <- %s";
-  char *value =
+  char *value = *ptrs_next++ =
     (char *) malloc (strlen (parent) + strlen (child) + sizeof format);
   sprintf (value, format, parent, child);
   return value;
@@ -399,7 +416,7 @@ static char *
 merge (YYSTYPE s1, YYSTYPE s2)
 {
   char const format[] = "merge{ %s and %s }";
-  char *value =
+  char *value = *ptrs_next++ =
     (char *) malloc (strlen (s1.ptr) + strlen (s2.ptr) + sizeof format);
   sprintf (value, format, s1.ptr, s2.ptr);
   return value;
@@ -412,12 +429,12 @@ yyerror (char const *msg)
 }
 ]])
 
-AT_CHECK([[bison -o glr-regr4.c glr-regr4.y]], 0, [],
+AT_BISON_CHECK([[-o glr-regr4.c glr-regr4.y]], 0, [],
 [glr-regr4.y: conflicts: 1 reduce/reduce
 ])
 AT_COMPILE([glr-regr4])
 
-AT_CHECK([[./glr-regr4]], 0,
+AT_PARSER_CHECK([[./glr-regr4]], 0,
 [[merge{ S <- merge{ A <- A1 <- 'a' and A <- A2 <- 'a' } and S <- B <- 'a' }
 ]], [])
 
@@ -465,8 +482,11 @@ start:
 static int
 yylex (void)
 {
-  static char const *input = "a";
-  return *input++;
+  static char const input[] = "a";
+  static size_t toknum;
+  if (! (toknum < sizeof input))
+    abort ();
+  return input[toknum++];
 }
 
 static void
@@ -482,12 +502,12 @@ main (void)
 }
 ]])
 
-AT_CHECK([[bison -o glr-regr5.c glr-regr5.y]], 0, [],
+AT_BISON_CHECK([[-o glr-regr5.c glr-regr5.y]], 0, [],
 [glr-regr5.y: conflicts: 1 reduce/reduce
 ])
 AT_COMPILE([glr-regr5])
 
-AT_CHECK([[./glr-regr5]], 0, [],
+AT_PARSER_CHECK([[./glr-regr5]], 0, [],
 [syntax is ambiguous
 ])
 
@@ -527,8 +547,11 @@ start: 'a' | 'a' ;
 static int
 yylex (void)
 {
-  static char const *input = "a";
-  return *input++;
+  static char const input[] = "a";
+  static size_t toknum;
+  if (! (toknum < sizeof input))
+    abort ();
+  return input[toknum++];
 }
 
 static void
@@ -544,12 +567,12 @@ main (void)
 }
 ]])
 
-AT_CHECK([[bison -o glr-regr6.c glr-regr6.y]], 0, [],
+AT_BISON_CHECK([[-o glr-regr6.c glr-regr6.y]], 0, [],
 [glr-regr6.y: conflicts: 1 reduce/reduce
 ])
 AT_COMPILE([glr-regr6])
 
-AT_CHECK([[./glr-regr6]], 0,
+AT_PARSER_CHECK([[./glr-regr6]], 0,
 [Destructor called.
 ],
 [syntax is ambiguous
@@ -573,14 +596,19 @@ AT_DATA_GRAMMAR([glr-regr7.y],
   static void yyerror (char const *);
   static int yylex (void);
   #define YYSTACKEXPANDABLE 0
+  typedef struct count_node {
+    int count;
+    struct count_node *prev;
+  } count_node;
+  static count_node *tail;
 %}
 
 %glr-parser
-%union { int *count; }
-%type <count> 'a'
+%union { count_node *node; }
+%type <node> 'a'
 
 %destructor {
-  if ((*$$)++)
+  if ($$->count++)
     fprintf (stderr, "Destructor called on same value twice.\n");
 } 'a'
 
@@ -599,13 +627,15 @@ stack2: 'a' ;
 static int
 yylex (void)
 {
-  yylval.count = (int *) malloc (sizeof (int));
-  if (!yylval.count)
+  yylval.node = (count_node*) malloc (sizeof *yylval.node);
+  if (!yylval.node)
     {
       fprintf (stderr, "Test inconclusive.\n");
       exit (EXIT_FAILURE);
     }
-  *yylval.count = 0;
+  yylval.node->count = 0;
+  yylval.node->prev = tail;
+  tail = yylval.node;
   return 'a';
 }
 
@@ -618,16 +648,23 @@ yyerror (char const *msg)
 int
 main (void)
 {
-  return yyparse ();
+  int status = yyparse ();
+  while (tail)
+    {
+      count_node *prev = tail->prev;
+      free (tail);
+      tail = prev;
+    }
+  return status;
 }
 ]])
 
-AT_CHECK([[bison -o glr-regr7.c glr-regr7.y]], 0, [],
+AT_BISON_CHECK([[-o glr-regr7.c glr-regr7.y]], 0, [],
 [glr-regr7.y: conflicts: 2 reduce/reduce
 ])
 AT_COMPILE([glr-regr7])
 
-AT_CHECK([[./glr-regr7]], 2, [],
+AT_PARSER_CHECK([[./glr-regr7]], 2, [],
 [memory exhausted
 ])
 
@@ -697,6 +734,8 @@ int yylex (void)
   lexIndex += 1;
   switch (lexIndex)
     {
+    default:
+      abort ();
     case 1:
       yylloc.first_column = 1;
       yylloc.last_column = 9;
@@ -705,7 +744,7 @@ int yylex (void)
       yylloc.first_column = 13;
       yylloc.last_column = 17;
       return T_PORT;
-    default:
+    case 3:
       return 0;
     }
 }
@@ -718,12 +757,12 @@ main (void)
 }
 ]])
 
-AT_CHECK([[bison -o glr-regr8.c glr-regr8.y]], 0, [],
+AT_BISON_CHECK([[-o glr-regr8.c glr-regr8.y]], 0, [],
 [glr-regr8.y: conflicts: 1 reduce/reduce
 ])
 AT_COMPILE([glr-regr8])
 
-AT_CHECK([[./glr-regr8]], 0,
+AT_PARSER_CHECK([[./glr-regr8]], 0,
 [empty: 9/9
 1/9 - 9/9 - 13/17
 ],
@@ -801,12 +840,12 @@ main (void)
 }
 ]])
 
-AT_CHECK([[bison -o glr-regr9.c glr-regr9.y]], 0, [],
+AT_BISON_CHECK([[-o glr-regr9.c glr-regr9.y]], 0, [],
 [glr-regr9.y: conflicts: 1 reduce/reduce
 ])
 AT_COMPILE([glr-regr9])
 
-AT_CHECK([[./glr-regr9]], 0, [],
+AT_PARSER_CHECK([[./glr-regr9]], 0, [],
 [memory exhausted
 ])
 
@@ -822,6 +861,7 @@ AT_SETUP([Corrupted semantic options if user action cuts parse])
 AT_DATA_GRAMMAR([glr-regr10.y],
 [[
 %{
+# include <stdlib.h>
 # include <stdio.h>
   static void yyerror (char const *);
   static int yylex (void);
@@ -851,6 +891,9 @@ yyerror (char const *msg)
 static int
 yylex (void)
 {
+  static int called;
+  if (called++)
+    abort ();
   return 0;
 }
 
@@ -864,12 +907,12 @@ main (void)
 }
 ]])
 
-AT_CHECK([[bison -o glr-regr10.c glr-regr10.y]], 0, [],
+AT_BISON_CHECK([[-o glr-regr10.c glr-regr10.y]], 0, [],
 [glr-regr10.y: conflicts: 1 reduce/reduce
 ])
 AT_COMPILE([glr-regr10])
 
-AT_CHECK([[./glr-regr10]], 0, [], [])
+AT_PARSER_CHECK([[./glr-regr10]], 0, [], [])
 
 AT_CLEANUP
 
@@ -913,8 +956,11 @@ yyerror (char const *msg)
 static int
 yylex (void)
 {
-  static char const *input = "a";
-  return *input++;
+  static char const input[] = "a";
+  static size_t toknum;
+  if (! (toknum < sizeof input))
+    abort ();
+  return input[toknum++];
 }
 
 int
@@ -930,12 +976,12 @@ main (void)
 }
 ]])
 
-AT_CHECK([[bison -o glr-regr11.c glr-regr11.y]], 0, [],
+AT_BISON_CHECK([[-o glr-regr11.c glr-regr11.y]], 0, [],
 [glr-regr11.y: conflicts: 1 reduce/reduce
 ])
 AT_COMPILE([glr-regr11])
 
-AT_CHECK([[./glr-regr11]], 0, [], [])
+AT_PARSER_CHECK([[./glr-regr11]], 0, [], [])
 
 AT_CLEANUP
 
@@ -1030,10 +1076,12 @@ static int
 yylex (void)
 {
   static int const input[] = { PARENT_RHS_AFTER, 0 };
-  static const int *inputp = input;
-  if (*inputp == PARENT_RHS_AFTER)
+  static size_t toknum;
+  if (! (toknum < sizeof input / sizeof *input))
+    abort ();
+  if (input[toknum] == PARENT_RHS_AFTER)
     parent_rhs_after_value = 1;
-  return *inputp++;
+  return input[toknum++];
 }
 
 int
@@ -1059,12 +1107,12 @@ main (void)
 }
 ]])
 
-AT_CHECK([[bison -o glr-regr12.c glr-regr12.y]], 0, [],
+AT_BISON_CHECK([[-o glr-regr12.c glr-regr12.y]], 0, [],
 [glr-regr12.y: conflicts: 1 shift/reduce, 1 reduce/reduce
 ])
 AT_COMPILE([glr-regr12])
 
-AT_CHECK([[./glr-regr12]], 0, [], [])
+AT_PARSER_CHECK([[./glr-regr12]], 0, [], [])
 
 AT_CLEANUP
 
@@ -1090,7 +1138,7 @@ AT_DATA_GRAMMAR([glr-regr13.y],
   #include <stdio.h>
   static void yyerror (char const *);
   static int yylex (void);
-  static void print_look_ahead (char const *);
+  static void print_lookahead (char const *);
   #define USE(value)
 %}
 
@@ -1104,32 +1152,32 @@ AT_DATA_GRAMMAR([glr-regr13.y],
 start:
   defstate_init defstate_shift 'b' change_lookahead 'a' {
     USE ($3);
-    print_look_ahead ("start <- defstate_init defstate_shift 'b'");
+    print_lookahead ("start <- defstate_init defstate_shift 'b'");
   }
   ;
 defstate_init:
   {
-    print_look_ahead ("defstate_init <- empty string");
+    print_lookahead ("defstate_init <- empty string");
   }
   ;
 defstate_shift:
   nondefstate defstate_look 'a' {
     USE ($3);
-    print_look_ahead ("defstate_shift <- nondefstate defstate_look 'a'");
+    print_lookahead ("defstate_shift <- nondefstate defstate_look 'a'");
   }
   ;
 defstate_look:
   {
-    print_look_ahead ("defstate_look <- empty string");
+    print_lookahead ("defstate_look <- empty string");
   }
   ;
 nondefstate:
   {
-    print_look_ahead ("nondefstate <- empty string");
+    print_lookahead ("nondefstate <- empty string");
   }
   | 'b' {
     USE ($1);
-    print_look_ahead ("nondefstate <- 'b'");
+    print_lookahead ("nondefstate <- 'b'");
   }
   ;
 change_lookahead:
@@ -1149,16 +1197,18 @@ yyerror (char const *msg)
 static int
 yylex (void)
 {
-  static char const *input = "ab";
-  static int i = 0;
+  static char const input[] = "ab";
+  static size_t toknum;
+  if (! (toknum < sizeof input))
+    abort ();
   yylloc.first_line = yylloc.last_line = 1;
-  yylloc.first_column = yylloc.last_column = i + 1;
-  yylval.value = input[i] + 'A' - 'a';
-  return input[i++];
+  yylloc.first_column = yylloc.last_column = toknum + 1;
+  yylval.value = input[toknum] + 'A' - 'a';
+  return input[toknum++];
 }
 
 static void
-print_look_ahead (char const *reduction)
+print_lookahead (char const *reduction)
 {
   printf ("%s:\n  yychar=", reduction);
   if (yychar == YYEMPTY)
@@ -1186,10 +1236,10 @@ main (void)
 }
 ]])
 
-AT_CHECK([[bison -o glr-regr13.c glr-regr13.y]], 0, [], [])
+AT_BISON_CHECK([[-o glr-regr13.c glr-regr13.y]], 0, [], [])
 AT_COMPILE([glr-regr13])
 
-AT_CHECK([[./glr-regr13]], 0,
+AT_PARSER_CHECK([[./glr-regr13]], 0,
 [defstate_init <- empty string:
   yychar=YYEMPTY
 nondefstate <- empty string:
@@ -1235,10 +1285,11 @@ AT_DATA_GRAMMAR([glr-regr14.y],
 %union { char value; }
 
 %{
+  #include <stdlib.h>
   #include <stdio.h>
   static void yyerror (char const *);
   static int yylex (void);
-  static void print_look_ahead (char const *);
+  static void print_lookahead (char const *);
   static char merge (union YYSTYPE, union YYSTYPE);
   #define USE(value)
 %}
@@ -1252,7 +1303,7 @@ AT_DATA_GRAMMAR([glr-regr14.y],
 start:
   merge 'c' stack_explosion {
     USE ($2); USE ($3);
-    print_look_ahead ("start <- merge 'c' stack_explosion");
+    print_lookahead ("start <- merge 'c' stack_explosion");
   }
   ;
 
@@ -1260,44 +1311,44 @@ start:
 merge:
   nonconflict1 'a' 'b' nonconflict2 %dprec 1 {
     USE ($2); USE ($3);
-    print_look_ahead ("merge <- nonconflict1 'a' 'b' nonconflict2");
+    print_lookahead ("merge <- nonconflict1 'a' 'b' nonconflict2");
   }
   | conflict defstate_look 'a' nonconflict2 'b' defstate_shift %dprec 2 {
     USE ($3); USE ($5);
-    print_look_ahead ("merge <- conflict defstate_look 'a' nonconflict2 'b'"
+    print_lookahead ("merge <- conflict defstate_look 'a' nonconflict2 'b'"
 		      " defstate_shift");
   }
   ;
 
 nonconflict1:
   {
-    print_look_ahead ("nonconflict1 <- empty string");
+    print_lookahead ("nonconflict1 <- empty string");
   }
   ;
 nonconflict2:
   {
-    print_look_ahead ("nonconflict2 <- empty string");
+    print_lookahead ("nonconflict2 <- empty string");
   }
   | 'a' {
     USE ($1);
-    print_look_ahead ("nonconflict2 <- 'a'");
+    print_lookahead ("nonconflict2 <- 'a'");
   }
   ;
 conflict:
   {
-    print_look_ahead ("conflict <- empty string");
+    print_lookahead ("conflict <- empty string");
   }
   ;
 defstate_look:
   {
-    print_look_ahead ("defstate_look <- empty string");
+    print_lookahead ("defstate_look <- empty string");
   }
   ;
 
 /* yychar != YYEMPTY but lookahead need is yyfalse.  */
 defstate_shift:
   {
-    print_look_ahead ("defstate_shift <- empty string");
+    print_lookahead ("defstate_shift <- empty string");
   }
   ;
 
@@ -1355,16 +1406,18 @@ yyerror (char const *msg)
 static int
 yylex (void)
 {
-  static char const *input = "abcdddd";
-  static int i = 0;
+  static char const input[] = "abcdddd";
+  static size_t toknum;
+  if (! (toknum < sizeof input))
+    abort ();
   yylloc.first_line = yylloc.last_line = 1;
-  yylloc.first_column = yylloc.last_column = i + 1;
-  yylval.value = input[i] + 'A' - 'a';
-  return input[i++];
+  yylloc.first_column = yylloc.last_column = toknum + 1;
+  yylval.value = input[toknum] + 'A' - 'a';
+  return input[toknum++];
 }
 
 static void
-print_look_ahead (char const *reduction)
+print_lookahead (char const *reduction)
 {
   printf ("%s:\n  yychar=", reduction);
   if (yychar == YYEMPTY)
@@ -1399,12 +1452,12 @@ main (void)
 }
 ]])
 
-AT_CHECK([[bison -o glr-regr14.c glr-regr14.y]], 0, [],
+AT_BISON_CHECK([[-o glr-regr14.c glr-regr14.y]], 0, [],
 [glr-regr14.y: conflicts: 3 reduce/reduce
 ])
 AT_COMPILE([glr-regr14])
 
-AT_CHECK([[./glr-regr14]], 0,
+AT_PARSER_CHECK([[./glr-regr14]], 0,
 [conflict <- empty string:
   yychar='a', yylval='A', yylloc=(1,1),(1,1)
 defstate_look <- empty string:
@@ -1484,6 +1537,9 @@ yyerror (char const *msg)
 static int
 yylex (void)
 {
+  static int called;
+  if (called++)
+    abort ();
   return 0;
 }
 
@@ -1500,12 +1556,12 @@ main (void)
 }
 ]])
 
-AT_CHECK([[bison -o glr-regr15.c glr-regr15.y]], 0, [],
+AT_BISON_CHECK([[-o glr-regr15.c glr-regr15.y]], 0, [],
 [glr-regr15.y: conflicts: 2 reduce/reduce
 ])
 AT_COMPILE([glr-regr15])
 
-AT_CHECK([[./glr-regr15]], 0, [],
+AT_PARSER_CHECK([[./glr-regr15]], 0, [],
 [syntax is ambiguous
 ])
 
@@ -1547,10 +1603,13 @@ yyerror (char const *msg)
 static int
 yylex (void)
 {
-  static char const *input = "ab";
-  if (*input == 'b')
+  static char const input[] = "ab";
+  static size_t toknum;
+  if (! (toknum < sizeof input))
+    abort ();
+  if (input[toknum] == 'b')
     lookahead_value = 1;
-  return *input++;
+  return input[toknum++];
 }
 
 int
@@ -1566,12 +1625,12 @@ main (void)
 }
 ]])
 
-AT_CHECK([[bison -o glr-regr16.c glr-regr16.y]], 0, [],
+AT_BISON_CHECK([[-o glr-regr16.c glr-regr16.y]], 0, [],
 [glr-regr16.y: conflicts: 1 reduce/reduce
 ])
 AT_COMPILE([glr-regr16])
 
-AT_CHECK([[./glr-regr16]], 0, [],
+AT_PARSER_CHECK([[./glr-regr16]], 0, [],
 [syntax error
 ])
 
@@ -1587,7 +1646,7 @@ AT_DATA_GRAMMAR([glr-regr17.y],
 [[
 %glr-parser
 %locations
-%pure-parser
+%define api.pure
 %error-verbose
 
 %union { int dummy; }
@@ -1636,12 +1695,14 @@ static int
 yylex (YYSTYPE *lvalp, YYLTYPE *llocp)
 {
   static char const input[] = "ab";
-  static char const *inputp = input;
+  static size_t toknum;
+  if (! (toknum < sizeof input))
+    abort ();
   lvalp->dummy = 0;
   llocp->first_line = llocp->last_line = 2;
-  llocp->first_column = inputp - input + 1;
+  llocp->first_column = toknum + 1;
   llocp->last_column = llocp->first_column + 1;
-  return *inputp++;
+  return input[toknum++];
 }
 
 int
@@ -1651,13 +1712,77 @@ main (void)
 }
 ]])
 
-AT_CHECK([[bison -o glr-regr17.c glr-regr17.y]], 0, [],
+AT_BISON_CHECK([[-o glr-regr17.c glr-regr17.y]], 0, [],
 [glr-regr17.y: conflicts: 3 reduce/reduce
 ])
 AT_COMPILE([glr-regr17])
 
-AT_CHECK([[./glr-regr17]], 0, [],
+AT_PARSER_CHECK([[./glr-regr17]], 0, [],
 [Error at 1.1-2.3: syntax is ambiguous.
+])
+
+AT_CLEANUP
+
+
+## -------------------------------------------------------------##
+## Missed %merge type warnings when LHS type is declared later. ##
+## -------------------------------------------------------------##
+
+AT_SETUP([Missed %merge type warnings when LHS type is declared later])
+AT_DATA_GRAMMAR([glr-regr18.y],
+[[%glr-parser
+
+%{
+  #include <stdlib.h>
+  static void yyerror (char const *);
+  static int yylex ();
+%}
+
+%union {
+  int type1;
+  int type2;
+  int type3;
+}
+
+%%
+
+sym1: sym2 %merge<merge> { $$ = $1; } ;
+sym2: sym3 %merge<merge> { $$ = $1; } ;
+sym3: %merge<merge> { $$ = 0; } ;
+
+%type <type1> sym1;
+%type <type2> sym2;
+%type <type3> sym3;
+
+%%
+
+static void
+yyerror (char const *msg)
+{
+  fprintf (stderr, "%s\n", msg);
+}
+
+static int
+yylex ()
+{
+  static int called;
+  if (called++)
+    abort ();
+  return 0;
+}
+
+int
+main (void)
+{
+  return yyparse ();
+}
+]])
+
+AT_BISON_CHECK([[-o glr-regr18.c glr-regr18.y]], 1, [],
+[glr-regr18.y:26.18-24: result type clash on merge function `merge': <type2> != <type1>
+glr-regr18.y:25.18-24: previous declaration
+glr-regr18.y:27.13-19: result type clash on merge function `merge': <type3> != <type2>
+glr-regr18.y:26.18-24: previous declaration
 ])
 
 AT_CLEANUP

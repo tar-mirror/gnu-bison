@@ -1,30 +1,30 @@
 /* Top level entry point of Bison.
 
-   Copyright (C) 1984, 1986, 1989, 1992, 1995, 2000, 2001, 2002, 2004, 2005
-   Free Software Foundation, Inc.
+   Copyright (C) 1984, 1986, 1989, 1992, 1995, 2000, 2001, 2002, 2004,
+   2005, 2006, 2007 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
-   Bison is free software; you can redistribute it and/or modify
+   This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
-   any later version.
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
-   Bison is distributed in the hope that it will be useful,
+   This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with Bison; see the file COPYING.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.  */
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
 #include "system.h"
 
 #include <bitset_stats.h>
 #include <bitset.h>
+#include <configmake.h>
+#include <quotearg.h>
 #include <timevar.h>
 
 #include "LR0.h"
@@ -40,14 +40,15 @@
 #include "output.h"
 #include "print.h"
 #include "print_graph.h"
+#include "print-xml.h"
 #include "reader.h"
 #include "reduce.h"
+#include "scan-code.h"
+#include "scan-gram.h"
+#include "scan-skel.h"
 #include "symtab.h"
 #include "tables.h"
 #include "uniqstr.h"
-
-/* The name this program was run with, for messages.  */
-char *program_name;
 
 
 
@@ -108,11 +109,21 @@ main (int argc, char *argv[])
   timevar_pop (TV_LALR);
 
   /* Find and record any conflicts: places where one token of
-     look-ahead is not enough to disambiguate the parsing.  In file
+     lookahead is not enough to disambiguate the parsing.  In file
      conflicts.  Also resolve s/r conflicts based on precedence
      declarations.  */
   timevar_push (TV_CONFLICTS);
   conflicts_solve ();
+  muscle_percent_define_default ("lr.keep_unreachable_states", "false");
+  if (!muscle_percent_define_flag_if ("lr.keep_unreachable_states"))
+    {
+      state_number *old_to_new = xnmalloc (nstates, sizeof *old_to_new);
+      state_number nstates_old = nstates;
+      state_remove_unreachable_states (old_to_new);
+      lalr_update_state_numbers (old_to_new, nstates_old);
+      conflicts_update_state_numbers (old_to_new, nstates_old);
+      free (old_to_new);
+    }
   conflicts_print ();
   timevar_pop (TV_CONFLICTS);
 
@@ -121,8 +132,8 @@ main (int argc, char *argv[])
   tables_generate ();
   timevar_pop (TV_ACTIONS);
 
-  grammar_rules_never_reduced_report
-    (_("rule never reduced because of conflicts"));
+  grammar_rules_useless_report
+    (_("rule useless in parser due to conflicts"));
 
   /* Output file names. */
   compute_output_file_names ();
@@ -135,7 +146,7 @@ main (int argc, char *argv[])
       timevar_pop (TV_REPORT);
     }
 
-  /* Output the VCG graph.  */
+  /* Output the graph.  */
   if (graph_flag)
     {
       timevar_push (TV_GRAPH);
@@ -143,12 +154,20 @@ main (int argc, char *argv[])
       timevar_pop (TV_GRAPH);
     }
 
+  /* Output xml.  */
+  if (xml_flag)
+    {
+      timevar_push (TV_XML);
+      print_xml ();
+      timevar_pop (TV_XML);
+    }
+
   /* Stop if there were errors, to avoid trashing previous output
      files.  */
   if (complaint_issued)
     goto finish;
 
-  /* Look-ahead tokens are no longer needed. */
+  /* Lookahead tokens are no longer needed. */
   timevar_push (TV_FREE);
   lalr_free ();
   timevar_pop (TV_FREE);
@@ -166,12 +185,16 @@ main (int argc, char *argv[])
   reduce_free ();
   conflicts_free ();
   grammar_free ();
+  output_file_names_free ();
 
   /* The scanner memory cannot be released right after parsing, as it
      contains things such as user actions, prologue, epilogue etc.  */
-  scanner_free ();
+  gram_scanner_free ();
   muscle_free ();
   uniqstrs_free ();
+  code_scanner_free ();
+  skel_scanner_free ();
+  quotearg_free ();
   timevar_pop (TV_FREE);
 
   if (trace_flag & trace_bitsets)

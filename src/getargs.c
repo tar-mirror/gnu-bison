@@ -1,29 +1,30 @@
 /* Parse command line arguments for Bison.
 
    Copyright (C) 1984, 1986, 1989, 1992, 2000, 2001, 2002, 2003, 2004,
-   2005, 2006 Free Software Foundation, Inc.
+   2005, 2006, 2007, 2008 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
-   Bison is free software; you can redistribute it and/or modify it
-   under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
-   any later version.
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
-   Bison is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with Bison; see the file COPYING.  If not, write to the Free
-   Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-   02110-1301, USA.  */
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include <config.h>
 #include "system.h"
+#include "output.h"
 
 #include <argmatch.h>
+#include <c-strcase.h>
+#include <configmake.h>
 #include <error.h>
 
 /* Hack to get <getopt.h> to declare getopt with a prototype.  */
@@ -47,9 +48,9 @@
 bool debug_flag;
 bool defines_flag;
 bool graph_flag;
+bool xml_flag;
 bool locations_flag;
 bool no_lines_flag;
-bool no_parser_flag;
 bool token_table_flag;
 bool yacc_flag;	/* for -y */
 
@@ -57,15 +58,104 @@ bool error_verbose = false;
 
 bool nondeterministic_parser = false;
 bool glr_parser = false;
-bool pure_parser = false;
 
 int report_flag = report_none;
 int trace_flag = trace_none;
+int warnings_flag = warnings_none;
 
+static struct bison_language const valid_languages[] = {
+  { "c", "c-skel.m4", ".c", ".h", true },
+  { "c++", "c++-skel.m4", ".cc", ".hh", true },
+  { "java", "java-skel.m4", ".java", ".java", false },
+  { "", "", "", "", false }
+};
+
+static int skeleton_prio = 2;
 const char *skeleton = NULL;
+static int language_prio = 2;
+struct bison_language const *language = &valid_languages[0];
 const char *include = NULL;
 
-extern char *program_name;
+char *program_name;
+
+
+/** Decode an option's set of keys.
+ *
+ *  \param option   option being decoded.
+ *  \param keys     array of valid subarguments.
+ *  \param values   array of corresponding (int) values.
+ *  \param flags    the flags to update
+ *  \param args     colon separated list of effective subarguments to decode.
+ *                  If 0, then activate all the flags.
+ *
+ *  The special value 0 resets the flags to 0.
+ */
+static void
+flags_argmatch (const char *option,
+		const char * const keys[], const int values[],
+		int *flags, char *args)
+{
+  if (args)
+    {
+      args = strtok (args, ",");
+      while (args)
+	{
+	  int value = XARGMATCH (option, args, keys, values);
+	  if (value == 0)
+	    *flags = 0;
+	  else
+	    *flags |= value;
+	  args = strtok (NULL, ",");
+	}
+    }
+  else
+    *flags = ~0;
+}
+
+/** Decode a set of sub arguments.
+ *
+ *  \param FlagName  the flag familly to update.
+ *  \param Args      the effective sub arguments to decode.
+ *
+ *  \arg FlagName_args   the list of keys.
+ *  \arg FlagName_types  the list of values.
+ *  \arg FlagName_flag   the flag to update.
+ */
+#define FLAGS_ARGMATCH(FlagName, Args)					\
+  flags_argmatch ("--" #FlagName, FlagName ## _args, FlagName ## _types, \
+		  &FlagName ## _flag, Args)
+
+
+/*----------------------.
+| --report's handling.  |
+`----------------------*/
+
+static const char * const report_args[] =
+{
+  /* In a series of synonyms, present the most meaningful first, so
+     that argmatch_valid be more readable.  */
+  "none",
+  "state", "states",
+  "itemset", "itemsets",
+  "lookahead", "lookaheads", "look-ahead",
+  "solved",
+  "all",
+  0
+};
+
+static const int report_types[] =
+{
+  report_none,
+  report_states, report_states,
+  report_states | report_itemsets, report_states | report_itemsets,
+  report_states | report_lookahead_tokens,
+  report_states | report_lookahead_tokens,
+  report_states | report_lookahead_tokens,
+  report_states | report_solved_conflicts,
+  report_all
+};
+
+ARGMATCH_VERIFY (report_args, report_types);
 
 
 /*---------------------.
@@ -76,12 +166,12 @@ static const char * const trace_args[] =
 {
   /* In a series of synonyms, present the most meaningful first, so
      that argmatch_valid be more readable.  */
-  "none       - no report",
+  "none       - no traces",
   "scan       - grammar scanner traces",
   "parse      - grammar parser traces",
-  "automaton  - contruction of the automaton",
+  "automaton  - construction of the automaton",
   "bitsets    - use of bitsets",
-  "grammar    - reading, reducing of the grammar",
+  "grammar    - reading, reducing the grammar",
   "resource   - memory consumption (where available)",
   "sets       - grammar sets: firsts, nullable etc.",
   "tools      - m4 invocation",
@@ -111,74 +201,33 @@ static const int trace_types[] =
 
 ARGMATCH_VERIFY (trace_args, trace_types);
 
-static void
-trace_argmatch (char *args)
-{
-  if (args)
-    {
-      args = strtok (args, ",");
-      do
-	{
-	  int trace = XARGMATCH ("--trace", args,
-				 trace_args, trace_types);
-	  if (trace == trace_none)
-	    trace_flag = trace_none;
-	  else
-	    trace_flag |= trace;
-	}
-      while ((args = strtok (NULL, ",")));
-    }
-  else
-    trace_flag = trace_all;
-}
 
+/*------------------------.
+| --warnings's handling.  |
+`------------------------*/
 
-/*----------------------.
-| --report's handling.  |
-`----------------------*/
-
-static const char * const report_args[] =
+static const char * const warnings_args[] =
 {
   /* In a series of synonyms, present the most meaningful first, so
      that argmatch_valid be more readable.  */
-  "none",
-  "state", "states",
-  "itemset", "itemsets",
-  "look-ahead", "lookahead", "lookaheads",
-  "solved",
-  "all",
+  "none            - no warnings",
+  "midrule-values  - unset or unused midrule values",
+  "yacc            - incompatibilities with POSIX YACC",
+  "all             - all of the above",
+  "error           - warnings are errors",
   0
 };
 
-static const int report_types[] =
+static const int warnings_types[] =
 {
-  report_none,
-  report_states, report_states,
-  report_states | report_itemsets, report_states | report_itemsets,
-  report_states | report_look_ahead_tokens,
-  report_states | report_look_ahead_tokens,
-  report_states | report_look_ahead_tokens,
-  report_states | report_solved_conflicts,
-  report_all
+  warnings_none,
+  warnings_midrule_values,
+  warnings_yacc,
+  warnings_all,
+  warnings_error
 };
 
-ARGMATCH_VERIFY (report_args, report_types);
-
-static void
-report_argmatch (char *args)
-{
-  args = strtok (args, ",");
-  do
-    {
-      int report = XARGMATCH ("--report", args,
-			      report_args, report_types);
-      if (report == report_none)
-	report_flag = report_none;
-      else
-	report_flag |= report;
-    }
-  while ((args = strtok (NULL, ",")));
-}
+ARGMATCH_VERIFY (warnings_args, warnings_types);
 
 
 /*-------------------------------------------.
@@ -195,66 +244,83 @@ usage (int status)
 	     program_name);
   else
     {
-      /* Some efforts were made to ease the translators' task, please
-	 continue.  */
+      printf (_("Usage: %s [OPTION]... FILE\n"), program_name);
       fputs (_("\
-GNU bison generates parsers for LALR(1) grammars.\n"), stdout);
-      putc ('\n', stdout);
-
-      fprintf (stdout, _("\
-Usage: %s [OPTION]... FILE\n"), program_name);
-      putc ('\n', stdout);
+Generate LALR(1) and GLR parsers.\n\
+\n\
+"), stdout);
 
       fputs (_("\
-If a long option shows an argument as mandatory, then it is mandatory\n\
-for the equivalent short option also.  Similarly for optional arguments.\n"),
-	     stdout);
-      putc ('\n', stdout);
+Mandatory arguments to long options are mandatory for short options too.\n\
+"), stdout);
+      fputs (_("\
+The same is true for optional arguments.\n\
+"), stdout);
 
       fputs (_("\
+\n\
 Operation modes:\n\
   -h, --help                 display this help and exit\n\
   -V, --version              output version information and exit\n\
       --print-localedir      output directory containing locale-dependent data\n\
-  -y, --yacc                 emulate POSIX yacc\n"), stdout);
-      putc ('\n', stdout);
+      --print-datadir        output directory containing skeletons and XSLT\n\
+  -y, --yacc                 emulate POSIX Yacc\n\
+  -W, --warnings=[CATEGORY]  report the warnings falling in CATEGORY\n\
+\n\
+"), stdout);
 
       fputs (_("\
 Parser:\n\
+  -L, --language=LANGUAGE    specify the output programming language\n\
+                             (this is an experimental feature)\n\
   -S, --skeleton=FILE        specify the skeleton to use\n\
   -t, --debug                instrument the parser for debugging\n\
       --locations            enable locations computation\n\
   -p, --name-prefix=PREFIX   prepend PREFIX to the external symbols\n\
   -l, --no-lines             don't generate `#line' directives\n\
-  -n, --no-parser            generate the tables only\n\
   -k, --token-table          include a table of token names\n\
+\n\
 "), stdout);
-      putc ('\n', stdout);
 
+      /* Keep -d and --defines separate so that ../build-aux/cross-options.pl
+       * won't assume that -d also takes an argument.  */
       fputs (_("\
 Output:\n\
-  -d, --defines              also produce a header file\n\
+      --defines[=FILE]       also produce a header file\n\
+  -d                         likewise but cannot specify FILE (for POSIX Yacc)\n\
   -r, --report=THINGS        also produce details on the automaton\n\
+      --report-file=FILE     write report to FILE\n\
   -v, --verbose              same as `--report=state'\n\
   -b, --file-prefix=PREFIX   specify a PREFIX for output files\n\
   -o, --output=FILE          leave output to FILE\n\
-  -g, --graph                also produce a VCG description of the automaton\n\
+  -g, --graph[=FILE]         also output a graph of the automaton\n\
+  -x, --xml[=FILE]           also output an XML report of the automaton\n\
+                             (the XML schema is experimental)\n\
+\n\
 "), stdout);
-      putc ('\n', stdout);
+
+      fputs (_("\
+Warning categories include:\n\
+  `midrule-values'  unset or unused midrule values\n\
+  `yacc'            incompatibilities with POSIX YACC\n\
+  `all'             all the warnings\n\
+  `no-CATEGORY'     turn off warnings in CATEGORY\n\
+  `none'            turn off all the warnings\n\
+  `error'           treat warnings as errors\n\
+\n\
+"), stdout);
 
       fputs (_("\
 THINGS is a list of comma separated words that can include:\n\
   `state'        describe the states\n\
   `itemset'      complete the core item sets with their closure\n\
-  `look-ahead'   explicitly associate look-ahead tokens to items\n\
+  `lookahead'    explicitly associate lookahead tokens to items\n\
   `solved'       describe shift/reduce conflicts solving\n\
   `all'          include all the above information\n\
   `none'         disable the report\n\
 "), stdout);
-      putc ('\n', stdout);
 
-      fputs (_("\
-Report bugs to <bug-bison@gnu.org>.\n"), stdout);
+      printf (_("\nReport bugs to <%s>.\n"), PACKAGE_BUGREPORT);
     }
 
   exit (status);
@@ -276,7 +342,8 @@ version (void)
   putc ('\n', stdout);
 
   fprintf (stdout,
-	   _("Copyright (C) %d Free Software Foundation, Inc.\n"), 2006);
+	   _("Copyright (C) %d Free Software Foundation, Inc.\n"),
+	   PACKAGE_COPYRIGHT_YEAR);
 
   fputs (_("\
 This is free software; see the source for copying conditions.  There is NO\n\
@@ -286,26 +353,103 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\
 }
 
 
+/*-------------------------------------.
+| --skeleton and --language handling.  |
+`--------------------------------------*/
+
+void
+skeleton_arg (char const *arg, int prio, location const *loc)
+{
+  if (prio < skeleton_prio)
+    {
+      skeleton_prio = prio;
+      skeleton = arg;
+    }
+  else if (prio == skeleton_prio)
+    {
+      char const *msg =
+	_("multiple skeleton declarations are invalid");
+      if (loc)
+	complain_at (*loc, msg);
+      else
+	complain (msg);
+    }
+}
+
+void
+language_argmatch (char const *arg, int prio, location const *loc)
+{
+  char const *msg;
+
+  if (prio < language_prio)
+    {
+      int i;
+      for (i = 0; valid_languages[i].language[0]; i++)
+	if (c_strcasecmp (arg, valid_languages[i].language) == 0)
+	  {
+	    language_prio = prio;
+	    language = &valid_languages[i];
+	    return;
+	  }
+      msg = _("invalid language `%s'");
+    }
+  else if (language_prio == prio)
+    msg = _("multiple language declarations are invalid");
+  else
+    return;
+
+  if (loc)
+    complain_at (*loc, msg, arg);
+  else
+    complain (msg, arg);
+}
+
 /*----------------------.
 | Process the options.  |
 `----------------------*/
 
-/* Shorts options.  */
-static char const short_options[] = "yvegdhr:ltknVo:b:p:S:T::";
+/* Shorts options.
+   Should be computed from long_options.  */
+static char const short_options[] =
+  "L:"
+  "S:"
+  "T::"
+  "V"
+  "W::"
+  "b:"
+  "d"
+  "e"
+  "g::"
+  "h"
+  "k"
+  "l"
+  "n"
+  "o:"
+  "p:"
+  "r:"
+  "t"
+  "v"
+  "x::"
+  "y"
+  ;
 
 /* Values for long options that do not have single-letter equivalents.  */
 enum
 {
   LOCATIONS_OPTION = CHAR_MAX + 1,
-  PRINT_LOCALEDIR_OPTION
+  PRINT_LOCALEDIR_OPTION,
+  PRINT_DATADIR_OPTION,
+  REPORT_FILE_OPTION
 };
 
 static struct option const long_options[] =
 {
   /* Operation modes. */
-  { "help",            no_argument,	0,   'h' },
-  { "version",         no_argument,	0,   'V' },
-  { "print-localedir", no_argument,	0,   PRINT_LOCALEDIR_OPTION },
+  { "help",            no_argument,	  0,   'h' },
+  { "version",         no_argument,	  0,   'V' },
+  { "print-localedir", no_argument,	  0,   PRINT_LOCALEDIR_OPTION },
+  { "print-datadir",   no_argument,	  0,   PRINT_DATADIR_OPTION   },
+  { "warnings",        optional_argument, 0,   'W' },
 
   /* Parser. */
   { "name-prefix",   required_argument,	  0,   'p' },
@@ -316,7 +460,9 @@ static struct option const long_options[] =
   { "output",	   required_argument,	0,   'o' },
   { "output-file", required_argument,	0,   'o' },
   { "graph",	   optional_argument,	0,   'g' },
+  { "xml",         optional_argument,   0,   'x' },
   { "report",	   required_argument,   0,   'r' },
+  { "report-file", required_argument,   0,   REPORT_FILE_OPTION },
   { "verbose",	   no_argument,	        0,   'v' },
 
   /* Hidden. */
@@ -333,9 +479,9 @@ static struct option const long_options[] =
   { "debug",	      no_argument,               0,   't' },
   { "locations",      no_argument,		 0, LOCATIONS_OPTION },
   { "no-lines",       no_argument,               0,   'l' },
-  { "no-parser",      no_argument,               0,   'n' },
   { "raw",            no_argument,               0,     0 },
   { "skeleton",       required_argument,         0,   'S' },
+  { "language",       required_argument,         0,   'L' },
   { "token-table",    no_argument,               0,   'k' },
 
   {0, 0, 0, 0}
@@ -362,73 +508,63 @@ getargs (int argc, char *argv[])
 	/* Certain long options cause getopt_long to return 0.  */
 	break;
 
-      case 'y':
-	yacc_flag = true;
-	break;
-
-      case 'h':
-	usage (EXIT_SUCCESS);
-
-      case 'V':
-	version ();
-	exit (EXIT_SUCCESS);
-
-      case PRINT_LOCALEDIR_OPTION:
-	printf ("%s\n", LOCALEDIR);
-	exit (EXIT_SUCCESS);
-
-      case 'g':
-	/* Here, the -g and --graph=FILE options are differentiated.  */
-	graph_flag = true;
+      case 'd':
+	/* Here, the -d and --defines options are differentiated.  */
+	defines_flag = true;
 	if (optarg)
-	  spec_graph_file = AS_FILE_NAME (optarg);
-	break;
-
-      case 'v':
-	report_flag |= report_states;
-	break;
-
-      case 'S':
-	skeleton = AS_FILE_NAME (optarg);
+	  spec_defines_file = xstrdup (AS_FILE_NAME (optarg));
 	break;
 
       case 'I':
 	include = AS_FILE_NAME (optarg);
 	break;
 
-      case 'd':
-	/* Here, the -d and --defines options are differentiated.  */
-	defines_flag = true;
+      case 'L':
+	language_argmatch (optarg, 0, NULL);
+	break;
+
+      case 'S':
+	skeleton_arg (AS_FILE_NAME (optarg), 0, NULL);
+	break;
+
+      case 'T':
+	FLAGS_ARGMATCH (trace, optarg);
+	break;
+
+      case 'V':
+	version ();
+	exit (EXIT_SUCCESS);
+
+      case 'W':
 	if (optarg)
-	  spec_defines_file = AS_FILE_NAME (optarg);
+	  FLAGS_ARGMATCH (warnings, optarg);
+	else
+	  warnings_flag |= warnings_all;
+	break;
+
+      case 'b':
+	spec_file_prefix = AS_FILE_NAME (optarg);
+	break;
+
+      case 'g':
+	graph_flag = true;
+	if (optarg)
+	  spec_graph_file = xstrdup (AS_FILE_NAME (optarg));
+	break;
+
+      case 'h':
+	usage (EXIT_SUCCESS);
+
+      case 'k':
+	token_table_flag = true;
 	break;
 
       case 'l':
 	no_lines_flag = true;
 	break;
 
-      case LOCATIONS_OPTION:
-	locations_flag = true;
-	break;
-
-      case 'k':
-	token_table_flag = true;
-	break;
-
-      case 'n':
-	no_parser_flag = true;
-	break;
-
-      case 't':
-	debug_flag = true;
-	break;
-
       case 'o':
 	spec_outfile = AS_FILE_NAME (optarg);
-	break;
-
-      case 'b':
-	spec_file_prefix = AS_FILE_NAME (optarg);
 	break;
 
       case 'p':
@@ -436,11 +572,41 @@ getargs (int argc, char *argv[])
 	break;
 
       case 'r':
-	report_argmatch (optarg);
+	FLAGS_ARGMATCH (report, optarg);
 	break;
 
-      case 'T':
-	trace_argmatch (optarg);
+      case 't':
+	debug_flag = true;
+	break;
+
+      case 'v':
+	report_flag |= report_states;
+	break;
+
+      case 'x':
+	xml_flag = true;
+	if (optarg)
+	  spec_xml_file = xstrdup (AS_FILE_NAME (optarg));
+	break;
+
+      case 'y':
+	yacc_flag = true;
+	break;
+
+      case LOCATIONS_OPTION:
+	locations_flag = true;
+	break;
+
+      case PRINT_LOCALEDIR_OPTION:
+	printf ("%s\n", LOCALEDIR);
+	exit (EXIT_SUCCESS);
+
+      case PRINT_DATADIR_OPTION:
+	printf ("%s\n", compute_pkgdatadir ());
+	exit (EXIT_SUCCESS);
+
+      case REPORT_FILE_OPTION:
+	spec_verbose_file = xstrdup (AS_FILE_NAME (optarg));
 	break;
 
       default:
