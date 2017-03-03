@@ -39,7 +39,7 @@ This description of the options that can be given to
 is adapted from the node
 .B Invocation
 in the
-.B bison.texinfo
+.B bison.texi
 manual, which should be taken as authoritative.
 .PP
 .I Bison
@@ -53,3 +53,8 @@ are unique.  When a long option takes an argument, like
 .BR \-\-file-prefix ,
 connect the option name and the argument with
 .BR = .
+
+[see also]
+.BR lex (1),
+.BR flex (1),
+.BR yacc (1).

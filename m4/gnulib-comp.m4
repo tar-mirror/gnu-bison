@@ -53,6 +53,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module close:
   # Code from module close-stream:
   # Code from module closeout:
+  # Code from module concat-filename:
   # Code from module config-h:
   # Code from module configmake:
   # Code from module dirname:
@@ -74,6 +75,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module fd-hook:
   # Code from module fd-safer-flag:
   # Code from module fdl:
+  # Code from module filename:
   # Code from module float:
   # Code from module fopen:
   # Code from module fopen-safer:
@@ -87,9 +89,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module fseterr:
   # Code from module fstat:
   # Code from module gendocs:
-  # Code from module getdelim:
   # Code from module getdtablesize:
-  # Code from module getline:
   # Code from module getopt-gnu:
   # Code from module getopt-posix:
   # Code from module gettext:
@@ -113,7 +113,6 @@ AC_DEFUN([gl_EARLY],
   # Code from module isnanf-nolibm:
   # Code from module isnanl:
   # Code from module isnanl-nolibm:
-  # Code from module iswblank:
   # Code from module javacomp-script:
   # Code from module javaexec-script:
   # Code from module largefile:
@@ -126,18 +125,15 @@ AC_DEFUN([gl_EARLY],
   # Code from module malloc-gnu:
   # Code from module malloc-posix:
   # Code from module math:
-  # Code from module mbchar:
   # Code from module mbrtowc:
-  # Code from module mbschr:
   # Code from module mbsinit:
-  # Code from module mbsrchr:
   # Code from module mbswidth:
-  # Code from module mbuiter:
   # Code from module memchr:
   # Code from module msvc-inval:
   # Code from module msvc-nothrow:
   # Code from module multiarch:
   # Code from module nocrash:
+  # Code from module non-recursive-gnulib-prefix-hack:
   # Code from module obstack:
   # Code from module obstack-printf:
   # Code from module open:
@@ -200,7 +196,6 @@ AC_DEFUN([gl_EARLY],
   # Code from module string:
   # Code from module strndup:
   # Code from module strnlen:
-  # Code from module strnlen1:
   # Code from module strtoul:
   # Code from module strverscmp:
   # Code from module sys_stat:
@@ -234,6 +229,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module xalloc:
   # Code from module xalloc-die:
   # Code from module xalloc-oversized:
+  # Code from module xconcat-filename:
   # Code from module xmemdup0:
   # Code from module xsize:
   # Code from module xstrndup:
@@ -344,24 +340,12 @@ AC_DEFUN([gl_INIT],
     gl_PREREQ_FSTAT
   fi
   gl_SYS_STAT_MODULE_INDICATOR([fstat])
-  gl_FUNC_GETDELIM
-  if test $HAVE_GETDELIM = 0 || test $REPLACE_GETDELIM = 1; then
-    AC_LIBOBJ([getdelim])
-    gl_PREREQ_GETDELIM
-  fi
-  gl_STDIO_MODULE_INDICATOR([getdelim])
   gl_FUNC_GETDTABLESIZE
   if test $HAVE_GETDTABLESIZE = 0; then
     AC_LIBOBJ([getdtablesize])
     gl_PREREQ_GETDTABLESIZE
   fi
   gl_UNISTD_MODULE_INDICATOR([getdtablesize])
-  gl_FUNC_GETLINE
-  if test $REPLACE_GETLINE = 1; then
-    AC_LIBOBJ([getline])
-    gl_PREREQ_GETLINE
-  fi
-  gl_STDIO_MODULE_INDICATOR([getline])
   gl_FUNC_GETOPT_GNU
   if test $REPLACE_GETOPT = 1; then
     AC_LIBOBJ([getopt])
@@ -441,15 +425,6 @@ AC_DEFUN([gl_INIT],
     AC_LIBOBJ([isnanl])
     gl_PREREQ_ISNANL
   fi
-  gl_FUNC_ISWBLANK
-  if test $HAVE_ISWCNTRL = 0 || test $REPLACE_ISWCNTRL = 1; then
-    :
-  else
-    if test $HAVE_ISWBLANK = 0 || test $REPLACE_ISWBLANK = 1; then
-      AC_LIBOBJ([iswblank])
-    fi
-  fi
-  gl_WCTYPE_MODULE_INDICATOR([iswblank])
   # You need to invoke gt_JAVACOMP yourself, possibly with arguments.
   AC_CONFIG_FILES([javacomp.sh:build-aux/javacomp.sh.in])
   # You need to invoke gt_JAVAEXEC yourself, possibly with arguments.
@@ -465,6 +440,7 @@ AC_DEFUN([gl_INIT],
   LOCALCHARSET_TESTS_ENVIRONMENT="CHARSETALIASDIR=\"\$(abs_top_builddir)/$gl_source_base\""
   AC_SUBST([LOCALCHARSET_TESTS_ENVIRONMENT])
   gl_LOCK
+  gl_MODULE_INDICATOR([lock])
   AC_CONFIG_COMMANDS_PRE([m4_ifdef([AH_HEADER],
     [AC_SUBST([CONFIG_INCLUDE], m4_defn([AH_HEADER]))])])
   gl_FUNC_MALLOC_GNU
@@ -478,23 +454,19 @@ AC_DEFUN([gl_INIT],
   fi
   gl_STDLIB_MODULE_INDICATOR([malloc-posix])
   gl_MATH_H
-  gl_MBCHAR
   gl_FUNC_MBRTOWC
   if test $HAVE_MBRTOWC = 0 || test $REPLACE_MBRTOWC = 1; then
     AC_LIBOBJ([mbrtowc])
     gl_PREREQ_MBRTOWC
   fi
   gl_WCHAR_MODULE_INDICATOR([mbrtowc])
-  gl_STRING_MODULE_INDICATOR([mbschr])
   gl_FUNC_MBSINIT
   if test $HAVE_MBSINIT = 0 || test $REPLACE_MBSINIT = 1; then
     AC_LIBOBJ([mbsinit])
     gl_PREREQ_MBSINIT
   fi
   gl_WCHAR_MODULE_INDICATOR([mbsinit])
-  gl_STRING_MODULE_INDICATOR([mbsrchr])
   gl_MBSWIDTH
-  gl_MBITER
   gl_FUNC_MEMCHR
   if test $HAVE_MEMCHR = 0 || test $REPLACE_MEMCHR = 1; then
     AC_LIBOBJ([memchr])
@@ -510,6 +482,11 @@ AC_DEFUN([gl_INIT],
     AC_LIBOBJ([msvc-nothrow])
   fi
   gl_MULTIARCH
+  dnl Run our hack near the end, just before config.status creation.
+  dnl It must happen late, i.e., after gl_LIBOBJS has been finalized.
+  AC_CONFIG_COMMANDS_PRE([
+    gl_NON_RECURSIVE_GNULIB_PREFIX_HACK([lib])
+    ])
   AC_FUNC_OBSTACK
   dnl Note: AC_FUNC_OBSTACK does AC_LIBSOURCES([obstack.h, obstack.c]).
   gl_FUNC_OBSTACK_PRINTF
@@ -905,6 +882,7 @@ AC_DEFUN([gl_FILE_LIST], [
   build-aux/gnupload
   build-aux/javacomp.sh.in
   build-aux/javaexec.sh.in
+  build-aux/prefix-gnulib-mk
   build-aux/snippet/_Noreturn.h
   build-aux/snippet/arg-nonnull.h
   build-aux/snippet/c++defs.h
@@ -939,6 +917,8 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/close.c
   lib/closeout.c
   lib/closeout.h
+  lib/concat-filename.c
+  lib/concat-filename.h
   lib/config.charset
   lib/dirname-lgpl.c
   lib/dirname.c
@@ -960,6 +940,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/fd-hook.h
   lib/fd-safer-flag.c
   lib/fd-safer.c
+  lib/filename.h
   lib/float+.h
   lib/float.c
   lib/float.in.h
@@ -974,9 +955,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/fseterr.c
   lib/fseterr.h
   lib/fstat.c
-  lib/getdelim.c
   lib/getdtablesize.c
-  lib/getline.c
   lib/getopt.c
   lib/getopt.in.h
   lib/getopt1.c
@@ -996,7 +975,6 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/isnanf.c
   lib/isnanl-nolibm.h
   lib/isnanl.c
-  lib/iswblank.c
   lib/itold.c
   lib/ldexpl.c
   lib/localcharset.c
@@ -1004,16 +982,10 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/malloc.c
   lib/math.c
   lib/math.in.h
-  lib/mbchar.c
-  lib/mbchar.h
   lib/mbrtowc.c
-  lib/mbschr.c
   lib/mbsinit.c
-  lib/mbsrchr.c
   lib/mbswidth.c
   lib/mbswidth.h
-  lib/mbuiter.c
-  lib/mbuiter.h
   lib/memchr.c
   lib/memchr.valgrind
   lib/msvc-inval.c
@@ -1098,8 +1070,6 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/stripslash.c
   lib/strndup.c
   lib/strnlen.c
-  lib/strnlen1.c
-  lib/strnlen1.h
   lib/strtol.c
   lib/strtoul.c
   lib/strverscmp.c
@@ -1134,6 +1104,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/xalloc-die.c
   lib/xalloc-oversized.h
   lib/xalloc.h
+  lib/xconcat-filename.c
   lib/xmalloc.c
   lib/xmemdup0.c
   lib/xmemdup0.h
@@ -1176,9 +1147,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/frexpl.m4
   m4/fseterr.m4
   m4/fstat.m4
-  m4/getdelim.m4
   m4/getdtablesize.m4
-  m4/getline.m4
   m4/getopt.m4
   m4/gettext.m4
   m4/glibc2.m4
@@ -1199,7 +1168,6 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/isnand.m4
   m4/isnanf.m4
   m4/isnanl.m4
-  m4/iswblank.m4
   m4/javacomp.m4
   m4/javaexec.m4
   m4/largefile.m4
@@ -1218,8 +1186,6 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/longlong.m4
   m4/malloc.m4
   m4/math_h.m4
-  m4/mbchar.m4
-  m4/mbiter.m4
   m4/mbrtowc.m4
   m4/mbsinit.m4
   m4/mbstate_t.m4
@@ -1232,6 +1198,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/multiarch.m4
   m4/nls.m4
   m4/nocrash.m4
+  m4/non-recursive-gnulib-prefix-hack.m4
   m4/obstack-printf.m4
   m4/off_t.m4
   m4/open.m4

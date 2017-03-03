@@ -90,6 +90,10 @@
 #undef GNULIB_FSCANF
 
 /* Define to a C preprocessor expression that evaluates to 1 or 0, depending
+   whether the gnulib module lock shall be considered present. */
+#undef GNULIB_LOCK
+
+/* Define to a C preprocessor expression that evaluates to 1 or 0, depending
    whether the gnulib module malloc-gnu shall be considered present. */
 #undef GNULIB_MALLOC_GNU
 
@@ -142,14 +146,8 @@
 /* Define to 1 when the gnulib module fstat should be tested. */
 #undef GNULIB_TEST_FSTAT
 
-/* Define to 1 when the gnulib module getdelim should be tested. */
-#undef GNULIB_TEST_GETDELIM
-
 /* Define to 1 when the gnulib module getdtablesize should be tested. */
 #undef GNULIB_TEST_GETDTABLESIZE
-
-/* Define to 1 when the gnulib module getline should be tested. */
-#undef GNULIB_TEST_GETLINE
 
 /* Define to 1 when the gnulib module getopt-gnu should be tested. */
 #undef GNULIB_TEST_GETOPT_GNU
@@ -166,9 +164,6 @@
 /* Define to 1 when the gnulib module isnanl should be tested. */
 #undef GNULIB_TEST_ISNANL
 
-/* Define to 1 when the gnulib module iswblank should be tested. */
-#undef GNULIB_TEST_ISWBLANK
-
 /* Define to 1 when the gnulib module ldexpl should be tested. */
 #undef GNULIB_TEST_LDEXPL
 
@@ -178,14 +173,8 @@
 /* Define to 1 when the gnulib module mbrtowc should be tested. */
 #undef GNULIB_TEST_MBRTOWC
 
-/* Define to 1 when the gnulib module mbschr should be tested. */
-#undef GNULIB_TEST_MBSCHR
-
 /* Define to 1 when the gnulib module mbsinit should be tested. */
 #undef GNULIB_TEST_MBSINIT
-
-/* Define to 1 when the gnulib module mbsrchr should be tested. */
-#undef GNULIB_TEST_MBSRCHR
 
 /* Define to 1 when the gnulib module memchr should be tested. */
 #undef GNULIB_TEST_MEMCHR
@@ -424,25 +413,13 @@
    don't. */
 #undef HAVE_DECL_GETC_UNLOCKED
 
-/* Define to 1 if you have the declaration of `getdelim', and to 0 if you
-   don't. */
-#undef HAVE_DECL_GETDELIM
-
 /* Define to 1 if you have the declaration of `getenv', and to 0 if you don't.
    */
 #undef HAVE_DECL_GETENV
 
-/* Define to 1 if you have the declaration of `getline', and to 0 if you
-   don't. */
-#undef HAVE_DECL_GETLINE
-
 /* Define to 1 if you have the declaration of `getrusage', and to 0 if you
    don't. */
 #undef HAVE_DECL_GETRUSAGE
-
-/* Define to 1 if you have the declaration of `iswblank', and to 0 if you
-   don't. */
-#undef HAVE_DECL_ISWBLANK
 
 /* Define to 1 if you have the declaration of `mbrtowc', and to 0 if you
    don't. */
@@ -540,20 +517,11 @@
 /* Define to 1 if you have the <features.h> header file. */
 #undef HAVE_FEATURES_H
 
-/* Define to 1 if you have the `flockfile' function. */
-#undef HAVE_FLOCKFILE
-
 /* Define if the frexpl function is available in libc. */
 #undef HAVE_FREXPL_IN_LIBC
 
 /* Define if the frexp function is available in libc. */
 #undef HAVE_FREXP_IN_LIBC
-
-/* Define to 1 if you have the `funlockfile' function. */
-#undef HAVE_FUNLOCKFILE
-
-/* Define to 1 if you have the `getdelim' function. */
-#undef HAVE_GETDELIM
 
 /* Define to 1 if you have the `getdtablesize' function. */
 #undef HAVE_GETDTABLESIZE
@@ -591,9 +559,6 @@
 
 /* Define if the isnan(long double) function is available in libc. */
 #undef HAVE_ISNANL_IN_LIBC
-
-/* Define to 1 if you have the `iswblank' function. */
-#undef HAVE_ISWBLANK
 
 /* Define to 1 if you have the `iswcntrl' function. */
 #undef HAVE_ISWCNTRL
@@ -1881,9 +1846,6 @@
    large precisions without arbitrary bounds. */
 #undef NEED_PRINTF_UNBOUNDED_PRECISION
 
-/* Define to 1 if your C compiler doesn't accept -c and -o together. */
-#undef NO_MINUS_C_MINUS_O
-
 /* Define to 1 if open() fails to recognize a trailing slash. */
 #undef OPEN_TRAILING_SLASH_BUG
 
@@ -2130,30 +2092,31 @@
    used. */
 #undef __GETOPT_PREFIX
 
-/* _GL_INLINE is a portable alternative to ISO C99 plain 'inline'.
-   _GL_EXTERN_INLINE is a portable alternative to 'extern inline'.
-   _GL_INLINE_HEADER_BEGIN contains useful stuff to put
-     in an include file, before uses of _GL_INLINE.
-     It suppresses GCC's bogus "no previous prototype for 'FOO'" diagnostic,
-     when FOO is an inline function in the header; see
-     <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=54113>.
-   _GL_INLINE_HEADER_END contains useful stuff to put
-     in the same include file, after uses of _GL_INLINE.
+/* Please see the Gnulib manual for how to use these macros.
 
    Suppress extern inline with HP-UX cc, as it appears to be broken; see
    <http://lists.gnu.org/archive/html/bug-texinfo/2013-02/msg00030.html>.
 
-   Suppress the use of extern inline on Apple's platforms,
-   as Libc-825.25 (2012-09-19) is incompatible with it; see
+   Suppress extern inline with Sun C in standards-conformance mode, as it
+   mishandles inline functions that call each other.  E.g., for 'inline void f
+   (void) { } inline void g (void) { f (); }', c99 incorrectly complains
+   'reference to static identifier "f" in extern inline function'.
+   This bug was observed with Sun C 5.12 SunOS_i386 2011/11/16.
+
+   Suppress the use of extern inline on Apple's platforms, as Libc at least
+   through Libc-825.26 (2013-04-09) is incompatible with it; see, e.g.,
    <http://lists.gnu.org/archive/html/bug-gnulib/2012-12/msg00023.html>.
    Perhaps Apple will fix this some day.  */
 #if ((__GNUC__ \
       ? defined __GNUC_STDC_INLINE__ && __GNUC_STDC_INLINE__ \
-      : 199901L <= __STDC_VERSION__ && !defined __HP_cc) \
+      : (199901L <= __STDC_VERSION__ \
+         && !defined __HP_cc \
+         && !(defined __SUNPRO_C && __STDC__))) \
      && !defined __APPLE__)
 # define _GL_INLINE inline
 # define _GL_EXTERN_INLINE extern inline
-#elif 2 < __GNUC__ + (7 <= __GNUC_MINOR__) && !defined __APPLE__
+#elif (2 < __GNUC__ + (7 <= __GNUC_MINOR__) && !defined __STRICT_ANSI__ \
+       && !defined __APPLE__)
 # if __GNUC_GNU_INLINE__
    /* __gnu_inline__ suppresses a GCC 4.2 diagnostic.  */
 #  define _GL_INLINE extern inline __attribute__ ((__gnu_inline__))
@@ -2173,6 +2136,10 @@
 #  define _GL_INLINE_HEADER_CONST_PRAGMA \
      _Pragma ("GCC diagnostic ignored \"-Wsuggest-attribute=const\"")
 # endif
+  /* Suppress GCC's bogus "no previous prototype for 'FOO'"
+     and "no previous declaration for 'FOO'"  diagnostics,
+     when FOO is an inline function in the header; see
+     <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=54113>.  */
 # define _GL_INLINE_HEADER_BEGIN \
     _Pragma ("GCC diagnostic push") \
     _Pragma ("GCC diagnostic ignored \"-Wmissing-prototypes\"") \

@@ -66,7 +66,7 @@ main (int argc, char *argv[])
 
   {
     char const *cp = getenv ("LC_CTYPE");
-    if (cp && !strcmp (cp, "C"))
+    if (cp && STREQ (cp, "C"))
       set_custom_quoting (&quote_quoting_options, "'", "'");
     else
       set_quoting_style (&quote_quoting_options, locale_quoting_style);
@@ -76,6 +76,7 @@ main (int argc, char *argv[])
 
   uniqstrs_new ();
   muscle_init ();
+  complain_init ();
 
   getargs (argc, argv);
 
@@ -94,7 +95,7 @@ main (int argc, char *argv[])
   reader ();
   timevar_pop (TV_READER);
 
-  if (complaint_issued)
+  if (complaint_status == status_complaint)
     goto finish;
 
   /* Find useless nonterminals and productions and reduce the grammar. */
@@ -125,7 +126,7 @@ main (int argc, char *argv[])
      declarations.  */
   timevar_push (TV_CONFLICTS);
   conflicts_solve ();
-  if (!muscle_percent_define_flag_if ("lr.keep-unreachable-states"))
+  if (!muscle_percent_define_flag_if ("lr.keep-unreachable-state"))
     {
       state_number *old_to_new = xnmalloc (nstates, sizeof *old_to_new);
       state_number nstates_old = nstates;
@@ -142,8 +143,9 @@ main (int argc, char *argv[])
   tables_generate ();
   timevar_pop (TV_ACTIONS);
 
-  grammar_rules_useless_report
-    (_("rule useless in parser due to conflicts"));
+  grammar_rules_useless_report (_("rule useless in parser due to conflicts"));
+
+  print_precedence_warnings ();
 
   /* Output file names. */
   compute_output_file_names ();
@@ -174,7 +176,7 @@ main (int argc, char *argv[])
 
   /* Stop if there were errors, to avoid trashing previous output
      files.  */
-  if (complaint_issued)
+  if (complaint_status == status_complaint)
     goto finish;
 
   /* Lookahead tokens are no longer needed. */
@@ -218,5 +220,5 @@ main (int argc, char *argv[])
 
   cleanup_caret ();
 
-  return complaint_issued ? EXIT_FAILURE : EXIT_SUCCESS;
+  return complaint_status ? EXIT_FAILURE : EXIT_SUCCESS;
 }

@@ -34,14 +34,15 @@ status=$?
 for i
 do
   case $i in
-    */parse-gram.y)
+    */src/parse-gram.y)
     if $PERL --version >/dev/null; then
-      # We are called by ylwrap which still uses y.tab.*, and
-      # post-processes the synclines on y.tab.c itself.  Don't let it
-      # do it.  Besides, it leaves "parse-gram.y" as the source,
-      # dropping the src/ part.
-      $PERL -pi -e 's{"y\.tab\.}{"parse-gram.}g;'    \
-                -e 's{".*/(parse-gram\.y)"}{"$1"}g;' \
+      # We are called by ylwrap which (if it's an old version) still
+      # uses y.tab.*, and post-processes the synclines on y.tab.c
+      # itself.  Don't let it do it.  Besides, it leaves
+      # "parse-gram.y" as the source, dropping the src/ part.
+      $PERL -pi -e 's{"y\.tab\.}{"parse-gram.}g;'                       \
+                -e 's{"(?:.*/)?(parse-gram\.[chy])"}{"src/$1"}g;'       \
+                -e 's{GRAM_Y_TAB_H}{GRAM_SRC_PARSE_GRAM_H}g;'           \
            y.tab.[ch]
     fi
     ;;

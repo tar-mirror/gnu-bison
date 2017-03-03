@@ -17,23 +17,236 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-use IO::File;
-use Benchmark qw (:all);
+=head1 NAME
 
-my $bison = $ENV{'BISON'} || '@abs_top_builddir@/tests/bison';
-my $cc = $ENV{'CC'} || 'gcc';
+bench.pl - bench marks for Bison parsers.
+
+=head1 SYNOPSIS
+
+  ./bench.pl [OPTIONS]... DIRECTIVES
+
+=head1 DIRECTIVES
+
+Specify the set of benches to run.  The following grammar defines the
+I<directives>:
+
+   directives ::=
+       directives | directives  -- Alternation
+     | directives & directives  -- Concatenation
+     | [ directives> ]          -- Optional
+     | ( directives> )          -- Parentheses
+     | %b PATH                  -- Use bison at PATH for this bench
+     | #d NAME[=VALUE]          -- %code { #define NAME [VALUE] }
+     | %d NAME[=VALUE]          -- %define NAME ["VALUE"]
+     | %s skeleton              -- %skeleton "skeleton"
+     | directive
+
+Parentheses only group to override precedence.  For instance:
+
+  [ %debug ] & [ %error-verbose ] & [ %define variant ]
+
+will generate eight different cases.
+
+=head1 OPTIONS
+
+=over 4
+
+=item B<-b>, B<--bench>
+
+Predefined benches, that is, combimation between a grammar and a I<directives>
+request.
+
+=over 4
+
+=item I<push>
+
+Test the push parser vs. the pull interface.  Use the C parser.
+
+=item I<variant>
+
+Test the use of variants instead of union in the C++ parser.
+
+=back
+
+=item B<-c>, B<--cflags>=I<flags>
+
+Flags to pass to the C or C++ compiler.  Defaults to -O2.
+
+=item B<-d>, B<--directive>=I<directives>
+
+Add a set of Bison directives to bench against each other.
+
+=item B<-g>, B<--grammar>=I<grammar>
+
+Select the base I<grammar> to use.  Defaults to I<calc>.
+
+=over 4
+
+=item I<calc>
+
+Traditional calculator.
+
+=item I<list>
+
+C++ grammar that uses std::string and std::list.  Can be used with
+or without %define variant.
+
+=item I<triangular>
+
+Artificial grammar with very long rules.
+
+=back
+
+=item B<-h>, B<--help>
+
+Display this message and exit succesfully.  The more verbose, the more
+details.
+
+=item B<-i>, B<--iterations>=I<integer>
+
+Say how many times a single test of the bench must be run.  If
+negative, specify the minimum number of CPU seconds to run.  Defaults
+to -1.
+
+=item B<-q>, B<--quiet>
+
+Decrease the verbosity level (defaults to 1).
+
+=item B<-v>, B<--verbose>
+
+Raise the verbosity level (defaults to 1).
+
+=back
+
+=cut
+
+use strict;
+use IO::File;
 
 ##################################################################
 
-sub triangular_grammar ($$$)
+=head1 VARIABLES
+
+=over 4
+
+=item C<@bench>
+
+The list of benches to run.
+
+=item C<$bison>
+
+The Bison program to use to compile the grammar.
+
+=item C<$cc>
+
+The C compiler.
+
+=item C<$cxx>
+
+The C++ compiler.
+
+=item C<$cflags>
+
+Compiler flags (C or C++).
+
+=item C<@directive>
+
+A list of directive sets to measure against each other.
+
+=item C<$iterations>
+
+The number of times the parser is run for a bench.
+
+=item C<$verbose>
+
+Verbosity level.
+
+=back
+
+=cut
+
+my $bench;
+my $bison = $ENV{'BISON'} || '@abs_top_builddir@/tests/bison';
+my $cc = $ENV{'CC'} || 'gcc';
+my $cxx = $ENV{'CXX'} || 'g++';
+my $cflags = '-O2';
+my @directive = ();
+my $grammar = 'calc';
+my $iterations = -1;
+my $verbose = 1;
+
+=head1 FUNCTIONS
+
+=over 4
+
+=item C<verbose($level, $message)>
+
+Report the C<$message> is C<$level> E<lt>= C<$verbose>.
+
+=cut
+
+sub verbose($$)
 {
-  my ($base, $max, $directives) = @_;
+  my ($level, $message) = @_;
+  print STDERR $message
+    if $level <= $verbose;
+}
+
+
+######################################################################
+
+=item C<directives($bench, @directive)>
+
+Format the list of directives for Bison for bench named C<$bench>.
+
+=cut
+
+sub directives($@)
+{
+  my ($bench, @directive) = @_;
+  my $res = "/* Directives for bench '$bench'. */\n";
+  $res .= join ("\n", @directive) . "\n";
+  $res .= "/* End of directives for bench '$bench'. */\n";
+  return $res;
+}
+
+######################################################################
+
+=item C<generate_grammar_triangular ($base, $max, @directive)>
+
+Create a large triangular grammar which looks like :
+
+  input:
+    exp        { if ($1 != 0) abort (); $$ = $1; }
+  | input exp  { if ($2 != $1 + 1) abort (); $$ = $2; }
+  ;
+
+  exp:
+    END                         { $$ = 0; }
+  | "1"  END                    { $$ = 1; }
+  | "1" "2"  END                { $$ = 2; }
+  | "1" "2" "3"  END            { $$ = 3; }
+  | "1" "2" "3" "4"  END        { $$ = 4; }
+  | "1" "2" "3" "4" "5"  END    { $$ = 5; }
+  ;
+
+C<$base> is the base name for the file to create (F<$base.y>).
+C<$max> is the number of such rules (here, 5).  You may pass
+additional Bison C<@directive>.
+
+The created parser is self contained: it includes its scanner, and
+source of input.
+=cut
+
+sub generate_grammar_triangular ($$@)
+{
+  my ($base, $max, @directive) = @_;
+  my $directives = directives ($base, @directive);
 
   my $out = new IO::File ">$base.y"
     or die;
   print $out <<EOF;
 %error-verbose
-%debug
 %{
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,6 +254,7 @@ sub triangular_grammar ($$$)
 static int yylex (void);
 static void yyerror (const char *msg);
 %}
+$directives
 %union
 {
   int val;
@@ -71,8 +285,8 @@ for my $size (1 .. $max)
   {
     use Text::Wrap;
     print $out wrap ("| ", "   ",
-		     (map { "\"$_\"" } (1 .. $size)),
-		     " END \n"),
+                     (map { "\"$_\"" } (1 .. $size)),
+                     " END \n"),
                "    { \$\$ = $size; }\n";
   };
 print $out ";\n";
@@ -104,13 +318,24 @@ yyerror (const char *msg)
 int
 main (void)
 {
+#if YYDEBUG
   yydebug = !!getenv ("YYDEBUG");
+#endif
   return yyparse ();
 }
 EOF
 }
 
 ##################################################################
+
+=item C<calc_input ($base, $max)>
+
+Generate the input file F<$base.input> for the calc parser.  The input
+is composed of two expressions.  The first one is using left recursion
+only and consumes no stack.  The second one requires a deep stack.
+These two expressions are repeated C<$max> times in the output file.
+
+=cut
 
 sub calc_input ($$)
 {
@@ -126,9 +351,22 @@ sub calc_input ($$)
 
 ##################################################################
 
-sub calc_grammar ($$$)
+=item C<generate_grammar_calc ($base, $max, @directive)>
+
+Generate a Bison file F<$base.y> for a calculator parser in C.  Pass
+the additional Bison C<@directive>.  C<$max> is ignored, but left to
+have the same interface as C<triangular_grammar>.
+
+=cut
+
+sub generate_grammar_calc ($$@)
 {
-  my ($base, $max, $directives) = @_;
+  my ($base, $max, @directive) = @_;
+  my $directives = directives ($base, @directive);
+
+  # Putting this request here is stupid, since the input will be
+  # generated each time we generate a grammar.
+  calc_input ('calc', 200);
 
   my $out = new IO::File ">$base.y"
     or die;
@@ -148,9 +386,9 @@ static semantic_value global_result = 0;
 static int global_count = 0;
 %}
 
-/* Exercise %union. */
 $directives
 %error-verbose
+/* Exercise %union. */
 %union
 {
   semantic_value ival;
@@ -174,7 +412,7 @@ static int yylex (void);
 %token <ival> NUM "number"
 %type  <ival> exp
 
-%nonassoc '=' /* comparison	       */
+%nonassoc '=' /* comparison            */
 %left '-' '+'
 %left '*' '/'
 %left NEG     /* negation--unary minus */
@@ -306,6 +544,10 @@ main (int argc, const char **argv)
   int count = 0;
   int status;
 
+#if YYDEBUG
+  yydebug = !!getenv ("YYDEBUG");
+#endif
+
   input = fopen ("calc.input", "r");
   if (!input)
     {
@@ -326,44 +568,567 @@ EOF
 
 ##################################################################
 
+=item C<generate_grammar_list ($base, $max, @directive)>
+
+Generate a Bison file F<$base.y> for a C++ parser that uses C++
+objects (std::string, std::list).  Tailored for using %define variant.
+
+=cut
+
+sub generate_grammar_list ($$@)
+{
+  my ($base, $max, @directive) = @_;
+  my $directives = directives ($base, @directive);
+  my $variant = grep { /%define "?variant"?/ } @directive;
+  my $token_ctor = grep { /%define "?api.token.constructor"?/ } @directive;
+  my $out = new IO::File ">$base.y"
+    or die;
+  print $out <<EOF;
+%language "C++"
+%defines
+%locations
+$directives
+
+%code requires // *.h
+{
+#include <string>
+}
+
+%code // *.c
+{
+#include <algorithm>
+#include <iostream>
+#include <sstream>
+
+#define STAGE_MAX    ($max * 10) // max = $max
+
+#define USE_TOKEN_CTOR $token_ctor
+#define USE_VARIANTS $variant
+
+  // Prototype of the yylex function providing subsequent tokens.
+  static
+#if USE_TOKEN_CTOR
+  yy::parser::symbol_type yylex();
+#else
+  yy::parser::token_type yylex(yy::parser::semantic_type* yylvalp,
+                               yy::parser::location_type* yyllocp);
+#endif
+
+  // Conversion to string.
+  template <typename T>
+    inline
+    std::string
+    string_cast (const T& t)
+  {
+    std::ostringstream o;
+    o << t;
+    return o.str ();
+  }
+}
+
+%token END_OF_FILE 0
+EOF
+
+  if ($variant)
+    {
+      print $out <<'EOF';
+%token <std::string> TEXT
+%token <int> NUMBER
+%printer { std::cerr << "Number: " << $$; } <int>
+%printer { std::cerr << "Text: " << $$; } <std::string>
+%type <std::string> text result
+
+%%
+result:
+  text                  { /* Throw away the result. */ }
+;
+
+text:
+  /* nothing */         { /* This will generate an empty string */ }
+| text TEXT             { std::swap ($$, $2); }
+| text NUMBER           { $$ = string_cast($2); }
+;
+EOF
+    }
+  else
+    {
+      # Not using Bison variants.
+      print $out <<'EOF';
+%union {int ival; std::string* sval;}
+%token <sval> TEXT
+%token <ival> NUMBER
+%printer { std::cerr << "Number: " << $$; } <ival>
+%printer { std::cerr << "Text: " << *$$; } <sval>
+%type <sval> text result
+
+%%
+result:
+  text                  { delete $1; }
+;
+
+text:
+  /* nothing */         { $$ = new std::string; }
+| text TEXT             { delete $1; $$ = $2; }
+| text NUMBER           { delete $1; $$ = new std::string (string_cast ($2)); }
+;
+EOF
+    }
+
+  print $out <<'EOF';
+%%
+#
+
+static
+#if USE_TOKEN_CTOR
+yy::parser::symbol_type yylex()
+#else
+yy::parser::token_type yylex(yy::parser::semantic_type* yylvalp,
+                             yy::parser::location_type* yyllocp)
+#endif
+{
+  typedef yy::parser::location_type location_type;
+  typedef yy::parser::token token;
+  static int stage = -1;
+  ++stage;
+  if (stage == STAGE_MAX)
+    {
+#if USE_TOKEN_CTOR
+      return yy::parser::make_END_OF_FILE (location_type ());
+#else
+      *yyllocp = location_type ();
+      return token::END_OF_FILE;
+#endif
+    }
+  else if (stage % 2)
+    {
+#if USE_TOKEN_CTOR
+      return yy::parser::make_NUMBER (stage, location_type ());
+#else
+# if defined ONE_STAGE_BUILD
+      yylvalp->build(stage);
+# elif USE_VARIANTS
+      yylvalp->build<int>() = stage;
+# else
+      yylvalp->ival = stage;
+# endif
+      *yyllocp = location_type ();
+      return token::NUMBER;
+#endif
+    }
+  else
+    {
+#if USE_TOKEN_CTOR
+      return yy::parser::make_TEXT ("A string.", location_type ());
+#else
+# if defined ONE_STAGE_BUILD
+      yylvalp->build(std::string("A string."));
+# elif USE_VARIANTS
+      yylvalp->build<std::string>() = std::string("A string.");
+# else
+      yylvalp->sval = new std::string("A string.");
+# endif
+      *yyllocp = location_type ();
+      return token::TEXT;
+#endif
+    }
+  abort();
+}
+
+// Mandatory error function
+void
+yy::parser::error(const yy::parser::location_type& loc, const std::string& msg)
+{
+  std::cerr << loc << ": " << msg << std::endl;
+}
+
+int main(int argc, char *argv[])
+{
+  yy::parser p;
+#if YYDEBUG
+  p.set_debug_level(!!getenv("YYDEBUG"));
+#endif
+  p.parse();
+  return 0;
+}
+EOF
+}
+
+##################################################################
+
+=item C<generate_grammar ($name, $base, @directive)>
+
+Generate F<$base.y> by calling C<&generate_grammar_$name>.
+
+=cut
+
+sub generate_grammar ($$@)
+{
+  my ($name, $base, @directive) = @_;
+  verbose 3, "Generating $base.y\n";
+  my %generator =
+    (
+      "calc"       => \&generate_grammar_calc,
+      "list"       => \&generate_grammar_list,
+      "triangular" => \&generate_grammar_triangular,
+    );
+  &{$generator{$name}}($base, 200, @directive);
+}
+
+##################################################################
+
+=item C<run ($command)>
+
+Run, possibly verbosely, the shell C<$command>.
+
+=cut
+
+sub run ($)
+{
+  my ($command) = @_;
+  verbose 3, "$command\n";
+  system ("$command") == 0
+    or die "$command failed";
+}
+
+##################################################################
+
+=item C<compile ($base)>
+
+Compile C<$base.y> to an executable C, Using the C or C++ compiler
+depending on the %language specification in C<$base.y>.
+
+=cut
+
 sub compile ($)
 {
   my ($base) = @_;
-  system ("$bison $base.y -o $base.c") == 0
-    or die;
-  system ("$cc -o $base $base.c") == 0
-    or die;
+  my $language = `sed -ne '/%language "\\(.*\\)"/{s//\\1/;p;q;}' $base.y`;
+  chomp $language;
+
+  my $compiler = $language eq 'C++' ? $cxx : $cc;
+
+  my $my_bison = `sed -ne '/%bison "\\(.*\\)"/{s//\\1/;p;q;}' $base.y`;
+  run ((length $my_bison ? $my_bison : $bison) . " $base.y -o $base.c");
+  run "$compiler -o $base $cflags $base.c";
 }
 
-sub bench_grammar ($)
-{
-  my ($gram) = @_;
-  my %test =
-    (
-     "pull-impure" => '',
-     "pull-pure" => '%define api.pure',
-     "push-impure" => '%define api.push-pull "both"',
-     "push-pure" => '%define api.push-pull "both" %define api.pure',
-    );
+######################################################################
 
+=item C<bench ($grammar, @token)>
+
+Generate benches for the C<$grammar> and the directive specification
+given in the list of C<@token>.
+
+=cut
+
+sub bench ($@)
+{
+  my ($grammar, @token) = @_;
+  use Benchmark qw (:all :hireswallclock);
+
+  my @directive = parse (@token);
+
+  # Set up the benches as expected by timethese.
   my %bench;
-  while (my ($name, $directives) = each %test)
+  # A counter of directive sets.
+  my $count = 1;
+  for my $d (@directive)
     {
-      print STDERR "$name\n";
-      my $generator = "$gram" . "_grammar";
-      &$generator ($name, 200, $directives);
+      $bench{$count} = $d;
+      printf " %2d. %s\n", $count, join (' ', split ("\n", $d));
+      $count++;
+    };
+
+  # For each bench, capture the size.
+  my %size;
+
+  while (my ($name, $directives) = each %bench)
+    {
+      generate_grammar ($grammar, $name, $directives);
+      # Compile the executable.
       compile ($name);
       $bench{$name} = "system ('./$name');";
+      chop($size{$name} = `wc -c <$name`);
     }
 
-  print "$gram:\n";
-  my $res = timethese (50, \%bench, 'nop');
+  # Run the benches.
+  #
+  # STYLE can be any of 'all', 'none', 'noc', 'nop' or 'auto'.  'all'
+  # shows each of the 5 times available ('wallclock' time, user time,
+  # system time, user time of children, and system time of
+  # children). 'noc' shows all except the two children times. 'nop'
+  # shows only wallclock and the two children times.  'auto' (the
+  # default) will act as 'all' unless the children times are both
+  # zero, in which case it acts as 'noc'.  'none' prevents output.
+  verbose 3, "Running the benches for $grammar\n";
+  my $res = timethese ($iterations, \%bench, 'nop');
+
+  # Output the speed result.
   cmpthese ($res, 'nop');
+
+  # Display the sizes.
+  print "Sizes (decreasing):\n";
+  my $width = 10;
+  for my $bench (keys %size)
+    {
+      $width = length $bench
+        if $width < length $bench;
+    }
+  # Benches sorted by decreasing size.
+  my @benches_per_size = sort {$size{$b} <=> $size{$a}} keys %size;
+  for my $bench (@benches_per_size)
+    {
+      printf "%${width}s: %5.2fkB\n", $bench, $size{$bench} / 1024;
+    }
 }
 
-print STDERR "Using $bison, $cc.\n";
-calc_input ('calc', 200);
-bench_grammar ('calc');
+######################################################################
+
+=item C<bench_push_parser ()>
+
+Bench the C push parser against the pull parser, pure and impure
+interfaces.
+
+=cut
+
+sub bench_push_parser ()
+{
+  bench ('calc',
+         qw(
+            [ %d api.pure ]
+            &
+            [ %d api.push-pull=both ]
+         ));
+}
+
+######################################################################
+
+=item C<bench_variant_parser ()>
+
+Bench the C++ lalr1.cc parser using variants or %union.
+
+=cut
+
+sub bench_variant_parser ()
+{
+  bench ('list',
+         qw(
+            [
+              %d variant
+              &
+              [ #d ONE_STAGE_BUILD | %d api.token.constructor ]
+            ]
+         )
+    );
+}
+
+############################################################################
+
+sub help ($)
+{
+  my ($verbose) = @_;
+  use Pod::Usage;
+  # See <URL:http://perldoc.perl.org/pod2man.html#NOTES>.
+  pod2usage( { -message => "Bench Bison parsers",
+               -exitval => 0,
+               -verbose => $verbose,
+               -output  => \*STDOUT });
+}
+
+######################################################################
+
+# The end of the directives to parse.
+my $eod = "end of directives";
+# The list of tokens parsed by the following functions.
+my @token;
+
+# eat ($EXPECTED)
+# ---------------
+# Check that the current token is $EXPECTED, and move to the next.
+sub eat ($)
+{
+  my ($expected) = @_;
+  die "expected $expected, unexpected: $token[0] (@token)\n"
+    unless $token[0] eq $expected;
+  shift @token;
+}
+
+# Parse directive specifications:
+#   expr: term (| term)*
+#   term: fact (& fact)*
+#   fact: ( expr ) | [ expr ] | dirs
+#   dirs: %s SKELETON | #d NAME[=VALUE] | %d NAME[=VALUE] | directive
+sub parse (@)
+{
+  @token = (@_, $eod);
+  verbose 3, "Parsing: @token\n";
+  my @res = parse_expr ();
+  eat ($eod);
+  return @res;
+}
+
+sub parse_expr ()
+{
+  my @res = parse_term ();
+  while ($token[0] eq '|')
+    {
+      eat ('|');
+      # Alternation.
+      push @res, parse_term ();
+    }
+  return @res;
+}
+
+sub parse_term ()
+{
+  my @res = parse_fact ();
+  while ($token[0] eq '&')
+    {
+      eat ('&');
+      # Cartesian product.
+      my @lhs = @res;
+      @res = ();
+      for my $rhs (parse_fact ())
+        {
+          for my $lhs (@lhs)
+            {
+              push @res, $lhs . ($lhs && $rhs ? "\n" : "") . $rhs;
+            }
+        }
+    }
+  return @res;
+}
+
+sub parse_fact ()
+{
+  my @res;
+  die "unexpected end of expression"
+    unless defined $token[0];
+
+  if ($token[0] eq '(')
+    {
+      eat ('(');
+      @res = parse_expr ();
+      eat (')');
+    }
+  elsif ($token[0] eq '[')
+    {
+      eat ('[');
+      @res = (parse_expr (), '');
+      eat (']');
+    }
+  else
+    {
+      @res = parse_dirs ();
+    }
+  return @res;
+}
+
+sub parse_dirs ()
+{
+  my @res;
+  die "unexpected end of expression"
+    unless defined $token[0];
+
+  if ($token[0] eq '#d')
+    {
+      eat ('#d');
+      $token[0] =~ s/(.*?)=(.*)/$1 $2/;
+      @res = ("%code {\n#define $token[0]\n}");
+      shift @token;
+    }
+  elsif ($token[0] eq '%d')
+    {
+      shift @token;
+      $token[0] =~ s/(.*?)=(.*)/$1 "$2"/;
+      @res = ("%define $token[0]");
+      shift @token;
+    }
+  elsif ($token[0] eq '%s')
+    {
+      shift @token;
+      @res = ("%skeleton \"$token[0]\"");
+      shift @token;
+    }
+  elsif ($token[0] eq '%b')
+    {
+      shift @token;
+      @res = ("/*\n%bison \"$token[0]\"\\\n*/");
+      shift @token;
+    }
+  else
+    {
+      @res = $token[0];
+      shift @token;
+    }
+
+  return @res;
+}
+
+######################################################################
+
+sub getopt ()
+{
+  use Getopt::Long;
+  my %option = (
+    "b|bench=s"      => \$bench,
+    "c|cflags=s"     => \$cflags,
+    "d|directive=s"  => \@directive,
+    "g|grammar=s"    => \$grammar,
+    "h|help"         => sub { help ($verbose) },
+    "i|iterations=i" => \$iterations,
+    "q|quiet"        => sub { --$verbose },
+    "v|verbose"      => sub { ++$verbose },
+    );
+  Getopt::Long::Configure ("bundling", "pass_through");
+  GetOptions (%option)
+    or exit 1;
+}
+
+######################################################################
+
+getopt;
+
+# Create the directory we work in.
+mkdir "benches" or die "cannot create benches"
+  unless -d "benches";
+my $count = 1;
+++$count
+  while -d "benches/$count";
+my $dir = "benches/$count";
+mkdir $dir
+  or die "cannot create $dir";
+chdir $dir
+  or die "cannot chdir $dir";
+
+# The following message is tailored to please Emacs' compilation-mode.
+verbose 1, "Entering directory `$dir'\n";
+verbose 1, "Using bison=$bison.\n";
+verbose 2, "Using cc=$cc.\n";
+verbose 2, "Using cxx=$cxx.\n";
+verbose 2, "Using cflags=$cflags.\n";
+verbose 2, "Grammar: $grammar\n";
+
+
+# Support -b: predefined benches.
+my %bench =
+  (
+   "push"     => \&bench_push_parser,
+   "variant"  => \&bench_variant_parser,
+  );
+
+if (defined $bench)
+{
+  die "invalid argument for --bench: $bench"
+    unless defined $bench{$bench};
+  &{$bench{$bench}}();
+  exit 0;
+}
+else
+{
+  # Launch the bench marking.
+  bench ($grammar, @ARGV);
+}
 
 ### Setup "GNU" style for perl-mode and cperl-mode.
 ## Local Variables:

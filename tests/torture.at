@@ -91,9 +91,9 @@ for my $size (1 .. $max)
   {
     use Text::Wrap;
     print wrap ("| ", "   ",
-		(map { "\"$_\"" } (1 .. $size)),
-		" END \n"),
-		  "    { \$\$ = $size; }\n";
+                (map { "\"$_\"" } (1 .. $size)),
+                " END \n"),
+                  "    { \$\$ = $size; }\n";
   };
 print ";\n";
 
@@ -115,12 +115,7 @@ yylex (void)
     }
   return inner++;
 }
-int
-main (void)
-{
-  yydebug = !!getenv ("YYDEBUG");
-  return yyparse ();
-}
+]AT_MAIN_DEFINE[
 EOF
 ]])
 AT_BISON_OPTION_POPDEFS
@@ -188,7 +183,7 @@ EOF
 use Text::Wrap;
 print
   wrap ("exp: ", "  ",
-	(map { "\"$_\"" } (1 .. $max)), ";"),
+        (map { "\"$_\"" } (1 .. $max)), ";"),
   "\n";
 
 print <<\EOF;
@@ -204,13 +199,7 @@ yylex (void)
   assert (counter++ == MAX + 1);
   return 0;
 }
-
-int
-main (void)
-{
-  yydebug = !!getenv ("YYDEBUG");
-  return yyparse ();
-}
+]AT_MAIN_DEFINE[
 EOF
 ]])
 
@@ -288,8 +277,8 @@ EOF
 
 print
   wrap ("%type <val> ",
-	"            ",
-	map { "n$_" } (1 .. $max)),
+        "            ",
+        map { "n$_" } (1 .. $max)),
   "\n";
 
 print "%token\n";
@@ -342,12 +331,7 @@ yylex (void)
   return counter++;
 }
 
-int
-main (void)
-{
-  yydebug = !!getenv ("YYDEBUG");
-  return yyparse ();
-}
+]AT_MAIN_DEFINE[
 EOF
 ]])
 

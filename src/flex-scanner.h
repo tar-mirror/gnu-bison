@@ -28,7 +28,7 @@
    + (YY_FLEX_SUBMINOR_VERSION))
 
 /* Pacify "gcc -Wmissing-prototypes" when flex 2.5.31 is used.  */
-# if FLEX_VERSION <= 2005031
+#if FLEX_VERSION <= 2005031
 int   FLEX_PREFIX (get_lineno) (void);
 FILE *FLEX_PREFIX (get_in) (void);
 FILE *FLEX_PREFIX (get_out) (void);
@@ -76,16 +76,13 @@ int   FLEX_PREFIX (lex_destroy) (void);
 
 static struct obstack obstack_for_string;
 
-# define STRING_GROW   \
+# define STRING_GROW                                    \
   obstack_grow (&obstack_for_string, yytext, yyleng)
 
-# define STRING_FINISH					\
-  do {							\
-    obstack_1grow (&obstack_for_string, '\0');		\
-    last_string = obstack_finish (&obstack_for_string);	\
-  } while (0)
+# define STRING_FINISH                                  \
+  (last_string = obstack_finish0 (&obstack_for_string))
 
-# define STRING_FREE \
+# define STRING_FREE                                    \
   obstack_free (&obstack_for_string, last_string)
 
 #endif

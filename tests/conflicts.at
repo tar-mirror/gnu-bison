@@ -1,7 +1,6 @@
 # Exercising Bison on conflicts.                         -*- Autotest -*-
 
-# Copyright (C) 2002-2005, 2007, 2009-2013 Free Software Foundation,
-# Inc.
+# Copyright (C) 2002-2005, 2007-2013 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,6 +16,248 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 AT_BANNER([[Conflicts.]])
+
+## ------------------------- ##
+## Token declaration order.  ##
+## ------------------------- ##
+
+# This test checks that token are declared left to right when in a precedence
+# statement.
+
+AT_SETUP([Token declaration order])
+
+AT_BISON_OPTION_PUSHDEFS
+
+AT_DATA_GRAMMAR([[input.y]],
+[[%code {
+  #include <stdio.h>
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+}
+%token A B C
+%token D
+%right E F G
+%right H I
+%right J
+%left  K
+%left  L M N
+%nonassoc O P Q
+%precedence R S T U
+%precedence V W
+%%
+exp: A
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE[
+int main (void)
+{
+  assert (A < B);
+  assert (B < C);
+  assert (C < D);
+  assert (D < E);
+  assert (E < F);
+  assert (F < G);
+  assert (G < H);
+  assert (H < I);
+  assert (I < J);
+  assert (J < K);
+  assert (K < L);
+  assert (L < M);
+  assert (M < N);
+  assert (N < O);
+  assert (O < P);
+  assert (P < Q);
+  assert (Q < R);
+  assert (R < S);
+  assert (S < T);
+  assert (T < U);
+  assert (U < V);
+  assert (V < W);
+  return 0;
+}
+]])
+
+AT_BISON_CHECK([-o input.c input.y])
+AT_COMPILE([input])
+
+AT_PARSER_CHECK([./input])
+
+AT_BISON_OPTION_POPDEFS
+
+AT_CLEANUP
+
+
+## --------------------------------------------------- ##
+## Token declaration order: literals vs. identifiers.  ##
+## --------------------------------------------------- ##
+
+# This test checks that when several tokens are declared by the same keyword,
+# some of them defined as a character ('a'), others as simple textual reference
+# (A), they are declared correctly left to right.
+# Previously, the following test would declare the states in the order 'o' 'p'
+# M N, instead of M N 'o' 'p'.
+
+AT_SETUP([Token declaration order: literals vs. identifiers])
+
+AT_DATA_GRAMMAR([[input.y]],
+[[%token 'a' 'b' C D
+%token E F 'g' 'h'
+%right 'i' 'j' K L
+%right M N 'o' 'p'
+%%
+exp: 'a'
+   | 'b'
+   | C
+   | D
+   | E
+   | F
+   | 'g'
+   | 'h'
+   | 'i'
+   | 'j'
+   | K
+   | L
+   | M
+   | N
+   | 'o'
+   | 'p'
+;
+%%
+]])
+
+AT_BISON_CHECK([[--report=all -o input.c input.y]], 0, [], [ignore])
+AT_CHECK([[cat input.output | sed -n '/^State 0$/,/^State 1$/p']], 0,
+[[State 0
+
+    0 $accept: . exp $end
+    1 exp: . 'a'
+    2    | . 'b'
+    3    | . C
+    4    | . D
+    5    | . E
+    6    | . F
+    7    | . 'g'
+    8    | . 'h'
+    9    | . 'i'
+   10    | . 'j'
+   11    | . K
+   12    | . L
+   13    | . M
+   14    | . N
+   15    | . 'o'
+   16    | . 'p'
+
+    'a'  shift, and go to state 1
+    'b'  shift, and go to state 2
+    C    shift, and go to state 3
+    D    shift, and go to state 4
+    E    shift, and go to state 5
+    F    shift, and go to state 6
+    'g'  shift, and go to state 7
+    'h'  shift, and go to state 8
+    'i'  shift, and go to state 9
+    'j'  shift, and go to state 10
+    K    shift, and go to state 11
+    L    shift, and go to state 12
+    M    shift, and go to state 13
+    N    shift, and go to state 14
+    'o'  shift, and go to state 15
+    'p'  shift, and go to state 16
+
+    exp  go to state 17
+
+
+State 1
+]])
+
+AT_CLEANUP
+
+
+## ------------------------------- ##
+## Useless associativity warning.  ##
+## ------------------------------- ##
+
+AT_SETUP([Useless associativity warning])
+
+AT_DATA([[input.y]],
+[[%token EQ "=" PL "+" ST "*"  LP "("
+%nonassoc "="
+%left "+"
+%left "*"
+%precedence "("
+%%
+stmt:
+  exp
+| "var" "=" exp
+;
+
+exp:
+  exp "+" exp
+| exp "*" "num"
+| "(" exp ")"
+| "num"
+;
+]])
+
+AT_BISON_CHECK([-Wprecedence input.y], 0, [],
+[[input.y:2.1-9: warning: useless precedence and associativity for "=" [-Wprecedence]
+input.y:4.1-5: warning: useless associativity for "*", use %precedence [-Wprecedence]
+input.y:5.1-11: warning: useless precedence for "(" [-Wprecedence]
+]])
+
+AT_CLEANUP
+
+
+## ---------------------------- ##
+## Useless precedence warning.  ##
+## ---------------------------- ##
+
+AT_SETUP([Useless precedence warning])
+
+AT_DATA([[input.y]],
+[[%token A B U V W X Y Z
+%precedence Z
+%left X
+%precedence Y
+%left W
+%right V
+%nonassoc U
+%%
+a: b
+ | a U b
+ | f
+;
+b: c
+ | b V c
+;
+c: d
+ | c W d
+;
+d: A
+ | d X d
+ | d Y A
+;
+f: B
+ | f Z B
+;
+]])
+
+AT_BISON_CHECK([-Wprecedence -fcaret -o input.c input.y], 0, [],
+[[input.y:7.1-9: warning: useless precedence and associativity for U [-Wprecedence]
+ %nonassoc U
+ ^^^^^^^^^
+input.y:6.1-6: warning: useless precedence and associativity for V [-Wprecedence]
+ %right V
+ ^^^^^^
+input.y:5.1-5: warning: useless precedence and associativity for W [-Wprecedence]
+ %left W
+ ^^^^^
+input.y:2.1-11: warning: useless precedence for Z [-Wprecedence]
+ %precedence Z
+ ^^^^^^^^^^^
+]])
+
+AT_CLEANUP
 
 
 ## ---------------- ##
@@ -38,11 +279,11 @@ e: 'e' | /* Nothing. */;
 ]])
 
 AT_BISON_CHECK([-o input.c input.y], 0, [],
-[[input.y:4.9: warning: rule useless in parser due to conflicts: e: /* empty */
+[[input.y:4.9: warning: rule useless in parser due to conflicts [-Wother]
 ]])
 
 AT_BISON_CHECK([-fcaret -o input.c input.y], 0, [],
-[[input.y:4.9: warning: rule useless in parser due to conflicts
+[[input.y:4.9: warning: rule useless in parser due to conflicts [-Wother]
  e: 'e' | /* Nothing. */;
          ^
 ]])
@@ -124,10 +365,10 @@ AT_NONASSOC_AND_EOF_CHECK([], [[incorrect]])
 
 # We must disable default reductions in inconsistent states in order to
 # have an explicit list of all expected tokens.
-AT_NONASSOC_AND_EOF_CHECK([[-Dlr.default-reductions=consistent]],
+AT_NONASSOC_AND_EOF_CHECK([[-Dlr.default-reduction=consistent]],
                           [[correct]])
 
-# lr.default-reductions=consistent happens to work for this test case.
+# lr.default-reduction=consistent happens to work for this test case.
 # However, for other grammars, lookahead sets can be merged for
 # different left contexts, so it is still possible to have an incorrect
 # expected list.  Canonical LR is almost a general solution (that is, it
@@ -148,11 +389,11 @@ AT_CLEANUP
 
 
 
-## -------------------------------------- ##
-## %error-verbose and consistent errors.  ##
-## -------------------------------------- ##
+## ------------------------------------------- ##
+## parse.error=verbose and consistent errors.  ##
+## ------------------------------------------- ##
 
-AT_SETUP([[%error-verbose and consistent errors]])
+AT_SETUP([[parse.error=verbose and consistent errors]])
 
 m4_pushdef([AT_CONSISTENT_ERRORS_CHECK], [
 
@@ -170,7 +411,6 @@ AT_SKEL_JAVA_IF([AT_DATA], [AT_DATA_GRAMMAR])([input.y],
 }]], [[
 
 %code {]AT_SKEL_CC_IF([[
-  #include <cassert>
   #include <string>]], [[
   #include <assert.h>
   #include <stdio.h>
@@ -183,7 +423,7 @@ AT_SKEL_JAVA_IF([AT_DATA], [AT_DATA_GRAMMAR])([input.y],
 
 ]$1[
 
-%error-verbose
+%define parse.error verbose
 
 %%
 
@@ -223,30 +463,9 @@ public Object getLVal ()
 
 /*-------.
 | main.  |
-`-------*/]AT_SKEL_JAVA_IF([[
-
-class input
-{
-  public static void main (String args[]) throws IOException
-  {
-    YYParser p = new YYParser ();
-    p.parse ();
-  }
-}]], [AT_SKEL_CC_IF([[
-
-int
-main (void)
-{
-  yy::parser parser;
-  return parser.parse ();
-}]], [[
-
-int
-main (void)
-{
-  return yyparse ();
-}]])])[
-]])
+`-------*/
+]AT_MAIN_DEFINE
+])
 
 AT_FULL_COMPILE([[input]])
 
@@ -318,12 +537,12 @@ AT_CONSISTENT_ERRORS_CHECK([[%define lr.type ielr
 
 # Even canonical LR doesn't foresee the error for 'a'!
 AT_CONSISTENT_ERRORS_CHECK([[%define lr.type ielr
-                             %define lr.default-reductions consistent]],
+                             %define lr.default-reduction consistent]],
                            [AT_PREVIOUS_STATE_GRAMMAR],
                            [AT_PREVIOUS_STATE_INPUT],
                            [[$end]], [[ab]])
 AT_CONSISTENT_ERRORS_CHECK([[%define lr.type ielr
-                             %define lr.default-reductions accepting]],
+                             %define lr.default-reduction accepting]],
                            [AT_PREVIOUS_STATE_GRAMMAR],
                            [AT_PREVIOUS_STATE_INPUT],
                            [[$end]], [[ab]])
@@ -378,7 +597,7 @@ error-reduce:
 ;
 
 consistent-reduction: /*empty*/ {
-  assert (yychar == ]AT_SKEL_CC_IF([[yyempty_]], [[YYEMPTY]])[);
+  assert (yychar == YYEMPTY);
   yylval = 0;
   yychar = 'b';
 } ;
@@ -402,19 +621,15 @@ AT_CONSISTENT_ERRORS_CHECK([[%glr-parser]],
                            [AT_USER_ACTION_GRAMMAR],
                            [AT_USER_ACTION_INPUT],
                            [['b']], [[none]])
-AT_CONSISTENT_ERRORS_CHECK([[%language "c++"]],
-                           [AT_USER_ACTION_GRAMMAR],
-                           [AT_USER_ACTION_INPUT],
-                           [['b']], [[none]])
-# No Java test because yychar cannot be manipulated by users.
+# No C++ or Java test because yychar cannot be manipulated by users.
 
-AT_CONSISTENT_ERRORS_CHECK([[%define lr.default-reductions consistent]],
+AT_CONSISTENT_ERRORS_CHECK([[%define lr.default-reduction consistent]],
                            [AT_USER_ACTION_GRAMMAR],
                            [AT_USER_ACTION_INPUT],
                            [['b']], [[none]])
 
 # Canonical LR doesn't foresee the error for 'a'!
-AT_CONSISTENT_ERRORS_CHECK([[%define lr.default-reductions accepting]],
+AT_CONSISTENT_ERRORS_CHECK([[%define lr.default-reduction accepting]],
                            [AT_USER_ACTION_GRAMMAR],
                            [AT_USER_ACTION_INPUT],
                            [[$end]], [[a]])
@@ -428,7 +643,7 @@ AT_CONSISTENT_ERRORS_CHECK([[%define parse.lac full]],
                            [AT_USER_ACTION_INPUT],
                            [['b']], [[none]])
 AT_CONSISTENT_ERRORS_CHECK([[%define parse.lac full
-                             %define lr.default-reductions accepting]],
+                             %define lr.default-reduction accepting]],
                            [AT_USER_ACTION_GRAMMAR],
                            [AT_USER_ACTION_INPUT],
                            [[$end]], [[none]])
@@ -498,19 +713,14 @@ reduce-nonassoc: %prec 'a';
 %%
 ]AT_YYERROR_DEFINE[
 ]AT_YYLEX_DEFINE(["aaa"])[
-
-int
-main (void)
-{
-  return yyparse ();
-}
-]])
+]AT_MAIN_DEFINE
+])
 AT_BISON_OPTION_POPDEFS
 
 # Show canonical LR's failure.
 AT_BISON_CHECK([[-Dlr.type=canonical-lr -o input.c input.y]],
                [[0]], [[]],
-[[input.y: conflicts: 2 shift/reduce
+[[input.y: warning: 2 shift/reduce conflicts [-Wconflicts-sr]
 ]])
 AT_COMPILE([[input]])
 AT_PARSER_CHECK([[./input]], [[1]], [[]],
@@ -520,7 +730,7 @@ AT_PARSER_CHECK([[./input]], [[1]], [[]],
 # It's corrected by LAC.
 AT_BISON_CHECK([[-Dlr.type=canonical-lr -Dparse.lac=full \
                  -o input.c input.y]], [[0]], [[]],
-[[input.y: conflicts: 2 shift/reduce
+[[input.y: warning: 2 shift/reduce conflicts [-Wconflicts-sr]
 ]])
 AT_COMPILE([[input]])
 AT_PARSER_CHECK([[./input]], [[1]], [[]],
@@ -530,7 +740,7 @@ AT_PARSER_CHECK([[./input]], [[1]], [[]],
 # IELR is sufficient when LAC is used.
 AT_BISON_CHECK([[-Dlr.type=ielr -Dparse.lac=full -o input.c input.y]],
                [[0]], [[]],
-[[input.y: conflicts: 2 shift/reduce
+[[input.y: warning: 2 shift/reduce conflicts [-Wconflicts-sr]
 ]])
 AT_COMPILE([[input]])
 AT_PARSER_CHECK([[./input]], [[1]], [[]],
@@ -554,8 +764,8 @@ exp: exp OP exp | NUM;
 ]])
 
 AT_BISON_CHECK([-o input.c --report=all input.y], 0, [],
-[input.y: conflicts: 1 shift/reduce
-])
+[[input.y: warning: 1 shift/reduce conflict [-Wconflicts-sr]
+]])
 
 # Check the contents of the report.
 AT_CHECK([cat input.output], [],
@@ -747,6 +957,62 @@ State 5
 AT_CLEANUP
 
 
+## ---------------------- ##
+## %precedence suffices.  ##
+## ---------------------- ##
+
+AT_SETUP([%precedence suffices])
+
+AT_DATA([input.y],
+[[%precedence "then"
+%precedence "else"
+%%
+stmt:
+  "if" cond "then" stmt
+| "if" cond "then" stmt "else" stmt
+| "stmt"
+;
+
+cond:
+  "exp"
+;
+]])
+
+AT_BISON_CHECK([-o input.c input.y])
+
+AT_CLEANUP
+
+
+## ------------------------------ ##
+## %precedence does not suffice.  ##
+## ------------------------------ ##
+
+AT_SETUP([%precedence does not suffice])
+
+AT_DATA([input.y],
+[[%precedence "then"
+%precedence "else"
+%%
+stmt:
+  "if" cond "then" stmt
+| "if" cond "then" stmt "else" stmt
+| "stmt"
+;
+
+cond:
+  "exp"
+| cond "then" cond
+;
+]])
+
+AT_BISON_CHECK([-o input.c input.y], 0, [],
+[[input.y: warning: 1 shift/reduce conflict [-Wconflicts-sr]
+input.y:12.3-18: warning: rule useless in parser due to conflicts [-Wother]
+]])
+
+AT_CLEANUP
+
+
 ## -------------------------------- ##
 ## Defaulted Conflicted Reduction.  ##
 ## -------------------------------- ##
@@ -757,13 +1023,13 @@ AT_CLEANUP
 #    $end           reduce using rule 3 (num)
 #    $end           [reduce using rule 4 (id)]
 #
-# But when `reduce 3' is the default action, we'd produce:
+# But when 'reduce 3' is the default action, we'd produce:
 #
 #    $end           [reduce using rule 4 (id)]
 #    $default    reduce using rule 3 (num)
 #
 # In this precise case (a reduction is masked by the default
-# reduction), we make the `reduce 3' explicit:
+# reduction), we make the 'reduce 3' explicit:
 #
 #    $end           reduce using rule 3 (num)
 #    $end           [reduce using rule 4 (id)]
@@ -784,8 +1050,8 @@ id : '0';
 ]])
 
 AT_BISON_CHECK([-o input.c --report=all input.y], 0, [],
-[[input.y: conflicts: 1 reduce/reduce
-input.y:4.6-8: warning: rule useless in parser due to conflicts: id: '0'
+[[input.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+input.y:4.6-8: warning: rule useless in parser due to conflicts [-Wother]
 ]])
 
 # Check the contents of the report.
@@ -901,9 +1167,8 @@ exp: exp OP exp | NUM;
 ]])
 
 AT_BISON_CHECK([-o input.c input.y], 1, [],
-[input.y: conflicts: 1 shift/reduce
-input.y: error: expected 0 shift/reduce conflicts
-])
+[[input.y: error: shift/reduce conflicts: 1 found, 0 expected
+]])
 AT_CLEANUP
 
 
@@ -938,9 +1203,8 @@ exp: exp OP exp | NUM;
 ]])
 
 AT_BISON_CHECK([-o input.c input.y], 1, [],
-[input.y: conflicts: 1 shift/reduce
-input.y: error: expected 2 shift/reduce conflicts
-])
+[[input.y: error: shift/reduce conflicts: 1 found, 2 expected
+]])
 AT_CLEANUP
 
 
@@ -958,9 +1222,8 @@ a: 'a';
 ]])
 
 AT_BISON_CHECK([-o input.c input.y], 1, [],
-[input.y: conflicts: 1 reduce/reduce
-input.y: error: expected 0 reduce/reduce conflicts
-])
+[[input.y: error: reduce/reduce conflicts: 1 found, 0 expected
+]])
 AT_CLEANUP
 
 
@@ -1001,8 +1264,10 @@ e:   e '+' e
    ;
 ]])
 
-AT_BISON_CHECK([-o input.c input.y], 0, [],
-[[input.y: conflicts: 4 shift/reduce
+AT_BISON_CHECK([-Wall -o input.c input.y], 0, [],
+[[input.y: warning: 4 shift/reduce conflicts [-Wconflicts-sr]
+input.y:1.1-5: warning: useless precedence and associativity for '+' [-Wprecedence]
+input.y:2.1-5: warning: useless precedence and associativity for '*' [-Wprecedence]
 ]])
 AT_CLEANUP
 
@@ -1104,14 +1369,15 @@ reported_conflicts:
 ]])
 
 AT_BISON_CHECK([[--report=all input.y]], 0, [],
-[[input.y: conflicts: 1 shift/reduce, 1 reduce/reduce
-input.y:12.5-20: warning: rule useless in parser due to conflicts: resolved_conflict: 'a' unreachable1
-input.y:20.5-20: warning: rule useless in parser due to conflicts: unreachable1: 'a' unreachable2
-input.y:21.4: warning: rule useless in parser due to conflicts: unreachable1: /* empty */
-input.y:25.13: warning: rule useless in parser due to conflicts: unreachable2: /* empty */
-input.y:25.16: warning: rule useless in parser due to conflicts: unreachable2: /* empty */
-input.y:31.5-7: warning: rule useless in parser due to conflicts: reported_conflicts: 'a'
-input.y:32.4: warning: rule useless in parser due to conflicts: reported_conflicts: /* empty */
+[[input.y: warning: 1 shift/reduce conflict [-Wconflicts-sr]
+input.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+input.y:12.5-20: warning: rule useless in parser due to conflicts [-Wother]
+input.y:20.5-20: warning: rule useless in parser due to conflicts [-Wother]
+input.y:21.4: warning: rule useless in parser due to conflicts [-Wother]
+input.y:25.13: warning: rule useless in parser due to conflicts [-Wother]
+input.y:25.16: warning: rule useless in parser due to conflicts [-Wother]
+input.y:31.5-7: warning: rule useless in parser due to conflicts [-Wother]
+input.y:32.4: warning: rule useless in parser due to conflicts [-Wother]
 ]])
 
 AT_CHECK([[cat input.output]], 0,
@@ -1120,13 +1386,13 @@ AT_CHECK([[cat input.output]], 0,
     2 resolved_conflict: 'a' unreachable1
 
     4 unreachable1: 'a' unreachable2
-    5             | /* empty */
+    5             | %empty
 
-    6 unreachable2: /* empty */
-    7             | /* empty */
+    6 unreachable2: %empty
+    7             | %empty
 
     9 reported_conflicts: 'a'
-   10                   | /* empty */
+   10                   | %empty
 
 
 State 4 conflicts: 1 shift/reduce
@@ -1140,17 +1406,17 @@ Grammar
     1 start: resolved_conflict 'a' reported_conflicts 'a'
 
     2 resolved_conflict: 'a' unreachable1
-    3                  | /* empty */
+    3                  | %empty
 
     4 unreachable1: 'a' unreachable2
-    5             | /* empty */
+    5             | %empty
 
-    6 unreachable2: /* empty */
-    7             | /* empty */
+    6 unreachable2: %empty
+    7             | %empty
 
     8 reported_conflicts: 'a'
     9                   | 'a'
-   10                   | /* empty */
+   10                   | %empty
 
 
 Terminals, with rules where they appear
@@ -1251,16 +1517,17 @@ State 7
 ]])
 
 AT_DATA([[input-keep.y]],
-[[%define lr.keep-unreachable-states
+[[%define lr.keep-unreachable-state
 ]])
 AT_CHECK([[cat input.y >> input-keep.y]])
 
 AT_BISON_CHECK([[input-keep.y]], 0, [],
-[[input-keep.y: conflicts: 2 shift/reduce, 2 reduce/reduce
-input-keep.y:22.4: warning: rule useless in parser due to conflicts: unreachable1: /* empty */
-input-keep.y:26.16: warning: rule useless in parser due to conflicts: unreachable2: /* empty */
-input-keep.y:32.5-7: warning: rule useless in parser due to conflicts: reported_conflicts: 'a'
-input-keep.y:33.4: warning: rule useless in parser due to conflicts: reported_conflicts: /* empty */
+[[input-keep.y: warning: 2 shift/reduce conflicts [-Wconflicts-sr]
+input-keep.y: warning: 2 reduce/reduce conflicts [-Wconflicts-rr]
+input-keep.y:22.4: warning: rule useless in parser due to conflicts [-Wother]
+input-keep.y:26.16: warning: rule useless in parser due to conflicts [-Wother]
+input-keep.y:32.5-7: warning: rule useless in parser due to conflicts [-Wother]
+input-keep.y:33.4: warning: rule useless in parser due to conflicts [-Wother]
 ]])
 
 AT_CLEANUP
@@ -1415,9 +1682,40 @@ State 1
 AT_CLEANUP
 
 
-## --------------------------------- ##
-## -W versus %expect and %expect-rr  ##
-## --------------------------------- ##
+## -------------------- ##
+## %expect-rr non GLR.  ##
+## -------------------- ##
+
+AT_SETUP([[%expect-rr non GLR]])
+
+AT_DATA([[1.y]],
+[[%expect-rr 0
+%%
+exp: 'a'
+]])
+
+AT_BISON_CHECK([[1.y]], [[0]], [],
+[[1.y: warning: %expect-rr applies only to GLR parsers [-Wother]
+]])
+
+AT_DATA([[2.y]],
+[[%expect-rr 1
+%%
+exp: 'a' | 'a';
+]])
+
+AT_BISON_CHECK([[2.y]], [[0]], [],
+[[2.y: warning: %expect-rr applies only to GLR parsers [-Wother]
+2.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+2.y:3.12-14: warning: rule useless in parser due to conflicts [-Wother]
+]])
+
+AT_CLEANUP
+
+
+## ---------------------------------- ##
+## -W versus %expect and %expect-rr.  ##
+## ---------------------------------- ##
 
 AT_SETUP([[-W versus %expect and %expect-rr]])
 
@@ -1443,17 +1741,27 @@ B: ;
 ]])
 
 AT_BISON_CHECK([[sr-rr.y]], [[0]], [[]],
-[[sr-rr.y: conflicts: 1 shift/reduce, 1 reduce/reduce
+[[sr-rr.y: warning: 1 shift/reduce conflict [-Wconflicts-sr]
+sr-rr.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
 ]])
 AT_BISON_CHECK([[-Wno-conflicts-sr sr-rr.y]], [[0]], [[]],
-[[sr-rr.y: conflicts: 1 reduce/reduce
+[[sr-rr.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
 ]])
 AT_BISON_CHECK([[-Wno-conflicts-rr sr-rr.y]], [[0]], [[]],
-[[sr-rr.y: conflicts: 1 shift/reduce
+[[sr-rr.y: warning: 1 shift/reduce conflict [-Wconflicts-sr]
 ]])
 
-[for gram in sr-rr sr rr; do
+[
+# This is piece of code is rather complex for a simple task: try every
+# combinaison of (0 or 1 real SR) x (0 or 1 real RR) x (don't %expect
+# or %expect 0, 1, or 2 SR) x (don't %expect-rr or %expect-rr 0, 1, or 2
+# RR).
+
+# Number and types of genuine conflicts in the grammar.
+for gram in sr-rr sr rr; do
+  # Number of expected s/r conflicts.
   for sr_exp_i in '' 0 1 2; do
+    # Number of expected r/r conflicts.
     for rr_exp_i in '' 0 1 2; do
       test -z "$sr_exp_i" && test -z "$rr_exp_i" && continue
 
@@ -1476,36 +1784,38 @@ AT_BISON_CHECK([[-Wno-conflicts-rr sr-rr.y]], [[0]], [[]],
       echo "$directives" > $file
       cat $gram.y >> $file
 
-      # Count actual conflicts.
-      conflicts=
-      sr_count=0
-      rr_count=0
-      if test $gram = sr || test $gram = sr-rr; then
-        conflicts="1 shift/reduce"
-        sr_count=1
-      fi
-      if test $gram = rr || test $gram = sr-rr; then
-        if test -n "$conflicts"; then
-          conflicts="$conflicts, "
-        fi
-        conflicts="${conflicts}1 reduce/reduce"
-        rr_count=1
-      fi
+      # Number of found conflicts.
+      case $gram in
+        (sr)    sr_count=1; rr_count=0;;
+        (rr)    sr_count=0; rr_count=1;;
+        (sr-rr) sr_count=1; rr_count=1;;
+      esac
+
+      # Update number of expected conflicts: if %expect is given then
+      # %expect-rr defaults to 0, and vice-versa.  Leave empty if
+      # nothing expected.
+      case $sr_exp_i:$rr_exp_i in
+        ?:) rr_exp_i=0;;
+        :?) sr_exp_i=0;;
+      esac
 
       # Run tests.
       if test $sr_count -eq $sr_exp && test $rr_count -eq $rr_exp; then
         ]AT_BISON_CHECK([[-Wnone $file]])[
         ]AT_BISON_CHECK([[-Werror $file]])[
       else
-        echo "$file: conflicts: $conflicts" > experr
-        if test $sr_count -ne $sr_exp; then
-          if test $sr_exp -ne 1; then s=s; else s= ; fi
-          echo "$file: error: expected $sr_exp shift/reduce conflict$s" >> experr
-        fi
-        if test $rr_count -ne $rr_exp; then
-          if test $rr_exp -ne 1; then s=s; else s= ; fi
-          echo "$file: error: expected $rr_exp reduce/reduce conflict$s" >> experr
-        fi
+        {
+          if test -z "$sr_exp_i" && test "$sr_count" -ne 0; then
+            echo "warning: $sr_count shift/reduce conflicts"
+          elif test "$sr_exp_i" -ne "$sr_count"; then
+            echo "error: shift/reduce conflicts: $sr_count found, $sr_exp_i expected"
+          fi
+          if test -z "$rr_exp_i" && test "$rr_count" -ne 0; then
+            echo "warning: $rr_count reduce/reduce conflicts"
+          elif test "$rr_exp_i" -ne "$rr_count"; then
+            echo "error: reduce/reduce conflicts: $rr_count found, $rr_exp_i expected"
+          fi
+        } | sed -e "s/^/$file: /" > experr
         ]AT_BISON_CHECK([[-Wnone $file]], [[1]], [[]], [[experr]])[
         ]AT_BISON_CHECK([[-Werror $file]], [[1]], [[]], [[experr]])[
       fi

@@ -41,7 +41,7 @@ AT_DATA_GRAMMAR([$1.y],
 ]AT_YYLEX_DECLARE_EXTERN[
 %}
 %%
-dummy:;
+dummy: /* empty */;
 %%
 #include <$1.h>
 ])
@@ -68,30 +68,21 @@ AT_TEST_CPP_GUARD_H([9foo],        [%glr-parser])
 
 AT_SETUP([export YYLTYPE])
 
+AT_BISON_OPTION_PUSHDEFS([%name-prefix "my_"])
 AT_DATA_GRAMMAR([input.y],
-[%locations
+[[%locations
 
 %name-prefix "my_"
 %{
 #include <stdio.h>
 #include <stdlib.h>
 
-static int
-my_lex (void)
-{
-  return EOF;
-}
-
-static void
-my_error (const char *msg)
-{
-  fprintf (stderr, "%s\n", msg);
-}
-
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE[
 %}
 %%
-exp:;
-])
+exp: /* empty */;
+]])
 
 AT_BISON_CHECK([--defines -o input.c input.y])
 
@@ -102,11 +93,7 @@ YYLTYPE *my_llocp = &my_lloc;
 
 int my_parse (void);
 
-int
-main (void)
-{
-  return my_parse ();
-}
+]AT_MAIN_DEFINE[
 ]])
 
 # Link and execute, just to make sure everything is fine (and in
@@ -115,7 +102,7 @@ AT_COMPILE([caller.o])
 AT_COMPILE([input.o])
 AT_COMPILE([caller], [caller.o input.o])
 AT_PARSER_CHECK([./caller])
-
+AT_BISON_OPTION_POPDEFS
 AT_CLEANUP
 
 ## ----------------- ##
@@ -130,9 +117,9 @@ AT_SETUP([Several parsers])
 # nor yy* identifiers in the header.  Check that headers are
 # self-contained, and can be compiled by a C++ compiler.
 m4_pushdef([AT_TEST],
-[AT_BISON_OPTION_PUSHDEFS([%define api.prefix "$1_" $2])
+[AT_BISON_OPTION_PUSHDEFS([%define api.prefix {$1_} $2])
 AT_DATA_GRAMMAR([$1.y],
-[[%define api.prefix "$1_"
+[[%define api.prefix {$1_}
 $2
 %error-verbose
 %union
@@ -229,16 +216,13 @@ AT_TEST([x8], [%define api.pure %define api.push-pull both])
 # C++ output relies on namespaces and still uses yy a lot.
 #
 # Check there is no 'YY' left.
-# Ignore comments, YYChar (template parameter), YYPARSE_PARAM
-# (obsolete), YYPUSH_MORE(_DEFINED)?  (constant definition),
-# YY_\w+_INCLUDED (header guards).
-#
+# Ignore comments, YYChar (template parameter), YYPUSH_MORE(_DEFINED)?
+# (constant definition), YY_\w+_INCLUDED (header guards).
 # YYDEBUG (not renamed) can be read, but not changed.
 AT_CHECK([[$PERL -n -0777 -e '
   s{/\*.*?\*/}{}gs;
   s{//.*}{}g;
   s{\b(YYChar
-      |YYPARSE_PARAM
       |YYPUSH_MORE(_DEFINED)?
       |YY_\w+_INCLUDED
       |YY_NULL

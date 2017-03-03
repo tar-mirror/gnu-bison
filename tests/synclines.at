@@ -23,7 +23,7 @@ AT_BANNER([[User Actions.]])
 # --------------------------
 # Compile FILE expecting an error, and save in the file stdout the
 # normalized output.  Ignore the exit status, since some compilers
-# (e.g. c89 on IRIX 6.5) trigger warnings on `#error', instead of
+# (e.g. c89 on IRIX 6.5) trigger warnings on '#error', instead of
 # errors.
 m4_define([AT_SYNCLINES_COMPILE],
 [AT_CHECK([$CC $CFLAGS $CPPFLAGS -c $1], [ignore], [], [stderr])
@@ -268,7 +268,7 @@ m4_popdef([AT_TEST])
 ## ----------- ##
 
 m4_pushdef([AT_TEST],
-[AT_SETUP([%no-lines])
+[AT_SETUP([%no-lines: $1])
 
 AT_BISON_OPTION_PUSHDEFS([%skeleton "$1" %defines])
 AT_DATA_GRAMMAR([input.y],

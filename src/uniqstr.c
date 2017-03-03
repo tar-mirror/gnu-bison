@@ -80,7 +80,7 @@ uniqstr_assert (char const *str)
   if (!hash_lookup (uniqstrs_table, str))
     {
       error (0, 0,
-	     "not a uniqstr: %s", quotearg (str));
+             "not a uniqstr: %s", quotearg (str));
       abort ();
     }
 }
@@ -103,7 +103,17 @@ uniqstr_print_processor (void *ustr, void *null ATTRIBUTE_UNUSED)
   return uniqstr_print (ustr);
 }
 
-
+
+int
+uniqstr_cmp (uniqstr l, uniqstr r)
+{
+  return (l == r ? 0
+          : !l ? -1
+          : !r ? +1
+          : strcmp (l, r));
+}
+
+
 /*-----------------------.
 | A uniqstr hash table.  |
 `-----------------------*/
@@ -111,7 +121,7 @@ uniqstr_print_processor (void *ustr, void *null ATTRIBUTE_UNUSED)
 static bool
 hash_compare_uniqstr (void const *m1, void const *m2)
 {
-  return strcmp (m1, m2) == 0;
+  return STREQ (m1, m2);
 }
 
 static size_t
@@ -119,6 +129,7 @@ hash_uniqstr (void const *m, size_t tablesize)
 {
   return hash_string (m, tablesize);
 }
+
 
 /*----------------------------.
 | Create the uniqstrs table.  |
@@ -128,10 +139,10 @@ void
 uniqstrs_new (void)
 {
   uniqstrs_table = hash_initialize (HT_INITIAL_CAPACITY,
-				    NULL,
-				    hash_uniqstr,
-				    hash_compare_uniqstr,
-				    free);
+                                    NULL,
+                                    hash_uniqstr,
+                                    hash_compare_uniqstr,
+                                    free);
 }
 
 

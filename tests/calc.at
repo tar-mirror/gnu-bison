@@ -27,11 +27,11 @@
 
 # _AT_DATA_CALC_Y($1, $2, $3, [BISON-DIRECTIVES])
 # -----------------------------------------------
-# Produce `calc.y' and, if %defines was specified, `calc-lex.c' or
-# `calc-lex.cc'.
+# Produce 'calc.y' and, if %defines was specified, 'calc-lex.c' or
+# 'calc-lex.cc'.
 #
 # Don't call this macro directly, because it contains some occurrences
-# of `$1' etc. which will be interpreted by m4.  So you should call it
+# of '$1' etc. which will be interpreted by m4.  So you should call it
 # with $1, $2, and $3 as arguments, which is what AT_DATA_CALC_Y does.
 #
 # When %defines is not passed, generate a single self-contained file.
@@ -46,12 +46,7 @@ m4_define([_AT_DATA_CALC_Y],
 
 m4_pushdef([AT_CALC_MAIN],
 [#include <assert.h>
-#if HAVE_UNISTD_H
-# include <unistd.h>
-#else
-# undef alarm
-# define alarm(seconds) /* empty */
-#endif
+#include <unistd.h>
 
 AT_SKEL_CC_IF([[
 /* A C++ ]AT_NAME_PREFIX[parse that simulates the C signature.  */
@@ -77,10 +72,12 @@ main (int argc, const char **argv)
   int count = 0;
   int status;
 
-  /* This used to be alarm (10), but that isn't enough time for
-     a July 1995 vintage DEC Alphastation 200 4/100 system,
-     according to Nelson H. F. Beebe.  100 seconds is enough.  */
-  alarm (100);
+  /* This used to be alarm (10), but that isn't enough time for a July
+     1995 vintage DEC Alphastation 200 4/100 system, according to
+     Nelson H. F. Beebe.  100 seconds was enough for regular users,
+     but the Hydra build farm, which is heavily loaded needs more.  */
+
+  alarm (200);
 
   if (argc == 2)
     input = fopen (argv[1], "r");
@@ -93,8 +90,7 @@ main (int argc, const char **argv)
       return 3;
     }
 
-]AT_SKEL_CC_IF([], [m4_bmatch([$4], [%debug],
-[  ]AT_NAME_PREFIX[debug = 1;])])[
+]AT_SKEL_CC_IF([], [AT_DEBUG_IF([  ]AT_NAME_PREFIX[debug = 1;])])[
   status = ]AT_NAME_PREFIX[parse (]AT_PARAM_IF([[&result, &count]])[);
   if (fclose (input))
     perror ("fclose");
@@ -138,7 +134,7 @@ unget_char (]AT_YYLEX_PRE_FORMALS[ int c)
 {
   ]AT_USE_LEX_ARGS[;
 ]AT_LOCATION_IF([
-  /* Wrong when C == `\n'. */
+  /* Wrong when C == '\n'. */
   AT_LOC = last_yylloc;
 ])[
   ungetc (c, input);
@@ -194,12 +190,12 @@ read_signed_integer (]AT_YYLEX_FORMALS[)
     {
       unget_char (]AT_YYLEX_PRE_ARGS[ c);
       ]AT_VAL[.ival = read_signed_integer (]AT_YYLEX_ARGS[);
-      return NUM;
+      return ]AT_TOKEN_PREFIX[NUM;
     }
 
   /* Return end-of-file.  */
   if (c == EOF)
-    return CALC_EOF;
+    return ]AT_TOKEN_PREFIX[CALC_EOF;
 
   /* Return single chars. */
   return c;
@@ -287,11 +283,11 @@ static int power (int base, int exponent);
 %token <ival> NUM "number"
 %type  <ival> exp
 
-%nonassoc '=' /* comparison            */
+%nonassoc '='   /* comparison          */
 %left '-' '+'
 %left '*' '/'
-%left NEG     /* negation--unary minus */
-%right '^'    /* exponentiation        */
+%precedence NEG /* negation--unary minus */
+%right '^'      /* exponentiation        */
 
 /* Grammar follows */
 %%
@@ -370,8 +366,8 @@ m4_popdef([AT_CALC_LEX])
 
 # AT_DATA_CALC_Y([BISON-OPTIONS])
 # -------------------------------
-# Produce `calc.y' and, if %defines was specified, `calc-lex.c' or
-# `calc-lex.cc'.
+# Produce 'calc.y' and, if %defines was specified, 'calc-lex.c' or
+# 'calc-lex.cc'.
 m4_define([AT_DATA_CALC_Y],
 [_AT_DATA_CALC_Y($[1], $[2], $[3], [$1])
 ])
@@ -380,9 +376,9 @@ m4_define([AT_DATA_CALC_Y],
 
 # _AT_CHECK_CALC(BISON-OPTIONS, INPUT, [NUM-STDERR-LINES])
 # --------------------------------------------------------
-# Run `calc' on INPUT and expect no STDOUT nor STDERR.
+# Run 'calc' on INPUT and expect no STDOUT nor STDERR.
 #
-# If BISON-OPTIONS contains `%debug' but not `%glr-parser', then
+# If BISON-OPTIONS contains '%debug' but not '%glr-parser', then
 #
 # NUM-STDERR-LINES is the number of expected lines on stderr.
 # Currently this is ignored, though, since the output format is fluctuating.
@@ -401,7 +397,7 @@ AT_PARSER_CHECK([./calc input], 0, [], [stderr])
 #                      [NUM-STDERR-LINES],
 #                      [VERBOSE-AND-LOCATED-ERROR-MESSAGE])
 # ---------------------------------------------------------
-# Run `calc' on INPUT, and expect a `syntax error' message.
+# Run 'calc' on INPUT, and expect a 'syntax error' message.
 #
 # If INPUT starts with a slash, it is used as absolute input file name,
 # otherwise as contents.
@@ -409,14 +405,14 @@ AT_PARSER_CHECK([./calc input], 0, [], [stderr])
 # NUM-STDERR-LINES is the number of expected lines on stderr.
 # Currently this is ignored, though, since the output format is fluctuating.
 #
-# If BISON-OPTIONS contains `%location', then make sure the ERROR-LOCATION
+# If BISON-OPTIONS contains '%location', then make sure the ERROR-LOCATION
 # is correctly output on stderr.
 #
-# If BISON-OPTIONS contains `%error-verbose', then make sure the
-# IF-YYERROR-VERBOSE message is properly output after `syntax error, '
+# If BISON-OPTIONS contains '%define parse.error verbose', then make sure the
+# IF-YYERROR-VERBOSE message is properly output after 'syntax error, '
 # on STDERR.
 #
-# If BISON-OPTIONS contains `%debug' but not `%glr', then NUM-STDERR-LINES
+# If BISON-OPTIONS contains '%debug' but not '%glr', then NUM-STDERR-LINES
 # is the number of expected lines on stderr.
 m4_define([_AT_CHECK_CALC_ERROR],
 [m4_bmatch([$3], [^/],
@@ -453,8 +449,8 @@ AT_DATA([[expout]],
 AT_YYERROR_SEES_LOC_IF([],
 [[sed 's/^[-0-9.]*: //' expout >at-expout
 mv at-expout expout]])
-# 4. If error-verbose is not used, strip the`, unexpected....' part.
-m4_bmatch([$1], [%error-verbose], [],
+# 4. If error-verbose is not used, strip the', unexpected....' part.
+m4_bmatch([$1], [%define parse.error verbose], [],
 [[sed 's/syntax error, .*$/syntax error/' expout >at-expout
 mv at-expout expout]])
 # 5. Check
@@ -462,18 +458,20 @@ AT_CHECK([cat stderr], 0, [expout])
 ])
 
 
-# AT_CHECK_SPACES([FILE])
-# -----------------------
+# AT_CHECK_SPACES([FILES])
+# ------------------------
 # Make sure we did not introduce bad spaces.  Checked here because all
 # the skeletons are (or should be) exercized here.
 m4_define([AT_CHECK_SPACES],
 [AT_CHECK([$PERL -ne '
   chomp;
-  print "$.: {$_}\n"
+  print "$ARGV:$.: {$_}\n"
     if (# No starting/ending empty lines.
         (eof || $. == 1) && /^\s*$/
-        # No trailing space.  FIXME: not ready for "maint".
-        # || /\s$/
+        # No trailing space.
+        || /\s$/
+        # No tabs.
+        || /\t/
         )' $1
 ])dnl
 ])
@@ -481,7 +479,7 @@ m4_define([AT_CHECK_SPACES],
 
 # AT_CHECK_CALC([BISON-OPTIONS])
 # ------------------------------
-# Start a testing chunk which compiles `calc' grammar with
+# Start a testing chunk which compiles 'calc' grammar with
 # BISON-OPTIONS, and performs several tests over the parser.
 m4_define([AT_CHECK_CALC],
 [m4_ifval([$2], [m4_fatal([$0: expected a single argument])])
@@ -493,8 +491,9 @@ AT_BISON_OPTION_PUSHDEFS([$1])
 
 AT_DATA_CALC_Y([$1])
 AT_FULL_COMPILE([calc], AT_DEFINES_IF([[lex], [main]]))
-AT_CHECK_SPACES([calc.AT_SKEL_CC_IF([cc], [c])])
-AT_DEFINES_IF([AT_CHECK_SPACES([calc.AT_SKEL_CC_IF([hh], [h])])])
+AT_CHECK_SPACES(m4_join([ ],
+                        [calc.AT_SKEL_CC_IF([cc], [c])],
+                        [AT_DEFINES_IF([calc.AT_SKEL_CC_IF([hh], [h])])]))
 
 # Test the priorities.
 _AT_CHECK_CALC([$1],
@@ -540,7 +539,7 @@ _AT_CHECK_CALC_ERROR([$1], [1], [/dev/null], [4],
 #   - (* * *): nothing to pop, a lot to discard
 #   - (1 + 2 * *): some to pop and discard
 #
-# - test the action associated to `error'
+# - test the action associated to 'error'
 #
 # - check the lookahead that triggers an error is not discarded
 #   when we enter error recovery.  Below, the lookahead causing the
@@ -589,7 +588,7 @@ AT_BANNER([[Simple LALR(1) Calculator.]])
 
 # AT_CHECK_CALC_LALR([BISON-OPTIONS])
 # -----------------------------------
-# Start a testing chunk which compiles `calc' grammar with
+# Start a testing chunk which compiles 'calc' grammar with
 # BISON-OPTIONS, and performs several tests over the parser.
 m4_define([AT_CHECK_CALC_LALR],
 [AT_CHECK_CALC($@)])
@@ -599,26 +598,26 @@ AT_CHECK_CALC_LALR()
 AT_CHECK_CALC_LALR([%defines])
 AT_CHECK_CALC_LALR([%locations])
 
-AT_CHECK_CALC_LALR([%name-prefix="calc"]) dnl test deprecated `='
+AT_CHECK_CALC_LALR([%name-prefix "calc"])
 AT_CHECK_CALC_LALR([%verbose])
 AT_CHECK_CALC_LALR([%yacc])
-AT_CHECK_CALC_LALR([%error-verbose])
+AT_CHECK_CALC_LALR([%define parse.error verbose])
 
 AT_CHECK_CALC_LALR([%define api.pure full %locations])
 AT_CHECK_CALC_LALR([%define api.push-pull both %define api.pure full %locations])
-AT_CHECK_CALC_LALR([%error-verbose %locations])
+AT_CHECK_CALC_LALR([%define parse.error verbose %locations])
 
-AT_CHECK_CALC_LALR([%error-verbose %locations %defines %name-prefix "calc" %verbose %yacc])
-AT_CHECK_CALC_LALR([%error-verbose %locations %defines %define api.prefix "calc" %verbose %yacc])
+AT_CHECK_CALC_LALR([%define parse.error verbose %locations %defines %define api.prefix {calc} %verbose %yacc])
+AT_CHECK_CALC_LALR([%define parse.error verbose %locations %defines %name-prefix "calc" %define api.token.prefix {TOK_} %verbose %yacc])
 
 AT_CHECK_CALC_LALR([%debug])
-AT_CHECK_CALC_LALR([%error-verbose %debug %locations %defines %name-prefix "calc" %verbose %yacc])
-AT_CHECK_CALC_LALR([%error-verbose %debug %locations %defines %define api.prefix "calc" %verbose %yacc])
+AT_CHECK_CALC_LALR([%define parse.error verbose %debug %locations %defines %name-prefix "calc" %verbose %yacc])
+AT_CHECK_CALC_LALR([%define parse.error verbose %debug %locations %defines %define api.prefix {calc} %verbose %yacc])
 
-AT_CHECK_CALC_LALR([%define api.pure full %verbose %debug %locations %defines %name-prefix "calc" %verbose %yacc])
-AT_CHECK_CALC_LALR([%define api.push-pull both %define api.pure full %verbose %debug %locations %defines %define api.prefix "calc" %verbose %yacc])
+AT_CHECK_CALC_LALR([%define api.pure full %define parse.error verbose %debug %locations %defines %name-prefix "calc" %verbose %yacc])
+AT_CHECK_CALC_LALR([%define api.push-pull both %define api.pure full %define parse.error verbose %debug %locations %defines %define api.prefix {calc} %verbose %yacc])
 
-AT_CHECK_CALC_LALR([%define api.pure %error-verbose %debug %locations %defines %define api.prefix "calc" %verbose %yacc %parse-param {semantic_value *result} %parse-param {int *count}])
+AT_CHECK_CALC_LALR([%define api.pure %define parse.error verbose %debug %locations %defines %define api.prefix {calc} %verbose %yacc %parse-param {semantic_value *result} %parse-param {int *count}])
 
 
 # ----------------------- #
@@ -629,7 +628,7 @@ AT_BANNER([[Simple GLR Calculator.]])
 
 # AT_CHECK_CALC_GLR([BISON-OPTIONS])
 # ----------------------------------
-# Start a testing chunk which compiles `calc' grammar with
+# Start a testing chunk which compiles 'calc' grammar with
 # BISON-OPTIONS and %glr-parser, and performs several tests over the parser.
 m4_define([AT_CHECK_CALC_GLR],
 [AT_CHECK_CALC([%glr-parser] $@)])
@@ -640,24 +639,24 @@ AT_CHECK_CALC_GLR()
 AT_CHECK_CALC_GLR([%defines])
 AT_CHECK_CALC_GLR([%locations])
 AT_CHECK_CALC_GLR([%name-prefix "calc"])
-AT_CHECK_CALC_GLR([%define api.prefix "calc"])
+AT_CHECK_CALC_GLR([%define api.prefix {calc}])
 AT_CHECK_CALC_GLR([%verbose])
 AT_CHECK_CALC_GLR([%yacc])
-AT_CHECK_CALC_GLR([%error-verbose])
+AT_CHECK_CALC_GLR([%define parse.error verbose])
 
 AT_CHECK_CALC_GLR([%define api.pure %locations])
-AT_CHECK_CALC_GLR([%error-verbose %locations])
+AT_CHECK_CALC_GLR([%define parse.error verbose %locations])
 
-AT_CHECK_CALC_GLR([%error-verbose %locations %defines %name-prefix "calc" %verbose %yacc])
+AT_CHECK_CALC_GLR([%define parse.error verbose %locations %defines %name-prefix "calc" %verbose %yacc])
 
 AT_CHECK_CALC_GLR([%debug])
-AT_CHECK_CALC_GLR([%error-verbose %debug %locations %defines %name-prefix "calc" %verbose %yacc])
-AT_CHECK_CALC_GLR([%error-verbose %debug %locations %defines %define api.prefix "calc" %verbose %yacc])
+AT_CHECK_CALC_GLR([%define parse.error verbose %debug %locations %defines %name-prefix "calc" %verbose %yacc])
+AT_CHECK_CALC_GLR([%define parse.error verbose %debug %locations %defines %define api.prefix {calc} %define api.token.prefix {TOK_} %verbose %yacc])
 
-AT_CHECK_CALC_GLR([%define api.pure %error-verbose %debug %locations %defines %name-prefix "calc" %verbose %yacc])
+AT_CHECK_CALC_GLR([%define api.pure %define parse.error verbose %debug %locations %defines %name-prefix "calc" %verbose %yacc])
 
-AT_CHECK_CALC_GLR([%define api.pure %error-verbose %debug %locations %defines %name-prefix "calc" %verbose %yacc %parse-param {semantic_value *result} %parse-param {int *count}])
-AT_CHECK_CALC_GLR([%define api.pure %error-verbose %debug %locations %defines %define api.prefix "calc" %verbose %yacc %parse-param {semantic_value *result} %parse-param {int *count}])
+AT_CHECK_CALC_GLR([%define api.pure %define parse.error verbose %debug %locations %defines %name-prefix "calc" %verbose %yacc %parse-param {semantic_value *result} %parse-param {int *count}])
+AT_CHECK_CALC_GLR([%define api.pure %define parse.error verbose %debug %locations %defines %define api.prefix {calc} %verbose %yacc %parse-param {semantic_value *result} %parse-param {int *count}])
 
 
 # ----------------------------- #
@@ -667,25 +666,30 @@ AT_CHECK_CALC_GLR([%define api.pure %error-verbose %debug %locations %defines %d
 AT_BANNER([[Simple LALR(1) C++ Calculator.]])
 
 # First let's try using %skeleton
-AT_CHECK_CALC([%skeleton "lalr1.cc" %defines %locations])
+AT_CHECK_CALC([%skeleton "lalr1.cc" %defines])
 
 # AT_CHECK_CALC_LALR1_CC([BISON-OPTIONS])
 # ---------------------------------------
-# Start a testing chunk which compiles `calc' grammar with
+# Start a testing chunk which compiles 'calc' grammar with
 # the C++ skeleton, and performs several tests over the parser.
 m4_define([AT_CHECK_CALC_LALR1_CC],
-[AT_CHECK_CALC([%language "C++" %defines %locations] $@)])
+[AT_CHECK_CALC([%language "C++"] $@)])
 
 AT_CHECK_CALC_LALR1_CC([])
-AT_CHECK_CALC_LALR1_CC([%define api.location.type Span])
-AT_CHECK_CALC_LALR1_CC([%error-verbose %name-prefix "calc" %verbose %yacc])
-AT_CHECK_CALC_LALR1_CC([%error-verbose %define api.prefix "calc" %verbose %yacc])
-AT_CHECK_CALC_LALR1_CC([%error-verbose %debug %name-prefix "calc" %verbose %yacc])
+AT_CHECK_CALC_LALR1_CC([%locations])
+AT_CHECK_CALC_LALR1_CC([%locations %define api.location.type {Span}])
+AT_CHECK_CALC_LALR1_CC([%defines %locations %define parse.error verbose %name-prefix "calc" %verbose %yacc])
 
-AT_CHECK_CALC_LALR1_CC([%pure-parser %error-verbose %debug %define api.prefix "calc" %verbose %yacc])
+AT_CHECK_CALC_LALR1_CC([%locations %define parse.error verbose %define api.prefix {calc} %verbose %yacc])
+AT_CHECK_CALC_LALR1_CC([%locations %define parse.error verbose %debug %name-prefix "calc" %verbose %yacc])
 
-AT_CHECK_CALC_LALR1_CC([%pure-parser %error-verbose %debug %name-prefix "calc" %verbose %yacc %parse-param {semantic_value *result} %parse-param {int *count}])
-AT_CHECK_CALC_LALR1_CC([%pure-parser %error-verbose %debug %define api.prefix "calc" %verbose %yacc %parse-param {semantic_value *result} %parse-param {int *count}])
+AT_CHECK_CALC_LALR1_CC([%locations %define parse.error verbose %debug %define api.prefix {calc} %verbose %yacc])
+AT_CHECK_CALC_LALR1_CC([%locations %define parse.error verbose %debug %define api.prefix {calc} %define api.token.prefix {TOK_} %verbose %yacc])
+
+AT_CHECK_CALC_LALR1_CC([%defines %locations %define parse.error verbose %debug %name-prefix "calc" %verbose %yacc %parse-param {semantic_value *result} %parse-param {int *count}])
+
+AT_CHECK_CALC_LALR1_CC([%define parse.error verbose %debug %define api.prefix {calc} %verbose %yacc %parse-param {semantic_value *result} %parse-param {int *count}])
+AT_CHECK_CALC_LALR1_CC([%defines %locations %define parse.error verbose %debug %define api.prefix {calc} %verbose %yacc %parse-param {semantic_value *result} %parse-param {int *count}])
 
 
 
@@ -696,24 +700,25 @@ AT_CHECK_CALC_LALR1_CC([%pure-parser %error-verbose %debug %define api.prefix "c
 AT_BANNER([[Simple GLR C++ Calculator.]])
 
 # Again, we try also using %skeleton.
-AT_CHECK_CALC([%skeleton "glr.cc" %defines %locations])
+AT_CHECK_CALC([%skeleton "glr.cc"])
 
 # AT_CHECK_CALC_GLR_CC([BISON-OPTIONS])
 # -------------------------------------
-# Start a testing chunk which compiles `calc' grammar with
+# Start a testing chunk which compiles 'calc' grammar with
 # the GLR C++ skeleton, and performs several tests over the parser.
 m4_define([AT_CHECK_CALC_GLR_CC],
-[AT_CHECK_CALC([%language "C++" %glr-parser %defines %locations] $@)])
+[AT_CHECK_CALC([%language "C++" %glr-parser] $@)])
 
 AT_CHECK_CALC_GLR_CC([])
-AT_CHECK_CALC_GLR_CC([%define api.location.type Span])
-AT_CHECK_CALC_GLR_CC([%error-verbose %name-prefix "calc" %verbose %yacc])
-AT_CHECK_CALC_GLR_CC([%error-verbose %define api.prefix "calc" %verbose %yacc])
+AT_CHECK_CALC_GLR_CC([%locations])
+AT_CHECK_CALC_GLR_CC([%locations %define api.location.type {Span}])
+AT_CHECK_CALC_GLR_CC([%defines %define parse.error verbose %name-prefix "calc" %verbose %yacc])
+AT_CHECK_CALC_GLR_CC([%define parse.error verbose %define api.prefix {calc} %verbose %yacc])
 
 AT_CHECK_CALC_GLR_CC([%debug])
-AT_CHECK_CALC_GLR_CC([%error-verbose %debug %name-prefix "calc" %verbose %yacc])
 
-AT_CHECK_CALC_GLR_CC([%pure-parser %error-verbose %debug %name-prefix "calc" %verbose %yacc])
+AT_CHECK_CALC_GLR_CC([%define parse.error verbose %debug %name-prefix "calc" %verbose %yacc])
+AT_CHECK_CALC_GLR_CC([%define parse.error verbose %debug %name-prefix "calc" %define api.token.prefix {TOK_} %verbose %yacc])
 
-AT_CHECK_CALC_GLR_CC([%pure-parser %error-verbose %debug %name-prefix "calc" %verbose %yacc %parse-param {semantic_value *result} %parse-param {int *count}])
-AT_CHECK_CALC_GLR_CC([%pure-parser %error-verbose %debug %define api.prefix "calc" %verbose %yacc %parse-param {semantic_value *result} %parse-param {int *count}])
+AT_CHECK_CALC_GLR_CC([%locations %defines %define parse.error verbose %debug %name-prefix "calc" %verbose %yacc %parse-param {semantic_value *result} %parse-param {int *count}])
+AT_CHECK_CALC_GLR_CC([%locations %defines %define parse.error verbose %debug %define api.prefix {calc} %verbose %yacc %parse-param {semantic_value *result} %parse-param {int *count}])

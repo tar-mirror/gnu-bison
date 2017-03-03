@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison-runtime 2.4.3\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2013-04-15 13:59+0200\n"
+"POT-Creation-Date: 2013-07-25 17:57+0200\n"
 "PO-Revision-Date: 2010-11-30 16:43+0100\n"
 "Last-Translator: Leandro Regueiro <leandro.regueiro@gmail.com>\n"
 "Language-Team: Galician <proxecto@trasno.net>\n"
@@ -21,46 +21,46 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
-#: data/glr.c:838 data/yacc.c:771
+#: data/glr.c:775 data/yacc.c:643
 msgid "syntax error: cannot back up"
 msgstr "erro de sintaxe: non foi posible realizar unha copia de seguridade"
 
-#: data/glr.c:1712
+#: data/glr.c:1656
 msgid "syntax is ambiguous"
 msgstr "a sintaxe é ambigua"
 
-#: data/glr.c:1997 data/glr.c:2077 data/glr.c:2117 data/glr.c:2382
-#: data/lalr1.cc:941 data/lalr1.cc:961 data/yacc.c:1346 data/yacc.c:1851
-#: data/yacc.c:1857
+#: data/glr.c:1977 data/glr.c:2057 data/glr.c:2097 data/glr.c:2361
+#: data/lalr1.cc:1084 data/lalr1.cc:1104 data/yacc.c:1210 data/yacc.c:1710
+#: data/yacc.c:1716
 msgid "syntax error"
 msgstr "erro de sintaxe"
 
-#: data/glr.c:2078 data/lalr1.cc:942 data/yacc.c:1347
+#: data/glr.c:2058 data/lalr1.cc:1085 data/yacc.c:1211
 #, c-format
 msgid "syntax error, unexpected %s"
 msgstr "erro de sintaxe, non se agardaba %s"
 
-#: data/glr.c:2079 data/lalr1.cc:943 data/yacc.c:1348
+#: data/glr.c:2059 data/lalr1.cc:1086 data/yacc.c:1212
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s"
 msgstr "erro de sintaxe, non se agardaba %s, agardábase %s"
 
-#: data/glr.c:2080 data/lalr1.cc:944 data/yacc.c:1349
+#: data/glr.c:2060 data/lalr1.cc:1087 data/yacc.c:1213
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s"
 msgstr "erro de sintaxe, non se agardaba %s, agardábase %s ou %s"
 
-#: data/glr.c:2081 data/lalr1.cc:945 data/yacc.c:1350
+#: data/glr.c:2061 data/lalr1.cc:1088 data/yacc.c:1214
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s or %s"
 msgstr "erro de sintaxe, non se agardaba %s, agardábase %s ou %s ou %s"
 
-#: data/glr.c:2082 data/lalr1.cc:946 data/yacc.c:1351
+#: data/glr.c:2062 data/lalr1.cc:1089 data/yacc.c:1215
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s or %s or %s"
 msgstr "erro de sintaxe, non se agardaba %s, agardábase %s ou %s ou %s ou %s"
 
-#: data/glr.c:2442 data/yacc.c:1431 data/yacc.c:1433 data/yacc.c:1611
-#: data/yacc.c:2008
+#: data/glr.c:2421 data/yacc.c:1295 data/yacc.c:1297 data/yacc.c:1470
+#: data/yacc.c:1867
 msgid "memory exhausted"
 msgstr "memoria esgotada"
