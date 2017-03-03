@@ -167,6 +167,9 @@
 /* Define to 1 when the gnulib module ldexpl should be tested. */
 #undef GNULIB_TEST_LDEXPL
 
+/* Define to 1 when the gnulib module lstat should be tested. */
+#undef GNULIB_TEST_LSTAT
+
 /* Define to 1 when the gnulib module malloc-posix should be tested. */
 #undef GNULIB_TEST_MALLOC_POSIX
 
@@ -283,6 +286,9 @@
 
 /* Define to 1 when the gnulib module strverscmp should be tested. */
 #undef GNULIB_TEST_STRVERSCMP
+
+/* Define to 1 when the gnulib module unlink should be tested. */
+#undef GNULIB_TEST_UNLINK
 
 /* Define to 1 when the gnulib module unsetenv should be tested. */
 #undef GNULIB_TEST_UNSETENV
@@ -500,6 +506,10 @@
 /* Define to 1 if you have the declaration of `_snprintf', and to 0 if you
    don't. */
 #undef HAVE_DECL__SNPRINTF
+
+/* Define to 1 if you have the declaration of `__fpending', and to 0 if you
+   don't. */
+#undef HAVE_DECL___FPENDING
 
 /* Define to 1 if you have the 'dup2' function. */
 #undef HAVE_DUP2
@@ -1770,6 +1780,10 @@
 /* Define as the word index where to find the sign of 'long double'. */
 #undef LDBL_SIGNBIT_WORD
 
+/* Define to 1 if 'lstat' dereferences a symlink specified with a trailing
+   slash. */
+#undef LSTAT_FOLLOWS_SLASHED_SYMLINK
+
 /* Define to the GNU M4 executable name. */
 #undef M4
 
@@ -1943,6 +1957,9 @@
 /* Define to 1 if strerror_r returns char *. */
 #undef STRERROR_R_CHAR_P
 
+/* Define to 1 if unlink() on a parent directory may succeed */
+#undef UNLINK_PARENT_BUG
+
 /* Define to the prefix of C symbols at the assembler and linker level, either
    an underscore or empty. */
 #undef USER_LABEL_PREFIX
@@ -2099,15 +2116,20 @@
    'reference to static identifier "f" in extern inline function'.
    This bug was observed with Sun C 5.12 SunOS_i386 2011/11/16.
 
-   Suppress the use of extern inline on problematic Apple configurations, as
-   Libc at least through Libc-825.26 (2013-04-09) mishandles it; see, e.g.,
+   Suppress the use of extern inline on problematic Apple configurations.
+   OS X 10.8 and earlier mishandle it; see, e.g.,
    <http://lists.gnu.org/archive/html/bug-gnulib/2012-12/msg00023.html>.
+   OS X 10.9 has a macro __header_inline indicating the bug is fixed for C and
+   for clang but remains for g++; see <http://trac.macports.org/ticket/41033>.
    Perhaps Apple will fix this some day.  */
 #if (defined __APPLE__ \
-     && ((! defined _DONT_USE_CTYPE_INLINE_ \
-          && (defined __GNUC__ || defined __cplusplus)) \
-         || (defined _FORTIFY_SOURCE && 0 < _FORTIFY_SOURCE \
-             && defined __GNUC__ && ! defined __cplusplus)))
+     && (defined __header_inline \
+         ? (defined __cplusplus && defined __GNUC_STDC_INLINE__ \
+            && ! defined __clang__) \
+         : ((! defined _DONT_USE_CTYPE_INLINE_ \
+             && (defined __GNUC__ || defined __cplusplus)) \
+            || (defined _FORTIFY_SOURCE && 0 < _FORTIFY_SOURCE \
+                && defined __GNUC__ && ! defined __cplusplus))))
 # define _GL_EXTERN_INLINE_APPLE_BUG
 #endif
 #if ((__GNUC__ \

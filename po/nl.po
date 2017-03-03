@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.4.3\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2013-11-12 15:56+0100\n"
+"POT-Creation-Date: 2013-12-05 14:59+0100\n"
 "PO-Revision-Date: 2010-11-04 16:36+0100\n"
 "Last-Translator: Tim Van Holder <tim.van.holder@telenet.be>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -115,28 +115,28 @@ msgid_plural "%d reduce/reduce conflicts"
 msgstr[0] "er werd %d reductie/reductie conflict verwacht"
 msgstr[1] "er werden %d reductie/reductie conflicten verwacht"
 
-#: src/files.c:114
+#: src/files.c:123
 #, fuzzy, c-format
 msgid "%s: cannot open"
 msgstr "kan bestand `%s' niet openen"
 
-#: src/files.c:130
+#: src/files.c:139
 #, c-format
 msgid "input/output error"
 msgstr ""
 
-#: src/files.c:133
+#: src/files.c:142
 #, c-format
 msgid "cannot close file"
 msgstr "kan bestand niet sluiten"
 
 # Betere formulering (ik-vorm vermijden)?
-#: src/files.c:363
+#: src/files.c:372
 #, c-format
 msgid "refusing to overwrite the input file %s"
 msgstr "ik weiger om invoerbestand %s te overschrijven"
 
-#: src/files.c:373
+#: src/files.c:382
 #, c-format
 msgid "conflicting outputs to file %s"
 msgstr "conflicterende uitvoer naar bestand %s"
@@ -455,59 +455,59 @@ msgstr "naam ontbreekt in parameterdeclaratie"
 msgid " type %d is %s\n"
 msgstr " type %d is %s\n"
 
-#: src/print.c:164
+#: src/print.c:167
 #, c-format
 msgid "shift, and go to state %d\n"
 msgstr "shift, en ga naar toestand %d\n"
 
-#: src/print.c:166
+#: src/print.c:169
 #, c-format
 msgid "go to state %d\n"
 msgstr "ga naar toestand %d\n"
 
-#: src/print.c:203
+#: src/print.c:206
 msgid "error (nonassociative)\n"
 msgstr "fout (niet associatief)\n"
 
-#: src/print.c:226
+#: src/print.c:229
 #, c-format
 msgid "reduce using rule %d (%s)"
 msgstr "reduceren via regel %d (%s)"
 
-#: src/print.c:228
+#: src/print.c:231
 #, c-format
 msgid "accept"
 msgstr "accepteer"
 
-#: src/print.c:264 src/print.c:338
+#: src/print.c:267 src/print.c:341
 msgid "$default"
 msgstr "$standaard"
 
-#: src/print.c:373 src/print_graph.c:61
+#: src/print.c:376 src/print_graph.c:61
 #, fuzzy, c-format
 msgid "State %d"
 msgstr "Staat %d"
 
-#: src/print.c:409
+#: src/print.c:412
 msgid "Terminals, with rules where they appear"
 msgstr "Eindsymbolen, met de regels waarin ze voorkomen"
 
 # Betere vertaling voor non-terminals? 'tussensymbolen'?
-#: src/print.c:436
+#: src/print.c:439
 msgid "Nonterminals, with rules where they appear"
 msgstr "Niet-eindsymbolen, met de regels waarin ze voorkomen"
 
-#: src/print.c:465
+#: src/print.c:468
 #, c-format
 msgid " on left:"
 msgstr " links:"
 
-#: src/print.c:482
+#: src/print.c:485
 #, c-format
 msgid " on right:"
 msgstr " rechts:"
 
-#: src/print.c:510
+#: src/print.c:513
 msgid "Rules useless in parser due to conflicts"
 msgstr "Regels die, omwille van conflicten, nutteloos zijn in de grammatica"
 
@@ -793,12 +793,12 @@ msgstr "`%s' ontbreekt aan einde van regel"
 msgid "unclosed %s directive in skeleton"
 msgstr "onbeëindigd %s commando in skelet"
 
-#: src/scan-skel.l:255
+#: src/scan-skel.l:256
 #, c-format
 msgid "too few arguments for %s directive in skeleton"
 msgstr "te weinig argumenten voor %s commando in skelet"
 
-#: src/scan-skel.l:262
+#: src/scan-skel.l:263
 #, c-format
 msgid "too many arguments for %s directive in skeleton"
 msgstr "teveel argumenten voor %s commando in skelet"

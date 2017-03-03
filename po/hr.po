@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.7.1\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2013-11-12 15:56+0100\n"
+"POT-Creation-Date: 2013-12-05 14:59+0100\n"
 "PO-Revision-Date: 2013-04-18 00:00+0200\n"
 "Last-Translator: Tomislav Krznar <tomislav.krznar@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
@@ -118,27 +118,27 @@ msgstr[0] "očekujem %d reduciraj/reduciraj konflikt"
 msgstr[1] "očekujem %d reduciraj/reduciraj konflikta"
 msgstr[2] "očekujem %d reduciraj/reduciraj konflikata"
 
-#: src/files.c:114
+#: src/files.c:123
 #, c-format
 msgid "%s: cannot open"
 msgstr "%s: ne mogu otvoriti"
 
-#: src/files.c:130
+#: src/files.c:139
 #, c-format
 msgid "input/output error"
 msgstr "ulazno/izlazna greška"
 
-#: src/files.c:133
+#: src/files.c:142
 #, c-format
 msgid "cannot close file"
 msgstr "ne mogu zatvoriti datoteku"
 
-#: src/files.c:363
+#: src/files.c:372
 #, c-format
 msgid "refusing to overwrite the input file %s"
 msgstr "odbijam pisati preko ulazne datoteke %s"
 
-#: src/files.c:373
+#: src/files.c:382
 #, c-format
 msgid "conflicting outputs to file %s"
 msgstr "konfliktni izlazi u datoteku %s"
@@ -468,58 +468,58 @@ msgstr "nedostaje identifikator u deklaraciji paremetra"
 msgid " type %d is %s\n"
 msgstr " vrsta %d je %s\n"
 
-#: src/print.c:164
+#: src/print.c:167
 #, c-format
 msgid "shift, and go to state %d\n"
 msgstr "pomakni i idi u stanje %d\n"
 
-#: src/print.c:166
+#: src/print.c:169
 #, c-format
 msgid "go to state %d\n"
 msgstr "idi u stanje %d\n"
 
-#: src/print.c:203
+#: src/print.c:206
 msgid "error (nonassociative)\n"
 msgstr "greška (neasocijativna)\n"
 
-#: src/print.c:226
+#: src/print.c:229
 #, c-format
 msgid "reduce using rule %d (%s)"
 msgstr "reduciraj koristeći pravilo %d (%s)"
 
-#: src/print.c:228
+#: src/print.c:231
 #, c-format
 msgid "accept"
 msgstr "prihvati"
 
-#: src/print.c:264 src/print.c:338
+#: src/print.c:267 src/print.c:341
 msgid "$default"
 msgstr "$default"
 
-#: src/print.c:373 src/print_graph.c:61
+#: src/print.c:376 src/print_graph.c:61
 #, c-format
 msgid "State %d"
 msgstr "Stanje %d"
 
-#: src/print.c:409
+#: src/print.c:412
 msgid "Terminals, with rules where they appear"
 msgstr "Završni znakovi, s pravilima gdje se pojavljuju"
 
-#: src/print.c:436
+#: src/print.c:439
 msgid "Nonterminals, with rules where they appear"
 msgstr "Nezavršni znakovi, s pravilima gdje se pojavljuju"
 
-#: src/print.c:465
+#: src/print.c:468
 #, c-format
 msgid " on left:"
 msgstr " s lijeva:"
 
-#: src/print.c:482
+#: src/print.c:485
 #, c-format
 msgid " on right:"
 msgstr " s desna:"
 
-#: src/print.c:510
+#: src/print.c:513
 msgid "Rules useless in parser due to conflicts"
 msgstr "Pravila su beskorisna u analizatoru zbog konflikata"
 
@@ -805,12 +805,12 @@ msgstr "nedostaje %s na kraju retka"
 msgid "unclosed %s directive in skeleton"
 msgstr "nezatvoren %s propis u predlošku"
 
-#: src/scan-skel.l:255
+#: src/scan-skel.l:256
 #, c-format
 msgid "too few arguments for %s directive in skeleton"
 msgstr "premalo argumenata %s propisa u predlošku"
 
-#: src/scan-skel.l:262
+#: src/scan-skel.l:263
 #, c-format
 msgid "too many arguments for %s directive in skeleton"
 msgstr "premalo argumenata %s propisa u predlošku"

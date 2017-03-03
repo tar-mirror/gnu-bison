@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.0\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2013-11-12 15:56+0100\n"
+"POT-Creation-Date: 2013-12-05 14:59+0100\n"
 "PO-Revision-Date: 2005-03-01 10:06+0100\n"
 "Last-Translator: Trond Endrestøl <Trond.Endrestol@gtf.ol.no>\n"
 "Language-Team: Norwegian Bokmaal <i18n-nb@lister.ping.uio.no>\n"
@@ -130,27 +130,27 @@ msgid_plural "%d reduce/reduce conflicts"
 msgstr[0] "forventet %d reduksjon/reduksjon-konflikt"
 msgstr[1] "forventet %d reduksjon/reduksjon-konflikter"
 
-#: src/files.c:114
+#: src/files.c:123
 #, fuzzy, c-format
 msgid "%s: cannot open"
 msgstr "kan ikke åpne filen «%s»"
 
-#: src/files.c:130
+#: src/files.c:139
 #, c-format
 msgid "input/output error"
 msgstr ""
 
-#: src/files.c:133
+#: src/files.c:142
 #, c-format
 msgid "cannot close file"
 msgstr "kan ikke lukke filen"
 
-#: src/files.c:363
+#: src/files.c:372
 #, c-format
 msgid "refusing to overwrite the input file %s"
 msgstr ""
 
-#: src/files.c:373
+#: src/files.c:382
 #, c-format
 msgid "conflicting outputs to file %s"
 msgstr "motstridende output til fila %s"
@@ -436,60 +436,60 @@ msgstr "mangler identifikator i parameterdeklarasjonen"
 msgid " type %d is %s\n"
 msgstr " type %d er %s\n"
 
-#: src/print.c:164
+#: src/print.c:167
 #, c-format
 msgid "shift, and go to state %d\n"
 msgstr "skift og gå til tilstand %d\n"
 
-#: src/print.c:166
+#: src/print.c:169
 #, c-format
 msgid "go to state %d\n"
 msgstr "gå til tilstand %d\n"
 
-#: src/print.c:203
+#: src/print.c:206
 msgid "error (nonassociative)\n"
 msgstr "feil (ikke-assosiativ)\n"
 
-#: src/print.c:226
+#: src/print.c:229
 #, c-format
 msgid "reduce using rule %d (%s)"
 msgstr "reduksjon ved hjelp av regel %d (%s)"
 
-#: src/print.c:228
+#: src/print.c:231
 #, c-format
 msgid "accept"
 msgstr "aksept"
 
 # Det er vel ikke så mye å oversette denne med.
 # [TE, 2004-06-02]
-#: src/print.c:264 src/print.c:338
+#: src/print.c:267 src/print.c:341
 msgid "$default"
 msgstr "$default"
 
-#: src/print.c:373 src/print_graph.c:61
+#: src/print.c:376 src/print_graph.c:61
 #, fuzzy, c-format
 msgid "State %d"
 msgstr "Tilstand %d "
 
-#: src/print.c:409
+#: src/print.c:412
 msgid "Terminals, with rules where they appear"
 msgstr "Terminaler med regler hvor de opptrer"
 
-#: src/print.c:436
+#: src/print.c:439
 msgid "Nonterminals, with rules where they appear"
 msgstr "Ikke-terminaler med regler hvor de opptrer"
 
-#: src/print.c:465
+#: src/print.c:468
 #, c-format
 msgid " on left:"
 msgstr " til venstre:"
 
-#: src/print.c:482
+#: src/print.c:485
 #, c-format
 msgid " on right:"
 msgstr " til høyre:"
 
-#: src/print.c:510
+#: src/print.c:513
 #, fuzzy
 msgid "Rules useless in parser due to conflicts"
 msgstr "regel ble aldri redusert på grunn av konflikter"
@@ -782,12 +782,12 @@ msgstr "mangler «%s» på slutten av linjen"
 msgid "unclosed %s directive in skeleton"
 msgstr ""
 
-#: src/scan-skel.l:255
+#: src/scan-skel.l:256
 #, c-format
 msgid "too few arguments for %s directive in skeleton"
 msgstr ""
 
-#: src/scan-skel.l:262
+#: src/scan-skel.l:263
 #, c-format
 msgid "too many arguments for %s directive in skeleton"
 msgstr ""

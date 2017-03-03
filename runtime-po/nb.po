@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison-runtime 2.1\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2013-11-12 14:58+0100\n"
+"POT-Creation-Date: 2013-12-05 14:59+0100\n"
 "PO-Revision-Date: 2005-09-21 09:35+0200\n"
 "Last-Translator: Trond Endrestøl <Trond.Endrestol@gtf.ol.no>\n"
 "Language-Team: Norwegian Bokmaal <i18n-nb@lister.ping.uio.no>\n"
@@ -36,42 +36,42 @@ msgstr ""
 msgid "syntax error: cannot back up"
 msgstr "syntaksfeil: kan ikke gå tilbake"
 
-#: data/glr.c:1650
+#: data/glr.c:1654
 msgid "syntax is ambiguous"
 msgstr "syntaksen er flertydig"
 
-#: data/glr.c:1971 data/glr.c:2051 data/glr.c:2091 data/glr.c:2355
-#: data/lalr1.cc:1085 data/lalr1.cc:1105 data/yacc.c:1210 data/yacc.c:1710
+#: data/glr.c:1975 data/glr.c:2055 data/glr.c:2095 data/glr.c:2359
+#: data/lalr1.cc:1083 data/lalr1.cc:1103 data/yacc.c:1210 data/yacc.c:1710
 #: data/yacc.c:1716
 msgid "syntax error"
 msgstr "syntaksfeil"
 
-#: data/glr.c:2052 data/lalr1.cc:1086 data/yacc.c:1211
+#: data/glr.c:2056 data/lalr1.cc:1084 data/yacc.c:1211
 #, c-format
 msgid "syntax error, unexpected %s"
 msgstr "syntaksfeil, uforventet %s"
 
-#: data/glr.c:2053 data/lalr1.cc:1087 data/yacc.c:1212
+#: data/glr.c:2057 data/lalr1.cc:1085 data/yacc.c:1212
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s"
 msgstr "syntaksfeil, uforventet %s, forventet %s"
 
-#: data/glr.c:2054 data/lalr1.cc:1088 data/yacc.c:1213
+#: data/glr.c:2058 data/lalr1.cc:1086 data/yacc.c:1213
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s"
 msgstr "syntaksfeil, uforventet %s, forventet %s eller %s"
 
-#: data/glr.c:2055 data/lalr1.cc:1089 data/yacc.c:1214
+#: data/glr.c:2059 data/lalr1.cc:1087 data/yacc.c:1214
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s or %s"
 msgstr "syntaksfeil, uforventet %s, forventet %s eller %s eller %s"
 
-#: data/glr.c:2056 data/lalr1.cc:1090 data/yacc.c:1215
+#: data/glr.c:2060 data/lalr1.cc:1088 data/yacc.c:1215
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s or %s or %s"
 msgstr "syntaksfeil, uforventet %s, forventet %s eller %s eller %s eller %s"
 
-#: data/glr.c:2415 data/yacc.c:1295 data/yacc.c:1297 data/yacc.c:1470
+#: data/glr.c:2419 data/yacc.c:1295 data/yacc.c:1297 data/yacc.c:1470
 #: data/yacc.c:1867
 msgid "memory exhausted"
 msgstr "minne er uttømt"

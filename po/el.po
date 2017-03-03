@@ -5,10 +5,10 @@
 # Lefteris Dimitroulakis <ledimitro@gmail.com>, 2008, 2013.
 msgid ""
 msgstr ""
-"Project-Id-Version: bison-2.7.90\n"
+"Project-Id-Version: bison-3.0\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2013-11-12 15:56+0100\n"
-"PO-Revision-Date: 2013-07-04 12:30+0300\n"
+"POT-Creation-Date: 2013-12-05 14:59+0100\n"
+"PO-Revision-Date: 2013-11-10 16:37+0200\n"
 "Last-Translator: Lefteris Dimitroulakis <ledimitro@gmail.com>\n"
 "Language-Team: Greek <team@lists.gnome.gr>\n"
 "Language: el\n"
@@ -51,21 +51,21 @@ msgid "previous declaration"
 msgstr "προηγούμενη δήλωση"
 
 #: src/conflicts.c:77
-#, fuzzy, c-format
+#, c-format
 msgid "    Conflict between rule %d and token %s resolved as shift"
 msgstr ""
 "Η σύγκρουση μεταξύ του κανόνα %d και της λεκτικής μονάδας %s επιλύθηκε ως "
 "ολίσθηση"
 
 #: src/conflicts.c:86
-#, fuzzy, c-format
+#, c-format
 msgid "    Conflict between rule %d and token %s resolved as reduce"
 msgstr ""
 "Η σύγκρουση μεταξύ του κανόνα %d και της λεκτικής μονάδας %s επιλύθηκε ως "
 "ελάττωση"
 
 #: src/conflicts.c:94
-#, fuzzy, c-format
+#, c-format
 msgid "    Conflict between rule %d and token %s resolved as an error"
 msgstr ""
 "Η σύγκρουση μεταξύ του κανόνα %d και της λεκτικής μονάδας %s επιλύθηκε ως "
@@ -120,27 +120,27 @@ msgid_plural "%d reduce/reduce conflicts"
 msgstr[0] "%d σύγκρουση ελάττωση/ελάττωση"
 msgstr[1] "%d συγκρούσεις ελάττωση/ελάττωση"
 
-#: src/files.c:114
+#: src/files.c:123
 #, c-format
 msgid "%s: cannot open"
 msgstr "%s: αδυναμία ανοίγματος"
 
-#: src/files.c:130
+#: src/files.c:139
 #, c-format
 msgid "input/output error"
 msgstr "σφάλμα εισόδου/εξόδου"
 
-#: src/files.c:133
+#: src/files.c:142
 #, c-format
 msgid "cannot close file"
 msgstr "δεν μπορώ να κλείσω το αρχείο"
 
-#: src/files.c:363
+#: src/files.c:372
 #, c-format
 msgid "refusing to overwrite the input file %s"
 msgstr "άρνηση εγγραφής πάνω στο αρχείο εισόδου %s"
 
-#: src/files.c:373
+#: src/files.c:382
 #, c-format
 msgid "conflicting outputs to file %s"
 msgstr "αντικρουόμενες έξοδοι στο αρχείο %s"
@@ -472,58 +472,58 @@ msgstr "το όνομα λείπει στη δήλωση παραμέτρου"
 msgid " type %d is %s\n"
 msgstr "ο τύπος %d είναι %s\n"
 
-#: src/print.c:164
+#: src/print.c:167
 #, c-format
 msgid "shift, and go to state %d\n"
 msgstr "ολίσθηση, και μετάβαση στη κατάσταση %d\n"
 
-#: src/print.c:166
+#: src/print.c:169
 #, c-format
 msgid "go to state %d\n"
 msgstr "πήγαινε στην κατάσταση %d\n"
 
-#: src/print.c:203
+#: src/print.c:206
 msgid "error (nonassociative)\n"
 msgstr "σφάλμα (μη προσεταιριστικό)\n"
 
-#: src/print.c:226
+#: src/print.c:229
 #, c-format
 msgid "reduce using rule %d (%s)"
 msgstr "ελάττωση με χρήση του κανόνα %d (%s)"
 
-#: src/print.c:228
+#: src/print.c:231
 #, c-format
 msgid "accept"
 msgstr "αποδοχή"
 
-#: src/print.c:264 src/print.c:338
+#: src/print.c:267 src/print.c:341
 msgid "$default"
 msgstr "$default"
 
-#: src/print.c:373 src/print_graph.c:61
+#: src/print.c:376 src/print_graph.c:61
 #, c-format
 msgid "State %d"
 msgstr "Κατάσταση %d "
 
-#: src/print.c:409
+#: src/print.c:412
 msgid "Terminals, with rules where they appear"
 msgstr "Τερματικά σύμβολα, με κανόνες όπου εμφανίζονται"
 
-#: src/print.c:436
+#: src/print.c:439
 msgid "Nonterminals, with rules where they appear"
 msgstr "Μη τερματικά σύμβολα, με κανόνες όπου εμφανίζονται"
 
-#: src/print.c:465
+#: src/print.c:468
 #, c-format
 msgid " on left:"
 msgstr "στα αριστερά:"
 
-#: src/print.c:482
+#: src/print.c:485
 #, c-format
 msgid " on right:"
 msgstr "στα δεξιά:"
 
-#: src/print.c:510
+#: src/print.c:513
 msgid "Rules useless in parser due to conflicts"
 msgstr "Κανόνες άχρηστοι στον αναλυτή λόγω συγκρούσεων"
 
@@ -805,12 +805,12 @@ msgstr "στο τέλος της γραμμής λείπει «%s»"
 msgid "unclosed %s directive in skeleton"
 msgstr "unclosed %s οδηγία στο σκελετό"
 
-#: src/scan-skel.l:255
+#: src/scan-skel.l:256
 #, c-format
 msgid "too few arguments for %s directive in skeleton"
 msgstr "πολύ λίγα ορίσματα για την οδηγία %s στο σκελετό"
 
-#: src/scan-skel.l:262
+#: src/scan-skel.l:263
 #, c-format
 msgid "too many arguments for %s directive in skeleton"
 msgstr "πάρα πολλά ορίσματα για την οδηγία %s στο σκελετό"
@@ -1072,9 +1072,9 @@ msgid "Unknown system error"
 msgstr "Άγνωστο σφάλμα συστήματος"
 
 #: lib/getopt.c:547 lib/getopt.c:576
-#, fuzzy, c-format
+#, c-format
 msgid "%s: option '%s' is ambiguous; possibilities:"
-msgstr "%s: η επιλογή «%s» είναι ασαφής· επιλογές:\n"
+msgstr "%s: η επιλογή «%s» είναι ασαφής· δυνατότητες:"
 
 #: lib/getopt.c:624 lib/getopt.c:628
 #, c-format

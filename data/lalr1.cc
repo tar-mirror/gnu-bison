@@ -220,8 +220,8 @@ b4_location_define])])[
 
     /// Compute post-reduction state.
     /// \param yystate   the current state
-    /// \param yylhs     the nonterminal to push on the stack
-    state_type yy_lr_goto_state_ (state_type yystate, int yylhs);
+    /// \param yysym     the nonterminal to push on the stack
+    state_type yy_lr_goto_state_ (state_type yystate, int yysym);
 
     /// Whether the given \c yypact_ value indicates a defaulted state.
     /// \param yyvalue   the value to check
@@ -671,13 +671,13 @@ m4_if(b4_prefix, [yy], [],
 #endif // ]b4_api_PREFIX[DEBUG
 
   inline ]b4_parser_class_name[::state_type
-  ]b4_parser_class_name[::yy_lr_goto_state_ (state_type yystate, int yylhs)
+  ]b4_parser_class_name[::yy_lr_goto_state_ (state_type yystate, int yysym)
   {
-    int yyr = yypgoto_[yylhs - yyntokens_] + yystate;
+    int yyr = yypgoto_[yysym - yyntokens_] + yystate;
     if (0 <= yyr && yyr <= yylast_ && yycheck_[yyr] == yystate)
       return yytable_[yyr];
     else
-      return yydefgoto_[yylhs - yyntokens_];
+      return yydefgoto_[yysym - yyntokens_];
   }
 
   inline bool
@@ -700,6 +700,7 @@ m4_if(b4_prefix, [yy], [],
 
     // State.
     int yyn;
+    /// Length of the RHS of the rule being reduced.
     int yylen = 0;
 
     // Error handling.
@@ -711,9 +712,6 @@ m4_if(b4_prefix, [yy], [],
 
     /// The locations where the error started and ended.
     stack_symbol_type yyerror_range[3];]])[
-
-    /// $$ and @@$.
-    stack_symbol_type yylhs;
 
     /// The return value of parse ().
     int yyresult;
@@ -815,52 +813,55 @@ b4_dollar_popdef])[]dnl
   `-----------------------------*/
   yyreduce:
     yylen = yyr2_[yyn];
-    yylhs.state = yy_lr_goto_state_(yystack_[yylen].state, yyr1_[yyn]);]b4_variant_if([
-    /* Variants are always initialized to an empty instance of the
-       correct type. The default $$=$1 action is NOT applied when using
-       variants.  */
-    b4_symbol_variant([[yyr1_@{yyn@}]], [yylhs.value], [build])],[
-    /* If YYLEN is nonzero, implement the default value of the action:
-       '$$ = $1'.  Otherwise, use the top of the stack.
+    {
+      stack_symbol_type yylhs;
+      yylhs.state = yy_lr_goto_state_(yystack_[yylen].state, yyr1_[yyn]);]b4_variant_if([
+      /* Variants are always initialized to an empty instance of the
+         correct type. The default '$$ = $1' action is NOT applied
+         when using variants.  */
+      b4_symbol_variant([[yyr1_@{yyn@}]], [yylhs.value], [build])], [
+      /* If YYLEN is nonzero, implement the default value of the
+         action: '$$ = $1'.  Otherwise, use the top of the stack.
 
-       Otherwise, the following line sets YYLHS.VALUE to garbage.
-       This behavior is undocumented and Bison
-       users should not rely upon it.  */
-    if (yylen)
-      yylhs.value = yystack_@{yylen - 1@}.value;
-    else
-      yylhs.value = yystack_@{0@}.value;])[
+         Otherwise, the following line sets YYLHS.VALUE to garbage.
+         This behavior is undocumented and Bison users should not rely
+         upon it.  */
+      if (yylen)
+        yylhs.value = yystack_@{yylen - 1@}.value;
+      else
+        yylhs.value = yystack_@{0@}.value;])[
 ]b4_locations_if([dnl
 [
-    // Compute the default @@$.
-    {
-      slice<stack_symbol_type, stack_type> slice (yystack_, yylen);
-      YYLLOC_DEFAULT (yylhs.location, slice, yylen);
-    }]])[
-
-    // Perform the reduction.
-    YY_REDUCE_PRINT (yyn);
-    try
+      // Compute the default @@$.
       {
-        switch (yyn)
-          {
+        slice<stack_symbol_type, stack_type> slice (yystack_, yylen);
+        YYLLOC_DEFAULT (yylhs.location, slice, yylen);
+      }]])[
+
+      // Perform the reduction.
+      YY_REDUCE_PRINT (yyn);
+      try
+        {
+          switch (yyn)
+            {
 ]b4_user_actions[
-          default:
-            break;
-          }
-      }
-    catch (const syntax_error& yyexc)
-      {
-        error (yyexc);
-        YYERROR;
-      }
-    YY_SYMBOL_PRINT ("-> $$ =", yylhs);
-    yypop_ (yylen);
-    yylen = 0;
-    YY_STACK_PRINT ();
+            default:
+              break;
+            }
+        }
+      catch (const syntax_error& yyexc)
+        {
+          error (yyexc);
+          YYERROR;
+        }
+      YY_SYMBOL_PRINT ("-> $$ =", yylhs);
+      yypop_ (yylen);
+      yylen = 0;
+      YY_STACK_PRINT ();
 
-    // Shift the result of the reduction.
-    yypush_ (YY_NULLPTR, yylhs);
+      // Shift the result of the reduction.
+      yypush_ (YY_NULLPTR, yylhs);
+    }
     goto yynewstate;
 
   /*--------------------------------------.
@@ -907,10 +908,7 @@ b4_dollar_popdef])[]dnl
        code.  */
     if (false)
       goto yyerrorlab;]b4_locations_if([[
-    yyerror_range[1].location = yystack_[yylen - 1].location;]])b4_variant_if([[
-    /* $$ was initialized before running the user action.  */
-    YY_SYMBOL_PRINT ("Error: discarding", yylhs);
-    yylhs.~stack_symbol_type();]])[
+    yyerror_range[1].location = yystack_[yylen - 1].location;]])[
     /* Do not reclaim the symbols of the rule whose action triggered
        this YYERROR.  */
     yypop_ (yylen);

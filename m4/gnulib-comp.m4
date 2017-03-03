@@ -39,6 +39,7 @@ AC_DEFUN([gl_EARLY],
   m4_pattern_allow([^gl_LTLIBOBJS$])dnl a variable
   AC_REQUIRE([gl_PROG_AR_RANLIB])
   AC_REQUIRE([AM_PROG_CC_C_O])
+  # Code from module absolute-header:
   # Code from module alloca-opt:
   # Code from module announce-gen:
   # Code from module argmatch:
@@ -121,6 +122,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module ldexpl:
   # Code from module localcharset:
   # Code from module lock:
+  # Code from module lstat:
   # Code from module maintainer-makefile:
   # Code from module malloc-gnu:
   # Code from module malloc-posix:
@@ -209,6 +211,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module unitypes:
   # Code from module uniwidth/base:
   # Code from module uniwidth/width:
+  # Code from module unlink:
   # Code from module unlocked-io:
   # Code from module unsetenv:
   # Code from module update-copyright:
@@ -441,6 +444,12 @@ AC_DEFUN([gl_INIT],
   AC_SUBST([LOCALCHARSET_TESTS_ENVIRONMENT])
   gl_LOCK
   gl_MODULE_INDICATOR([lock])
+  gl_FUNC_LSTAT
+  if test $REPLACE_LSTAT = 1; then
+    AC_LIBOBJ([lstat])
+    gl_PREREQ_LSTAT
+  fi
+  gl_SYS_STAT_MODULE_INDICATOR([lstat])
   AC_CONFIG_COMMANDS_PRE([m4_ifdef([AH_HEADER],
     [AC_SUBST([CONFIG_INCLUDE], m4_defn([AH_HEADER]))])])
   gl_FUNC_MALLOC_GNU
@@ -700,6 +709,11 @@ AC_DEFUN([gl_INIT],
   gl_LIBUNISTRING_LIBHEADER([0.9], [unitypes.h])
   gl_LIBUNISTRING_LIBHEADER([0.9], [uniwidth.h])
   gl_LIBUNISTRING_MODULE([0.9.4], [uniwidth/width])
+  gl_FUNC_UNLINK
+  if test $REPLACE_UNLINK = 1; then
+    AC_LIBOBJ([unlink])
+  fi
+  gl_UNISTD_MODULE_INDICATOR([unlink])
   gl_FUNC_GLIBC_UNLOCKED_IO
   gl_FUNC_UNSETENV
   if test $HAVE_UNSETENV = 0 || test $REPLACE_UNSETENV = 1; then
@@ -979,6 +993,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/ldexpl.c
   lib/localcharset.c
   lib/localcharset.h
+  lib/lstat.c
   lib/malloc.c
   lib/math.c
   lib/math.in.h
@@ -1085,6 +1100,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/uniwidth.in.h
   lib/uniwidth/cjk.h
   lib/uniwidth/width.c
+  lib/unlink.c
   lib/unlocked-io.h
   lib/unsetenv.c
   lib/vasnprintf.c
@@ -1113,6 +1129,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/xstrndup.c
   lib/xstrndup.h
   m4/00gnulib.m4
+  m4/absolute-header.m4
   m4/alloca.m4
   m4/asm-underscore.m4
   m4/assert.m4
@@ -1184,6 +1201,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/locale-zh.m4
   m4/lock.m4
   m4/longlong.m4
+  m4/lstat.m4
   m4/malloc.m4
   m4/math_h.m4
   m4/mbrtowc.m4
@@ -1258,6 +1276,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/uintmax_t.m4
   m4/unistd-safer.m4
   m4/unistd_h.m4
+  m4/unlink.m4
   m4/unlocked-io.m4
   m4/vasnprintf.m4
   m4/vfprintf-posix.m4

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU bison 2.7.90\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2013-11-12 15:56+0100\n"
+"POT-Creation-Date: 2013-12-05 14:59+0100\n"
 "PO-Revision-Date: 2013-05-30 21:22+0200\n"
 "Last-Translator: Frédéric Marchal <fmarchal@perso.be>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -116,27 +116,27 @@ msgid_plural "%d reduce/reduce conflicts"
 msgstr[0] "%d conflit par réduction/réduction"
 msgstr[1] "%d conflits par réduction/réduction"
 
-#: src/files.c:114
+#: src/files.c:123
 #, c-format
 msgid "%s: cannot open"
 msgstr "%s: ouverture impossible"
 
-#: src/files.c:130
+#: src/files.c:139
 #, c-format
 msgid "input/output error"
 msgstr "erreur d'entrée/sortie"
 
-#: src/files.c:133
+#: src/files.c:142
 #, c-format
 msgid "cannot close file"
 msgstr "ne peut fermer le fichier"
 
-#: src/files.c:363
+#: src/files.c:372
 #, c-format
 msgid "refusing to overwrite the input file %s"
 msgstr "refus d'écraser le fichier d'entrée %s"
 
-#: src/files.c:373
+#: src/files.c:382
 #, c-format
 msgid "conflicting outputs to file %s"
 msgstr "sorties en conflit vers le fichier %s"
@@ -475,58 +475,58 @@ msgstr "identificateur manquant dans la déclaration de paramètres"
 msgid " type %d is %s\n"
 msgstr " le type %d est %s\n"
 
-#: src/print.c:164
+#: src/print.c:167
 #, c-format
 msgid "shift, and go to state %d\n"
 msgstr "décalage et aller à l'état %d\n"
 
-#: src/print.c:166
+#: src/print.c:169
 #, c-format
 msgid "go to state %d\n"
 msgstr "aller à l'état %d\n"
 
-#: src/print.c:203
+#: src/print.c:206
 msgid "error (nonassociative)\n"
 msgstr "erreur (non-associative)\n"
 
-#: src/print.c:226
+#: src/print.c:229
 #, c-format
 msgid "reduce using rule %d (%s)"
 msgstr "réduction par utilisation de la règle %d (%s)"
 
-#: src/print.c:228
+#: src/print.c:231
 #, c-format
 msgid "accept"
 msgstr "accepter"
 
-#: src/print.c:264 src/print.c:338
+#: src/print.c:267 src/print.c:341
 msgid "$default"
 msgstr "$défaut"
 
-#: src/print.c:373 src/print_graph.c:61
+#: src/print.c:376 src/print_graph.c:61
 #, c-format
 msgid "State %d"
 msgstr "État %d"
 
-#: src/print.c:409
+#: src/print.c:412
 msgid "Terminals, with rules where they appear"
 msgstr "Terminaux, suivis des règles où ils apparaissent"
 
-#: src/print.c:436
+#: src/print.c:439
 msgid "Nonterminals, with rules where they appear"
 msgstr "Non-terminaux, suivis des règles où ils apparaissent"
 
-#: src/print.c:465
+#: src/print.c:468
 #, c-format
 msgid " on left:"
 msgstr " à gauche:"
 
-#: src/print.c:482
+#: src/print.c:485
 #, c-format
 msgid " on right:"
 msgstr " à droite:"
 
-#: src/print.c:510
+#: src/print.c:513
 msgid "Rules useless in parser due to conflicts"
 msgstr "La règle est inutile dans l'analyseur à cause de conflits"
 
@@ -811,12 +811,12 @@ msgstr "%s manquant à la fin de fichier"
 msgid "unclosed %s directive in skeleton"
 msgstr "directive %s pas fermée dans le squelette"
 
-#: src/scan-skel.l:255
+#: src/scan-skel.l:256
 #, c-format
 msgid "too few arguments for %s directive in skeleton"
 msgstr "trop peu de paramètres pour la directive %s du squelette"
 
-#: src/scan-skel.l:262
+#: src/scan-skel.l:263
 #, c-format
 msgid "too many arguments for %s directive in skeleton"
 msgstr "trop de paramètres pour la directive %s du squelette"

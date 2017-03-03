@@ -1,7 +1,7 @@
 This is ../../doc/bison.info, produced by makeinfo version 4.13 from
 ../../doc/bison.texi.
 
-This manual (23 October 2013) is for GNU Bison (version 3.0.1), the GNU
+This manual (23 October 2013) is for GNU Bison (version 3.0.2), the GNU
 parser generator.
 
    Copyright (C) 1988-1993, 1995, 1998-2013 Free Software Foundation,
@@ -30,7 +30,7 @@ File: bison.info,  Node: Top,  Next: Introduction,  Up: (dir)
 Bison
 *****
 
-This manual (23 October 2013) is for GNU Bison (version 3.0.1), the GNU
+This manual (23 October 2013) is for GNU Bison (version 3.0.2), the GNU
 parser generator.
 
    Copyright (C) 1988-1993, 1995, 1998-2013 Free Software Foundation,
@@ -385,7 +385,7 @@ Bison has grown more robust and evolved many other new features thanks
 to the hard work of a long list of volunteers.  For details, see the
 `THANKS' and `ChangeLog' files included in the Bison distribution.
 
-   This edition corresponds to version 3.0.1 of Bison.
+   This edition corresponds to version 3.0.2 of Bison.
 
 
 File: bison.info,  Node: Conditions,  Next: Copying,  Prev: Introduction,  Up: Top
@@ -10369,7 +10369,7 @@ changed several times, it is safer to require the version you designed
 the grammar for.
 
      %skeleton "lalr1.cc" /* -*- C++ -*- */
-     %require "3.0.1"
+     %require "3.0.2"
      %defines
      %define parser_class_name {calcxx_parser}
 

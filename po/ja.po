@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU bison 2.5.1\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2013-11-12 15:56+0100\n"
+"POT-Creation-Date: 2013-12-05 14:59+0100\n"
 "PO-Revision-Date: 2012-06-10 18:47+0900\n"
 "Last-Translator: Takeshi Hamasaki <hmatrjp@users.sourceforge.jp>\n"
 "Language-Team: Japanese <translation-team-ja@lists.sourceforge.net>\n"
@@ -113,27 +113,27 @@ msgid "%d reduce/reduce conflict"
 msgid_plural "%d reduce/reduce conflicts"
 msgstr[0] "ホスト名の衝突\n"
 
-#: src/files.c:114
+#: src/files.c:123
 #, c-format
 msgid "%s: cannot open"
 msgstr "%s: 開くことができません"
 
-#: src/files.c:130
+#: src/files.c:139
 #, c-format
 msgid "input/output error"
 msgstr "入力/出力エラーです"
 
-#: src/files.c:133
+#: src/files.c:142
 #, c-format
 msgid "cannot close file"
 msgstr "ファイルを閉じることができません"
 
-#: src/files.c:363
+#: src/files.c:372
 #, fuzzy, c-format
 msgid "refusing to overwrite the input file %s"
 msgstr " ファイルを上書きしようとした際, 再取得に失敗しました"
 
-#: src/files.c:373
+#: src/files.c:382
 #, fuzzy, c-format
 msgid "conflicting outputs to file %s"
 msgstr "リモートファイルへの参照"
@@ -410,60 +410,60 @@ msgstr "マクロ仮引数リストに ')' がありません"
 msgid " type %d is %s\n"
 msgstr " タイプ %d は %s です\n"
 
-#: src/print.c:164
+#: src/print.c:167
 #, fuzzy, c-format
 msgid "shift, and go to state %d\n"
 msgstr "    %-4s\tシフト、および状態 %d へ\n"
 
-#: src/print.c:166
+#: src/print.c:169
 #, fuzzy, c-format
 msgid "go to state %d\n"
 msgstr "先頭に移動"
 
-#: src/print.c:203
+#: src/print.c:206
 #, fuzzy
 msgid "error (nonassociative)\n"
 msgstr "%s サブプロセス入出力エラー"
 
-#: src/print.c:226
+#: src/print.c:229
 #, fuzzy, c-format
 msgid "reduce using rule %d (%s)"
 msgstr " (\"%s\"からの規則, %d行)"
 
-#: src/print.c:228
+#: src/print.c:231
 #, fuzzy, c-format
 msgid "accept"
 msgstr "許可する(_A)"
 
-#: src/print.c:264 src/print.c:338
+#: src/print.c:267 src/print.c:341
 #, fuzzy
 msgid "$default"
 msgstr "デフォルト"
 
-#: src/print.c:373 src/print_graph.c:61
+#: src/print.c:376 src/print_graph.c:61
 #, fuzzy, c-format
 msgid "State %d"
 msgstr "状態 %d "
 
-#: src/print.c:409
+#: src/print.c:412
 msgid "Terminals, with rules where they appear"
 msgstr "出現位置の規則による終端"
 
-#: src/print.c:436
+#: src/print.c:439
 msgid "Nonterminals, with rules where they appear"
 msgstr "出現位置の規則による非終端"
 
-#: src/print.c:465
+#: src/print.c:468
 #, c-format
 msgid " on left:"
 msgstr " 左辺:"
 
-#: src/print.c:482
+#: src/print.c:485
 #, c-format
 msgid " on right:"
 msgstr " 右辺:"
 
-#: src/print.c:510
+#: src/print.c:513
 msgid "Rules useless in parser due to conflicts"
 msgstr "衝突のせいでパーサ内の規則が使用できません"
 
@@ -747,12 +747,12 @@ msgstr "行末に %s がありません"
 msgid "unclosed %s directive in skeleton"
 msgstr "文字列が命令の途中で終わっています."
 
-#: src/scan-skel.l:255
+#: src/scan-skel.l:256
 #, c-format
 msgid "too few arguments for %s directive in skeleton"
 msgstr ""
 
-#: src/scan-skel.l:262
+#: src/scan-skel.l:263
 #, c-format
 msgid "too many arguments for %s directive in skeleton"
 msgstr ""

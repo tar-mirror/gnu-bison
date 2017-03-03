@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.7.90\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2013-11-12 15:56+0100\n"
+"POT-Creation-Date: 2013-12-05 14:59+0100\n"
 "PO-Revision-Date: 2013-06-13 11:10+0300\n"
 "Last-Translator: Jorma Karvonen <karvonen.jorma@gmail.com>\n"
 "Language-Team: Finnish <translation-team-fi@lists.sourceforge.net>\n"
@@ -120,27 +120,27 @@ msgid_plural "%d reduce/reduce conflicts"
 msgstr[0] "%d supistaminen/supistaminen -ristiriita"
 msgstr[1] "%d supistaminen/supistaminen -ristiriitaa"
 
-#: src/files.c:114
+#: src/files.c:123
 #, c-format
 msgid "%s: cannot open"
 msgstr "%s: tiedoston avaus epäonnistui"
 
-#: src/files.c:130
+#: src/files.c:139
 #, c-format
 msgid "input/output error"
 msgstr "syöttö/tulostevirhe"
 
-#: src/files.c:133
+#: src/files.c:142
 #, c-format
 msgid "cannot close file"
 msgstr "tiedoston sulkeminen epäonnistui"
 
-#: src/files.c:363
+#: src/files.c:372
 #, c-format
 msgid "refusing to overwrite the input file %s"
 msgstr "kieltäydytään korvaamasta syötetiedostoa %s"
 
-#: src/files.c:373
+#: src/files.c:382
 #, c-format
 msgid "conflicting outputs to file %s"
 msgstr "keskenään ristiriitaisia tulosteita tiedostoon %s"
@@ -485,58 +485,58 @@ msgstr "puuttuva tunniste parametriesittelyssä"
 msgid " type %d is %s\n"
 msgstr " tyyppi %d on %s\n"
 
-#: src/print.c:164
+#: src/print.c:167
 #, c-format
 msgid "shift, and go to state %d\n"
 msgstr "siirto, ja siirry tilaan %d\n"
 
-#: src/print.c:166
+#: src/print.c:169
 #, c-format
 msgid "go to state %d\n"
 msgstr "siirry tilaan %d\n"
 
-#: src/print.c:203
+#: src/print.c:206
 msgid "error (nonassociative)\n"
 msgstr "virhe (ei-assosiatiivinen)\n"
 
-#: src/print.c:226
+#: src/print.c:229
 #, c-format
 msgid "reduce using rule %d (%s)"
 msgstr "supistaminen käyttäen sääntöä %d (%s)"
 
-#: src/print.c:228
+#: src/print.c:231
 #, c-format
 msgid "accept"
 msgstr "accept"
 
-#: src/print.c:264 src/print.c:338
+#: src/print.c:267 src/print.c:341
 msgid "$default"
 msgstr "$default"
 
-#: src/print.c:373 src/print_graph.c:61
+#: src/print.c:376 src/print_graph.c:61
 #, c-format
 msgid "State %d"
 msgstr "Tila %d"
 
-#: src/print.c:409
+#: src/print.c:412
 msgid "Terminals, with rules where they appear"
 msgstr "Päätteet, säännöillä missä niin tarvitaan"
 
-#: src/print.c:436
+#: src/print.c:439
 msgid "Nonterminals, with rules where they appear"
 msgstr "Ei-päätteet, säännöillä missä niitä tarvitaan"
 
-#: src/print.c:465
+#: src/print.c:468
 #, c-format
 msgid " on left:"
 msgstr " vasemmalla:"
 
-#: src/print.c:482
+#: src/print.c:485
 #, c-format
 msgid " on right:"
 msgstr " oikealla:"
 
-#: src/print.c:510
+#: src/print.c:513
 msgid "Rules useless in parser due to conflicts"
 msgstr "Säännöt eivät kelpaa jäsentimessä ristiriitojen vuoksi"
 
@@ -819,12 +819,12 @@ msgstr "puuttuva %s rivin lopussa"
 msgid "unclosed %s directive in skeleton"
 msgstr "sulkematon %s-direktiivi rungossa"
 
-#: src/scan-skel.l:255
+#: src/scan-skel.l:256
 #, c-format
 msgid "too few arguments for %s directive in skeleton"
 msgstr "liian vähän argumentteja %s-direktiiville rungossa"
 
-#: src/scan-skel.l:262
+#: src/scan-skel.l:263
 #, c-format
 msgid "too many arguments for %s directive in skeleton"
 msgstr "liian monta argumenttia %s-direktiiville rungossa"

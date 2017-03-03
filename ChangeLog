@@ -1,3 +1,167 @@
+2013-12-05  Akim Demaille  <akim@lrde.epita.fr>
+
+	version 3.0.2
+	* NEWS: Record release date.
+
+2013-12-05  Akim Demaille  <akim@lrde.epita.fr>
+
+	gnulib: update
+	* gnulib: here.
+
+2013-12-04  Akim Demaille  <akim@lrde.epita.fr>
+
+	output: do not generate source files when late errors are caught
+	Reported by Alexandre Duret-Lutz as "second problem" in:
+	http://lists.gnu.org/archive/html/bug-bison/2013-09/msg00015.html
+
+	* bootstrap.conf: We need the "unlink" module.
+	* src/files.h, src/files.c (unlink_generated_sources): New.
+	* src/output.c: Use it.
+	* tests/output.at: Check the case of late errors.
+
+2013-12-04  Akim Demaille  <akim@lrde.epita.fr>
+
+	output: record what generated files are source or report files
+	* src/files.h, src/files.c (output_file_name_check): Take an additional
+	argument to record whether a file is a source or report file.
+	* src/files.c (generated_file): New.
+	(file_names, file_names_count): Replace with...
+	(generated_files, generated_files_size): these.
+	* src/scan-skel.l: Adjust.
+
+2013-12-04  Akim Demaille  <akim@lrde.epita.fr>
+
+	output: do not generate source files when early errors are caught
+	Reported by Alexandre Duret-Lutz as "second problem" in:
+	http://lists.gnu.org/archive/html/bug-bison/2013-09/msg00015.html
+
+	One problem is that some errors are caught early, before the
+	generation of output files, while others can only be detected
+	afterwards (since, for instance, skeletons can raise errors
+	themselves).
+
+	This will be addressed in two steps: early errors do not generate
+	source files at all, while later errors will remove the files that
+	have already been generated.
+
+	* src/scan-skel.l (yyout): Open to /dev/null when there are errors.
+	* tests/output.at (AT_CHECK_FILES): Factored out of...
+	(AT_CHECK_OUTPUT): this.
+	Fuse the "SHELLIO" argument in the "FLAGS" one.
+	Use $5 to denote the expected exit status.
+	Add a test case for early errors.
+
+2013-11-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	xml: also use "%empty" with html output
+	* data/xslt/xml2xhtml.xsl: No longer issue an Epsilon, display as in
+	dot and text formats.
+
+2013-11-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	style: formatting changes
+	* src/print-xml.c: here.
+
+2013-11-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	xml: also display %empty for empty right-hand sides
+	* data/xslt/xml2dot.xsl, data/xslt/xml2text.xsl: Display %empty where needed.
+
+2013-11-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	reports: display %empty in the generated pointed-rules
+	* src/print.c (print_core): Use %empty for empty rules.
+	* src/print_graph.c (print_core): Ditto.
+	* tests/conflicts.at, tests/output.at, tests/reduce.at: Adjust
+	expectations.
+
+2013-11-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	news: YYERROR vs variants
+
+2013-11-18  Akim Demaille  <akim@lrde.epita.fr>
+
+	style: scope reduction in lalr.cc
+	* src/lalr.c: Shorten variable scopes.
+	(lookahead_tokens_print): Use the same variable name in two loops
+	iterating over the same structure.
+
+2013-11-15  Akim Demaille  <akim@lrde.epita.fr>
+
+	lalr1.cc: formatting changes
+	* data/lalr1.cc: Fix indentation.
+
+2013-11-15  Akim Demaille  <akim@lrde.epita.fr>
+
+	lalr1.cc: fix the support of YYERROR with variants
+	When variant are enabled, the yylhs variable (the left-hand side of
+	the rule being reduced, i.e. $$ and @$) is explicitly destroyed when
+	YYERROR is called.  This is because before running the user code, $$
+	is initialized, so that the user can properly use it.
+
+	However, when quitting yyparse, yylhs is also reclaimed by the C++
+	compiler: the variable goes out of scope.
+
+	Instead of trying to be too smart, let the compiler do its job: reduce
+	the scope of yylhs to exactly the reduction.  This way, whatever the
+	type of scope exit (regular, exception, return, goto...) this variable
+	will be properly reclaimed.
+
+	Reported by Paolo Simone Gasparello.
+	<http://lists.gnu.org/archive/html/bug-bison/2013-10/msg00003.html>
+
+	* data/lalr1.cc (yyparse): Reduce the scope of yylhs.
+	* tests/c++.at: We now pass this test.
+
+2013-11-15  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: check $$'s destruction with variant, YYERROR, and no error recovery
+	When variant are enabled, the yylhs variable (the left-hand side of
+	the rule being reduced, i.e. $$ and @$) is explicitly destroyed when
+	YYERROR is called.  This is because before running the user code, $$
+	is initialized, so that the user can properly use it.
+
+	However, when quitting yyparse, yylhs is also reclaimed by the C++
+	compiler: the variable goes out of scope.
+
+	This was not detected by the test suite because (i) the Object tracker
+	was too weak, and (ii) the problem does not show when there is error
+	recovery.
+
+	Reported by Paolo Simone Gasparello.
+	<http://lists.gnu.org/archive/html/bug-bison/2013-10/msg00003.html>
+
+	* tests/c++.at (Exception safety): Improve the objects logger to make
+	sure that we never destroy twice an object.
+	Also track copy-constructors.
+	Use a set instead of a list.
+	Display the logs before running the function body, this is more
+	useful in case of failure.
+	Generalize to track with and without error recovery.
+
+2013-11-15  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: simplify useless obfuscation
+	* tests/c++.at: $$ is not special for M4, there is no need to "escape"
+	it.
+
+2013-11-14  Akim Demaille  <akim@lrde.epita.fr>
+
+	skeletons: use better names when computing a "goto"
+	* data/glr.c (yyLRgotoState): Name the symbol argument yysym, instead
+	of yylhs.
+	* data/lalr1.cc (yy_lr_goto_state_): Likewise.
+	* data/lalr1.java (yy_lr_goto_state_): New, modeled after the previous
+	two routines.
+	Use it.
+
+2013-11-12  Akim Demaille  <akim@lrde.epita.fr>
+
+	maint: post-release administrivia
+	* NEWS: Add header line for next release.
+	* .prev-version: Record previous version.
+	* cfg.mk (old_NEWS_hash): Auto-update.
+
 2013-11-12  Akim Demaille  <akim@lrde.epita.fr>
 
 	version 3.0.1
