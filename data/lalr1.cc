@@ -157,6 +157,7 @@ m4_define([b4_shared_declarations],
 ]b4_bison_locations_if([[# include "location.hh"]])])[
 ]b4_variant_if([b4_variant_includes])[
 
+]b4_attribute_define[
 ]b4_YYDEBUG_define[
 
 ]b4_namespace_open[
@@ -183,14 +184,14 @@ b4_location_define])])[
 
 #if ]b4_api_PREFIX[DEBUG
     /// The current debugging stream.
-    std::ostream& debug_stream () const;
+    std::ostream& debug_stream () const YY_ATTRIBUTE_PURE;
     /// Set the current debugging stream.
     void set_debug_stream (std::ostream &);
 
     /// Type for debugging levels.
     typedef int debug_level_type;
     /// The current debugging level.
-    debug_level_type debug_level () const;
+    debug_level_type debug_level () const YY_ATTRIBUTE_PURE;
     /// Set the current debugging level.
     void set_debug_level (debug_level_type l);
 #endif
@@ -267,7 +268,7 @@ b4_location_define])])[
     /// \brief Reclaim the memory associated to a symbol.
     /// \param yymsg     Why this token is reclaimed.
     ///                  If null, print nothing.
-    /// \param s         The symbol.
+    /// \param yysym     The symbol.
     template <typename Base>
     void yy_destroy_ (const char* yymsg, basic_symbol<Base>& yysym) const;
 
@@ -341,13 +342,13 @@ b4_location_define])])[
     enum
     {
       yyeof_ = 0,
-      yylast_ = ]b4_last[,           //< Last index in yytable_.
-      yynnts_ = ]b4_nterms_number[,  //< Number of nonterminal symbols.
+      yylast_ = ]b4_last[,     ///< Last index in yytable_.
+      yynnts_ = ]b4_nterms_number[,  ///< Number of nonterminal symbols.
       yyempty_ = -2,
-      yyfinal_ = ]b4_final_state_number[, //< Termination state number.
+      yyfinal_ = ]b4_final_state_number[, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
-      yyntokens_ = ]b4_tokens_number[    //< Number of tokens.
+      yyntokens_ = ]b4_tokens_number[  ///< Number of tokens.
     };
 
 ]b4_parse_param_vars[
@@ -734,7 +735,7 @@ b4_dollar_popdef])[]dnl
        location values to have been already stored, initialize these
        stacks with a primary value.  */
     yystack_.clear ();
-    yypush_ (YY_NULL, 0, yyla);
+    yypush_ (YY_NULLPTR, 0, yyla);
 
     // A new symbol was pushed on the stack.
   yynewstate:
@@ -859,7 +860,7 @@ b4_dollar_popdef])[]dnl
     YY_STACK_PRINT ();
 
     // Shift the result of the reduction.
-    yypush_ (YY_NULL, yylhs);
+    yypush_ (YY_NULLPTR, yylhs);
     goto yynewstate;
 
   /*--------------------------------------.
@@ -988,11 +989,11 @@ b4_dollar_popdef])[]dnl
         // Do not try to display the values of the reclaimed symbols,
         // as their printer might throw an exception.
         if (!yyempty)
-          yy_destroy_ (YY_NULL, yyla);
+          yy_destroy_ (YY_NULLPTR, yyla);
 
         while (1 < yystack_.size ())
           {
-            yy_destroy_ (YY_NULL, yystack_[0]);
+            yy_destroy_ (YY_NULLPTR, yystack_[0]);
             yypop_ ();
           }
         throw;
@@ -1074,7 +1075,7 @@ b4_error_verbose_if([state_type yystate, symbol_number_type yytoken],
           }
       }
 
-    char const* yyformat = YY_NULL;
+    char const* yyformat = YY_NULLPTR;
     switch (yycount)
       {
 #define YYCASE_(N, S)                         \

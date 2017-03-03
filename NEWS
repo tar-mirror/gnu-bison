@@ -1,5 +1,36 @@
 GNU Bison NEWS
 
+* Noteworthy changes in release 3.0.1 (2013-11-12) [stable]
+
+** Bug fixes
+
+*** Errors in caret diagnostics
+
+  On some platforms, some errors could result in endless diagnostics.
+
+*** Fixes of the -Werror option
+
+  Options such as "-Werror -Wno-error=foo" were still turning "foo"
+  diagnostics into errors instead of warnings.  This is fixed.
+
+  Actually, for consistency with GCC, "-Wno-error=foo -Werror" now also
+  leaves "foo" diagnostics as warnings.  Similarly, with "-Werror=foo
+  -Wno-error", "foo" diagnostics are now errors.
+
+*** GLR Predicates
+
+  As demonstrated in the documentation, one can now leave spaces between
+  "%?" and its "{".
+
+*** Installation
+
+  The yacc.1 man page is no longer installed if --disable-yacc was
+  specified.
+
+*** Fixes in the test suite
+
+  Bugs and portability issues.
+
 * Noteworthy changes in release 3.0 (2013-07-25) [stable]
 
 ** WARNING: Future backward-incompatibilities!

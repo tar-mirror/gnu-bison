@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.4.1\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2013-07-25 17:57+0200\n"
+"POT-Creation-Date: 2013-11-12 15:56+0100\n"
 "PO-Revision-Date: 2009-02-04 19:44+0200\n"
 "Last-Translator: Pavel Maryanov <acid_jack@ukr.net>\n"
 "Language-Team: Russian <gnu@mx.ru>\n"
@@ -21,35 +21,35 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: src/complain.c:298
+#: src/complain.c:322
 msgid "fatal error"
 msgstr "фатальная ошибка"
 
-#: src/complain.c:299
+#: src/complain.c:323
 #, fuzzy
 msgid "error"
 msgstr "ошибка ввода-вывода"
 
-#: src/complain.c:300
+#: src/complain.c:324
 msgid "warning"
 msgstr "предупреждение"
 
-#: src/complain.c:363
+#: src/complain.c:387
 #, fuzzy, c-format
 msgid "deprecated directive, use %s"
 msgstr "неверная директива: %s"
 
-#: src/complain.c:367
+#: src/complain.c:391
 #, fuzzy, c-format
 msgid "deprecated directive: %s, use %s"
 msgstr "неверная директива: %s"
 
-#: src/complain.c:376
+#: src/complain.c:400
 #, c-format
 msgid "only one %s allowed per rule"
 msgstr "только одно %s разрешено на правило"
 
-#: src/complain.c:378 src/reader.c:140 src/symtab.c:217 src/symtab.c:229
+#: src/complain.c:402 src/reader.c:140 src/symtab.c:217 src/symtab.c:229
 #, c-format
 msgid "previous declaration"
 msgstr "предыдущее описание"
@@ -415,32 +415,32 @@ msgstr "переполнение номера столбца"
 msgid "rule useless in parser due to conflicts"
 msgstr "правило не применимо в парсере из-за конфликтов"
 
-#: src/muscle-tab.c:513
+#: src/muscle-tab.c:514
 #, fuzzy, c-format
 msgid "%%define variable %s redefined"
 msgstr "повторное определение символа %s"
 
-#: src/muscle-tab.c:517
+#: src/muscle-tab.c:518
 #, fuzzy, c-format
 msgid "previous definition"
 msgstr "предыдущее описание"
 
-#: src/muscle-tab.c:567 src/muscle-tab.c:668 src/muscle-tab.c:731
+#: src/muscle-tab.c:568 src/muscle-tab.c:669 src/muscle-tab.c:732
 #, c-format
 msgid "%s: undefined %%define variable %s"
 msgstr ""
 
-#: src/muscle-tab.c:662
+#: src/muscle-tab.c:663
 #, c-format
 msgid "invalid value for %%define Boolean variable %s"
 msgstr ""
 
-#: src/muscle-tab.c:716
+#: src/muscle-tab.c:717
 #, c-format
 msgid "invalid value for %%define variable %s: %s"
 msgstr ""
 
-#: src/muscle-tab.c:721
+#: src/muscle-tab.c:722
 #, fuzzy, c-format
 msgid "accepted value: %s"
 msgstr "неиспользуемая переменная: $%d"
@@ -638,77 +638,77 @@ msgstr "некорректный «$»"
 msgid "refers to: %c%s at %s"
 msgstr ""
 
-#: src/scan-code.l:351
+#: src/scan-code.l:362
 #, c-format
 msgid "possibly meant: %c"
 msgstr ""
 
-#: src/scan-code.l:360
+#: src/scan-code.l:371
 #, c-format
 msgid ", hiding %c"
 msgstr ""
 
-#: src/scan-code.l:368
+#: src/scan-code.l:379
 #, c-format
 msgid " at %s"
 msgstr ""
 
-#: src/scan-code.l:372
+#: src/scan-code.l:383
 #, c-format
 msgid ", cannot be accessed from mid-rule action at $%d"
 msgstr ""
 
-#: src/scan-code.l:429 src/scan-gram.l:849
+#: src/scan-code.l:440 src/scan-gram.l:849
 #, c-format
 msgid "integer out of range: %s"
 msgstr "выход за границы диапазона целого: %s"
 
-#: src/scan-code.l:519
+#: src/scan-code.l:530
 #, fuzzy, c-format
 msgid "invalid reference: %s"
 msgstr "неверная директива: %s"
 
-#: src/scan-code.l:527
+#: src/scan-code.l:538
 #, c-format
 msgid "syntax error after '%c', expecting integer, letter, '_', '[', or '$'"
 msgstr ""
 
-#: src/scan-code.l:533
+#: src/scan-code.l:544
 #, c-format
 msgid "symbol not found in production before $%d: %.*s"
 msgstr ""
 
-#: src/scan-code.l:538
+#: src/scan-code.l:549
 #, c-format
 msgid "symbol not found in production: %.*s"
 msgstr ""
 
-#: src/scan-code.l:553
+#: src/scan-code.l:564
 #, fuzzy, c-format
 msgid "misleading reference: %s"
 msgstr "переопределение приоритета для %s"
 
-#: src/scan-code.l:569
+#: src/scan-code.l:580
 #, fuzzy, c-format
 msgid "ambiguous reference: %s"
 msgstr "неоднозначный аргумент %s для %s"
 
-#: src/scan-code.l:608
+#: src/scan-code.l:616
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr "указан тип в нетипизированной грамматике"
 
-#: src/scan-code.l:667
+#: src/scan-code.l:675
 #, fuzzy, c-format
 msgid "$$ for the midrule at $%d of %s has no declared type"
 msgstr "$$ для правила $%d из «%s» не имеет описанного типа"
 
-#: src/scan-code.l:673
+#: src/scan-code.l:681
 #, fuzzy, c-format
 msgid "$$ of %s has no declared type"
 msgstr "$$ в «%s» не имеет описанного типа"
 
-#: src/scan-code.l:696
+#: src/scan-code.l:704
 #, fuzzy, c-format
 msgid "$%s of %s has no declared type"
 msgstr "$%d из «%s» не имеет описанного типа"

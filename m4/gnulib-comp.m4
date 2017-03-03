@@ -314,7 +314,7 @@ AC_DEFUN([gl_INIT],
   gl_STDIO_MODULE_INDICATOR([fopen])
   gl_MODULE_INDICATOR([fopen-safer])
   gl_FUNC_FPENDING
-  if test $ac_cv_func___fpending = no; then
+  if test $gl_cv_func___fpending = no; then
     AC_LIBOBJ([fpending])
     gl_PREREQ_FPENDING
   fi
@@ -341,7 +341,7 @@ AC_DEFUN([gl_INIT],
   fi
   gl_SYS_STAT_MODULE_INDICATOR([fstat])
   gl_FUNC_GETDTABLESIZE
-  if test $HAVE_GETDTABLESIZE = 0; then
+  if test $HAVE_GETDTABLESIZE = 0 || test $REPLACE_GETDTABLESIZE = 1; then
     AC_LIBOBJ([getdtablesize])
     gl_PREREQ_GETDTABLESIZE
   fi

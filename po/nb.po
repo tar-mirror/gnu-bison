@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.0\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2013-07-25 17:57+0200\n"
+"POT-Creation-Date: 2013-11-12 15:56+0100\n"
 "PO-Revision-Date: 2005-03-01 10:06+0100\n"
 "Last-Translator: Trond Endrestøl <Trond.Endrestol@gtf.ol.no>\n"
 "Language-Team: Norwegian Bokmaal <i18n-nb@lister.ping.uio.no>\n"
@@ -32,36 +32,36 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/complain.c:298
+#: src/complain.c:322
 #, fuzzy
 msgid "fatal error"
 msgstr "alvorlig feil: "
 
-#: src/complain.c:299
+#: src/complain.c:323
 #, fuzzy
 msgid "error"
 msgstr "alvorlig feil: "
 
-#: src/complain.c:300
+#: src/complain.c:324
 msgid "warning"
 msgstr "advarsel"
 
-#: src/complain.c:363
+#: src/complain.c:387
 #, fuzzy, c-format
 msgid "deprecated directive, use %s"
 msgstr "ugyldig direktiv: %s"
 
-#: src/complain.c:367
+#: src/complain.c:391
 #, fuzzy, c-format
 msgid "deprecated directive: %s, use %s"
 msgstr "ugyldig direktiv: %s"
 
-#: src/complain.c:376
+#: src/complain.c:400
 #, c-format
 msgid "only one %s allowed per rule"
 msgstr "bare en %s pr regel er tillatt"
 
-#: src/complain.c:378 src/reader.c:140 src/symtab.c:217 src/symtab.c:229
+#: src/complain.c:402 src/reader.c:140 src/symtab.c:217 src/symtab.c:229
 #, fuzzy, c-format
 msgid "previous declaration"
 msgstr "første deklarasjon"
@@ -396,32 +396,32 @@ msgstr ""
 msgid "rule useless in parser due to conflicts"
 msgstr "regel ble aldri redusert på grunn av konflikter"
 
-#: src/muscle-tab.c:513
+#: src/muscle-tab.c:514
 #, fuzzy, c-format
 msgid "%%define variable %s redefined"
 msgstr "symbolet %s ble redefinert"
 
-#: src/muscle-tab.c:517
+#: src/muscle-tab.c:518
 #, c-format
 msgid "previous definition"
 msgstr ""
 
-#: src/muscle-tab.c:567 src/muscle-tab.c:668 src/muscle-tab.c:731
+#: src/muscle-tab.c:568 src/muscle-tab.c:669 src/muscle-tab.c:732
 #, c-format
 msgid "%s: undefined %%define variable %s"
 msgstr ""
 
-#: src/muscle-tab.c:662
+#: src/muscle-tab.c:663
 #, c-format
 msgid "invalid value for %%define Boolean variable %s"
 msgstr ""
 
-#: src/muscle-tab.c:716
+#: src/muscle-tab.c:717
 #, c-format
 msgid "invalid value for %%define variable %s: %s"
 msgstr ""
 
-#: src/muscle-tab.c:721
+#: src/muscle-tab.c:722
 #, fuzzy, c-format
 msgid "accepted value: %s"
 msgstr "ugyldig verdi: %s"
@@ -628,77 +628,77 @@ msgstr ""
 msgid "refers to: %c%s at %s"
 msgstr ""
 
-#: src/scan-code.l:351
+#: src/scan-code.l:362
 #, c-format
 msgid "possibly meant: %c"
 msgstr ""
 
-#: src/scan-code.l:360
+#: src/scan-code.l:371
 #, c-format
 msgid ", hiding %c"
 msgstr ""
 
-#: src/scan-code.l:368
+#: src/scan-code.l:379
 #, c-format
 msgid " at %s"
 msgstr ""
 
-#: src/scan-code.l:372
+#: src/scan-code.l:383
 #, c-format
 msgid ", cannot be accessed from mid-rule action at $%d"
 msgstr ""
 
-#: src/scan-code.l:429 src/scan-gram.l:849
+#: src/scan-code.l:440 src/scan-gram.l:849
 #, c-format
 msgid "integer out of range: %s"
 msgstr "heltall utenfor tallområde: %s"
 
-#: src/scan-code.l:519
+#: src/scan-code.l:530
 #, fuzzy, c-format
 msgid "invalid reference: %s"
 msgstr "ugyldig direktiv: %s"
 
-#: src/scan-code.l:527
+#: src/scan-code.l:538
 #, c-format
 msgid "syntax error after '%c', expecting integer, letter, '_', '[', or '$'"
 msgstr ""
 
-#: src/scan-code.l:533
+#: src/scan-code.l:544
 #, c-format
 msgid "symbol not found in production before $%d: %.*s"
 msgstr ""
 
-#: src/scan-code.l:538
+#: src/scan-code.l:549
 #, c-format
 msgid "symbol not found in production: %.*s"
 msgstr ""
 
-#: src/scan-code.l:553
+#: src/scan-code.l:564
 #, c-format
 msgid "misleading reference: %s"
 msgstr ""
 
-#: src/scan-code.l:569
+#: src/scan-code.l:580
 #, fuzzy, c-format
 msgid "ambiguous reference: %s"
 msgstr "flertydig argument %s for %s"
 
-#: src/scan-code.l:608
+#: src/scan-code.l:616
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr ""
 
-#: src/scan-code.l:667
+#: src/scan-code.l:675
 #, fuzzy, c-format
 msgid "$$ for the midrule at $%d of %s has no declared type"
 msgstr "$%d av «%s» har ingen deklarert type"
 
-#: src/scan-code.l:673
+#: src/scan-code.l:681
 #, fuzzy, c-format
 msgid "$$ of %s has no declared type"
 msgstr "$$ til «%s» har ingen deklarert type"
 
-#: src/scan-code.l:696
+#: src/scan-code.l:704
 #, fuzzy, c-format
 msgid "$%s of %s has no declared type"
 msgstr "$%d av «%s» har ingen deklarert type"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.7.90\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2013-07-25 17:57+0200\n"
+"POT-Creation-Date: 2013-11-12 15:56+0100\n"
 "PO-Revision-Date: 2013-06-13 11:59+0300\n"
 "Last-Translator: Toomas Soome <tsoome@me.com>\n"
 "Language-Team: Estonian <linux-ee@lists.eenet.ee>\n"
@@ -17,34 +17,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/complain.c:298
+#: src/complain.c:322
 msgid "fatal error"
 msgstr "fataalne viga"
 
-#: src/complain.c:299
+#: src/complain.c:323
 msgid "error"
 msgstr "viga"
 
-#: src/complain.c:300
+#: src/complain.c:324
 msgid "warning"
 msgstr "hoiatus"
 
-#: src/complain.c:363
+#: src/complain.c:387
 #, c-format
 msgid "deprecated directive, use %s"
 msgstr "mittesoovitatav direktiiv, kasutage %s"
 
-#: src/complain.c:367
+#: src/complain.c:391
 #, c-format
 msgid "deprecated directive: %s, use %s"
 msgstr "mittesoovitatav direktiiv: %s, kasutage %s"
 
-#: src/complain.c:376
+#: src/complain.c:400
 #, c-format
 msgid "only one %s allowed per rule"
 msgstr "reeglis on lubatud ainult üks %s"
 
-#: src/complain.c:378 src/reader.c:140 src/symtab.c:217 src/symtab.c:229
+#: src/complain.c:402 src/reader.c:140 src/symtab.c:217 src/symtab.c:229
 #, c-format
 msgid "previous declaration"
 msgstr "eelmine deklaratsioon"
@@ -424,32 +424,32 @@ msgstr "veeru numbri ületäitumine"
 msgid "rule useless in parser due to conflicts"
 msgstr "reegel on konfliktide tõttu kasutu"
 
-#: src/muscle-tab.c:513
+#: src/muscle-tab.c:514
 #, c-format
 msgid "%%define variable %s redefined"
 msgstr "%%define muutuja %s deklareeriti uuesti"
 
-#: src/muscle-tab.c:517
+#: src/muscle-tab.c:518
 #, c-format
 msgid "previous definition"
 msgstr "eelmine deklaratsioon"
 
-#: src/muscle-tab.c:567 src/muscle-tab.c:668 src/muscle-tab.c:731
+#: src/muscle-tab.c:568 src/muscle-tab.c:669 src/muscle-tab.c:732
 #, c-format
 msgid "%s: undefined %%define variable %s"
 msgstr "%s: defineerimata %%define muutuja %s"
 
-#: src/muscle-tab.c:662
+#: src/muscle-tab.c:663
 #, c-format
 msgid "invalid value for %%define Boolean variable %s"
 msgstr "vigane %%define tõeväärtus muutuja %s väärtus"
 
-#: src/muscle-tab.c:716
+#: src/muscle-tab.c:717
 #, c-format
 msgid "invalid value for %%define variable %s: %s"
 msgstr "vigane väärtus %%define muutujale %s: %s"
 
-#: src/muscle-tab.c:721
+#: src/muscle-tab.c:722
 #, c-format
 msgid "accepted value: %s"
 msgstr "lubatud väärtus: %s"
@@ -644,77 +644,77 @@ msgstr "liigne '%s'"
 msgid "refers to: %c%s at %s"
 msgstr "viitab: %c%s kohal %s"
 
-#: src/scan-code.l:351
+#: src/scan-code.l:362
 #, c-format
 msgid "possibly meant: %c"
 msgstr "arvatavasti mõeldi: %c"
 
-#: src/scan-code.l:360
+#: src/scan-code.l:371
 #, c-format
 msgid ", hiding %c"
 msgstr ", peidab %c"
 
-#: src/scan-code.l:368
+#: src/scan-code.l:379
 #, c-format
 msgid " at %s"
 msgstr " kohal %s"
 
-#: src/scan-code.l:372
+#: src/scan-code.l:383
 #, c-format
 msgid ", cannot be accessed from mid-rule action at $%d"
 msgstr ", ei saa vahe reegli tegevusel kasutada kohal $%d"
 
-#: src/scan-code.l:429 src/scan-gram.l:849
+#: src/scan-code.l:440 src/scan-gram.l:849
 #, c-format
 msgid "integer out of range: %s"
 msgstr "number piiridest väljas: %s"
 
-#: src/scan-code.l:519
+#: src/scan-code.l:530
 #, c-format
 msgid "invalid reference: %s"
 msgstr "vigane viide: %s"
 
-#: src/scan-code.l:527
+#: src/scan-code.l:538
 #, c-format
 msgid "syntax error after '%c', expecting integer, letter, '_', '[', or '$'"
 msgstr "süntaksi viga peale '%c', ootan numbrit, tähte, '_', '[' või '$'"
 
-#: src/scan-code.l:533
+#: src/scan-code.l:544
 #, c-format
 msgid "symbol not found in production before $%d: %.*s"
 msgstr "sümbol puudub produktsioonis $%d ees: %.*s"
 
-#: src/scan-code.l:538
+#: src/scan-code.l:549
 #, c-format
 msgid "symbol not found in production: %.*s"
 msgstr "sümbol puudub produktsioonis: %.*s"
 
-#: src/scan-code.l:553
+#: src/scan-code.l:564
 #, c-format
 msgid "misleading reference: %s"
 msgstr "segadust tekitav viide: %s"
 
-#: src/scan-code.l:569
+#: src/scan-code.l:580
 #, c-format
 msgid "ambiguous reference: %s"
 msgstr "segane viide: %s"
 
-#: src/scan-code.l:608
+#: src/scan-code.l:616
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr "tüüpimata grammatikas kasutati konkreetset tüüpi"
 
-#: src/scan-code.l:667
+#: src/scan-code.l:675
 #, c-format
 msgid "$$ for the midrule at $%d of %s has no declared type"
 msgstr "$$ vahereeglis kohal $%d '%s' ei oma deklareeritud tüüpi"
 
-#: src/scan-code.l:673
+#: src/scan-code.l:681
 #, c-format
 msgid "$$ of %s has no declared type"
 msgstr "$$ märgil '%s' ei oma deklareeritud tüüpi"
 
-#: src/scan-code.l:696
+#: src/scan-code.l:704
 #, c-format
 msgid "$%s of %s has no declared type"
 msgstr "$%s märgil '%s' ei oma deklareeritud tüüpi"

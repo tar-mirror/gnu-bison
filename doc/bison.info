@@ -1,7 +1,7 @@
 This is ../../doc/bison.info, produced by makeinfo version 4.13 from
 ../../doc/bison.texi.
 
-This manual (24 June 2013) is for GNU Bison (version 3.0), the GNU
+This manual (23 October 2013) is for GNU Bison (version 3.0.1), the GNU
 parser generator.
 
    Copyright (C) 1988-1993, 1995, 1998-2013 Free Software Foundation,
@@ -30,7 +30,7 @@ File: bison.info,  Node: Top,  Next: Introduction,  Up: (dir)
 Bison
 *****
 
-This manual (24 June 2013) is for GNU Bison (version 3.0), the GNU
+This manual (23 October 2013) is for GNU Bison (version 3.0.1), the GNU
 parser generator.
 
    Copyright (C) 1988-1993, 1995, 1998-2013 Free Software Foundation,
@@ -385,7 +385,7 @@ Bison has grown more robust and evolved many other new features thanks
 to the hard work of a long list of volunteers.  For details, see the
 `THANKS' and `ChangeLog' files included in the Bison distribution.
 
-   This edition corresponds to version 3.0 of Bison.
+   This edition corresponds to version 3.0.1 of Bison.
 
 
 File: bison.info,  Node: Conditions,  Next: Copying,  Prev: Introduction,  Up: Top
@@ -9367,18 +9367,15 @@ Operations modes:
      instance, `-Wno-yacc' will hide the warnings about POSIX Yacc
      incompatibilities.
 
-`-Werror[=CATEGORY]'
-`-Wno-error[=CATEGORY]'
-     Enable warnings falling in CATEGORY, and treat them as errors.  If
-     no CATEGORY is given, it defaults to making all enabled warnings
-     into errors.
+`-Werror'
+     Turn enabled warnings for every CATEGORY into errors, unless they
+     are explicitly disabled by `-Wno-error=CATEGORY'.
+
+`-Werror=CATEGORY'
+     Enable warnings falling in CATEGORY, and treat them as errors.
 
      CATEGORY is the same as for `--warnings', with the exception that
      it may not be prefixed with `no-' (see above).
-
-     Prefixed with `no', it deactivates the error treatment for this
-     CATEGORY. However, the warning itself won't be disabled, or
-     enabled, by this option.
 
      Note that the precedence of the `=' and `,' operators is such that
      the following commands are _not_ equivalent, as the first will not
@@ -9386,6 +9383,14 @@ Operations modes:
 
           $ bison -Werror=yacc,conflicts-sr input.y
           $ bison -Werror=yacc,error=conflicts-sr input.y
+
+`-Wno-error'
+     Do not turn enabled warnings for every CATEGORY into errors, unless
+     they are explicitly enabled by `-Werror=CATEGORY'.
+
+`-Wno-error=CATEGORY'
+     Deactivate the error treatment for this CATEGORY. However, the
+     warning itself won't be disabled, or enabled, by this option.
 
 `-f [FEATURE]'
 `--feature[=FEATURE]'
@@ -10364,7 +10369,7 @@ changed several times, it is safer to require the version you designed
 the grammar for.
 
      %skeleton "lalr1.cc" /* -*- C++ -*- */
-     %require "3.0"
+     %require "3.0.1"
      %defines
      %define parser_class_name {calcxx_parser}
 
@@ -13654,195 +13659,195 @@ Index of Terms
 
 
 Tag Table:
-Node: Top1051
-Node: Introduction15806
-Node: Conditions17477
-Node: Copying19388
-Node: Concepts56926
-Node: Language and Grammar58118
-Node: Grammar in Bison64053
-Node: Semantic Values65967
-Node: Semantic Actions68073
-Node: GLR Parsers69247
-Node: Simple GLR Parsers72076
-Node: Merging GLR Parses78488
-Node: GLR Semantic Actions83021
-Node: Semantic Predicates85578
-Node: Compiler Requirements88091
-Node: Locations88842
-Node: Bison Parser90295
-Node: Stages93416
-Node: Grammar Layout94704
-Node: Examples96036
-Node: RPN Calc97232
-Node: Rpcalc Declarations98234
-Node: Rpcalc Rules100289
-Node: Rpcalc Input102167
-Node: Rpcalc Line103703
-Node: Rpcalc Expr104824
-Node: Rpcalc Lexer106713
-Node: Rpcalc Main109359
-Node: Rpcalc Error109766
-Node: Rpcalc Generate110799
-Node: Rpcalc Compile112035
-Node: Infix Calc112974
-Node: Simple Error Recovery115793
-Node: Location Tracking Calc117675
-Node: Ltcalc Declarations118371
-Node: Ltcalc Rules119473
-Node: Ltcalc Lexer121333
-Node: Multi-function Calc123656
-Node: Mfcalc Declarations125352
-Node: Mfcalc Rules127380
-Node: Mfcalc Symbol Table128697
-Node: Mfcalc Lexer132113
-Node: Mfcalc Main134790
-Node: Exercises135708
-Node: Grammar File136222
-Node: Grammar Outline137082
-Node: Prologue137932
-Node: Prologue Alternatives139736
-Node: Bison Declarations149308
-Node: Grammar Rules149736
-Node: Epilogue150207
-Node: Symbols151252
-Node: Rules158327
-Node: Rules Syntax158642
-Node: Empty Rules160675
-Node: Recursion161686
-Node: Semantics163346
-Node: Value Type164648
-Node: Multiple Types166004
-Node: Type Generation167501
-Node: Union Decl169410
-Node: Structured Value Type170719
-Node: Actions171708
-Node: Action Types175523
-Node: Mid-Rule Actions176817
-Node: Using Mid-Rule Actions177401
-Node: Mid-Rule Action Translation181481
-Node: Mid-Rule Conflicts183327
-Node: Tracking Locations185948
-Node: Location Type186612
-Node: Actions and Locations187632
-Node: Location Default Action190026
-Node: Named References193524
-Node: Declarations196160
-Node: Require Decl197828
-Node: Token Decl198147
-Node: Precedence Decl200589
-Node: Type Decl202819
-Node: Initial Action Decl203742
-Node: Destructor Decl204528
-Node: Printer Decl210151
-Node: Expect Decl212405
-Node: Start Decl214401
-Node: Pure Decl214789
-Node: Push Decl216546
-Node: Decl Summary221032
-Node: %define Summary230264
-Node: %code Summary244490
-Node: Multiple Parsers248317
-Node: Interface251389
-Node: Parser Function252707
-Node: Push Parser Function255058
-Node: Pull Parser Function255844
-Node: Parser Create Function256493
-Node: Parser Delete Function257313
-Node: Lexical258080
-Node: Calling Convention259523
-Node: Token Values262498
-Node: Token Locations263654
-Node: Pure Calling264538
-Node: Error Reporting267073
-Node: Action Features270369
-Node: Internationalization274670
-Node: Algorithm277213
-Node: Lookahead279643
-Node: Shift/Reduce281820
-Node: Precedence284997
-Node: Why Precedence285769
-Node: Using Precedence287605
-Node: Precedence Only289069
-Node: Precedence Examples290857
-Node: How Precedence291373
-Node: Non Operators292552
-Node: Contextual Precedence294101
-Node: Parser States295843
-Node: Reduce/Reduce297087
-Node: Mysterious Conflicts301698
-Node: Tuning LR305208
-Node: LR Table Construction306529
-Node: Default Reductions312232
-Node: LAC317064
-Node: Unreachable States322616
-Node: Generalized LR Parsing324606
-Node: Memory Management328980
-Node: Error Recovery331329
-Node: Context Dependency336572
-Node: Semantic Tokens337421
-Node: Lexical Tie-ins340413
-Node: Tie-in Recovery341851
-Node: Debugging343945
-Node: Understanding345184
-Node: Graphviz355770
-Node: Xml360005
-Node: Tracing361723
-Node: Enabling Traces362157
-Node: Mfcalc Traces365913
-Node: The YYPRINT Macro371194
-Node: Invocation372357
-Node: Bison Options373772
-Node: Option Cross Key386911
-Node: Yacc Library388834
-Node: Other Languages389659
-Node: C++ Parsers389986
-Node: C++ Bison Interface390483
-Node: C++ Semantic Values391893
-Node: C++ Unions392486
-Node: C++ Variants393331
-Node: C++ Location Values396508
-Node: C++ position397419
-Node: C++ location399429
-Node: User Defined Location Type401301
-Node: C++ Parser Interface402806
-Node: C++ Scanner Interface405944
-Node: Split Symbols406502
-Node: Complete Symbols408135
-Node: A Complete C++ Example410602
-Node: Calc++ --- C++ Calculator411546
-Node: Calc++ Parsing Driver412060
-Node: Calc++ Parser415825
-Node: Calc++ Scanner420421
-Node: Calc++ Top Level423850
-Node: Java Parsers424579
-Node: Java Bison Interface425332
-Node: Java Semantic Values427633
-Node: Java Location Values429265
-Node: Java Parser Interface430821
-Node: Java Scanner Interface435354
-Node: Java Action Features437669
-Node: Java Push Parser Interface440379
-Node: Java Differences443426
-Ref: Java Differences-Footnote-1446011
-Node: Java Declarations Summary446161
-Node: FAQ450970
-Node: Memory Exhausted451917
-Node: How Can I Reset the Parser452230
-Node: Strings are Destroyed454771
-Node: Implementing Gotos/Loops456444
-Node: Multiple start-symbols457727
-Node: Secure? Conform?459274
-Node: I can't build Bison459722
-Node: Where can I find help?460436
-Node: Bug Reports461229
-Node: More Languages462689
-Node: Beta Testing463047
-Node: Mailing Lists463921
-Node: Table of Symbols464132
-Node: Glossary482103
-Node: Copying This Manual491107
-Node: Bibliography516242
-Node: Index of Terms518133
+Node: Top1056
+Node: Introduction15816
+Node: Conditions17489
+Node: Copying19400
+Node: Concepts56938
+Node: Language and Grammar58130
+Node: Grammar in Bison64065
+Node: Semantic Values65979
+Node: Semantic Actions68085
+Node: GLR Parsers69259
+Node: Simple GLR Parsers72088
+Node: Merging GLR Parses78500
+Node: GLR Semantic Actions83033
+Node: Semantic Predicates85590
+Node: Compiler Requirements88103
+Node: Locations88854
+Node: Bison Parser90307
+Node: Stages93428
+Node: Grammar Layout94716
+Node: Examples96048
+Node: RPN Calc97244
+Node: Rpcalc Declarations98246
+Node: Rpcalc Rules100301
+Node: Rpcalc Input102179
+Node: Rpcalc Line103715
+Node: Rpcalc Expr104836
+Node: Rpcalc Lexer106725
+Node: Rpcalc Main109371
+Node: Rpcalc Error109778
+Node: Rpcalc Generate110811
+Node: Rpcalc Compile112047
+Node: Infix Calc112986
+Node: Simple Error Recovery115805
+Node: Location Tracking Calc117687
+Node: Ltcalc Declarations118383
+Node: Ltcalc Rules119485
+Node: Ltcalc Lexer121345
+Node: Multi-function Calc123668
+Node: Mfcalc Declarations125364
+Node: Mfcalc Rules127392
+Node: Mfcalc Symbol Table128709
+Node: Mfcalc Lexer132125
+Node: Mfcalc Main134802
+Node: Exercises135720
+Node: Grammar File136234
+Node: Grammar Outline137094
+Node: Prologue137944
+Node: Prologue Alternatives139748
+Node: Bison Declarations149320
+Node: Grammar Rules149748
+Node: Epilogue150219
+Node: Symbols151264
+Node: Rules158339
+Node: Rules Syntax158654
+Node: Empty Rules160687
+Node: Recursion161698
+Node: Semantics163358
+Node: Value Type164660
+Node: Multiple Types166016
+Node: Type Generation167513
+Node: Union Decl169422
+Node: Structured Value Type170731
+Node: Actions171720
+Node: Action Types175535
+Node: Mid-Rule Actions176829
+Node: Using Mid-Rule Actions177413
+Node: Mid-Rule Action Translation181493
+Node: Mid-Rule Conflicts183339
+Node: Tracking Locations185960
+Node: Location Type186624
+Node: Actions and Locations187644
+Node: Location Default Action190038
+Node: Named References193536
+Node: Declarations196172
+Node: Require Decl197840
+Node: Token Decl198159
+Node: Precedence Decl200601
+Node: Type Decl202831
+Node: Initial Action Decl203754
+Node: Destructor Decl204540
+Node: Printer Decl210163
+Node: Expect Decl212417
+Node: Start Decl214413
+Node: Pure Decl214801
+Node: Push Decl216558
+Node: Decl Summary221044
+Node: %define Summary230276
+Node: %code Summary244502
+Node: Multiple Parsers248329
+Node: Interface251401
+Node: Parser Function252719
+Node: Push Parser Function255070
+Node: Pull Parser Function255856
+Node: Parser Create Function256505
+Node: Parser Delete Function257325
+Node: Lexical258092
+Node: Calling Convention259535
+Node: Token Values262510
+Node: Token Locations263666
+Node: Pure Calling264550
+Node: Error Reporting267085
+Node: Action Features270381
+Node: Internationalization274682
+Node: Algorithm277225
+Node: Lookahead279655
+Node: Shift/Reduce281832
+Node: Precedence285009
+Node: Why Precedence285781
+Node: Using Precedence287617
+Node: Precedence Only289081
+Node: Precedence Examples290869
+Node: How Precedence291385
+Node: Non Operators292564
+Node: Contextual Precedence294113
+Node: Parser States295855
+Node: Reduce/Reduce297099
+Node: Mysterious Conflicts301710
+Node: Tuning LR305220
+Node: LR Table Construction306541
+Node: Default Reductions312244
+Node: LAC317076
+Node: Unreachable States322628
+Node: Generalized LR Parsing324618
+Node: Memory Management328992
+Node: Error Recovery331341
+Node: Context Dependency336584
+Node: Semantic Tokens337433
+Node: Lexical Tie-ins340425
+Node: Tie-in Recovery341863
+Node: Debugging343957
+Node: Understanding345196
+Node: Graphviz355782
+Node: Xml360017
+Node: Tracing361735
+Node: Enabling Traces362169
+Node: Mfcalc Traces365925
+Node: The YYPRINT Macro371206
+Node: Invocation372369
+Node: Bison Options373784
+Node: Option Cross Key387078
+Node: Yacc Library389001
+Node: Other Languages389826
+Node: C++ Parsers390153
+Node: C++ Bison Interface390650
+Node: C++ Semantic Values392060
+Node: C++ Unions392653
+Node: C++ Variants393498
+Node: C++ Location Values396675
+Node: C++ position397586
+Node: C++ location399596
+Node: User Defined Location Type401468
+Node: C++ Parser Interface402973
+Node: C++ Scanner Interface406111
+Node: Split Symbols406669
+Node: Complete Symbols408302
+Node: A Complete C++ Example410769
+Node: Calc++ --- C++ Calculator411713
+Node: Calc++ Parsing Driver412227
+Node: Calc++ Parser415992
+Node: Calc++ Scanner420590
+Node: Calc++ Top Level424019
+Node: Java Parsers424748
+Node: Java Bison Interface425501
+Node: Java Semantic Values427802
+Node: Java Location Values429434
+Node: Java Parser Interface430990
+Node: Java Scanner Interface435523
+Node: Java Action Features437838
+Node: Java Push Parser Interface440548
+Node: Java Differences443595
+Ref: Java Differences-Footnote-1446180
+Node: Java Declarations Summary446330
+Node: FAQ451139
+Node: Memory Exhausted452086
+Node: How Can I Reset the Parser452399
+Node: Strings are Destroyed454940
+Node: Implementing Gotos/Loops456613
+Node: Multiple start-symbols457896
+Node: Secure? Conform?459443
+Node: I can't build Bison459891
+Node: Where can I find help?460605
+Node: Bug Reports461398
+Node: More Languages462858
+Node: Beta Testing463216
+Node: Mailing Lists464090
+Node: Table of Symbols464301
+Node: Glossary482272
+Node: Copying This Manual491276
+Node: Bibliography516411
+Node: Index of Terms518302
 
 End Tag Table

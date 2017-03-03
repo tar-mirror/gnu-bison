@@ -1,3 +1,318 @@
+2013-11-12  Akim Demaille  <akim@lrde.epita.fr>
+
+	version 3.0.1
+	* NEWS: Record release date.
+
+2013-11-12  Akim Demaille  <akim@lrde.epita.fr>
+
+	aver: it is no longer "protected against NDEBUG"
+	Apply the same rules for aver as for assert: no side effects,
+	especially not important ones.
+
+	* src/AnnotationList.c, src/muscle-tab.c: Adjust aver uses to resist
+	to -DNDEBUG.
+
+2013-11-08  Akim Demaille  <akim@lrde.epita.fr>
+
+	parsers: rename YY_NULL as YY_NULLPTR to avoid conflicts with Flex
+	Flex also defines YY_NULL (to 0).  Avoid gratuitous conflicts.
+
+	* data/c.m4 (b4_null_define): Rename YY_NULL as YY_NULLPTR.
+
+	* data/glr.c, data/lalr1.cc, data/location.cc, data/variant.hh,
+	* data/yacc.c, src/parse-gram.c, tests/actions.at, tests/c++.at,
+	* tests/cxx-type.at, tests/glr-regression.at, tests/headers.at,
+	* tests/push.at, tests/regression.at:
+	Adjust.
+
+2013-11-05  Akim Demaille  <akim@lrde.epita.fr>
+
+	build: use Automake 1.14's non-recursive Makefile features
+	* configure.ac: Require Automake 1.14.
+	* examples/calc++/local.mk, examples/local.mk, examples/mfcalc/local.mk,
+	* examples/rpcalc/local.mk, tests/local.mk: Use %D% and %C%.
+
+2013-11-05  Akim Demaille  <akim@lrde.epita.fr>
+
+	build: restore maintainer-push-check
+	* tests/local.mk: here.
+
+2013-11-05  Akim Demaille  <akim@lrde.epita.fr>
+
+	c++: use __attribute__((__pure__)) to avoid warnings
+	Building C++ parsers with -Wsuggest-attribute=const and
+	-Wsuggest-attribute=noreturn triggers warning in generated code.
+
+	* data/lalr1.cc: Call b4_attribute_define.
+	(debug_stream, debug_level): Flag as pure.
+	* tests/headers.at (Several parsers): There are now more YY macros
+	that "leak".
+
+2013-11-05  Akim Demaille  <akim@lrde.epita.fr>
+
+	skeletons: update the handling of compiler attributes
+	* data/c.m4 (b4_attribute_define): Instead of defining __attribute__,
+	define YY_ATTRIBUTE conditionally.
+	(YY_ATTRIBUTE_PURE, YY_ATTRIBUTE_UNUSED, _Noreturn): New.
+	Use them.
+	* data/glr.c: Use them.
+
+2013-11-05  Akim Demaille  <akim@lrde.epita.fr>
+
+	gnulib: update
+
+2013-10-24  Akim Demaille  <akim@lrde.epita.fr>
+
+	style: use /* ... */ comments
+	* src/complain.c: Here.
+
+2013-10-24  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: skip C++ tests that are too demanding for some compilers
+	Some tests now fail when compiled with G++ 4.3 or 4.4 on MacPorts.
+
+	* tests/local.at (AT_SKIP_IF_EXCEPTION_SUPPORT_IS_POOR): New.
+	* tests/c++.at (Exception safety): Use it.
+
+2013-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	install: do not install yacc.1 when --disable-yacc
+	* configure.ac (ENABLE_YACC): New conditional.
+	(YACC_SCRIPT, YACC_LIBRARY): Remove.
+	* lib/local.mk, src/local.mk: Use the former instead of the latter.
+	* doc/local.mk: Use ENABLE_YACC to avoid installing yacc.1.
+
+2013-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	style: avoid tabs
+	* src/scan-code.l: here.
+
+2013-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	c++: fix generated doxygen comments
+	* configure.ac: Enable -Wdocumentation if supported.
+	* data/lalr1.cc: Fix comments.
+
+2013-10-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	fix: uniqstr are already pointers
+	* src/uniqstr.c (uniqstr_assert): Remove incorrect double indirection,
+	and now useless cast.
+
+2013-10-22  Paul Eggert  <eggert@cs.ucla.edu>
+
+	bison: pacify Sun C 5.12
+	* src/scan-code.l (show_sub_message):
+	Redo initializations to work around a bogus Sun C 5.12 warning.
+	(parse_ref): Remove unreachable code that Sun C 5.12 complains about.
+	* src/uniqstr.h (uniqstr_vsprintf): Use
+	_GL_ATTRIBUTE_FORMAT_PRINTF (...)  instead of __attribute__
+	((__format__ (__printf__, ...))).  Otherwise, Sun C 5.12
+	complains about an unknown attribute.
+
+2013-10-22  Paul Eggert  <eggert@cs.ucla.edu>
+
+	maint: git now ignores rpcalc
+	* examples/rpcalc/.gitignore: Ignore rpcalc.
+
+2013-10-22  Paul Eggert  <eggert@cs.ucla.edu>
+
+	build: examples/calc++/calc++ requires flex
+	* configure.ac (FLEX_CXX_WORKS): New AM_CONDITIONAL.
+	* examples/calc++/local.mk (examples/calc++/calc++):
+	Build if FLEX_CXX_WORKS, not BISON_CXX_WORKS.
+
+2013-10-22  Paul Eggert  <eggert@cs.ucla.edu>
+
+	maint: mention help2man, texinfo, apt-get
+	* README-hacking: Add help2man, texinfo.
+	Describe how to add packages if you're using Debian.
+
+2013-10-22  Paul Eggert  <eggert@cs.ucla.edu>
+
+	maint: git now ignores .log and .trs files
+	* .gitignore: Add *.log, *.trs.
+
+2013-10-21  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: fix incorrect object construction
+	Reported by Ken Moffat.
+	http://lists.gnu.org/archive/html/bug-bison/2013-10/msg00009.html
+
+	* tests/c++.at (Exception safety): Here.
+
+2013-10-16  Akim Demaille  <akim@lrde.epita.fr>
+
+	glr: allow spaces between "%?" and "{" in predicates
+	Reported by Rici Lake.
+	http://lists.gnu.org/archive/html/bug-bison/2013-10/msg00004.html
+	http://stackoverflow.com/questions/19330171/
+
+	* src/scan-gram.l: Do not try to be too smart when diagnosing invalid
+	directives.
+	* tests/glr-regression.at (Predicates): New test.
+
+2013-10-16  Akim Demaille  <akim@lrde.epita.fr>
+
+	diagnostics: "-Werror -Wno-error=foo" must not emit errors
+	Currently "-Werror -Wno-error=foo" still turns "foo" warnings into errors.
+	Reported by Alexandre Duret-Lutz.
+	See http://lists.gnu.org/archive/html/bug-bison/2013-09/msg00015.html.
+
+	* src/complain.c (errority, errority_flag): New.
+	(complain_init): Initialize the latter.
+	(warning_argmatch): Extract the loop iterating on the flag's bits.
+	Set and unset errority_flag here.
+	(warnings_argmatch): -Wno-error is not the same as -Wno-error=everything:
+	we must remember if category foo was explicitly turned in an error/warning
+	via -W(no-)error=foo.
+	(warning_severity): Use errority_flag.
+
+	* tests/input.at (Symbols): Just check --yacc, not -Wyacc, that's the
+	job of tests on -W.
+	(-Werror is not affected by -Wnone and -Wall): Rename as...
+	(-Werror combinations): this.
+	Tests more combinations of -W, -W(no-)error, and -W(no-)error=foo.
+	* tests/local.at (AT_BISON_CHECK_WARNINGS): Don't expect -Werror
+	to turn runs that issue warnings into runs with errors, as the
+	warnings might be enforced as warnings by -Wno-error=foo, in which
+	case -Werror does not change anything.
+
+	* doc/bison.texi (Bison Options): Try to be clearer about how
+	-W(no-)error and -W(no-)error=foo interact.
+
+2013-10-16  Akim Demaille  <akim@lrde.epita.fr>
+
+	comment changes
+	* src/complain.h, src/complain.c: More documentation, more comments.
+
+2013-10-04  Andreas Schwab  <schwab@linux-m68k.org>
+
+	location: fix EOF check
+	* location.c (location_caret): Use int, not char, for values from
+	getc.
+
+2013-09-19  Akim Demaille  <akim@lrde.epita.fr>
+
+	style: variant: remove empty line
+	* data/variant.hh (b4_symbol_constructor_define_): Remove
+	stray eol.
+
+2013-09-19  Akim Demaille  <akim@lrde.epita.fr>
+
+	glr: more assertions
+	* data/glr.c (yyaddDeferredAction, yyglrShiftDefer, yypdumpstack):
+	More assertions.
+
+2013-09-19  Akim Demaille  <akim@lrde.epita.fr>
+
+	glr: shorten scopes
+	* data/glr.c (yyglrReduce): Define yyflag with its value.
+
+2013-09-19  Akim Demaille  <akim@lrde.epita.fr>
+
+	glr: formatting changes
+	* data/glr.c: here.
+
+2013-09-19  Akim Demaille  <akim@lrde.epita.fr>
+
+	glr: better use of tracing macros
+	* data/glr.c (yydestroyGLRState): Use YY_SYMBOL_PRINT instead of
+	yy_symbol_print.
+
+2013-09-19  Akim Demaille  <akim@lrde.epita.fr>
+
+	examples: improve the output of the "variant" example
+	* examples/variant.yy: Improve the printing of lists.
+
+2013-09-19  Akim Demaille  <akim@lrde.epita.fr>
+
+	variant: remove useless assertion
+	* data/variant.hh (move): Remove precondition assertion which is
+	ensured by the first call of the body (this precondition is also one
+	of "build").
+
+2013-09-19  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: remove stray debugging traces
+	* tests/atlocal.in: Remove traces.
+	Be ready to remove conftest.dSYM generated on OS X.
+
+2013-09-04  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: do not use grep -q
+	Reported by Daniel Galloway.
+	http://lists.gnu.org/archive/html/bug-bison/2013-08/msg00020.html
+
+	* tests/java.at: Ignore grep's output instead.
+
+2013-08-25  Paul Eggert  <eggert@cs.ucla.edu>
+
+	build: don't require flex for ordinary builds
+	* configure.ac (LEX): Don't fail if this is lex, as flex is not
+	required for ordinary builds.  Instead, issue a warning and
+	substitute a no-op LEX.  Reported by Michael Felt in
+	<http://lists.gnu.org/archive/html/bug-bison/2013-08/msg00009.html>.
+
+2013-08-25  Paul Eggert  <eggert@cs.ucla.edu>
+
+	maint: update .gitignore
+	* .gitignore: Add *.eps, *.o, *.pdf, *.png, *.stamp, *~,
+	.deps, .dirstamp.  Needed to suppress unwanted chatter from
+	'git status' after a bootstrap build.
+
+2013-08-24  Paul Eggert  <eggert@cs.ucla.edu>
+
+	build: port to pre-5.8.7 perl
+	* examples/local.mk (extract): Omit -f from perl options.
+	This doesn't work with perl versions before 5.8.7
+	that are configured without USE_SITECUSTOMIZE.
+	Reported by Michael Felt in
+	<http://lists.gnu.org/archive/html/bug-bison/2013-08/msg00006.html>.
+
+2013-08-01  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: minor change to make it easier to test other skeletons
+	* tests/c++.at (Variants): Pass the skeleton as argument.
+
+2013-08-01  Valentin Tolmer  <valentin.tolmer@gmail.com>
+
+	uniqstr: fix assertion
+	* src/uniqstr.c (uniqstr_assert): Really make sure str is a uniqstr,
+	not just whether some uniqstr with the same content was registered.
+
+2013-08-01  Akim Demaille  <akim@lrde.epita.fr>
+
+	build: ship the ASCII art figures
+	We don't ship the *.txt files that are used to build the info
+	file.
+	Reported by Colin Daley.
+
+	* doc/figs/example.txt: New.
+	* doc/local.mk (bison.info): Depend on the txt files.
+	And ship them.
+
+2013-08-01  Akim Demaille  <akim@lrde.epita.fr>
+
+	doc: prefer the ".gv" extension to ".dot"
+	See http://marc.info/?l=graphviz-devel&m=129418103126092 for the
+	motivation (basically, some word processor now uses *.dot).
+
+	* doc/figs/example-reduce.dot: Rename as...
+	* doc/figs/example-reduce.gv: this.
+	* doc/figs/example-shift.dot: Rename as...
+	* doc/figs/example-shift.gv: this.
+	* doc/figs/example.dot: Rename as...
+	* doc/figs/example.gv: this.
+	* doc/local.mk: Adjust.
+
+2013-07-25  Akim Demaille  <akim@lrde.epita.fr>
+
+	maint: post-release administrivia
+	* NEWS: Add header line for next release.
+	* .prev-version: Record previous version.
+	* cfg.mk (old_NEWS_hash): Auto-update.
+
 2013-07-25  Akim Demaille  <akim@lrde.epita.fr>
 
 	version 3.0

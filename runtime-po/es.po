@@ -1,26 +1,28 @@
-# Mensajes en español para GNU Bison.
+# Mensajes en espaÃ±ol para GNU Bison.
 # Copyright (C) 1998 Free Software Foundation, Inc.
-# Nicolás García-Pedrajas <ngarcia-pedrajas@acm.org>, 1998.
+# This file is distributed under the same license as the bison package.
+# NicolÃ¡s GarcÃ­a-Pedrajas <ngarcia-pedrajas@acm.org>, 1998.
+# Santiago Vila Doncel <sanvila@unex.es>, 2013.
 #
 # Corregido por:
 #
-# cll - Carlos Linares López        clinares@acm.org
+# cll - Carlos Linares LÃ³pez        clinares@acm.org
 #                                   clinares@delicias.dia.fi.upm.es
 #
 # Notas:
 #
-# 1. Nicolás, en algunas ocasiones notarás que algunos `msgstr' no están
+# 1. NicolÃ¡s, en algunas ocasiones notarÃ¡s que algunos `msgstr' no estÃ¡n
 # indentados como los `msgid'. No te preocupes, eso es porque yo utilizo
-# el `po-mode' de Emacs, ... Él es el responsable de esas indentaciones
+# el `po-mode' de Emacs, ... Ã‰l es el responsable de esas indentaciones
 # del `msgstr' :)
 #
 # 2. Todos los comentarios que contengan "Duda:" debieran revisarse.
 #
 # --------------------------------------------------------------------
-# En mi opinión has hecho un excelente trabajo y te animo a que sigas
-# manteniendo esta traducción y a que lo intentes con otras.
+# En mi opiniÃ³n has hecho un excelente trabajo y te animo a que sigas
+# manteniendo esta traducciÃ³n y a que lo intentes con otras.
 #
-# (¡te lo dice el tío que ha traducido el paquete más grande: 1406
+# (Â¡te lo dice el tÃ­o que ha traducido el paquete mÃ¡s grande: 1406
 # mensajes en el clisp!)
 #
 # 						      Carlos Linares
@@ -28,58 +30,58 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GNU bison 1.875\n"
+"Project-Id-Version: bison-runtime 3.0\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2013-07-25 17:57+0200\n"
-"PO-Revision-Date: 2003-01-02 12:47+0100\n"
-"Last-Translator: Nicolás García-Pedrajas <ngarcia-pedrajas@acm.org>\n"
+"POT-Creation-Date: 2013-11-12 14:58+0100\n"
+"PO-Revision-Date: 2013-10-23 01:00+0200\n"
+"Last-Translator: Santiago Vila Doncel <sanvila@unex.es>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: data/glr.c:775 data/yacc.c:643
+#: data/glr.c:770 data/yacc.c:643
 msgid "syntax error: cannot back up"
 msgstr ""
 
-#: data/glr.c:1656
+#: data/glr.c:1650
 msgid "syntax is ambiguous"
-msgstr ""
+msgstr "la sintaxis es ambigua"
 
-#: data/glr.c:1977 data/glr.c:2057 data/glr.c:2097 data/glr.c:2361
-#: data/lalr1.cc:1084 data/lalr1.cc:1104 data/yacc.c:1210 data/yacc.c:1710
+#: data/glr.c:1971 data/glr.c:2051 data/glr.c:2091 data/glr.c:2355
+#: data/lalr1.cc:1085 data/lalr1.cc:1105 data/yacc.c:1210 data/yacc.c:1710
 #: data/yacc.c:1716
 msgid "syntax error"
-msgstr ""
+msgstr "error de sintaxis"
 
-#: data/glr.c:2058 data/lalr1.cc:1085 data/yacc.c:1211
+#: data/glr.c:2052 data/lalr1.cc:1086 data/yacc.c:1211
 #, c-format
 msgid "syntax error, unexpected %s"
-msgstr ""
+msgstr "error de sintaxis, %s inesperado"
 
-#: data/glr.c:2059 data/lalr1.cc:1086 data/yacc.c:1212
+#: data/glr.c:2053 data/lalr1.cc:1087 data/yacc.c:1212
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s"
-msgstr ""
+msgstr "error de sintaxis, %s inesperado, se esperaba %s"
 
-#: data/glr.c:2060 data/lalr1.cc:1087 data/yacc.c:1213
+#: data/glr.c:2054 data/lalr1.cc:1088 data/yacc.c:1213
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s"
-msgstr ""
+msgstr "error de sintaxis, %s inesperado, se esperaba %s o %s"
 
-#: data/glr.c:2061 data/lalr1.cc:1088 data/yacc.c:1214
+#: data/glr.c:2055 data/lalr1.cc:1089 data/yacc.c:1214
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s or %s"
-msgstr ""
+msgstr "error de sintaxis, %s inesperado, se esperaba %s o %s o %s"
 
-#: data/glr.c:2062 data/lalr1.cc:1089 data/yacc.c:1215
+#: data/glr.c:2056 data/lalr1.cc:1090 data/yacc.c:1215
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s or %s or %s"
-msgstr ""
+msgstr "error de sintaxis, %s inesperado, se esperaba %s o %s o %s o %s"
 
-#: data/glr.c:2421 data/yacc.c:1295 data/yacc.c:1297 data/yacc.c:1470
+#: data/glr.c:2415 data/yacc.c:1295 data/yacc.c:1297 data/yacc.c:1470
 #: data/yacc.c:1867
 msgid "memory exhausted"
 msgstr "memoria agotada"

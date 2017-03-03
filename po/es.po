@@ -1,26 +1,28 @@
-# Mensajes en espaÒol para GNU Bison.
+# Mensajes en espa√±ol para GNU Bison.
 # Copyright (C) 1998 Free Software Foundation, Inc.
-# Nicol·s GarcÌa-Pedrajas <ngarcia-pedrajas@acm.org>, 1998.
+# This file is distributed under the same license as the bison package.
+# Nicol√°s Garc√≠a-Pedrajas <ngarcia-pedrajas@acm.org>, 1998.
+# Santiago Vila Doncel <sanvila@unex.es>, 2013.
 #
 # Corregido por:
 #
-# cll - Carlos Linares LÛpez        clinares@acm.org
+# cll - Carlos Linares L√≥pez        clinares@acm.org
 #                                   clinares@delicias.dia.fi.upm.es
 #
 # Notas:
 #
-# 1. Nicol·s, en algunas ocasiones notar·s que algunos `msgstr' no est·n
+# 1. Nicol√°s, en algunas ocasiones notar√°s que algunos `msgstr' no est√°n
 # indentados como los `msgid'. No te preocupes, eso es porque yo utilizo
-# el `po-mode' de Emacs, ... …l es el responsable de esas indentaciones
+# el `po-mode' de Emacs, ... √âl es el responsable de esas indentaciones
 # del `msgstr' :)
 #
 # 2. Todos los comentarios que contengan "Duda:" debieran revisarse.
 #
 # --------------------------------------------------------------------
-# En mi opiniÛn has hecho un excelente trabajo y te animo a que sigas
-# manteniendo esta traducciÛn y a que lo intentes con otras.
+# En mi opini√≥n has hecho un excelente trabajo y te animo a que sigas
+# manteniendo esta traducci√≥n y a que lo intentes con otras.
 #
-# (°te lo dice el tÌo que ha traducido el paquete m·s grande: 1406
+# (¬°te lo dice el t√≠o que ha traducido el paquete m√°s grande: 1406
 # mensajes en el clisp!)
 #
 # 						      Carlos Linares
@@ -28,65 +30,56 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GNU bison 2.2\n"
+"Project-Id-Version: bison 3.0\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2013-07-25 17:57+0200\n"
-"PO-Revision-Date: 2006-06-05 13:51+0200\n"
-"Last-Translator: Nicol·s GarcÌa-Pedrajas <ngarcia-pedrajas@acm.org>\n"
+"POT-Creation-Date: 2013-11-12 15:56+0100\n"
+"PO-Revision-Date: 2013-10-23 01:19+0200\n"
+"Last-Translator: Santiago Vila Doncel <sanvila@unex.es>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-# Duda: desconozco cu·l ser· el convenio en la lista de correo a
-# propÛsito de "fatal". Por favor, comprueba que "error grave" es
+# Duda: desconozco cu√°l ser√° el convenio en la lista de correo a
+# prop√≥sito de "fatal". Por favor, comprueba que "error grave" es
 # preferido por todos los miembros a "error fatal" - cll
-# veremos que dice la mayorÌa, como hay otros 2 revisores
+# veremos que dice la mayor√≠a, como hay otros 2 revisores
 # La verdad es que a mi lo de error fatal me suena fatal
 # ngp
 #
-#: src/complain.c:298
-#, fuzzy
+#: src/complain.c:322
 msgid "fatal error"
-msgstr "error grave: "
+msgstr "error grave"
 
-# Duda: desconozco cu·l ser· el convenio en la lista de correo a
-# propÛsito de "fatal". Por favor, comprueba que "error grave" es
-# preferido por todos los miembros a "error fatal" - cll
-# veremos que dice la mayorÌa, como hay otros 2 revisores
-# La verdad es que a mi lo de error fatal me suena fatal
-# ngp
-#
-#: src/complain.c:299
-#, fuzzy
+#: src/complain.c:323
 msgid "error"
-msgstr "error grave: "
+msgstr "error"
 
-#: src/complain.c:300
+#: src/complain.c:324
 msgid "warning"
 msgstr "aviso"
 
-#: src/complain.c:363
+#: src/complain.c:387
 #, fuzzy, c-format
 msgid "deprecated directive, use %s"
-msgstr "directiva no v·lida: %s"
+msgstr "directiva no v√°lida: %s"
 
-#: src/complain.c:367
+#: src/complain.c:391
 #, fuzzy, c-format
 msgid "deprecated directive: %s, use %s"
-msgstr "directiva no v·lida: %s"
+msgstr "directiva no v√°lida: %s"
 
-#: src/complain.c:376
+#: src/complain.c:400
 #, c-format
 msgid "only one %s allowed per rule"
-msgstr "sÛlo se permite un %s por regla"
+msgstr "s√≥lo se permite un %s por regla"
 
-#: src/complain.c:378 src/reader.c:140 src/symtab.c:217 src/symtab.c:229
+#: src/complain.c:402 src/reader.c:140 src/symtab.c:217 src/symtab.c:229
 #, fuzzy, c-format
 msgid "previous declaration"
-msgstr "primera declaraciÛn"
+msgstr "primera declaraci√≥n"
 
 #: src/conflicts.c:77
 #, c-format
@@ -100,7 +93,7 @@ msgstr ""
 msgid "    Conflict between rule %d and token %s resolved as reduce"
 msgstr ""
 "    El conflicto entre la regla %d y el terminal %s se resuelve como "
-"reducciÛn."
+"reducci√≥n."
 
 #: src/conflicts.c:94
 #, c-format
@@ -117,58 +110,58 @@ msgstr "Estado %d "
 #: src/conflicts.c:533
 #, c-format
 msgid "conflicts: %d shift/reduce, %d reduce/reduce\n"
-msgstr "conflictos: %d desplazamiento/reducciÛn, %d reducciÛn/reducciÛn\n"
+msgstr "conflictos: %d desplazamiento/reducci√≥n, %d reducci√≥n/reducci√≥n\n"
 
-# Date cuenta de que `%d' puede ser cualquier n˙mero decimal. PodrÌa
-# ocurrir, por lo tanto, que tu mensaje en ejecuciÛn se vea luego como:
+# Date cuenta de que `%d' puede ser cualquier n√∫mero decimal. Podr√≠a
+# ocurrir, por lo tanto, que tu mensaje en ejecuci√≥n se vea luego como:
 #
-# 23845789243789 desplazamiento/reducciÛn
+# 23845789243789 desplazamiento/reducci√≥n
 #
-# (°estoy exagerando!, por supuesto :)
+# (¬°estoy exagerando!, por supuesto :)
 #
-# Te sugiero por lo tanto que aÒadas el caso (s) tal y como se hace en
-# espaÒol habitualmente.
+# Te sugiero por lo tanto que a√±adas el caso (s) tal y como se hace en
+# espa√±ol habitualmente.
 # ok
 # ngp
 #
 #: src/conflicts.c:536
 #, c-format
 msgid "conflicts: %d shift/reduce\n"
-msgstr "conflictos: %d desplazamiento(s)/reducciÛn(ones)\n"
+msgstr "conflictos: %d desplazamiento(s)/reducci√≥n(ones)\n"
 
-# Date cuenta de que `%d' puede ser cualquier n˙mero decimal. PodrÌa
-# ocurrir, por lo tanto, que tu mensaje en ejecuciÛn se vea luego como:
+# Date cuenta de que `%d' puede ser cualquier n√∫mero decimal. Podr√≠a
+# ocurrir, por lo tanto, que tu mensaje en ejecuci√≥n se vea luego como:
 #
-# 23845789243789 reducciÛn/reducciÛn
+# 23845789243789 reducci√≥n/reducci√≥n
 #
-# (°estoy exagerando!, por supuesto :)
+# (¬°estoy exagerando!, por supuesto :)
 #
-# Te sugiero por lo tanto que aÒadas el caso (s) tal y como se hace en
-# espaÒol habitualmente.
+# Te sugiero por lo tanto que a√±adas el caso (s) tal y como se hace en
+# espa√±ol habitualmente.
 #
 # ok
 # ngp
 #: src/conflicts.c:538
 #, c-format
 msgid "conflicts: %d reduce/reduce\n"
-msgstr "conflictos: %d reducciÛn(ones)/reducciÛn(ones)\n"
+msgstr "conflictos: %d reducci√≥n(ones)/reducci√≥n(ones)\n"
 
 #: src/conflicts.c:569
 #, c-format
 msgid "%%expect-rr applies only to GLR parsers"
-msgstr "%%expect-rr afecta sÛlo a los analizadores GLR"
+msgstr "%%expect-rr afecta s√≥lo a los analizadores GLR"
 
 #: src/conflicts.c:586
 #, fuzzy, c-format
 msgid "shift/reduce conflicts: %d found, %d expected"
-msgstr "%d conflicto desplazamiento/reducciÛn"
+msgstr "%d conflicto desplazamiento/reducci√≥n"
 
 #: src/conflicts.c:591
 #, c-format
 msgid "%d shift/reduce conflict"
 msgid_plural "%d shift/reduce conflicts"
-msgstr[0] "%d conflicto desplazamiento/reducciÛn"
-msgstr[1] "%d conflictos desplazamiento/reducciÛn"
+msgstr[0] "%d conflicto desplazamiento/reducci√≥n"
+msgstr[1] "%d conflictos desplazamiento/reducci√≥n"
 
 #: src/conflicts.c:608
 #, c-format
@@ -179,13 +172,13 @@ msgstr ""
 #, fuzzy, c-format
 msgid "%d reduce/reduce conflict"
 msgid_plural "%d reduce/reduce conflicts"
-msgstr[0] "esperado %d conflicto reducciÛn/reducciÛn"
-msgstr[1] "esperados %d conflictos reducciÛn/reducciÛn"
+msgstr[0] "esperado %d conflicto reducci√≥n/reducci√≥n"
+msgstr[1] "esperados %d conflictos reducci√≥n/reducci√≥n"
 
 #: src/files.c:114
-#, fuzzy, c-format
+#, c-format
 msgid "%s: cannot open"
-msgstr "no se puede abrir el fichero `%s'"
+msgstr "%s: no se puede abrir"
 
 #: src/files.c:130
 #, c-format
@@ -208,14 +201,14 @@ msgid "conflicting outputs to file %s"
 msgstr "salidas en conflicto al fichero %s"
 
 #: src/getargs.c:252
-#, fuzzy, c-format
+#, c-format
 msgid "Try '%s --help' for more information.\n"
-msgstr "Pruebe `%s --help' para m·s informaciÛn.\n"
+msgstr "Pruebe '%s --help' para m√°s informaci√≥n.\n"
 
 #: src/getargs.c:261
 #, c-format
 msgid "Usage: %s [OPTION]... FILE\n"
-msgstr "UtilizaciÛn: %s [OPCI”N]... FICHERO\n"
+msgstr "Utilizaci√≥n: %s [OPCI√ìN]... FICHERO\n"
 
 #: src/getargs.c:262
 msgid ""
@@ -249,12 +242,12 @@ msgid ""
 "  -f, --feature[=FEATURE]    activate miscellaneous features\n"
 "\n"
 msgstr ""
-"Modos de operaciÛn:\n"
+"Modos de operaci√≥n:\n"
 "  -h, --help                    muestra esta ayuda y termina\n"
-"  -V, --version                 informa de la versiÛn y termina\n"
+"  -V, --version                 informa de la versi√≥n y termina\n"
 "      --print-localedir         informa del directorio que contiene "
-"informaciÛn \n"
-"                                dependiente de la configuraciÛn local\n"
+"informaci√≥n \n"
+"                                dependiente de la configuraci√≥n local\n"
 "  -y, --yacc                    emula POSIX yacc\n"
 
 #: src/getargs.c:289
@@ -275,9 +268,9 @@ msgid ""
 msgstr ""
 "Analizador:\n"
 "  -S, --skeleton=FICHERO     especifica el skeleton a utilizar\n"
-"  -t, --debug                instrumenta al analizador para depuraciÛn\n"
-"      --locations            abilita la computaciÛn de localizaciones\n"
-"  -p, --name-prefix=PREFIJO  preaÒade PREFIJO a los sÌmbolos externos\n"
+"  -t, --debug                instrumenta al analizador para depuraci√≥n\n"
+"      --locations            abilita la computaci√≥n de localizaciones\n"
+"  -p, --name-prefix=PREFIJO  prea√±ade PREFIJO a los s√≠mbolos externos\n"
 "  -l, --no-lines             no genera la directiva `#line'\n"
 "  -n, --no-parser            solamente genera las tablas\n"
 " --k, --token-table          incluye una tabla de nombres de terminales\n"
@@ -299,13 +292,13 @@ msgid ""
 "                             (the XML schema is experimental)\n"
 msgstr ""
 "Salida:\n"
-"  -d, --defines              tambiÈn produce un fichero de cabecera\n"
-"  -r, --report=THINGS        tambiÈn produce detalles del automaton\n"
-"  -v, --verbose              tambiÈn produce una explicaciÛn del automaton\n"
+"  -d, --defines              tambi√©n produce un fichero de cabecera\n"
+"  -r, --report=THINGS        tambi√©n produce detalles del automaton\n"
+"  -v, --verbose              tambi√©n produce una explicaci√≥n del automaton\n"
 "  -b, --file-prefix=PREFIJO  especifia el PREFIJO para los ficheros de "
 "salida\n"
 "  -o, --output=FICHERO       almacena la salida en FICHERO\n"
-"  -g, --graph                tambiÈn produce una descripciÛn en VCG del "
+"  -g, --graph                tambi√©n produce una descripci√≥n en VCG del "
 "automaton\n"
 
 #: src/getargs.c:322
@@ -339,11 +332,11 @@ msgid ""
 msgstr ""
 "THINGS es una lista de palabras separadas por comas que puede incluir:\n"
 "  `state'        describe los estados\n"
-"  `itemset'      completa los conjuntos de Ìtems n˙cleo con sus cierres\n"
-"  `lookahead'    asocia explÌcitamente lookaheads a los Ìtems\n"
-"  `solved'       describe la resoluciÛn de los conflictos desplazamiento/"
-"reducciÛn\n"
-"  `all'          incluye toda la informaciÛn anterior\n"
+"  `itemset'      completa los conjuntos de √≠tems n√∫cleo con sus cierres\n"
+"  `lookahead'    asocia expl√≠citamente lookaheads a los √≠tems\n"
+"  `solved'       describe la resoluci√≥n de los conflictos desplazamiento/"
+"reducci√≥n\n"
+"  `all'          incluye toda la informaci√≥n anterior\n"
 "  `none'         disable the report\n"
 
 #: src/getargs.c:350
@@ -358,7 +351,7 @@ msgstr ""
 #: src/getargs.c:358
 #, fuzzy, c-format
 msgid "Report bugs to <%s>.\n"
-msgstr "Informe de los errores a <bug-bison@gnu.org>.\n"
+msgstr "Informe de los errores a <%s>.\n"
 
 #: src/getargs.c:359
 #, c-format
@@ -403,28 +396,28 @@ msgid ""
 msgstr ""
 "Esto es software libre; mire el fuente para las condiciones de copia. No "
 "hay\n"
-"NINGUNA garantÌa; ni siquiera para COMERCIALIZACI”N o ADAPTACI”N PARA UN\n"
+"NINGUNA garant√≠a; ni siquiera para COMERCIALIZACI√ìN o ADAPTACI√ìN PARA UN\n"
 "USO PARTICULAR\n"
 
 #: src/getargs.c:422
 #, fuzzy, c-format
 msgid "multiple skeleton declarations are invalid"
-msgstr "m˙ltiples declaraciones de %s"
+msgstr "m√∫ltiples declaraciones de %s"
 
 #: src/getargs.c:440
 #, fuzzy, c-format
 msgid "%s: invalid language"
-msgstr "valor $ no v·lido"
+msgstr "valor $ no v√°lido"
 
 #: src/getargs.c:443
 #, fuzzy
 msgid "multiple language declarations are invalid"
-msgstr "m˙ltiples declaraciones de %s"
+msgstr "m√∫ltiples declaraciones de %s"
 
 #: src/getargs.c:724
 #, fuzzy, c-format
 msgid "%s: missing operand"
-msgstr "falta un operando despuÈs de `%s'"
+msgstr "falta un operando despu√©s de `%s'"
 
 #: src/getargs.c:726
 #, fuzzy, c-format
@@ -433,7 +426,7 @@ msgstr "operando extra `%s'"
 
 #: src/gram.c:185
 msgid "Grammar"
-msgstr "Gram·tica"
+msgstr "Gram√°tica"
 
 #: src/graphviz.c:45
 #, c-format
@@ -447,52 +440,52 @@ msgstr ""
 #: src/location.c:93 src/scan-gram.l:926
 #, c-format
 msgid "line number overflow"
-msgstr "desbordamiento del n˙mero de lÌnea"
+msgstr "desbordamiento del n√∫mero de l√≠nea"
 
 #: src/location.c:95
 #, c-format
 msgid "column number overflow"
-msgstr "desbordamiento del n˙mero de columna"
+msgstr "desbordamiento del n√∫mero de columna"
 
 #: src/main.c:146
 #, fuzzy
 msgid "rule useless in parser due to conflicts"
 msgstr "la regla nunca se redujo debido a los conflictos"
 
-#: src/muscle-tab.c:513
+#: src/muscle-tab.c:514
 #, fuzzy, c-format
 msgid "%%define variable %s redefined"
-msgstr "redefinido el sÌmbolo %s"
+msgstr "redefinido el s√≠mbolo %s"
 
-#: src/muscle-tab.c:517
+#: src/muscle-tab.c:518
 #, c-format
 msgid "previous definition"
 msgstr ""
 
-#: src/muscle-tab.c:567 src/muscle-tab.c:668 src/muscle-tab.c:731
+#: src/muscle-tab.c:568 src/muscle-tab.c:669 src/muscle-tab.c:732
 #, c-format
 msgid "%s: undefined %%define variable %s"
 msgstr ""
 
-#: src/muscle-tab.c:662
+#: src/muscle-tab.c:663
 #, c-format
 msgid "invalid value for %%define Boolean variable %s"
 msgstr ""
 
-#: src/muscle-tab.c:716
+#: src/muscle-tab.c:717
 #, c-format
 msgid "invalid value for %%define variable %s: %s"
 msgstr ""
 
-#: src/muscle-tab.c:721
+#: src/muscle-tab.c:722
 #, fuzzy, c-format
 msgid "accepted value: %s"
-msgstr "valor no v·lido: %s"
+msgstr "valor no v√°lido: %s"
 
 #: src/parse-gram.y:809
 #, c-format
 msgid "missing identifier in parameter declaration"
-msgstr "falta el identificador el la declaraciÛn del par·metro"
+msgstr "falta el identificador el la declaraci√≥n del par√°metro"
 
 #: src/print.c:47
 #, c-format
@@ -558,12 +551,12 @@ msgstr "la regla nunca se redujo debido a los conflictos"
 #: src/reader.c:62
 #, c-format
 msgid "multiple %s declarations"
-msgstr "m˙ltiples declaraciones de %s"
+msgstr "m√∫ltiples declaraciones de %s"
 
 #: src/reader.c:133
 #, c-format
 msgid "result type clash on merge function %s: <%s> != <%s>"
-msgstr "tipo resultado incompatible en la funciÛn combinada %s: <%s> != <%s>"
+msgstr "tipo resultado incompatible en la funci√≥n combinada %s: <%s> != <%s>"
 
 #: src/reader.c:206
 #, c-format
@@ -578,12 +571,12 @@ msgstr "se ha dado una regla para %s, que es un terminal"
 #: src/reader.c:306
 #, c-format
 msgid "type clash on default action: <%s> != <%s>"
-msgstr "incompatibilidad de tipos en la acciÛn por defecto: <%s> != <%s>"
+msgstr "incompatibilidad de tipos en la acci√≥n por defecto: <%s> != <%s>"
 
 #: src/reader.c:312
 #, c-format
 msgid "empty rule for typed nonterminal, and no action"
-msgstr "regla vacÌa para un no terminal con tipo y no hay ninguna acciÛn"
+msgstr "regla vac√≠a para un no terminal con tipo y no hay ninguna acci√≥n"
 
 #: src/reader.c:329
 #, c-format
@@ -613,12 +606,12 @@ msgstr ""
 #: src/reader.c:473 src/reader.c:495
 #, c-format
 msgid "%s affects only GLR parsers"
-msgstr "%s afecta sÛlo a los analizadores GLR"
+msgstr "%s afecta s√≥lo a los analizadores GLR"
 
 #: src/reader.c:476
 #, c-format
 msgid "%s must be followed by positive number"
-msgstr "%s debe estar seguido por un n˙mero positivo"
+msgstr "%s debe estar seguido por un n√∫mero positivo"
 
 #: src/reader.c:602
 #, c-format
@@ -628,12 +621,12 @@ msgstr "la regla es demasiado larga"
 #: src/reader.c:718
 #, c-format
 msgid "no rules in the input grammar"
-msgstr "no hay reglas en la gram·tica de entrada"
+msgstr "no hay reglas en la gram√°tica de entrada"
 
 #: src/reduce.c:241
 #, fuzzy
 msgid "rule useless in grammar"
-msgstr "no hay reglas en la gram·tica de entrada"
+msgstr "no hay reglas en la gram√°tica de entrada"
 
 #: src/reduce.c:303
 #, c-format
@@ -648,12 +641,12 @@ msgstr "No terminales con las reglas donde aparecen"
 #: src/reduce.c:364
 #, fuzzy
 msgid "Terminals unused in grammar"
-msgstr "no hay reglas en la gram·tica de entrada"
+msgstr "no hay reglas en la gram√°tica de entrada"
 
 #: src/reduce.c:373
 #, fuzzy
 msgid "Rules useless in grammar"
-msgstr "no hay reglas en la gram·tica de entrada"
+msgstr "no hay reglas en la gram√°tica de entrada"
 
 #: src/reduce.c:386
 #, c-format
@@ -666,13 +659,13 @@ msgstr[1] ""
 #, fuzzy, c-format
 msgid "%d rule useless in grammar"
 msgid_plural "%d rules useless in grammar"
-msgstr[0] "no hay reglas en la gram·tica de entrada"
-msgstr[1] "no hay reglas en la gram·tica de entrada"
+msgstr[0] "no hay reglas en la gram√°tica de entrada"
+msgstr[1] "no hay reglas en la gram√°tica de entrada"
 
 #: src/reduce.c:420
 #, c-format
 msgid "start symbol %s does not derive any sentence"
-msgstr "El sÌmbolo de inicio (axioma) %s no deriva ninguna sentencia"
+msgstr "El s√≠mbolo de inicio (axioma) %s no deriva ninguna sentencia"
 
 #: src/scan-code.l:157
 #, fuzzy, c-format
@@ -684,77 +677,77 @@ msgstr "`$ extraviado"
 msgid "refers to: %c%s at %s"
 msgstr ""
 
-#: src/scan-code.l:351
+#: src/scan-code.l:362
 #, c-format
 msgid "possibly meant: %c"
 msgstr ""
 
-#: src/scan-code.l:360
+#: src/scan-code.l:371
 #, c-format
 msgid ", hiding %c"
 msgstr ""
 
-#: src/scan-code.l:368
+#: src/scan-code.l:379
 #, c-format
 msgid " at %s"
 msgstr ""
 
-#: src/scan-code.l:372
+#: src/scan-code.l:383
 #, c-format
 msgid ", cannot be accessed from mid-rule action at $%d"
 msgstr ""
 
-#: src/scan-code.l:429 src/scan-gram.l:849
+#: src/scan-code.l:440 src/scan-gram.l:849
 #, c-format
 msgid "integer out of range: %s"
 msgstr "entero fuera de rango: %s"
 
-#: src/scan-code.l:519
+#: src/scan-code.l:530
 #, fuzzy, c-format
 msgid "invalid reference: %s"
-msgstr "directiva no v·lida: %s"
+msgstr "directiva no v√°lida: %s"
 
-#: src/scan-code.l:527
+#: src/scan-code.l:538
 #, c-format
 msgid "syntax error after '%c', expecting integer, letter, '_', '[', or '$'"
 msgstr ""
 
-#: src/scan-code.l:533
+#: src/scan-code.l:544
 #, c-format
 msgid "symbol not found in production before $%d: %.*s"
 msgstr ""
 
-#: src/scan-code.l:538
+#: src/scan-code.l:549
 #, c-format
 msgid "symbol not found in production: %.*s"
 msgstr ""
 
-#: src/scan-code.l:553
+#: src/scan-code.l:564
 #, fuzzy, c-format
 msgid "misleading reference: %s"
-msgstr "redefiniciÛn de la precedencia de %s"
+msgstr "redefinici√≥n de la precedencia de %s"
 
-#: src/scan-code.l:569
+#: src/scan-code.l:580
 #, fuzzy, c-format
 msgid "ambiguous reference: %s"
-msgstr "argumento %s ambig¸o para %s"
+msgstr "argumento %s ambig√ºo para %s"
 
-#: src/scan-code.l:608
+#: src/scan-code.l:616
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr ""
 
-#: src/scan-code.l:667
+#: src/scan-code.l:675
 #, fuzzy, c-format
 msgid "$$ for the midrule at $%d of %s has no declared type"
 msgstr "$%d de `%s' no tiene tipo declarado"
 
-#: src/scan-code.l:673
+#: src/scan-code.l:681
 #, fuzzy, c-format
 msgid "$$ of %s has no declared type"
 msgstr "$$ de `%s' no tiene tipo declarado"
 
-#: src/scan-code.l:696
+#: src/scan-code.l:704
 #, fuzzy, c-format
 msgid "$%s of %s has no declared type"
 msgstr "$%d de `%s' no tiene tipo declarado"
@@ -767,33 +760,33 @@ msgstr "`,' perdido se trato como un espacio en blanco"
 #: src/scan-gram.l:270
 #, c-format
 msgid "invalid directive: %s"
-msgstr "directiva no v·lida: %s"
+msgstr "directiva no v√°lida: %s"
 
 #: src/scan-gram.l:296
 #, fuzzy, c-format
 msgid "invalid identifier: %s"
-msgstr "directiva no v·lida: %s"
+msgstr "directiva no v√°lida: %s"
 
 #: src/scan-gram.l:348
 #, fuzzy
 msgid "invalid character"
 msgid_plural "invalid characters"
-msgstr[0] "car·cter no v·lido: %s"
-msgstr[1] "car·cter no v·lido: %s"
+msgstr[0] "car√°cter no v√°lido: %s"
+msgstr[1] "car√°cter no v√°lido: %s"
 
 #: src/scan-gram.l:366
 #, c-format
 msgid "invalid null character"
-msgstr "car·cter nulo no v·lido"
+msgstr "car√°cter nulo no v√°lido"
 
 # En unas ocasiones, has traducido `unexpected' como `no esperado' y, en
 # otras, como `inesperado'. Cualquiera es correcta, por supuesto y, en
-# este caso, la segunda me parece m·s apropiada - cll
+# este caso, la segunda me parece m√°s apropiada - cll
 # ok - ngp
 #: src/scan-gram.l:419
 #, fuzzy, c-format
 msgid "unexpected identifier in bracketed name: %s"
-msgstr "Ìtem inesperado: %s"
+msgstr "√≠tem inesperado: %s"
 
 #: src/scan-gram.l:441
 #, c-format
@@ -804,8 +797,8 @@ msgstr ""
 #, fuzzy
 msgid "invalid character in bracketed name"
 msgid_plural "invalid characters in bracketed name"
-msgstr[0] "car·cter no v·lido: %s"
-msgstr[1] "car·cter no v·lido: %s"
+msgstr[0] "car√°cter no v√°lido: %s"
+msgstr[1] "car√°cter no v√°lido: %s"
 
 #: src/scan-gram.l:538
 #, c-format
@@ -820,12 +813,12 @@ msgstr ""
 #: src/scan-gram.l:590 src/scan-gram.l:600 src/scan-gram.l:620
 #, fuzzy, c-format
 msgid "invalid number after \\-escape: %s"
-msgstr "car·cter nulo no v·lido: %s"
+msgstr "car√°cter nulo no v√°lido: %s"
 
 #: src/scan-gram.l:632
 #, fuzzy, c-format
 msgid "invalid character after \\-escape: %s"
-msgstr "car·cter no v·lido: %s"
+msgstr "car√°cter no v√°lido: %s"
 
 #: src/scan-gram.l:978
 #, fuzzy, c-format
@@ -855,7 +848,7 @@ msgstr ""
 #: src/symlist.c:204
 #, c-format
 msgid "invalid $ value: $%d"
-msgstr "valor $ no v·lido: $%d"
+msgstr "valor $ no v√°lido: $%d"
 
 #: src/symtab.c:75
 #, c-format
@@ -865,41 +858,41 @@ msgstr ""
 #: src/symtab.c:97
 #, c-format
 msgid "too many symbols in input grammar (limit is %d)"
-msgstr "demasiados sÌmbolos en la gram·tica de entrada (el lÌmite es %d)"
+msgstr "demasiados s√≠mbolos en la gram√°tica de entrada (el l√≠mite es %d)"
 
 #: src/symtab.c:214
 #, c-format
 msgid "%s redeclaration for %s"
-msgstr "%s redeclaraciÛn de %s"
+msgstr "%s redeclaraci√≥n de %s"
 
 #: src/symtab.c:226
 #, fuzzy, c-format
 msgid "%s redeclaration for <%s>"
-msgstr "%s redeclaraciÛn de %s"
+msgstr "%s redeclaraci√≥n de %s"
 
 #: src/symtab.c:355
 #, c-format
 msgid "symbol %s redefined"
-msgstr "redefinido el sÌmbolo %s"
+msgstr "redefinido el s√≠mbolo %s"
 
 #: src/symtab.c:370
 #, c-format
 msgid "symbol %s redeclared"
-msgstr "redefinido el sÌmbolo %s"
+msgstr "redefinido el s√≠mbolo %s"
 
 #: src/symtab.c:392
 #, c-format
 msgid "redefining user token number of %s"
-msgstr "redefiniciÛn del n˙mero del terminal del usuario de %s"
+msgstr "redefinici√≥n del n√∫mero del terminal del usuario de %s"
 
 # `token' se debe traducir como `literal' - cll
-# en terminologÌa de compiladores token es m·s un terminal - ngp
+# en terminolog√≠a de compiladores token es m√°s un terminal - ngp
 #
 #: src/symtab.c:422
 #, c-format
 msgid "symbol %s is used, but is not defined as a token and has no rules"
 msgstr ""
-"se usa el sÌmbolo %s, pero no est· definido como terminal y no tiene reglas"
+"se usa el s√≠mbolo %s, pero no est√° definido como terminal y no tiene reglas"
 
 #: src/symtab.c:460
 #, c-format
@@ -907,43 +900,43 @@ msgid "useless %s for type <%s>"
 msgstr ""
 
 # `token' se debe traducir como `literal' - cll
-# en terminologÌa de compiladores token es m·s un terminal - ngp
+# en terminolog√≠a de compiladores token es m√°s un terminal - ngp
 #
 #: src/symtab.c:465
 #, fuzzy, c-format
 msgid "type <%s> is used, but is not associated to any symbol"
 msgstr ""
-"se usa el sÌmbolo %s, pero no est· definido como terminal y no tiene reglas"
+"se usa el s√≠mbolo %s, pero no est√° definido como terminal y no tiene reglas"
 
 #: src/symtab.c:490
 #, fuzzy, c-format
 msgid "symbol %s used more than once as a literal string"
-msgstr "sÌmbolo `%s' utilizado m·s de una vez como cadena literal"
+msgstr "s√≠mbolo `%s' utilizado m√°s de una vez como cadena literal"
 
 #: src/symtab.c:493
 #, fuzzy, c-format
 msgid "symbol %s given more than one literal string"
-msgstr "al sÌmbolo `%s' se le ha dado m·s de una cadena literal"
+msgstr "al s√≠mbolo `%s' se le ha dado m√°s de una cadena literal"
 
 #: src/symtab.c:602
 #, fuzzy, c-format
 msgid "user token number %d redeclaration for %s"
-msgstr "redeclaraciÛn del tipo de %s"
+msgstr "redeclaraci√≥n del tipo de %s"
 
 #: src/symtab.c:606
 #, fuzzy, c-format
 msgid "previous declaration for %s"
-msgstr "redeclaraciÛn del tipo de %s"
+msgstr "redeclaraci√≥n del tipo de %s"
 
 #: src/symtab.c:987
 #, c-format
 msgid "the start symbol %s is undefined"
-msgstr "el sÌmbolo de inicio (axioma) %s no est· definido"
+msgstr "el s√≠mbolo de inicio (axioma) %s no est√° definido"
 
 #: src/symtab.c:991
 #, c-format
 msgid "the start symbol %s is a token"
-msgstr "el sÌmbolo de inicio (axioma) %s es un terminal"
+msgstr "el s√≠mbolo de inicio (axioma) %s es un terminal"
 
 #: src/symtab.c:1166
 #, c-format
@@ -953,7 +946,7 @@ msgstr ""
 #: src/symtab.c:1169
 #, fuzzy, c-format
 msgid "useless precedence for %s"
-msgstr "precedencias en conflicto entre %s y %s"
+msgstr "redefinici√≥n de la precedencia de %s"
 
 #: src/symtab.c:1173
 #, c-format
@@ -1008,12 +1001,12 @@ msgstr ""
 #: djgpp/subpipe.c:234
 #, fuzzy, c-format
 msgid "subsidiary program '%s' interrupted"
-msgstr "fallÛ el programa subsidiario `%s'"
+msgstr "fall√≥ el programa subsidiario `%s'"
 
 #: djgpp/subpipe.c:241
 #, fuzzy, c-format
 msgid "subsidiary program '%s' not found"
-msgstr "no se encontrÛ el programa subsidiario `%s'"
+msgstr "no se encontr√≥ el programa subsidiario `%s'"
 
 #: djgpp/subpipe.c:265
 #, c-format
@@ -1023,16 +1016,16 @@ msgstr ""
 #: lib/argmatch.c:133
 #, c-format
 msgid "invalid argument %s for %s"
-msgstr "argumento no v·lido %s para %s"
+msgstr "argumento no v√°lido %s para %s"
 
 #: lib/argmatch.c:134
 #, c-format
 msgid "ambiguous argument %s for %s"
-msgstr "argumento %s ambig¸o para %s"
+msgstr "argumento %s ambig√ºo para %s"
 
 #: lib/argmatch.c:153
 msgid "Valid arguments are:"
-msgstr "Los argumentos v·lidos son:"
+msgstr "Los argumentos v√°lidos son:"
 
 #: lib/bitset_stats.c:177
 #, c-format
@@ -1042,17 +1035,17 @@ msgstr "%u bitset_allocs, %u liberados (%.2f%%).\n"
 #: lib/bitset_stats.c:180
 #, c-format
 msgid "%u bitset_sets, %u cached (%.2f%%)\n"
-msgstr "%u bitset_sets, %u en la cachÈ (%.2f%%)\n"
+msgstr "%u bitset_sets, %u en la cach√© (%.2f%%)\n"
 
 #: lib/bitset_stats.c:183
 #, c-format
 msgid "%u bitset_resets, %u cached (%.2f%%)\n"
-msgstr "%u bitset_resets, %u en la cachÈ (%.2f%%)\n"
+msgstr "%u bitset_resets, %u en la cach√© (%.2f%%)\n"
 
 #: lib/bitset_stats.c:186
 #, c-format
 msgid "%u bitset_tests, %u cached (%.2f%%)\n"
-msgstr "%u bitset_tests, %u en la cachÈ (%.2f%%)\n"
+msgstr "%u bitset_tests, %u en la cach√© (%.2f%%)\n"
 
 #: lib/bitset_stats.c:190
 #, c-format
@@ -1065,7 +1058,7 @@ msgstr "histograma del registro de conteo\n"
 
 #: lib/bitset_stats.c:195
 msgid "size log histogram\n"
-msgstr "histograma del registro de tamaÒo\n"
+msgstr "histograma del registro de tama√±o\n"
 
 #: lib/bitset_stats.c:198
 msgid "density histogram\n"
@@ -1076,7 +1069,7 @@ msgstr "histograma de densidad\n"
 msgid ""
 "Bitset statistics:\n"
 "\n"
-msgstr "EstadÌsticas de bitset\n"
+msgstr "Estad√≠sticas de bitset\n"
 
 #: lib/bitset_stats.c:215
 #, c-format
@@ -1086,22 +1079,22 @@ msgstr "Ejecuciones acumuladas = %u\n"
 #: lib/bitset_stats.c:259 lib/bitset_stats.c:264
 #, fuzzy
 msgid "cannot read stats file"
-msgstr "No pude leer fichero de estadÌsticas"
+msgstr "No pude leer fichero de estad√≠sticas"
 
 #: lib/bitset_stats.c:261
 #, fuzzy, c-format
 msgid "bad stats file size\n"
-msgstr "Fichero de estadÌstica no v·lido.\n"
+msgstr "Fichero de estad√≠stica no v√°lido.\n"
 
 #: lib/bitset_stats.c:287 lib/bitset_stats.c:289
 #, fuzzy
 msgid "cannot write stats file"
-msgstr "No pude escribir el fichero de estadÌsticas."
+msgstr "No pude escribir el fichero de estad√≠sticas."
 
 #: lib/bitset_stats.c:292
 #, fuzzy
 msgid "cannot open stats file for writing"
-msgstr "No pude abrir el fichero de estadÌsticas para escritura"
+msgstr "No pude abrir el fichero de estad√≠sticas para escritura"
 
 #: lib/closeout.c:112
 #, fuzzy
@@ -1115,64 +1108,64 @@ msgstr "Error del sistema desconocido"
 #: lib/getopt.c:547 lib/getopt.c:576
 #, fuzzy, c-format
 msgid "%s: option '%s' is ambiguous; possibilities:"
-msgstr "%s: la opciÛn `%s' es ambigua\n"
+msgstr "%s: la opci√≥n `%s' es ambigua\n"
 
 # Pongo esto como en otros .po. sv
 #: lib/getopt.c:624 lib/getopt.c:628
 #, fuzzy, c-format
 msgid "%s: option '--%s' doesn't allow an argument\n"
-msgstr "%s: la opciÛn `--%s' no admite ning˙n argumento\n"
+msgstr "%s: la opci√≥n `--%s' no admite ning√∫n argumento\n"
 
 #: lib/getopt.c:637 lib/getopt.c:642
 #, fuzzy, c-format
 msgid "%s: option '%c%s' doesn't allow an argument\n"
-msgstr "%s: la opciÛn `%c%s' no admite ning˙n argumento\n"
+msgstr "%s: la opci√≥n `%c%s' no admite ning√∫n argumento\n"
 
 #: lib/getopt.c:685 lib/getopt.c:704
 #, fuzzy, c-format
 msgid "%s: option '--%s' requires an argument\n"
-msgstr "%s: la opciÛn `%s' requiere un argumento\n"
+msgstr "%s: la opci√≥n `%s' requiere un argumento\n"
 
 #: lib/getopt.c:742 lib/getopt.c:745
 #, fuzzy, c-format
 msgid "%s: unrecognized option '--%s'\n"
-msgstr "%s: opciÛn `--%s' no reconocida\n"
+msgstr "%s: opci√≥n `--%s' no reconocida\n"
 
 #: lib/getopt.c:753 lib/getopt.c:756
 #, fuzzy, c-format
 msgid "%s: unrecognized option '%c%s'\n"
-msgstr "%s: opciÛn `%c%s' no reconocida\n"
+msgstr "%s: opci√≥n `%c%s' no reconocida\n"
 
-# °Muy bien traducido! En el grupo de traducciÛn ha habido autÈnticas
-# batallas con el tema "invalid - inv·lido/a" :) - cll
-# Porque Enrique decÌa que le recordaba a disminuidos fÌsicos.
+# ¬°Muy bien traducido! En el grupo de traducci√≥n ha habido aut√©nticas
+# batallas con el tema "invalid - inv√°lido/a" :) - cll
+# Porque Enrique dec√≠a que le recordaba a disminuidos f√≠sicos.
 # Francamente, no creo que haya que andar con estas "fobias".
-# Pongo inv·lida. sv
+# Pongo inv√°lida. sv
 #: lib/getopt.c:805 lib/getopt.c:808
 #, fuzzy, c-format
 msgid "%s: invalid option -- '%c'\n"
-msgstr "%s: opciÛn -- %c no v·lida\n"
+msgstr "%s: opci√≥n -- %c no v√°lida\n"
 
 #: lib/getopt.c:861 lib/getopt.c:878 lib/getopt.c:1088 lib/getopt.c:1106
 #, fuzzy, c-format
 msgid "%s: option requires an argument -- '%c'\n"
-msgstr "%s: la opciÛn -- %c requiere un argumento\n"
+msgstr "%s: la opci√≥n -- %c requiere un argumento\n"
 
 #: lib/getopt.c:934 lib/getopt.c:950
 #, fuzzy, c-format
 msgid "%s: option '-W %s' is ambiguous\n"
-msgstr "%s: la opciÛn `-W %s' es ambigua\n"
+msgstr "%s: la opci√≥n `-W %s' es ambigua\n"
 
 # Pongo esto como en otros .po. sv
 #: lib/getopt.c:974 lib/getopt.c:992
 #, fuzzy, c-format
 msgid "%s: option '-W %s' doesn't allow an argument\n"
-msgstr "%s: la opciÛn `-W %s' no admite ning˙n argumento\n"
+msgstr "%s: la opci√≥n `-W %s' no admite ning√∫n argumento\n"
 
 #: lib/getopt.c:1013 lib/getopt.c:1031
 #, fuzzy, c-format
 msgid "%s: option '-W %s' requires an argument\n"
-msgstr "%s: la opciÛn `%s' requiere un argumento\n"
+msgstr "%s: la opci√≥n `%s' requiere un argumento\n"
 
 #: lib/obstack.c:413 lib/obstack.c:415 lib/xalloc-die.c:34
 msgid "memory exhausted"
@@ -1225,7 +1218,7 @@ msgid ""
 "Execution times (seconds)\n"
 msgstr ""
 "\n"
-"Tiempos de ejecuciÛn (segundo)\n"
+"Tiempos de ejecuci√≥n (segundo)\n"
 
 #: lib/timevar.c:525
 msgid " TOTAL                 :"
@@ -1256,43 +1249,31 @@ msgstr ""
 msgid "%s subprocess got fatal signal %d"
 msgstr ""
 
-#~ msgid "empty"
-#~ msgstr "vacÌo"
-
-#~ msgid "state %d"
-#~ msgstr "estado %d"
-
-#~ msgid "expected %d shift/reduce conflict"
-#~ msgid_plural "expected %d shift/reduce conflicts"
-#~ msgstr[0] "esperado %d conflicto desplazamiento/reducciÛn"
-#~ msgstr[1] "esperados %d conflictos desplazamiento/reducciÛn"
-
-#, fuzzy
-#~ msgid "stray '@'"
-#~ msgstr "`@ extraviado"
-
-#, fuzzy
-#~ msgid "redeclaration for default tagged %s"
-#~ msgstr "%s redeclaraciÛn de %s"
-
-#, fuzzy
-#~ msgid "redeclaration for default tagless %s"
-#~ msgstr "%s redeclaraciÛn de %s"
-
 #~ msgid "warning: "
 #~ msgstr "aviso: "
 
+#~ msgid "expected %d shift/reduce conflict"
+#~ msgid_plural "expected %d shift/reduce conflicts"
+#~ msgstr[0] "esperado %d conflicto desplazamiento/reducci√≥n"
+#~ msgstr[1] "esperados %d conflictos desplazamiento/reducci√≥n"
+
 #~ msgid "GNU bison generates parsers for LALR(1) grammars.\n"
-#~ msgstr "GNU bison genera analizadores para gram·ticas LALR(1).\n"
+#~ msgstr "GNU bison genera analizadores para gram√°ticas LALR(1).\n"
 
 #~ msgid ""
 #~ "If a long option shows an argument as mandatory, then it is mandatory\n"
 #~ "for the equivalent short option also.  Similarly for optional arguments.\n"
 #~ msgstr ""
-#~ "Si una opciÛn larga muestra un argumento como obligatorio, entonces es "
+#~ "Si una opci√≥n larga muestra un argumento como obligatorio, entonces es "
 #~ "obligatorio\n"
-#~ "para la opciÛn corta equivalente tambiÈn. De igual forma para los "
+#~ "para la opci√≥n corta equivalente tambi√©n. De igual forma para los "
 #~ "argumentos opcionales.\n"
+
+#~ msgid "empty"
+#~ msgstr "vac√≠o"
+
+#~ msgid "state %d"
+#~ msgstr "estado %d"
 
 #~ msgid "Rules never reduced"
 #~ msgstr "Reglas nunca reducidas"
@@ -1331,7 +1312,7 @@ msgstr ""
 #~ msgstr[1] "%d reglas sin uso"
 
 #~ msgid "invalid escape sequence: %s"
-#~ msgstr "secuencia de escape no v·lida: %s"
+#~ msgstr "secuencia de escape no v√°lida: %s"
 
 #~ msgid "unrecognized escape sequence: %s"
 #~ msgstr "secuencia de escape no reconocida: %s"
@@ -1339,43 +1320,49 @@ msgstr ""
 #~ msgid "missing `{' in %s"
 #~ msgstr "falta `{' en %s"
 
-#~ msgid "tokens %s and %s both assigned number %d"
-#~ msgstr "los terminales %s y %s tienen asignados ambos el n˙mero %d"
+#~ msgid "stray `@'"
+#~ msgstr "`@ extraviado"
 
-# øQuÈ encuentras de malo en traducir `illegal' como `ilegal'? Date
-# cuenta de que el mensaje "opciÛn no v·lida" parece ambigua y har·
+#~ msgid "tokens %s and %s both assigned number %d"
+#~ msgstr "los terminales %s y %s tienen asignados ambos el n√∫mero %d"
+
+# ¬øQu√© encuentras de malo en traducir `illegal' como `ilegal'? Date
+# cuenta de que el mensaje "opci√≥n no v√°lida" parece ambigua y har√°
 # pensar al usuario de que tal vez la ha usado incorrectamente, sin
-# reparar, por lo tanto, en que la opciÛn misma es ilegal. Esto es, °°no
+# reparar, por lo tanto, en que la opci√≥n misma es ilegal. Esto es, ¬°¬°no
 # existe!! (porque imagino que es en este sentido como se ha programado)
 # - cll
-# Sobre esto hubo una discusiÛn en la lista hace tiempo,
-# quiz·s ilegal queda un poco fuerte, alguien decÌa que parecÌa que
-# ibas a ir a la carcel por usar la opciÛn.
+# Sobre esto hubo una discusi√≥n en la lista hace tiempo,
+# quiz√°s ilegal queda un poco fuerte, alguien dec√≠a que parec√≠a que
+# ibas a ir a la carcel por usar la opci√≥n.
 # ngp
 #
-# SÌ, era Enrique a quien no le gustaba la palabra.
-# No creo que debamos dejar de decir algo por la "correcciÛn polÌtica"
-# Yo creo que si el 386 tiene instrucciones *ilegales*, tambiÈn puede
+# S√≠, era Enrique a quien no le gustaba la palabra.
+# No creo que debamos dejar de decir algo por la "correcci√≥n pol√≠tica"
+# Yo creo que si el 386 tiene instrucciones *ilegales*, tambi√©n puede
 # haber opciones ilegales, digo yo, y no por eso las CPUs van
-# a la c·rcel (como mucho se cuelgan, je, je, 0ff0 :-). sv
+# a la c√°rcel (como mucho se cuelgan, je, je, 0ff0 :-). sv
 #
 #~ msgid "%s: illegal option -- %c\n"
-#~ msgstr "%s: opciÛn -- %c ilegal\n"
+#~ msgstr "%s: opci√≥n -- %c ilegal\n"
 
 #~ msgid "subsidiary program `%s' could not be invoked"
 #~ msgstr "no se pudo invocar el programa subsidiario `%s'"
 
 #~ msgid "subsidiary program `%s' failed (exit status %d)"
-#~ msgstr "fallÛ el programa subsidiario `%s' (estado de salida %d)"
+#~ msgstr "fall√≥ el programa subsidiario `%s' (estado de salida %d)"
 
 #~ msgid "POSIX forbids declarations in the grammar"
-#~ msgstr "POSIX prohÌbe declaraciones en a gram·tica"
+#~ msgstr "POSIX proh√≠be declaraciones en a gram√°tica"
+
+#~ msgid "conflicting precedences for %s and %s"
+#~ msgstr "precedencias en conflicto entre %s y %s"
 
 #~ msgid "conflicting associativities for %s (%s) and %s (%s)"
 #~ msgstr "conflicto de asociaciatividades para %s (%s) y %s (%s)"
 
 #~ msgid "too many states (max %d)"
-#~ msgstr "demasiados estados (m·ximo %d)"
+#~ msgstr "demasiados estados (m√°ximo %d)"
 
 #~ msgid "reduce"
 #~ msgstr "reduce"
@@ -1396,23 +1383,23 @@ msgstr ""
 #~ msgstr "%s contiene "
 
 #~ msgid "`%s' is no longer supported"
-#~ msgstr "`%s' ya no est· soportado"
+#~ msgstr "`%s' ya no est√° soportado"
 
-# Me parece menos "computadora" decir "ning˙n fichero de gram·tica" - cll
+# Me parece menos "computadora" decir "ning√∫n fichero de gram√°tica" - cll
 #
 #~ msgid "%s: no grammar file given\n"
-#~ msgstr "%s: no se ha especificado ning˙n fichero de gram·tica\n"
+#~ msgstr "%s: no se ha especificado ning√∫n fichero de gram√°tica\n"
 
 # Ignorar es no saber, to ignore es no hacer caso, que no es lo mismo. sv
 #~ msgid "%s: extra arguments ignored after `%s'\n"
-#~ msgstr "%s: los argumentos extra despuÈs de '%s' no se tendr·n en cuenta\n"
+#~ msgstr "%s: los argumentos extra despu√©s de '%s' no se tendr√°n en cuenta\n"
 
 #~ msgid "too many gotos (max %d)"
-#~ msgstr "demasiados gotos (m·ximo %d)"
+#~ msgstr "demasiados gotos (m√°ximo %d)"
 
 # to ignore no es ignorar. Pon otra cosa, please. sv
 #~ msgid "unexpected `/' found and ignored"
-#~ msgstr "se ha encontrado `/' cuando no se esperaba, no se tendr·n en cuenta"
+#~ msgstr "se ha encontrado `/' cuando no se esperaba, no se tendr√°n en cuenta"
 
 #~ msgid "unterminated comment"
 #~ msgstr "comentario sin terminar"
@@ -1420,9 +1407,9 @@ msgstr ""
 #~ msgid "unexpected end of file"
 #~ msgstr "fin de fichero inesperado"
 
-# øunescaped?
+# ¬øunescaped?
 #~ msgid "unescaped newline in constant"
-#~ msgstr "salto de lÌnea en constante sin secuencia de escape"
+#~ msgstr "salto de l√≠nea en constante sin secuencia de escape"
 
 #~ msgid "octal value outside range 0...255: `\\%o'"
 #~ msgstr "valor octal fuera del rango 0...255: `\\%o'"
@@ -1439,9 +1426,9 @@ msgstr ""
 #~ msgid "unterminated type name"
 #~ msgstr "nombre de tipo sin terminar"
 
-# ømulticar·cter o multicaracteres? sv
+# ¬ømulticar√°cter o multicaracteres? sv
 #~ msgid "use \"...\" for multi-character literal tokens"
-#~ msgstr "use \"...\" para terminales literales multicar·cter"
+#~ msgstr "use \"...\" para terminales literales multicar√°cter"
 
 #~ msgid "`%s' supports no argument: %s"
 #~ msgstr "`%s' no soporta el argumento: %s"
@@ -1478,7 +1465,7 @@ msgstr ""
 #~ msgstr "    SIN ACCIONES\n"
 
 #~ msgid "Number, Line, Rule"
-#~ msgstr "N˙mero, LÌnea, Regla"
+#~ msgstr "N√∫mero, L√≠nea, Regla"
 
 #~ msgid "  %3d %3d %s ->"
 #~ msgstr "  %3d %3d %s ->"
@@ -1493,88 +1480,88 @@ msgstr ""
 #~ msgstr "cadena sin terminar"
 
 #~ msgid "%s is invalid"
-#~ msgstr "%s no es v·lido"
+#~ msgstr "%s no es v√°lido"
 
 #~ msgid "unterminated `%{' definition"
-#~ msgstr "definiciÛn `%{' sin terminar"
+#~ msgstr "definici√≥n `%{' sin terminar"
 
 #~ msgid "Premature EOF after %s"
-#~ msgstr "EOF prematuro despuÈs de %s"
+#~ msgstr "EOF prematuro despu√©s de %s"
 
 #~ msgid "`%s' is invalid in %s"
-#~ msgstr "`%s' no es v·lido en %s"
+#~ msgstr "`%s' no es v√°lido en %s"
 
 #~ msgid "%type declaration has no <typename>"
-#~ msgstr "la declaraciÛn %type no tiene <nombre-tipo>"
+#~ msgstr "la declaraci√≥n %type no tiene <nombre-tipo>"
 
 #~ msgid "invalid %%type declaration due to item: %s"
-#~ msgstr "declaraciÛn de %%type no v·lida debido al Ìtem: %s"
+#~ msgstr "declaraci√≥n de %%type no v√°lida debido al √≠tem: %s"
 
-# Una correcciÛn menor: en realidad, `should' es el pasado y condicional
-# de "to must" y aquÌ se emplea en su forma condicional. Por eso, he
-# cambiado `debe' por `deberÌa' - cll
-# ahÌ me has pillado en un olvido del inglÈs - ngp
+# Una correcci√≥n menor: en realidad, `should' es el pasado y condicional
+# de "to must" y aqu√≠ se emplea en su forma condicional. Por eso, he
+# cambiado `debe' por `deber√≠a' - cll
+# ah√≠ me has pillado en un olvido del ingl√©s - ngp
 #~ msgid "invalid text (%s) - number should be after identifier"
 #~ msgstr ""
-#~ "texto no v·lido (%s) - el n˙mero deberÌa estar despuÈs del identificador"
+#~ "texto no v√°lido (%s) - el n√∫mero deber√≠a estar despu√©s del identificador"
 
-# Cambio el orden y el sexo. Ahora est· "en espaÒol". sv
+# Cambio el orden y el sexo. Ahora est√° "en espa√±ol". sv
 #~ msgid "unmatched %s"
 #~ msgstr "%s desemparejado/a"
 
 #~ msgid "argument of %%expect is not an integer"
 #~ msgstr "el argumento de %%expect no es un entero"
 
-# No te recomiendo que emplees participios para expresar acciones (°si
-# me oyera mi antigua profesora de lengua, llorarÌa de emociÛn! :). En
-# vez de eso, emplea las conjugaciones habituales, que para eso est·n :)
+# No te recomiendo que emplees participios para expresar acciones (¬°si
+# me oyera mi antigua profesora de lengua, llorar√≠a de emoci√≥n! :). En
+# vez de eso, emplea las conjugaciones habituales, que para eso est√°n :)
 # - cll
 # ok - ngp
 #
 #~ msgid "unrecognized item %s, expected an identifier"
-#~ msgstr "no se reconoce el Ìtem %s, se esperaba un identificador"
+#~ msgstr "no se reconoce el √≠tem %s, se esperaba un identificador"
 
 #~ msgid "expected string constant instead of %s"
 #~ msgstr "se esperaba una cadena constante en lugar de %s"
 
 #~ msgid "no input grammar"
-#~ msgstr "no hay gram·tica de entrada"
+#~ msgstr "no hay gram√°tica de entrada"
 
 #~ msgid "ill-formed rule: initial symbol not followed by colon"
-#~ msgstr "regla mal formada: el sÌmbolo inicial no est· seguido por :"
+#~ msgstr "regla mal formada: el s√≠mbolo inicial no est√° seguido por :"
 
 #~ msgid "grammar starts with vertical bar"
-#~ msgstr "la gram·tica comienza con una barra vertical"
+#~ msgstr "la gram√°tica comienza con una barra vertical"
 
 #~ msgid "previous rule lacks an ending `;'"
 #~ msgstr "a la regla previa le falta un `;' al final"
 
 #~ msgid "two @prec's in a row"
-#~ msgstr "dos @prec en una lÌnea"
+#~ msgstr "dos @prec en una l√≠nea"
 
 # Insisto, el empleo de participios a secas me parece como hablar en
-# indio. Por favor, permÌteme que aÒada un "est·" :) - cll
+# indio. Por favor, perm√≠teme que a√±ada un "est√°" :) - cll
 # ok - ngp
 #~ msgid "%%guard present but %%semantic_parser not specified"
-#~ msgstr "%%guard presente pero %%semantic_parser est· sin especificar"
+#~ msgstr "%%guard presente pero %%semantic_parser est√° sin especificar"
 
 #~ msgid "two actions at end of one rule"
 #~ msgstr "dos acciones al final de una regla"
 
-# ⁄nicamente cambio la posiciÛn del adjetivo `m·ximo'. En vez de despuÈs
-# de `tabla', despuÈs de `tamaÒo' - cll
-# en inglÈs era asÌ, pero quiz·s en espaÒol sea mejor como dices
+# √önicamente cambio la posici√≥n del adjetivo `m√°ximo'. En vez de despu√©s
+# de `tabla', despu√©s de `tama√±o' - cll
+# en ingl√©s era as√≠, pero quiz√°s en espa√±ol sea mejor como dices
 # ngp
 #
 #~ msgid "maximum table size (%d) exceeded"
-#~ msgstr "excedido el tamaÒo m·ximo de la tabla (%d)"
+#~ msgstr "excedido el tama√±o m√°ximo de la tabla (%d)"
 
 #~ msgid "    $   \tgo to state %d\n"
 #~ msgstr "    $   \tir al estado %d\n"
 
-# Tal vez pueda parecer pedante, pero `inconclusa' me suena muchÌsimo
-# mejor que `sin terminar' que me parece m·s "computerizado" - cll
-# quiz·s un poco cacofÛnico lo de cla˙sula inconclusa - ngp
+# Tal vez pueda parecer pedante, pero `inconclusa' me suena much√≠simo
+# mejor que `sin terminar' que me parece m√°s "computerizado" - cll
+# quiz√°s un poco cacof√≥nico lo de cla√∫sula inconclusa - ngp
 #
 #~ msgid "unterminated %guard clause"
-#~ msgstr "cl·usula %guard sin terminar"
+#~ msgstr "cl√°usula %guard sin terminar"

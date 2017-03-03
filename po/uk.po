@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.7.90\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2013-07-25 17:57+0200\n"
+"POT-Creation-Date: 2013-11-12 15:56+0100\n"
 "PO-Revision-Date: 2013-05-30 22:18+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <translation-team-uk@lists.sourceforge.net>\n"
@@ -20,34 +20,34 @@ msgstr ""
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: src/complain.c:298
+#: src/complain.c:322
 msgid "fatal error"
 msgstr "критична помилка: "
 
-#: src/complain.c:299
+#: src/complain.c:323
 msgid "error"
 msgstr "помилка"
 
-#: src/complain.c:300
+#: src/complain.c:324
 msgid "warning"
 msgstr "попередження"
 
-#: src/complain.c:363
+#: src/complain.c:387
 #, c-format
 msgid "deprecated directive, use %s"
 msgstr "застаріла інструкція, скористайтеся %s"
 
-#: src/complain.c:367
+#: src/complain.c:391
 #, c-format
 msgid "deprecated directive: %s, use %s"
 msgstr "застаріла інструкція: %s, скористайтеся %s"
 
-#: src/complain.c:376
+#: src/complain.c:400
 #, c-format
 msgid "only one %s allowed per rule"
 msgstr "у правилі допускається лише один %s"
 
-#: src/complain.c:378 src/reader.c:140 src/symtab.c:217 src/symtab.c:229
+#: src/complain.c:402 src/reader.c:140 src/symtab.c:217 src/symtab.c:229
 #, c-format
 msgid "previous declaration"
 msgstr "попереднє оголошення"
@@ -442,32 +442,32 @@ msgstr "переповнення номеру стовпчика"
 msgid "rule useless in parser due to conflicts"
 msgstr "правило є зайвим у аналізаторі через конфлікти"
 
-#: src/muscle-tab.c:513
+#: src/muscle-tab.c:514
 #, c-format
 msgid "%%define variable %s redefined"
 msgstr "змінну %%define %s перевизначено"
 
-#: src/muscle-tab.c:517
+#: src/muscle-tab.c:518
 #, c-format
 msgid "previous definition"
 msgstr "попереднє визначення"
 
-#: src/muscle-tab.c:567 src/muscle-tab.c:668 src/muscle-tab.c:731
+#: src/muscle-tab.c:568 src/muscle-tab.c:669 src/muscle-tab.c:732
 #, c-format
 msgid "%s: undefined %%define variable %s"
 msgstr "%s: невизначена змінна %%define %s"
 
-#: src/muscle-tab.c:662
+#: src/muscle-tab.c:663
 #, c-format
 msgid "invalid value for %%define Boolean variable %s"
 msgstr "некоректне значення булевої змінної %%define %s"
 
-#: src/muscle-tab.c:716
+#: src/muscle-tab.c:717
 #, c-format
 msgid "invalid value for %%define variable %s: %s"
 msgstr "некоректне значення змінної %%define %s: %s"
 
-#: src/muscle-tab.c:721
+#: src/muscle-tab.c:722
 #, c-format
 msgid "accepted value: %s"
 msgstr "прийняте значення: %s"
@@ -667,79 +667,79 @@ msgstr "зайвий символ '%s'"
 msgid "refers to: %c%s at %s"
 msgstr "посилається на: %c%s у %s"
 
-#: src/scan-code.l:351
+#: src/scan-code.l:362
 #, c-format
 msgid "possibly meant: %c"
 msgstr "ймовірно мало бути: %c"
 
-#: src/scan-code.l:360
+#: src/scan-code.l:371
 #, c-format
 msgid ", hiding %c"
 msgstr ", приховування %c"
 
-#: src/scan-code.l:368
+#: src/scan-code.l:379
 #, c-format
 msgid " at %s"
 msgstr " у %s"
 
-#: src/scan-code.l:372
+#: src/scan-code.l:383
 #, c-format
 msgid ", cannot be accessed from mid-rule action at $%d"
 msgstr ", доступ з дії проміжного правила неможливий у $%d"
 
-#: src/scan-code.l:429 src/scan-gram.l:849
+#: src/scan-code.l:440 src/scan-gram.l:849
 #, c-format
 msgid "integer out of range: %s"
 msgstr "вихід за межі діапазону цілого числа: %s"
 
-#: src/scan-code.l:519
+#: src/scan-code.l:530
 #, c-format
 msgid "invalid reference: %s"
 msgstr "некоректне посилання: %s"
 
-#: src/scan-code.l:527
+#: src/scan-code.l:538
 #, c-format
 msgid "syntax error after '%c', expecting integer, letter, '_', '[', or '$'"
 msgstr ""
 "синтаксична помилка після '%c'. Мало бути вказано ціле число, літеру, '_', "
 "'[' або '$'"
 
-#: src/scan-code.l:533
+#: src/scan-code.l:544
 #, c-format
 msgid "symbol not found in production before $%d: %.*s"
 msgstr "у продукції не знайдено символу до $%d: %.*s"
 
-#: src/scan-code.l:538
+#: src/scan-code.l:549
 #, c-format
 msgid "symbol not found in production: %.*s"
 msgstr "у продукції не знайдено символу: %.*s"
 
-#: src/scan-code.l:553
+#: src/scan-code.l:564
 #, c-format
 msgid "misleading reference: %s"
 msgstr "помилкове посилання: %s"
 
-#: src/scan-code.l:569
+#: src/scan-code.l:580
 #, c-format
 msgid "ambiguous reference: %s"
 msgstr "неоднозначне посилання: %s"
 
-#: src/scan-code.l:608
+#: src/scan-code.l:616
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr "у нетипізованій граматиці явним чином вказано тип"
 
-#: src/scan-code.l:667
+#: src/scan-code.l:675
 #, c-format
 msgid "$$ for the midrule at $%d of %s has no declared type"
 msgstr "$$ для проміжного правила у $%d %s немає оголошеного типу"
 
-#: src/scan-code.l:673
+#: src/scan-code.l:681
 #, c-format
 msgid "$$ of %s has no declared type"
 msgstr "$$ %s не має оголошеного типу"
 
-#: src/scan-code.l:696
+#: src/scan-code.l:704
 #, c-format
 msgid "$%s of %s has no declared type"
 msgstr "$%s %s не має оголошеного типу"

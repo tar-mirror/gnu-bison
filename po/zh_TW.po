@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.7.90\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2013-07-25 17:57+0200\n"
+"POT-Creation-Date: 2013-11-12 15:56+0100\n"
 "PO-Revision-Date: 2013-06-14 23:36+0800\n"
 "Last-Translator: Wei-Lun Chao <bluebat@member.fsf.org>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -17,34 +17,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: src/complain.c:298
+#: src/complain.c:322
 msgid "fatal error"
 msgstr "嚴重錯誤"
 
-#: src/complain.c:299
+#: src/complain.c:323
 msgid "error"
 msgstr "錯誤"
 
-#: src/complain.c:300
+#: src/complain.c:324
 msgid "warning"
 msgstr "警告"
 
-#: src/complain.c:363
+#: src/complain.c:387
 #, c-format
 msgid "deprecated directive, use %s"
 msgstr "無效的指令：%s"
 
-#: src/complain.c:367
+#: src/complain.c:391
 #, c-format
 msgid "deprecated directive: %s, use %s"
 msgstr "不宜再用的指令：%s，應使用 %s"
 
-#: src/complain.c:376
+#: src/complain.c:400
 #, c-format
 msgid "only one %s allowed per rule"
 msgstr "每個規則只允許一個 %s"
 
-#: src/complain.c:378 src/reader.c:140 src/symtab.c:217 src/symtab.c:229
+#: src/complain.c:402 src/reader.c:140 src/symtab.c:217 src/symtab.c:229
 #, c-format
 msgid "previous declaration"
 msgstr "前次宣告"
@@ -416,32 +416,32 @@ msgstr "欄數溢位"
 msgid "rule useless in parser due to conflicts"
 msgstr "規則由於衝突而在剖析器中無用"
 
-#: src/muscle-tab.c:513
+#: src/muscle-tab.c:514
 #, c-format
 msgid "%%define variable %s redefined"
 msgstr "%%define 變數 %s 被重新定義"
 
-#: src/muscle-tab.c:517
+#: src/muscle-tab.c:518
 #, c-format
 msgid "previous definition"
 msgstr "前一個定義"
 
-#: src/muscle-tab.c:567 src/muscle-tab.c:668 src/muscle-tab.c:731
+#: src/muscle-tab.c:568 src/muscle-tab.c:669 src/muscle-tab.c:732
 #, c-format
 msgid "%s: undefined %%define variable %s"
 msgstr "%s：未定義的 %%define 變數 %s"
 
-#: src/muscle-tab.c:662
+#: src/muscle-tab.c:663
 #, c-format
 msgid "invalid value for %%define Boolean variable %s"
 msgstr "無效的值用於 %%define 布林變數 %s"
 
-#: src/muscle-tab.c:716
+#: src/muscle-tab.c:717
 #, c-format
 msgid "invalid value for %%define variable %s: %s"
 msgstr "無效的值用於 %%define 變數 %s：%s"
 
-#: src/muscle-tab.c:721
+#: src/muscle-tab.c:722
 #, c-format
 msgid "accepted value: %s"
 msgstr "被接受的值：%s"
@@ -634,77 +634,77 @@ msgstr "零星的 %s"
 msgid "refers to: %c%s at %s"
 msgstr "參考：%c%s 於 %s"
 
-#: src/scan-code.l:351
+#: src/scan-code.l:362
 #, c-format
 msgid "possibly meant: %c"
 msgstr "可能意指：%c"
 
-#: src/scan-code.l:360
+#: src/scan-code.l:371
 #, c-format
 msgid ", hiding %c"
 msgstr "，隱藏 %c"
 
-#: src/scan-code.l:368
+#: src/scan-code.l:379
 #, c-format
 msgid " at %s"
 msgstr " 於 %s"
 
-#: src/scan-code.l:372
+#: src/scan-code.l:383
 #, c-format
 msgid ", cannot be accessed from mid-rule action at $%d"
 msgstr "，無法從 位於 $%d 的 mid-rule 動作存取"
 
-#: src/scan-code.l:429 src/scan-gram.l:849
+#: src/scan-code.l:440 src/scan-gram.l:849
 #, c-format
 msgid "integer out of range: %s"
 msgstr "整數超過範圍：%s"
 
-#: src/scan-code.l:519
+#: src/scan-code.l:530
 #, c-format
 msgid "invalid reference: %s"
 msgstr "無效的參考：%s"
 
-#: src/scan-code.l:527
+#: src/scan-code.l:538
 #, c-format
 msgid "syntax error after '%c', expecting integer, letter, '_', '[', or '$'"
 msgstr "語法錯誤發生於 %c 之後，預期為整數、字母、'_'、'[' 或 '$'"
 
-#: src/scan-code.l:533
+#: src/scan-code.l:544
 #, c-format
 msgid "symbol not found in production before $%d: %.*s"
 msgstr "在 $%d 之前的結果中找不到符號：%.*s"
 
-#: src/scan-code.l:538
+#: src/scan-code.l:549
 #, c-format
 msgid "symbol not found in production: %.*s"
 msgstr "在結果中找不到符號：%.*s"
 
-#: src/scan-code.l:553
+#: src/scan-code.l:564
 #, c-format
 msgid "misleading reference: %s"
 msgstr "誤導的參考：%s"
 
-#: src/scan-code.l:569
+#: src/scan-code.l:580
 #, c-format
 msgid "ambiguous reference: %s"
 msgstr "模稜兩可的參考：%s"
 
-#: src/scan-code.l:608
+#: src/scan-code.l:616
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr "在未定型態文法中給定明確的型態"
 
-#: src/scan-code.l:667
+#: src/scan-code.l:675
 #, c-format
 msgid "$$ for the midrule at $%d of %s has no declared type"
 msgstr "$$ 對於在 %2$s 中 $%1$d 的中段沒有任何宣告型態"
 
-#: src/scan-code.l:673
+#: src/scan-code.l:681
 #, c-format
 msgid "$$ of %s has no declared type"
 msgstr "%s 中的 $$ 沒有任何宣告型態"
 
-#: src/scan-code.l:696
+#: src/scan-code.l:704
 #, c-format
 msgid "$%s of %s has no declared type"
 msgstr "%2$s 中的 $%1$s 沒有任何宣告型態"

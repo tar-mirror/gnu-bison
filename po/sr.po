@@ -1,13 +1,13 @@
 # Serbian translation for bison.
 # Copyright (C) 2012 Free Software Foundation, Inc.
 # This file is distributed under the same license as the bison package.
-# Мирослав Николић <miroslavnikolic@rocketmail.com>, 2012.
+# Мирослав Николић <miroslavnikolic@rocketmail.com>, 2012, 2013.
 msgid ""
 msgstr ""
-"Project-Id-Version: bison-2.6.2\n"
+"Project-Id-Version: bison-3.0\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2013-07-25 17:57+0200\n"
-"PO-Revision-Date: 2012-08-09 22:38+0200\n"
+"POT-Creation-Date: 2013-11-12 15:56+0100\n"
+"PO-Revision-Date: 2013-10-02 12:00+0200\n"
 "Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <gnu@prevod.org>\n"
 "Language: sr\n"
@@ -17,35 +17,34 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: src/complain.c:298
+#: src/complain.c:322
 msgid "fatal error"
 msgstr "кобна грешка"
 
-#: src/complain.c:299
-#, fuzzy
+#: src/complain.c:323
 msgid "error"
-msgstr "кобна грешка"
+msgstr "грешка"
 
-#: src/complain.c:300
+#: src/complain.c:324
 msgid "warning"
 msgstr "упозорење"
 
-#: src/complain.c:363
-#, fuzzy, c-format
+#: src/complain.c:387
+#, c-format
 msgid "deprecated directive, use %s"
-msgstr "%s: неодређена %%define променљива „%s“"
+msgstr "застарела смерница, користите „%s“"
 
-#: src/complain.c:367
-#, fuzzy, c-format
+#: src/complain.c:391
+#, c-format
 msgid "deprecated directive: %s, use %s"
-msgstr "%s: неодређена %%define променљива „%s“"
+msgstr "застарела смерница: %s, користите „%s“"
 
-#: src/complain.c:376
+#: src/complain.c:400
 #, c-format
 msgid "only one %s allowed per rule"
 msgstr "дозвољен је само један „%s“ по правилу"
 
-#: src/complain.c:378 src/reader.c:140 src/symtab.c:217 src/symtab.c:229
+#: src/complain.c:402 src/reader.c:140 src/symtab.c:217 src/symtab.c:229
 #, c-format
 msgid "previous declaration"
 msgstr "претходна објава"
@@ -93,28 +92,28 @@ msgstr "%%очекуј-рр се примењује само на ГЛР обр�
 #: src/conflicts.c:586
 #, c-format
 msgid "shift/reduce conflicts: %d found, %d expected"
-msgstr ""
+msgstr "сукоби помака/смањења: нађох %d, очекивах %d"
 
 #: src/conflicts.c:591
-#, fuzzy, c-format
+#, c-format
 msgid "%d shift/reduce conflict"
 msgid_plural "%d shift/reduce conflicts"
-msgstr[0] "очекиван је %d сукоб помака/смањења"
-msgstr[1] "очекивана су %d сукоба помака/смањења"
-msgstr[2] "очекивано је %d сукоба помака/смањења"
+msgstr[0] "%d сукоб помака/смањења"
+msgstr[1] "%d сукоба помака/смањења"
+msgstr[2] "%d сукоба помака/смањења"
 
 #: src/conflicts.c:608
 #, c-format
 msgid "reduce/reduce conflicts: %d found, %d expected"
-msgstr ""
+msgstr "сукоби смањења/смањења: нађох %d, очекивах %d"
 
 #: src/conflicts.c:613
-#, fuzzy, c-format
+#, c-format
 msgid "%d reduce/reduce conflict"
 msgid_plural "%d reduce/reduce conflicts"
-msgstr[0] "очекиван је %d сукоб смањења/смањења"
-msgstr[1] "очекивана су %d сукоба смањења/смањења"
-msgstr[2] "очекивано је %d сукоба смањења/смањења"
+msgstr[0] "%d сукоб смањења/смањења"
+msgstr[1] "%d сукоба смањења/смањења"
+msgstr[2] "%d сукоба смањења/смањења"
 
 #: src/files.c:114
 #, c-format
@@ -142,7 +141,7 @@ msgid "conflicting outputs to file %s"
 msgstr "сукобљавам излазе у датотеку „%s“"
 
 #: src/getargs.c:252
-#, fuzzy, c-format
+#, c-format
 msgid "Try '%s --help' for more information.\n"
 msgstr "Пробајте „%s --help“ за више података.\n"
 
@@ -174,7 +173,6 @@ msgid "The same is true for optional arguments.\n"
 msgstr "Исто је тачно и за опционалне аргументе.\n"
 
 #: src/getargs.c:276
-#, fuzzy
 msgid ""
 "\n"
 "Operation modes:\n"
@@ -198,10 +196,11 @@ msgstr ""
 "ИксСЛТ\n"
 "  -y, --yacc                   опонаша ПОСИКС-ов Јацц\n"
 "  -W, --warnings[=КАТЕГОРИЈА]  извештава о упозорењима у КАТЕГОРИЈИ\n"
+"  -f, --feature[=ФУНКЦИЈА]     покреће разне функције\n"
 "\n"
 
 #: src/getargs.c:289
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Parser:\n"
 "  -L, --language=LANGUAGE          specify the output programming language\n"
@@ -218,9 +217,9 @@ msgid ""
 msgstr ""
 "Parser:\n"
 "  -L, --language=ЈЕЗИК                наводи излазни језик програмирања\n"
-"                                      (ово је пробна функција)\n"
 "  -S, --skeleton=ДАТОТЕКА             одређује скелет за коришћење\n"
-"  -t, --debug                         мери обрађивач за уклањање грешака\n"
+"  -t, --debug                         инструмент обрађивач за праћење\n"
+"                                      исти као „-Dparse.trace“\n"
 "      --locations                     укључује подршку места\n"
 "  -D, --define=НАЗИВ[=ВРЕДНОСТ]       слично као „%define НАЗИВ 'ВРЕДНОСТ'“\n"
 "  -F, --force-define=НАЗИВ[=ВЕДНОСТ]  преписује „%define НАЗИВ 'ВРЕДНОСТ'“\n"
@@ -232,7 +231,6 @@ msgstr ""
 "\n"
 
 #: src/getargs.c:307
-#, fuzzy
 msgid ""
 "Output:\n"
 "      --defines[=FILE]       also produce a header file\n"
@@ -259,10 +257,9 @@ msgstr ""
 "  -g, --graph[=ДАТОТЕКА]      такође даје график аутомата\n"
 "  -x, --xml[=ДАТОТЕКА]        такође даје ИксМЛ извештај о аутомату\n"
 "                              (ИксМЛ шема је испитивачка)\n"
-"\n"
 
 #: src/getargs.c:322
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning categories include:\n"
 "  'midrule-values'    unset or unused midrule values\n"
@@ -283,15 +280,17 @@ msgstr ""
 "  „yacc“            несагласности са ПОСИКС Јацц-ом\n"
 "  „conflicts-sr“    С/Р сукоби (унапред укључено)\n"
 "  „conflicts-rr“    Р/Р сукоби (унапред укључено)\n"
+"  „deprecated“      застарела конструкција\n"
+"  „empty-rule“      празна правила без „%empty“\n"
+"  „precedence“      непогодна предност и придруживост\n"
 "  „other“           сва друга упозорења (унапред укључено)\n"
 "  „all“             сва упозорења\n"
 "  „no-CATEGORY“     искључује упозорења у КАТЕГОРИЈИ\n"
 "  „none“            искључује сва упозорења\n"
-"  „error“           упозорења сматра грешкама\n"
+"  „error[=CATEGORY]“упозорења сматра грешкама\n"
 "\n"
 
 #: src/getargs.c:339
-#, fuzzy
 msgid ""
 "THINGS is a list of comma separated words that can include:\n"
 "  'state'        describe the states\n"
@@ -317,22 +316,25 @@ msgid ""
 "  'none'         disable all of the above\n"
 "  "
 msgstr ""
+"ФУНКЦИЈА је списак зарезом раздвојених речи који може да укључи:\n"
+"  „caret“        приказује грешке са каретима\n"
+"  „all“          све од горњег\n"
+"  „none“         искључује све од горњег\n"
+"  "
 
 #: src/getargs.c:358
-#, fuzzy, c-format
+#, c-format
 msgid "Report bugs to <%s>.\n"
-msgstr ""
-"\n"
-"Грешке пријавите на <%s>.\n"
+msgstr "Грешке пријавите на <%s>.\n"
 
 #: src/getargs.c:359
 #, c-format
 msgid "%s home page: <%s>.\n"
-msgstr ""
+msgstr "Матична страница „%s“: <%s>.\n"
 
 #: src/getargs.c:360
 msgid "General help using GNU software: <http://www.gnu.org/gethelp/>.\n"
-msgstr ""
+msgstr "Општа помоћ користећи ГНУ софтвер: <http://www.gnu.org/gethelp/>.\n"
 
 #. TRANSLATORS: Replace LANG_CODE in this URL with your language
 #. code <http://translationproject.org/team/LANG_CODE.html> to
@@ -342,10 +344,11 @@ msgstr ""
 #: src/getargs.c:373
 msgid "Report translation bugs to <http://translationproject.org/team/>.\n"
 msgstr ""
+"Грешке у преводу пријавите на „<http://translationproject.org/team/>“.\n"
 
 #: src/getargs.c:375
 msgid "For complete documentation, run: info bison.\n"
-msgstr ""
+msgstr "За потпуну документацију, покрените: „info bison“.\n"
 
 #: src/getargs.c:391
 #, c-format
@@ -425,32 +428,32 @@ msgstr "прекорачење броја колона"
 msgid "rule useless in parser due to conflicts"
 msgstr "бескорисна правила у обрађивачу због сукоба"
 
-#: src/muscle-tab.c:513
+#: src/muscle-tab.c:514
 #, c-format
 msgid "%%define variable %s redefined"
 msgstr "%%define променљива „%s“ је поново одређена"
 
-#: src/muscle-tab.c:517
+#: src/muscle-tab.c:518
 #, c-format
 msgid "previous definition"
 msgstr "претходна одредница"
 
-#: src/muscle-tab.c:567 src/muscle-tab.c:668 src/muscle-tab.c:731
+#: src/muscle-tab.c:568 src/muscle-tab.c:669 src/muscle-tab.c:732
 #, c-format
 msgid "%s: undefined %%define variable %s"
 msgstr "%s: неодређена %%define променљива „%s“"
 
-#: src/muscle-tab.c:662
+#: src/muscle-tab.c:663
 #, c-format
 msgid "invalid value for %%define Boolean variable %s"
 msgstr "неисправна вредност %%define логичке променљиве „%s“"
 
-#: src/muscle-tab.c:716
+#: src/muscle-tab.c:717
 #, c-format
 msgid "invalid value for %%define variable %s: %s"
 msgstr "неисправна вредност %%define променљиве „%s“: %s"
 
-#: src/muscle-tab.c:721
+#: src/muscle-tab.c:722
 #, c-format
 msgid "accepted value: %s"
 msgstr "прихваћена вредност: %s"
@@ -494,9 +497,9 @@ msgid "$default"
 msgstr "$основно"
 
 #: src/print.c:373 src/print_graph.c:61
-#, fuzzy, c-format
+#, c-format
 msgid "State %d"
-msgstr "Стање: %d "
+msgstr "Стање %d "
 
 #: src/print.c:409
 msgid "Terminals, with rules where they appear"
@@ -564,12 +567,12 @@ msgstr "неподешена вредност: $$"
 #: src/reader.c:340
 #, c-format
 msgid "%%empty on non-empty rule"
-msgstr ""
+msgstr "„%%empty“ на не-празном правилу"
 
 #: src/reader.c:346
 #, c-format
 msgid "empty rule without %%empty"
-msgstr ""
+msgstr "празно правило без „%%empty“"
 
 #: src/reader.c:355
 #, c-format
@@ -648,77 +651,77 @@ msgstr "залутало „%s“"
 msgid "refers to: %c%s at %s"
 msgstr "односи се на: %c%s у %s"
 
-#: src/scan-code.l:351
+#: src/scan-code.l:362
 #, c-format
 msgid "possibly meant: %c"
 msgstr "могуће значење: %c"
 
-#: src/scan-code.l:360
+#: src/scan-code.l:371
 #, c-format
 msgid ", hiding %c"
 msgstr ", кријем %c"
 
-#: src/scan-code.l:368
+#: src/scan-code.l:379
 #, c-format
 msgid " at %s"
 msgstr " у %s"
 
-#: src/scan-code.l:372
+#: src/scan-code.l:383
 #, c-format
 msgid ", cannot be accessed from mid-rule action at $%d"
 msgstr ", не може бити приступљен из радње средњег правила у $%d"
 
-#: src/scan-code.l:429 src/scan-gram.l:849
+#: src/scan-code.l:440 src/scan-gram.l:849
 #, c-format
 msgid "integer out of range: %s"
 msgstr "цео број је ван опсега: %s"
 
-#: src/scan-code.l:519
+#: src/scan-code.l:530
 #, c-format
 msgid "invalid reference: %s"
 msgstr "неисправна референца: %s"
 
-#: src/scan-code.l:527
+#: src/scan-code.l:538
 #, c-format
 msgid "syntax error after '%c', expecting integer, letter, '_', '[', or '$'"
 msgstr "садржајна грешка након „%c“, очекујем цео број, слово, _, [, или $"
 
-#: src/scan-code.l:533
+#: src/scan-code.l:544
 #, c-format
 msgid "symbol not found in production before $%d: %.*s"
 msgstr "симбол није пронађен у производњи пре $%d: %.*s"
 
-#: src/scan-code.l:538
+#: src/scan-code.l:549
 #, c-format
 msgid "symbol not found in production: %.*s"
 msgstr "симбол није пронађен у производњи: %.*s"
 
-#: src/scan-code.l:553
+#: src/scan-code.l:564
 #, c-format
 msgid "misleading reference: %s"
 msgstr "неисправна референца: %s"
 
-#: src/scan-code.l:569
+#: src/scan-code.l:580
 #, c-format
 msgid "ambiguous reference: %s"
 msgstr "нејасна референца: %s"
 
-#: src/scan-code.l:608
+#: src/scan-code.l:616
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr "дата је изричита врста у неуписаној основи"
 
-#: src/scan-code.l:667
+#: src/scan-code.l:675
 #, c-format
 msgid "$$ for the midrule at $%d of %s has no declared type"
 msgstr "$$ за средње правило при $%d од %s нема објављену врсту"
 
-#: src/scan-code.l:673
+#: src/scan-code.l:681
 #, c-format
 msgid "$$ of %s has no declared type"
 msgstr "$$ од %s нема објављену врсту"
 
-#: src/scan-code.l:696
+#: src/scan-code.l:704
 #, c-format
 msgid "$%s of %s has no declared type"
 msgstr "$%s од %s нема објављену врсту"
@@ -739,12 +742,11 @@ msgid "invalid identifier: %s"
 msgstr "неисправна одређивач: %s"
 
 #: src/scan-gram.l:348
-#, fuzzy
 msgid "invalid character"
 msgid_plural "invalid characters"
-msgstr[0] "неисправан знак: %s"
-msgstr[1] "неисправан знак: %s"
-msgstr[2] "неисправан знак: %s"
+msgstr[0] "неисправан знак"
+msgstr[1] "неисправни знаци"
+msgstr[2] "неисправни знаци"
 
 #: src/scan-gram.l:366
 #, c-format
@@ -762,12 +764,11 @@ msgid "an identifier expected"
 msgstr "очекиван је одређивач"
 
 #: src/scan-gram.l:446
-#, fuzzy
 msgid "invalid character in bracketed name"
 msgid_plural "invalid characters in bracketed name"
-msgstr[0] "неисправан знак у називу у заградама: %s"
-msgstr[1] "неисправан знак у називу у заградама: %s"
-msgstr[2] "неисправан знак у називу у заградама: %s"
+msgstr[0] "неисправан знак у називу у заградама"
+msgstr[1] "неисправни знаци у називу у заградама"
+msgstr[2] "неисправни знаци у називу у заградама"
 
 #: src/scan-gram.l:538
 #, c-format
@@ -862,12 +863,12 @@ msgstr "коришћен је симбол „%s“, али није одређ�
 #: src/symtab.c:460
 #, c-format
 msgid "useless %s for type <%s>"
-msgstr ""
+msgstr "непотребно „%s“ за врсту <%s>"
 
 #: src/symtab.c:465
-#, fuzzy, c-format
+#, c-format
 msgid "type <%s> is used, but is not associated to any symbol"
-msgstr "коришћен је симбол „%s“, али није одређен као обележје и нема правила"
+msgstr "врста „%s“ је употребљена, али није придружена ниједном симболу"
 
 #: src/symtab.c:490
 #, c-format
@@ -902,17 +903,17 @@ msgstr "полазни симбол „%s“ је обележје"
 #: src/symtab.c:1166
 #, c-format
 msgid "useless precedence and associativity for %s"
-msgstr ""
+msgstr "непотребна предност и придруживост за „%s“"
 
 #: src/symtab.c:1169
 #, c-format
 msgid "useless precedence for %s"
-msgstr ""
+msgstr "непотребна предност за „%s“"
 
 #: src/symtab.c:1173
 #, c-format
 msgid "useless associativity for %s, use %%precedence"
-msgstr ""
+msgstr "непотребна придруживост за „%s“, користите „%%precedence“"
 
 #: djgpp/subpipe.c:63 djgpp/subpipe.c:286 djgpp/subpipe.c:288
 #, c-format
@@ -1204,37 +1205,3 @@ msgstr "%s потпроцес"
 #, c-format
 msgid "%s subprocess got fatal signal %d"
 msgstr "%s потпроцес је добио кобни сигнал %d"
-
-#~ msgid "a ';' might be needed at the end of action code"
-#~ msgstr "на крају кода радње може бити потребна тачка и зарез (;)"
-
-#~ msgid "future versions of Bison will not add the ';'"
-#~ msgstr "будућа издања Бизона неће додавати „;“"
-
-#~ msgid "empty"
-#~ msgstr "празно"
-
-#, fuzzy
-#~ msgid "deprecated %%define variable name: %s, use %s"
-#~ msgstr "%s: неодређена %%define променљива „%s“"
-
-#~ msgid "state %d"
-#~ msgstr "стање %d"
-
-#~ msgid "use of YYFAIL, which is deprecated and will be removed"
-#~ msgstr "„YYFAIL“ је застарело у употреби и биће уклоњено"
-
-#~ msgid "redeclaration for default tagged %%destructor"
-#~ msgstr "поновна објава за основног означеног %%уништавача"
-
-#~ msgid "redeclaration for default tagless %%destructor"
-#~ msgstr "поновна објава за основног неозначеног %%уништавача"
-
-#~ msgid "redeclaration for default tagged %%printer"
-#~ msgstr "поновна објава за основног означеног %%штампача"
-
-#~ msgid "redeclaration for default tagless %%printer"
-#~ msgstr "поновна објава за основног неозначеног %%штампача"
-
-#~ msgid "stray '@'"
-#~ msgstr "залутало „@“"

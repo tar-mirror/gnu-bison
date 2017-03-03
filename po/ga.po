@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.5\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2013-07-25 17:57+0200\n"
+"POT-Creation-Date: 2013-11-12 15:56+0100\n"
 "PO-Revision-Date: 2012-05-22 18:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -17,35 +17,35 @@ msgstr ""
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :"
 "(n>6 && n<11) ? 3 : 4;\n"
 
-#: src/complain.c:298
+#: src/complain.c:322
 msgid "fatal error"
 msgstr "earráid mharfach"
 
-#: src/complain.c:299
+#: src/complain.c:323
 #, fuzzy
 msgid "error"
 msgstr "Earráid I/A"
 
-#: src/complain.c:300
+#: src/complain.c:324
 msgid "warning"
 msgstr "rabhadh"
 
-#: src/complain.c:363
+#: src/complain.c:387
 #, fuzzy, c-format
 msgid "deprecated directive, use %s"
 msgstr "luach neamhbhailí ar athróg %%define `%s': `%s'"
 
-#: src/complain.c:367
+#: src/complain.c:391
 #, fuzzy, c-format
 msgid "deprecated directive: %s, use %s"
 msgstr "luach neamhbhailí ar athróg %%define `%s': `%s'"
 
-#: src/complain.c:376
+#: src/complain.c:400
 #, c-format
 msgid "only one %s allowed per rule"
 msgstr "ní cheadaítear ach %s amháin an riail"
 
-#: src/complain.c:378 src/reader.c:140 src/symtab.c:217 src/symtab.c:229
+#: src/complain.c:402 src/reader.c:140 src/symtab.c:217 src/symtab.c:229
 #, c-format
 msgid "previous declaration"
 msgstr "fógra roimhe seo"
@@ -434,32 +434,32 @@ msgstr "uimhir an cholúin thar maoil"
 msgid "rule useless in parser due to conflicts"
 msgstr "riail gan tairbhe sa pharsálaí de bhrí coinbhleachtaí"
 
-#: src/muscle-tab.c:513
+#: src/muscle-tab.c:514
 #, fuzzy, c-format
 msgid "%%define variable %s redefined"
 msgstr "sainmhíniú nua ar athróg %%define `%s'"
 
-#: src/muscle-tab.c:517
+#: src/muscle-tab.c:518
 #, c-format
 msgid "previous definition"
 msgstr "sainmhíniú roimhe seo"
 
-#: src/muscle-tab.c:567 src/muscle-tab.c:668 src/muscle-tab.c:731
+#: src/muscle-tab.c:568 src/muscle-tab.c:669 src/muscle-tab.c:732
 #, fuzzy, c-format
 msgid "%s: undefined %%define variable %s"
 msgstr "luach neamhbhailí ar athróg %%define `%s': `%s'"
 
-#: src/muscle-tab.c:662
+#: src/muscle-tab.c:663
 #, fuzzy, c-format
 msgid "invalid value for %%define Boolean variable %s"
 msgstr "luach neamhbhailí ar athróg Boole %%define `%s'"
 
-#: src/muscle-tab.c:716
+#: src/muscle-tab.c:717
 #, fuzzy, c-format
 msgid "invalid value for %%define variable %s: %s"
 msgstr "luach neamhbhailí ar athróg %%define `%s': `%s'"
 
-#: src/muscle-tab.c:721
+#: src/muscle-tab.c:722
 #, fuzzy, c-format
 msgid "accepted value: %s"
 msgstr "luach glactha: `%s'"
@@ -664,79 +664,79 @@ msgstr "`$' ar strae"
 msgid "refers to: %c%s at %s"
 msgstr "déanann sé tagairt do: %c%s ag %s"
 
-#: src/scan-code.l:351
+#: src/scan-code.l:362
 #, c-format
 msgid "possibly meant: %c"
 msgstr "b'fhéidir: %c"
 
-#: src/scan-code.l:360
+#: src/scan-code.l:371
 #, c-format
 msgid ", hiding %c"
 msgstr ", %c á chur i bhfolach"
 
-#: src/scan-code.l:368
+#: src/scan-code.l:379
 #, c-format
 msgid " at %s"
 msgstr " ag %s"
 
-#: src/scan-code.l:372
+#: src/scan-code.l:383
 #, c-format
 msgid ", cannot be accessed from mid-rule action at $%d"
 msgstr ", níl aon fháil air ó ghníomh meánrialach ag $%d"
 
-#: src/scan-code.l:429 src/scan-gram.l:849
+#: src/scan-code.l:440 src/scan-gram.l:849
 #, c-format
 msgid "integer out of range: %s"
 msgstr "slánuimhir as raon: %s"
 
-#: src/scan-code.l:519
+#: src/scan-code.l:530
 #, c-format
 msgid "invalid reference: %s"
 msgstr "tagairt neamhbhailí: %s"
 
-#: src/scan-code.l:527
+#: src/scan-code.l:538
 #, fuzzy, c-format
 msgid "syntax error after '%c', expecting integer, letter, '_', '[', or '$'"
 msgstr ""
 "earráid chomhréire tar éis `%c', bhíothas ag súil le slánuimhir, litir, `_', "
 "`[', or `$'"
 
-#: src/scan-code.l:533
+#: src/scan-code.l:544
 #, c-format
 msgid "symbol not found in production before $%d: %.*s"
 msgstr "siombail gan aimsiú i riail ghramadaí roimh $%d: %.*s"
 
-#: src/scan-code.l:538
+#: src/scan-code.l:549
 #, c-format
 msgid "symbol not found in production: %.*s"
 msgstr "siombail gan aimsiú i riail ghramadaí: %.*s"
 
-#: src/scan-code.l:553
+#: src/scan-code.l:564
 #, c-format
 msgid "misleading reference: %s"
 msgstr "tagairt mhíthreorach: %s"
 
-#: src/scan-code.l:569
+#: src/scan-code.l:580
 #, c-format
 msgid "ambiguous reference: %s"
 msgstr "tagairt dhébhríoch: %s"
 
-#: src/scan-code.l:608
+#: src/scan-code.l:616
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr "cineál follasach i ngramadach gan chineálacha"
 
-#: src/scan-code.l:667
+#: src/scan-code.l:675
 #, fuzzy, c-format
 msgid "$$ for the midrule at $%d of %s has no declared type"
 msgstr "Níl aon chineál fógartha ag $$ na meánrialach ag $%d de `%s'"
 
-#: src/scan-code.l:673
+#: src/scan-code.l:681
 #, fuzzy, c-format
 msgid "$$ of %s has no declared type"
 msgstr "Níl aon chineál fógartha ag $$ de `%s'"
 
-#: src/scan-code.l:696
+#: src/scan-code.l:704
 #, fuzzy, c-format
 msgid "$%s of %s has no declared type"
 msgstr "Níl aon chineál fógartha ag $%s de `%s'"

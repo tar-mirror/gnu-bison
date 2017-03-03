@@ -174,11 +174,10 @@ AT_CLEANUP
 m4_pushdef([AT_TEST],
 [AT_SETUP([Variants $1])
 
-AT_BISON_OPTION_PUSHDEFS([%skeleton "lalr1.cc" %debug $1])
+AT_BISON_OPTION_PUSHDEFS([%debug $1])
 # Store strings and integers in a list of strings.
 AT_DATA_GRAMMAR([list.y],
 [[%debug
-%skeleton "lalr1.cc"
 %define api.value.type variant
 ]m4_bpatsubst([$1], [\\n], [
 ])[
@@ -320,13 +319,13 @@ AT_BISON_OPTION_POPDEFS
 AT_CLEANUP
 ])
 
-AT_TEST([])
-AT_TEST([%define parse.assert])
-AT_TEST([%locations %define parse.assert])
-AT_TEST([[%define parse.assert %code {\n#define TWO_STAGE_BUILD\n}]])
-AT_TEST([[%define parse.assert %define api.token.constructor]])
-AT_TEST([[%define parse.assert %define api.token.constructor %define api.token.prefix {TOK_}]])
-AT_TEST([[%locations %define parse.assert %define api.token.constructor %define api.token.prefix {TOK_}]])
+AT_TEST([[%skeleton "lalr1.cc" ]])
+AT_TEST([[%skeleton "lalr1.cc" %define parse.assert]])
+AT_TEST([[%skeleton "lalr1.cc" %locations %define parse.assert]])
+AT_TEST([[%skeleton "lalr1.cc" %define parse.assert %code {\n#define TWO_STAGE_BUILD\n}]])
+AT_TEST([[%skeleton "lalr1.cc" %define parse.assert %define api.token.constructor]])
+AT_TEST([[%skeleton "lalr1.cc" %define parse.assert %define api.token.constructor %define api.token.prefix {TOK_}]])
+AT_TEST([[%skeleton "lalr1.cc" %locations %define parse.assert %define api.token.constructor %define api.token.prefix {TOK_}]])
 
 m4_popdef([AT_TEST])
 
@@ -656,6 +655,8 @@ AT_CLEANUP
 m4_pushdef([AT_TEST],
 [AT_SETUP([[Exception safety $1]])
 
+AT_SKIP_IF_EXCEPTION_SUPPORT_IS_POOR
+
 AT_BISON_OPTION_PUSHDEFS([%skeleton "lalr1.cc" $1])
 
 AT_DATA_GRAMMAR([[input.yy]],
@@ -795,11 +796,11 @@ item:
 // Not just 'E', otherwise we reduce when 'E' is the lookahead, and
 // then the stack is emptied, defeating the point of the test.
 | 'E' 'a' { YYUSE($][1); $][$ = $][2; }
-| 'R'     { ]AT_VARIANT_IF([], [$][$ = YY_NULL; delete $][1]; )[YYERROR; }
+| 'R'     { ]AT_VARIANT_IF([], [$][$ = YY_NULLPTR; delete $][1]; )[YYERROR; }
 | 'p'     { $][$ = $][1; }
 | 's'     { $][$ = $][1; throw std::runtime_error ("reduction"); }
-| 'T'     { ]AT_VARIANT_IF([], [$][$ = YY_NULL; delete $][1]; )[YYABORT; }
-| error   { ]AT_VARIANT_IF([], [$][$ = YY_NULL; ])[yyerrok; }
+| 'T'     { ]AT_VARIANT_IF([], [$][$ = YY_NULLPTR; delete $][1]; )[YYABORT; }
+| error   { ]AT_VARIANT_IF([], [$][$ = YY_NULLPTR; ])[yyerrok; }
 ;
 %%
 
@@ -819,7 +820,8 @@ yylex (yy::parser::semantic_type *lvalp)
   case 'l':
     throw std::runtime_error ("yylex");
   default:
-    lvalp]AT_VARIANT_IF([->build (res)], [->obj = new Object (res)])[;
+    lvalp->]AT_VARIANT_IF([build (Object (res))],
+                          [obj = new Object (res)])[;
     // Fall through.
   case 0:
     return res;
@@ -866,7 +868,7 @@ main (int argc, const char *argv[])
   {
     std::cerr << "unknown exception caught" << std::endl;
   }
-  Object::log (YY_NULL, "end");
+  Object::log (YY_NULLPTR, "end");
   assert (Object::empty());
   return res;
 }
