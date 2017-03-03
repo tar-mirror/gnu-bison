@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 1.875d\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2015-01-15 10:07+0100\n"
+"POT-Creation-Date: 2015-01-23 13:55+0100\n"
 "PO-Revision-Date: 2004-05-22 11:14+0200\n"
 "Last-Translator: Byrial Ole Jensen <byrial@image.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -450,30 +450,30 @@ msgstr "acceptér"
 msgid "$default"
 msgstr "$default"
 
-#: src/print.c:376 src/print_graph.c:61
+#: src/print.c:377 src/print_graph.c:61
 #, fuzzy, c-format
 msgid "State %d"
 msgstr "Tilstand %d "
 
-#: src/print.c:412
+#: src/print.c:413
 msgid "Terminals, with rules where they appear"
 msgstr "Terminaler, med regler hvor de forekommer"
 
-#: src/print.c:439
+#: src/print.c:440
 msgid "Nonterminals, with rules where they appear"
 msgstr "Ikke-terminaler, med regler hvor de forekommer"
 
-#: src/print.c:468
+#: src/print.c:469
 #, c-format
 msgid " on left:"
 msgstr " til venstre:"
 
-#: src/print.c:485
+#: src/print.c:486
 #, c-format
 msgid " on right:"
 msgstr " til højre:"
 
-#: src/print.c:513
+#: src/print.c:514
 #, fuzzy
 msgid "Rules useless in parser due to conflicts"
 msgstr "regel aldrig reduceret på grund af konflikter"
@@ -677,7 +677,7 @@ msgstr "$%d for \"%s\" har ingen erklæret type"
 msgid "$$ of %s has no declared type"
 msgstr "$$ for \"%s\" har ingen erklæret type"
 
-#: src/scan-code.l:704
+#: src/scan-code.l:703
 #, fuzzy, c-format
 msgid "$%s of %s has no declared type"
 msgstr "$%d for \"%s\" har ingen erklæret type"

@@ -200,7 +200,6 @@ AC_DEFUN([gl_EARLY],
   # Code from module string:
   # Code from module strndup:
   # Code from module strnlen:
-  # Code from module strtoul:
   # Code from module strverscmp:
   # Code from module sys_stat:
   # Code from module sys_time:
@@ -696,10 +695,6 @@ AC_DEFUN([gl_INIT],
     gl_PREREQ_STRNLEN
   fi
   gl_STRING_MODULE_INDICATOR([strnlen])
-  gl_FUNC_STRTOUL
-  if test $ac_cv_func_strtoul = no; then
-    AC_LIBOBJ([strtoul])
-  fi
   gl_FUNC_STRVERSCMP
   if test $HAVE_STRVERSCMP = 0; then
     AC_LIBOBJ([strverscmp])
@@ -718,8 +713,8 @@ AC_DEFUN([gl_INIT],
   gl_HEADER_TIME_H
   gl_UNISTD_H
   gl_UNISTD_SAFER
-  gl_LIBUNISTRING_LIBHEADER([0.9], [unitypes.h])
-  gl_LIBUNISTRING_LIBHEADER([0.9], [uniwidth.h])
+  gl_LIBUNISTRING_LIBHEADER([0.9.4], [unitypes.h])
+  gl_LIBUNISTRING_LIBHEADER([0.9.4], [uniwidth.h])
   gl_LIBUNISTRING_MODULE([0.9.5], [uniwidth/width])
   gl_FUNC_UNLINK
   if test $REPLACE_UNLINK = 1; then
@@ -1100,8 +1095,6 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/stripslash.c
   lib/strndup.c
   lib/strnlen.c
-  lib/strtol.c
-  lib/strtoul.c
   lib/strverscmp.c
   lib/sys_stat.in.h
   lib/sys_time.in.h
@@ -1283,7 +1276,6 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/string_h.m4
   m4/strndup.m4
   m4/strnlen.m4
-  m4/strtoul.m4
   m4/strverscmp.m4
   m4/sys_socket_h.m4
   m4/sys_stat_h.m4

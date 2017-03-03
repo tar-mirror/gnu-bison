@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 3.0.2\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2015-01-15 10:07+0100\n"
+"POT-Creation-Date: 2015-01-23 13:55+0100\n"
 "PO-Revision-Date: 2013-12-06 01:52-0300\n"
 "Last-Translator: Rafael Ferreira <rafael.f.f1@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <ldpbr-translation@lists.sourceforge."
@@ -501,30 +501,30 @@ msgstr "aceitar"
 msgid "$default"
 msgstr "$padrão"
 
-#: src/print.c:376 src/print_graph.c:61
+#: src/print.c:377 src/print_graph.c:61
 #, c-format
 msgid "State %d"
 msgstr "Estado %d"
 
-#: src/print.c:412
+#: src/print.c:413
 msgid "Terminals, with rules where they appear"
 msgstr "Terminais, com as regras onde eles aparecem"
 
-#: src/print.c:439
+#: src/print.c:440
 msgid "Nonterminals, with rules where they appear"
 msgstr "Não terminais com as regras onde eles aparecem"
 
-#: src/print.c:468
+#: src/print.c:469
 #, c-format
 msgid " on left:"
 msgstr " à esquerda:"
 
-#: src/print.c:485
+#: src/print.c:486
 #, c-format
 msgid " on right:"
 msgstr " à direita:"
 
-#: src/print.c:513
+#: src/print.c:514
 msgid "Rules useless in parser due to conflicts"
 msgstr "Regras inúteis no analisador por causa de conflitos"
 
@@ -724,7 +724,7 @@ msgstr "$$ para a midrule em $%d de %s não possui tipo declarado"
 msgid "$$ of %s has no declared type"
 msgstr "$$ de %s não possui um tipo declarado"
 
-#: src/scan-code.l:704
+#: src/scan-code.l:703
 #, c-format
 msgid "$%s of %s has no declared type"
 msgstr "$%s de %s não possui um tipo declarado"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.7.90\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2015-01-15 10:07+0100\n"
+"POT-Creation-Date: 2015-01-23 13:55+0100\n"
 "PO-Revision-Date: 2013-06-04 09:47-0300\n"
 "Last-Translator: Felipe Castro <fefcas@gmail.com>\n"
 "Language-Team: Esperanto <translation-team-eo@lists.sourceforge.net>\n"
@@ -492,30 +492,30 @@ msgstr "akcepti"
 msgid "$default"
 msgstr "$default"
 
-#: src/print.c:376 src/print_graph.c:61
+#: src/print.c:377 src/print_graph.c:61
 #, c-format
 msgid "State %d"
 msgstr "Stato %d"
 
-#: src/print.c:412
+#: src/print.c:413
 msgid "Terminals, with rules where they appear"
 msgstr "Terminaloj, kun reguloj kie ili aperas"
 
-#: src/print.c:439
+#: src/print.c:440
 msgid "Nonterminals, with rules where they appear"
 msgstr "Neterminaloj, kun reguloj kie ili aperas"
 
-#: src/print.c:468
+#: src/print.c:469
 #, c-format
 msgid " on left:"
 msgstr " maldekstre:"
 
-#: src/print.c:485
+#: src/print.c:486
 #, c-format
 msgid " on right:"
 msgstr " dekstre:"
 
-#: src/print.c:513
+#: src/print.c:514
 msgid "Rules useless in parser due to conflicts"
 msgstr "Reguloj neutilas en analizilo pro konfliktoj"
 
@@ -715,7 +715,7 @@ msgstr "$$ por la mezregulo ĉe $%d de %s havas neniun deklaritan tipon "
 msgid "$$ of %s has no declared type"
 msgstr "$$ de %s havas neniun deklaritan tipon"
 
-#: src/scan-code.l:704
+#: src/scan-code.l:703
 #, c-format
 msgid "$%s of %s has no declared type"
 msgstr "$%s de %s havas neniun deklaritan tipon"

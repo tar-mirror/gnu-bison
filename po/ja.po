@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU bison 2.5.1\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2015-01-15 10:07+0100\n"
+"POT-Creation-Date: 2015-01-23 13:55+0100\n"
 "PO-Revision-Date: 2012-06-10 18:47+0900\n"
 "Last-Translator: Takeshi Hamasaki <hmatrjp@users.sourceforge.jp>\n"
 "Language-Team: Japanese <translation-team-ja@lists.sourceforge.net>\n"
@@ -440,30 +440,30 @@ msgstr "許可する(_A)"
 msgid "$default"
 msgstr "デフォルト"
 
-#: src/print.c:376 src/print_graph.c:61
+#: src/print.c:377 src/print_graph.c:61
 #, fuzzy, c-format
 msgid "State %d"
 msgstr "状態 %d "
 
-#: src/print.c:412
+#: src/print.c:413
 msgid "Terminals, with rules where they appear"
 msgstr "出現位置の規則による終端"
 
-#: src/print.c:439
+#: src/print.c:440
 msgid "Nonterminals, with rules where they appear"
 msgstr "出現位置の規則による非終端"
 
-#: src/print.c:468
+#: src/print.c:469
 #, c-format
 msgid " on left:"
 msgstr " 左辺:"
 
-#: src/print.c:485
+#: src/print.c:486
 #, c-format
 msgid " on right:"
 msgstr " 右辺:"
 
-#: src/print.c:513
+#: src/print.c:514
 msgid "Rules useless in parser due to conflicts"
 msgstr "衝突のせいでパーサ内の規則が使用できません"
 
@@ -665,7 +665,7 @@ msgstr "$%d 個の `%s' が宣言された型を持っていません"
 msgid "$$ of %s has no declared type"
 msgstr "`%s' の $$ に宣言のない型があります"
 
-#: src/scan-code.l:704
+#: src/scan-code.l:703
 #, fuzzy, c-format
 msgid "$%s of %s has no declared type"
 msgstr "`%s' の $$ に宣言のない型があります"

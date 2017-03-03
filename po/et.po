@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.7.90\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2015-01-15 10:07+0100\n"
+"POT-Creation-Date: 2015-01-23 13:55+0100\n"
 "PO-Revision-Date: 2013-06-13 11:59+0300\n"
 "Last-Translator: Toomas Soome <tsoome@me.com>\n"
 "Language-Team: Estonian <linux-ee@lists.eenet.ee>\n"
@@ -492,30 +492,30 @@ msgstr "nõustun"
 msgid "$default"
 msgstr "$default"
 
-#: src/print.c:376 src/print_graph.c:61
+#: src/print.c:377 src/print_graph.c:61
 #, c-format
 msgid "State %d"
 msgstr "Olek %d"
 
-#: src/print.c:412
+#: src/print.c:413
 msgid "Terminals, with rules where they appear"
 msgstr "Terminalid, koos reeglitega kus nad ilmuvad"
 
-#: src/print.c:439
+#: src/print.c:440
 msgid "Nonterminals, with rules where they appear"
 msgstr "Mitteterminalid, koos reeglitega kus nad ilmuvad"
 
-#: src/print.c:468
+#: src/print.c:469
 #, c-format
 msgid " on left:"
 msgstr " vasakul:"
 
-#: src/print.c:485
+#: src/print.c:486
 #, c-format
 msgid " on right:"
 msgstr " paremal:"
 
-#: src/print.c:513
+#: src/print.c:514
 msgid "Rules useless in parser due to conflicts"
 msgstr "Reeglid on parseris konfliktide tõttu kasutud"
 
@@ -714,7 +714,7 @@ msgstr "$$ vahereeglis kohal $%d '%s' ei oma deklareeritud tüüpi"
 msgid "$$ of %s has no declared type"
 msgstr "$$ märgil '%s' ei oma deklareeritud tüüpi"
 
-#: src/scan-code.l:704
+#: src/scan-code.l:703
 #, c-format
 msgid "$%s of %s has no declared type"
 msgstr "$%s märgil '%s' ei oma deklareeritud tüüpi"

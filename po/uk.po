@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.7.90\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2015-01-15 10:07+0100\n"
+"POT-Creation-Date: 2015-01-23 13:55+0100\n"
 "PO-Revision-Date: 2013-05-30 22:18+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <translation-team-uk@lists.sourceforge.net>\n"
@@ -510,30 +510,30 @@ msgstr "прийняти"
 msgid "$default"
 msgstr "$default"
 
-#: src/print.c:376 src/print_graph.c:61
+#: src/print.c:377 src/print_graph.c:61
 #, c-format
 msgid "State %d"
 msgstr "Стан %d"
 
-#: src/print.c:412
+#: src/print.c:413
 msgid "Terminals, with rules where they appear"
 msgstr "Термінальні символи з правилами, у яких вони з'являються"
 
-#: src/print.c:439
+#: src/print.c:440
 msgid "Nonterminals, with rules where they appear"
 msgstr "Нетермінальні символи з правилами, у яких вони з'являються"
 
-#: src/print.c:468
+#: src/print.c:469
 #, c-format
 msgid " on left:"
 msgstr " ліворуч:"
 
-#: src/print.c:485
+#: src/print.c:486
 #, c-format
 msgid " on right:"
 msgstr " праворуч:"
 
-#: src/print.c:513
+#: src/print.c:514
 msgid "Rules useless in parser due to conflicts"
 msgstr "Правила є зайвими у аналізаторі через конфлікти"
 
@@ -739,7 +739,7 @@ msgstr "$$ для проміжного правила у $%d %s немає ог�
 msgid "$$ of %s has no declared type"
 msgstr "$$ %s не має оголошеного типу"
 
-#: src/scan-code.l:704
+#: src/scan-code.l:703
 #, c-format
 msgid "$%s of %s has no declared type"
 msgstr "$%s %s не має оголошеного типу"

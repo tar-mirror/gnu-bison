@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.4.1\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2015-01-15 10:07+0100\n"
+"POT-Creation-Date: 2015-01-23 13:55+0100\n"
 "PO-Revision-Date: 2009-01-13 00:35+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <translation-team-ms@lists.sourceforge.net>\n"
@@ -476,30 +476,30 @@ msgstr "terima"
 msgid "$default"
 msgstr "$default"
 
-#: src/print.c:376 src/print_graph.c:61
+#: src/print.c:377 src/print_graph.c:61
 #, fuzzy, c-format
 msgid "State %d"
 msgstr "Keadaan %d "
 
-#: src/print.c:412
+#: src/print.c:413
 msgid "Terminals, with rules where they appear"
 msgstr "Terminal, dengan hukum dimana mereka kelihatan"
 
-#: src/print.c:439
+#: src/print.c:440
 msgid "Nonterminals, with rules where they appear"
 msgstr "Tidak terminal, dengan hukum dimana mereka kelihatan"
 
-#: src/print.c:468
+#: src/print.c:469
 #, c-format
 msgid " on left:"
 msgstr " pada kiri:"
 
-#: src/print.c:485
+#: src/print.c:486
 #, c-format
 msgid " on right:"
 msgstr " pada kanan:"
 
-#: src/print.c:513
+#: src/print.c:514
 msgid "Rules useless in parser due to conflicts"
 msgstr "Hukum tidak digunakan dalam penghurai kerana konflik"
 
@@ -698,7 +698,7 @@ msgstr ""
 msgid "$$ of %s has no declared type"
 msgstr "$$ bagi `%s' tiada jenis dinyatakan"
 
-#: src/scan-code.l:704
+#: src/scan-code.l:703
 #, fuzzy, c-format
 msgid "$%s of %s has no declared type"
 msgstr "$%d bagi `%s' tiada jenis dinyatakan"

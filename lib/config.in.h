@@ -1662,9 +1662,6 @@
 /* Define to 1 if you have the `strnlen' function. */
 #undef HAVE_STRNLEN
 
-/* Define to 1 if you have the `strtoul' function. */
-#undef HAVE_STRTOUL
-
 /* Define to 1 if `sa_sigaction' is a member of `struct sigaction'. */
 #undef HAVE_STRUCT_SIGACTION_SA_SIGACTION
 

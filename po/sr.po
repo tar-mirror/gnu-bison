@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison-3.0\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2015-01-15 10:07+0100\n"
+"POT-Creation-Date: 2015-01-23 13:55+0100\n"
 "PO-Revision-Date: 2013-10-02 12:00+0200\n"
 "Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <gnu@prevod.org>\n"
@@ -496,30 +496,30 @@ msgstr "прихвата"
 msgid "$default"
 msgstr "$основно"
 
-#: src/print.c:376 src/print_graph.c:61
+#: src/print.c:377 src/print_graph.c:61
 #, c-format
 msgid "State %d"
 msgstr "Стање %d "
 
-#: src/print.c:412
+#: src/print.c:413
 msgid "Terminals, with rules where they appear"
 msgstr "Терминали, са правилима где се појављују"
 
-#: src/print.c:439
+#: src/print.c:440
 msgid "Nonterminals, with rules where they appear"
 msgstr "Нетерминали, са правилима где се појављују"
 
-#: src/print.c:468
+#: src/print.c:469
 #, c-format
 msgid " on left:"
 msgstr " на лево:"
 
-#: src/print.c:485
+#: src/print.c:486
 #, c-format
 msgid " on right:"
 msgstr " на десно:"
 
-#: src/print.c:513
+#: src/print.c:514
 msgid "Rules useless in parser due to conflicts"
 msgstr "Бескорисна правила у обрађивачу због сукоба"
 
@@ -721,7 +721,7 @@ msgstr "$$ за средње правило при $%d од %s нема обја
 msgid "$$ of %s has no declared type"
 msgstr "$$ од %s нема објављену врсту"
 
-#: src/scan-code.l:704
+#: src/scan-code.l:703
 #, c-format
 msgid "$%s of %s has no declared type"
 msgstr "$%s од %s нема објављену врсту"

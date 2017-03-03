@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.7.90\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2015-01-15 10:07+0100\n"
+"POT-Creation-Date: 2015-01-23 13:55+0100\n"
 "PO-Revision-Date: 2013-06-17 21:11+0200\n"
 "Last-Translator: Wojciech Polak <polak@gnu.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -504,30 +504,30 @@ msgstr "akceptowanie"
 msgid "$default"
 msgstr "$domyślnie"
 
-#: src/print.c:376 src/print_graph.c:61
+#: src/print.c:377 src/print_graph.c:61
 #, c-format
 msgid "State %d"
 msgstr "Stan %d"
 
-#: src/print.c:412
+#: src/print.c:413
 msgid "Terminals, with rules where they appear"
 msgstr "Symbole terminalne i reguły, w których występują"
 
-#: src/print.c:439
+#: src/print.c:440
 msgid "Nonterminals, with rules where they appear"
 msgstr "Symbole nieterminalne i reguły, w których występują"
 
-#: src/print.c:468
+#: src/print.c:469
 #, c-format
 msgid " on left:"
 msgstr " po lewej:"
 
-#: src/print.c:485
+#: src/print.c:486
 #, c-format
 msgid " on right:"
 msgstr " po prawej:"
 
-#: src/print.c:513
+#: src/print.c:514
 msgid "Rules useless in parser due to conflicts"
 msgstr "Bezużyteczne reguły w analizatorze z powodu konfliktów"
 
@@ -733,7 +733,7 @@ msgstr ""
 msgid "$$ of %s has no declared type"
 msgstr "$$ należący do %s nie posiada zadeklarowanego typu"
 
-#: src/scan-code.l:704
+#: src/scan-code.l:703
 #, c-format
 msgid "$%s of %s has no declared type"
 msgstr "$%s należący do %s nie posiada zadeklarowanego typu"

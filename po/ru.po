@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.4.1\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2015-01-15 10:07+0100\n"
+"POT-Creation-Date: 2015-01-23 13:55+0100\n"
 "PO-Revision-Date: 2009-02-04 19:44+0200\n"
 "Last-Translator: Pavel Maryanov <acid_jack@ukr.net>\n"
 "Language-Team: Russian <gnu@mx.ru>\n"
@@ -483,30 +483,30 @@ msgstr "принять"
 msgid "$default"
 msgstr "$default"
 
-#: src/print.c:376 src/print_graph.c:61
+#: src/print.c:377 src/print_graph.c:61
 #, fuzzy, c-format
 msgid "State %d"
 msgstr "Состояние %d "
 
-#: src/print.c:412
+#: src/print.c:413
 msgid "Terminals, with rules where they appear"
 msgstr "Терминальные символы с правилами, в которых они появляются"
 
-#: src/print.c:439
+#: src/print.c:440
 msgid "Nonterminals, with rules where they appear"
 msgstr "Нетерминальные символы с правилами, в которых они появляются"
 
-#: src/print.c:468
+#: src/print.c:469
 #, c-format
 msgid " on left:"
 msgstr " налево:"
 
-#: src/print.c:485
+#: src/print.c:486
 #, c-format
 msgid " on right:"
 msgstr " направо:"
 
-#: src/print.c:513
+#: src/print.c:514
 msgid "Rules useless in parser due to conflicts"
 msgstr "Правило не применимо в парсере из-за конфликтов"
 
@@ -708,7 +708,7 @@ msgstr "$$ для правила $%d из «%s» не имеет описанн�
 msgid "$$ of %s has no declared type"
 msgstr "$$ в «%s» не имеет описанного типа"
 
-#: src/scan-code.l:704
+#: src/scan-code.l:703
 #, fuzzy, c-format
 msgid "$%s of %s has no declared type"
 msgstr "$%d из «%s» не имеет описанного типа"

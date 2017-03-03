@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 3.0.2\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2015-01-15 10:07+0100\n"
+"POT-Creation-Date: 2015-01-23 13:55+0100\n"
 "PO-Revision-Date: 2013-12-29 21:02+0100\n"
 "Last-Translator: Benno Schulenberg <benno@vertaalt.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -504,31 +504,31 @@ msgstr "accepteer"
 msgid "$default"
 msgstr "$standaard"
 
-#: src/print.c:376 src/print_graph.c:61
+#: src/print.c:377 src/print_graph.c:61
 #, c-format
 msgid "State %d"
 msgstr "Toestand %d"
 
-#: src/print.c:412
+#: src/print.c:413
 msgid "Terminals, with rules where they appear"
 msgstr "Eindsymbolen, met de regels waarin ze voorkomen"
 
 # Betere vertaling voor non-terminals? 'tussensymbolen'?
-#: src/print.c:439
+#: src/print.c:440
 msgid "Nonterminals, with rules where they appear"
 msgstr "Niet-eindsymbolen, met de regels waarin ze voorkomen"
 
-#: src/print.c:468
+#: src/print.c:469
 #, c-format
 msgid " on left:"
 msgstr " links:"
 
-#: src/print.c:485
+#: src/print.c:486
 #, c-format
 msgid " on right:"
 msgstr " rechts:"
 
-#: src/print.c:513
+#: src/print.c:514
 msgid "Rules useless in parser due to conflicts"
 msgstr "Regels die wegens conflicten nutteloos zijn in de grammatica"
 
@@ -730,7 +730,7 @@ msgstr "$$ voor de middenregel op $%d van %s heeft geen gedeclareerd type"
 msgid "$$ of %s has no declared type"
 msgstr "$$ van %s heeft geen gedeclareerd type"
 
-#: src/scan-code.l:704
+#: src/scan-code.l:703
 #, c-format
 msgid "$%s of %s has no declared type"
 msgstr "$%s van %s heeft geen gedeclareerd type"

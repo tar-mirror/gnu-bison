@@ -1,3 +1,183 @@
+2015-01-23  Akim Demaille  <akim@lrde.epita.fr>
+
+	version 3.0.4
+	* NEWS: Record release date.
+
+2015-01-23  Akim Demaille  <akim@lrde.epita.fr>
+
+	gnulib: update
+
+2015-01-23  Akim Demaille  <akim@lrde.epita.fr>
+
+	build: re-enable compiler warnings, and fix them
+	There are warnings (-Wextra) in generated C++ code:
+
+	  ltlparse.cc: In member function 'ltlyy::parser::symbol_number_type
+	  ltlyy::parser::by_state::type_get() const':
+	  ltlparse.cc:452:33: warning: enumeral and non-enumeral type in
+	  conditional expression
+	      return state == empty_state ? empty_symbol : yystos_[state];
+
+	Reported by Alexandre Duret-Lutz.
+
+	It turns out that -Wall and -Wextra were disabled because of a stupid
+	typo.
+
+	* configure.ac: Fix the stupid typo.
+	* data/lalr1.cc, src/AnnotationList.c, src/InadequacyList.c,
+	* src/ielr.c, src/print.c, src/scan-code.l, src/symlist.c,
+	* src/symlist.h, src/symtab.c, src/tables.c, tests/actions.at,
+	* tests/calc.at, tests/cxx-type.at, tests/glr-regression.at,
+	* tests/named-refs.at, tests/torture.at:
+	Fix warnings, mostly issues about variables used only with assertions,
+	which are disabled with -DNDEBUG.
+
+2015-01-22  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: c++: fix a C++03 conformance issue
+	This fixes test 241 on xLC:
+
+	"input.y", line 42.11: 1540-0274 (S) The name lookup for "report" did not find a declaration.
+	"input.y", line 42.11: 1540-1292 (I) Static declarations are not considered for a function call if the function is not qualified.
+
+	where report is:
+
+	  static void
+	  report (std::ostream& yyo, int ival, float fval)
+	  {
+	    yyo << "ival: " << ival << ", fval: " <<  fval;
+	  }
+
+	and line 42 is:
+
+	  %printer { report (yyo, $$,       $<fval>$); } <ival>;
+
+	It turns out that indeed this function must not be declared static,
+	<http://stackoverflow.com/a/17662745/1353549>.  Let's put it into an
+	anonymous namespace.
+
+	Reported by Thomas Jahns.
+	http://lists.gnu.org/archive/html/bug-bison/2015-01/msg00059.html
+
+	* tests/actions.at (Qualified $$ in actions): Don't use "static",
+	prefer anonymous namespace.
+
+2015-01-20  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: fix a title
+	* tests/conflicts.at: De-overquote.
+
+2015-01-20  Akim Demaille  <akim@lrde.epita.fr>
+
+	c++: reserve 200 slots in the parser's stack
+	This is consistent with what is done with yacc.c and glr.c.  Because
+	it also avoids that the stack needs to be resized very soon, it should
+	help keeping tests about destructors more reliable.
+
+	Indeed, if the stack is created too small, very soon the C++ library
+	needs to enlarge it, which means creating a new one, copying the
+	elements from the initial one onto it, and then destroy the elements
+	of the initial stack: that would be a spurious call to a destructor.
+
+	Reported by Thomas Jahns.
+	http://lists.gnu.org/archive/html/bug-bison/2015-01/msg00059.html
+
+	* data/stack.hh (stack::stack): Reserve 200 slots.
+	* tests/c++.at: Remove traces of stack expansions.
+
+2015-01-20  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: be more robust to unrecognized synclines, and try to recognize xlc
+	Reported by Thomas Jahns.
+	http://lists.gnu.org/archive/html/bug-bison/2015-01/msg00059.html
+
+	* tests/synclines.at (AT_SYNCLINES_COMPILE): Rename as...
+	(_AT_SYNCLINES_COMPILE): this.
+	Try to recognize xlc locations.
+	(AT_SYNCLINES_COMPILE): New.  Skips the test if we can't read the
+	synclines.
+
+2015-01-20  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: fix C++ conformance
+	Reported by Thomas Jahns.
+	http://lists.gnu.org/archive/html/bug-bison/2015-01/msg00059.html
+
+	* tests/c++.at (Exception safety): Add missing include.
+	Don't use const_iterator for erase.
+
+2015-01-18  Akim Demaille  <akim@lrde.epita.fr>
+
+	build: fix some warnings
+	Reported by John Horigan.
+	http://lists.gnu.org/archive/html/bug-bison/2015-01/msg00034.html
+
+	* src/graphviz.c, src/symtab.h: Address compiler warnings.
+
+2015-01-16  Akim Demaille  <akim@lrde.epita.fr>
+
+	build: avoid infinite recursions on include_next
+	On MacOS X 10.5 PPC with Apple's GCC 4.0.1:
+
+	  % uname -a
+	  Darwin aria.cielonegro.org 9.8.0 Darwin Kernel Version 9.8.0: Wed Jul 15 16:57:0
+	  1 PDT 2009; root:xnu-1228.15.4~1/RELEASE_PPC Power Macintosh
+	  % gcc --version
+	  powerpc-apple-darwin9-gcc-4.0.1 (GCC) 4.0.1 (Apple Inc. build 5493)
+	  Copyright (C) 2005 Free Software Foundation, Inc.
+	  This is free software; see the source for copying conditions.  There is NO
+	  warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+	building in place enters into an infinite recursion on "#include_next":
+
+	  % gmake V=1
+	  [snip]
+	  depbase=`echo lib/math.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+	  gcc -std=gnu99    -I. -Ilib -I. -I./lib   -g -O2 -MT lib/math.o -MD -MP -MF $depbase.Tpo -c -o lib/math.o lib/math.c &&\
+	  mv -f $depbase.Tpo $depbase.Po
+	  In file included from lib/math.h:27,
+	                   from lib/math.h:27,
+	                   from lib/math.h:27,
+	                   from lib/math.h:27,
+	  [snip]
+	                   from lib/math.h:27,
+	                   from lib/math.h:27,
+	                   from lib/math.c:3:
+	  lib/math.h:27:23: error: #include nested too deeply
+	  Makefile:3414: recipe for target 'lib/math.o' failed
+	  gmake[2]: *** [lib/math.o] Error 1
+
+	Using -I./lib instead of -Ilib fixes the problem.
+
+	Reported by Pho.
+	<https://lists.gnu.org/archive/html/bison-patches/2014-01/msg00000.html>
+
+	* Makefile.am (AM_CPPFLAGS): Use -I./lib instead of -Ilib.
+
+2015-01-16  Akim Demaille  <akim@lrde.epita.fr>
+
+	doc: minor fixes
+	* doc/bison.texi: Fix warnings about colon in reference names.
+	* data/bison.m4, src/files.h: Fix comments.
+	* doc/Doxyfile.in: update.
+
+2015-01-15  Akim Demaille  <akim@lrde.epita.fr>
+
+	gnulib: strtoul is considered obsolete and now useless
+	* bootstrap.conf: here.
+
+2015-01-15  Akim Demaille  <akim@lrde.epita.fr>
+
+	c++: avoid warnings when destructors don't use $$
+	* data/c++.m4: here.
+
+2015-01-15  Akim Demaille  <akim@lrde.epita.fr>
+
+	maint: post-release administrivia
+	* NEWS: Add header line for next release.
+	* .prev-version: Record previous version.
+	* cfg.mk (old_NEWS_hash): Auto-update.
+
 2015-01-15  Akim Demaille  <akim@lrde.epita.fr>
 
 	version 3.0.3

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.7.1\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2015-01-15 10:07+0100\n"
+"POT-Creation-Date: 2015-01-23 13:55+0100\n"
 "PO-Revision-Date: 2013-04-18 00:00+0200\n"
 "Last-Translator: Tomislav Krznar <tomislav.krznar@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
@@ -496,30 +496,30 @@ msgstr "prihvati"
 msgid "$default"
 msgstr "$default"
 
-#: src/print.c:376 src/print_graph.c:61
+#: src/print.c:377 src/print_graph.c:61
 #, c-format
 msgid "State %d"
 msgstr "Stanje %d"
 
-#: src/print.c:412
+#: src/print.c:413
 msgid "Terminals, with rules where they appear"
 msgstr "Završni znakovi, s pravilima gdje se pojavljuju"
 
-#: src/print.c:439
+#: src/print.c:440
 msgid "Nonterminals, with rules where they appear"
 msgstr "Nezavršni znakovi, s pravilima gdje se pojavljuju"
 
-#: src/print.c:468
+#: src/print.c:469
 #, c-format
 msgid " on left:"
 msgstr " s lijeva:"
 
-#: src/print.c:485
+#: src/print.c:486
 #, c-format
 msgid " on right:"
 msgstr " s desna:"
 
-#: src/print.c:513
+#: src/print.c:514
 msgid "Rules useless in parser due to conflicts"
 msgstr "Pravila su beskorisna u analizatoru zbog konflikata"
 
@@ -721,7 +721,7 @@ msgstr "$$ za srednje pravilo na $%d od %s nema deklariranu vrstu"
 msgid "$$ of %s has no declared type"
 msgstr "$$ od %s nema deklariranu vrstu"
 
-#: src/scan-code.l:704
+#: src/scan-code.l:703
 #, c-format
 msgid "$%s of %s has no declared type"
 msgstr "$%s od %s nema deklariranu vrstu"

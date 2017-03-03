@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU bison 2.0\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2015-01-15 10:07+0100\n"
+"POT-Creation-Date: 2015-01-23 13:55+0100\n"
 "PO-Revision-Date: 2005-03-20 22:03+0100\n"
 "Last-Translator: Çaðrý Çöltekin <cagri@xs4all.nl>\n"
 "Language-Team: Turkish <gnu-tr-u12a@lists.sourceforge.net>\n"
@@ -454,30 +454,30 @@ msgstr "onayla"
 msgid "$default"
 msgstr "$öntanýmlý"
 
-#: src/print.c:376 src/print_graph.c:61
+#: src/print.c:377 src/print_graph.c:61
 #, fuzzy, c-format
 msgid "State %d"
 msgstr "Durum %d "
 
-#: src/print.c:412
+#: src/print.c:413
 msgid "Terminals, with rules where they appear"
 msgstr "Sabit simgeler, içinde geçtikleri kurallarla birlikte"
 
-#: src/print.c:439
+#: src/print.c:440
 msgid "Nonterminals, with rules where they appear"
 msgstr "Deðiþken simgeler, içinde geçtikleri kurallarla birlikte"
 
-#: src/print.c:468
+#: src/print.c:469
 #, c-format
 msgid " on left:"
 msgstr " (sol tarafta):"
 
-#: src/print.c:485
+#: src/print.c:486
 #, c-format
 msgid " on right:"
 msgstr " (sað tarafta):"
 
-#: src/print.c:513
+#: src/print.c:514
 #, fuzzy
 msgid "Rules useless in parser due to conflicts"
 msgstr "çeliskiler yüzünden kural indirgenemedi"
@@ -680,7 +680,7 @@ msgstr "`%2$s''in %1$d'i için bildirilmiþ tip yok"
 msgid "$$ of %s has no declared type"
 msgstr "`%s''in $$'ý için bildirilmiþ tip yok"
 
-#: src/scan-code.l:704
+#: src/scan-code.l:703
 #, fuzzy, c-format
 msgid "$%s of %s has no declared type"
 msgstr "`%2$s''in %1$d'i için bildirilmiþ tip yok"

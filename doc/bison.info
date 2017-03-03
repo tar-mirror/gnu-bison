@@ -1,6 +1,6 @@
 This is bison.info, produced by makeinfo version 5.2 from bison.texi.
 
-This manual (13 January 2015) is for GNU Bison (version 3.0.3), the GNU
+This manual (22 January 2015) is for GNU Bison (version 3.0.4), the GNU
 parser generator.
 
    Copyright © 1988-1993, 1995, 1998-2015 Free Software Foundation, Inc.
@@ -27,7 +27,7 @@ File: bison.info,  Node: Top,  Next: Introduction,  Up: (dir)
 Bison
 *****
 
-This manual (13 January 2015) is for GNU Bison (version 3.0.3), the GNU
+This manual (22 January 2015) is for GNU Bison (version 3.0.4), the GNU
 parser generator.
 
    Copyright © 1988-1993, 1995, 1998-2015 Free Software Foundation, Inc.
@@ -382,7 +382,7 @@ Bison has grown more robust and evolved many other new features thanks
 to the hard work of a long list of volunteers.  For details, see the
 ‘THANKS’ and ‘ChangeLog’ files included in the Bison distribution.
 
-   This edition corresponds to version 3.0.3 of Bison.
+   This edition corresponds to version 3.0.4 of Bison.
 
 
 File: bison.info,  Node: Conditions,  Next: Copying,  Prev: Introduction,  Up: Top
@@ -7075,7 +7075,7 @@ be specified as follows.
      %precedence ELSE
 
    The unary-minus is another typical example where associativity is
-usually over-specified, see *note Infix Notation Calculator: ‘calc’:
+usually over-specified, see *note Infix Notation Calculator - ‘calc’:
 Infix Calc.  The ‘%left’ directive is traditionally used to declare the
 precedence of ‘NEG’, which is more than needed since it also defines its
 associativity.  While this is harmless in the traditional example, who
@@ -9951,8 +9951,8 @@ Instead of using the built-in types you may use the ‘%define’ variable
 
    • in order to compute the (default) value of ‘@$’ in a reduction, the
      parser basically runs
-          @$.begin = @$1.begin;
-          @$.end   = @$N.end; // The location of last right-hand side symbol.
+          @$.begin = @1.begin;
+          @$.end   = @N.end; // The location of last right-hand side symbol.
      so there must be copyable ‘begin’ and ‘end’ members;
 
    • alternatively you may redefine the computation of the default
@@ -10349,7 +10349,7 @@ changed several times, it is safer to require the version you designed
 the grammar for.
 
      %skeleton "lalr1.cc" /* -*- C++ -*- */
-     %require "3.0.3"
+     %require "3.0.4"
      %defines
      %define parser_class_name {calcxx_parser}
 
@@ -10442,7 +10442,7 @@ regular destructors.  All the values are printed using their
      %printer { yyoutput << $$; } <*>;
 
 The grammar itself is straightforward (*note Location Tracking
-Calculator: ‘ltcalc’: Location Tracking Calc.).
+Calculator - ‘ltcalc’: Location Tracking Calc.).
 
      %%
      %start unit;
@@ -13797,55 +13797,55 @@ Node: Precedence291636
 Node: Why Precedence292408
 Node: Using Precedence294315
 Node: Precedence Only295815
-Node: Precedence Examples297675
-Node: How Precedence298199
-Node: Non Operators299387
-Node: Contextual Precedence300984
-Node: Parser States302750
-Node: Reduce/Reduce304005
-Node: Mysterious Conflicts308775
-Node: Tuning LR312380
-Node: LR Table Construction313710
-Node: Default Reductions319457
-Node: LAC324371
-Node: Unreachable States329962
-Node: Generalized LR Parsing331965
-Node: Memory Management336358
-Node: Error Recovery338757
-Node: Context Dependency344097
-Node: Semantic Tokens344950
-Node: Lexical Tie-ins348026
-Node: Tie-in Recovery349492
-Node: Debugging351624
-Node: Understanding352870
-Node: Graphviz363669
-Node: Xml368086
-Node: Tracing369888
-Node: Enabling Traces370334
-Node: Mfcalc Traces374228
-Node: The YYPRINT Macro379643
-Node: Invocation380846
-Node: Bison Options382343
-Node: Option Cross Key396247
-Node: Yacc Library399090
-Node: Other Languages400163
-Node: C++ Parsers400490
-Node: C++ Bison Interface400987
-Node: C++ Semantic Values402480
-Node: C++ Unions403072
-Node: C++ Variants403942
-Node: C++ Location Values407189
-Node: C++ position408132
-Node: C++ location410186
-Node: User Defined Location Type412277
-Node: C++ Parser Interface413842
-Node: C++ Scanner Interface417056
-Node: Split Symbols417626
-Node: Complete Symbols419275
-Node: A Complete C++ Example421781
-Node: Calc++ --- C++ Calculator422725
-Node: Calc++ Parsing Driver423247
-Node: Calc++ Parser427040
+Node: Precedence Examples297676
+Node: How Precedence298200
+Node: Non Operators299388
+Node: Contextual Precedence300985
+Node: Parser States302751
+Node: Reduce/Reduce304006
+Node: Mysterious Conflicts308776
+Node: Tuning LR312381
+Node: LR Table Construction313711
+Node: Default Reductions319458
+Node: LAC324372
+Node: Unreachable States329963
+Node: Generalized LR Parsing331966
+Node: Memory Management336359
+Node: Error Recovery338758
+Node: Context Dependency344098
+Node: Semantic Tokens344951
+Node: Lexical Tie-ins348027
+Node: Tie-in Recovery349493
+Node: Debugging351625
+Node: Understanding352871
+Node: Graphviz363670
+Node: Xml368087
+Node: Tracing369889
+Node: Enabling Traces370335
+Node: Mfcalc Traces374229
+Node: The YYPRINT Macro379644
+Node: Invocation380847
+Node: Bison Options382344
+Node: Option Cross Key396248
+Node: Yacc Library399091
+Node: Other Languages400164
+Node: C++ Parsers400491
+Node: C++ Bison Interface400988
+Node: C++ Semantic Values402481
+Node: C++ Unions403073
+Node: C++ Variants403943
+Node: C++ Location Values407190
+Node: C++ position408133
+Node: C++ location410187
+Node: User Defined Location Type412278
+Node: C++ Parser Interface413841
+Node: C++ Scanner Interface417055
+Node: Split Symbols417625
+Node: Complete Symbols419274
+Node: A Complete C++ Example421780
+Node: Calc++ --- C++ Calculator422724
+Node: Calc++ Parsing Driver423246
+Node: Calc++ Parser427039
 Node: Calc++ Scanner431708
 Node: Calc++ Top Level435163
 Node: Java Parsers435896
