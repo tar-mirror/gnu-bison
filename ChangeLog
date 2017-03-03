@@ -1,3 +1,283 @@
+2012-07-30  Akim Demaille  <akim@lrde.epita.fr>
+
+	version 2.6.1
+	* NEWS: Record release date.
+
+2012-07-30  Akim Demaille  <akim@lrde.epita.fr>
+
+	gnulib: update
+
+2012-07-27  Akim Demaille  <akim@lrde.epita.fr>
+
+	maint: fix some syntax-check issues
+	* cfg.mk: Nuke the following warnings which are confused by our
+	text reports (that state that the error token is number 256).
+	  prohibit_magic_number_exit
+	  ../../doc/bison.texi:8170:error (256)
+	  ../../tests/conflicts.at:570:error (256)
+	  ../../tests/conflicts.at:673:error (256)
+	  ../../tests/conflicts.at:811:error (256)
+	  ../../tests/conflicts.at:1154:error (256)
+	  ../../tests/regression.at:281:error (256)
+	  ../../tests/regression.at:582:error (256)
+	  maint.mk: use EXIT_* values rather than magic number
+
+2012-07-27  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: do not depend on __cplusplus to decide for C++ or C output
+	Since we do support compiling C code with a C++ compiler.
+
+	* tests/actions.at (Qualified $$ in actions): Use AT_SKEL_CC_IF.
+
+2012-07-27  Akim Demaille  <akim@lrde.epita.fr>
+
+	regen
+
+2012-07-27  Akim Demaille  <akim@lrde.epita.fr>
+
+	synclines: remove spurious empty line
+	* data/bison.m4 (b4_syncline): Do not start with an empty line.
+
+2012-07-27  Akim Demaille  <akim@lrde.epita.fr>
+
+	also support $<foo>$ in the %initial-action
+	scan-code.l is already passing argument to b4_dollar_dollar for the
+	initial acton, but its definition (of b4_dollar_dollar) does not use
+	this argument.
+
+	Generalize this definition, and use it for the %initial-action too.
+
+	* data/c.m4 (b4_dollar_dollar_, b4_dollar_pushdef, b4_dollar_popdef):
+	Instead of expecting a pointer, require a value, and use ".".
+	Since they are now generic enough, move to...
+	* data/c-like.m4: this new file.
+	* data/c.m4, data/java.m4: Load it.
+	* data/glr.c, data/lalr1.cc, data/lalr1.java, data/yacc.c: Use
+	b4_dollar_pushdef for the %initial-action.
+	* tests/actions.at: Check that.
+	* data/Makefile.am: Adjust.
+	* NEWS, doc/bison.texi: Document.
+
+2012-07-27  Akim Demaille  <akim@lrde.epita.fr>
+
+	skeletons: b4_dollar_pushdef and popdef to simpify complex definitions
+	M4 is really making it uselessly hard to define macros that define
+	macros.
+	* data/c.m4 (b4_dollar_pushdef, b4_dollar_popdef): New.
+	Use it.
+
+2012-07-27  Akim Demaille  <akim@lrde.epita.fr>
+
+	regen
+
+2012-07-27  Akim Demaille  <akim@lrde.epita.fr>
+
+	printer/destructor: translate only once
+	Currently "%printer {...} a b c d e f" translates the {...} six times.
+	Not only is this bad for time and space, it also issues six times the
+	same warnings.
+
+	* src/symlist.h, src/symlist.c (symbol_list_destructor_set)
+	(symbol_list_printer_set): Take the action as code_props instead of
+	const char *.
+	* src/parse-gram.y: Translate these actions here.
+	* src/scan-code.h: Comment change.
+	* tests/input.at: Check that warnings are issued only once.
+
+2012-07-27  Akim Demaille  <akim@lrde.epita.fr>
+
+	factor the handling of m4 escaping
+	The conversion from @ to @@ and so forth is coded is too many
+	different places.  Factor, a bit.
+
+	* src/scan-code.l: Instead of duplicating the logic of obstack_escape,
+	use it.
+	It sure is less efficient, but the cost is negligible.
+	This allows to factor rules that are alike.
+	And to factor some start-condition clauses.
+	* tests/input.at (Stray $ or @): New.
+	* NEWS: Document it.
+
+2012-07-27  Akim Demaille  <akim@lrde.epita.fr>
+
+	news: schedule the removal of the ";" hack
+	scan-code.l is significantly more complex because of this.
+
+	* NEWS: Doc it.
+
+2012-07-27  Akim Demaille  <akim@lrde.epita.fr>
+
+	style changes in the scanners
+	* src/scan-code.l, src/scan-skel.l: Use a more traditional indentation
+	style for start-conditions.
+	Prefer "continue" to a comment, for empty actions.
+	Strip useless {}.
+	Remove useless start-condition clauses.
+
+2012-07-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	regen
+
+2012-07-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	support $<tag>$ in printers and destructors
+	* src/scan-code.l (SC_SYMBOL_ACTION): Accept $<tag>$, not just $$.
+	* data/c.m4 (b4_dollar_dollar_): New.
+	(b4_symbol_actions): Let b4_dollar_dollar use b4_dollar_dollar_.
+	* NEWS, doc/bison.texi: Document it.
+	* tests/actions.at: Check this for C and C++.
+
+2012-07-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	scan-code: factor the handling of the type in $<TYPE>$
+	* src/scan-code.l (fetch_type_name): New.
+	(handle_action_dollar): Use it.
+	(gt_ptr): Remove, useless.
+
+2012-07-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	muscles: fix another occurrence of unescaped type name
+	* src/output.c (quoted_output): Split into...
+	(quoted_output, string_output): these.
+	Use the former when outputting a type_name.
+	* tests/input.at: Check this case.
+	* src/symtab.h: Comment changes.
+
+2012-07-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	glr.cc: fix the handling of yydebug
+	* data/glr.cc (yydebug_): Remove, unused.
+	(set_debug_level, debug_level): Work on yydebug instead.
+	* doc/bison.texi, NEWS: Document this.
+
+2012-07-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	gnulib: update
+
+2012-07-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	formatting changes
+	* src/symtab.h: here.
+
+2012-07-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: fix an assertion
+	* tests/local.at (AT_YYLEX_DEFINE): Be sure to check the array
+	against its length, not its size in bytes.
+
+2012-07-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	tests: adjust to GCC 4.8, which displays caret errors
+	With GCC 4.8, the tests on synclines are skipped.  Transform
+
+	  input.y:1:2: error: #error "1"
+	   #error "1"
+	    ^
+
+	into
+
+	  input.y:1: #error "1"
+
+	* tests/synclines.at (AT_SYNCLINES_COMPILE): Do it, using Perl instead of
+	sed.
+
+2012-07-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	be sure to properly escape type names
+	* src/scan-code.l: Use obstack_quote when passing type_name to m4.
+	* tests/input.at (Code injection): New.
+	* NEWS: Document it.
+	Thanks to Paul Eggert for the wording.
+
+2012-07-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	obstack_quote: escape and quote for M4
+	* src/system.h (obstack_quote): New.
+	* src/muscle-tab.c: Use it instead of obstack_escape where applicable.
+	* src/scan-code.l: Since obstack_quote supports NULL, leave type_name
+	as NULL instead of defaulting to "".
+
+2012-07-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	muscles: shuffle responsabilities
+	* src/muscle-tab.c (muscle_boundary_grow): Be in charge of quotation,
+	instead of leaving this to the caller.
+
+2012-07-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	muscles: make private functions static
+	* src/muscle-tab.h, src/muscle-tab.c (muscle_boundary_grow)
+	(muscle_location_grow): Now static.
+
+2012-07-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	muscles: rename private functions/macros
+	* src/muscle-tab.c (MUSCLE_COMMON_DECODE, muscle_string_decode)
+	(muscle_location_decode): Not related to muscles, rename as...
+	(COMMON_DECODE, string_decode, location_decode): these.
+
+2012-07-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	obstack_escape: escape M4 characters
+	* src/muscle-tab.h (MUSCLE_OBSTACK_SGROW): This is not related to
+	muscles, so move to, and rename as...
+	* src/system.h (obstack_escape): this.
+	Adjust dependencies.
+
+2012-07-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	remove dead macro
+	* src/system.h (DEFAULT_TMPDIR): Remove, unused.
+
+2012-07-26  Akim Demaille  <akim@lrde.epita.fr>
+
+	maint: style changes
+	* src/scan-code.l: Remove useless braces.
+	Formatting changes.
+	Prefer NULL to 0.
+	* src/muscle-tab.c, src/system.h: Formatting changes.
+
+2012-07-24  Akim Demaille  <akim@lrde.epita.fr>
+
+	doc: avoid problems with case insensitive file systems
+	makeinfo --html generates index.html, and the node "Index" will result
+	in Index.html.  On case insensitive file systems, such as on Mac OS X
+	by default, this results in a single, invalid, file (Texinfo 4.13).
+	See http://lists.gnu.org/archive/html/bug-texinfo/2012-07/msg00032.html
+
+	* doc/bison.texi (Index): Rename as...
+	(Index of Terms): this.
+
+2012-07-24  Stefano Lattarini  <stefano.lattarini@gmail.com>  (tiny change)
+
+	configure: fix botched quoting
+	* configure.ac: In the AC_SUBST call on 'VALGRIND_PREBISON'.  Without
+	this change, when running ./configure, I see:
+
+	    ...
+	    checking for valgrind... valgrind
+	    ./configure: line 35221: -q: command not found
+	    checking for Java compiler... gcj -C -fsource=1.3 -ftarget=1.4
+	    ...
+
+2012-07-20  Akim Demaille  <akim@lrde.epita.fr>
+
+	news: fix typo.
+	* NEWS: here.
+	Reported by Ben Pfaff.
+
+2012-07-19  Akim Demaille  <akim@lrde.epita.fr>
+
+	maint: update gnu-web-doc-update.
+	* gnulib: here.
+
+2012-07-19  Akim Demaille  <akim@lrde.epita.fr>
+
+	maint: post-release administrivia
+	* NEWS: Add header line for next release.
+	* .prev-version: Record previous version.
+	* cfg.mk (old_NEWS_hash): Auto-update.
+
 2012-07-19  Akim Demaille  <akim@lrde.epita.fr>
 
 	version 2.6

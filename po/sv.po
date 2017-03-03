@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.5.90\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-07-19 15:26+0200\n"
+"POT-Creation-Date: 2012-07-27 17:17+0200\n"
 "PO-Revision-Date: 2012-07-05 22:29+0200\n"
 "Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -363,38 +363,38 @@ msgstr "kolumnnummerspill"
 msgid "rule useless in parser due to conflicts"
 msgstr "oanvändbar regel i parsern på grund av konflikter"
 
-#: src/muscle-tab.c:428
+#: src/muscle-tab.c:436
 #, c-format
 msgid "%%define variable %s redefined"
 msgstr "%%define-variabeln %s omdefinierad"
 
-#: src/muscle-tab.c:431
+#: src/muscle-tab.c:439
 #, c-format
 msgid "previous definition"
 msgstr "föregående definition"
 
-#: src/muscle-tab.c:470 src/muscle-tab.c:484 src/muscle-tab.c:536
-#: src/muscle-tab.c:601
+#: src/muscle-tab.c:478 src/muscle-tab.c:492 src/muscle-tab.c:544
+#: src/muscle-tab.c:609
 #, c-format
 msgid "%s: undefined %%define variable %s"
 msgstr "%s: odefinierad  %%define-variabel %s"
 
-#: src/muscle-tab.c:530
+#: src/muscle-tab.c:538
 #, c-format
 msgid "invalid value for %%define Boolean variable %s"
 msgstr "ogiltigt värde för boolesk %%define-variabel %s"
 
-#: src/muscle-tab.c:588
+#: src/muscle-tab.c:596
 #, c-format
 msgid "invalid value for %%define variable %s: %s"
 msgstr "ogiltigt värde för %%define-variabeln %s: %s"
 
-#: src/muscle-tab.c:591
+#: src/muscle-tab.c:599
 #, c-format
 msgid "accepted value: %s"
 msgstr "accepterat värde: %s"
 
-#: src/parse-gram.y:734
+#: src/parse-gram.y:744
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "identiferare saknas i parameterdeklaration"
@@ -574,108 +574,103 @@ msgstr[1] "%d oanvändbara regler i grammatiken"
 msgid "start symbol %s does not derive any sentence"
 msgstr "startsymbolen %s genererar inga meningar"
 
-#: src/scan-code.l:200
-#, c-format
-msgid "stray '$'"
+#: src/scan-code.l:188
+#, fuzzy, c-format
+msgid "stray '%s'"
 msgstr "vilsekommet \"$\""
 
-#: src/scan-code.l:205
-#, c-format
-msgid "stray '@'"
-msgstr "vilsekommet \"@\""
-
-#: src/scan-code.l:230
+#: src/scan-code.l:227
 #, c-format
 msgid "a ';' might be needed at the end of action code"
 msgstr "ett \";\" kan behövas i slutet av åtgärdskoden"
 
-#: src/scan-code.l:231
+#: src/scan-code.l:228
 #, c-format
 msgid "future versions of Bison will not add the ';'"
 msgstr "framtida versioner av Bison kommer inte lägga till \";\""
 
-#: src/scan-code.l:253
+#: src/scan-code.l:250
 #, c-format
 msgid "use of YYFAIL, which is deprecated and will be removed"
 msgstr "användning av YYFAIL, som avrådes ifrån och kommer tas bort"
 
-#: src/scan-code.l:438 src/scan-code.l:441
+#: src/scan-code.l:427 src/scan-code.l:430
 #, c-format
 msgid "refers to: %c%s at %s"
 msgstr "refererar till: %c%s vid %s"
 
-#: src/scan-code.l:457
+#: src/scan-code.l:446
 #, c-format
 msgid "possibly meant: %c"
 msgstr "möjligen avsett: %c"
 
-#: src/scan-code.l:466
+#: src/scan-code.l:455
 #, c-format
 msgid ", hiding %c"
 msgstr ", döljer %c"
 
-#: src/scan-code.l:474
+#: src/scan-code.l:463
 #, c-format
 msgid " at %s"
 msgstr " vid %s"
 
-#: src/scan-code.l:479
+#: src/scan-code.l:468
 #, c-format
 msgid ", cannot be accessed from mid-rule action at $%d"
 msgstr ", kan inte nås från åtgärd mitt i regeln vid $%d"
 
-#: src/scan-code.l:531 src/scan-gram.l:777
+#: src/scan-code.l:520 src/scan-gram.l:777
 #, c-format
 msgid "integer out of range: %s"
 msgstr "heltal utanför intervall: %s"
 
-#: src/scan-code.l:620
+#: src/scan-code.l:609
 #, c-format
 msgid "invalid reference: %s"
 msgstr "ogiltig referens: %s"
 
-#: src/scan-code.l:629
+#: src/scan-code.l:618
 #, c-format
 msgid "syntax error after '%c', expecting integer, letter, '_', '[', or '$'"
 msgstr ""
 "syntaxfel efter \"%c\", siffra, bokstav, \"_\", \"[\" eller \"$\" förväntades"
 
-#: src/scan-code.l:636
+#: src/scan-code.l:625
 #, c-format
 msgid "symbol not found in production before $%d: %.*s"
 msgstr "symbol inte funnen i produktion före $%d: %.*s"
 
-#: src/scan-code.l:643
+#: src/scan-code.l:632
 #, c-format
 msgid "symbol not found in production: %.*s"
 msgstr "symbol inte funnen i produktion: %.*s"
 
-#: src/scan-code.l:658
+#: src/scan-code.l:647
 #, c-format
 msgid "misleading reference: %s"
 msgstr "vilseledande referens: %s"
 
-#: src/scan-code.l:673
+#: src/scan-code.l:662
 #, c-format
 msgid "ambiguous reference: %s"
 msgstr "tvetydigt argument: %s"
 
-#: src/scan-code.l:732
+#: src/scan-code.l:699
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr "explicit typ given i otypad grammatik"
 
-#: src/scan-code.l:757
+#: src/scan-code.l:758
 #, c-format
 msgid "$$ for the midrule at $%d of %s has no declared type"
 msgstr "$$ för mitt-i-regeln vid $%d av %s har ingen deklarerad typ"
 
-#: src/scan-code.l:762
+#: src/scan-code.l:763
 #, c-format
 msgid "$$ of %s has no declared type"
 msgstr "$$ för %s har ingen deklarerad typ"
 
-#: src/scan-code.l:784
+#: src/scan-code.l:785
 #, c-format
 msgid "$%s of %s has no declared type"
 msgstr "$%s för %s har ingen deklarerad typ"
@@ -750,17 +745,17 @@ msgstr "saknat %s vid filslut"
 msgid "missing %s at end of line"
 msgstr "saknat %s vid radslut"
 
-#: src/scan-skel.l:144
+#: src/scan-skel.l:146
 #, c-format
 msgid "unclosed %s directive in skeleton"
 msgstr "oavslutat %s-direktiv i skelettet"
 
-#: src/scan-skel.l:289
+#: src/scan-skel.l:291
 #, c-format
 msgid "too few arguments for %s directive in skeleton"
 msgstr "för få argument till %s-direktiv i skelettet"
 
-#: src/scan-skel.l:296
+#: src/scan-skel.l:298
 #, c-format
 msgid "too many arguments for %s directive in skeleton"
 msgstr "för många argument till %s-direktiv i skelettet"
@@ -1151,3 +1146,6 @@ msgstr "%s-underprocess"
 #, c-format
 msgid "%s subprocess got fatal signal %d"
 msgstr "%s-underprocess fick en ödesdiger signal %d"
+
+#~ msgid "stray '@'"
+#~ msgstr "vilsekommet \"@\""

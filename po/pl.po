@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.5.90\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-07-19 15:26+0200\n"
+"POT-Creation-Date: 2012-07-27 17:17+0200\n"
 "PO-Revision-Date: 2012-07-06 10:57+0200\n"
 "Last-Translator: Wojciech Polak <polak@gnu.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -369,38 +369,38 @@ msgstr "przepełnienie numeru kolumny"
 msgid "rule useless in parser due to conflicts"
 msgstr "bezużyteczna reguła w analizatorze z powodu konfliktów"
 
-#: src/muscle-tab.c:428
+#: src/muscle-tab.c:436
 #, c-format
 msgid "%%define variable %s redefined"
 msgstr "zredefiniowana zmienna %%define %s"
 
-#: src/muscle-tab.c:431
+#: src/muscle-tab.c:439
 #, c-format
 msgid "previous definition"
 msgstr "poprzednia definicja"
 
-#: src/muscle-tab.c:470 src/muscle-tab.c:484 src/muscle-tab.c:536
-#: src/muscle-tab.c:601
+#: src/muscle-tab.c:478 src/muscle-tab.c:492 src/muscle-tab.c:544
+#: src/muscle-tab.c:609
 #, c-format
 msgid "%s: undefined %%define variable %s"
 msgstr "%s: niezdefiniowana zmienna %%define %s"
 
-#: src/muscle-tab.c:530
+#: src/muscle-tab.c:538
 #, c-format
 msgid "invalid value for %%define Boolean variable %s"
 msgstr "nieprawidłowa wartość dla boole'owskiej zmiennej %%define %s"
 
-#: src/muscle-tab.c:588
+#: src/muscle-tab.c:596
 #, c-format
 msgid "invalid value for %%define variable %s: %s"
 msgstr "nieprawidłowa wartość dla zmiennej %%define %s: %s"
 
-#: src/muscle-tab.c:591
+#: src/muscle-tab.c:599
 #, c-format
 msgid "accepted value: %s"
 msgstr "zaakceptowana wartość: %s"
 
-#: src/parse-gram.y:734
+#: src/parse-gram.y:744
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "brakujący identyfikator w deklaracji parametrów"
@@ -583,111 +583,106 @@ msgstr[2] "%d bezużytecznych reguł w gramatyce"
 msgid "start symbol %s does not derive any sentence"
 msgstr "początkowy symbol %s nie dziedziczy żadnego zdania"
 
-#: src/scan-code.l:200
-#, c-format
-msgid "stray '$'"
+#: src/scan-code.l:188
+#, fuzzy, c-format
+msgid "stray '%s'"
 msgstr "zabłąkany '$'"
 
-#: src/scan-code.l:205
-#, c-format
-msgid "stray '@'"
-msgstr "zabłąkany '@'"
-
-#: src/scan-code.l:230
+#: src/scan-code.l:227
 #, c-format
 msgid "a ';' might be needed at the end of action code"
 msgstr "znak ';' może być konieczny na końcu kodu akcji"
 
-#: src/scan-code.l:231
+#: src/scan-code.l:228
 #, c-format
 msgid "future versions of Bison will not add the ';'"
 msgstr "przyszłe wersje Bisona nie będą dodawać znaku ';'"
 
-#: src/scan-code.l:253
+#: src/scan-code.l:250
 #, c-format
 msgid "use of YYFAIL, which is deprecated and will be removed"
 msgstr "użycie YYFAIL, które jest przestarzałe i będzie usunięte"
 
-#: src/scan-code.l:438 src/scan-code.l:441
+#: src/scan-code.l:427 src/scan-code.l:430
 #, c-format
 msgid "refers to: %c%s at %s"
 msgstr "odnosi się do: %c%s w %s"
 
-#: src/scan-code.l:457
+#: src/scan-code.l:446
 #, c-format
 msgid "possibly meant: %c"
 msgstr "może chodziło o: %c"
 
-#: src/scan-code.l:466
+#: src/scan-code.l:455
 #, c-format
 msgid ", hiding %c"
 msgstr ", ukrywanie %c"
 
-#: src/scan-code.l:474
+#: src/scan-code.l:463
 #, c-format
 msgid " at %s"
 msgstr " w %s"
 
-#: src/scan-code.l:479
+#: src/scan-code.l:468
 #, c-format
 msgid ", cannot be accessed from mid-rule action at $%d"
 msgstr ", nie jest dostępne z akcji mid-rule w $%d"
 
-#: src/scan-code.l:531 src/scan-gram.l:777
+#: src/scan-code.l:520 src/scan-gram.l:777
 #, c-format
 msgid "integer out of range: %s"
 msgstr "liczba całkowita poza zakresem: %s"
 
-#: src/scan-code.l:620
+#: src/scan-code.l:609
 #, c-format
 msgid "invalid reference: %s"
 msgstr "nieprawidłowe odwołanie: %s"
 
-#: src/scan-code.l:629
+#: src/scan-code.l:618
 #, c-format
 msgid "syntax error after '%c', expecting integer, letter, '_', '[', or '$'"
 msgstr ""
 "błąd składni za znakiem '%c', spodziewano się liczby, litery, '_', '[', lub "
 "'$'"
 
-#: src/scan-code.l:636
+#: src/scan-code.l:625
 #, c-format
 msgid "symbol not found in production before $%d: %.*s"
 msgstr "nie znaleziono symbolu w produkcji przed $%d: %.*s"
 
-#: src/scan-code.l:643
+#: src/scan-code.l:632
 #, c-format
 msgid "symbol not found in production: %.*s"
 msgstr "nie znaleziono symbolu w produkcji: %.*s"
 
-#: src/scan-code.l:658
+#: src/scan-code.l:647
 #, c-format
 msgid "misleading reference: %s"
 msgstr "mylące odniesienie: %s"
 
-#: src/scan-code.l:673
+#: src/scan-code.l:662
 #, c-format
 msgid "ambiguous reference: %s"
 msgstr "niejednoznaczne odniesienie: %s"
 
-#: src/scan-code.l:732
+#: src/scan-code.l:699
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr "jawny typ w gramatyce beztypowej"
 
-#: src/scan-code.l:757
+#: src/scan-code.l:758
 #, c-format
 msgid "$$ for the midrule at $%d of %s has no declared type"
 msgstr ""
 "$$ w pozycji $%d należący do pośredniej reguły %s nie posiada "
 "zadeklarowanego typu"
 
-#: src/scan-code.l:762
+#: src/scan-code.l:763
 #, c-format
 msgid "$$ of %s has no declared type"
 msgstr "$$ należący do %s nie posiada zadeklarowanego typu"
 
-#: src/scan-code.l:784
+#: src/scan-code.l:785
 #, c-format
 msgid "$%s of %s has no declared type"
 msgstr "$%s należący do %s nie posiada zadeklarowanego typu"
@@ -762,17 +757,17 @@ msgstr "brakujący %s na końcu pliku"
 msgid "missing %s at end of line"
 msgstr "brakujący %s na końcu linii"
 
-#: src/scan-skel.l:144
+#: src/scan-skel.l:146
 #, c-format
 msgid "unclosed %s directive in skeleton"
 msgstr "niedomknięta dyrektywa %s w szkielecie"
 
-#: src/scan-skel.l:289
+#: src/scan-skel.l:291
 #, c-format
 msgid "too few arguments for %s directive in skeleton"
 msgstr "za mało argumentów dla dyrektywy %s w szkielecie"
 
-#: src/scan-skel.l:296
+#: src/scan-skel.l:298
 #, c-format
 msgid "too many arguments for %s directive in skeleton"
 msgstr "za dużo argumentów dla dyrektywy %s w szkielecie"
@@ -1160,6 +1155,9 @@ msgstr "podproces %s"
 #, c-format
 msgid "%s subprocess got fatal signal %d"
 msgstr "podproces %s otrzymał nieprawidłowy sygnał %d"
+
+#~ msgid "stray '@'"
+#~ msgstr "zabłąkany '@'"
 
 #~ msgid "I/O error"
 #~ msgstr "błąd wejścia/wyjścia"

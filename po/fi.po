@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.5.90\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-07-19 15:26+0200\n"
+"POT-Creation-Date: 2012-07-27 17:17+0200\n"
 "PO-Revision-Date: 2012-07-05 23:03+0300\n"
 "Last-Translator: Jorma Karvonen <karvonen.jorma@gmail.com>\n"
 "Language-Team: Finnish <translation-team-fi@lists.sourceforge.net>\n"
@@ -376,38 +376,38 @@ msgstr "sarakenumeron ylivuoto"
 msgid "rule useless in parser due to conflicts"
 msgstr "sääntö on hyödytön jäsentimessä ristiriitojen vuoksi"
 
-#: src/muscle-tab.c:428
+#: src/muscle-tab.c:436
 #, c-format
 msgid "%%define variable %s redefined"
 msgstr "%%define-muuttuja %s on määritelty uudelleen"
 
-#: src/muscle-tab.c:431
+#: src/muscle-tab.c:439
 #, c-format
 msgid "previous definition"
 msgstr "edellinen määrittely"
 
-#: src/muscle-tab.c:470 src/muscle-tab.c:484 src/muscle-tab.c:536
-#: src/muscle-tab.c:601
+#: src/muscle-tab.c:478 src/muscle-tab.c:492 src/muscle-tab.c:544
+#: src/muscle-tab.c:609
 #, c-format
 msgid "%s: undefined %%define variable %s"
 msgstr "%s: määrittelemätön %%define-muuttuja %s"
 
-#: src/muscle-tab.c:530
+#: src/muscle-tab.c:538
 #, c-format
 msgid "invalid value for %%define Boolean variable %s"
 msgstr "virheellinen arvo kohteelle %%define Boolean muuttuja %s"
 
-#: src/muscle-tab.c:588
+#: src/muscle-tab.c:596
 #, c-format
 msgid "invalid value for %%define variable %s: %s"
 msgstr "virheellinen arvo kohteelle %%define-muuttuja %s: %s"
 
-#: src/muscle-tab.c:591
+#: src/muscle-tab.c:599
 #, c-format
 msgid "accepted value: %s"
 msgstr "hyväksytty arvo: %s"
 
-#: src/parse-gram.y:734
+#: src/parse-gram.y:744
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "puuttuva tunniste parametriesittelyssä"
@@ -587,109 +587,104 @@ msgstr[1] "%d sääntöä ovat hyödyttömiä kieliopissa"
 msgid "start symbol %s does not derive any sentence"
 msgstr "aloitussymboli %s ei johda lauseeseen"
 
-#: src/scan-code.l:200
-#, c-format
-msgid "stray '$'"
+#: src/scan-code.l:188
+#, fuzzy, c-format
+msgid "stray '%s'"
 msgstr "yksinäinen ’$’"
 
-#: src/scan-code.l:205
-#, c-format
-msgid "stray '@'"
-msgstr "yksinäinen ’@’"
-
-#: src/scan-code.l:230
+#: src/scan-code.l:227
 #, c-format
 msgid "a ';' might be needed at the end of action code"
 msgstr "merkkiä ’;’ saatetaan tarvita toimintakoodin lopussa"
 
-#: src/scan-code.l:231
+#: src/scan-code.l:228
 #, c-format
 msgid "future versions of Bison will not add the ';'"
 msgstr "tulevat Bison-versiot eivät lisää merkkiä ’;’"
 
-#: src/scan-code.l:253
+#: src/scan-code.l:250
 #, c-format
 msgid "use of YYFAIL, which is deprecated and will be removed"
 msgstr "YYFAIL-käyttö, joka on vanhentunut ja poistetaan"
 
-#: src/scan-code.l:438 src/scan-code.l:441
+#: src/scan-code.l:427 src/scan-code.l:430
 #, c-format
 msgid "refers to: %c%s at %s"
 msgstr "viittaa kohteeseen: %c%s at %s"
 
-#: src/scan-code.l:457
+#: src/scan-code.l:446
 #, c-format
 msgid "possibly meant: %c"
 msgstr "mahdollisesti tarkoitti: %c"
 
-#: src/scan-code.l:466
+#: src/scan-code.l:455
 #, c-format
 msgid ", hiding %c"
 msgstr ", piilotetaan %c"
 
-#: src/scan-code.l:474
+#: src/scan-code.l:463
 #, c-format
 msgid " at %s"
 msgstr " osoitteessa %s"
 
-#: src/scan-code.l:479
+#: src/scan-code.l:468
 #, c-format
 msgid ", cannot be accessed from mid-rule action at $%d"
 msgstr ", ei kyetä käyttämään mid-rule -toimintoa osoitteessa $%d"
 
-#: src/scan-code.l:531 src/scan-gram.l:777
+#: src/scan-code.l:520 src/scan-gram.l:777
 #, c-format
 msgid "integer out of range: %s"
 msgstr "kokonaisluku on lukualueen ulkopuolella: %s"
 
-#: src/scan-code.l:620
+#: src/scan-code.l:609
 #, c-format
 msgid "invalid reference: %s"
 msgstr "virheellinen viite: %s"
 
-#: src/scan-code.l:629
+#: src/scan-code.l:618
 #, c-format
 msgid "syntax error after '%c', expecting integer, letter, '_', '[', or '$'"
 msgstr ""
 "syntaksivirhe merkin ’%c’ jälkeen, odotettiin kokonaislukua, kirjainta, tai "
 "merkkejä ’_’, ’[’, ’$’"
 
-#: src/scan-code.l:636
+#: src/scan-code.l:625
 #, c-format
 msgid "symbol not found in production before $%d: %.*s"
 msgstr "symbolia ei löytynyt tuotannosta ennen $%d: %.*s"
 
-#: src/scan-code.l:643
+#: src/scan-code.l:632
 #, c-format
 msgid "symbol not found in production: %.*s"
 msgstr "symbolia ei löytynyt tuotannosta: %.*s"
 
-#: src/scan-code.l:658
+#: src/scan-code.l:647
 #, c-format
 msgid "misleading reference: %s"
 msgstr "harhaanjohtava viite: %s"
 
-#: src/scan-code.l:673
+#: src/scan-code.l:662
 #, c-format
 msgid "ambiguous reference: %s"
 msgstr "ei-yksiselitteinen viite: %s"
 
-#: src/scan-code.l:732
+#: src/scan-code.l:699
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr "eksplisiittinen tyyppi annettu tyypittömässä kieliopissa"
 
-#: src/scan-code.l:757
+#: src/scan-code.l:758
 #, c-format
 msgid "$$ for the midrule at $%d of %s has no declared type"
 msgstr "$$ midrule-lohkolle osoitteessa $%d/%s ei ole esiteltyä tyyppiä"
 
-#: src/scan-code.l:762
+#: src/scan-code.l:763
 #, c-format
 msgid "$$ of %s has no declared type"
 msgstr "$$/%s ei ole esitelty tyyppi"
 
-#: src/scan-code.l:784
+#: src/scan-code.l:785
 #, c-format
 msgid "$%s of %s has no declared type"
 msgstr "$%s/%s ei ole esitelty tyyppi"
@@ -764,17 +759,17 @@ msgstr "puuttuva %s tiedoston lopussa"
 msgid "missing %s at end of line"
 msgstr "puuttuva %s rivin lopussa"
 
-#: src/scan-skel.l:144
+#: src/scan-skel.l:146
 #, c-format
 msgid "unclosed %s directive in skeleton"
 msgstr "sulkematon %s-direktiivi rungossa"
 
-#: src/scan-skel.l:289
+#: src/scan-skel.l:291
 #, c-format
 msgid "too few arguments for %s directive in skeleton"
 msgstr "liian vähän argumentteja %s-direktiiville rungossa"
 
-#: src/scan-skel.l:296
+#: src/scan-skel.l:298
 #, c-format
 msgid "too many arguments for %s directive in skeleton"
 msgstr "liian monta argumenttia %s-direktiiville rungossa"
@@ -1165,6 +1160,9 @@ msgstr "%s-aliprosessi"
 #, c-format
 msgid "%s subprocess got fatal signal %d"
 msgstr "%s-aliprosessi sai kohtalokkaan signaalin %d"
+
+#~ msgid "stray '@'"
+#~ msgstr "yksinäinen ’@’"
 
 #~ msgid "I/O error"
 #~ msgstr "Siirräntävirhe"

@@ -1,7 +1,7 @@
 This is bison.info, produced by makeinfo version 4.13 from
 /Users/akim/src/gnu/bison-2.5/doc/bison.texi.
 
-This manual (18 July 2012) is for GNU Bison (version 2.5.91), the GNU
+This manual (18 July 2012) is for GNU Bison (version 2.6), the GNU
 parser generator.
 
    Copyright (C) 1988-1993, 1995, 1998-2012 Free Software Foundation,
@@ -1811,7 +1811,7 @@ changed several times, it is safer to require the version you designed
 the grammar for.
 
      %skeleton "lalr1.cc" /* -*- C++ -*- */
-     %require "2.5.91"
+     %require "2.6"
      %defines
      %define parser_class_name "calcxx_parser"
 

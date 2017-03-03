@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison-runtime 2.3a\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-07-19 15:26+0200\n"
+"POT-Creation-Date: 2012-07-27 17:17+0200\n"
 "PO-Revision-Date: 2006-12-12 09:38+0100\n"
 "Last-Translator: Michael Piefel <piefel@informatik.hu-berlin.de>\n"
 "Language-Team: German <translation-team-de@lists.sourceforge.net>\n"
@@ -25,39 +25,39 @@ msgstr "Syntaxfehler: Kann nicht zurück gehen"
 msgid "syntax is ambiguous"
 msgstr "Syntax ist mehrdeutig"
 
-#: data/glr.c:2041 data/glr.c:2119 data/glr.c:2157 data/glr.c:2428
-#: data/lalr1.cc:914 data/lalr1.cc:934 data/yacc.c:1336 data/yacc.c:1852
-#: data/yacc.c:1858
+#: data/glr.c:2041 data/glr.c:2119 data/glr.c:2157 data/glr.c:2426
+#: data/lalr1.cc:912 data/lalr1.cc:932 data/yacc.c:1336 data/yacc.c:1851
+#: data/yacc.c:1857
 msgid "syntax error"
 msgstr "Syntaxfehler"
 
-#: data/glr.c:2120 data/lalr1.cc:915 data/yacc.c:1337
+#: data/glr.c:2120 data/lalr1.cc:913 data/yacc.c:1337
 #, c-format
 msgid "syntax error, unexpected %s"
 msgstr "Syntaxfehler, unerwartetes %s"
 
-#: data/glr.c:2121 data/lalr1.cc:916 data/yacc.c:1338
+#: data/glr.c:2121 data/lalr1.cc:914 data/yacc.c:1338
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s"
 msgstr "Syntaxfehler, unerwartetes %s, hatte %s erwartet"
 
-#: data/glr.c:2122 data/lalr1.cc:917 data/yacc.c:1339
+#: data/glr.c:2122 data/lalr1.cc:915 data/yacc.c:1339
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s"
 msgstr "Syntaxfehler, unerwartetes %s, hatte %s oder %s erwartet"
 
-#: data/glr.c:2123 data/lalr1.cc:918 data/yacc.c:1340
+#: data/glr.c:2123 data/lalr1.cc:916 data/yacc.c:1340
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s or %s"
 msgstr "Syntaxfehler, unerwartetes %s, hatte %s oder %s oder %s erwartet"
 
-#: data/glr.c:2124 data/lalr1.cc:919 data/yacc.c:1341
+#: data/glr.c:2124 data/lalr1.cc:917 data/yacc.c:1341
 #, c-format
 msgid "syntax error, unexpected %s, expecting %s or %s or %s or %s"
 msgstr ""
 "Syntaxfehler, unerwartetes %s, hatte %s oder %s oder %s oder %s erwartet"
 
-#: data/glr.c:2488 data/yacc.c:1418 data/yacc.c:1420 data/yacc.c:1614
-#: data/yacc.c:2007
+#: data/glr.c:2486 data/yacc.c:1418 data/yacc.c:1420 data/yacc.c:1613
+#: data/yacc.c:2006
 msgid "memory exhausted"
 msgstr "Speicher ausgeschöpft"

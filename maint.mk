@@ -353,8 +353,9 @@ sc_prohibit_strncpy:
 #  | xargs --no-run-if-empty \
 #      perl -pi -e 's/(^|[^.])\b(exit ?)\(0\)/$1$2(EXIT_SUCCESS)/'
 sc_prohibit_magic_number_exit:
-	@prohibit='(^|[^.])\<(usage|exit) ?\([0-9]|\<error ?\([1-9][0-9]*,'	\
-	halt='use EXIT_* values rather than magic number'			\
+	@prohibit='(^|[^.])\<(usage|exit|error) ?\(-?[0-9]+[,)]'	\
+	exclude='error ?\(0,'						\
+	halt='use EXIT_* values rather than magic number'		\
 	  $(_sc_search_regexp)
 
 # Using EXIT_SUCCESS as the first argument to error is misleading,
@@ -1255,10 +1256,11 @@ bootstrap-tools ?= autoconf,automake,gnulib
 
 # If it's not already specified, derive the GPG key ID from
 # the signed tag we've just applied to mark this release.
-gpg_key_ID ?= \
-  $$(git cat-file tag v$(VERSION) \
-     | gpgv --status-fd 1 --keyring /dev/null - - 2>/dev/null \
-     | awk '/^\[GNUPG:\] ERRSIG / {print $$3; exit}')
+gpg_key_ID ?=								\
+  $$(cd $(srcdir)							\
+     && git cat-file tag v$(VERSION)					\
+        | gpgv --status-fd 1 --keyring /dev/null - - 2>/dev/null	\
+        | awk '/^\[GNUPG:\] ERRSIG / {print $$3; exit}')
 
 translation_project_ ?= coordinator@translationproject.org
 
@@ -1385,9 +1387,8 @@ release-prep:
 	echo $(VERSION) > $(prev_version_file)
 	$(MAKE) update-NEWS-hash
 	perl -pi -e '$$. == 3 and print "$(gl_noteworthy_news_)\n\n\n"' $(srcdir)/NEWS
-	$(emit-commit-log) > .ci-msg
-	$(VC) commit -F .ci-msg -a
-	rm .ci-msg
+	msg=$$($(emit-commit-log)) || exit 1;		\
+	(cd $(srcdir) && $(VC) commit -m "$$msg" -a)
 
 # Override this with e.g., -s $(srcdir)/some_other_name.texi
 # if the default $(PACKAGE)-derived name doesn't apply.
@@ -1427,6 +1428,31 @@ gen-coverage:
 		--title "$(PACKAGE_NAME)"
 
 coverage: init-coverage build-coverage gen-coverage
+
+# Some projects carry local adjustments for gnulib modules via patches in
+# a gnulib patch directory whose default name is gl/ (defined in bootstrap
+# via local_gl_dir=gl).  Those patches become stale as the originals evolve
+# in gnulib.  Use this rule to refresh any stale patches.  It applies each
+# patch to the original in $(gnulib_dir) and uses the temporary result to
+# generate a fuzz-free .diff file.  If you customize the name of your local
+# gnulib patch directory via bootstrap.conf, this rule detects that name.
+# Run this from a non-VPATH (i.e., srcdir) build directory.
+.PHONY: refresh-gnulib-patches
+refresh-gnulib-patches:
+	gl=gl;								\
+	if test -f bootstrap.conf; then					\
+	  t=$$(perl -lne '/^\s*local_gl_dir=(\S+)/ and $$d=$$1;'	\
+	       -e 'END{defined $$d and print $$d}' bootstrap.conf);	\
+	  test -n "$$t" && gl=$$t;					\
+	fi;								\
+	for diff in $$(cd $$gl; git ls-files | grep '\.diff$$'); do	\
+	  b=$$(printf %s "$$diff"|sed 's/\.diff$$//');			\
+	  VERSION_CONTROL=none						\
+	    patch "$(gnulib_dir)/$$b" "$$gl/$$diff" || exit 1;		\
+	  ( cd $(gnulib_dir) || exit 1;					\
+	    git diff "$$b" > "../$$gl/$$diff";				\
+	    git checkout $$b ) || exit 1;				\
+	done
 
 # Update gettext files.
 PACKAGE ?= $(shell basename $(PWD))

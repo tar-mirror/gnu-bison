@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison-2.5.90\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-07-19 15:26+0200\n"
+"POT-Creation-Date: 2012-07-27 17:17+0200\n"
 "PO-Revision-Date: 2012-07-06 07:12+0700\n"
 "Last-Translator: Trần Ngọc Quân <vnwildman@gmail.com>\n"
 "Language-Team: Vietnamese <translation-team-vi@lists.sourceforge.net>\n"
@@ -367,38 +367,38 @@ msgstr "tràn số thứ tự cột"
 msgid "rule useless in parser due to conflicts"
 msgstr "quy tắc vô ích trong bộ phân tích bởi vì các xung đột"
 
-#: src/muscle-tab.c:428
+#: src/muscle-tab.c:436
 #, c-format
 msgid "%%define variable %s redefined"
 msgstr "%%biến định nghĩa %s bị định nghĩa lại"
 
-#: src/muscle-tab.c:431
+#: src/muscle-tab.c:439
 #, c-format
 msgid "previous definition"
 msgstr "lời định nghĩa trước"
 
-#: src/muscle-tab.c:470 src/muscle-tab.c:484 src/muscle-tab.c:536
-#: src/muscle-tab.c:601
+#: src/muscle-tab.c:478 src/muscle-tab.c:492 src/muscle-tab.c:544
+#: src/muscle-tab.c:609
 #, c-format
 msgid "%s: undefined %%define variable %s"
 msgstr "%s: chưa định nghĩa %%define biến %s"
 
-#: src/muscle-tab.c:530
+#: src/muscle-tab.c:538
 #, c-format
 msgid "invalid value for %%define Boolean variable %s"
 msgstr "gặp giá trị sai đối với biến Bun %%define %s"
 
-#: src/muscle-tab.c:588
+#: src/muscle-tab.c:596
 #, c-format
 msgid "invalid value for %%define variable %s: %s"
 msgstr "gặp giá trị sai đối với biến %%define %s: %s"
 
-#: src/muscle-tab.c:591
+#: src/muscle-tab.c:599
 #, c-format
 msgid "accepted value: %s"
 msgstr "giá trị không được chấp nhận: %s"
 
-#: src/parse-gram.y:734
+#: src/parse-gram.y:744
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "thiếu dấu nhận diện trong khai báo tham số"
@@ -576,108 +576,103 @@ msgstr[0] "%d quy tắc vô ích trong ngữ pháp"
 msgid "start symbol %s does not derive any sentence"
 msgstr "ký hiệu bắt đầu %s không nhận được câu"
 
-#: src/scan-code.l:200
-#, c-format
-msgid "stray '$'"
+#: src/scan-code.l:188
+#, fuzzy, c-format
+msgid "stray '%s'"
 msgstr "lạc '$'"
 
-#: src/scan-code.l:205
-#, c-format
-msgid "stray '@'"
-msgstr "lạc '@'"
-
-#: src/scan-code.l:230
+#: src/scan-code.l:227
 #, c-format
 msgid "a ';' might be needed at the end of action code"
 msgstr "một dấu ';' có lẽ là cần thiết tại cuối của câu lệnh hành động"
 
-#: src/scan-code.l:231
+#: src/scan-code.l:228
 #, c-format
 msgid "future versions of Bison will not add the ';'"
 msgstr "phiên bản tiếp theo của Bison sẽ không thêm ';'"
 
-#: src/scan-code.l:253
+#: src/scan-code.l:250
 #, c-format
 msgid "use of YYFAIL, which is deprecated and will be removed"
 msgstr "sử dụng YYFAIL, việc này không được tán thành và sẽ bị gỡ bỏ"
 
-#: src/scan-code.l:438 src/scan-code.l:441
+#: src/scan-code.l:427 src/scan-code.l:430
 #, c-format
 msgid "refers to: %c%s at %s"
 msgstr "tham chiếu đến: %c%s tại %s"
 
-#: src/scan-code.l:457
+#: src/scan-code.l:446
 #, c-format
 msgid "possibly meant: %c"
 msgstr "có lẽ khoảng: %c"
 
-#: src/scan-code.l:466
+#: src/scan-code.l:455
 #, c-format
 msgid ", hiding %c"
 msgstr ", ẩn %c"
 
-#: src/scan-code.l:474
+#: src/scan-code.l:463
 #, c-format
 msgid " at %s"
 msgstr " ở %s"
 
-#: src/scan-code.l:479
+#: src/scan-code.l:468
 #, c-format
 msgid ", cannot be accessed from mid-rule action at $%d"
 msgstr ", không thể truy cập được từ hành động quy-tắc-trung tại $%d"
 
-#: src/scan-code.l:531 src/scan-gram.l:777
+#: src/scan-code.l:520 src/scan-gram.l:777
 #, c-format
 msgid "integer out of range: %s"
 msgstr "số nguyên ở ngoại phạm vi: %s"
 
-#: src/scan-code.l:620
+#: src/scan-code.l:609
 #, c-format
 msgid "invalid reference: %s"
 msgstr "sai tham chiếu: %s"
 
-#: src/scan-code.l:629
+#: src/scan-code.l:618
 #, c-format
 msgid "syntax error after '%c', expecting integer, letter, '_', '[', or '$'"
 msgstr ""
 "lỗi sai cú pháp sau '%c', đang mong chờ số nguyên, chữ, '_', '[', hay '$'"
 
-#: src/scan-code.l:636
+#: src/scan-code.l:625
 #, c-format
 msgid "symbol not found in production before $%d: %.*s"
 msgstr "ký hiệu không tìm thấy trong thủ tục trước $%d: %.*s"
 
-#: src/scan-code.l:643
+#: src/scan-code.l:632
 #, c-format
 msgid "symbol not found in production: %.*s"
 msgstr "ký hiệu không tìm thấy trong thủ tục: %.*s"
 
-#: src/scan-code.l:658
+#: src/scan-code.l:647
 #, c-format
 msgid "misleading reference: %s"
 msgstr "tham chiếu không đúng chỗ: %s"
 
-#: src/scan-code.l:673
+#: src/scan-code.l:662
 #, c-format
 msgid "ambiguous reference: %s"
 msgstr "tham chiếu mơ hồ: %s"
 
-#: src/scan-code.l:732
+#: src/scan-code.l:699
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr "đưa ra kiểu dứt khoát theo ngữ cảnh không đặt kiểu"
 
-#: src/scan-code.l:757
+#: src/scan-code.l:758
 #, c-format
 msgid "$$ for the midrule at $%d of %s has no declared type"
 msgstr "$$ cho quy tắc giữa ở $%d của %s không có kiểu được khai báo"
 
-#: src/scan-code.l:762
+#: src/scan-code.l:763
 #, c-format
 msgid "$$ of %s has no declared type"
 msgstr "$$ của %s không khai báo kiểu"
 
-#: src/scan-code.l:784
+#: src/scan-code.l:785
 #, c-format
 msgid "$%s of %s has no declared type"
 msgstr "$%s của %s không khai báo kiểu"
@@ -752,17 +747,17 @@ msgstr "thiếu %s tại kết thúc tập tin"
 msgid "missing %s at end of line"
 msgstr "thiếu %s tại kết thúc dòng"
 
-#: src/scan-skel.l:144
+#: src/scan-skel.l:146
 #, c-format
 msgid "unclosed %s directive in skeleton"
 msgstr "gặp chỉ thị %s chưa đóng trong khung sườn"
 
-#: src/scan-skel.l:289
+#: src/scan-skel.l:291
 #, c-format
 msgid "too few arguments for %s directive in skeleton"
 msgstr "quá ít đối số cho chỉ thị %s trong khung sườn"
 
-#: src/scan-skel.l:296
+#: src/scan-skel.l:298
 #, c-format
 msgid "too many arguments for %s directive in skeleton"
 msgstr "quá nhiều đối số cho chỉ thị %s trong khung sườn"
@@ -1150,6 +1145,9 @@ msgstr "tiến trình con %s"
 #, c-format
 msgid "%s subprocess got fatal signal %d"
 msgstr "tiến trình con %s đã nhận tín hiệu nghiệm trọng %d"
+
+#~ msgid "stray '@'"
+#~ msgstr "lạc '@'"
 
 #~ msgid "I/O error"
 #~ msgstr "Lỗi V/R"

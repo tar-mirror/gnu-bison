@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.5.90\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-07-19 15:26+0200\n"
+"POT-Creation-Date: 2012-07-27 17:17+0200\n"
 "PO-Revision-Date: 2012-07-07 12:35+0200\n"
 "Last-Translator: Michael Piefel <piefel@informatik.hu-berlin.de>\n"
 "Language-Team: German <translation-team-de@lists.sourceforge.net>\n"
@@ -363,38 +363,38 @@ msgstr "Überlauf bei den Spaltennummern"
 msgid "rule useless in parser due to conflicts"
 msgstr "Regel nutzlos im Parser wegen Konflikten"
 
-#: src/muscle-tab.c:428
+#: src/muscle-tab.c:436
 #, c-format
 msgid "%%define variable %s redefined"
 msgstr "%%define-Variable %s noch einmal definiert"
 
-#: src/muscle-tab.c:431
+#: src/muscle-tab.c:439
 #, c-format
 msgid "previous definition"
 msgstr "vorhergehende Definition"
 
-#: src/muscle-tab.c:470 src/muscle-tab.c:484 src/muscle-tab.c:536
-#: src/muscle-tab.c:601
+#: src/muscle-tab.c:478 src/muscle-tab.c:492 src/muscle-tab.c:544
+#: src/muscle-tab.c:609
 #, c-format
 msgid "%s: undefined %%define variable %s"
 msgstr "%s: undefinierte %%define-Variable %s"
 
-#: src/muscle-tab.c:530
+#: src/muscle-tab.c:538
 #, c-format
 msgid "invalid value for %%define Boolean variable %s"
 msgstr "ungültiger Wert für Boole’sche %%define-Variable %s"
 
-#: src/muscle-tab.c:588
+#: src/muscle-tab.c:596
 #, c-format
 msgid "invalid value for %%define variable %s: %s"
 msgstr "ungültiger Wert für %%define-Variable %s: %s"
 
-#: src/muscle-tab.c:591
+#: src/muscle-tab.c:599
 #, c-format
 msgid "accepted value: %s"
 msgstr "akzeptierte Werte: %s"
 
-#: src/parse-gram.y:734
+#: src/parse-gram.y:744
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "fehlender Bezeichner in Parameterdeklaration"
@@ -574,109 +574,104 @@ msgstr[1] "%d Regeln, die in Grammatik nutzlos sind"
 msgid "start symbol %s does not derive any sentence"
 msgstr "es lassen sich keine Sätze vom Startsymbol %s ableiten"
 
-#: src/scan-code.l:200
-#, c-format
-msgid "stray '$'"
+#: src/scan-code.l:188
+#, fuzzy, c-format
+msgid "stray '%s'"
 msgstr "herumstreunendes ‚$‘"
 
-#: src/scan-code.l:205
-#, c-format
-msgid "stray '@'"
-msgstr "herumstreunendes ‚@‘"
-
-#: src/scan-code.l:230
+#: src/scan-code.l:227
 #, c-format
 msgid "a ';' might be needed at the end of action code"
 msgstr "ein ‚;‘ könnte am Ende von Aktionscode nötig sein"
 
-#: src/scan-code.l:231
+#: src/scan-code.l:228
 #, c-format
 msgid "future versions of Bison will not add the ';'"
 msgstr "zukünftige Versionen von Bison werden das ‚;‘ nicht hinzufügen"
 
-#: src/scan-code.l:253
+#: src/scan-code.l:250
 #, c-format
 msgid "use of YYFAIL, which is deprecated and will be removed"
 msgstr "Benutzung von YYFAIL, was veraltet ist und bald entfernt wird"
 
-#: src/scan-code.l:438 src/scan-code.l:441
+#: src/scan-code.l:427 src/scan-code.l:430
 #, c-format
 msgid "refers to: %c%s at %s"
 msgstr "verweist auf: %c%s bei %s"
 
-#: src/scan-code.l:457
+#: src/scan-code.l:446
 #, c-format
 msgid "possibly meant: %c"
 msgstr "meinte möglicherweise: %c"
 
-#: src/scan-code.l:466
+#: src/scan-code.l:455
 #, c-format
 msgid ", hiding %c"
 msgstr ", versteckt dabei %c"
 
-#: src/scan-code.l:474
+#: src/scan-code.l:463
 #, c-format
 msgid " at %s"
 msgstr " bei %s"
 
-#: src/scan-code.l:479
+#: src/scan-code.l:468
 #, c-format
 msgid ", cannot be accessed from mid-rule action at $%d"
 msgstr ""
 ", kann nicht aus Aktion inmitten einer Regel bei $%d heraus zugegriffen "
 "werden"
 
-#: src/scan-code.l:531 src/scan-gram.l:777
+#: src/scan-code.l:520 src/scan-gram.l:777
 #, c-format
 msgid "integer out of range: %s"
 msgstr "Ganzzahl außerhalb des Wertebereichs: %s"
 
-#: src/scan-code.l:620
+#: src/scan-code.l:609
 #, c-format
 msgid "invalid reference: %s"
 msgstr "ungültiger Verweis: %s"
 
-#: src/scan-code.l:629
+#: src/scan-code.l:618
 #, c-format
 msgid "syntax error after '%c', expecting integer, letter, '_', '[', or '$'"
 msgstr "Syntaxfehler nach ‚%c‘, erwarte Ganzzahl, Buchstabe, ‚_‘, ‚[‘ oder ‚$‘"
 
-#: src/scan-code.l:636
+#: src/scan-code.l:625
 #, c-format
 msgid "symbol not found in production before $%d: %.*s"
 msgstr "Symbol nicht in Produktion gefunden vor $%d: %.*s"
 
-#: src/scan-code.l:643
+#: src/scan-code.l:632
 #, c-format
 msgid "symbol not found in production: %.*s"
 msgstr "Symbol nicht in Produktion gefunden: %.*s"
 
-#: src/scan-code.l:658
+#: src/scan-code.l:647
 #, c-format
 msgid "misleading reference: %s"
 msgstr "irreführender Verweis: %s"
 
-#: src/scan-code.l:673
+#: src/scan-code.l:662
 #, c-format
 msgid "ambiguous reference: %s"
 msgstr "mehrdeutiger Verweis: %s"
 
-#: src/scan-code.l:732
+#: src/scan-code.l:699
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr "expliziter Typ angegeben und ungetypter Grammatik"
 
-#: src/scan-code.l:757
+#: src/scan-code.l:758
 #, c-format
 msgid "$$ for the midrule at $%d of %s has no declared type"
 msgstr "$$ für Regelmitte bei $%d von %s hat keinen deklarierten Typ"
 
-#: src/scan-code.l:762
+#: src/scan-code.l:763
 #, c-format
 msgid "$$ of %s has no declared type"
 msgstr "$$ von %s hat keinen deklarierten Typ"
 
-#: src/scan-code.l:784
+#: src/scan-code.l:785
 #, c-format
 msgid "$%s of %s has no declared type"
 msgstr "$%s von %s hat keinen deklarierten Typ"
@@ -751,17 +746,17 @@ msgstr "fehlendes %s am Ende der Datei"
 msgid "missing %s at end of line"
 msgstr "fehlendes %s am Ende der Zeile"
 
-#: src/scan-skel.l:144
+#: src/scan-skel.l:146
 #, c-format
 msgid "unclosed %s directive in skeleton"
 msgstr "nicht geschlossene Direktive %s im Skelett"
 
-#: src/scan-skel.l:289
+#: src/scan-skel.l:291
 #, c-format
 msgid "too few arguments for %s directive in skeleton"
 msgstr "zu wenige Argumente für Direktive %s im Skelett"
 
-#: src/scan-skel.l:296
+#: src/scan-skel.l:298
 #, c-format
 msgid "too many arguments for %s directive in skeleton"
 msgstr "zu viele Argumente für Direktive %s im Skelett"
@@ -1154,6 +1149,9 @@ msgstr "Unterprozess %s"
 #, c-format
 msgid "%s subprocess got fatal signal %d"
 msgstr "Unterprozess %s erhielt tödliches Signal %d"
+
+#~ msgid "stray '@'"
+#~ msgstr "herumstreunendes ‚@‘"
 
 #~ msgid ""
 #~ "undefined %%define variable `%s' passed to muscle_percent_define_get_loc"

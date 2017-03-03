@@ -36,7 +36,7 @@
 #define FLEX_SCANNER
 #define YY_FLEX_MAJOR_VERSION 2
 #define YY_FLEX_MINOR_VERSION 5
-#define YY_FLEX_SUBMINOR_VERSION 35
+#define YY_FLEX_SUBMINOR_VERSION 36
 #if YY_FLEX_SUBMINOR_VERSION > 0
 #define FLEX_BETA
 #endif
@@ -97,7 +97,6 @@ typedef int flex_int32_t;
 typedef unsigned char flex_uint8_t; 
 typedef unsigned short int flex_uint16_t;
 typedef unsigned int flex_uint32_t;
-#endif /* ! C99 */
 
 /* Limits of integral types. */
 #ifndef INT8_MIN
@@ -127,6 +126,8 @@ typedef unsigned int flex_uint32_t;
 #ifndef UINT32_MAX
 #define UINT32_MAX             (4294967295U)
 #endif
+
+#endif /* ! C99 */
 
 #endif /* ! FLEXINT_H */
 
@@ -214,8 +215,13 @@ typedef unsigned int flex_uint32_t;
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 #endif
 
+#ifndef YY_TYPEDEF_YY_SIZE_T
+#define YY_TYPEDEF_YY_SIZE_T
+typedef size_t yy_size_t;
+#endif
+
 /* %if-not-reentrant */
-extern int skel_leng;
+extern yy_size_t skel_leng;
 /* %endif */
 
 /* %if-c-only */
@@ -246,11 +252,6 @@ extern FILE *skel_in, *skel_out;
 
 #define unput(c) yyunput( c, (yytext_ptr)  )
 
-#ifndef YY_TYPEDEF_YY_SIZE_T
-#define YY_TYPEDEF_YY_SIZE_T
-typedef size_t yy_size_t;
-#endif
-
 #ifndef YY_STRUCT_YY_BUFFER_STATE
 #define YY_STRUCT_YY_BUFFER_STATE
 struct yy_buffer_state
@@ -273,7 +274,7 @@ struct yy_buffer_state
 	/* Number of characters read into yy_ch_buf, not including EOB
 	 * characters.
 	 */
-	int yy_n_chars;
+	yy_size_t yy_n_chars;
 
 	/* Whether we "own" the buffer - i.e., we know we created it,
 	 * and can realloc() it to grow it, and should free() it to
@@ -357,8 +358,8 @@ static YY_BUFFER_STATE * yy_buffer_stack = 0; /**< Stack as an array. */
 
 /* yy_hold_char holds the character lost when skel_text is formed. */
 static char yy_hold_char;
-static int yy_n_chars;		/* number of characters read into yy_ch_buf */
-int skel_leng;
+static yy_size_t yy_n_chars;		/* number of characters read into yy_ch_buf */
+yy_size_t skel_leng;
 
 /* Points to current character in buffer. */
 static char *yy_c_buf_p = (char *) 0;
@@ -389,7 +390,7 @@ static void skel__init_buffer (YY_BUFFER_STATE b,FILE *file  );
 
 YY_BUFFER_STATE skel__scan_buffer (char *base,yy_size_t size  );
 YY_BUFFER_STATE skel__scan_string (yyconst char *yy_str  );
-YY_BUFFER_STATE skel__scan_bytes (yyconst char *bytes,int len  );
+YY_BUFFER_STATE skel__scan_bytes (yyconst char *bytes,yy_size_t len  );
 
 /* %endif */
 
@@ -424,7 +425,7 @@ void skel_free (void *  );
 /* %% [1.0] skel_text/skel_in/skel_out/yy_state_type/skel_lineno etc. def's & init go here */
 /* Begin user sect3 */
 
-#define skel_wrap(n) 1
+#define skel_wrap() 1
 #define YY_SKIP_YYWRAP
 
 #define FLEX_DEBUG
@@ -585,8 +586,8 @@ int skel__flex_debug = 1;
 static yyconst flex_int16_t yy_rule_linenum[22] =
     {   0,
        72,   73,   74,   75,   76,   78,   79,   81,   90,   91,
-       92,  104,  106,  107,  108,  109,  111,  113,  134,  138,
-      139
+       92,  105,  107,  108,  109,  110,  111,  113,  134,  139,
+      140
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -649,7 +650,7 @@ static void fail_for_at_directive_too_few_args (char const *at_directive_name);
 static void fail_for_invalid_at (char const *at);
 
 
-#line 653 "scan-skel.c"
+#line 654 "scan-skel.c"
 
 #define INITIAL 0
 #define SC_AT_DIRECTIVE_ARGS 1
@@ -703,7 +704,7 @@ FILE *skel_get_out (void );
 
 void skel_set_out  (FILE * out_str  );
 
-int skel_get_leng (void );
+yy_size_t skel_get_leng (void );
 
 char *skel_get_text (void );
 
@@ -769,7 +770,7 @@ static int input (void );
 /* This used to be an fputs(), but since the string might contain NUL's,
  * we now use fwrite().
  */
-#define ECHO fwrite( skel_text, skel_leng, 1, skel_out )
+#define ECHO do { if (fwrite( skel_text, skel_leng, 1, skel_out )) {} } while (0)
 /* %endif */
 /* %if-c++-only C++ definition */
 /* %endif */
@@ -784,7 +785,7 @@ static int input (void );
 	if ( YY_CURRENT_BUFFER_LVALUE->yy_is_interactive ) \
 		{ \
 		int c = '*'; \
-		int n; \
+		size_t n; \
 		for ( n = 0; n < max_size && \
 			     (c = getc( skel_in )) != EOF && c != '\n'; ++n ) \
 			buf[n] = (char) c; \
@@ -906,7 +907,7 @@ YY_DECL
   char *at_directive_argv[AT_DIRECTIVE_ARGC_MAX];
 
 
-#line 910 "scan-skel.c"
+#line 911 "scan-skel.c"
 
 	if ( !(yy_init) )
 		{
@@ -1034,13 +1035,13 @@ fputc (']', skel_out);
 case 4:
 YY_RULE_SETUP
 #line 75 "scan-skel.l"
-/* Empty.  Used by b4_cat in ../data/bison.m4.  */
+continue;  /* Used by b4_cat in ../data/bison.m4.  */
 	YY_BREAK
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
 #line 76 "scan-skel.l"
-/* Likewise.  */
+continue;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
@@ -1081,6 +1082,8 @@ YY_RULE_SETUP
 ECHO;
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
+case YY_STATE_EOF(SC_AT_DIRECTIVE_ARGS):
+case YY_STATE_EOF(SC_AT_DIRECTIVE_SKIP_WS):
 #line 94 "scan-skel.l"
 {
   if (outname)
@@ -1092,38 +1095,38 @@ case YY_STATE_EOF(INITIAL):
 }
 	YY_BREAK
 
+
 case 12:
 /* rule 12 can match eol */
 YY_RULE_SETUP
-#line 104 "scan-skel.l"
-{ STRING_GROW; }
+#line 105 "scan-skel.l"
+STRING_GROW;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 106 "scan-skel.l"
-{ obstack_1grow (&obstack_for_string, '@'); }
+#line 107 "scan-skel.l"
+obstack_1grow (&obstack_for_string, '@');
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 107 "scan-skel.l"
-{ obstack_1grow (&obstack_for_string, '['); }
+#line 108 "scan-skel.l"
+obstack_1grow (&obstack_for_string, '[');
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 108 "scan-skel.l"
-{ obstack_1grow (&obstack_for_string, ']'); }
+#line 109 "scan-skel.l"
+obstack_1grow (&obstack_for_string, ']');
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 109 "scan-skel.l"
-/* Empty.  Useful for starting an argument
-          that begins with whitespace. */
+#line 110 "scan-skel.l"
+continue; /* For starting an argument that begins with whitespace. */
 	YY_BREAK
 case 17:
 /* rule 17 can match eol */
 YY_RULE_SETUP
 #line 111 "scan-skel.l"
-/* Empty.  */
+continue;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
@@ -1152,26 +1155,26 @@ YY_RULE_SETUP
 case 19:
 YY_RULE_SETUP
 #line 134 "scan-skel.l"
-{ fail_for_invalid_at (skel_text); }
+fail_for_invalid_at (skel_text);
 	YY_BREAK
+
 
 
 case 20:
 /* rule 20 can match eol */
 YY_RULE_SETUP
-#line 138 "scan-skel.l"
-
+#line 139 "scan-skel.l"
+continue;
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 139 "scan-skel.l"
+#line 140 "scan-skel.l"
 { yyless (0); BEGIN SC_AT_DIRECTIVE_ARGS; }
 	YY_BREAK
 
 
-case YY_STATE_EOF(SC_AT_DIRECTIVE_ARGS):
-case YY_STATE_EOF(SC_AT_DIRECTIVE_SKIP_WS):
-#line 143 "scan-skel.l"
+
+#line 145 "scan-skel.l"
 {
     fatal (_("unclosed %s directive in skeleton"), at_directive_argv[0]);
   }
@@ -1179,10 +1182,10 @@ case YY_STATE_EOF(SC_AT_DIRECTIVE_SKIP_WS):
 
 case 22:
 YY_RULE_SETUP
-#line 148 "scan-skel.l"
+#line 150 "scan-skel.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 1186 "scan-skel.c"
+#line 1189 "scan-skel.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1380,21 +1383,21 @@ static int yy_get_next_buffer (void)
 
 	else
 		{
-			int num_to_read =
+			yy_size_t num_to_read =
 			YY_CURRENT_BUFFER_LVALUE->yy_buf_size - number_to_move - 1;
 
 		while ( num_to_read <= 0 )
 			{ /* Not enough room in the buffer - grow it. */
 
 			/* just a shorter name for the current buffer */
-			YY_BUFFER_STATE b = YY_CURRENT_BUFFER;
+			YY_BUFFER_STATE b = YY_CURRENT_BUFFER_LVALUE;
 
 			int yy_c_buf_p_offset =
 				(int) ((yy_c_buf_p) - b->yy_ch_buf);
 
 			if ( b->yy_is_our_buffer )
 				{
-				int new_size = b->yy_buf_size * 2;
+				yy_size_t new_size = b->yy_buf_size * 2;
 
 				if ( new_size <= 0 )
 					b->yy_buf_size += b->yy_buf_size / 8;
@@ -1425,7 +1428,7 @@ static int yy_get_next_buffer (void)
 
 		/* Read in more data. */
 		YY_INPUT( (&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move]),
-			(yy_n_chars), (size_t) num_to_read );
+			(yy_n_chars), num_to_read );
 
 		YY_CURRENT_BUFFER_LVALUE->yy_n_chars = (yy_n_chars);
 		}
@@ -1533,7 +1536,7 @@ static int yy_get_next_buffer (void)
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 	yy_is_jam = (yy_current_state == 44);
 
-	return yy_is_jam ? 0 : yy_current_state;
+		return yy_is_jam ? 0 : yy_current_state;
 }
 
 /* %if-c-only */
@@ -1568,7 +1571,7 @@ static int yy_get_next_buffer (void)
 
 		else
 			{ /* need more input */
-			int offset = (yy_c_buf_p) - (yytext_ptr);
+			yy_size_t offset = (yy_c_buf_p) - (yytext_ptr);
 			++(yy_c_buf_p);
 
 			switch ( yy_get_next_buffer(  ) )
@@ -1752,13 +1755,6 @@ static void skel__load_buffer_state  (void)
 	skel_free((void *) b  );
 }
 
-/* %if-c-only */
-
-/* %endif */
-
-/* %if-c++-only */
-/* %endif */
-
 /* Initializes or reinitializes a buffer.
  * This function is sometimes called more than once on the same buffer,
  * such as during a skel_restart() or at EOF.
@@ -1901,7 +1897,7 @@ static void skel_ensure_buffer_stack (void)
 /* %if-c++-only */
 /* %endif */
 {
-	int num_to_alloc;
+	yy_size_t num_to_alloc;
     
 	if (!(yy_buffer_stack)) {
 
@@ -1999,12 +1995,12 @@ YY_BUFFER_STATE skel__scan_string (yyconst char * yystr )
 /* %if-c-only */
 /** Setup the input buffer state to scan the given bytes. The next call to skel_lex() will
  * scan from a @e copy of @a bytes.
- * @param bytes the byte buffer to scan
- * @param len the number of bytes in the buffer pointed to by @a bytes.
+ * @param yybytes the byte buffer to scan
+ * @param _yybytes_len the number of bytes in the buffer pointed to by @a bytes.
  * 
  * @return the newly allocated buffer state object.
  */
-YY_BUFFER_STATE skel__scan_bytes  (yyconst char * yybytes, int  _yybytes_len )
+YY_BUFFER_STATE skel__scan_bytes  (yyconst char * yybytes, yy_size_t  _yybytes_len )
 {
 	YY_BUFFER_STATE b;
 	char *buf;
@@ -2100,7 +2096,7 @@ FILE *skel_get_out  (void)
 /** Get the length of the current token.
  * 
  */
-int skel_get_leng  (void)
+yy_size_t skel_get_leng  (void)
 {
         return skel_leng;
 }
@@ -2269,7 +2265,7 @@ void skel_free (void * ptr )
 
 /* %ok-for-header */
 
-#line 148 "scan-skel.l"
+#line 150 "scan-skel.l"
 
 
 

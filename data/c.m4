@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+m4_include(b4_pkgdatadir/[c-like.m4])
 
 # b4_tocpp(STRING)
 # ----------------
@@ -421,17 +422,18 @@ $2
 #                   SYMBOL-TAG, SYMBOL-NUM,
 #                   SYMBOL-ACTION, SYMBOL-TYPENAME)
 # -------------------------------------------------
+# Issue the code for a symbol action (e.g., %printer).
+#
+# Define b4_dollar_dollar([TYPE-NAME]), and b4_at_dollar, which are
+# invoked where $<TYPE-NAME>$ and @$ were specified by the user.
 m4_define([b4_symbol_actions],
-[m4_pushdef([b4_dollar_dollar],
-   [m4_ifval([$6], [(yyvaluep->$6)], [(*yyvaluep)])])dnl
-m4_pushdef([b4_at_dollar], [(*yylocationp)])dnl
+[b4_dollar_pushdef([(*yyvaluep)], [$6], [(*yylocationp)])dnl
       case $4: /* $3 */
 b4_syncline([$2], [$1])
 	$5;
 b4_syncline([@oline@], [@ofile@])
 	break;
-m4_popdef([b4_at_dollar])dnl
-m4_popdef([b4_dollar_dollar])dnl
+b4_dollar_popdef[]dnl
 ])
 
 

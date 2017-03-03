@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.5\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-07-19 15:26+0200\n"
+"POT-Creation-Date: 2012-07-27 17:17+0200\n"
 "PO-Revision-Date: 2012-05-22 18:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -370,38 +370,38 @@ msgstr "uimhir an cholúin thar maoil"
 msgid "rule useless in parser due to conflicts"
 msgstr "riail gan tairbhe sa pharsálaí de bhrí coinbhleachtaí"
 
-#: src/muscle-tab.c:428
+#: src/muscle-tab.c:436
 #, fuzzy, c-format
 msgid "%%define variable %s redefined"
 msgstr "sainmhíniú nua ar athróg %%define `%s'"
 
-#: src/muscle-tab.c:431
+#: src/muscle-tab.c:439
 #, c-format
 msgid "previous definition"
 msgstr "sainmhíniú roimhe seo"
 
-#: src/muscle-tab.c:470 src/muscle-tab.c:484 src/muscle-tab.c:536
-#: src/muscle-tab.c:601
+#: src/muscle-tab.c:478 src/muscle-tab.c:492 src/muscle-tab.c:544
+#: src/muscle-tab.c:609
 #, fuzzy, c-format
 msgid "%s: undefined %%define variable %s"
 msgstr "luach neamhbhailí ar athróg %%define `%s': `%s'"
 
-#: src/muscle-tab.c:530
+#: src/muscle-tab.c:538
 #, fuzzy, c-format
 msgid "invalid value for %%define Boolean variable %s"
 msgstr "luach neamhbhailí ar athróg Boole %%define `%s'"
 
-#: src/muscle-tab.c:588
+#: src/muscle-tab.c:596
 #, fuzzy, c-format
 msgid "invalid value for %%define variable %s: %s"
 msgstr "luach neamhbhailí ar athróg %%define `%s': `%s'"
 
-#: src/muscle-tab.c:591
+#: src/muscle-tab.c:599
 #, fuzzy, c-format
 msgid "accepted value: %s"
 msgstr "luach glactha: `%s'"
 
-#: src/parse-gram.y:734
+#: src/parse-gram.y:744
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "aitheantóir ar iarraidh i bhfógra paraiméadair"
@@ -591,109 +591,104 @@ msgstr[4] "%d riail gan tairbhe sa ghramadach"
 msgid "start symbol %s does not derive any sentence"
 msgstr "níl aon abairt díorthaithe ón siombail tosaigh %s"
 
-#: src/scan-code.l:200
+#: src/scan-code.l:188
 #, fuzzy, c-format
-msgid "stray '$'"
+msgid "stray '%s'"
 msgstr "`$' ar strae"
 
-#: src/scan-code.l:205
-#, fuzzy, c-format
-msgid "stray '@'"
-msgstr "`@' ar strae"
-
-#: src/scan-code.l:230
+#: src/scan-code.l:227
 #, fuzzy, c-format
 msgid "a ';' might be needed at the end of action code"
 msgstr "seans go bhfuil `;' ar iarraidh ag deireadh an ghnímh"
 
-#: src/scan-code.l:231
+#: src/scan-code.l:228
 #, fuzzy, c-format
 msgid "future versions of Bison will not add the ';'"
 msgstr "ní chuirfear `;' leis i leaganacha de Bison amach anseo"
 
-#: src/scan-code.l:253
+#: src/scan-code.l:250
 #, c-format
 msgid "use of YYFAIL, which is deprecated and will be removed"
 msgstr "tá YYFAIL i léig agus bainfear amach é sa todhchaí"
 
-#: src/scan-code.l:438 src/scan-code.l:441
+#: src/scan-code.l:427 src/scan-code.l:430
 #, c-format
 msgid "refers to: %c%s at %s"
 msgstr "déanann sé tagairt do: %c%s ag %s"
 
-#: src/scan-code.l:457
+#: src/scan-code.l:446
 #, c-format
 msgid "possibly meant: %c"
 msgstr "b'fhéidir: %c"
 
-#: src/scan-code.l:466
+#: src/scan-code.l:455
 #, c-format
 msgid ", hiding %c"
 msgstr ", %c á chur i bhfolach"
 
-#: src/scan-code.l:474
+#: src/scan-code.l:463
 #, c-format
 msgid " at %s"
 msgstr " ag %s"
 
-#: src/scan-code.l:479
+#: src/scan-code.l:468
 #, c-format
 msgid ", cannot be accessed from mid-rule action at $%d"
 msgstr ", níl aon fháil air ó ghníomh meánrialach ag $%d"
 
-#: src/scan-code.l:531 src/scan-gram.l:777
+#: src/scan-code.l:520 src/scan-gram.l:777
 #, c-format
 msgid "integer out of range: %s"
 msgstr "slánuimhir as raon: %s"
 
-#: src/scan-code.l:620
+#: src/scan-code.l:609
 #, c-format
 msgid "invalid reference: %s"
 msgstr "tagairt neamhbhailí: %s"
 
-#: src/scan-code.l:629
+#: src/scan-code.l:618
 #, fuzzy, c-format
 msgid "syntax error after '%c', expecting integer, letter, '_', '[', or '$'"
 msgstr ""
 "earráid chomhréire tar éis `%c', bhíothas ag súil le slánuimhir, litir, `_', "
 "`[', or `$'"
 
-#: src/scan-code.l:636
+#: src/scan-code.l:625
 #, c-format
 msgid "symbol not found in production before $%d: %.*s"
 msgstr "siombail gan aimsiú i riail ghramadaí roimh $%d: %.*s"
 
-#: src/scan-code.l:643
+#: src/scan-code.l:632
 #, c-format
 msgid "symbol not found in production: %.*s"
 msgstr "siombail gan aimsiú i riail ghramadaí: %.*s"
 
-#: src/scan-code.l:658
+#: src/scan-code.l:647
 #, c-format
 msgid "misleading reference: %s"
 msgstr "tagairt mhíthreorach: %s"
 
-#: src/scan-code.l:673
+#: src/scan-code.l:662
 #, c-format
 msgid "ambiguous reference: %s"
 msgstr "tagairt dhébhríoch: %s"
 
-#: src/scan-code.l:732
+#: src/scan-code.l:699
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr "cineál follasach i ngramadach gan chineálacha"
 
-#: src/scan-code.l:757
+#: src/scan-code.l:758
 #, fuzzy, c-format
 msgid "$$ for the midrule at $%d of %s has no declared type"
 msgstr "Níl aon chineál fógartha ag $$ na meánrialach ag $%d de `%s'"
 
-#: src/scan-code.l:762
+#: src/scan-code.l:763
 #, fuzzy, c-format
 msgid "$$ of %s has no declared type"
 msgstr "Níl aon chineál fógartha ag $$ de `%s'"
 
-#: src/scan-code.l:784
+#: src/scan-code.l:785
 #, fuzzy, c-format
 msgid "$%s of %s has no declared type"
 msgstr "Níl aon chineál fógartha ag $%s de `%s'"
@@ -768,17 +763,17 @@ msgstr "`%s' ar iarraidh ag críoch an chomhaid"
 msgid "missing %s at end of line"
 msgstr "`%s' ar iarraidh ag críoch na líne"
 
-#: src/scan-skel.l:144
+#: src/scan-skel.l:146
 #, c-format
 msgid "unclosed %s directive in skeleton"
 msgstr "treoir %s gan dúnadh i gcreatlach"
 
-#: src/scan-skel.l:289
+#: src/scan-skel.l:291
 #, c-format
 msgid "too few arguments for %s directive in skeleton"
 msgstr "easpa argóintí do threoir %s i gcreatlach"
 
-#: src/scan-skel.l:296
+#: src/scan-skel.l:298
 #, c-format
 msgid "too many arguments for %s directive in skeleton"
 msgstr "an iomarca argóintí do threoir %s i gcreatlach"
@@ -1170,6 +1165,10 @@ msgstr "fophróiseas %s"
 #, c-format
 msgid "%s subprocess got fatal signal %d"
 msgstr "fuair fophróiseas %s comhartha marfach %d"
+
+#, fuzzy
+#~ msgid "stray '@'"
+#~ msgstr "`@' ar strae"
 
 #~ msgid "I/O error"
 #~ msgstr "Earráid I/A"

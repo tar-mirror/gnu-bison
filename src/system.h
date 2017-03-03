@@ -160,36 +160,79 @@ typedef size_t uintptr_t;
 # define obstack_chunk_free  free
 # include <obstack.h>
 
-# define obstack_sgrow(Obs, Str) \
+# define obstack_sgrow(Obs, Str)                \
   obstack_grow (Obs, Str, strlen (Str))
 
-# define obstack_fgrow1(Obs, Format, Arg1)	\
-do {						\
-  char buf[4096];				\
-  sprintf (buf, Format, Arg1);			\
-  obstack_grow (Obs, buf, strlen (buf));	\
-} while (0)
+# define obstack_fgrow1(Obs, Format, Arg1)      \
+  do {                                          \
+    char buf[4096];                             \
+    sprintf (buf, Format, Arg1);                \
+    obstack_grow (Obs, buf, strlen (buf));      \
+  } while (0)
 
-# define obstack_fgrow2(Obs, Format, Arg1, Arg2)	\
-do {						\
-  char buf[4096];				\
-  sprintf (buf, Format, Arg1, Arg2);		\
-  obstack_grow (Obs, buf, strlen (buf));	\
-} while (0)
+# define obstack_fgrow2(Obs, Format, Arg1, Arg2)        \
+  do {                                                  \
+    char buf[4096];                                     \
+    sprintf (buf, Format, Arg1, Arg2);                  \
+    obstack_grow (Obs, buf, strlen (buf));              \
+  } while (0)
 
-# define obstack_fgrow3(Obs, Format, Arg1, Arg2, Arg3)	\
-do {							\
-  char buf[4096];					\
-  sprintf (buf, Format, Arg1, Arg2, Arg3);		\
-  obstack_grow (Obs, buf, strlen (buf));		\
-} while (0)
+# define obstack_fgrow3(Obs, Format, Arg1, Arg2, Arg3)  \
+  do {                                                  \
+    char buf[4096];                                     \
+    sprintf (buf, Format, Arg1, Arg2, Arg3);            \
+    obstack_grow (Obs, buf, strlen (buf));              \
+  } while (0)
 
-# define obstack_fgrow4(Obs, Format, Arg1, Arg2, Arg3, Arg4)	\
-do {								\
-  char buf[4096];						\
-  sprintf (buf, Format, Arg1, Arg2, Arg3, Arg4);		\
-  obstack_grow (Obs, buf, strlen (buf));			\
-} while (0)
+# define obstack_fgrow4(Obs, Format, Arg1, Arg2, Arg3, Arg4)    \
+  do {                                                          \
+    char buf[4096];                                             \
+    sprintf (buf, Format, Arg1, Arg2, Arg3, Arg4);              \
+    obstack_grow (Obs, buf, strlen (buf));                      \
+  } while (0)
+
+
+/* Output Str escaped for our postprocessing (i.e., escape M4 special
+   characters).
+
+   For instance "[foo]" -> "@{foo@}", "$$" -> "$][$][". */
+
+# define obstack_escape(Obs, Str)                       \
+  do {                                                  \
+    char const *p;                                      \
+    for (p = Str; *p; p++)                              \
+      switch (*p)                                       \
+        {                                               \
+        case '$': obstack_sgrow (Obs, "$]["); break;    \
+        case '@': obstack_sgrow (Obs, "@@" ); break;    \
+        case '[': obstack_sgrow (Obs, "@{" ); break;    \
+        case ']': obstack_sgrow (Obs, "@}" ); break;    \
+        default:  obstack_1grow (Obs, *p   ); break;    \
+        }                                               \
+  } while (0)
+
+
+/* Output Str both quoted for M4 (i.e., embed in [[...]]), and escaped
+   for our postprocessing (i.e., escape M4 special characters).  If
+   Str is empty (or NULL), output "[]" instead of "[[]]" as it make M4
+   programming easier (m4_ifval can be used).
+
+   For instance "[foo]" -> "[[@{foo@}]]", "$$" -> "[[$][$][]]". */
+
+# define obstack_quote(Obs, Str)                \
+  do {                                          \
+    char const* obstack_quote_p = Str;          \
+    if (obstack_quote_p && obstack_quote_p[0])  \
+      {                                         \
+        obstack_sgrow (Obs, "[[");              \
+        obstack_escape (Obs, obstack_quote_p);  \
+        obstack_sgrow (Obs, "]]");              \
+      }                                         \
+    else                                        \
+      obstack_sgrow (Obs, "[]");                \
+  } while (0)
+
+
 
 
 
@@ -205,25 +248,21 @@ do {								\
 #  define TAB_EXT ".tab"
 # endif
 
-# ifndef DEFAULT_TMPDIR
-#  define DEFAULT_TMPDIR "/tmp"
-# endif
-
 
 
 /*---------------------.
 | Free a linked list.  |
 `---------------------*/
 
-# define LIST_FREE(Type, List)			\
-do {						\
-  Type *_node, *_next;				\
-  for (_node = List; _node; _node = _next)	\
-    {						\
-      _next = _node->next;			\
-      free (_node);				\
-    }						\
-} while (0)
+# define LIST_FREE(Type, List)                  \
+  do {                                          \
+    Type *_node, *_next;                        \
+    for (_node = List; _node; _node = _next)    \
+      {                                         \
+        _next = _node->next;                    \
+        free (_node);                           \
+      }                                         \
+  } while (0)
 
 
 /*---------------------------------------------.

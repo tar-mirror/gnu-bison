@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.5\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2012-07-19 15:26+0200\n"
+"POT-Creation-Date: 2012-07-27 17:17+0200\n"
 "PO-Revision-Date: 2011-07-25 11:00中国标准时间\n"
 "Last-Translator: Ji ZhengYu <zhengyuji@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
@@ -293,38 +293,38 @@ msgstr "列号溢出"
 msgid "rule useless in parser due to conflicts"
 msgstr "由于冲突，解析器中的规则不起作用"
 
-#: src/muscle-tab.c:428
+#: src/muscle-tab.c:436
 #, fuzzy, c-format
 msgid "%%define variable %s redefined"
 msgstr "重新定义了 %%define 变量“%s”"
 
-#: src/muscle-tab.c:431
+#: src/muscle-tab.c:439
 #, c-format
 msgid "previous definition"
 msgstr "上次定义"
 
-#: src/muscle-tab.c:470 src/muscle-tab.c:484 src/muscle-tab.c:536
-#: src/muscle-tab.c:601
+#: src/muscle-tab.c:478 src/muscle-tab.c:492 src/muscle-tab.c:544
+#: src/muscle-tab.c:609
 #, fuzzy, c-format
 msgid "%s: undefined %%define variable %s"
 msgstr "%%define 变量 %s 的值无效：“%s”"
 
-#: src/muscle-tab.c:530
+#: src/muscle-tab.c:538
 #, fuzzy, c-format
 msgid "invalid value for %%define Boolean variable %s"
 msgstr "%%define 布尔型变量 %s 的值无效"
 
-#: src/muscle-tab.c:588
+#: src/muscle-tab.c:596
 #, fuzzy, c-format
 msgid "invalid value for %%define variable %s: %s"
 msgstr "%%define 变量 %s 的值无效：“%s”"
 
-#: src/muscle-tab.c:591
+#: src/muscle-tab.c:599
 #, fuzzy, c-format
 msgid "accepted value: %s"
 msgstr "接受的值：“%s”"
 
-#: src/parse-gram.y:734
+#: src/parse-gram.y:744
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "参数声明中缺少识别符"
@@ -502,107 +502,102 @@ msgstr[0] ""
 msgid "start symbol %s does not derive any sentence"
 msgstr ""
 
-#: src/scan-code.l:200
+#: src/scan-code.l:188
 #, c-format
-msgid "stray '$'"
+msgid "stray '%s'"
 msgstr ""
 
-#: src/scan-code.l:205
-#, c-format
-msgid "stray '@'"
-msgstr ""
-
-#: src/scan-code.l:230
+#: src/scan-code.l:227
 #, c-format
 msgid "a ';' might be needed at the end of action code"
 msgstr ""
 
-#: src/scan-code.l:231
+#: src/scan-code.l:228
 #, c-format
 msgid "future versions of Bison will not add the ';'"
 msgstr ""
 
-#: src/scan-code.l:253
+#: src/scan-code.l:250
 #, c-format
 msgid "use of YYFAIL, which is deprecated and will be removed"
 msgstr "使用了 YYFAIL，它已经废弃并将被移除"
 
-#: src/scan-code.l:438 src/scan-code.l:441
+#: src/scan-code.l:427 src/scan-code.l:430
 #, c-format
 msgid "refers to: %c%s at %s"
 msgstr ""
 
-#: src/scan-code.l:457
+#: src/scan-code.l:446
 #, c-format
 msgid "possibly meant: %c"
 msgstr "可能指：%c"
 
-#: src/scan-code.l:466
+#: src/scan-code.l:455
 #, c-format
 msgid ", hiding %c"
 msgstr ""
 
-#: src/scan-code.l:474
+#: src/scan-code.l:463
 #, c-format
 msgid " at %s"
 msgstr " 位于 %s"
 
-#: src/scan-code.l:479
+#: src/scan-code.l:468
 #, c-format
 msgid ", cannot be accessed from mid-rule action at $%d"
 msgstr ""
 
-#: src/scan-code.l:531 src/scan-gram.l:777
+#: src/scan-code.l:520 src/scan-gram.l:777
 #, c-format
 msgid "integer out of range: %s"
 msgstr "整数超出范围：%s"
 
-#: src/scan-code.l:620
+#: src/scan-code.l:609
 #, c-format
 msgid "invalid reference: %s"
 msgstr "无效引用：%s"
 
-#: src/scan-code.l:629
+#: src/scan-code.l:618
 #, fuzzy, c-format
 msgid "syntax error after '%c', expecting integer, letter, '_', '[', or '$'"
 msgstr "“%c”后语法错误，应为整数、字母、“_”、“[”或“$”"
 
-#: src/scan-code.l:636
+#: src/scan-code.l:625
 #, c-format
 msgid "symbol not found in production before $%d: %.*s"
 msgstr ""
 
-#: src/scan-code.l:643
+#: src/scan-code.l:632
 #, c-format
 msgid "symbol not found in production: %.*s"
 msgstr ""
 
-#: src/scan-code.l:658
+#: src/scan-code.l:647
 #, c-format
 msgid "misleading reference: %s"
 msgstr ""
 
-#: src/scan-code.l:673
+#: src/scan-code.l:662
 #, c-format
 msgid "ambiguous reference: %s"
 msgstr ""
 
-#: src/scan-code.l:732
+#: src/scan-code.l:699
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr ""
 
-#: src/scan-code.l:757
+#: src/scan-code.l:758
 #, c-format
 msgid "$$ for the midrule at $%d of %s has no declared type"
 msgstr ""
 
-#: src/scan-code.l:762
+#: src/scan-code.l:763
 #, c-format
 msgid "$$ of %s has no declared type"
 msgstr ""
 
-#: src/scan-code.l:784
+#: src/scan-code.l:785
 #, c-format
 msgid "$%s of %s has no declared type"
 msgstr ""
@@ -677,17 +672,17 @@ msgstr "文件末尾缺少“%s”"
 msgid "missing %s at end of line"
 msgstr "行尾缺少“%s”"
 
-#: src/scan-skel.l:144
+#: src/scan-skel.l:146
 #, c-format
 msgid "unclosed %s directive in skeleton"
 msgstr ""
 
-#: src/scan-skel.l:289
+#: src/scan-skel.l:291
 #, c-format
 msgid "too few arguments for %s directive in skeleton"
 msgstr ""
 
-#: src/scan-skel.l:296
+#: src/scan-skel.l:298
 #, c-format
 msgid "too many arguments for %s directive in skeleton"
 msgstr ""
