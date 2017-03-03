@@ -1,8 +1,10 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(reduce.c)
-AM_INIT_AUTOMAKE(bison,1.27)
+AC_INIT(src/reduce.c)
+AM_INIT_AUTOMAKE(bison,1.28)
 AM_CONFIG_HEADER(config.h:config.hin)
 AC_PREREQ(2.13)
+
+ALL_LINGUAS="de es fr nl"
 
 dnl Checks for programs.
 AC_PROG_CC
@@ -29,10 +31,20 @@ AM_C_PROTOTYPES
 dnl Checks for library functions.
 AC_FUNC_ALLOCA
 AC_CHECK_FUNCS(mkstemp setlocale)
+BISON_NEED_DECLARATIONS(calloc realloc)
 
-PFILE="${datadir}/bison.simple"
-BISON_DEFINE_FILE(XPFILE, PFILE)
-PFILE1="${datadir}/bison.hairy"
-BISON_DEFINE_FILE(XPFILE1, PFILE1)
+AM_GNU_GETTEXT
 
-AC_OUTPUT(Makefile)
+# This is necessary so that .o files in LIBOBJS are also built via
+# the ANSI2KNR-filtering rules.
+LIBOBJS=`echo $LIBOBJS|sed 's/\.o /\$U.o /g;s/\.o$/\$U.o/'`
+
+AC_DEFINE_UNQUOTED(VERSION_STRING, "GNU Bison version ${VERSION}")
+XPFILE="${datadir}/bison.simple"
+BISON_DEFINE_FILE(XPFILE, XPFILE)
+XPFILE1="${datadir}/bison.hairy"
+BISON_DEFINE_FILE(XPFILE1, XPFILE1)
+LOCALEDIR="${datadir}/locale"
+BISON_DEFINE_FILE(LOCALEDIR, LOCALEDIR)
+
+AC_OUTPUT(Makefile intl/Makefile po/Makefile.in src/Makefile doc/Makefile)
