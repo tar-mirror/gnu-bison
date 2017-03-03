@@ -3,10 +3,10 @@
 % Load plain if necessary, i.e., if running under initex.
 \expandafter\ifx\csname fmtname\endcsname\relax\input plain\fi
 %
-\def\texinfoversion{2002-03-13.06}
+\def\texinfoversion{2002-10-01.17}
 %
-% Copyright (C) 1985, 86, 88, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99,
-%               2000, 01, 02 Free Software Foundation, Inc.
+% Copyright (C) 1985, 1986, 1988, 1990, 1991, 1992, 1993, 1994, 1995,
+% 1996, 1997, 1998, 1999, 2000, 2001, 2002 Free Software Foundation, Inc.
 %
 % This texinfo.tex file is free software; you can redistribute it and/or
 % modify it under the terms of the GNU General Public License as
@@ -36,12 +36,11 @@
 %     (and all CTAN mirrors, see http://www.ctan.org),
 %   and /home/gd/gnu/doc/texinfo.tex on the GNU machines.
 % 
+% The GNU Texinfo home page is http://www.gnu.org/software/texinfo.
+% 
 % The texinfo.tex in any given Texinfo distribution could well be out
 % of date, so if that's what you're using, please check.
 % 
-% Texinfo has a small home page at http://texinfo.org/ and also
-% http://www.gnu.org/software/texinfo.
-%
 % Send bug reports to bug-texinfo@gnu.org.  Please include including a
 % complete document in each bug report with which we can reproduce the
 % problem.  Patches are, of course, greatly appreciated.
@@ -53,7 +52,7 @@
 %   texindex foo.??
 %   tex foo.texi
 %   tex foo.texi
-%   dvips foo.dvi -o # or whatever, to process the dvi file; this makes foo.ps.
+%   dvips foo.dvi -o  # or whatever; this makes foo.ps.
 % The extra TeX runs get the cross-reference information correct.
 % Sometimes one run after texindex suffices, and sometimes you need more
 % than two; texi2dvi does it as many times as necessary.
@@ -987,40 +986,39 @@ where each line of input produces a line of output.}
     \openin 1 \jobname.toc
     \ifeof 1\else\begingroup
       \closein 1 
-      \indexnofonts
-      \def\tt{}
-      \let\_ = \normalunderscore
       % Thanh's hack / proper braces in bookmarks  
       \edef\mylbrace{\iftrue \string{\else}\fi}\let\{=\mylbrace
       \edef\myrbrace{\iffalse{\else\string}\fi}\let\}=\myrbrace
       %
       \def\chapentry ##1##2##3{}
-      \let\appendixentry = \chapentry
-      \def\unnumbchapentry ##1##2{}
       \def\secentry ##1##2##3##4{\advancenumber{chap##2}}
-      \def\unnumbsecentry ##1##2##3{\advancenumber{chap##2}}
       \def\subsecentry ##1##2##3##4##5{\advancenumber{sec##2.##3}}
-      \def\unnumbsubsecentry ##1##2##3##4{\advancenumber{sec##2.##3}}
       \def\subsubsecentry ##1##2##3##4##5##6{\advancenumber{subsec##2.##3.##4}}
-      \def\unnumbsubsubsecentry ##1##2##3##4##5{\advancenumber{subsec##2.##3.##4}}
+      \let\appendixentry = \chapentry
+      \let\unnumbchapentry = \chapentry
+      \let\unnumbsecentry = \secentry
+      \let\unnumbsubsecentry = \subsecentry
+      \let\unnumbsubsubsecentry = \subsubsecentry
       \input \jobname.toc
       \def\chapentry ##1##2##3{%
         \pdfoutline goto name{\pdfmkpgn{##3}}count-\expnumber{chap##2}{##1}}
-      \let\appendixentry = \chapentry
-      \def\unnumbchapentry ##1##2{%
-        \pdfoutline goto name{\pdfmkpgn{##2}}{##1}}
       \def\secentry ##1##2##3##4{%
         \pdfoutline goto name{\pdfmkpgn{##4}}count-\expnumber{sec##2.##3}{##1}}
-      \def\unnumbsecentry ##1##2##3{%
-        \pdfoutline goto name{\pdfmkpgn{##3}}{##1}}
       \def\subsecentry ##1##2##3##4##5{%
         \pdfoutline goto name{\pdfmkpgn{##5}}count-\expnumber{subsec##2.##3.##4}{##1}}
-      \def\unnumbsubsecentry ##1##2##3##4{%
-        \pdfoutline goto name{\pdfmkpgn{##4}}{##1}}
       \def\subsubsecentry ##1##2##3##4##5##6{%
         \pdfoutline goto name{\pdfmkpgn{##6}}{##1}}
-      \def\unnumbsubsubsecentry ##1##2##3##4##5{%
-        \pdfoutline goto name{\pdfmkpgn{##5}}{##1}}
+      \let\appendixentry = \chapentry
+      \let\unnumbchapentry = \chapentry
+      \let\unnumbsecentry = \secentry
+      \let\unnumbsubsecentry = \subsecentry
+      \let\unnumbsubsubsecentry = \subsubsecentry
+      %
+      % Make special characters normal for writing to the pdf file.
+      % 
+      \indexnofonts
+      \let\tt=\relax
+      \turnoffactive
       \input \jobname.toc
     \endgroup\fi
   }}
@@ -1170,7 +1168,7 @@ where each line of input produces a line of output.}
 \newcount\mainmagstep
 \ifx\bigger\relax
   % not really supported.
-  \let\mainmagstep=\magstep1
+  \mainmagstep=\magstep1
   \setfont\textrm\rmshape{12}{1000}
   \setfont\texttt\ttshape{12}{1000}
 \else
@@ -2413,20 +2411,20 @@ width0pt\relax} \fi
   \let\item = \relax
 }
 
-% Ignore @ignore ... @end ignore.
+% Ignore @ignore, @ifhtml, @ifinfo, and the like.
 %
-\def\ignore{\doignore{ignore}}
-
-% Also ignore @ifinfo, @ifhtml, @ifnottex, @html, @menu,
-% @documentdescription, and @direntry text.
-%
-\def\ifinfo{\doignore{ifinfo}}
-\def\ifhtml{\doignore{ifhtml}}
-\def\ifnottex{\doignore{ifnottex}}
-\def\html{\doignore{html}}
-\def\menu{\doignore{menu}}
-\def\documentdescription{\doignore{documentdescription}}
 \def\direntry{\doignore{direntry}}
+\def\documentdescriptionword{documentdescription}
+\def\documentdescription{\doignore{documentdescription}}
+\def\html{\doignore{html}}
+\def\ifhtml{\doignore{ifhtml}}
+\def\ifinfo{\doignore{ifinfo}}
+\def\ifnottex{\doignore{ifnottex}}
+\def\ifplaintext{\doignore{ifplaintext}}
+\def\ifxml{\doignore{ifxml}}
+\def\ignore{\doignore{ignore}}
+\def\menu{\doignore{menu}}
+\def\xml{\doignore{xml}}
 
 % @dircategory CATEGORY  -- specify a category of the dir file
 % which this file should belong to.  Ignore this in TeX.
@@ -2453,14 +2451,21 @@ width0pt\relax} \fi
   % We must not have @c interpreted as a control sequence.
   \catcode`\@ = 12
   %
-  % Make the letter c a comment character so that the rest of the line
-  % will be ignored. This way, the document can have (for example)
-  %   @c @end ifinfo
-  % and the @end ifinfo will be properly ignored.
-  % (We've just changed @ to catcode 12.)
-  \catcode`\c = 14
+  \def\ignoreword{#1}%
+  \ifx\ignoreword\documentdescriptionword
+    % The c kludge breaks documentdescription, since
+    % `documentdescription' contains a `c'.  Means not everything will
+    % be ignored inside @documentdescription, but oh well...
+  \else
+    % Make the letter c a comment character so that the rest of the line
+    % will be ignored. This way, the document can have (for example)
+    %   @c @end ifinfo
+    % and the @end ifinfo will be properly ignored.
+    % (We've just changed @ to catcode 12.)
+    \catcode`\c = 14
+  \fi
   %
-  % And now expand that command.
+  % And now expand the command defined above.
   \doignoretext
 }
 
@@ -2501,7 +2506,7 @@ width0pt\relax} \fi
   % We must actually expand the ignored text to look for the @end
   % command, so that nested ignore constructs work.  Thus, we put the
   % text into a \vbox and then do nothing with the result.  To minimize
-  % the change of memory overflow, we follow the approach outlined on
+  % the chance of memory overflow, we follow the approach outlined on
   % page 401 of the TeXbook: make the current font be a dummy font.
   %
   \setbox0 = \vbox\bgroup
@@ -2553,7 +2558,7 @@ width0pt\relax} \fi
     % Do minimal line-breaking.
     \pretolerance = 10000
     %
-    % Do not execute instructions in @tex
+    % Do not execute instructions in @tex.
     \def\tex{\doignore{tex}}%
     % Do not execute macro definitions.
     % `c' is a comment character, so the word `macro' will get cut off.
@@ -2651,19 +2656,21 @@ width0pt\relax} \fi
 \def\ifclearfail{\nestedignore{ifclear}}
 \defineunmatchedend{ifclear}
 
-% @iftex, @ifnothtml, @ifnotinfo always succeed; we read the text
-% following, through the first @end iftex (etc.).  Make `@end iftex'
-% (etc.) valid only after an @iftex.
+% @iftex, @ifnothtml, @ifnotinfo, @ifnotplaintext always succeed; we
+% read the text following, through the first @end iftex (etc.).  Make
+% `@end iftex' (etc.) valid only after an @iftex.
 %
 \def\iftex{\conditionalsucceed{iftex}}
 \def\ifnothtml{\conditionalsucceed{ifnothtml}}
 \def\ifnotinfo{\conditionalsucceed{ifnotinfo}}
+\def\ifnotplaintext{\conditionalsucceed{ifnotplaintext}}
 \defineunmatchedend{iftex}
 \defineunmatchedend{ifnothtml}
 \defineunmatchedend{ifnotinfo}
+\defineunmatchedend{ifnotplaintext}
 
-% We can't just want to start a group at @iftex (for example) and end it
-% at @end iftex, since then @set commands inside the conditional have no
+% We can't just want to start a group at @iftex (etc.) and end it at
+% @end iftex, since then @set commands inside the conditional have no
 % effect (they'd get reverted at the end of the group).  So we must
 % define \Eiftex to redefine itself to be its previous value.  (We can't
 % just define it to fail again with an ``unmatched end'' error, since
@@ -3589,7 +3596,7 @@ width0pt\relax} \fi
 \unnumbchapmacro {#1}%
 \gdef\thischapter{#1}\gdef\thissection{#1}%
 \toks0 = {#1}%
-\edef\temp{\noexpand\writetocentry{\realbackslash unnumbchapentry{\the\toks0}}}%
+\edef\temp{\noexpand\writetocentry{\realbackslash unnumbchapentry{\the\toks0}{\the\chapno}}}%
 \temp
 \unnumbnoderef
 \global\let\section = \unnumberedsec
@@ -3631,7 +3638,7 @@ width0pt\relax} \fi
 \plainsecheading {#1}\gdef\thissection{#1}%
 \toks0 = {#1}%
 \edef\temp{\noexpand\writetocentry{\realbackslash unnumbsecentry%
-  {\the\toks0}{\the\chapno}}}%
+  {\the\toks0}{\the\chapno}{\the\secno}}}%
 \temp
 \unnumbnoderef
 \nobreak
@@ -3670,7 +3677,7 @@ width0pt\relax} \fi
 \plainsubsecheading {#1}\gdef\thissection{#1}%
 \toks0 = {#1}%
 \edef\temp{\noexpand\writetocentry{\realbackslash unnumbsubsecentry%
-  {\the\toks0}{\the\chapno}{\the\secno}}}%
+  {\the\toks0}{\the\chapno}{\the\secno}{\the\subsecno}}}%
 \temp
 \unnumbnoderef
 \nobreak
@@ -3711,7 +3718,7 @@ width0pt\relax} \fi
 \plainsubsubsecheading {#1}\gdef\thissection{#1}%
 \toks0 = {#1}%
 \edef\temp{\noexpand\writetocentry{\realbackslash unnumbsubsubsecentry%
-  {\the\toks0}{\the\chapno}{\the\secno}{\the\subsecno}}}%
+  {\the\toks0}{\the\chapno}{\the\secno}{\the\subsecno}{\the\subsubsecno}}}%
 \temp
 \unnumbnoderef
 \nobreak
@@ -4004,11 +4011,11 @@ width0pt\relax} \fi
       \hyphenpenalty = 10000
       \advance\baselineskip by 1pt % Open it up a little.
       \def\secentry ##1##2##3##4{}
-      \def\unnumbsecentry ##1##2##3{}
       \def\subsecentry ##1##2##3##4##5{}
-      \def\unnumbsubsecentry ##1##2##3##4{}
       \def\subsubsecentry ##1##2##3##4##5##6{}
-      \def\unnumbsubsubsecentry ##1##2##3##4##5{}
+      \let\unnumbsecentry = \secentry
+      \let\unnumbsubsecentry = \subsecentry
+      \let\unnumbsubsubsecentry = \subsubsecentry
       \openin 1 \jobname.toc
       \ifeof 1 \else
         \closein 1
@@ -4065,21 +4072,21 @@ width0pt\relax} \fi
 }
 
 % Unnumbered chapters.
-\def\unnumbchapentry#1#2{\dochapentry{#1}{#2}}
-\def\shortunnumberedentry#1#2{\tocentry{#1}{\doshortpageno\bgroup#2\egroup}}
+\def\unnumbchapentry#1#2#3{\dochapentry{#1}{#3}}
+\def\shortunnumberedentry#1#2#3{\tocentry{#1}{\doshortpageno\bgroup#3\egroup}}
 
 % Sections.
 \def\secentry#1#2#3#4{\dosecentry{#2.#3\labelspace#1}{#4}}
-\def\unnumbsecentry#1#2#3{\dosecentry{#1}{#3}}
+\def\unnumbsecentry#1#2#3#4{\dosecentry{#1}{#4}}
 
 % Subsections.
 \def\subsecentry#1#2#3#4#5{\dosubsecentry{#2.#3.#4\labelspace#1}{#5}}
-\def\unnumbsubsecentry#1#2#3#4{\dosubsecentry{#1}{#4}}
+\def\unnumbsubsecentry#1#2#3#4#5{\dosubsecentry{#1}{#5}}
 
 % And subsubsections.
 \def\subsubsecentry#1#2#3#4#5#6{%
   \dosubsubsecentry{#2.#3.#4.#5\labelspace#1}{#6}}
-\def\unnumbsubsubsecentry#1#2#3#4#5{\dosubsubsecentry{#1}{#5}}
+\def\unnumbsubsubsecentry#1#2#3#4#5#6{\dosubsubsecentry{#1}{#6}}
 
 % This parameter controls the indentation of the various levels.
 \newdimen\tocindent \tocindent = 3pc
@@ -4140,36 +4147,27 @@ width0pt\relax} \fi
 \message{environments,}
 % @foo ... @end foo.
 
+% @point{}, @result{}, @expansion{}, @print{}, @equiv{}.
+% 
 % Since these characters are used in examples, it should be an even number of
 % \tt widths. Each \tt character is 1en, so two makes it 1em.
-% Furthermore, these definitions must come after we define our fonts.
-\newbox\dblarrowbox    \newbox\longdblarrowbox
-\newbox\pushcharbox    \newbox\bullbox
-\newbox\equivbox       \newbox\errorbox
-
-%{\tentt
-%\global\setbox\dblarrowbox = \hbox to 1em{\hfil$\Rightarrow$\hfil}
-%\global\setbox\longdblarrowbox = \hbox to 1em{\hfil$\mapsto$\hfil}
-%\global\setbox\pushcharbox = \hbox to 1em{\hfil$\dashv$\hfil}
-%\global\setbox\equivbox = \hbox to 1em{\hfil$\ptexequiv$\hfil}
-% Adapted from the manmac format (p.420 of TeXbook)
-%\global\setbox\bullbox = \hbox to 1em{\kern.15em\vrule height .75ex width .85ex
-%                                      depth .1ex\hfil}
-%}
-
-% @point{}, @result{}, @expansion{}, @print{}, @equiv{}.
+%
 \def\point{$\star$}
 \def\result{\leavevmode\raise.15ex\hbox to 1em{\hfil$\Rightarrow$\hfil}}
 \def\expansion{\leavevmode\raise.1ex\hbox to 1em{\hfil$\mapsto$\hfil}}
 \def\print{\leavevmode\lower.1ex\hbox to 1em{\hfil$\dashv$\hfil}}
 \def\equiv{\leavevmode\lower.1ex\hbox to 1em{\hfil$\ptexequiv$\hfil}}
 
+% The @error{} command.
 % Adapted from the TeXbook's \boxit.
+% 
+\newbox\errorbox
+%
 {\tentt \global\dimen0 = 3em}% Width of the box.
 \dimen2 = .55pt % Thickness of rules
 % The text. (`r' is open on the right, `e' somewhat less so on the left.)
 \setbox0 = \hbox{\kern-.75pt \tensf error\kern-1.5pt}
-
+%
 \global\setbox\errorbox=\hbox to \dimen0{\hfil
    \hsize = \dimen0 \advance\hsize by -5.8pt % Space to left+right.
    \advance\hsize by -2\dimen2 % Rules.
@@ -4180,8 +4178,7 @@ width0pt\relax} \fi
          \kern3pt\vrule width\dimen2}% Space to right.
       \hrule height\dimen2}
     \hfil}
-
-% The @error{} command.
+%
 \def\error{\leavevmode\lower.7ex\copy\errorbox}
 
 % @tex ... @end tex    escapes into raw Tex temporarily.
@@ -4221,9 +4218,9 @@ width0pt\relax} \fi
   \def\@{@}%
 \let\Etex=\endgroup}
 
-% Define @lisp ... @endlisp.
+% Define @lisp ... @end lisp.
 % @lisp does a \begingroup so it can rebind things,
-% including the definition of @endlisp (which normally is erroneous).
+% including the definition of @end lisp (which normally is erroneous).
 
 % Amount to narrow the margins by for @lisp.
 \newskip\lispnarrowing \lispnarrowing=0.4in
@@ -4621,12 +4618,66 @@ width0pt\relax} \fi
   \endgroup\nonfillfinish\endgroup
 }
 
+% @copying ... @end copying.
+% Save the text away for @insertcopying later.  Many commands won't be
+% allowed in this context, but that's ok.
+% 
+% We save the uninterpreted tokens, rather than creating a box.
+% Saving the text in a box would be much easier, but then all the
+% typesetting commands (@smallbook, font changes, etc.) have to be done
+% beforehand -- and a) we want @copying to be done first in the source
+% file; b) letting users define the frontmatter in as flexible order as
+% possible is very desirable.
+% 
+\def\copying{\begingroup
+  % Define a command to swallow text until we reach `@end copying'.
+  % \ is the escape char in this texinfo.tex file, so it is the
+  % delimiter for the command; @ will be the escape char when we read
+  % it, but that doesn't matter.
+  \long\def\docopying##1\end copying{\gdef\copyingtext{##1}\enddocopying}%
+  %
+  % We must preserve ^^M's in the input file; see \insertcopying below.
+  \catcode`\^^M = \active
+  \docopying
+}
+
+% What we do to finish off the copying text.
+%
+\def\enddocopying{\endgroup\ignorespaces}
+
+% @insertcopying.  Here we must play games with ^^M's.  On the one hand,
+% we need them to delimit commands such as `@end quotation', so they
+% must be active.  On the other hand, we certainly don't want every
+% end-of-line to be a \par, as would happen with the normal active
+% definition of ^^M.  On the third hand, two ^^M's in a row should still
+% generate a \par.
+% 
+% Our approach is to make ^^M insert a space and a penalty1 normally;
+% then it can also check if \lastpenalty=1.  If it does, then manually
+% do \par.
+% 
+% Seems pretty fragile, but for the limited use of getting the copying
+% text (which should be quite simple) inserted, we can hope it's ok.
+% % 
+{\catcode`\^^M=\active %
+\gdef\insertcopying{\begingroup %
+  \parindent = 0pt  % looks wrong on title page
+  \def^^M{%
+    \ifnum \lastpenalty=1 %
+      \par %
+    \else %
+      \space \penalty 1 %
+    \fi %
+  }%
+  \copyingtext %
+\endgroup}%
+}
 
 \message{defuns,}
 % @defun etc.
 
 % Allow user to change definition object font (\df) internally
-\def\setdeffont #1 {\csname DEF#1\endcsname}
+\def\setdeffont#1 {\csname DEF#1\endcsname}
 
 \newskip\defbodyindent \defbodyindent=.4in
 \newskip\defargsindent \defargsindent=50pt
@@ -4717,56 +4768,60 @@ width0pt\relax} \fi
 {\df #1}\enskip        % Generate function name
 }
 
-% Actually process the body of a definition
-% #1 should be the terminating control sequence, such as \Edefun.
-% #2 should be the "another name" control sequence, such as \defunx.
-% #3 should be the control sequence that actually processes the header,
-%    such as \defunheader.
-
-\def\defparsebody #1#2#3{\begingroup\inENV% Environment for definitionbody
-\medbreak %
-% Define the end token that this defining construct specifies
-% so that it will exit this group.
-\def#1{\endgraf\endgroup\medbreak}%
-\def#2{\begingroup\obeylines\activeparens\spacesplit#3}%
-\parindent=0in
-\advance\leftskip by \defbodyindent
-\exdentamount=\defbodyindent
-\begingroup %
-\catcode 61=\active % 61 is `='
-\obeylines\activeparens\spacesplit#3}
-
+% Common pieces to start any @def...
 % #1 is the \E... control sequence to end the definition (which we define).
-% #2 is the \...x control sequence for consecutive fns (which we define).
-% #3 is the control sequence to call to resume processing.
-% #4, delimited by the space, is the class name.
-%
-\def\defmethparsebody#1#2#3#4 {\begingroup\inENV %
-\medbreak %
-% Define the end token that this defining construct specifies
-% so that it will exit this group.
-\def#1{\endgraf\endgroup\medbreak}%
-\def#2##1 {\begingroup\obeylines\activeparens\spacesplit{#3{##1}}}%
-\parindent=0in
-\advance\leftskip by \defbodyindent
-\exdentamount=\defbodyindent
-\begingroup\obeylines\activeparens\spacesplit{#3{#4}}}
-
-% Used for @deftypemethod and @deftypeivar.
-% #1 is the \E... control sequence to end the definition (which we define).
-% #2 is the \...x control sequence for consecutive fns (which we define).
-% #3 is the control sequence to call to resume processing.
-% #4, delimited by a space, is the class name.
-% #5 is the method's return type.
-%
-\def\deftypemethparsebody#1#2#3#4 #5 {\begingroup\inENV
+% #2 is the \...x control sequence (which our caller defines).
+% #3 is the control sequence to process the header, such as \defunheader.
+% 
+\def\parsebodycommon#1#2#3{%
+  \begingroup\inENV
+  % If there are two @def commands in a row, we'll have a \nobreak,
+  % which is there to keep the function description together with its
+  % header.  But if there's nothing but headers, we want to allow a
+  % break after all.
+  \ifnum\lastpenalty = 10000 \penalty0 \fi
   \medbreak
+  %
+  % Define the \E... end token that this defining construct specifies
+  % so that it will exit this group.
   \def#1{\endgraf\endgroup\medbreak}%
-  \def#2##1 ##2 {\begingroup\obeylines\activeparens\spacesplit{#3{##1}{##2}}}%
+  %
   \parindent=0in
   \advance\leftskip by \defbodyindent
   \exdentamount=\defbodyindent
-  \begingroup\obeylines\activeparens\spacesplit{#3{#4}{#5}}}
+}
+
+% Process body of @defun, @deffn, @defmac, etc.
+%
+\def\defparsebody#1#2#3{%
+  \parsebodycommon{#1}{#2}{#3}%
+  \def#2{\begingroup\obeylines\activeparens\spacesplit#3}%
+  \catcode61=\active % 61 is `='
+  \begingroup\obeylines\activeparens
+  \spacesplit#3%
+}
+
+% #1, #2, #3 are the common arguments (see \defparsebody).
+% #4, delimited by the space, is the class name.
+%
+\def\defmethparsebody#1#2#3#4 {%
+  \parsebodycommon{#1}{#2}{#3}%
+  \def#2##1 {\begingroup\obeylines\activeparens\spacesplit{#3{##1}}}%
+  \begingroup\obeylines\activeparens
+  \spacesplit{#3{#4}}%
+}
+
+% Used for @deftypemethod and @deftypeivar.
+% #1, #2, #3 are the common arguments (see \defparsebody).
+% #4, delimited by a space, is the class name.
+% #5 is the method's return type.
+%
+\def\deftypemethparsebody#1#2#3#4 #5 {%
+  \parsebodycommon{#1}{#2}{#3}%
+  \def#2##1 ##2 {\begingroup\obeylines\activeparens\spacesplit{#3{##1}{##2}}}%
+  \begingroup\obeylines\activeparens
+  \spacesplit{#3{#4}{#5}}%
+}
 
 % Used for @deftypeop.  The change from \deftypemethparsebody is an
 % extra argument at the beginning which is the `category', instead of it
@@ -4775,64 +4830,49 @@ width0pt\relax} \fi
 % input at hand.  Thus also need a control sequence (passed as #5) for
 % the \E... definition to assign the category name to.
 % 
-\def\deftypeopparsebody#1#2#3#4#5 #6 {\begingroup\inENV
-  \medbreak
-  \def#1{\endgraf\endgroup\medbreak}%
+\def\deftypeopparsebody#1#2#3#4#5 #6 {%
+  \parsebodycommon{#1}{#2}{#3}%
   \def#2##1 ##2 ##3 {%
     \def#4{##1}%
     \begingroup\obeylines\activeparens\spacesplit{#3{##2}{##3}}}%
-  \parindent=0in
-  \advance\leftskip by \defbodyindent
-  \exdentamount=\defbodyindent
-  \begingroup\obeylines\activeparens\spacesplit{#3{#5}{#6}}}
+  \begingroup\obeylines\activeparens
+  \spacesplit{#3{#5}{#6}}%
+}
 
-\def\defopparsebody #1#2#3#4#5 {\begingroup\inENV %
-\medbreak %
-% Define the end token that this defining construct specifies
-% so that it will exit this group.
-\def#1{\endgraf\endgroup\medbreak}%
-\def#2##1 ##2 {\def#4{##1}%
-\begingroup\obeylines\activeparens\spacesplit{#3{##2}}}%
-\parindent=0in
-\advance\leftskip by \defbodyindent
-\exdentamount=\defbodyindent
-\begingroup\obeylines\activeparens\spacesplit{#3{#5}}}
+% For @defop.
+\def\defopparsebody #1#2#3#4#5 {%
+  \parsebodycommon{#1}{#2}{#3}%
+  \def#2##1 ##2 {\def#4{##1}%
+    \begingroup\obeylines\activeparens\spacesplit{#3{##2}}}%
+  \begingroup\obeylines\activeparens
+  \spacesplit{#3{#5}}%
+}
 
 % These parsing functions are similar to the preceding ones
 % except that they do not make parens into active characters.
 % These are used for "variables" since they have no arguments.
-
-\def\defvarparsebody #1#2#3{\begingroup\inENV% Environment for definitionbody
-\medbreak %
-% Define the end token that this defining construct specifies
-% so that it will exit this group.
-\def#1{\endgraf\endgroup\medbreak}%
-\def#2{\begingroup\obeylines\spacesplit#3}%
-\parindent=0in
-\advance\leftskip by \defbodyindent
-\exdentamount=\defbodyindent
-\begingroup %
-\catcode 61=\active %
-\obeylines\spacesplit#3}
-
-% This is used for \def{tp,vr}parsebody.  It could probably be used for
-% some of the others, too, with some judicious conditionals.
 %
-\def\parsebodycommon#1#2#3{%
-  \begingroup\inENV %
-  \medbreak %
-  % Define the end token that this defining construct specifies
-  % so that it will exit this group.
-  \def#1{\endgraf\endgroup\medbreak}%
-  \def#2##1 {\begingroup\obeylines\spacesplit{#3{##1}}}%
-  \parindent=0in
-  \advance\leftskip by \defbodyindent
-  \exdentamount=\defbodyindent
+\def\defvarparsebody #1#2#3{%
+  \parsebodycommon{#1}{#2}{#3}%
+  \def#2{\begingroup\obeylines\spacesplit#3}%
+  \catcode61=\active %
   \begingroup\obeylines
+  \spacesplit#3%
+}
+
+% @defopvar.
+\def\defopvarparsebody #1#2#3#4#5 {%
+  \parsebodycommon{#1}{#2}{#3}%
+  \def#2##1 ##2 {\def#4{##1}%
+    \begingroup\obeylines\spacesplit{#3{##2}}}%
+  \begingroup\obeylines
+  \spacesplit{#3{#5}}%
 }
 
 \def\defvrparsebody#1#2#3#4 {%
   \parsebodycommon{#1}{#2}{#3}%
+  \def#2##1 {\begingroup\obeylines\spacesplit{#3{##1}}}%
+  \begingroup\obeylines
   \spacesplit{#3{#4}}%
 }
 
@@ -4847,6 +4887,8 @@ width0pt\relax} \fi
 %
 \def\deftpparsebody #1#2#3#4 {%
   \parsebodycommon{#1}{#2}{#3}%
+  \def#2##1 {\begingroup\obeylines\spacesplit{#3{##1}}}%
+  \begingroup\obeylines
   \spacesplit{\parsetpheaderline{#3{#4}}}\empty
 }
 
@@ -4863,32 +4905,18 @@ width0pt\relax} \fi
   #1{\removeemptybraces#2\relax}{#3}%
 }%
 
-\def\defopvarparsebody #1#2#3#4#5 {\begingroup\inENV %
-\medbreak %
-% Define the end token that this defining construct specifies
-% so that it will exit this group.
-\def#1{\endgraf\endgroup\medbreak}%
-\def#2##1 ##2 {\def#4{##1}%
-\begingroup\obeylines\spacesplit{#3{##2}}}%
-\parindent=0in
-\advance\leftskip by \defbodyindent
-\exdentamount=\defbodyindent
-\begingroup\obeylines\spacesplit{#3{#5}}}
-
 % Split up #2 at the first space token.
 % call #1 with two arguments:
 %  the first is all of #2 before the space token,
 %  the second is all of #2 after that space token.
 % If #2 contains no space token, all of it is passed as the first arg
 % and the second is passed as empty.
-
+%
 {\obeylines
 \gdef\spacesplit#1#2^^M{\endgroup\spacesplitfoo{#1}#2 \relax\spacesplitfoo}%
 \long\gdef\spacesplitfoo#1#2 #3#4\spacesplitfoo{%
 \ifx\relax #3%
 #1{#2}{}\else #1{#2}{#3#4}\fi}}
-
-% So much for the things common to all kinds of definitions.
 
 % Define @defun.
 
@@ -6045,11 +6073,13 @@ should work if nowhere else does.}
 }
 
 % Parameters in order: 1) textheight; 2) textwidth; 3) voffset;
-% 4) hoffset; 5) binding offset; 6) topskip.  We also call
-% \setleading{\textleading}, so the caller should define \textleading.
-% The caller should also set \parskip.
+% 4) hoffset; 5) binding offset; 6) topskip; 7) physical page height; 8)
+% physical page width.
+% 
+% We also call \setleading{\textleading}, so the caller should define
+% \textleading.  The caller should also set \parskip.
 %
-\def\internalpagesizes#1#2#3#4#5#6{%
+\def\internalpagesizes#1#2#3#4#5#6#7#8{%
   \voffset = #3\relax
   \topskip = #6\relax
   \splittopskip = \topskip
@@ -6067,6 +6097,11 @@ should work if nowhere else does.}
   %
   \normaloffset = #4\relax
   \bindingoffset = #5\relax
+  %
+  \ifpdf
+    \pdfpageheight #7\relax
+    \pdfpagewidth #8\relax
+  \fi
   %
   \setleading{\textleading}
   %
@@ -6089,7 +6124,10 @@ should work if nowhere else does.}
   \textleading = 13.2pt
   %
   % If page is nothing but text, make it come out even.
-  \internalpagesizes{46\baselineskip}{6in}{\voffset}{.25in}{\bindingoffset}{36pt}%
+  \internalpagesizes{46\baselineskip}{6in}%
+                    {\voffset}{.25in}%
+                    {\bindingoffset}{36pt}%
+                    {11in}{8.5in}%
 }}
 
 % Use @smallbook to reset parameters for 7x9.5 (or so) format.
@@ -6097,7 +6135,10 @@ should work if nowhere else does.}
   \parskip = 2pt plus 1pt
   \textleading = 12pt
   %
-  \internalpagesizes{7.5in}{5.in}{\voffset}{.25in}{\bindingoffset}{16pt}%
+  \internalpagesizes{7.5in}{5in}%
+                    {\voffset}{.25in}%
+                    {\bindingoffset}{16pt}%
+                    {9.25in}{7in}%
   %
   \lispnarrowing = 0.3in
   \tolerance = 700
@@ -6111,12 +6152,28 @@ should work if nowhere else does.}
 % Use @afourpaper to print on European A4 paper.
 \def\afourpaper{{\globaldefs = 1
   \parskip = 3pt plus 2pt minus 1pt
-  \textleading = 12pt
+  \textleading = 13.2pt
   %
-  \internalpagesizes{53\baselineskip}{160mm}{\voffset}{4mm}{\bindingoffset}{44pt}%
+  % Double-side printing via postscript on Laserjet 4050 
+  % prints double-sided nicely when \bindingoffset=10mm and \hoffset=-6mm.
+  % To change the settings for a different printer or situation, adjust
+  % \normaloffset until the front-side and back-side texts align.  Then
+  % do the same for \bindingoffset.  You can set these for testing in
+  % your texinfo source file like this:
+  % @tex
+  % \global\normaloffset = -6mm
+  % \global\bindingoffset = 10mm
+  % @end tex
+  \internalpagesizes{51\baselineskip}{160mm}
+                    {\voffset}{\hoffset}%
+                    {\bindingoffset}{44pt}%
+                    {297mm}{210mm}%
   %
   \tolerance = 700
   \hfuzz = 1pt
+  \contentsrightmargin = 0pt
+  \deftypemargin = 0pt
+  \defbodyindent = 5mm
 }}
 
 % Use @afivepaper to print on European A5 paper.
@@ -6126,12 +6183,15 @@ should work if nowhere else does.}
   \parskip = 2pt plus 1pt minus 0.1pt
   \textleading = 12.5pt
   %
-  \internalpagesizes{166mm}{120mm}{\voffset}{-8mm}{\bindingoffset}{8pt}%
+  \internalpagesizes{160mm}{120mm}%
+                    {\voffset}{\hoffset}%
+                    {\bindingoffset}{8pt}%
+                    {210mm}{148mm}%
   %
   \lispnarrowing = 0.2in
   \tolerance = 800
   \hfuzz = 1.2pt
-  \contentsrightmargin = 0mm
+  \contentsrightmargin = 0pt
   \deftypemargin = 0pt
   \defbodyindent = 2mm
   \tableindent = 12mm
@@ -6139,24 +6199,27 @@ should work if nowhere else does.}
   \smallenvironments
 }}
 
-% A specific text layout, 24x15cm overall, intended for A4 paper.  Top margin
-% 29mm, hence bottom margin 28mm, nominal side margin 3cm.
+% A specific text layout, 24x15cm overall, intended for A4 paper.  
 \def\afourlatex{{\globaldefs = 1
-  \textleading = 13.6pt
-  %
   \afourpaper
-  \internalpagesizes{237mm}{150mm}{3.6mm}{3.6mm}{3mm}{7mm}%
+  \internalpagesizes{237mm}{150mm}%
+                    {\voffset}{4.6mm}%
+                    {\bindingoffset}{7mm}%
+                    {297mm}{210mm}%
   %
-  % Must explicitly reset to 0 because we call \afourpaper, apparently,
-  % although this does not entirely make sense.
+  % Must explicitly reset to 0 because we call \afourpaper.
   \globaldefs = 0
 }}
 
-% Use @afourwide to print on European A4 paper in wide format.
-\def\afourwide{%
+% Use @afourwide to print on A4 paper in landscape format.
+\def\afourwide{{\globaldefs = 1
   \afourpaper
-  \internalpagesizes{6.5in}{9.5in}{\hoffset}{\normaloffset}{\bindingoffset}{7mm}%
-}
+  \internalpagesizes{241mm}{165mm}%
+                    {\voffset}{-2.95mm}%
+                    {\bindingoffset}{7mm}%
+                    {297mm}{210mm}%
+  \globaldefs = 0
+}}
 
 % @pagesizes TEXTHEIGHT[,TEXTWIDTH]
 % Perhaps we should allow setting the margins, \topskip, \parskip,
@@ -6171,7 +6234,16 @@ should work if nowhere else does.}
   \parskip = 3pt plus 2pt minus 1pt
   \setleading{\textleading}%
   %
-  \internalpagesizes{#1}{\hsize}{\voffset}{\normaloffset}{\bindingoffset}{44pt}%
+  \dimen0 = #1
+  \advance\dimen0 by \voffset
+  %
+  \dimen2 = \hsize
+  \advance\dimen2 by \normaloffset
+  %
+  \internalpagesizes{#1}{\hsize}%
+                    {\voffset}{\normaloffset}%
+                    {\bindingoffset}{44pt}%
+                    {\dimen0}{\dimen2}%
 }}
 
 % Set default to letter.
@@ -6295,16 +6367,8 @@ should work if nowhere else does.}
 @let+=@normalplus
 @let$=@normaldollar}%$ font-lock fix
 
-@def@normalturnoffactive{@let"=@normaldoublequote
-@let\=@normalbackslash
-@let~=@normaltilde
-@let^=@normalcaret
-@let_=@normalunderscore
-@let|=@normalverticalbar
-@let<=@normalless
-@let>=@normalgreater
-@let+=@normalplus
-@let$=@normaldollar}%$ font-lock fix
+% Same as @turnoffactive except for \.
+@def@normalturnoffactive{@turnoffactive @let\=@normalbackslash}
 
 % Make _ and + \other characters, temporarily.
 % This is canceled by @fixbackslash.

@@ -1,5 +1,5 @@
 # Checking the output filenames.                         -*- Autotest -*-
-# Copyright 2000, 2001 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -53,7 +53,6 @@ AT_DATA([calc.y],
 char *strcat(char *dest, const char *src);
 #endif
 #include <ctype.h>
-]$4[
 
 static int power (int base, int exponent);
 static void yyerror (const char *s);
@@ -62,11 +61,22 @@ static int yygetc (void);
 static void yyungetc (int c);
 
 extern void perror (const char *s);
+
+/* Exercise pre-prologue dependency to %union.  */
+typedef int value_t;
+
 %}
 
+/* Exercise %union. */
+%union
+{
+  value_t ival;
+};
+
 /* Bison Declarations */
-%token CALC_EOF 0
-%token NUM
+%token CALC_EOF 0 "end of file"
+%token <ival> NUM "number"
+%type  <ival> exp
 
 %nonassoc '=' /* comparison	       */
 %left '-' '+'
@@ -74,16 +84,18 @@ extern void perror (const char *s);
 %left NEG     /* negation--unary minus */
 %right '^'    /* exponentiation        */
 
+]$4[
+
 /* Grammar follows */
 %%
 input:
-  /* empty string */
+  line
 | input line
 ;
 
 line:
-  '\n'
-| exp '\n'
+  '\n'      {}
+| exp '\n'  {}
 ;
 
 exp:
@@ -91,7 +103,7 @@ exp:
 | exp '=' exp
   {
      if ($1 != $3)
-       printf ("calc: error: %d != %d\n", $1, $3);
+       fprintf (stderr, "calc: error: %d != %d\n", $1, $3);
      $$ = $1 == $3;
   }
 | exp '+' exp        { $$ = $1 + $3;        }
@@ -101,6 +113,7 @@ exp:
 | '-' exp  %prec NEG { $$ = -$2;            }
 | exp '^' exp        { $$ = power ($1, $3); }
 | '(' exp ')'        { $$ = $2;             }
+| '(' error ')'      { $$ = 0;              }
 ;
 %%
 /* The input. */
@@ -110,22 +123,27 @@ static void
 yyerror (const char *s)
 {
 #if YYLSP_NEEDED
-  fprintf (stderr, "%d.%d:%d.%d: ",
+  fprintf (stderr, "%d.%d-%d.%d: ",
 	   yylloc.first_line, yylloc.first_column,
 	   yylloc.last_line, yylloc.last_column);
 #endif
   fprintf (stderr, "%s\n", s);
 }
 
+
+#if YYLSP_NEEDED
+static YYLTYPE last_yylloc;
+#endif
 static int
 yygetc (void)
 {
   int res = getc (yyin);
 #if YYLSP_NEEDED
+  last_yylloc = yylloc;
   if (res == '\n')
     {
       yylloc.last_line++;
-      yylloc.last_column = 0;
+      yylloc.last_column = 1;
     }
   else
     yylloc.last_column++;
@@ -139,7 +157,7 @@ yyungetc (int c)
 {
 #if YYLSP_NEEDED
   /* Wrong when C == `\n'. */
-  yylloc.last_column--;
+  yylloc = last_yylloc;
 #endif
   ungetc (c, yyin);
 }
@@ -199,7 +217,7 @@ yylex (void)
   if (c == '.' || isdigit (c))
     {
       yyungetc (c);
-      yylval = read_signed_integer ();
+      yylval.ival = read_signed_integer ();
       return NUM;
     }
 
@@ -242,7 +260,7 @@ main (int argc, const char **argv)
   yydebug = 1;
 #endif
 #if YYLSP_NEEDED
-  yylloc.last_column = 0;
+  yylloc.last_column = 1;
   yylloc.last_line = 1;
 #endif
   yyparse ();
@@ -258,7 +276,7 @@ main (int argc, const char **argv)
 m4_define([AT_DATA_CALC_Y],
 [_AT_DATA_CALC_Y($[1], $[2], $[3],
                  [m4_bmatch([$1], [--yyerror-verbose],
-                            [[#define YYERROR_VERBOSE]])])])
+                            [[%error-verbose]])])])
 
 
 
@@ -272,7 +290,7 @@ m4_define([_AT_CHECK_CALC],
 [AT_DATA([[input]],
 [[$2
 ]])
-AT_CHECK([./calc input], 0, [], [stderr])dnl
+AT_PARSER_CHECK([./calc input], 0, [], [stderr])dnl
 AT_CHECK([wc -l <stderr | sed 's/[[^0-9]]//g'], 0,
          [m4_bmatch([$1], [--debug],
                     [$3], [0])
@@ -285,6 +303,9 @@ AT_CHECK([wc -l <stderr | sed 's/[[^0-9]]//g'], 0,
 # ------------------------------------------------------------
 # Run `calc' on INPUT, and expect a `parse error' message.
 #
+# If INPUT starts with a slash, it is used as absolute input file name,
+# otherwise as contents.
+#
 # If BISON-OPTIONS contains `--location', then make sure the ERROR-LOCATION
 # is correctly output on stderr.
 #
@@ -295,28 +316,45 @@ AT_CHECK([wc -l <stderr | sed 's/[[^0-9]]//g'], 0,
 # If BISON-OPTIONS contains `--debug', then NUM-STDERR-LINES is the number
 # of expected lines on stderr.
 m4_define([_AT_CHECK_CALC_ERROR],
-[AT_DATA([[input]],
+[m4_bmatch([$2], [^/],
+           [AT_PARSER_CHECK([./calc $2], 0, [], [stderr])],
+           [AT_DATA([[input]],
 [[$2
 ]])
+AT_PARSER_CHECK([./calc input], 0, [], [stderr])])
 
-AT_CHECK([./calc input], 0, [], [stderr])
+m4_bmatch([$1], [--debug],
+[AT_CHECK([wc -l <stderr | sed 's/[[^0-9]]//g'], 0, [$3
+])])
 
-
-AT_CHECK([wc -l <stderr | sed 's/[[^0-9]]//g'], 0,
-         [m4_bmatch([$1], [--debug],
-                    [$3], [1])
-])
-
-egrep -v '^((Start|Enter|Read|Reduc|Shift)ing|state|Error:) ' stderr >at-stderr
+# Normalize the observed and expected error messages, depending upon the
+# options.
+# 1. Remove the traces from observed.
+sed '/^Starting/d
+/^Entering/d
+/^Reading/d
+/^Reducing/d
+/^Shifting/d
+/^state/d
+/^Error:/d
+/^Next/d
+/^Discarding/d
+/^yydestructor:/d' stderr >at-stderr
 mv at-stderr stderr
-
-AT_CHECK([cat stderr], 0,
-[m4_bmatch([$1], [--location], [$4: ])[]dnl
-parse error[]dnl
-m4_bmatch([$1], [--yyerror-verbose], [, $5])[]dnl
-
+# 2. Create the reference error message.
+AT_DATA([[expout]],
+[$4
 ])
-
+# 3. If locations are not used, remove them.
+m4_bmatch([$1], [--location], [],
+[[sed 's/^[-0-9.]*: //' expout >at-expout
+mv at-expout expout]])
+# 4. If error-verbose is not used, strip the`, unexpected....' part.
+m4_bmatch([$1], [--yyerror-verbose], [],
+[[sed 's/parse error, .*$/parse error/' expout >at-expout
+mv at-expout expout]])
+# 5. Check
+AT_CHECK([cat stderr], 0, [expout])
 ])
 
 
@@ -334,7 +372,7 @@ AT_DATA_CALC_Y([$1])
 AT_CHECK([bison calc.y -o calc.c m4_bpatsubst([$1], [--yyerror-verbose])],
          [0], [], [])
 
-AT_CHECK([$CC $CFLAGS $CPPFLAGS calc.c -o calc], 0, [], [ignore])
+AT_COMPILE([calc])
 
 # Test the priorities.
 _AT_CHECK_CALC([$1],
@@ -350,27 +388,38 @@ _AT_CHECK_CALC([$1],
 1 - (2 - 3) = 2
 
 2^2^3 = 256
-(2^2)^3 = 64], [491])
+(2^2)^3 = 64], [486])
 
 # Some parse errors.
-_AT_CHECK_CALC_ERROR([$1], [+1], [8],
-                     [1.0:1.1],
-                     [unexpected '+'])
-_AT_CHECK_CALC_ERROR([$1], [1//2], [17],
-                     [1.2:1.3],
-                     [unexpected '/', expecting NUM or '-' or '('])
-_AT_CHECK_CALC_ERROR([$1], [error], [8],
-                     [1.0:1.1],
-                     [unexpected $undefined.])
-_AT_CHECK_CALC_ERROR([$1], [1 = 2 = 3], [23],
-                     [1.6:1.7],
-                     [unexpected '='])
+_AT_CHECK_CALC_ERROR([$1], [0 0], [11],
+                     [1.3-1.4: parse error, unexpected "number"])
+_AT_CHECK_CALC_ERROR([$1], [1//2], [15],
+                     [1.3-1.4: parse error, unexpected '/', expecting "number" or '-' or '('])
+_AT_CHECK_CALC_ERROR([$1], [error], [4],
+                     [1.1-1.2: parse error, unexpected $undefined, expecting "number" or '-' or '\n' or '('])
+_AT_CHECK_CALC_ERROR([$1], [1 = 2 = 3], [22],
+                     [1.7-1.8: parse error, unexpected '='])
 _AT_CHECK_CALC_ERROR([$1],
                      [
 +1],
-                     [16],
-                     [2.0:2.1],
-                     [unexpected '+'])
+                     [14],
+                     [2.1-2.2: parse error, unexpected '+'])
+# Exercise error messages with EOF: work on an empty file.
+_AT_CHECK_CALC_ERROR([$1], [/dev/null], [4],
+                     [1.1-1.2: parse error, unexpected "end of file", expecting "number" or '-' or '\n' or '('])
+
+# Exercise the error token: without it, we die at the first error,
+# hence be sure i. to have several errors, ii. to test the action
+# associated to `error'.
+_AT_CHECK_CALC_ERROR([$1], [(1 ++ 2) + (0 0) = 1], [82],
+[1.5-1.6: parse error, unexpected '+', expecting "number" or '-' or '('
+1.15-1.16: parse error, unexpected "number"
+calc: error: 0 != 1])
+
+# Add a studid example demonstrating that Bison can further improve the
+# error message.  FIXME: Fix this ridiculous message.
+_AT_CHECK_CALC_ERROR([$1], [()], [21],
+[1.2-1.3: parse error, unexpected ')', expecting "number" or '-' or '('])
 
 AT_CLEANUP
 ])# AT_CHECK_CALC

@@ -1,3 +1,6 @@
+## Process this file with automake to produce Makefile.in -*-Makefile-*-
+## Copyright (C) 2001, 2002 Free Software Foundation, Inc.
+
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
 ## the Free Software Foundation; either version 2 of the License, or
@@ -13,16 +16,11 @@
 ## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 ## 02111-1307  USA
 
-## Process this file with automake to produce Makefile.in -*-Makefile-*-
-AUTOMAKE_OPTIONS = 1.6 check-news readme-alpha dist-bzip2
-
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = config intl po lib src doc m4 tests
+SUBDIRS = config po lib data src doc m4 tests
 
-EXTRA_DIST = config/config.rpath  REFERENCES configure.bat OChangeLog Makefile.maint GNUmakefile
-
-DISTCLEANFILES = intl/libintl.h
+EXTRA_DIST = REFERENCES OChangeLog Makefile.maint GNUmakefile
 
 
 ## ---------------------------- ##

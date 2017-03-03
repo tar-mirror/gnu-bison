@@ -4,142 +4,106 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bison 1.33b\n"
-"POT-Creation-Date: 2002-03-20 09:33+0100\n"
-"PO-Revision-Date: 2002-03-05 16:27+0200\n"
-"Last-Translator: Toomas Soome <tsoome@ut.ee>\n"
+"Project-Id-Version: bison 1.49b\n"
+"POT-Creation-Date: 2002-10-04 23:07-0700\n"
+"PO-Revision-Date: 2002-08-13 01:35+0300\n"
+"Last-Translator: Toomas Soome <Toomas.Soome@microlink.ee>\n"
 "Language-Team: Estonian <et@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-15\n"
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/LR0.c:189
-#, c-format
-msgid "too many states (max %d)"
-msgstr "liiga palju olekuid (maks %d)"
-
-#: src/complain.c:99 lib/error.c:128 lib/error.c:156
+#: src/complain.c:89 lib/error.c:128 lib/error.c:156
 msgid "Unknown system error"
 msgstr "Tundmatu süsteemi viga"
 
-#: src/complain.c:150
+#: src/complain.c:123 src/complain.c:152
 msgid "warning: "
 msgstr "hoiatus: "
 
-#: src/complain.c:238
+#: src/complain.c:252 src/complain.c:282
 msgid "fatal error: "
 msgstr "fataalne viga: "
 
-#: src/conflicts.c:44
+#: src/conflicts.c:72
 #, c-format
-msgid "Conflict in state %d between rule %d and token %s resolved as %s.\n"
-msgstr "Konflikt olekus %d reegli %d ja märgi %s vahel lahendatud, kui %s.\n"
+msgid "    Conflict between rule %d and token %s resolved as shift"
+msgstr "    Konflikt reegli %d ja märgi %s vahel lahendatud nihkega"
 
-#: src/conflicts.c:94 src/conflicts.c:119
-msgid "reduce"
-msgstr "redutseerimine"
+#: src/conflicts.c:80
+#, c-format
+msgid "    Conflict between rule %d and token %s resolved as reduce"
+msgstr "    Konflikt reegli %d ja märgi %s vahel lahendatud redutseerimisega"
 
-#: src/conflicts.c:101 src/conflicts.c:115
-msgid "shift"
-msgstr "nihutamine"
+#: src/conflicts.c:87
+#, c-format
+msgid "    Conflict between rule %d and token %s resolved as an error"
+msgstr "    Konflikt reegli %d ja märgi %s vahel lahendatud veana"
 
-#: src/conflicts.c:123
-msgid "an error"
-msgstr "viga"
-
-#: src/conflicts.c:302
+#: src/conflicts.c:402
 #, c-format
 msgid "%d shift/reduce conflict"
 msgid_plural "%d shift/reduce conflicts"
 msgstr[0] "%d nihutamine/redutseerimine konflikt"
 msgstr[1] "%d nihutamine/redutseerimine konflikti"
 
-#: src/conflicts.c:309
+#: src/conflicts.c:409
 msgid "and"
 msgstr "ja"
 
-#: src/conflicts.c:315
+#: src/conflicts.c:415
 #, c-format
 msgid "%d reduce/reduce conflict"
 msgid_plural "%d reduce/reduce conflicts"
 msgstr[0] "%d redutseerimine/redutseerimine konflikt"
 msgstr[1] "%d redutseerimine/redutseerimine konflikti"
 
-#: src/conflicts.c:340
-#, c-format
-msgid "State %d contains "
-msgstr "Olek %d sisaldab "
-
-#: src/conflicts.c:387
+#: src/conflicts.c:435
 msgid "conflicts: "
 msgstr "konfliktid: "
 
-#: src/conflicts.c:389
+#: src/conflicts.c:437
 #, c-format
 msgid " %d shift/reduce"
 msgstr " %d nihutamine/redutseerimine"
 
-#: src/conflicts.c:393
+#: src/conflicts.c:441
 #, c-format
 msgid " %d reduce/reduce"
 msgstr " %d redutseerimine/redutseerimine"
 
-#: src/conflicts.c:398 src/reduce.c:508
+#: src/conflicts.c:460
 #, c-format
-msgid "%s contains "
-msgstr "%s sisaldab "
+msgid "State %d contains "
+msgstr "Olek %d sisaldab "
 
-#: src/conflicts.c:412
+#: src/conflicts.c:537
 #, c-format
-msgid "expected %d shift/reduce conflict\n"
-msgid_plural "expected %d shift/reduce conflicts\n"
-msgstr[0] "eeldasime %d nihutamine/redutseerimine konflikti\n"
-msgstr[1] "eeldasime %d nihutamine/redutseerimine konflikti\n"
+msgid "expected %d shift/reduce conflict"
+msgid_plural "expected %d shift/reduce conflicts"
+msgstr[0] "eeldasime %d nihutamine/redutseerimine konflikti"
+msgstr[1] "eeldasime %d nihutamine/redutseerimine konflikti"
 
-#: src/conflicts.c:463 src/conflicts.c:540
-#, c-format
-msgid "    %-4s\t[reduce using rule %d (%s)]\n"
-msgstr "    %-4s\t[redutseerin, kasutades reeglit %d (%s)]\n"
-
-#: src/conflicts.c:467 src/print.c:154
-#, c-format
-msgid ""
-"    $default\treduce using rule %d (%s)\n"
-"\n"
-msgstr ""
-"    $default\tredutseerin kasutades reeglit %d (%s)\n"
-"\n"
-
-#: src/conflicts.c:521 src/conflicts.c:534
-#, c-format
-msgid "    %-4s\treduce using rule %d (%s)\n"
-msgstr "    %-4s\tredutseerin kasutades reeglit %d (%s)\n"
-
-#: src/conflicts.c:550
-#, c-format
-msgid "    $default\treduce using rule %d (%s)\n"
-msgstr "    $default\tredutseerin kasutades reeglit %d (%s)\n"
-
-#: src/files.c:151
+#: src/files.c:114
 #, c-format
 msgid "cannot open file `%s'"
 msgstr "faili `%s' ei saa avada"
 
-#: src/files.c:170
+#: src/files.c:133
 msgid "cannot close file"
 msgstr "faili ei õnnestu sulgeda"
 
-#: src/getargs.c:84
+#: src/getargs.c:157
 msgid "GNU bison generates parsers for LALR(1) grammars.\n"
 msgstr "GNU bison genereerib parsereid LALR(1) grammatikatele.\n"
 
-#: src/getargs.c:88
+#: src/getargs.c:161
 #, c-format
 msgid "Usage: %s [OPTION]... FILE\n"
 msgstr "Kasuta: %s [VÕTI]...FAIL\n"
 
-#: src/getargs.c:92
+#: src/getargs.c:165
 msgid ""
 "If a long option shows an argument as mandatory, then it is mandatory\n"
 "for the equivalent short option also.  Similarly for optional arguments.\n"
@@ -147,7 +111,7 @@ msgstr ""
 "Kui pikk võti näitab, et argument on kohustuslik, siis on see kohustuslik \n"
 "ka lühikese võtme korral. Sama ka vabalt valitavate võtmete korral.\n"
 
-#: src/getargs.c:98
+#: src/getargs.c:171
 msgid ""
 "Operation modes:\n"
 "  -h, --help      display this help and exit\n"
@@ -159,7 +123,7 @@ msgstr ""
 "  -V, --version   esita versiooniinfo ja lõpeta töö\n"
 "  -y, --yacc      emuleeri POSIX yacc\n"
 
-#: src/getargs.c:105
+#: src/getargs.c:178
 msgid ""
 "Parser:\n"
 "  -S, --skeleton=FILE        specify the skeleton to use\n"
@@ -179,11 +143,12 @@ msgstr ""
 "  -n, --no-parser            genereeri ainult tabelid\n"
 "  -k, --token-table          lisa ka sümbolite nimede tabel\n"
 
-#: src/getargs.c:117
+#: src/getargs.c:190
 msgid ""
 "Output:\n"
 "  -d, --defines              also produce a header file\n"
-"  -v, --verbose              also produce an explanation of the automaton\n"
+"  -r, --report=THINGS        also produce details on the automaton\n"
+"  -v, --verbose              same as `--report=state'\n"
 "  -b, --file-prefix=PREFIX   specify a PREFIX for output files\n"
 "  -o, --output=FILE          leave output to FILE\n"
 "  -g, --graph                also produce a VCG description of the "
@@ -191,29 +156,49 @@ msgid ""
 msgstr ""
 "Väljund:\n"
 "  -d, --defines              loo ka päisfail\n"
-"  -v, --verbose              väljasta automaadi kohta selgitusi\n"
+"  -r, --report=ASJAD         väljasta automaadi kohta selgitusi\n"
+"  -v, --verbose              sama, kui `--report=state'\n"
 "  -b, --file-prefix=PREFIKS  kasuta väljundfailide nimedes PREFIKSit\n"
 "  -o, --output-file=FAIL     jäta väljund FAILi\n"
 "  -g, --graph                loo automaadi kirjeldus VCG graafina\n"
 
-#: src/getargs.c:127
+#: src/getargs.c:201
+msgid ""
+"THINGS is a list of comma separated words that can include:\n"
+"  `state'        describe the states\n"
+"  `itemset'      complete the core item sets with their closure\n"
+"  `lookahead'    explicitly associate lookaheads to items\n"
+"  `solved'       describe shift/reduce conflicts solving\n"
+"  `all'          include all the above information\n"
+"  `none'         disable the report\n"
+msgstr ""
+"ASJAD on loend komadega eraldatud järgnevaid sõnu:\n"
+"  `state'        olekute kirjeldus\n"
+"  `itemset'      täienda põhilisi elemente nende sulunditega\n"
+"  `lookahead'    seo ettevaatamised elementidega\n"
+"  `solved'       kirjelda nihuta/redutseeri konfliktide lahendamisi\n"
+"  `all'          kogu ülaltoodud info\n"
+"  `none'         blokeeri raport\n"
+
+#: src/getargs.c:212
 msgid "Report bugs to <bug-bison@gnu.org>.\n"
 msgstr "Teatage palun vigadest aadressil <bug-bison@gnu.org>.\n"
 
-#: src/getargs.c:141
+#: src/getargs.c:226
 #, c-format
 msgid "bison (GNU Bison) %s"
 msgstr "bison (GNU Bison) %s"
 
-#: src/getargs.c:146
-msgid ""
-"Copyright 1984, 1986, 1989, 1992, 2000, 2001, 2002\n"
-"Free Software Foundation, Inc.\n"
-msgstr ""
-"Autoriõigus 1984, 1986, 1989, 1992, 2000, 2001, 2002\n"
-"Free Software Foundation, Inc.\n"
+#: src/getargs.c:228
+msgid "Written by Robert Corbett and Richard Stallman.\n"
+msgstr "Kirjutanud Robert Corbett ja Richard Stallman.\n"
 
-#: src/getargs.c:151
+#: src/getargs.c:232
+#, c-format
+msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
+msgstr "Autoriõigus © %d Free Software Foundation, Inc.\n"
+
+#: src/getargs.c:234
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
@@ -221,505 +206,482 @@ msgstr ""
 "See on vaba tarkvara; kopeerimistingimused leiate lähtetekstidest. Garantii\n"
 "PUUDUB; ka müügiks või mingil eesmärgil kasutamiseks.\n"
 
-#: src/getargs.c:230 src/lex.c:705
-#, c-format
-msgid "`%s' is no longer supported"
-msgstr "`%s' ei ole enam toetatud"
-
-#: src/getargs.c:254
+#: src/getargs.c:395
 #, c-format
 msgid "Try `%s --help' for more information.\n"
 msgstr "Lisainfo saamiseks proovige `%s --help'.\n"
 
-#: src/getargs.c:261
+#: src/getargs.c:402
 #, c-format
 msgid "%s: no grammar file given\n"
 msgstr "%s: puudub grammatikafail\n"
 
-#: src/getargs.c:265
+#: src/getargs.c:406
 #, c-format
 msgid "%s: extra arguments ignored after `%s'\n"
 msgstr "%s: ignoreerin lisaargumente peale `%s'\n"
 
-#: src/lalr.c:256
+#: src/gram.c:139
+msgid "empty"
+msgstr "tühi"
+
+#: src/gram.c:233
+msgid "Grammar"
+msgstr "Grammatika"
+
+#: src/gram.c:321 src/reduce.c:302 src/reduce.c:392
+msgid "warning"
+msgstr "hoiatus"
+
+#: src/lalr.c:91
 #, c-format
 msgid "too many gotos (max %d)"
-msgstr "liiga palju gotosid (maks %d)"
+msgstr "liiga palju gotosid (maks. %d)"
 
-#: src/lex.c:76
-msgid "unexpected `/' found and ignored"
-msgstr "leidsin ja ignoreerin ootamatu `/'"
+#: src/main.c:117
+msgid "rule never reduced because of conflicts"
+msgstr "reeglit ei redutseerita konfliktide tõttu kunagi"
 
-#: src/lex.c:105 src/reader.c:280
-msgid "unterminated comment"
-msgstr "lõpetamata kommentaar"
+#: parse-gram.y:347
+msgid "POSIX forbids declarations in the grammar"
+msgstr "POSIX keelab deklareerimised grammatikas"
 
-#: src/lex.c:137
-msgid "unexpected end of file"
-msgstr "ootamatu faililõpp"
-
-#: src/lex.c:166
-msgid "unescaped newline in constant"
-msgstr "paojadata reavahetus konstandis"
-
-#: src/lex.c:208
-#, c-format
-msgid "octal value outside range 0...255: `\\%o'"
-msgstr "kaheksandväärtus väljaspool piire 0...255: `\\%o'"
-
-#: src/lex.c:233
-#, c-format
-msgid "hexadecimal value above 255: `\\x%x'"
-msgstr "kuueteistkümnendväärtus  suurem, kui above 255: `\\x%x'"
-
-#: src/lex.c:245
-#, c-format
-msgid "unknown escape sequence: `\\' followed by `%s'"
-msgstr "tundmatu paojada: `\\' järgneb `%s'"
-
-#: src/lex.c:342
-msgid "unterminated type name at end of file"
-msgstr "lõpetamata tüübinimi faili lõpus"
-
-#: src/lex.c:345
-msgid "unterminated type name"
-msgstr "lõpetamata tüübinimi"
-
-#: src/lex.c:438
-msgid "use \"...\" for multi-character literal tokens"
-msgstr "kasuta mitmesümboliliste literaalidega \"...\" konstruktsiooni"
-
-#: src/lex.c:678
-#, c-format
-msgid "`%s' supports no argument: %s"
-msgstr "`%s' ei toeta argumente: %s"
-
-#: src/lex.c:694
-#, c-format
-msgid "`%s' requires an argument"
-msgstr "võti `%s' nõuab argumenti"
-
-#: src/output.c:951
-#, c-format
-msgid "maximum table size (%d) exceeded"
-msgstr "ületati maksimaalset tabelisuurust (%d)"
-
-#: src/print.c:39
+#: src/print.c:46
 #, c-format
 msgid " type %d is %s\n"
 msgstr " tüüp %d on %s\n"
 
-#: src/print.c:88
+#: src/print.c:162
 #, c-format
-msgid "   (rule %d)"
-msgstr "   (reegel %d)"
+msgid "shift, and go to state %d\n"
+msgstr "nihuta ja liigu olekule %d\n"
 
-#: src/print.c:108
-msgid "    $default\taccept\n"
-msgstr "    $default\taktsepteerin\n"
-
-#: src/print.c:110
-msgid "    NO ACTIONS\n"
-msgstr "    TEGEVUSI POLE\n"
-
-#: src/print.c:124
+#: src/print.c:164
 #, c-format
-msgid "    $   \tgo to state %d\n"
-msgstr "    $   \tliigu olekule %d\n"
+msgid "go to state %d\n"
+msgstr "liigu olekule %d\n"
 
-#: src/print.c:127
+#: src/print.c:201
+msgid "error (nonassociative)\n"
+msgstr "viga (mitteassotsiatiivne)\n"
+
+#: src/print.c:290
 #, c-format
-msgid "    %-4s\tshift, and go to state %d\n"
-msgstr "    %-4s\tnihuta ja liigu olekule %d\n"
+msgid "reduce using rule %d (%s)"
+msgstr "redutseerin kasutades reeglit %d (%s)"
 
-#: src/print.c:142
-#, c-format
-msgid "    %-4s\terror (nonassociative)\n"
-msgstr "    %-4s\tviga (mitteassotsiatiivne)\n"
+#: src/print.c:293
+msgid "accept"
+msgstr "nõustun"
 
-#: src/print.c:169
-#, c-format
-msgid "    %-4s\tgo to state %d\n"
-msgstr "    %-4s\tliigu olekule %d\n"
+#: src/print.c:324 src/print.c:390
+msgid "$default"
+msgstr "$default"
 
-#: src/print.c:180
+#: src/print.c:419
 #, c-format
 msgid "state %d"
 msgstr "olek %d"
 
-#: src/print.c:211
-msgid "Grammar"
-msgstr "Grammatika"
-
-#: src/print.c:212
-msgid "Number, Line, Rule"
-msgstr "Number, rida, reegel"
-
-#: src/print.c:217
-#, c-format
-msgid "  %3d %3d %s ->"
-msgstr "  %3d %3d %s ->"
-
-#: src/print.c:224
-msgid "empty"
-msgstr "tühi"
-
-#: src/print.c:231
+#: src/print.c:453
 msgid "Terminals, with rules where they appear"
-msgstr "Terminalid, koos reeglitega, kus nad ilmuvad"
+msgstr "Terminalid, koos reeglitega kus nad ilmuvad"
 
-#: src/print.c:256
+#: src/print.c:480
 msgid "Nonterminals, with rules where they appear"
-msgstr "Mitteterminalid, koos reeglitega, kus nad ilmuvad"
+msgstr "Mitteterminalid, koos reeglitega kus nad ilmuvad"
 
-#: src/print.c:282
+#: src/print.c:509
 msgid " on left:"
 msgstr " vasakul:"
 
-#: src/print.c:297
+#: src/print.c:524
 msgid " on right:"
 msgstr " paremal:"
 
-#: src/print_graph.c:146
-#, c-format
-msgid "%-4s\terror (nonassociative)"
-msgstr "%-4s\tviga (mitteassotsiatiivne)"
+#: src/print.c:552
+msgid "Rules never reduced"
+msgstr "Mitteredutseeruvad reeglid"
 
-#: src/print_graph.c:161
-#, c-format
-msgid "$default\treduce using rule %d (%s)"
-msgstr "$default\tredutseerin kasutades reeglit %d (%s)"
-
-#: src/reader.c:89
-msgid "   Skipping to next \\n"
-msgstr "   Liigun järgmisele \\n"
-
-#: src/reader.c:91
-#, c-format
-msgid "   Skipping to next %c"
-msgstr "   Liigun järgmisele %c"
-
-#: src/reader.c:142 src/reader.c:154
-msgid "invalid $ value"
-msgstr "vigane $ väärtus"
-
-#: src/reader.c:180 src/reader.c:195
-msgid "unterminated string at end of file"
-msgstr "lõpetamata sõne faili lõpus"
-
-#: src/reader.c:183
-msgid "unterminated string"
-msgstr "lõpetamata sõne"
-
-#: src/reader.c:339
-msgid "invalid @ value"
-msgstr "vigane @ väärtus"
-
-#: src/reader.c:352 src/reader.c:416
-#, c-format
-msgid "%s is invalid"
-msgstr "%s on vigane"
-
-#: src/reader.c:392
-#, c-format
-msgid "$$ of `%s' has no declared type"
-msgstr "`%s' $$ ei oma deklareeritud tüüpi"
-
-#: src/reader.c:409
-#, c-format
-msgid "$%d of `%s' has no declared type"
-msgstr "$%d `%s' ei oma deklareeritud tüüpi"
-
-#: src/reader.c:463
-msgid "unterminated `%{' definition"
-msgstr "lõpetamata `%{' definitsioon"
-
-#: src/reader.c:508 src/reader.c:623 src/reader.c:673
-#, c-format
-msgid "Premature EOF after %s"
-msgstr "Enneaegne EOF peale %s"
-
-#: src/reader.c:525
-#, c-format
-msgid "symbol `%s' used more than once as a literal string"
-msgstr "sümbolit `%s' on kasutatud enam kui kord literaal sõnena"
-
-#: src/reader.c:528
-#, c-format
-msgid "symbol `%s' given more than one literal string"
-msgstr "sümbolile `%s' on antud enam kui üks literaal sõne"
-
-#: src/reader.c:549 src/reader.c:692
-#, c-format
-msgid "symbol %s redefined"
-msgstr "sümbol %s on uuesti defineeritud"
-
-#: src/reader.c:559 src/reader.c:638 src/reader.c:699 src/reader.c:1315
-#, c-format
-msgid "type redeclaration for %s"
-msgstr "%s tüübi uuesti deklareerimine"
-
-#: src/reader.c:568
-#, c-format
-msgid "`%s' is invalid in %s"
-msgstr "`%s' ei ole %s sees lubatud"
-
-#: src/reader.c:586 src/reader.c:752
+#: src/reader.c:52
 #, c-format
 msgid "multiple %s declarations"
 msgstr "korduvad %s deklaratsioonid"
 
-#: src/reader.c:588 src/reader.c:931 src/reader.c:956 src/reader.c:1293
+#: src/reader.c:141
 #, c-format
-msgid "invalid %s declaration"
-msgstr "vigane %s deklaratsioon"
+msgid "result type clash on merge function %s: `%s' vs. `%s'"
+msgstr "tulemuse tüübikonflikt mestimise funktsioonis %s: `%s' versus `%s'"
 
-#: src/reader.c:608
-msgid "%type declaration has no <typename>"
-msgstr "%type deklaratsioonis puudub <tüübinimi>"
-
-#: src/reader.c:643
-#, c-format
-msgid "invalid %%type declaration due to item: %s"
-msgstr "vigane %%type deklaratsioon, element: %s"
-
-#: src/reader.c:688
-#, c-format
-msgid "redefining precedence of %s"
-msgstr "%s prioriteedi uus definitsioon"
-
-#: src/reader.c:711
-#, c-format
-msgid "invalid text (%s) - number should be after identifier"
-msgstr "vigane tekst (%s) - number peab olema peale identifikaatorit"
-
-#: src/reader.c:721
-#, c-format
-msgid "unexpected item: %s"
-msgstr "ootamatu element: %s"
-
-#: src/reader.c:795 src/reader.c:1127 src/reader.c:1204
-#, c-format
-msgid "unmatched %s"
-msgstr "puudub %s"
-
-#: src/reader.c:827
-#, c-format
-msgid "argument of %%expect is not an integer"
-msgstr "%%expect argument ei ole täisarv"
-
-#: src/reader.c:873
-#, c-format
-msgid "unrecognized item %s, expected an identifier"
-msgstr "tundmatu element %s, eeldasin identifikaatorit"
-
-#: src/reader.c:895
-#, c-format
-msgid "expected string constant instead of %s"
-msgstr "eeldasin %s asemel sõnekonstanti"
-
-#: src/reader.c:1043
-#, c-format
-msgid "unrecognized: %s"
-msgstr "tundmatu: %s"
-
-#: src/reader.c:1048
-msgid "no input grammar"
-msgstr "sisendgrammatikat pole"
-
-#: src/reader.c:1053
-#, c-format
-msgid "unknown character: %s"
-msgstr "tundmatu sümbol: %s"
-
-#: src/reader.c:1227
-#, c-format
-msgid "unterminated %guard clause"
-msgstr "lõpetamata %guard klausel"
-
-#: src/reader.c:1380
-msgid "ill-formed rule: initial symbol not followed by colon"
-msgstr "vigaselt formeeritud reegel: algsümbolile ei järgne koolonit"
-
-#: src/reader.c:1387
-msgid "grammar starts with vertical bar"
-msgstr "grammatika algab püstkriipsuga"
-
-#: src/reader.c:1415
+#: src/reader.c:239
 #, c-format
 msgid "rule given for %s, which is a token"
 msgstr "%s jaoks on antud reegel, aga see on märk"
 
-#: src/reader.c:1445 src/reader.c:1557
-msgid "previous rule lacks an ending `;'"
-msgstr "eelmisel reeglil puudub lõpetav `;'"
-
-#: src/reader.c:1518
-msgid "two @prec's in a row"
-msgstr "kaks @prec ühel real"
-
-#: src/reader.c:1526
-#, c-format
-msgid "%%guard present but %%semantic_parser not specified"
-msgstr "%%guard on määratud, aga %%semantic_parser ei ole"
-
-#: src/reader.c:1535
-msgid "two actions at end of one rule"
-msgstr "kaks tegevust ühe reegli lõpus"
-
-#: src/reader.c:1549
+#: src/reader.c:264
 #, c-format
 msgid "type clash (`%s' `%s') on default action"
 msgstr "vaikimisi tegevuse tüübikonflikt (`%s' `%s')"
 
-#: src/reader.c:1555
+#: src/reader.c:272
 msgid "empty rule for typed nonterminal, and no action"
 msgstr "tüübiga mitteterminalil on tühi reegel ja puudub tegevus"
 
-#: src/reader.c:1601
-#, c-format
-msgid "invalid input: %s"
-msgstr "vigane sisend: %s"
+#: src/reader.c:343
+msgid "two @prec's in a row"
+msgstr "kaks @prec ühel real"
 
-#: src/reader.c:1609
+#: src/reader.c:353
+#, c-format
+msgid "%%dprec affects only GLR parsers"
+msgstr "%%dprec puudutab ainult GLR parsereid"
+
+#: src/reader.c:355
+#, c-format
+msgid "%%dprec must be followed by positive number"
+msgstr "%%dprec järel peab olema positiivne number"
+
+#: src/reader.c:357
+#, c-format
+msgid "only one %%dprec allowed per rule"
+msgstr "reeglis on lubatud ainult üks %%dprec"
+
+#: src/reader.c:368
+#, c-format
+msgid "%%merge affects only GLR parsers"
+msgstr "%%merge puudutab ainult GLR parsereid"
+
+#: src/reader.c:370
+#, c-format
+msgid "only one %%merge allowed per rule"
+msgstr "reeglis on lubatud ainult üks %%merge"
+
+#: src/reader.c:513
+msgid "no rules in the input grammar"
+msgstr "sisendgrammatikas pole reegleid"
+
+#: src/reader.c:545
 #, c-format
 msgid "too many symbols (tokens plus nonterminals); maximum %d"
 msgstr "liiga palju sümboleid (märgid ja mitteterminalid); maksimaalne on %d"
 
-#: src/reader.c:1612
-msgid "no rules in the input grammar"
-msgstr "sisendgrammatikas pole reegleid"
+#: src/reduce.c:239
+msgid "useless rule"
+msgstr "kasutamata reegel"
 
-#: src/reader.c:1640
-#, c-format
-msgid "symbol %s is used, but is not defined as a token and has no rules"
-msgstr ""
-"kasutatakse sümbolit %s, mis ei ole defineeritud märgina ja millel puuduvad "
-"reeglid"
+#: src/reduce.c:302
+msgid "useless nonterminal"
+msgstr "kasutamata mitteterminal"
 
-#: src/reader.c:1775
-#, c-format
-msgid "tokens %s and %s both assigned number %d"
-msgstr "märkidele %s ja %s on mõlemale omistatud number %d"
+#: src/reduce.c:349
+msgid "Useless nonterminals"
+msgstr "Kasutamata mitteterminalid"
 
-#: src/reader.c:1828
-#, c-format
-msgid "conflicting precedences for %s and %s"
-msgstr "%s ja %s omavad konfliktseid prioriteete"
+#: src/reduce.c:362
+msgid "Terminals which are not used"
+msgstr "Terminalid, mida ei kasutatud"
 
-#: src/reader.c:1840
-#, c-format
-msgid "conflicting assoc values for %s and %s"
-msgstr "%s ja %s omavad konfliktseid assotsiatiivseid väärtuseid"
+#: src/reduce.c:371
+msgid "Useless rules"
+msgstr "Kasutamata reeglid"
 
-#: src/reader.c:1879
-#, c-format
-msgid "the start symbol %s is undefined"
-msgstr "stardisümbol %s ei ole defineeritud"
-
-#: src/reader.c:1881
-#, c-format
-msgid "the start symbol %s is a token"
-msgstr "stardisümbol %s on märk"
-
-#: src/reduce.c:409
-msgid "Useless nonterminals:"
-msgstr "Kasutamata mitteterminalid:"
-
-#: src/reduce.c:422
-msgid "Terminals which are not used:"
-msgstr "Terminalid, mida ei kasutatud:"
-
-#: src/reduce.c:433
-msgid "Useless rules:"
-msgstr "Kasutamata reeglid:"
-
-#: src/reduce.c:503
+#: src/reduce.c:387
 #, c-format
 msgid "%d rule never reduced\n"
 msgid_plural "%d rules never reduced\n"
 msgstr[0] "%d reegel ei redutseeru\n"
 msgstr[1] "%d reeglit ei redutseeru\n"
 
-#: src/reduce.c:511
+#: src/reduce.c:395
 #, c-format
 msgid "%d useless nonterminal"
 msgid_plural "%d useless nonterminals"
 msgstr[0] "%d kasutamata mitteterminal"
 msgstr[1] "%d kasutamata mitteterminali"
 
-#: src/reduce.c:517
+#: src/reduce.c:401
 msgid " and "
 msgstr " ja "
 
-#: src/reduce.c:520
+#: src/reduce.c:404
 #, c-format
 msgid "%d useless rule"
 msgid_plural "%d useless rules"
 msgstr[0] "%d kasutamata reegel"
 msgstr[1] "%d kasutamata reeglit"
 
-#: src/reduce.c:551
+#: src/reduce.c:435
 #, c-format
-msgid "Start symbol %s does not derive any sentence"
-msgstr "Stardisümbolist %s ei tuletata ühtegi lauset"
+msgid "start symbol %s does not derive any sentence"
+msgstr "stardisümbolist %s ei tuletata ühtegi lauset"
 
-#: lib/getopt.c:694
+#: scan-gram.l:202
+#, c-format
+msgid ": invalid character: `%c'\n"
+msgstr ": vigane sümbol: `%c'\n"
+
+#: scan-gram.l:246
+msgid ": unexpected end of file in a comment\n"
+msgstr ": ootamatu faililõpp kommentaaris\n"
+
+#: scan-gram.l:274 scan-gram.l:412
+msgid ": unexpected end of file in a string\n"
+msgstr ": ootamatu faililõpp sõnes\n"
+
+#: scan-gram.l:311 scan-gram.l:383
+msgid ": unexpected end of file in a character\n"
+msgstr ": ootamatu faililõpp sümbolis\n"
+
+#: scan-gram.l:332
+#, c-format
+msgid ": invalid escape: %s\n"
+msgstr ": vigane paojada: %s\n"
+
+#: scan-gram.l:353
+#, c-format
+msgid ": unrecognized escape: %s\n"
+msgstr ": tundmatu paojada: %s\n"
+
+#: scan-gram.l:473
+msgid ": unexpected end of file in a braced code\n"
+msgstr ": ootamatu faililõpp sulgude vahelises koodis\n"
+
+#: scan-gram.l:502
+msgid ": unexpected end of file in a prologue\n"
+msgstr ": ootamatu faililõpp proloogis\n"
+
+#: scan-gram.l:560
+#, c-format
+msgid "$$ of `%s' has no declared type"
+msgstr "`%s' $$ ei oma deklareeritud tüüpi"
+
+#: scan-gram.l:577 scan-gram.l:664
+#, c-format
+msgid "invalid value: %s%d"
+msgstr "vigane väärtus: %s%d"
+
+#: scan-gram.l:584
+#, c-format
+msgid "$%d of `%s' has no declared type"
+msgstr "$%d `%s' ei oma deklareeritud tüüpi"
+
+#: scan-gram.l:595 scan-gram.l:612 scan-gram.l:671 scan-gram.l:688
+#, c-format
+msgid "%s is invalid"
+msgstr "%s on vigane"
+
+#: src/state.c:145
+#, c-format
+msgid "too many states (max %d)"
+msgstr "liiga palju olekuid (maks %d)"
+
+#: src/symlist.c:97 src/symlist.c:109
+msgid "invalid $ value"
+msgstr "vigane $ väärtus"
+
+#: src/symtab.c:81
+#, c-format
+msgid "type redeclaration for %s"
+msgstr "%s tüübi uuesti deklareerimine"
+
+#: src/symtab.c:98 src/symtab.c:117
+#, c-format
+msgid "%s redeclaration for %s"
+msgstr "%s uuesti deklareerimine %s jaoks"
+
+#: src/symtab.c:138
+#, c-format
+msgid "redefining precedence of %s"
+msgstr "%s prioriteedi uus definitsioon"
+
+#: src/symtab.c:157
+#, c-format
+msgid "symbol %s redefined"
+msgstr "sümbol %s on uuesti defineeritud"
+
+#: src/symtab.c:180
+#, c-format
+msgid "redefining user token number of %s"
+msgstr "%s kasutaja märgi numbri uuesti defineerimine"
+
+#: src/symtab.c:225
+#, c-format
+msgid "symbol %s is used, but is not defined as a token and has no rules"
+msgstr ""
+"kasutatakse sümbolit %s, mis ei ole defineeritud märgina ja millel puuduvad "
+"reeglid"
+
+#: src/symtab.c:244
+#, c-format
+msgid "symbol `%s' used more than once as a literal string"
+msgstr "sümbolit `%s' on kasutatud enam kui kord literaal sõnena"
+
+#: src/symtab.c:247
+#, c-format
+msgid "symbol `%s' given more than one literal string"
+msgstr "sümbolile `%s' on antud enam kui üks literaal sõne"
+
+#: src/symtab.c:281
+#, c-format
+msgid "conflicting precedences for %s and %s"
+msgstr "%s ja %s omavad konfliktseid prioriteete"
+
+#: src/symtab.c:293
+#, c-format
+msgid "conflicting associativities for %s (%s) and %s (%s)"
+msgstr "%s (%s) ja %s (%s) omavad konfliktseid assotsiatiivseid väärtuseid"
+
+#: src/symtab.c:363
+#, c-format
+msgid "tokens %s and %s both assigned number %d"
+msgstr "märkidele %s ja %s on mõlemale omistatud number %d"
+
+#: src/symtab.c:568
+#, c-format
+msgid "the start symbol %s is undefined"
+msgstr "stardisümbol %s ei ole defineeritud"
+
+#: src/symtab.c:572
+#, c-format
+msgid "the start symbol %s is a token"
+msgstr "stardisümbol %s on märk"
+
+#: lib/argmatch.c:161
+#, c-format
+msgid "invalid argument %s for %s"
+msgstr "vigane argument %s %s'le"
+
+#: lib/argmatch.c:162
+#, c-format
+msgid "ambiguous argument %s for %s"
+msgstr "segane argument %s %s'le"
+
+#: lib/argmatch.c:181
+msgid "Valid arguments are:"
+msgstr "Lubatud argumendid on:"
+
+#: lib/bitset_stats.c:225
+#, fuzzy, c-format
+msgid "%u bitset_allocs, %u freed (%.2f%%).\n"
+msgstr "%d bitset_allocs, %d vabastatud (%.2f%%).\n"
+
+#: lib/bitset_stats.c:228
+#, fuzzy, c-format
+msgid "%u bitset_sets, %u cached (%.2f%%)\n"
+msgstr "%d bitset_sets, %d puhverdatud (%.2f%%)\n"
+
+#: lib/bitset_stats.c:231
+#, fuzzy, c-format
+msgid "%u bitset_resets, %u cached (%.2f%%)\n"
+msgstr "%d bitset_resets, %d puhverdatud (%.2f%%)\n"
+
+#: lib/bitset_stats.c:234
+#, fuzzy, c-format
+msgid "%u bitset_tests, %u cached (%.2f%%)\n"
+msgstr "%d bitset_tests, %d puhverdatud (%.2f%%)\n"
+
+#: lib/bitset_stats.c:238
+#, fuzzy, c-format
+msgid "%u bitset_lists\n"
+msgstr "%d bitset_lists\n"
+
+#: lib/bitset_stats.c:240
+msgid "count log histogram\n"
+msgstr "loenduri logi histogramm\n"
+
+#: lib/bitset_stats.c:243
+msgid "size log histogram\n"
+msgstr "suuruste logi histogramm\n"
+
+#: lib/bitset_stats.c:246
+msgid "density histogram\n"
+msgstr "tiheduse histogramm\n"
+
+#: lib/bitset_stats.c:262
+msgid ""
+"Bitset statistics:\n"
+"\n"
+msgstr ""
+"Bitset statistika:\n"
+"\n"
+
+#: lib/bitset_stats.c:265
+#, fuzzy, c-format
+msgid "Accumulated runs = %u\n"
+msgstr "Salvestatud läbimisi = %d\n"
+
+#: lib/bitset_stats.c:310
+msgid "Could not read stats file."
+msgstr "Statistika faili ei saa lugeda."
+
+#: lib/bitset_stats.c:312
+msgid "Bad stats file size.\n"
+msgstr "Vigane statistika faili suurus.\n"
+
+#: lib/bitset_stats.c:338
+msgid "Could not write stats file."
+msgstr "Statistika faili ei saa kirjutada."
+
+#: lib/bitset_stats.c:342
+msgid "Could not open stats file for writing."
+msgstr "Statistika faili ei saa kirjutamiseks avada."
+
+#: lib/getopt.c:662
 #, c-format
 msgid "%s: option `%s' is ambiguous\n"
 msgstr "%s: võti `%s' on segane\n"
 
-#: lib/getopt.c:719
+#: lib/getopt.c:687
 #, c-format
 msgid "%s: option `--%s' doesn't allow an argument\n"
 msgstr "%s: võti `--%s' ei luba argumenti\n"
 
-#: lib/getopt.c:724
+#: lib/getopt.c:692
 #, c-format
 msgid "%s: option `%c%s' doesn't allow an argument\n"
 msgstr "%s: võti `%c%s' ei luba argumenti\n"
 
-#: lib/getopt.c:742 lib/getopt.c:915
+#: lib/getopt.c:710 lib/getopt.c:883
 #, c-format
 msgid "%s: option `%s' requires an argument\n"
 msgstr "%s: võti `%s' nõuab argumenti\n"
 
-#: lib/getopt.c:771
+#: lib/getopt.c:739
 #, c-format
 msgid "%s: unrecognized option `--%s'\n"
 msgstr "%s: tundmatu võti `--%s'\n"
 
-#: lib/getopt.c:775
+#: lib/getopt.c:743
 #, c-format
 msgid "%s: unrecognized option `%c%s'\n"
 msgstr "%s: tundmatu võti `%c%s'\n"
 
-#: lib/getopt.c:801
+#: lib/getopt.c:769
 #, c-format
 msgid "%s: illegal option -- %c\n"
 msgstr "%s: lubamatu võti -- %c\n"
 
-#: lib/getopt.c:804
+#: lib/getopt.c:772
 #, c-format
 msgid "%s: invalid option -- %c\n"
 msgstr "%s: vigane võti -- %c\n"
 
-#: lib/getopt.c:834 lib/getopt.c:964
+#: lib/getopt.c:802 lib/getopt.c:932
 #, c-format
 msgid "%s: option requires an argument -- %c\n"
 msgstr "%s: võti nõuab argumenti -- %c\n"
 
-#: lib/getopt.c:881
+#: lib/getopt.c:849
 #, c-format
 msgid "%s: option `-W %s' is ambiguous\n"
 msgstr "%s: võti `-W %s' on segane\n"
 
-#: lib/getopt.c:899
+#: lib/getopt.c:867
 #, c-format
 msgid "%s: option `-W %s' doesn't allow an argument\n"
 msgstr "%s: võti `-W %s' ei luba argumenti\n"
 
-#: lib/obstack.c:494 lib/obstack.c:497 lib/xmalloc.c:66
+#: lib/obstack.c:496 lib/obstack.c:499 lib/xmalloc.c:66
 msgid "memory exhausted"
 msgstr "mälu on otsas"
 
@@ -730,3 +692,118 @@ msgstr "`"
 #: lib/quotearg.c:275
 msgid "'"
 msgstr "'"
+
+#: lib/timevar.c:466
+msgid ""
+"\n"
+"Execution times (seconds)\n"
+msgstr ""
+"\n"
+"Täitmise ajad (sekundites)\n"
+
+#: lib/timevar.c:516
+msgid " TOTAL                 :"
+msgstr " KOKKU                 :"
+
+#: lib/timevar.c:552
+#, c-format
+msgid "time in %s: %ld.%06ld (%ld%%)\n"
+msgstr "aeg %s: %ld.%06ld (%ld%%)\n"
+
+#~ msgid "state_list_append (state = %d, symbol = %d (%s))\n"
+#~ msgstr "state_list_append (olek = %d, sümbol = %d (%s))\n"
+
+#~ msgid "Entering new_itemsets, state = %d\n"
+#~ msgstr "Sisenen new_itemsets, olek = %d\n"
+
+#~ msgid "Entering get_state, symbol = %d (%s)\n"
+#~ msgstr "Sisenen get_state, szmbol = %d (%s)\n"
+
+#~ msgid "Exiting get_state => %d\n"
+#~ msgstr "Väljun get_state => %d\n"
+
+#~ msgid "Entering append_states, state = %d\n"
+#~ msgstr "Sisenen append_states, olek = %d\n"
+
+#~ msgid "Processing state %d (reached by %s)\n"
+#~ msgstr "Töötlen olekut %d (olekust %s)\n"
+
+#~ msgid "undefined associativity"
+#~ msgstr "defineerimata assotsiatiivsus"
+
+#~ msgid "Closure: %s\n"
+#~ msgstr "Sulund: %s\n"
+
+#~ msgid "  (rule %d)\n"
+#~ msgstr "  (reegel %d)\n"
+
+#~ msgid "RTC: Firsts Input"
+#~ msgstr "RTC: Firsts Sisend"
+
+#~ msgid "RTC: Firsts Output"
+#~ msgstr "RTC: Firsts Väljund"
+
+#~ msgid "input"
+#~ msgstr "sisend"
+
+#~ msgid "output"
+#~ msgstr "väljund"
+
+#~ msgid ""
+#~ "Variables\n"
+#~ "---------\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Muutujad\n"
+#~ "--------\n"
+#~ "\n"
+
+#~ msgid "Value  Sprec  Sassoc  Tag\n"
+#~ msgstr "Väärtus  Sprec  Sassoc  Märk\n"
+
+#~ msgid ""
+#~ "Rules\n"
+#~ "-----\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Reeglid\n"
+#~ "-------\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "Num (Prec, Assoc, Useful, Ritem Range) Lhs -> Rhs (Ritem range) [Num]\n"
+#~ msgstr ""
+#~ "Num (Prec, Assoc, Useful, Ritem Range) Lhs -> Rhs (Ritem range) [Num]\n"
+
+#~ msgid ""
+#~ "Rules interpreted\n"
+#~ "-----------------\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Interpreteeritud reeglid\n"
+#~ "------------------------\n"
+#~ "\n"
+
+#~ msgid "Lookaheads: BEGIN\n"
+#~ msgstr "Ettevaatamine: ALGUS\n"
+
+#~ msgid "State %d: %d lookaheads\n"
+#~ msgstr "Olek %d: %d ettevaatamist\n"
+
+#~ msgid "   on %d (%s) -> rule %d\n"
+#~ msgstr "   %d (%s) -> reegel %d\n"
+
+#~ msgid "Lookaheads: END\n"
+#~ msgstr "Ettevaatamine: LÕPP\n"
+
+#~ msgid "relation_transpose: input\n"
+#~ msgstr "relation_transpose: sisend\n"
+
+#~ msgid "relation_transpose: output\n"
+#~ msgstr "relation_transpose: väljund\n"
+
+#~ msgid "growing table and check from: %lu to %lu\n"
+#~ msgstr "kasvatan table ja check suuruselt: %lu suurusele %lu\n"
+
+#~ msgid "base_t too small to hold %d\n"
+#~ msgstr "base_t on liiga väike hoidmaks %d\n"
