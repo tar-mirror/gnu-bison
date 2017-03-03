@@ -247,8 +247,8 @@ fi
 
 # Not all shells have the 'times' builtin; the subshell is needed to make
 # sure we discard the 'times: not found' message from the shell.
-at_times=:
-(times) >/dev/null 2>&1 && at_times=times
+at_times_skip=:
+(times) >/dev/null 2>&1 && at_times_skip=false
 
 # CLI Arguments to pass to the debugging scripts.
 at_debug_args=
@@ -291,63 +291,120 @@ at_groups_all=' banner-1 1 2 banner-2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 1
 # numerical order.
 at_format='..'
 # Description of all the test groups.
-at_help_all='1;input.at:28;Invalid $n;
-2;input.at:47;Invalid @n;
-3;output.at:38;Output files:  & -dv.;
-4;output.at:40;Output files:  & -dv -o foo.c.;
-5;output.at:42;Output files:  & -dv -o foo.tab.c.;
-6;output.at:44;Output files:  & -dv -y.;
-7;output.at:46;Output files:  & -dv -b bar.;
-8;output.at:48;Output files:  & -dv -g -o foo.c.;
-9;output.at:52;Output files: %defines %verbose & .;
-10;output.at:54;Output files: %defines %verbose %yacc & .;
-11;output.at:57;Output files: %defines %verbose %yacc & .;
-12;output.at:61;Output files: %file-prefix="bar" %defines %verbose & .;
-13;output.at:63;Output files: %output="bar.c" %defines %verbose %yacc & .;
-14;output.at:67;Output files: %file-prefix="baz" %output="bar.c" %defines %verbose %yacc & .;
-15;output.at:72;Output files: %defines %verbose & .;
-16;output.at:75;Output files: %defines %verbose  & -o foo.c.;
-17;output.at:79;Output files:  & --defines=foo.hpp -o foo.c++.;
-18;output.at:83;Output files:  & -o foo.c++ --graph=foo.gph.;
-19;output.at:87;Clashing Output Files.;
-20;sets.at:26;Nullable;
-21;sets.at:160;Broken Closure;
-22;reduce.at:26;Useless Terminals;
-23;reduce.at:70;Useless Nonterminals;
-24;reduce.at:116;Useless Rules;
-25;reduce.at:180;Underivable Rules;
-26;calc.at:385;Calculator ;
-27;calc.at:387;Calculator --defines;
-28;calc.at:388;Calculator --locations;
-29;calc.at:389;Calculator --name-prefix=calc;
-30;calc.at:390;Calculator --verbose;
-31;calc.at:391;Calculator --yacc;
-32;calc.at:392;Calculator --yyerror-verbose;
-33;calc.at:394;Calculator --locations --yyerror-verbose;
-34;calc.at:396;Calculator --defines --locations --name-prefix=calc --verbose --yacc --yyerror-verbose;
-35;calc.at:398;Calculator --debug;
-36;calc.at:399;Calculator --debug --defines --locations --name-prefix=calc --verbose --yacc --yyerror-verbose;
-37;torture.at:83;Exploding the Stack Size with Alloca;
-38;torture.at:104;Exploding the Stack Size with Malloc;
-39;torture.at:123;GNU AWK Grammar;
-40;torture.at:463;GNU Cim Grammar;
-41;regression.at:26;%nonassoc and eof;
-42;regression.at:100;braces parsing;
-43;regression.at:122;Duplicate string;
-44;regression.at:146;Unresolved SR Conflicts;
-45;regression.at:251;Solved SR Conflicts;
-46;regression.at:356;Rule Line Numbers;
-47;regression.at:500;%expect not enough;
-48;regression.at:520;%expect right;
-49;regression.at:537;%expect too much;
-50;regression.at:558;Mixing %token styles;
-51;regression.at:581;%union and --defines;
-52;regression.at:603;%union and C comments;
-53;regression.at:626;Invalid inputs;
-54;regression.at:656;Invalid %directive;
-55;regression.at:681;Web2c Report;
-56;regression.at:798;Web2c Actions;
+at_help_all=
+at_help_all=$at_help_all'1;input.at:28;Invalid $n;
 '
+at_help_all=$at_help_all'2;input.at:47;Invalid @n;
+'
+at_help_all=$at_help_all'3;output.at:38;Output files:  & -dv.;
+'
+at_help_all=$at_help_all'4;output.at:40;Output files:  & -dv -o foo.c.;
+'
+at_help_all=$at_help_all'5;output.at:42;Output files:  & -dv -o foo.tab.c.;
+'
+at_help_all=$at_help_all'6;output.at:44;Output files:  & -dv -y.;
+'
+at_help_all=$at_help_all'7;output.at:46;Output files:  & -dv -b bar.;
+'
+at_help_all=$at_help_all'8;output.at:48;Output files:  & -dv -g -o foo.c.;
+'
+at_help_all=$at_help_all'9;output.at:52;Output files: %defines %verbose & .;
+'
+at_help_all=$at_help_all'10;output.at:54;Output files: %defines %verbose %yacc & .;
+'
+at_help_all=$at_help_all'11;output.at:57;Output files: %defines %verbose %yacc & .;
+'
+at_help_all=$at_help_all'12;output.at:61;Output files: %file-prefix="bar" %defines %verbose & .;
+'
+at_help_all=$at_help_all'13;output.at:63;Output files: %output="bar.c" %defines %verbose %yacc & .;
+'
+at_help_all=$at_help_all'14;output.at:67;Output files: %file-prefix="baz" %output="bar.c" %defines %verbose %yacc & .;
+'
+at_help_all=$at_help_all'15;output.at:72;Output files: %defines %verbose & .;
+'
+at_help_all=$at_help_all'16;output.at:75;Output files: %defines %verbose  & -o foo.c.;
+'
+at_help_all=$at_help_all'17;output.at:79;Output files:  & --defines=foo.hpp -o foo.c++.;
+'
+at_help_all=$at_help_all'18;output.at:83;Output files:  & -o foo.c++ --graph=foo.gph.;
+'
+at_help_all=$at_help_all'19;output.at:87;Clashing Output Files;
+'
+at_help_all=$at_help_all'20;sets.at:26;Nullable;
+'
+at_help_all=$at_help_all'21;sets.at:160;Broken Closure;
+'
+at_help_all=$at_help_all'22;reduce.at:26;Useless Terminals;
+'
+at_help_all=$at_help_all'23;reduce.at:70;Useless Nonterminals;
+'
+at_help_all=$at_help_all'24;reduce.at:116;Useless Rules;
+'
+at_help_all=$at_help_all'25;reduce.at:180;Underivable Rules;
+'
+at_help_all=$at_help_all'26;calc.at:385;Calculator ;
+'
+at_help_all=$at_help_all'27;calc.at:387;Calculator --defines;
+'
+at_help_all=$at_help_all'28;calc.at:388;Calculator --locations;
+'
+at_help_all=$at_help_all'29;calc.at:389;Calculator --name-prefix=calc;
+'
+at_help_all=$at_help_all'30;calc.at:390;Calculator --verbose;
+'
+at_help_all=$at_help_all'31;calc.at:391;Calculator --yacc;
+'
+at_help_all=$at_help_all'32;calc.at:392;Calculator --yyerror-verbose;
+'
+at_help_all=$at_help_all'33;calc.at:394;Calculator --locations --yyerror-verbose;
+'
+at_help_all=$at_help_all'34;calc.at:396;Calculator --defines --locations --name-prefix=calc --verbose --yacc --yyerror-verbose;
+'
+at_help_all=$at_help_all'35;calc.at:398;Calculator --debug;
+'
+at_help_all=$at_help_all'36;calc.at:399;Calculator --debug --defines --locations --name-prefix=calc --verbose --yacc --yyerror-verbose;
+'
+at_help_all=$at_help_all'37;torture.at:83;Exploding the Stack Size with Alloca;
+'
+at_help_all=$at_help_all'38;torture.at:104;Exploding the Stack Size with Malloc;
+'
+at_help_all=$at_help_all'39;torture.at:123;GNU AWK Grammar;
+'
+at_help_all=$at_help_all'40;torture.at:463;GNU Cim Grammar;
+'
+at_help_all=$at_help_all'41;regression.at:26;%nonassoc and eof;
+'
+at_help_all=$at_help_all'42;regression.at:100;braces parsing;
+'
+at_help_all=$at_help_all'43;regression.at:122;Duplicate string;
+'
+at_help_all=$at_help_all'44;regression.at:146;Unresolved SR Conflicts;
+'
+at_help_all=$at_help_all'45;regression.at:251;Solved SR Conflicts;
+'
+at_help_all=$at_help_all'46;regression.at:356;Rule Line Numbers;
+'
+at_help_all=$at_help_all'47;regression.at:500;%expect not enough;
+'
+at_help_all=$at_help_all'48;regression.at:520;%expect right;
+'
+at_help_all=$at_help_all'49;regression.at:537;%expect too much;
+'
+at_help_all=$at_help_all'50;regression.at:558;Mixing %token styles;
+'
+at_help_all=$at_help_all'51;regression.at:581;%union and --defines;
+'
+at_help_all=$at_help_all'52;regression.at:603;%union and C comments;
+'
+at_help_all=$at_help_all'53;regression.at:626;Invalid inputs;
+'
+at_help_all=$at_help_all'54;regression.at:656;Invalid %directive;
+'
+at_help_all=$at_help_all'55;regression.at:681;Web2c Report;
+'
+at_help_all=$at_help_all'56;regression.at:798;Web2c Actions;
+'
+
 
 
 while test $# -gt 0; do
@@ -361,7 +418,7 @@ while test $# -gt 0; do
         ;;
 
     --version | -V )
-        echo "$as_me (GNU Bison 1.34)"
+        echo "$as_me (GNU Bison 1.35)"
         exit 0
         ;;
 
@@ -506,7 +563,7 @@ fi
 # List of tests.
 if $at_list_p; then
   cat <<_ATEOF
-GNU Bison 1.34 test suite test groups:
+GNU Bison 1.35 test suite test groups:
 
  NUM: FILENAME:LINE      TEST-GROUP-NAME
       KEYWORDS
@@ -599,13 +656,13 @@ fi
 # Banners and logs.
 cat <<\_ASBOX
 ## -------------------------- ##
-## GNU Bison 1.34 test suite. ##
+## GNU Bison 1.35 test suite. ##
 ## -------------------------- ##
 _ASBOX
 {
   cat <<\_ASBOX
 ## -------------------------- ##
-## GNU Bison 1.34 test suite. ##
+## GNU Bison 1.35 test suite. ##
 ## -------------------------- ##
 _ASBOX
   echo
@@ -827,7 +884,7 @@ $at_failed && exit 1
 $at_traceon
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -868,7 +925,7 @@ $at_failed && exit 1
 $at_traceon
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -936,7 +993,7 @@ esac
 $at_failed && exit 1
 $at_traceon
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -995,7 +1052,7 @@ esac
 $at_failed && exit 1
 $at_traceon
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -1054,7 +1111,7 @@ esac
 $at_failed && exit 1
 $at_traceon
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -1113,7 +1170,7 @@ esac
 $at_failed && exit 1
 $at_traceon
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -1172,7 +1229,7 @@ esac
 $at_failed && exit 1
 $at_traceon
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -1231,7 +1288,7 @@ esac
 $at_failed && exit 1
 $at_traceon
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -1290,7 +1347,7 @@ esac
 $at_failed && exit 1
 $at_traceon
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -1349,7 +1406,7 @@ esac
 $at_failed && exit 1
 $at_traceon
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -1408,7 +1465,7 @@ esac
 $at_failed && exit 1
 $at_traceon
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -1467,7 +1524,7 @@ esac
 $at_failed && exit 1
 $at_traceon
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -1526,7 +1583,7 @@ esac
 $at_failed && exit 1
 $at_traceon
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -1585,7 +1642,7 @@ esac
 $at_failed && exit 1
 $at_traceon
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -1644,7 +1701,7 @@ esac
 $at_failed && exit 1
 $at_traceon
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -1703,7 +1760,7 @@ esac
 $at_failed && exit 1
 $at_traceon
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -1762,7 +1819,7 @@ esac
 $at_failed && exit 1
 $at_traceon
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -1821,14 +1878,14 @@ esac
 $at_failed && exit 1
 $at_traceon
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
 
-  19 ) # 19. output.at:87: Clashing Output Files.
+  19 ) # 19. output.at:87: Clashing Output Files
     at_setup_line='output.at:87'
-    $at_verbose "19. output.at:87: testing Clashing Output Files...."
+    $at_verbose "19. output.at:87: testing Clashing Output Files..."
     $at_quiet $ECHO_N " 19: output.at:87      $ECHO_C"
     (
       $at_traceon
@@ -1846,7 +1903,7 @@ at_status=$?
 egrep '^ *\+' $at_stder1 >&2
 egrep -v '^ *\+' $at_stder1 >$at_stderr
 at_failed=false
-echo >>$at_stderr; echo "foo.y:2: fatal error: header and parser would be both named \`foo.x'
+echo >>$at_stderr; echo "foo.y:2: fatal error: header and parser would both be named \`foo.x'
 " | $at_diff - $at_stderr >&5 || at_failed=:
 $at_diff $at_devnull $at_stdout >&5 || at_failed=:
 case $at_status in
@@ -1859,7 +1916,7 @@ esac
 $at_failed && exit 1
 $at_traceon
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -1990,7 +2047,7 @@ $at_failed && exit 1
 $at_traceon
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -2053,7 +2110,7 @@ $at_failed && exit 1
 $at_traceon
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -2147,7 +2204,7 @@ $at_failed && exit 1
 $at_traceon
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -2233,7 +2290,7 @@ $at_failed && exit 1
 $at_traceon
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -2337,7 +2394,7 @@ $at_failed && exit 1
 $at_traceon
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -2411,7 +2468,7 @@ $at_failed && exit 1
 $at_traceon
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -3128,7 +3185,7 @@ $at_traceon
 
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -3836,7 +3893,7 @@ $at_traceon
 
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -4544,7 +4601,7 @@ $at_traceon
 
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -5252,7 +5309,7 @@ $at_traceon
 
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -5960,7 +6017,7 @@ $at_traceon
 
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -6668,7 +6725,7 @@ $at_traceon
 
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -7376,7 +7433,7 @@ $at_traceon
 
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -8084,7 +8141,7 @@ $at_traceon
 
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -8792,7 +8849,7 @@ $at_traceon
 
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -9500,7 +9557,7 @@ $at_traceon
 
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -10208,7 +10265,7 @@ $at_traceon
 
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -10386,7 +10443,7 @@ $at_failed && exit 1
 $at_traceon
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -10555,7 +10612,7 @@ $at_failed && exit 1
 $at_traceon
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -10919,7 +10976,7 @@ $at_failed && exit 1
 $at_traceon
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -11812,7 +11869,7 @@ $at_failed && exit 1
 $at_traceon
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -12030,7 +12087,7 @@ $at_failed && exit 1
 $at_traceon
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -12094,7 +12151,7 @@ $at_failed && exit 1
 $at_traceon
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -12142,7 +12199,7 @@ $at_failed && exit 1
 $at_traceon
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -12288,7 +12345,7 @@ $at_failed && exit 1
 $at_traceon
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -12433,7 +12490,7 @@ $at_failed && exit 1
 $at_traceon
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -12618,7 +12675,7 @@ $at_failed && exit 1
 $at_traceon
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -12661,7 +12718,7 @@ esac
 $at_failed && exit 1
 $at_traceon
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -12702,7 +12759,7 @@ esac
 $at_failed && exit 1
 $at_traceon
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -12745,7 +12802,7 @@ esac
 $at_failed && exit 1
 $at_traceon
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -12790,7 +12847,7 @@ $at_failed && exit 1
 $at_traceon
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -12835,7 +12892,7 @@ $at_failed && exit 1
 $at_traceon
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -12900,7 +12957,7 @@ $at_failed && exit 1
 $at_traceon
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -12951,7 +13008,7 @@ $at_failed && exit 1
 $at_traceon
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -12993,7 +13050,7 @@ $at_failed && exit 1
 $at_traceon
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -13134,7 +13191,7 @@ $at_failed && exit 1
 $at_traceon
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -13283,7 +13340,7 @@ $at_failed && exit 1
 $at_traceon
 
 
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
@@ -13460,7 +13517,7 @@ _ASBOX
   echo "Please send \`$as_me.log' and all information you think might help:"
   echo
   echo "   To: <bug-bison@gnu.org>"
-  echo "   Subject: [GNU Bison 1.34] $as_me.log: $at_fail_count failures"
+  echo "   Subject: [GNU Bison 1.35] $as_me.log: $at_fail_count failures"
   echo
   exit 1
 fi

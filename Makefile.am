@@ -14,13 +14,13 @@
 ## 02111-1307  USA
 
 ## Process this file with automake to produce Makefile.in -*-Makefile-*-
-AUTOMAKE_OPTIONS = 1.5 check-news readme-alpha dist-bzip2
+AUTOMAKE_OPTIONS = 1.6 check-news readme-alpha dist-bzip2
 
 ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = config intl po lib src doc m4 tests
 
-EXTRA_DIST = REFERENCES configure.bat OChangeLog Makefile.maint GNUmakefile
+EXTRA_DIST = config/config.rpath  REFERENCES configure.bat OChangeLog Makefile.maint GNUmakefile
 
 DISTCLEANFILES = intl/libintl.h
 

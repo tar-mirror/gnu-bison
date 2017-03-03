@@ -1,6 +1,6 @@
 # Configure template for GNU Bison.                   -*-Autoconf-*-
 #
-# Copyright 2001, 2002  Free Software Foundation, Inc.
+# Copyright (C) 2001, 2002 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,12 +18,12 @@
 # 02111-1307  USA
 
 # We need a recent Autoconf to run a recent Autotest.
-AC_PREREQ(2.52g)
+AC_PREREQ(2.53)
 
-AC_INIT([GNU Bison], [1.34], [bug-bison@gnu.org])
+AC_INIT([GNU Bison], [1.35], [bug-bison@gnu.org])
 AC_CONFIG_AUX_DIR(config)
 
-AM_INIT_AUTOMAKE([bison], [1.34])
+AM_INIT_AUTOMAKE
 AM_CONFIG_HEADER(config.h:config.hin)
 
 # Initialize the test suite.
