@@ -1,4 +1,4 @@
-# generated automatically by aclocal 1.7 -*- Autoconf -*-
+# generated automatically by aclocal 1.7a -*- Autoconf -*-
 
 # Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002
 # Free Software Foundation, Inc.
@@ -153,14 +153,14 @@ echo "timestamp for $1" >`AS_DIRNAME([$1])`/stamp-h[]$_am_stamp_count])
 # ----------------------------
 # Automake X.Y traces this macro to ensure aclocal.m4 has been
 # generated from the m4 files accompanying Automake X.Y.
-AC_DEFUN([AM_AUTOMAKE_VERSION],[am__api_version="1.7"])
+AC_DEFUN([AM_AUTOMAKE_VERSION],[am__api_version="1.7a"])
 
 # AM_SET_CURRENT_AUTOMAKE_VERSION
 # -------------------------------
 # Call AM_AUTOMAKE_VERSION so it can be traced.
 # This function is AC_REQUIREd by AC_INIT_AUTOMAKE.
 AC_DEFUN([AM_SET_CURRENT_AUTOMAKE_VERSION],
-	 [AM_AUTOMAKE_VERSION([1.7])])
+	 [AM_AUTOMAKE_VERSION([1.7a])])
 
 # Helper functions for option handling.                    -*- Autoconf -*-
 
@@ -783,39 +783,6 @@ AC_CONFIG_COMMANDS_PRE(
 Usually this means the macro was only invoked conditionally.])
 fi])])
 
-
-# Copyright 1998, 1999, 2000, 2001, 2002 Free Software Foundation, Inc.
-
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2, or (at your option)
-# any later version.
-
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-# 02111-1307, USA.
-
-# serial 3
-
-AC_PREREQ(2.50)
-
-# AM_PROG_LEX
-# -----------
-# Autoconf leaves LEX=: if lex or flex can't be found.  Change that to a
-# "missing" invocation, for better error output.
-AC_DEFUN([AM_PROG_LEX],
-[AC_REQUIRE([AM_MISSING_HAS_RUN])dnl
-AC_REQUIRE([AC_PROG_LEX])dnl
-if test "$LEX" = :; then
-  LEX=${am_missing_run}flex
-fi])
-
 # isc-posix.m4 serial 2 (gettext-0.11.2)
 dnl Copyright (C) 1995-2002 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
@@ -861,125 +828,12 @@ AC_DEFUN([AC_ISC_POSIX],
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 
-# serial 2
+# serial 3
 
-# @defmac AC_PROG_CC_STDC
-# @maindex PROG_CC_STDC
-# @ovindex CC
-# If the C compiler in not in ANSI C mode by default, try to add an option
-# to output variable @code{CC} to make it so.  This macro tries various
-# options that select ANSI C on some system or another.  It considers the
-# compiler to be in ANSI C mode if it handles function prototypes correctly.
-#
-# If you use this macro, you should check after calling it whether the C
-# compiler has been set to accept ANSI C; if not, the shell variable
-# @code{am_cv_prog_cc_stdc} is set to @samp{no}.  If you wrote your source
-# code in ANSI C, you can make an un-ANSIfied copy of it by using the
-# program @code{ansi2knr}, which comes with Ghostscript.
-# @end defmac
+# This was merged into AC_PROG_CC in Autoconf.
 
-AC_DEFUN([AM_PROG_CC_STDC],
-[AC_REQUIRE([AC_PROG_CC])
-AC_BEFORE([$0], [AC_C_INLINE])
-AC_BEFORE([$0], [AC_C_CONST])
-dnl Force this before AC_PROG_CPP.  Some cpp's, eg on HPUX, require
-dnl a magic option to avoid problems with ANSI preprocessor commands
-dnl like #elif.
-dnl FIXME: can't do this because then AC_AIX won't work due to a
-dnl circular dependency.
-dnl AC_BEFORE([$0], [AC_PROG_CPP])
-AC_MSG_CHECKING([for ${CC-cc} option to accept ANSI C])
-AC_CACHE_VAL(am_cv_prog_cc_stdc,
-[am_cv_prog_cc_stdc=no
-ac_save_CC="$CC"
-# Don't try gcc -ansi; that turns off useful extensions and
-# breaks some systems' header files.
-# AIX			-qlanglvl=ansi
-# Ultrix and OSF/1	-std1
-# HP-UX 10.20 and later	-Ae
-# HP-UX older versions	-Aa -D_HPUX_SOURCE
-# SVR4			-Xc -D__EXTENSIONS__
-for ac_arg in "" -qlanglvl=ansi -std1 -Ae "-Aa -D_HPUX_SOURCE" "-Xc -D__EXTENSIONS__"
-do
-  CC="$ac_save_CC $ac_arg"
-  AC_TRY_COMPILE(
-[#include <stdarg.h>
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-/* Most of the following tests are stolen from RCS 5.7's src/conf.sh.  */
-struct buf { int x; };
-FILE * (*rcsopen) (struct buf *, struct stat *, int);
-static char *e (p, i)
-     char **p;
-     int i;
-{
-  return p[i];
-}
-static char *f (char * (*g) (char **, int), char **p, ...)
-{
-  char *s;
-  va_list v;
-  va_start (v,p);
-  s = g (p, va_arg (v,int));
-  va_end (v);
-  return s;
-}
-int test (int i, double x);
-struct s1 {int (*f) (int a);};
-struct s2 {int (*f) (double a);};
-int pairnames (int, char **, FILE *(*)(struct buf *, struct stat *, int), int, int);
-int argc;
-char **argv;
-], [
-return f (e, argv, 0) != argv[0]  ||  f (e, argv, 1) != argv[1];
-],
-[am_cv_prog_cc_stdc="$ac_arg"; break])
-done
-CC="$ac_save_CC"
-])
-if test -z "$am_cv_prog_cc_stdc"; then
-  AC_MSG_RESULT([none needed])
-else
-  AC_MSG_RESULT([$am_cv_prog_cc_stdc])
-fi
-case "x$am_cv_prog_cc_stdc" in
-  x|xno) ;;
-  *) CC="$CC $am_cv_prog_cc_stdc" ;;
-esac
-])
-
-AU_DEFUN([fp_PROG_CC_STDC], [AM_PROG_CC_STDC])
-
-# Copyright 2000 Free Software Foundation, Inc.
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2, or (at your option)
-# any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-# 02111-1307, USA.
-
-# BISON_PROG_GNU_M4
-# -----------------
-# Check for GNU m4, at least 1.3 (supports frozen files).
-AC_DEFUN([BISON_PROG_GNU_M4],
-[AC_PATH_PROGS(M4, gm4 gnum4 m4, m4)
-AC_CACHE_CHECK(whether m4 supports frozen files, ac_cv_prog_gnu_m4,
-[ac_cv_prog_gnu_m4=no
-if test x"$M4" != x; then
-  case `$M4 --help < /dev/null 2>&1` in
-    *reload-state*) ac_cv_prog_gnu_m4=yes ;;
-  esac
-fi])])
+AU_DEFUN([AM_PROG_CC_STDC])
+AU_DEFUN([fp_PROG_CC_STDC])
 
 # Finding valid warning flags for the C Compiler.           -*-Autoconf-*-
 #
@@ -1015,6 +869,69 @@ AC_MSG_RESULT(no))
 CFLAGS="$ac_save_CFLAGS"])
 
 
+# Copyright 1998, 1999, 2000, 2001, 2002 Free Software Foundation, Inc.
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+
+# serial 3
+
+AC_PREREQ(2.50)
+
+# AM_PROG_LEX
+# -----------
+# Autoconf leaves LEX=: if lex or flex can't be found.  Change that to a
+# "missing" invocation, for better error output.
+AC_DEFUN([AM_PROG_LEX],
+[AC_REQUIRE([AM_MISSING_HAS_RUN])dnl
+AC_REQUIRE([AC_PROG_LEX])dnl
+if test "$LEX" = :; then
+  LEX=${am_missing_run}flex
+fi])
+
+# Copyright 2000 Free Software Foundation, Inc.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+
+# BISON_PROG_GNU_M4
+# -----------------
+# Check for GNU m4, at least 1.3 (supports frozen files).
+AC_DEFUN([BISON_PROG_GNU_M4],
+[AC_PATH_PROGS(M4, gm4 gnum4 m4, m4)
+AC_CACHE_CHECK(whether m4 supports frozen files, ac_cv_prog_gnu_m4,
+[ac_cv_prog_gnu_m4=no
+if test x"$M4" != x; then
+  case `$M4 --help < /dev/null 2>&1` in
+    *reload-state*) ac_cv_prog_gnu_m4=yes ;;
+  esac
+fi])])
+
+
 # Copyright 1996, 1997, 1998, 2000, 2001, 2002  Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
@@ -1035,19 +952,15 @@ CFLAGS="$ac_save_CFLAGS"])
 # serial 2
 
 AC_DEFUN([AM_C_PROTOTYPES],
-[AC_REQUIRE([AM_PROG_CC_STDC])
-AC_REQUIRE([AC_PROG_CPP])
+[AC_REQUIRE([AC_C_PROTOTYPES])
 AC_MSG_CHECKING([for function prototypes])
-if test "$am_cv_prog_cc_stdc" != no; then
-  AC_MSG_RESULT(yes)
-  AC_DEFINE(PROTOTYPES,1,[Define if compiler has function prototypes])
+if test "$ac_cv_prog_cc_stdc" != no; then
   U= ANSI2KNR=
 else
-  AC_MSG_RESULT(no)
   U=_ ANSI2KNR=./ansi2knr
 fi
 # Ensure some checks needed by ansi2knr itself.
-AC_HEADER_STDC
+AC_REQUIRE([AC_HEADER_STDC])
 AC_CHECK_HEADERS(string.h)
 AC_SUBST(U)dnl
 AC_SUBST(ANSI2KNR)dnl
@@ -1382,66 +1295,6 @@ AC_DEFUN([jm_PREREQ_ERROR],
   AC_HEADER_STDC
 ])
 
-#serial 1003
-# Experimental replacement for the function in the latest CVS autoconf.
-# Use with the error.c file in ../lib.
-
-# Copyright 2001 Free Software Foundation, Inc.
-
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2, or (at your option)
-# any later version.
-
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software Foundation,
-# Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
-
-undefine([AC_FUNC_STRERROR_R])
-
-# AC_FUNC_STRERROR_R
-# ------------------
-AC_DEFUN([AC_FUNC_STRERROR_R],
-[AC_CHECK_DECLS([strerror_r])
-AC_CHECK_FUNCS([strerror_r])
-AC_CACHE_CHECK([whether strerror_r returns char *],
-               ac_cv_func_strerror_r_char_p,
-   [
-    ac_cv_func_strerror_r_char_p=no
-    if test $ac_cv_have_decl_strerror_r = yes; then
-      AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
-	[[
-	  char buf[100];
-	  char x = *strerror_r (0, buf, sizeof buf);
-	  char *p = strerror_r (0, buf, sizeof buf);
-	]])],
-			ac_cv_func_strerror_r_char_p=yes)
-    else
-      # strerror_r is not declared.  Choose between
-      # systems that have relatively inaccessible declarations for the
-      # function.  BeOS and DEC UNIX 4.0 fall in this category, but the
-      # former has a strerror_r that returns char*, while the latter
-      # has a strerror_r that returns `int'.
-      # This test should segfault on the DEC system.
-      AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT
-	extern char *strerror_r ();],
-	[[char buf[100];
-	  char x = *strerror_r (0, buf, sizeof buf);
-	  exit (!isalpha (x));]])],
-                    ac_cv_func_strerror_r_char_p=yes, , :)
-    fi
-  ])
-if test $ac_cv_func_strerror_r_char_p = yes; then
-  AC_DEFINE([STRERROR_R_CHAR_P], 1,
-	    [Define to 1 if strerror_r returns char *.])
-fi
-])# AC_FUNC_STRERROR_R
-
 # uintmax_t.m4 serial 6 (gettext-0.11)
 dnl Copyright (C) 1997-2002 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
@@ -1608,8 +1461,8 @@ else
 fi], [AC_MSG_RESULT(no)])
 ])
 
-# -*-Autoconf-*-
-# Checks required to run `stage', a nonportable memory/time tracker.
+# -*- Autoconf -*-
+# Checks required to run `timevar', a time tracker.
 #
 # Copyright (C) 2002 Free Software Foundation, Inc.
 #
@@ -1631,27 +1484,33 @@ fi], [AC_MSG_RESULT(no)])
 # serial 1
 
 AC_DEFUN([BISON_PREREQ_TIMEVAR],
-[AC_CHECK_HEADERS([sys/resource.h sys/times.h])
+[AC_CHECK_HEADERS([sys/resource.h sys/time.h sys/times.h])
 
 AC_CHECK_FUNCS([times])
 
 AC_CHECK_DECLS([getrusage, times, clock, sysconf], [], [],
 [$ac_includes_default
-#if HAVE_SYS_RESOURCE_H
-# include <sys/resource.h>
+#if HAVE_SYS_TIME_H
+# include <sys/time.h>
 #endif
 #if HAVE_SYS_TIMES_H
 # include <sys/times.h>
+#endif
+#if HAVE_SYS_RESOURCE_H
+# include <sys/resource.h>
 #endif
 ])
 
 AC_CHECK_TYPES([clock_t, struct tms], [], [],
 [$ac_includes_default
-#if HAVE_SYS_RESOURCE_H
-# include <sys/resource.h>
+#if HAVE_SYS_TIME_H
+# include <sys/time.h>
 #endif
 #if HAVE_SYS_TIMES_H
 # include <sys/times.h>
+#endif
+#if HAVE_SYS_RESOURCE_H
+# include <sys/resource.h>
 #endif
 ])
 ])

@@ -65,7 +65,7 @@ m4_define([b4_ints_in],
 # MIN to MAX (included).
 m4_define([b4_int_type],
 [m4_if(b4_ints_in($@,      [0],   [255]), [1], [unsigned char],
-       b4_ints_in($@,   [-128],   [128]), [1], [signed char],
+       b4_ints_in($@,   [-128],   [127]), [1], [yysigned_char],
 
        b4_ints_in($@,      [0], [65535]), [1], [unsigned short],
        b4_ints_in($@, [-32768], [32767]), [1], [short],
@@ -108,7 +108,7 @@ m4_define([b4_token_defines],
 [m4_if([$@], [[]], [],
 [/* Tokens.  */
 #ifndef YYTOKENTYPE
-# if defined (__STDC__) || defined (__cplusplus)
+# define YYTOKENTYPE
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
@@ -116,10 +116,7 @@ m4_map_sep([     b4_token_enum], [,
 ],
            [$@])
    };
-# endif
-  /* POSIX requires `int' for tokens in interfaces.  */
-# define YYTOKENTYPE int
-#endif /* !YYTOKENTYPE */
+#endif
 m4_map([b4_token_define], [$@])
 ])
 ])

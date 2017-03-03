@@ -166,10 +166,10 @@ m4_if(b4_prefix[], [yy], [],
 #define yynerrs b4_prefix[]nerrs
 b4_location_if([#define yylloc b4_prefix[]lloc])])
 
+b4_token_defines(b4_tokens)
+
 /* Copy the first part of user declarations.  */
 b4_pre_prologue
-
-b4_token_defines(b4_tokens)
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -307,6 +307,12 @@ b4_location_if(
 
 #endif
 
+#if defined (__STDC__) || defined (__cplusplus)
+   typedef signed char yysigned_char;
+#else
+   typedef short yysigned_char;
+#endif
+
 /* YYFINAL -- State number of the termination state. */
 #define YYFINAL  b4_final_state_number
 #define YYLAST   b4_last
@@ -414,7 +420,8 @@ static const b4_int_type_for([b4_pgoto]) yypgoto[[]] =
 
 /* YYTABLE[[YYPACT[STATE-NUM]]].  What to do in state STATE-NUM.  If
    positive, shift that token.  If negative, reduce the rule which
-   number is the opposite.  If zero, do what YYDEFACT says.  */
+   number is the opposite.  If zero, do what YYDEFACT says.
+   If YYTABLE_NINF, parse error.  */
 #define YYTABLE_NINF b4_table_ninf
 static const b4_int_type_for([b4_table]) yytable[[]] =
 {
@@ -646,74 +653,6 @@ m4_map([b4_symbol_actions], m4_defn([b4_symbol_printers]))dnl
   YYFPRINTF (yyout, ")");
 }
 #endif /* YYDEBUG. */
-
-
-/*----------------------------------------------------------.
-| yyreport_parse_error -- report a parse error in YYSTATE.  |
-`----------------------------------------------------------*/
-
-b4_c_function([yyreport_parse_error],
-	      [static void],
-	      [[int],     [yystate]],
-	      [[int],     [yychar]],
-	      [[YYSTYPE], [yyvalue]]b4_location_if([,
-	      [[YYLTYPE], [yylloc]]]))
-[{
-#if YYERROR_VERBOSE
-  int yyn = yypact[yystate];
-
-  if (YYPACT_NINF < yyn && yyn < YYLAST)
-    {
-      YYSIZE_T yysize = 0;
-      int yytype = YYTRANSLATE (yychar);
-      char *yymsg;
-      int yyx, yycount;
-
-      yycount = 0;
-      /* Start YYX at -YYN if negative to avoid negative indexes in
-	 YYCHECK.  */
-      for (yyx = yyn < 0 ? -yyn : 0;
-	   yyx < (int) (sizeof (yytname) / sizeof (char *)); yyx++)
-	if (yycheck[yyx + yyn] == yyx && yyx != YYTERROR)
-	  yysize += yystrlen (yytname[yyx]) + 15, yycount++;
-      yysize += yystrlen ("parse error, unexpected ") + 1;
-      yysize += yystrlen (yytname[yytype]);
-      yymsg = (char *) YYSTACK_ALLOC (yysize);
-      if (yymsg != 0)
-	{
-	  char *yyp = yystpcpy (yymsg, "parse error, unexpected ");
-	  yyp = yystpcpy (yyp, yytname[yytype]);
-
-	  if (yycount < 5)
-	    {
-	      yycount = 0;
-	      for (yyx = yyn < 0 ? -yyn : 0;
-		   yyx < (int) (sizeof (yytname) / sizeof (char *));
-		   yyx++)
-		if (yycheck[yyx + yyn] == yyx && yyx != YYTERROR)
-		  {
-		    const char *yyq = ! yycount ? ", expecting " : " or ";
-		    yyp = yystpcpy (yyp, yyq);
-		    yyp = yystpcpy (yyp, yytname[yyx]);
-		    yycount++;
-		  }
-	    }
-	  yyerror (yymsg);
-	  YYSTACK_FREE (yymsg);
-	}
-      else
-	yyerror ("parse error; also virtual memory exhausted");
-    }
-  else
-#endif /* YYERROR_VERBOSE */
-    yyerror ("parse error");
-
-  /* Pacify ``unused variable'' warnings.  */
-  (void) yystate;
-  (void) yychar;
-  (void) yyvalue;
-  ]b4_location_if([(void) yylloc;])[
-}]
 
 
 /*-----------------------------------------------.
@@ -985,28 +924,19 @@ yybackup:
       YYDPRINTF ((stderr, "\n"));
     }
 
+  /* If the proper action on seeing token YYCHAR1 is to reduce or to
+     detect an error, take that action.  */
   yyn += yychar1;
   if (yyn < 0 || YYLAST < yyn || yycheck[yyn] != yychar1)
     goto yydefault;
-
   yyn = yytable[yyn];
-
-  /* yyn is what to do for this token type in this state.
-     Negative => reduce, -yyn is rule number.
-     Positive => shift, yyn is new state.
-       New state is final state => don't bother to shift,
-       just return success.
-     0, or most negative number => error.  */
-
-  if (yyn < 0)
+  if (yyn <= 0)
     {
-      if (yyn == YYTABLE_NINF)
+      if (yyn == 0 || yyn == YYTABLE_NINF)
 	goto yyerrlab;
       yyn = -yyn;
       goto yyreduce;
     }
-  else if (yyn == 0)
-    goto yyerrlab;
 
   if (yyn == YYFINAL)
     YYACCEPT;
@@ -1127,7 +1057,54 @@ yyerrlab:
   if (!yyerrstatus)
     {
       ++yynerrs;
-      yyreport_parse_error (yystate, yychar, yylval]b4_location_if([, yylloc])[);
+#if YYERROR_VERBOSE
+      yyn = yypact[yystate];
+
+      if (YYPACT_NINF < yyn && yyn < YYLAST)
+	{
+	  YYSIZE_T yysize = 0;
+	  int yytype = YYTRANSLATE (yychar);
+	  char *yymsg;
+	  int yyx, yycount;
+
+	  yycount = 0;
+	  /* Start YYX at -YYN if negative to avoid negative indexes in
+	     YYCHECK.  */
+	  for (yyx = yyn < 0 ? -yyn : 0;
+	       yyx < (int) (sizeof (yytname) / sizeof (char *)); yyx++)
+	    if (yycheck[yyx + yyn] == yyx && yyx != YYTERROR)
+	      yysize += yystrlen (yytname[yyx]) + 15, yycount++;
+	  yysize += yystrlen ("parse error, unexpected ") + 1;
+	  yysize += yystrlen (yytname[yytype]);
+	  yymsg = (char *) YYSTACK_ALLOC (yysize);
+	  if (yymsg != 0)
+	    {
+	      char *yyp = yystpcpy (yymsg, "parse error, unexpected ");
+	      yyp = yystpcpy (yyp, yytname[yytype]);
+
+	      if (yycount < 5)
+		{
+		  yycount = 0;
+		  for (yyx = yyn < 0 ? -yyn : 0;
+		       yyx < (int) (sizeof (yytname) / sizeof (char *));
+		       yyx++)
+		    if (yycheck[yyx + yyn] == yyx && yyx != YYTERROR)
+		      {
+			const char *yyq = ! yycount ? ", expecting " : " or ";
+			yyp = yystpcpy (yyp, yyq);
+			yyp = yystpcpy (yyp, yytname[yyx]);
+			yycount++;
+		      }
+		}
+	      yyerror (yymsg);
+	      YYSTACK_FREE (yymsg);
+	    }
+	  else
+	    yyerror ("parse error; also virtual memory exhausted");
+	}
+      else
+#endif /* YYERROR_VERBOSE */
+	yyerror ("parse error");
     }
   goto yyerrlab1;
 

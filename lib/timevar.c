@@ -1,27 +1,26 @@
 /* Timing variables for measuring compiler performance.
-   Copyright (C) 2000 Free Software Foundation, Inc.
+   Copyright (C) 2000, 2002 Free Software Foundation, Inc.
    Contributed by Alex Samuel <samuel@codesourcery.com>
 
-This file is part of GCC.
+This file is part of Bison, the GNU Compiler Compiler.
 
-GCC is free software; you can redistribute it and/or modify it under
+Bison is free software; you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free
 Software Foundation; either version 2, or (at your option) any later
 version.
 
-GCC is distributed in the hope that it will be useful, but WITHOUT ANY
+Bison is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 for more details.
 
 You should have received a copy of the GNU General Public License
-along with GCC; see the file COPYING.  If not, write to the Free
+along with Bison; see the file COPYING.  If not, write to the Free
 Software Foundation, 59 Temple Place - Suite 330, Boston, MA
 02111-1307, USA.  */
 
 #if IN_GCC
 
-/* These are the original includes --akim.  */
 #include "config.h"
 #include "system.h"
 #include "intl.h"
@@ -29,9 +28,14 @@ Software Foundation, 59 Temple Place - Suite 330, Boston, MA
 
 #else
 
-/* These are my replacements by hand --akim.
-   There is another change below, flag with IN_GCC.  */
+/* This source file is taken from the GCC source code, with slight
+   modifications that are under control of the IN_GCC preprocessor
+   variable.  The !IN_GCC part of this file is specific to Bison.  */
+   
 # include "../src/system.h"
+# if HAVE_SYS_TIME_H
+#  include <sys/time.h>
+# endif
 int time_report = 0;
 
 #endif
@@ -129,7 +133,7 @@ static float clocks_to_msec;
 
 /* See timevar.h for an explanation of timing variables.  */
 
-/* This macro evaluates to non-zero if timing variables are enabled.  */
+/* This macro evaluates to nonzero if timing variables are enabled.  */
 #define TIMEVAR_ENABLE (time_report)
 
 /* A timing variable.  */
@@ -191,7 +195,7 @@ static void timevar_accumulate
 
 /* Fill the current times into TIME.  The definition of this function
    also defines any or all of the HAVE_USER_TIME, HAVE_SYS_TIME, and
-   HAVA_WALL_TIME macros.  */
+   HAVE_WALL_TIME macros.  */
 
 static void
 get_time (now)
@@ -207,18 +211,24 @@ get_time (now)
   {
 #ifdef USE_TIMES
     struct tms tms;
-    now->wall = times (&tms)   * ticks_to_msec;
+    now->wall = times (&tms)  * ticks_to_msec;
+#if IN_GCC
+    now->user = tms.tms_utime * ticks_to_msec;
+    now->sys  = tms.tms_stime * ticks_to_msec;
+#else
     now->user = (tms.tms_utime + tms.tms_cutime) * ticks_to_msec;
     now->sys  = (tms.tms_stime + tms.tms_cstime) * ticks_to_msec;
 #endif
+#endif
 #ifdef USE_GETRUSAGE
     struct rusage rusage;
+#if IN_GCC
     getrusage (RUSAGE_SELF, &rusage);
+#else
+    getrusage (RUSAGE_CHILDREN, &rusage);
+#endif
     now->user = rusage.ru_utime.tv_sec + rusage.ru_utime.tv_usec * 1e-6;
     now->sys  = rusage.ru_stime.tv_sec + rusage.ru_stime.tv_usec * 1e-6;
-    getrusage (RUSAGE_CHILDREN, &rusage);
-    now->user += rusage.ru_utime.tv_sec + rusage.ru_utime.tv_usec * 1e-6;
-    now->sys  += rusage.ru_stime.tv_sec + rusage.ru_stime.tv_usec * 1e-6;
 #endif
 #ifdef USE_CLOCK
     now->user = clock () * clocks_to_msec;
@@ -230,9 +240,9 @@ get_time (now)
 
 static void
 timevar_accumulate (timer, start_time, stop_time)
-  struct timevar_time_def *timer;
-  struct timevar_time_def *start_time;
-  struct timevar_time_def *stop_time;
+     struct timevar_time_def *timer;
+     struct timevar_time_def *start_time;
+     struct timevar_time_def *stop_time;
 {
   timer->user += stop_time->user - start_time->user;
   timer->sys += stop_time->sys - start_time->sys;
@@ -551,6 +561,6 @@ print_time (str, total)
   fprintf (stderr,
 	   _("time in %s: %ld.%06ld (%ld%%)\n"),
 	   str, total / 1000000, total % 1000000,
- 	   all_time == 0 ? 0
- 	   : (long) (((100.0 * (double) total) / (double) all_time) + .5));
+	   all_time == 0 ? 0
+	   : (long) (((100.0 * (double) total) / (double) all_time) + .5));
 }

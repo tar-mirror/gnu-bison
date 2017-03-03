@@ -1,9 +1,10 @@
-This is bison.info, produced by makeinfo version 4.2 from bison.texinfo.
+Ceci est le fichier Info bison.info, produit par Makeinfo version 4.2 à
+partir bison.texinfo.
 
 
 
-   This manual is for GNU Bison (version 1.50, 4 October 2002), the GNU
-parser generator.
+   This manual is for GNU Bison (version 1.75, 14 October 2002), the
+GNU parser generator.
 
    Copyright (C) 1988, 1989, 1990, 1991, 1992, 1993, 1995, 1998, 1999,
 2000, 2001, 2002 Free Software Foundation, Inc.
@@ -598,7 +599,7 @@ Compiling the Parser File
      
      # Compile the Bison parser.
      # `-lm' tells compiler to search math library for `pow'.
-     $ cc rpcalc.tab.c -lm -o rpcalc
+     $ cc -lm -o rpcalc rpcalc.tab.c
      
      # List files again.
      $ ls

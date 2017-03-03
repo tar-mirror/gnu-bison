@@ -1,9 +1,10 @@
-This is bison.info, produced by makeinfo version 4.2 from bison.texinfo.
+Ceci est le fichier Info bison.info, produit par Makeinfo version 4.2 à
+partir bison.texinfo.
 
 
 
-   This manual is for GNU Bison (version 1.50, 4 October 2002), the GNU
-parser generator.
+   This manual is for GNU Bison (version 1.75, 14 October 2002), the
+GNU parser generator.
 
    Copyright (C) 1988, 1989, 1990, 1991, 1992, 1993, 1995, 1998, 1999,
 2000, 2001, 2002 Free Software Foundation, Inc.
@@ -512,8 +513,8 @@ Index
 * formal grammar:                        Grammar in Bison.
 * format of grammar file:                Grammar Layout.
 * frequently asked questions:            FAQ.
-* generalized LR (GLR) parsing <1>:      GLR Parsers.
-* generalized LR (GLR) parsing <2>:      Generalized LR Parsing.
+* generalized LR (GLR) parsing <1>:      Generalized LR Parsing.
+* generalized LR (GLR) parsing <2>:      GLR Parsers.
 * generalized LR (GLR) parsing:          Language and Grammar.
 * glossary:                              Glossary.
 * GLR parsing <1>:                       Generalized LR Parsing.
@@ -599,8 +600,8 @@ Index
 * semantic actions:                      Semantic Actions.
 * semantic value:                        Semantic Values.
 * semantic value type:                   Value Type.
-* shift/reduce conflicts <1>:            GLR Parsers.
-* shift/reduce conflicts:                Shift/Reduce.
+* shift/reduce conflicts <1>:            Shift/Reduce.
+* shift/reduce conflicts:                GLR Parsers.
 * shifting:                              Algorithm.
 * simple examples:                       Examples.
 * single-character literal:              Symbols.
@@ -622,8 +623,8 @@ Index
 * syntax error:                          Error Reporting.
 * syntax of grammar rules:               Rules.
 * terminal symbol:                       Symbols.
-* textual position <1>:                  Locations Overview.
-* textual position:                      Locations.
+* textual position <1>:                  Locations.
+* textual position:                      Locations Overview.
 * token:                                 Language and Grammar.
 * token type:                            Symbols.
 * token type names, declaring:           Token Decl.
@@ -646,12 +647,12 @@ Index
 * YYBACKUP:                              Action Features.
 * yychar:                                Look-Ahead.
 * yyclearin:                             Error Recovery.
-* yydebug:                               Tracing.
 * YYDEBUG:                               Tracing.
+* yydebug:                               Tracing.
 * YYEMPTY:                               Action Features.
 * yyerrok:                               Error Recovery.
-* yyerror:                               Error Reporting.
 * YYERROR:                               Action Features.
+* yyerror:                               Error Reporting.
 * YYERROR_VERBOSE:                       Error Reporting.
 * YYINITDEPTH:                           Stack Overflow.
 * yylex:                                 Lexical.

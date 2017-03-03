@@ -4,9 +4,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bison 1.49b\n"
-"POT-Creation-Date: 2002-10-04 23:07-0700\n"
-"PO-Revision-Date: 2002-08-28 00:20-0300\n"
+"Project-Id-Version: bison 1.50\n"
+"POT-Creation-Date: 2002-10-14 14:47+0200\n"
+"PO-Revision-Date: 2002-10-07 00:30-0300\n"
 "Last-Translator: Alexandre Folle de Menezes <afmenez@terra.com.br>\n"
 "Language-Team: Brazilian Portuguese <ldp-br@bazar.conectiva.com.br>\n"
 "MIME-Version: 1.0\n"
@@ -288,23 +288,23 @@ msgstr "$padrão"
 msgid "state %d"
 msgstr "estado %d"
 
-#: src/print.c:453
+#: src/print.c:456
 msgid "Terminals, with rules where they appear"
 msgstr "Terminais, com as regras onde eles aparecem"
 
-#: src/print.c:480
+#: src/print.c:483
 msgid "Nonterminals, with rules where they appear"
 msgstr "Não-terminais com as regras onde eles aparecem"
 
-#: src/print.c:509
+#: src/print.c:512
 msgid " on left:"
 msgstr " à esquerda:"
 
-#: src/print.c:524
+#: src/print.c:527
 msgid " on right:"
 msgstr " à direita:"
 
-#: src/print.c:552
+#: src/print.c:555
 msgid "Rules never reduced"
 msgstr "Regras nunca reduzidas"
 
@@ -323,49 +323,49 @@ msgstr "tipo de resultado conflita na fução de mescla %s: `%s' vs. `%s'"
 msgid "rule given for %s, which is a token"
 msgstr "regra fornecida para %s, que é um token"
 
-#: src/reader.c:264
+#: src/reader.c:268
 #, c-format
 msgid "type clash (`%s' `%s') on default action"
 msgstr "os tipos (`%s' `%s') não concordam na ação padrão"
 
-#: src/reader.c:272
+#: src/reader.c:274
 msgid "empty rule for typed nonterminal, and no action"
 msgstr "regra vazia para um não-terminal com tipo, e não há ações"
 
-#: src/reader.c:343
+#: src/reader.c:344
 msgid "two @prec's in a row"
 msgstr "dois @prec em uma linha"
 
-#: src/reader.c:353
+#: src/reader.c:354
 #, c-format
 msgid "%%dprec affects only GLR parsers"
 msgstr "%%dprec afeta apenas analisadores GLR"
 
-#: src/reader.c:355
+#: src/reader.c:356
 #, c-format
 msgid "%%dprec must be followed by positive number"
 msgstr "%%dprec deve ser seguido por um número positivo"
 
-#: src/reader.c:357
+#: src/reader.c:358
 #, c-format
 msgid "only one %%dprec allowed per rule"
 msgstr "apenas um %%dprec é permitido por regra"
 
-#: src/reader.c:368
+#: src/reader.c:369
 #, c-format
 msgid "%%merge affects only GLR parsers"
 msgstr "%%merge afeta apenas analisadores GLR"
 
-#: src/reader.c:370
+#: src/reader.c:371
 #, c-format
 msgid "only one %%merge allowed per rule"
 msgstr "apenas um %%merge é permitido por regra"
 
-#: src/reader.c:513
+#: src/reader.c:514
 msgid "no rules in the input grammar"
 msgstr "não há regras na gramática de entrada"
 
-#: src/reader.c:545
+#: src/reader.c:546
 #, c-format
 msgid "too many symbols (tokens plus nonterminals); maximum %d"
 msgstr "muitos símbolos (terminais e não-terminais); máximo %d"
@@ -420,57 +420,57 @@ msgstr[1] "%d regras inúteis"
 msgid "start symbol %s does not derive any sentence"
 msgstr "símbolo de início %s não deriva nenhuma sentença"
 
-#: scan-gram.l:202
+#: scan-gram.l:211
 #, c-format
 msgid ": invalid character: `%c'\n"
 msgstr ": caractere inválido: `%c'\n"
 
-#: scan-gram.l:246
+#: scan-gram.l:255
 msgid ": unexpected end of file in a comment\n"
 msgstr ": fim de arquivo inesperado em um comentário\n"
 
-#: scan-gram.l:274 scan-gram.l:412
+#: scan-gram.l:284 scan-gram.l:423
 msgid ": unexpected end of file in a string\n"
 msgstr ": fim de arquivo inesperado em uma string\n"
 
-#: scan-gram.l:311 scan-gram.l:383
+#: scan-gram.l:322 scan-gram.l:394
 msgid ": unexpected end of file in a character\n"
 msgstr ": fim de arquivo inesperado em um caractere\n"
 
-#: scan-gram.l:332
+#: scan-gram.l:343
 #, c-format
 msgid ": invalid escape: %s\n"
 msgstr ": escape inválido: %s\n"
 
-#: scan-gram.l:353
+#: scan-gram.l:364
 #, c-format
 msgid ": unrecognized escape: %s\n"
 msgstr ": escape não reconhecido: %s\n"
 
-#: scan-gram.l:473
+#: scan-gram.l:485
 msgid ": unexpected end of file in a braced code\n"
 msgstr ": fim de arquivo inesperado em código entre chaves\n"
 
-#: scan-gram.l:502
+#: scan-gram.l:514
 msgid ": unexpected end of file in a prologue\n"
 msgstr ": fim de arquivo inesperado em um prólogo\n"
 
-#: scan-gram.l:560
+#: scan-gram.l:572
 #, c-format
 msgid "$$ of `%s' has no declared type"
 msgstr "$$ de `%s' não tem tipo declarado"
 
-#: scan-gram.l:577 scan-gram.l:664
+#: scan-gram.l:584 scan-gram.l:666
 #, c-format
 msgid "invalid value: %s%d"
 msgstr "valor inválido: %s%d"
 
-#: scan-gram.l:584
+#: scan-gram.l:591
 #, c-format
 msgid "$%d of `%s' has no declared type"
 msgstr "$%d de `%s' não tem tipo declarado"
 
-#: scan-gram.l:595 scan-gram.l:612 scan-gram.l:671 scan-gram.l:688
+#: scan-gram.l:602 scan-gram.l:619 scan-gram.l:673 scan-gram.l:690
 #, c-format
 msgid "%s is invalid"
 msgstr "%s é inválido"
@@ -563,44 +563,44 @@ msgstr "argumento %s ambíguo para %s"
 msgid "Valid arguments are:"
 msgstr "Argumentos válidos são:"
 
-#: lib/bitset_stats.c:225
-#, fuzzy, c-format
+#: lib/bitset_stats.c:235
+#, c-format
 msgid "%u bitset_allocs, %u freed (%.2f%%).\n"
-msgstr "%d bitset_allocs, %d liberados (%.2f%%).\n"
-
-#: lib/bitset_stats.c:228
-#, fuzzy, c-format
-msgid "%u bitset_sets, %u cached (%.2f%%)\n"
-msgstr "%d bitset_sets, %d em cache (%.2f%%)\n"
-
-#: lib/bitset_stats.c:231
-#, fuzzy, c-format
-msgid "%u bitset_resets, %u cached (%.2f%%)\n"
-msgstr "%d bitset_resets, %d em cache (%.2f%%)\n"
-
-#: lib/bitset_stats.c:234
-#, fuzzy, c-format
-msgid "%u bitset_tests, %u cached (%.2f%%)\n"
-msgstr "%d bitset_tests, %d em cache (%.2f%%)\n"
+msgstr "%u bitset_allocs, %u liberados (%.2f%%).\n"
 
 #: lib/bitset_stats.c:238
-#, fuzzy, c-format
-msgid "%u bitset_lists\n"
-msgstr "%d bitset_lists\n"
+#, c-format
+msgid "%u bitset_sets, %u cached (%.2f%%)\n"
+msgstr "%u bitset_sets, %u em cache (%.2f%%)\n"
 
-#: lib/bitset_stats.c:240
+#: lib/bitset_stats.c:241
+#, c-format
+msgid "%u bitset_resets, %u cached (%.2f%%)\n"
+msgstr "%u bitset_resets, %u em cache (%.2f%%)\n"
+
+#: lib/bitset_stats.c:244
+#, c-format
+msgid "%u bitset_tests, %u cached (%.2f%%)\n"
+msgstr "%u bitset_tests, %u em cache (%.2f%%)\n"
+
+#: lib/bitset_stats.c:248
+#, c-format
+msgid "%u bitset_lists\n"
+msgstr "%u bitset_lists\n"
+
+#: lib/bitset_stats.c:250
 msgid "count log histogram\n"
 msgstr "histograma de log de contagens\n"
 
-#: lib/bitset_stats.c:243
+#: lib/bitset_stats.c:253
 msgid "size log histogram\n"
 msgstr "histograma de log de tamanhos\n"
 
-#: lib/bitset_stats.c:246
+#: lib/bitset_stats.c:256
 msgid "density histogram\n"
 msgstr "histograma de densidades\n"
 
-#: lib/bitset_stats.c:262
+#: lib/bitset_stats.c:272
 msgid ""
 "Bitset statistics:\n"
 "\n"
@@ -608,24 +608,24 @@ msgstr ""
 "Estatísticas de bitset:\n"
 "\n"
 
-#: lib/bitset_stats.c:265
-#, fuzzy, c-format
+#: lib/bitset_stats.c:275
+#, c-format
 msgid "Accumulated runs = %u\n"
-msgstr "Execuções acumuladas = %d\n"
+msgstr "Execuções acumuladas = %u\n"
 
-#: lib/bitset_stats.c:310
+#: lib/bitset_stats.c:320
 msgid "Could not read stats file."
 msgstr "Impossível ler o arquivo de estatísticas."
 
-#: lib/bitset_stats.c:312
+#: lib/bitset_stats.c:322
 msgid "Bad stats file size.\n"
 msgstr "Tamanho do arquivo de estatísticas com erro.\n"
 
-#: lib/bitset_stats.c:338
+#: lib/bitset_stats.c:348
 msgid "Could not write stats file."
 msgstr "Impossível de escrever no arquivo de estatísticas."
 
-#: lib/bitset_stats.c:342
+#: lib/bitset_stats.c:352
 msgid "Could not open stats file for writing."
 msgstr "Impossível abrir arquivo de estatísticas para escrita."
 
@@ -696,7 +696,7 @@ msgstr "`"
 msgid "'"
 msgstr "'"
 
-#: lib/timevar.c:466
+#: lib/timevar.c:476
 msgid ""
 "\n"
 "Execution times (seconds)\n"
@@ -704,109 +704,11 @@ msgstr ""
 "\n"
 "Tempos de execução (segundos)\n"
 
-#: lib/timevar.c:516
+#: lib/timevar.c:526
 msgid " TOTAL                 :"
 msgstr " TOTAL                 :"
 
-#: lib/timevar.c:552
+#: lib/timevar.c:562
 #, c-format
 msgid "time in %s: %ld.%06ld (%ld%%)\n"
 msgstr "tempo em  %s: %ld.%06ld (%ld%%)\n"
-
-#~ msgid "state_list_append (state = %d, symbol = %d (%s))\n"
-#~ msgstr "state_list_append (estado = %d, símbolo = %d (%s))\n"
-
-#~ msgid "Entering new_itemsets, state = %d\n"
-#~ msgstr "Entrando new_itemsets, estado = %d\n"
-
-#~ msgid "Entering get_state, symbol = %d (%s)\n"
-#~ msgstr "Entrando get_state, símbolo = %d (%s)\n"
-
-#~ msgid "Exiting get_state => %d\n"
-#~ msgstr "Saindo get_state => %d\n"
-
-#~ msgid "Entering append_states, state = %d\n"
-#~ msgstr "Entrando append_states, estado = %d\n"
-
-#~ msgid "Processing state %d (reached by %s)\n"
-#~ msgstr "Processando estado %d (alcançado por %s)\n"
-
-#~ msgid "undefined associativity"
-#~ msgstr "associatividade indefinida"
-
-#~ msgid "Closure: %s\n"
-#~ msgstr "Fechamento: %s\n"
-
-#~ msgid "  (rule %d)\n"
-#~ msgstr "   (regra %d)\n"
-
-#~ msgid "RTC: Firsts Input"
-#~ msgstr "RTC: Entradas Antes"
-
-#~ msgid "RTC: Firsts Output"
-#~ msgstr "RTC: Saídas Antes"
-
-#~ msgid "input"
-#~ msgstr "entrada"
-
-#~ msgid "output"
-#~ msgstr "saída"
-
-#~ msgid ""
-#~ "Variables\n"
-#~ "---------\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Variáveis\n"
-#~ "---------\n"
-#~ "\n"
-
-#~ msgid "Value  Sprec  Sassoc  Tag\n"
-#~ msgstr "Valor  Sprec  Sassoc  Tag\n"
-
-#~ msgid ""
-#~ "Rules\n"
-#~ "-----\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Regras\n"
-#~ "------\n"
-#~ "\n"
-
-#~ msgid ""
-#~ "Num (Prec, Assoc, Useful, Ritem Range) Lhs -> Rhs (Ritem range) [Num]\n"
-#~ msgstr ""
-#~ "Num (Prec, Assoc, Util, Faixa Ritem) Lhs -> Rhs (Faixa Ritem) [Num]\n"
-
-#~ msgid ""
-#~ "Rules interpreted\n"
-#~ "-----------------\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Regras interpretadas\n"
-#~ "--------------------\n"
-#~ "\n"
-
-#~ msgid "Lookaheads: BEGIN\n"
-#~ msgstr "Previsões: INICIO\n"
-
-#~ msgid "State %d: %d lookaheads\n"
-#~ msgstr "Estado %d: %d previsões\n"
-
-#~ msgid "   on %d (%s) -> rule %d\n"
-#~ msgstr "   em %d (%s) -> regra %d\n"
-
-#~ msgid "Lookaheads: END\n"
-#~ msgstr "Previsões: FIM\n"
-
-#~ msgid "relation_transpose: input\n"
-#~ msgstr "relation_transpose: entrada\n"
-
-#~ msgid "relation_transpose: output\n"
-#~ msgstr "relation_transpose: saída\n"
-
-#~ msgid "growing table and check from: %lu to %lu\n"
-#~ msgstr "aumentando a tabela e checando origem:  %lu para %lu\n"
-
-#~ msgid "base_t too small to hold %d\n"
-#~ msgstr "base_t muito pequeno para guardar %d\n"

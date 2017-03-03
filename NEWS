@@ -1,6 +1,37 @@
 Bison News
 ----------
 
+Changes in version 1.75:
+
+* Bison should now work on 64-bit hosts.
+
+* Indonesian translation thanks to Tedi Heriyanto.
+
+* GLR parsers
+  Fix spurious parse errors.
+
+* Pure parsers
+  Some people redefine yyerror to steal yyparse' private variables.
+  Reenable this trick until an official feature replaces it.
+
+* Type Clashes
+  In agreement with POSIX and with other Yaccs, leaving a default
+  action is valid when $$ is untyped, and $1 typed:
+
+	untyped: ... typed;
+
+  but the converse remains an error:
+
+	typed: ... untyped;
+
+* Values of mid-rule actions
+  The following code:
+
+	foo: { ... } { $$ = $1; } ...
+
+  was incorrectly rejected: $1 is defined in the second mid-rule
+  action, and is equal to the $$ of the first mid-rule action.
+
 Changes in version 1.50, 2002-10-04:
 
 * GLR parsing
@@ -11,7 +42,7 @@ Changes in version 1.50, 2002-10-04:
   %dprec and %merge on grammar rules allow parse-time resolution of
   ambiguities.  Contributed by Paul Hilfinger.
 
-  Unfortunately GLR parsing does not yet work properly on 64-bit hosts
+  Unfortunately Bison 1.50 does not work properly on 64-bit hosts
   like the Alpha, so please stick to 32-bit hosts for now.
 
 * Output Directory

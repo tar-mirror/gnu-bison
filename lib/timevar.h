@@ -2,20 +2,20 @@
    Copyright (C) 2000 Free Software Foundation, Inc.
    Contributed by Alex Samuel <samuel@codesourcery.com>
 
-   This file is part of GCC.
+   This file is part of Bison, the GNU Compiler Compiler.
 
-   GCC is free software; you can redistribute it and/or modify it
+   Bison is free software; you can redistribute it and/or modify it
    under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2, or (at your option)
    any later version.
 
-   GCC is distributed in the hope that it will be useful, but WITHOUT
+   Bison is distributed in the hope that it will be useful, but WITHOUT
    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
    or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
    License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with GCC; see the file COPYING.  If not, write to the Free
+   along with Bison; see the file COPYING.  If not, write to the Free
    Software Foundation, 59 Temple Place - Suite 330, Boston, MA
    02111-1307, USA.  */
 
@@ -41,9 +41,9 @@
 
      - As a standalone timer, using timevar_start and timevar_stop.
        All time elapsed between the two calls is attributed to the
-       variable.  
+       variable.
 */
-   
+
 /* This structure stores the various varieties of time that can be
    measured.  Times are stored in seconds.  The time may be an
    absolute time or a time difference; in the former case, the time
@@ -67,7 +67,7 @@ struct timevar_time_def
    the contents of timevar.def.  */
 
 #define DEFTIMEVAR(identifier__, name__) \
-    identifier__, 
+    identifier__,
 typedef enum
 {
 #include "timevar.def"

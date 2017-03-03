@@ -1,115 +1,119 @@
-# Estonian translations for bison.
-# Copyright (C) 2001 Free Software Foundation, Inc.
-# Toomas Soome <tsoome@ut.ee>, 2001.
+# bison 1.50 (Indonesian)
+# Copyright (C) 2002 Free Software Foundation, Inc.
+# This file is distributed under the same license as the bison 1.50 package.
+# Tedi Heriyanto <tedi_h@gmx.net>, 2002
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: bison 1.50\n"
 "POT-Creation-Date: 2002-10-14 14:47+0200\n"
-"PO-Revision-Date: 2002-10-07 09:28+03:00\n"
-"Last-Translator: Toomas Soome <Toomas.Soome@microlink.ee>\n"
-"Language-Team: Estonian <et@li.org>\n"
+"PO-Revision-Date: 2002-10-08 17:53+0700\n"
+"Last-Translator: Tedi Heriyanto <tedi_h@gmx.net>\n"
+"Language-Team: Indonesian <translation-team-id@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-15\n"
-"Content-Transfer-Encoding: 8-bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: KBabel 0.9.5\n"
 
 #: src/complain.c:89 lib/error.c:128 lib/error.c:156
 msgid "Unknown system error"
-msgstr "Tundmatu süsteemi viga"
+msgstr "Kesalahan sistem tidak dikenal"
 
 #: src/complain.c:123 src/complain.c:152
 msgid "warning: "
-msgstr "hoiatus: "
+msgstr "peringatan: "
 
 #: src/complain.c:252 src/complain.c:282
 msgid "fatal error: "
-msgstr "fataalne viga: "
+msgstr "kesalahan fatal: "
 
 #: src/conflicts.c:72
 #, c-format
 msgid "    Conflict between rule %d and token %s resolved as shift"
-msgstr "    Konflikt reegli %d ja märgi %s vahel lahendatud nihkega"
+msgstr "    Konflik antara aturan %d dan token %s diselesaikan sebagai shift"
 
 #: src/conflicts.c:80
 #, c-format
 msgid "    Conflict between rule %d and token %s resolved as reduce"
-msgstr "    Konflikt reegli %d ja märgi %s vahel lahendatud redutseerimisega"
+msgstr "    Konflik antara aturan %d dan token %s diselesaikan sebagai reduce"
 
 #: src/conflicts.c:87
 #, c-format
 msgid "    Conflict between rule %d and token %s resolved as an error"
-msgstr "    Konflikt reegli %d ja märgi %s vahel lahendatud veana"
+msgstr ""
+"    Konflik antara aturan %d dan token %s diselesaikan sebagai kesalahan"
 
 #: src/conflicts.c:402
 #, c-format
 msgid "%d shift/reduce conflict"
 msgid_plural "%d shift/reduce conflicts"
-msgstr[0] "%d nihutamine/redutseerimine konflikt"
-msgstr[1] "%d nihutamine/redutseerimine konflikti"
+msgstr[0] "%d geser/kurangi konflik"
+msgstr[1] ""
 
 #: src/conflicts.c:409
 msgid "and"
-msgstr "ja"
+msgstr "dan"
 
 #: src/conflicts.c:415
 #, c-format
 msgid "%d reduce/reduce conflict"
 msgid_plural "%d reduce/reduce conflicts"
-msgstr[0] "%d redutseerimine/redutseerimine konflikt"
-msgstr[1] "%d redutseerimine/redutseerimine konflikti"
+msgstr[0] "%d geser/kurangi konflik"
+msgstr[1] ""
 
 #: src/conflicts.c:435
 msgid "conflicts: "
-msgstr "konfliktid: "
+msgstr "konflik: "
 
 #: src/conflicts.c:437
 #, c-format
 msgid " %d shift/reduce"
-msgstr " %d nihutamine/redutseerimine"
+msgstr " %d geser/kurangi"
 
 #: src/conflicts.c:441
 #, c-format
 msgid " %d reduce/reduce"
-msgstr " %d redutseerimine/redutseerimine"
+msgstr " %d kurangi/kurangi"
 
 #: src/conflicts.c:460
 #, c-format
 msgid "State %d contains "
-msgstr "Olek %d sisaldab "
+msgstr "State %d berisi "
 
 #: src/conflicts.c:537
 #, c-format
 msgid "expected %d shift/reduce conflict"
 msgid_plural "expected %d shift/reduce conflicts"
-msgstr[0] "eeldasime %d nihutamine/redutseerimine konflikti"
-msgstr[1] "eeldasime %d nihutamine/redutseerimine konflikti"
+msgstr[0] "mengharapkan %d shift/reduce konflik"
+msgstr[1] ""
 
 #: src/files.c:114
 #, c-format
 msgid "cannot open file `%s'"
-msgstr "faili `%s' ei saa avada"
+msgstr "tidak dapat membuka file `%s'"
 
 #: src/files.c:133
 msgid "cannot close file"
-msgstr "faili ei õnnestu sulgeda"
+msgstr "tidak dapat menutup file"
 
 #: src/getargs.c:157
 msgid "GNU bison generates parsers for LALR(1) grammars.\n"
-msgstr "GNU bison genereerib parsereid LALR(1) grammatikatele.\n"
+msgstr "GNU bison generates parsers for LALR(1) grammars.\n"
 
 #: src/getargs.c:161
 #, c-format
 msgid "Usage: %s [OPTION]... FILE\n"
-msgstr "Kasuta: %s [VÕTI]...FAIL\n"
+msgstr "Penggunaan: %s [OPTION]... FILE\n"
 
 #: src/getargs.c:165
 msgid ""
 "If a long option shows an argument as mandatory, then it is mandatory\n"
 "for the equivalent short option also.  Similarly for optional arguments.\n"
 msgstr ""
-"Kui pikk võti näitab, et argument on kohustuslik, siis on see kohustuslik \n"
-"ka lühikese võtme korral. Sama ka vabalt valitavate võtmete korral.\n"
+"Jika option panjang menyatakan argumen sebagai mandatori, maka ia mandatori "
+"juga\n"
+"untuk option pendek.  Hal yang sama untuk argumen opsional.\n"
 
 #: src/getargs.c:171
 msgid ""
@@ -118,10 +122,10 @@ msgid ""
 "  -V, --version   output version information and exit\n"
 "  -y, --yacc      emulate POSIX yacc\n"
 msgstr ""
-"Töömoodid:\n"
-"  -h, --help      esita see abiinfo ja lõpeta töö\n"
-"  -V, --version   esita versiooniinfo ja lõpeta töö\n"
-"  -y, --yacc      emuleeri POSIX yacc\n"
+"Mode Operasi:\n"
+"  -h, --help      tampilkan bantuan ini dan keluar\n"
+"  -V, --version   tampilkan informasi versi dan keluar\n"
+"  -y, --yacc      emulasikan POSIX yacc\n"
 
 #: src/getargs.c:178
 msgid ""
@@ -135,13 +139,13 @@ msgid ""
 "  -k, --token-table          include a table of token names\n"
 msgstr ""
 "Parser:\n"
-"  -S, --skeleton=FAIL        kasutatava skeleti kirjeldus\n"
-"  -t, --debug                varusta parser silumisinfoga\n"
-"      --locations            luba asukohtade arvestamine\n"
-"  -p, --name-prefix=PREFIKS  lisa välissümbolite nimedele PREFIKS\n"
-"  -l, --no-lines             ära genereeri `#line' direktiive\n"
-"  -n, --no-parser            genereeri ainult tabelid\n"
-"  -k, --token-table          lisa ka sümbolite nimede tabel\n"
+"  -S, --skeleton=FILE        specifikasikan rangka yang akan digunakan\n"
+"  -t, --debug                instrumen parser untuk debugging\n"
+"      --locations            aktifkan lokasi perhitungan\n"
+"  -p, --name-prefix=PREFIX   tambahkan PREFIX ke simbol eksternal\n"
+"  -l, --no-lines             jangan hasilkan direktiv `#line'\n"
+"  -n, --no-parser            hasilkan hanya tabel\n"
+"  -k, --token-table          sertakan tabel nama token\n"
 
 #: src/getargs.c:190
 msgid ""
@@ -154,13 +158,13 @@ msgid ""
 "  -g, --graph                also produce a VCG description of the "
 "automaton\n"
 msgstr ""
-"Väljund:\n"
-"  -d, --defines              loo ka päisfail\n"
-"  -r, --report=ASJAD         väljasta automaadi kohta selgitusi\n"
-"  -v, --verbose              sama, kui `--report=state'\n"
-"  -b, --file-prefix=PREFIKS  kasuta väljundfailide nimedes PREFIKSit\n"
-"  -o, --output-file=FAIL     jäta väljund FAILi\n"
-"  -g, --graph                loo automaadi kirjeldus VCG graafina\n"
+"Output:\n"
+"  -d, --defines              juga hasilkan file header\n"
+"  -r, --report=THINGS        juga hasilkan detil tentang otomaton\n"
+"  -v, --verbose              sama seperti `--report=state'\n"
+"  -b, --file-prefix=PREFIX   spesifikasikan PREFIX untuk file output\n"
+"  -o, --output=FILE          simpan output ke FILE\n"
+"  -g, --graph                juga hasilkan deskripsi VCG automaton\n"
 
 #: src/getargs.c:201
 msgid ""
@@ -172,17 +176,17 @@ msgid ""
 "  `all'          include all the above information\n"
 "  `none'         disable the report\n"
 msgstr ""
-"ASJAD on loend komadega eraldatud järgnevaid sõnu:\n"
-"  `state'        olekute kirjeldus\n"
-"  `itemset'      täienda põhilisi elemente nende sulunditega\n"
-"  `lookahead'    seo ettevaatamised elementidega\n"
-"  `solved'       kirjelda nihuta/redutseeri konfliktide lahendamisi\n"
-"  `all'          kogu ülaltoodud info\n"
-"  `none'         blokeeri raport\n"
+"THINGS adalah daftar kata yang dipisahkan koma termasuk:\n"
+"  `state'        menggambarkan state\n"
+"  `itemset'      lengkapi himpunan item inti dengan klosurnya\n"
+"  `lookahead'    asosiasikan lookaheads ke items secara eksplisit\n"
+"  `solved'       gambarkan penyelesaian konflik shift/reduce\n"
+"  `all'          sertakan semua informasi di atas\n"
+"  `none'         tiadakan laporan\n"
 
 #: src/getargs.c:212
 msgid "Report bugs to <bug-bison@gnu.org>.\n"
-msgstr "Teatage palun vigadest aadressil <bug-bison@gnu.org>.\n"
+msgstr "Laporkan kesalahan ke <bug-bison@gnu.org>.\n"
 
 #: src/getargs.c:226
 #, c-format
@@ -191,88 +195,88 @@ msgstr "bison (GNU Bison) %s"
 
 #: src/getargs.c:228
 msgid "Written by Robert Corbett and Richard Stallman.\n"
-msgstr "Kirjutanud Robert Corbett ja Richard Stallman.\n"
+msgstr "Written by Robert Corbett and Richard Stallman.\n"
 
 #: src/getargs.c:232
 #, c-format
 msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
-msgstr "Autoriõigus © %d Free Software Foundation, Inc.\n"
+msgstr "Copyright (C) %d Free Software Foundation, Inc.\n"
 
 #: src/getargs.c:234
 msgid ""
 "This is free software; see the source for copying conditions.  There is NO\n"
 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
 msgstr ""
-"See on vaba tarkvara; kopeerimistingimused leiate lähtetekstidest. Garantii\n"
-"PUUDUB; ka müügiks või mingil eesmärgil kasutamiseks.\n"
+"This is free software; see the source for copying conditions.  There is NO\n"
+"warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
 
 #: src/getargs.c:395
 #, c-format
 msgid "Try `%s --help' for more information.\n"
-msgstr "Lisainfo saamiseks proovige `%s --help'.\n"
+msgstr "Coba `%s --help' untuk informasi lebih lanjut.\n"
 
 #: src/getargs.c:402
 #, c-format
 msgid "%s: no grammar file given\n"
-msgstr "%s: puudub grammatikafail\n"
+msgstr "%s: tidak diberikan file grammar\n"
 
 #: src/getargs.c:406
 #, c-format
 msgid "%s: extra arguments ignored after `%s'\n"
-msgstr "%s: ignoreerin lisaargumente peale `%s'\n"
+msgstr "%s: argumen ekstra diabaikan setelah `%s'\n"
 
 #: src/gram.c:139
 msgid "empty"
-msgstr "tühi"
+msgstr "kosong"
 
 #: src/gram.c:233
 msgid "Grammar"
-msgstr "Grammatika"
+msgstr "Grammar"
 
 #: src/gram.c:321 src/reduce.c:302 src/reduce.c:392
 msgid "warning"
-msgstr "hoiatus"
+msgstr "peringatan"
 
 #: src/lalr.c:91
 #, c-format
 msgid "too many gotos (max %d)"
-msgstr "liiga palju gotosid (maks. %d)"
+msgstr "terlalu banyak goto (maks %d)"
 
 #: src/main.c:117
 msgid "rule never reduced because of conflicts"
-msgstr "reeglit ei redutseerita konfliktide tõttu kunagi"
+msgstr "aturan tidak pernah dikurangi karena konflik"
 
 #: parse-gram.y:347
 msgid "POSIX forbids declarations in the grammar"
-msgstr "POSIX keelab deklareerimised grammatikas"
+msgstr "POSIX melarang deklarasi dalam grammar"
 
 #: src/print.c:46
 #, c-format
 msgid " type %d is %s\n"
-msgstr " tüüp %d on %s\n"
+msgstr " tipe %d adalah %s\n"
 
 #: src/print.c:162
 #, c-format
 msgid "shift, and go to state %d\n"
-msgstr "nihuta ja liigu olekule %d\n"
+msgstr "geser, dan ke state %d\n"
 
 #: src/print.c:164
 #, c-format
 msgid "go to state %d\n"
-msgstr "liigu olekule %d\n"
+msgstr "ke state %d\n"
 
 #: src/print.c:201
 msgid "error (nonassociative)\n"
-msgstr "viga (mitteassotsiatiivne)\n"
+msgstr "kesalahan(nonasosiatif)\n"
 
 #: src/print.c:290
 #, c-format
 msgid "reduce using rule %d (%s)"
-msgstr "redutseerin kasutades reeglit %d (%s)"
+msgstr "kurangi gunakan aturan %d (%s)"
 
 #: src/print.c:293
 msgid "accept"
-msgstr "nõustun"
+msgstr "terima"
 
 #: src/print.c:324 src/print.c:390
 msgid "$default"
@@ -281,304 +285,304 @@ msgstr "$default"
 #: src/print.c:419
 #, c-format
 msgid "state %d"
-msgstr "olek %d"
+msgstr "state %d"
 
 #: src/print.c:456
 msgid "Terminals, with rules where they appear"
-msgstr "Terminalid, koos reeglitega kus nad ilmuvad"
+msgstr "Terminal, dengan aturan tempat mereka muncul"
 
 #: src/print.c:483
 msgid "Nonterminals, with rules where they appear"
-msgstr "Mitteterminalid, koos reeglitega kus nad ilmuvad"
+msgstr "Nonterminal, dengan aturan tempat mereka muncul"
 
 #: src/print.c:512
 msgid " on left:"
-msgstr " vasakul:"
+msgstr " di kiri:"
 
 #: src/print.c:527
 msgid " on right:"
-msgstr " paremal:"
+msgstr " di kanan:"
 
 #: src/print.c:555
 msgid "Rules never reduced"
-msgstr "Mitteredutseeruvad reeglid"
+msgstr "Aturan tidak pernah dikurangi"
 
 #: src/reader.c:52
 #, c-format
 msgid "multiple %s declarations"
-msgstr "korduvad %s deklaratsioonid"
+msgstr "deklarasi ganda %s"
 
 #: src/reader.c:141
 #, c-format
 msgid "result type clash on merge function %s: `%s' vs. `%s'"
-msgstr "tulemuse tüübikonflikt mestimise funktsioonis %s: `%s' versus `%s'"
+msgstr "tipe hasil bentrok pada fungsi merge %s: `%s' vs `%s'"
 
 #: src/reader.c:239
 #, c-format
 msgid "rule given for %s, which is a token"
-msgstr "%s jaoks on antud reegel, aga see on märk"
+msgstr "aturan diberikan untuk %s, yang merupakan sebuah token"
 
 #: src/reader.c:268
 #, c-format
 msgid "type clash (`%s' `%s') on default action"
-msgstr "vaikimisi tegevuse tüübikonflikt (`%s' `%s')"
+msgstr "bentrokan tipe (`%s' `%s') pada aksi baku"
 
 #: src/reader.c:274
 msgid "empty rule for typed nonterminal, and no action"
-msgstr "tüübiga mitteterminalil on tühi reegel ja puudub tegevus"
+msgstr "aturan kosong untuk nonterminal typed, dan tidak ada aksi"
 
 #: src/reader.c:344
 msgid "two @prec's in a row"
-msgstr "kaks @prec ühel real"
+msgstr "dua @prec dalam satu baris"
 
 #: src/reader.c:354
 #, c-format
 msgid "%%dprec affects only GLR parsers"
-msgstr "%%dprec puudutab ainult GLR parsereid"
+msgstr "%%dprec hanya mempengaruhi parser GLR"
 
 #: src/reader.c:356
 #, c-format
 msgid "%%dprec must be followed by positive number"
-msgstr "%%dprec järel peab olema positiivne number"
+msgstr "%%dprec harus diikuti oleh angka positif"
 
 #: src/reader.c:358
 #, c-format
 msgid "only one %%dprec allowed per rule"
-msgstr "reeglis on lubatud ainult üks %%dprec"
+msgstr "hanya satu %%dprec yang dibolehkan untuk satu aturan"
 
 #: src/reader.c:369
 #, c-format
 msgid "%%merge affects only GLR parsers"
-msgstr "%%merge puudutab ainult GLR parsereid"
+msgstr "%%merge hanya mempengaruhi parser GLR"
 
 #: src/reader.c:371
 #, c-format
 msgid "only one %%merge allowed per rule"
-msgstr "reeglis on lubatud ainult üks %%merge"
+msgstr "hanya satu %%merge yang dibolehkan tiap aturan"
 
 #: src/reader.c:514
 msgid "no rules in the input grammar"
-msgstr "sisendgrammatikas pole reegleid"
+msgstr "tidak ada aturan dalam grammar input"
 
 #: src/reader.c:546
 #, c-format
 msgid "too many symbols (tokens plus nonterminals); maximum %d"
-msgstr "liiga palju sümboleid (märgid ja mitteterminalid); maksimaalne on %d"
+msgstr "terlalu banyak simbol (token dan nonterminal); maksimum %d"
 
 #: src/reduce.c:239
 msgid "useless rule"
-msgstr "kasutamata reegel"
+msgstr "aturan tidak berguna"
 
 #: src/reduce.c:302
 msgid "useless nonterminal"
-msgstr "kasutamata mitteterminal"
+msgstr "nonterminal tidak berguna"
 
 #: src/reduce.c:349
 msgid "Useless nonterminals"
-msgstr "Kasutamata mitteterminalid"
+msgstr "Nonterminal tidak berguna"
 
 #: src/reduce.c:362
 msgid "Terminals which are not used"
-msgstr "Terminalid, mida ei kasutatud"
+msgstr "Terminal yang tidak digunakan"
 
 #: src/reduce.c:371
 msgid "Useless rules"
-msgstr "Kasutamata reeglid"
+msgstr "Useless rules"
 
 #: src/reduce.c:387
 #, c-format
 msgid "%d rule never reduced\n"
 msgid_plural "%d rules never reduced\n"
-msgstr[0] "%d reegel ei redutseeru\n"
-msgstr[1] "%d reeglit ei redutseeru\n"
+msgstr[0] "Aturan %d tidak pernah dikurangi\n"
+msgstr[1] "Aturan %d tidak pernah dikurangi\n"
 
 #: src/reduce.c:395
 #, c-format
 msgid "%d useless nonterminal"
 msgid_plural "%d useless nonterminals"
-msgstr[0] "%d kasutamata mitteterminal"
-msgstr[1] "%d kasutamata mitteterminali"
+msgstr[0] "nonterminal tidak berguna %d"
+msgstr[1] "nonterminal tidak berguna %d"
 
 #: src/reduce.c:401
 msgid " and "
-msgstr " ja "
+msgstr " dan "
 
 #: src/reduce.c:404
 #, c-format
 msgid "%d useless rule"
 msgid_plural "%d useless rules"
-msgstr[0] "%d kasutamata reegel"
-msgstr[1] "%d kasutamata reeglit"
+msgstr[0] "aturan tidak berguna %d"
+msgstr[1] "aturan tidak berguna %d"
 
 #: src/reduce.c:435
 #, c-format
 msgid "start symbol %s does not derive any sentence"
-msgstr "stardisümbolist %s ei tuletata ühtegi lauset"
+msgstr "simbol awal %s tidak melahirkan kalimat"
 
 #: scan-gram.l:211
 #, c-format
 msgid ": invalid character: `%c'\n"
-msgstr ": vigane sümbol: `%c'\n"
+msgstr ": karakter tidak valid: `%c'\n"
 
 #: scan-gram.l:255
 msgid ": unexpected end of file in a comment\n"
-msgstr ": ootamatu faililõpp kommentaaris\n"
+msgstr ": akhir file tidak diharapkan dalam komentar\n"
 
 #: scan-gram.l:284 scan-gram.l:423
 msgid ": unexpected end of file in a string\n"
-msgstr ": ootamatu faililõpp sõnes\n"
+msgstr ": akhir file tidak diharapkan dalam string\n"
 
 #: scan-gram.l:322 scan-gram.l:394
 msgid ": unexpected end of file in a character\n"
-msgstr ": ootamatu faililõpp sümbolis\n"
+msgstr ": akhir file tidak diharapkan dalam karakter\n"
 
 #: scan-gram.l:343
 #, c-format
 msgid ": invalid escape: %s\n"
-msgstr ": vigane paojada: %s\n"
+msgstr ": escape tidak valid: %s\n"
 
 #: scan-gram.l:364
 #, c-format
 msgid ": unrecognized escape: %s\n"
-msgstr ": tundmatu paojada: %s\n"
+msgstr ": escape tidak dikenal: %s\n"
 
 #: scan-gram.l:485
 msgid ": unexpected end of file in a braced code\n"
-msgstr ": ootamatu faililõpp sulgude vahelises koodis\n"
+msgstr ": akhir file tidak diharapkan dalam kode braced\n"
 
 #: scan-gram.l:514
 msgid ": unexpected end of file in a prologue\n"
-msgstr ": ootamatu faililõpp proloogis\n"
+msgstr ": akhir file tidak diharapkan dalam prolog\n"
 
 #: scan-gram.l:572
 #, c-format
 msgid "$$ of `%s' has no declared type"
-msgstr "`%s' $$ ei oma deklareeritud tüüpi"
+msgstr "$$ dari `%s' tidak memiliki tipe yang terdeklarasi"
 
 #: scan-gram.l:584 scan-gram.l:666
 #, c-format
 msgid "invalid value: %s%d"
-msgstr "vigane väärtus: %s%d"
+msgstr "nilai tidak valid: %s%d"
 
 #: scan-gram.l:591
 #, c-format
 msgid "$%d of `%s' has no declared type"
-msgstr "$%d `%s' ei oma deklareeritud tüüpi"
+msgstr "$%d dari `%s' tidak memiliki tipe terdeklarasi"
 
 #: scan-gram.l:602 scan-gram.l:619 scan-gram.l:673 scan-gram.l:690
 #, c-format
 msgid "%s is invalid"
-msgstr "%s on vigane"
+msgstr "%s tidak valid"
 
 #: src/state.c:145
 #, c-format
 msgid "too many states (max %d)"
-msgstr "liiga palju olekuid (maks %d)"
+msgstr "terlalu banyak state (maks %d)"
 
 #: src/symlist.c:97 src/symlist.c:109
 msgid "invalid $ value"
-msgstr "vigane $ väärtus"
+msgstr "nilai $ tidak valid"
 
 #: src/symtab.c:81
 #, c-format
 msgid "type redeclaration for %s"
-msgstr "%s tüübi uuesti deklareerimine"
+msgstr "redeklarasi tipe untuk %s"
 
 #: src/symtab.c:98 src/symtab.c:117
 #, c-format
 msgid "%s redeclaration for %s"
-msgstr "%s uuesti deklareerimine %s jaoks"
+msgstr "%s redeklarasi untuk %s"
 
 #: src/symtab.c:138
 #, c-format
 msgid "redefining precedence of %s"
-msgstr "%s prioriteedi uus definitsioon"
+msgstr "mendefinisikan kembali presedens %s"
 
 #: src/symtab.c:157
 #, c-format
 msgid "symbol %s redefined"
-msgstr "sümbol %s on uuesti defineeritud"
+msgstr "simbol %s didefinisikan ulang"
 
 #: src/symtab.c:180
 #, c-format
 msgid "redefining user token number of %s"
-msgstr "%s kasutaja märgi numbri uuesti defineerimine"
+msgstr "mendefinisikan ulang nomor token user %s"
 
 #: src/symtab.c:225
 #, c-format
 msgid "symbol %s is used, but is not defined as a token and has no rules"
 msgstr ""
-"kasutatakse sümbolit %s, mis ei ole defineeritud märgina ja millel puuduvad "
-"reeglid"
+"simbol %s digunakan, namun tidak didefinisikan sebagai token dan tidak "
+"memiliki aturan"
 
 #: src/symtab.c:244
 #, c-format
 msgid "symbol `%s' used more than once as a literal string"
-msgstr "sümbolit `%s' on kasutatud enam kui kord literaal sõnena"
+msgstr "simbol `%s' digunakan lebih dari satu kali sebagai string literal"
 
 #: src/symtab.c:247
 #, c-format
 msgid "symbol `%s' given more than one literal string"
-msgstr "sümbolile `%s' on antud enam kui üks literaal sõne"
+msgstr "simbol `%s' diberikan lebih dari satu string literal"
 
 #: src/symtab.c:281
 #, c-format
 msgid "conflicting precedences for %s and %s"
-msgstr "%s ja %s omavad konfliktseid prioriteete"
+msgstr "presenden konflik untuk %s dan %s"
 
 #: src/symtab.c:293
 #, c-format
 msgid "conflicting associativities for %s (%s) and %s (%s)"
-msgstr "%s (%s) ja %s (%s) omavad konfliktseid assotsiatiivseid väärtuseid"
+msgstr "asosiatif konflik untuk %s (%s) dan %s (%s)"
 
 #: src/symtab.c:363
 #, c-format
 msgid "tokens %s and %s both assigned number %d"
-msgstr "märkidele %s ja %s on mõlemale omistatud number %d"
+msgstr "token %s dan %s keduanya memiliki angka %d"
 
 #: src/symtab.c:568
 #, c-format
 msgid "the start symbol %s is undefined"
-msgstr "stardisümbol %s ei ole defineeritud"
+msgstr "simbol awal %s tidak didefinisikan"
 
 #: src/symtab.c:572
 #, c-format
 msgid "the start symbol %s is a token"
-msgstr "stardisümbol %s on märk"
+msgstr "simbol awal %s adalah sebuah token"
 
 #: lib/argmatch.c:161
 #, c-format
 msgid "invalid argument %s for %s"
-msgstr "vigane argument %s %s'le"
+msgstr "argument %s tidak valid untuk %s"
 
 #: lib/argmatch.c:162
 #, c-format
 msgid "ambiguous argument %s for %s"
-msgstr "segane argument %s %s'le"
+msgstr "argumen %s ambigu untuk %s"
 
 #: lib/argmatch.c:181
 msgid "Valid arguments are:"
-msgstr "Lubatud argumendid on:"
+msgstr "Argumen valid adalah:"
 
 #: lib/bitset_stats.c:235
 #, c-format
 msgid "%u bitset_allocs, %u freed (%.2f%%).\n"
-msgstr "%u bitset_allocs, %u vabastatud (%.2f%%).\n"
+msgstr "%u bitset_allocs, %u freed (%.2f%%).\n"
 
 #: lib/bitset_stats.c:238
 #, c-format
 msgid "%u bitset_sets, %u cached (%.2f%%)\n"
-msgstr "%u bitset_sets, %u puhverdatud (%.2f%%)\n"
+msgstr "%u bitset_sets, %u cached (%.2f%%)\n"
 
 #: lib/bitset_stats.c:241
 #, c-format
 msgid "%u bitset_resets, %u cached (%.2f%%)\n"
-msgstr "%u bitset_resets, %u puhverdatud (%.2f%%)\n"
+msgstr "%u bitset_resets, %u cached (%.2f%%)\n"
 
 #: lib/bitset_stats.c:244
 #, c-format
 msgid "%u bitset_tests, %u cached (%.2f%%)\n"
-msgstr "%u bitset_tests, %u puhverdatud (%.2f%%)\n"
+msgstr "%u bitset_tests, %u cached (%.2f%%)\n"
 
 #: lib/bitset_stats.c:248
 #, c-format
@@ -587,103 +591,103 @@ msgstr "%u bitset_lists\n"
 
 #: lib/bitset_stats.c:250
 msgid "count log histogram\n"
-msgstr "loenduri logi histogramm\n"
+msgstr "hitung log histogram\n"
 
 #: lib/bitset_stats.c:253
 msgid "size log histogram\n"
-msgstr "suuruste logi histogramm\n"
+msgstr "ukuran log histogram\n"
 
 #: lib/bitset_stats.c:256
 msgid "density histogram\n"
-msgstr "tiheduse histogramm\n"
+msgstr "kepadatan histogram\n"
 
 #: lib/bitset_stats.c:272
 msgid ""
 "Bitset statistics:\n"
 "\n"
 msgstr ""
-"Bitset statistika:\n"
+"Statistik bitset:\n"
 "\n"
 
 #: lib/bitset_stats.c:275
 #, c-format
 msgid "Accumulated runs = %u\n"
-msgstr "Salvestatud läbimisi = %u\n"
+msgstr "Run terakumulasi = %u\n"
 
 #: lib/bitset_stats.c:320
 msgid "Could not read stats file."
-msgstr "Statistika faili ei saa lugeda."
+msgstr "Tidak dapat membaca file stat."
 
 #: lib/bitset_stats.c:322
 msgid "Bad stats file size.\n"
-msgstr "Vigane statistika faili suurus.\n"
+msgstr "Ukuran file stat buruk.\n"
 
 #: lib/bitset_stats.c:348
 msgid "Could not write stats file."
-msgstr "Statistika faili ei saa kirjutada."
+msgstr "Tidak dapat menulis file stat."
 
 #: lib/bitset_stats.c:352
 msgid "Could not open stats file for writing."
-msgstr "Statistika faili ei saa kirjutamiseks avada."
+msgstr "Tidak dapat membuka file stat untuk ditulisi."
 
 #: lib/getopt.c:662
 #, c-format
 msgid "%s: option `%s' is ambiguous\n"
-msgstr "%s: võti `%s' on segane\n"
+msgstr "%s: option `%s' ambigu\n"
 
 #: lib/getopt.c:687
 #, c-format
 msgid "%s: option `--%s' doesn't allow an argument\n"
-msgstr "%s: võti `--%s' ei luba argumenti\n"
+msgstr "%s: option `--%s' tidak membolehkan sebuah argumen\n"
 
 #: lib/getopt.c:692
 #, c-format
 msgid "%s: option `%c%s' doesn't allow an argument\n"
-msgstr "%s: võti `%c%s' ei luba argumenti\n"
+msgstr "%s: option `%c%s' tidak membolehkan sebuah argumen\n"
 
 #: lib/getopt.c:710 lib/getopt.c:883
 #, c-format
 msgid "%s: option `%s' requires an argument\n"
-msgstr "%s: võti `%s' nõuab argumenti\n"
+msgstr "%s: option `%s' membutuhkan sebuah argumen\n"
 
 #: lib/getopt.c:739
 #, c-format
 msgid "%s: unrecognized option `--%s'\n"
-msgstr "%s: tundmatu võti `--%s'\n"
+msgstr "%s: option tidak dikenal `--%s'\n"
 
 #: lib/getopt.c:743
 #, c-format
 msgid "%s: unrecognized option `%c%s'\n"
-msgstr "%s: tundmatu võti `%c%s'\n"
+msgstr "%s: option tidak dikenal `%c%s'\n"
 
 #: lib/getopt.c:769
 #, c-format
 msgid "%s: illegal option -- %c\n"
-msgstr "%s: lubamatu võti -- %c\n"
+msgstr "%s: option ilegal -- %c\n"
 
 #: lib/getopt.c:772
 #, c-format
 msgid "%s: invalid option -- %c\n"
-msgstr "%s: vigane võti -- %c\n"
+msgstr "%s: option tidak valid -- %c\n"
 
 #: lib/getopt.c:802 lib/getopt.c:932
 #, c-format
 msgid "%s: option requires an argument -- %c\n"
-msgstr "%s: võti nõuab argumenti -- %c\n"
+msgstr "%s: option membutuhkan sebuah argumen -- %c\n"
 
 #: lib/getopt.c:849
 #, c-format
 msgid "%s: option `-W %s' is ambiguous\n"
-msgstr "%s: võti `-W %s' on segane\n"
+msgstr "%s: option `-W %s' ambigu\n"
 
 #: lib/getopt.c:867
 #, c-format
 msgid "%s: option `-W %s' doesn't allow an argument\n"
-msgstr "%s: võti `-W %s' ei luba argumenti\n"
+msgstr "%s: option `-W %s' tidak membolehkan sebuah argumen\n"
 
 #: lib/obstack.c:496 lib/obstack.c:499 lib/xmalloc.c:66
 msgid "memory exhausted"
-msgstr "mälu on otsas"
+msgstr "memori habis"
 
 #: lib/quotearg.c:274
 msgid "`"
@@ -699,13 +703,13 @@ msgid ""
 "Execution times (seconds)\n"
 msgstr ""
 "\n"
-"Täitmise ajad (sekundites)\n"
+"Waktu eksekusi (detik)\n"
 
 #: lib/timevar.c:526
 msgid " TOTAL                 :"
-msgstr " KOKKU                 :"
+msgstr " TOTAL                 :"
 
 #: lib/timevar.c:562
 #, c-format
 msgid "time in %s: %ld.%06ld (%ld%%)\n"
-msgstr "aeg %s: %ld.%06ld (%ld%%)\n"
+msgstr "waktu dalam %s: %ld.%06ld (%ld%%)\n"
