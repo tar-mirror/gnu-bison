@@ -1,3 +1,269 @@
+2010-08-05  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	Version 2.4.3.
+	* NEWS (2.4.3): Set date.
+
+2010-08-04  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	maint: add gettext version to release announcements.
+	Suggested by Paul Hilfinger at
+	<http://lists.gnu.org/archive/html/bison-patches/2010-07/msg00019.html>
+	<http://lists.gnu.org/archive/html/bison-patches/2010-08/msg00002.html>.
+	* cfg.mk (bootstrap-tools): Add gettext.
+
+2010-08-04  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	doc: fix -W and %expect documentation some.
+	* NEWS (2.4.3): Mention that there are documentation fixes.
+	* doc/bison.texinfo (Expect Decl): Make it clear that %expect
+	turns conflicts into errors not warnings.
+	(Shift/Reduce): Likewise.
+	(Bison Options): Don't mention -Wsyntax.  It doesn't exist.
+
+2010-08-01  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	-Werror: fix for rules useless in parser after conflicts.
+	* NEWS (2.4.3): Document fix.
+	* src/complain.c (error_message): Extend to handle incomplete
+	error messages so warn and warn_at can be used in more cases.
+	* src/gram.c (grammar_rules_useless_report): Use warn_at so that
+	-Werror is always obeyed.
+	* src/reduce.c (reduce_print): Use warn so that the "warnings
+	being treated as errors" message is printed consistently before
+	the first warning message.  This makes testing easier.
+	* tests/local.at (AT_BISON_WERROR_MSG): New macro.
+	(AT_BISON_CHECK_NO_XML): Extend to check -Werror and
+	--warnings=error when warnings appear in bison's stderr.
+
+2010-07-29  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	maint: enable gnits only at stable releases.
+	* configure.ac (AM_INIT_AUTOMAKE): Underscore or dash in a
+	version string should disable gnits.  Explain in comments.
+
+2010-07-29  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	Prepare for 2.4.3 release.
+	* NEWS (2.4.3_rc1): Rename back to...
+	(2.4.3): ... this, and unset date.
+
+2010-07-28  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	Version 2.4.3_rc1.
+	* NEWS (2.4.3): Rename to...
+	(2.4.3_rc1): ... this for now so we can include translation
+	updates in 2.4.3, and set release date.
+	* configure.ac (AM_INIT_AUTOMAKE): Underscore rather than dash
+	in version string now indicates a release candidate and that we
+	thus cannot enable gnits.  Dash confuses git-version-gen.
+
+2010-07-28  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	i18n: fix for gnulib.
+	* po/POTFILES.in: Add remaining gnulib files that have
+	translatable strings.
+
+2010-07-25  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	maint: use announce-gen's new --mail-headers.
+	* HACKING (Announce): Update instructions.
+	* cfg.mk (announcement_Cc_): Define.
+	* configure.ac (AM_GNU_GETTEXT_VERSION): Update to 0.18 as
+	required by latest gnulib.
+	* gnulib: Update to latest.
+
+2009-08-17  Akim Demaille  <demaille@gostai.com>
+
+	build: require gettext 0.17.
+
+	Suggested by Bruno Haible.
+	http://lists.gnu.org/archive/html/bug-bison/2009-08/msg00009.html
+	* configure.ac: require gettext 0.17 to ensure compatibility with
+	gnulib.
+
+2010-07-24  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	tests: handle Valgrind that complains about >&-.
+	* tests/output.at (AT_CHECK_OUTPUT): Extend to accept pre-tests.
+	(Output files: -dv >&-): Skip test group if running
+	maintainer-check-valgrind.
+
+2010-07-21  Akim Demaille  <demaille@gostai.com>
+
+	Pacify gcc warnings.
+	* src/getargs.c (skeleton_arg): Pass "%s" to printf-like functions
+	with variable format and no argument.
+
+2010-06-17  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Update from GFDL GFDL 1.2 to 1.3.
+	* doc/bison.texinfo: Update GFDL version number.
+	* doc/fdl.texi: Update to version 1.3, taken from:
+	http://www.gnu.org/licenses/fdl.texi
+
+2010-06-17  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Do not use date ranges in copyright notices.
+	See http://www.gnu.org/prep/maintain/maintain.html#Copyright-Notices
+
+	* HACKING, Makefile.am, NEWS, PACKAGING, README, README-alpha:
+	* TODO, bootstrap, bootstrap.conf:
+	* build-aux/update-b4-copyright, cfg.mk, configure.ac:
+	* data/README, data/bison.m4, data/c++-skel.m4, data/c++.m4:
+	* data/c-skel.m4, data/c.m4, data/glr.c, data/glr.cc:
+	* data/java-skel.m4, data/java.m4, data/lalr1.cc:
+	* data/lalr1.java, data/location.cc:
+	* data/xslt/bison.xsl:
+	* data/xslt/xml2dot.xsl, data/xslt/xml2text.xsl:
+	* data/xslt/xml2xhtml.xsl, data/yacc.c, djgpp/Makefile.maint:
+	* djgpp/README.in, djgpp/config.bat, djgpp/config.sed:
+	* djgpp/config.site, djgpp/config_h.sed, djgpp/djunpack.bat:
+	* djgpp/subpipe.c, djgpp/subpipe.h:
+	* djgpp/testsuite.sed, doc/bison.texinfo:
+	* doc/refcard.tex, etc/README, etc/bench.pl.in:
+	* examples/calc++/Makefile.am, examples/extexi:
+	* lib/abitset.c, lib/abitset.h:
+	* lib/bbitset.h, lib/bitset.c, lib/bitset.h:
+	* lib/bitset_stats.c, lib/bitset_stats.h, lib/bitsetv-print.c:
+	* lib/bitsetv-print.h, lib/bitsetv.c, lib/bitsetv.h:
+	* lib/ebitset.c, lib/ebitset.h, lib/get-errno.c:
+	* lib/get-errno.h, lib/lbitset.c, lib/lbitset.h:
+	* lib/libiberty.h, lib/main.c, lib/timevar.c:
+	* lib/timevar.def, lib/timevar.h, lib/vbitset.c:
+	* lib/vbitset.h, lib/yyerror.c, m4/bison-i18n.m4:
+	* m4/c-working.m4, m4/cxx.m4, m4/subpipe.m4, m4/timevar.m4:
+	* src/LR0.c:
+	* src/LR0.h, src/assoc.c:
+	* src/assoc.h, src/closure.c, src/closure.h, src/complain.c:
+	* src/complain.h, src/conflicts.c, src/conflicts.h:
+	* src/derives.c, src/derives.h, src/files.c, src/files.h:
+	* src/flex-scanner.h, src/getargs.c, src/getargs.h:
+	* src/gram.c, src/gram.h, src/graphviz.c:
+	* src/lalr.c, src/lalr.h:
+	* src/location.c, src/location.h, src/main.c:
+	* src/nullable.c, src/nullable.h:
+	* src/output.c, src/output.h, src/parse-gram.y:
+	* src/print-xml.c, src/print-xml.h, src/print.c, src/print.h:
+	* src/print_graph.c, src/print_graph.h, src/reader.c:
+	* src/reader.h, src/reduce.c, src/reduce.h, src/relation.c:
+	* src/relation.h, src/scan-code.h, src/scan-code.l:
+	* src/scan-gram.h, src/scan-gram.l, src/scan-skel.h:
+	* src/scan-skel.l, src/state.c, src/state.h, src/symlist.c:
+	* src/symlist.h, src/symtab.c, src/symtab.h, src/system.h:
+	* src/tables.c, src/tables.h, src/uniqstr.c, src/uniqstr.h:
+	* tests/actions.at, tests/atlocal.in, tests/c++.at:
+	* tests/calc.at, tests/conflicts.at, tests/cxx-type.at:
+	* tests/existing.at, tests/glr-regression.at:
+	* tests/headers.at, tests/input.at, tests/java.at:
+	* tests/local.at:
+	* tests/output.at, tests/push.at, tests/reduce.at:
+	* tests/regression.at, tests/sets.at, tests/skeletons.at:
+	* tests/synclines.at, tests/testsuite.at, tests/torture.at:
+	* data/Makefile.am, data/location.cc, doc/Makefile.am, src/Makefile.am:
+	* tests/Makefile.am, lib/Makefile.am, examples/Makefile.am:
+	* etc/Makefile.am, m4/m4.m4, src/muscle_tab.c, src/muscle_tab.h:
+	Don't use date ranges in copyright notices.
+
+2010-05-10  Akim Demaille  <demaille@gostai.com>
+
+	doc: fix lalr1.cc documentation.
+	* doc/bison.texinfo (C++ Scanner Interface): Fix yylex signature.
+	(C++ Bison Interface): Fix lalr1.cc skeleton name.
+	(C++ Parser Interface): Fix semantic_type and location_type names.
+	Document yy::parser::token.
+	Reported by Jerry Quinn.
+
+2010-05-07  Akim Demaille  <demaille@gostai.com>
+
+	doc: fix typo.
+	* tests/synclines.at: here.
+
+2010-05-04  Akim Demaille  <demaille@gostai.com>
+
+	tests: enhance AT_SYNCLINES_COMPILE.
+	* tests/synclines.at (AT_SYNCLINES_COMPILE): More distcc patterns.
+	(AT_TEST_SYNCLINE): Remove GCC 4.5 protection which is already
+	taken care of in AT_SYNCLINES_COMPILE.
+
+2010-04-30  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	Document that undefined %prec identifier warnings will remain.
+	* NEWS (2.4.3): Here.
+	(2.4.2): Here.
+
+2010-04-25  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	build: don't require src/bison during bootstrap.
+	Suggested by Eric Blake at
+	<http://lists.gnu.org/archive/html/bug-bison/2010-03/msg00003.html>.
+	* bootstrap.conf (bootstrap_epilogue): New function to make sure
+	src/parse-gram.[ch] are stamped later than src/parse-gram.y.
+
+2010-04-11  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	* NEWS (2.4.3): Mention fix for Sun Studio C++.
+
+2010-04-10  Joel E. Denny  <joeldenny@joeldenny.org>
+
+	tests: fix for newer Sun Studio C++.
+	Reported by Dagobert Michelsen at
+	<http://lists.gnu.org/archive/html/bug-bison/2010-03/msg00023.html>.
+	* THANKS (Dagobert Michelsen): Add.
+	* configure.ac (AC_PREREQ): Set to 2.64 so we get the latest
+	Autoconf macro for handling the restrict keyword.
+	* gnulib: Update to latest, which no longer overrides that macro
+	from Autoconf.
+
+2010-04-03  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	portability: fix pointer arithmetic to conform to C standard.
+	Reported by Tys Lefering at
+	<http://lists.gnu.org/archive/html/bug-bison/2010-03/msg00035.html>.
+	This fix is already implemented in glr.c and does not apply to
+	lalr1.java.
+	* data/lalr1.cc (yy::parser::parse): Increase size of
+	yyerror_range and adjust subscripting so you don't have to
+	subtract one from the beginning of the array.
+	* data/yacc.c (b4_declare_parser_state_variables,
+	yyparse, yypush_parse): Likewise.
+
+2010-03-31  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	portability: fix test suite for GCC 4.5's new #error message.
+	Reported by Tys Lefering at
+	<http://lists.gnu.org/archive/html/bug-bison/2010-03/msg00030.html>.
+	* NEWS (2.4.3): Mention.
+	* tests/synclines.at (AT_TEST_SYNCLINE): Implement.
+
+2010-03-30  Akim Demaille  <demaille@gostai.com>
+
+	fix comments.
+	* src/graphviz.h: Add missing license notice.
+	Document.
+
+2010-03-23  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	portability: fix for BSD make.
+	Reported by Johan van Selst at
+	<http://lists.gnu.org/archive/html/bug-bison/2010-03/msg00016.html>.
+	* tests/Makefile.am ($(TESTSUITE)): Qualify package.m4 in
+	this dependency list as in package.m4's target rule.
+
+2010-03-23  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	portability: fix spawning on at least FreeBSD 8 and FreeBSD 9.
+	Reported by Johan van Selst at
+	<http://lists.gnu.org/archive/html/bug-bison/2010-03/msg00014.html>.
+	* NEWS (2.4.3): New.
+	* THANKS (Johan van Selst): Add.
+	* gnulib: Update to latest.
+
+2010-03-20  Joel E. Denny  <jdenny@ces.clemson.edu>
+
+	maint: update for changes to gnulib's announce-gen.
+	* HACKING (Announce): RELEASE_TYPE=major must now be written
+	RELEASE_TYPE=stable.
+
 2010-03-20  Joel E. Denny  <jdenny@ces.clemson.edu>
 
 	Version 2.4.2.
@@ -21751,8 +22017,9 @@
 
 	-----
 
-	Copyright (C) 1987-1988, 1991-2010 Free Software Foundation,
-	Inc.
+	Copyright (C) 1987, 1988, 1991, 1992, 1993, 1994, 1995, 1996,
+	1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+	2008, 2009, 2010 Free Software Foundation, Inc.
 
 	Copying and distribution of this file, with or without
 	modification, are permitted provided the copyright notice and this

@@ -10,22 +10,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.4.1\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2010-03-20 13:15-0400\n"
+"POT-Creation-Date: 2010-08-05 21:01-0400\n"
 "PO-Revision-Date: 2009-02-04 19:44+0200\n"
 "Last-Translator: Pavel Maryanov <acid_jack@ukr.net>\n"
 "Language-Team: Russian <gnu@mx.ru>\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: src/complain.c:93 src/complain.c:100 src/gram.c:311 src/reduce.c:387
-#: src/reduce.c:396
+#: src/complain.c:101 src/complain.c:108
 msgid "warning"
 msgstr "предупреждение"
 
-#: src/complain.c:130 src/complain.c:137
+#: src/complain.c:138 src/complain.c:145
 msgid "fatal error"
 msgstr "фатальная ошибка"
 
@@ -312,20 +312,20 @@ msgstr "после «%s» пропущен операнд"
 msgid "extra operand `%s'"
 msgstr "лишний операнд «%s»"
 
-#: src/gram.c:112
+#: src/gram.c:113
 msgid "empty"
 msgstr "пусто"
 
-#: src/gram.c:201
+#: src/gram.c:202
 msgid "Grammar"
 msgstr "Грамматика"
 
-#: src/location.c:92 src/scan-gram.l:733
+#: src/location.c:94 src/scan-gram.l:734
 #, c-format
 msgid "line number overflow"
 msgstr "переполнение номера строки"
 
-#: src/location.c:94
+#: src/location.c:96
 #, c-format
 msgid "column number overflow"
 msgstr "переполнение номера столбца"
@@ -334,51 +334,51 @@ msgstr "переполнение номера столбца"
 msgid "rule useless in parser due to conflicts"
 msgstr "правило не применимо в парсере из-за конфликтов"
 
-#: src/muscle_tab.c:419
+#: src/muscle_tab.c:420
 #, fuzzy, c-format
 msgid "%s `%s' redefined"
 msgstr "повторное определение символа %s"
 
-#: src/muscle_tab.c:422
+#: src/muscle_tab.c:423
 #, fuzzy, c-format
 msgid "previous definition"
 msgstr "предыдущее описание"
 
-#: src/muscle_tab.c:458
+#: src/muscle_tab.c:459
 #, c-format
 msgid ""
 "undefined %%define variable `%s' passed to muscle_percent_define_get_loc"
 msgstr ""
 
-#: src/muscle_tab.c:472
+#: src/muscle_tab.c:473
 #, c-format
 msgid ""
 "undefined %%define variable `%s' passed to muscle_percent_define_get_syncline"
 msgstr ""
 
-#: src/muscle_tab.c:518
+#: src/muscle_tab.c:519
 #, c-format
 msgid "invalid value for %%define Boolean variable `%s'"
 msgstr ""
 
-#: src/muscle_tab.c:524
+#: src/muscle_tab.c:525
 #, c-format
 msgid ""
 "undefined %%define variable `%s' passed to muscle_percent_define_flag_if"
 msgstr ""
 
-#: src/muscle_tab.c:580
+#: src/muscle_tab.c:581
 #, c-format
 msgid "invalid value for %%define variable `%s': `%s'"
 msgstr ""
 
-#: src/muscle_tab.c:585
+#: src/muscle_tab.c:586
 #, c-format
 msgid ""
 "undefined %%define variable `%s' passed to muscle_percent_define_check_values"
 msgstr ""
 
-#: src/parse-gram.y:692
+#: src/parse-gram.y:693
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "в описании параметра отсутствует идентификатор"
@@ -536,7 +536,7 @@ msgstr "Терминалы не используются в грамматике
 msgid "Rules useless in grammar"
 msgstr "Правила не используются в грамматике"
 
-#: src/reduce.c:388
+#: src/reduce.c:386
 #, c-format
 msgid "%d nonterminal useless in grammar"
 msgid_plural "%d nonterminals useless in grammar"
@@ -544,7 +544,7 @@ msgstr[0] "%d нетерминал бесполезен в грамматике"
 msgstr[1] "%d нетерминала бесполезно в грамматике"
 msgstr[2] "%d нетерминалов бесполезно в грамматике"
 
-#: src/reduce.c:397
+#: src/reduce.c:391
 #, c-format
 msgid "%d rule useless in grammar"
 msgid_plural "%d rules useless in grammar"
@@ -552,97 +552,97 @@ msgstr[0] "%d правило бесполезно в грамматике"
 msgstr[1] "%d правила бесполезно в грамматике"
 msgstr[2] "%d правила бесполезно в грамматике"
 
-#: src/reduce.c:428
+#: src/reduce.c:420
 #, c-format
 msgid "start symbol %s does not derive any sentence"
 msgstr "начальный символ %s не выводит ни одного предложения"
 
-#: src/scan-code.l:163
+#: src/scan-code.l:164
 #, c-format
 msgid "stray `$'"
 msgstr "некорректный «$»"
 
-#: src/scan-code.l:167
+#: src/scan-code.l:168
 #, c-format
 msgid "stray `@'"
 msgstr "некорректный «@»"
 
-#: src/scan-code.l:280
+#: src/scan-code.l:281
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr "указан тип в нетипизированной грамматике"
 
-#: src/scan-code.l:295
+#: src/scan-code.l:296
 #, c-format
 msgid "$$ for the midrule at $%d of `%s' has no declared type"
 msgstr "$$ для правила $%d из «%s» не имеет описанного типа"
 
-#: src/scan-code.l:300
+#: src/scan-code.l:301
 #, c-format
 msgid "$$ of `%s' has no declared type"
 msgstr "$$ в «%s» не имеет описанного типа"
 
-#: src/scan-code.l:328
+#: src/scan-code.l:329
 #, c-format
 msgid "$%d of `%s' has no declared type"
 msgstr "$%d из «%s» не имеет описанного типа"
 
-#: src/scan-code.l:343 src/scan-code.l:378 src/scan-gram.l:655
+#: src/scan-code.l:344 src/scan-code.l:379 src/scan-gram.l:656
 #, c-format
 msgid "integer out of range: %s"
 msgstr "выход за границы диапазона целого: %s"
 
-#: src/scan-gram.l:135
+#: src/scan-gram.l:136
 #, c-format
 msgid "stray `,' treated as white space"
 msgstr "лишняя «,» считается пробелом"
 
-#: src/scan-gram.l:201
+#: src/scan-gram.l:202
 #, c-format
 msgid "invalid directive: %s"
 msgstr "неверная директива: %s"
 
-#: src/scan-gram.l:259
+#: src/scan-gram.l:260
 #, c-format
 msgid "invalid character: %s"
 msgstr "недопустимый символ: %s"
 
-#: src/scan-gram.l:390
+#: src/scan-gram.l:391
 #, c-format
 msgid "invalid null character"
 msgstr "недопустимый нулевой символ"
 
-#: src/scan-gram.l:403 src/scan-gram.l:413 src/scan-gram.l:433
+#: src/scan-gram.l:404 src/scan-gram.l:414 src/scan-gram.l:434
 #, fuzzy, c-format
 msgid "invalid number after \\-escape: %s"
 msgstr "недопустимый нулевой символ: %s"
 
-#: src/scan-gram.l:445
+#: src/scan-gram.l:446
 #, fuzzy, c-format
 msgid "invalid character after \\-escape: %s"
 msgstr "недопустимый символ: %s"
 
-#: src/scan-gram.l:765
+#: src/scan-gram.l:766
 #, c-format
 msgid "missing `%s' at end of file"
 msgstr "отсутствует «%s» в конце файла"
 
-#: src/scan-gram.l:776
+#: src/scan-gram.l:777
 #, c-format
 msgid "missing `%s' at end of line"
 msgstr "отсутствует «%s» в конце строки"
 
-#: src/scan-skel.l:145
+#: src/scan-skel.l:146
 #, c-format
 msgid "unclosed %s directive in skeleton"
 msgstr ""
 
-#: src/scan-skel.l:290
+#: src/scan-skel.l:291
 #, c-format
 msgid "too few arguments for %s directive in skeleton"
 msgstr ""
 
-#: src/scan-skel.l:297
+#: src/scan-skel.l:298
 #, c-format
 msgid "too many arguments for %s directive in skeleton"
 msgstr ""
@@ -747,44 +747,44 @@ msgstr "неоднозначный аргумент %s для %s"
 msgid "Valid arguments are:"
 msgstr "Допустимые аргументы:"
 
-#: lib/bitset_stats.c:175
+#: lib/bitset_stats.c:178
 #, c-format
 msgid "%u bitset_allocs, %u freed (%.2f%%).\n"
 msgstr "%u bitset_allocs, %u освобождено (%.2f%%).\n"
 
-#: lib/bitset_stats.c:178
+#: lib/bitset_stats.c:181
 #, c-format
 msgid "%u bitset_sets, %u cached (%.2f%%)\n"
 msgstr "%u bitset_sets, %u кэшировано (%.2f%%)\n"
 
-#: lib/bitset_stats.c:181
+#: lib/bitset_stats.c:184
 #, c-format
 msgid "%u bitset_resets, %u cached (%.2f%%)\n"
 msgstr "%u bitset_resets, %u кэшировано (%.2f%%)\n"
 
-#: lib/bitset_stats.c:184
+#: lib/bitset_stats.c:187
 #, c-format
 msgid "%u bitset_tests, %u cached (%.2f%%)\n"
 msgstr "%u bitset_tests, %u кэшировано (%.2f%%)\n"
 
-#: lib/bitset_stats.c:188
+#: lib/bitset_stats.c:191
 #, c-format
 msgid "%u bitset_lists\n"
 msgstr "%u bitset_lists\n"
 
-#: lib/bitset_stats.c:190
+#: lib/bitset_stats.c:193
 msgid "count log histogram\n"
 msgstr "посчитать гистограмму журнала\n"
 
-#: lib/bitset_stats.c:193
+#: lib/bitset_stats.c:196
 msgid "size log histogram\n"
 msgstr "гистограмма размера журнала\n"
 
-#: lib/bitset_stats.c:196
+#: lib/bitset_stats.c:199
 msgid "density histogram\n"
 msgstr "гистограмма плотности\n"
 
-#: lib/bitset_stats.c:210
+#: lib/bitset_stats.c:213
 #, c-format
 msgid ""
 "Bitset statistics:\n"
@@ -793,85 +793,100 @@ msgstr ""
 "Статистика bitset:\n"
 "\n"
 
-#: lib/bitset_stats.c:213
+#: lib/bitset_stats.c:216
 #, c-format
 msgid "Accumulated runs = %u\n"
 msgstr "Накоплено запусков = %u\n"
 
-#: lib/bitset_stats.c:257 lib/bitset_stats.c:262
+#: lib/bitset_stats.c:260 lib/bitset_stats.c:265
 msgid "Could not read stats file."
 msgstr "Не удается прочитать файл статистики."
 
-#: lib/bitset_stats.c:259
+#: lib/bitset_stats.c:262
 #, c-format
 msgid "Bad stats file size.\n"
 msgstr "Неверный размер файла статистики.\n"
 
-#: lib/bitset_stats.c:285 lib/bitset_stats.c:287
+#: lib/bitset_stats.c:288 lib/bitset_stats.c:290
 msgid "Could not write stats file."
 msgstr "Не удается записать в файл статистики."
 
-#: lib/bitset_stats.c:290
+#: lib/bitset_stats.c:293
 msgid "Could not open stats file for writing."
 msgstr "Не удается открыть файл статистики для записи."
 
-#: lib/error.c:153
+#: lib/error.c:181
 msgid "Unknown system error"
 msgstr "Неизвестная системная ошибка"
 
-#: lib/getopt.c:529 lib/getopt.c:545
+#: lib/getopt.c:527 lib/getopt.c:543
 #, fuzzy, c-format
 msgid "%s: option '%s' is ambiguous\n"
 msgstr "%s: неоднозначный ключ «%s»\n"
 
-#: lib/getopt.c:578 lib/getopt.c:582
+#: lib/getopt.c:576 lib/getopt.c:580
 #, fuzzy, c-format
 msgid "%s: option '--%s' doesn't allow an argument\n"
 msgstr "%s: ключ «--%s» должен использоваться без аргумента\n"
 
-#: lib/getopt.c:591 lib/getopt.c:596
+#: lib/getopt.c:589 lib/getopt.c:594
 #, fuzzy, c-format
 msgid "%s: option '%c%s' doesn't allow an argument\n"
 msgstr "%s: ключ «%c%s» должен использоваться без аргумента\n"
 
-#: lib/getopt.c:639 lib/getopt.c:658 lib/getopt.c:961 lib/getopt.c:980
+#: lib/getopt.c:637 lib/getopt.c:656
 #, fuzzy, c-format
-msgid "%s: option '%s' requires an argument\n"
+msgid "%s: option '--%s' requires an argument\n"
 msgstr "%s: ключ «%s» должен использоваться с аргументом\n"
 
-#: lib/getopt.c:696 lib/getopt.c:699
+#: lib/getopt.c:694 lib/getopt.c:697
 #, fuzzy, c-format
 msgid "%s: unrecognized option '--%s'\n"
 msgstr "%s: неизвестный ключ «--%s»\n"
 
-#: lib/getopt.c:707 lib/getopt.c:710
+#: lib/getopt.c:705 lib/getopt.c:708
 #, fuzzy, c-format
 msgid "%s: unrecognized option '%c%s'\n"
 msgstr "%s: неизвестный ключ «%c%s»\n"
 
-#: lib/getopt.c:759 lib/getopt.c:762
+#: lib/getopt.c:757 lib/getopt.c:760
 #, fuzzy, c-format
 msgid "%s: invalid option -- '%c'\n"
 msgstr "%s: неверный ключ -- %c\n"
 
-#: lib/getopt.c:812 lib/getopt.c:829 lib/getopt.c:1032 lib/getopt.c:1050
+#: lib/getopt.c:810 lib/getopt.c:827 lib/getopt.c:1035 lib/getopt.c:1053
 #, fuzzy, c-format
 msgid "%s: option requires an argument -- '%c'\n"
 msgstr "%s: ключ должен использоваться с аргументом -- %c\n"
 
-#: lib/getopt.c:882 lib/getopt.c:898
+#: lib/getopt.c:883 lib/getopt.c:899
 #, fuzzy, c-format
 msgid "%s: option '-W %s' is ambiguous\n"
 msgstr "%s: неоднозначный ключ «-W %s»\n"
 
-#: lib/getopt.c:922 lib/getopt.c:940
+#: lib/getopt.c:923 lib/getopt.c:941
 #, fuzzy, c-format
 msgid "%s: option '-W %s' doesn't allow an argument\n"
 msgstr "%s: ключ «-W %s» должен использоваться без аргумента\n"
 
+#: lib/getopt.c:962 lib/getopt.c:980
+#, fuzzy, c-format
+msgid "%s: option '-W %s' requires an argument\n"
+msgstr "%s: ключ «%s» должен использоваться с аргументом\n"
+
 #: lib/obstack.c:423 lib/obstack.c:425 lib/xalloc-die.c:34
 msgid "memory exhausted"
 msgstr "память исчерпана"
+
+#: lib/pipe.c:138 lib/pipe.c:141 lib/pipe.c:262 lib/pipe.c:265
+#, fuzzy, c-format
+msgid "cannot create pipe"
+msgstr "не удается закрыть файл"
+
+#: lib/pipe.c:232 lib/pipe.c:346 lib/wait-process.c:282 lib/wait-process.c:356
+#, c-format
+msgid "%s subprocess failed"
+msgstr ""
 
 #. TRANSLATORS:
 #. Get translations for open and closing quotation marks.
@@ -900,7 +915,7 @@ msgstr "«"
 msgid "'"
 msgstr "»"
 
-#: lib/timevar.c:473
+#: lib/timevar.c:475
 msgid ""
 "\n"
 "Execution times (seconds)\n"
@@ -908,14 +923,34 @@ msgstr ""
 "\n"
 "Время выполнения (сек.)\n"
 
-#: lib/timevar.c:523
+#: lib/timevar.c:525
 msgid " TOTAL                 :"
 msgstr " СУММА                 :"
 
-#: lib/timevar.c:559
+#: lib/timevar.c:561
 #, c-format
 msgid "time in %s: %ld.%06ld (%ld%%)\n"
 msgstr "время в %s: %ld.%06ld (%ld%%)\n"
+
+#: lib/w32spawn.h:40
+#, c-format
+msgid "_open_osfhandle failed"
+msgstr ""
+
+#: lib/w32spawn.h:81
+#, c-format
+msgid "cannot restore fd %d: dup2 failed"
+msgstr ""
+
+#: lib/wait-process.c:223 lib/wait-process.c:255 lib/wait-process.c:317
+#, c-format
+msgid "%s subprocess"
+msgstr ""
+
+#: lib/wait-process.c:274 lib/wait-process.c:346
+#, c-format
+msgid "%s subprocess got fatal signal %d"
+msgstr ""
 
 #~ msgid "invalid escape sequence: %s"
 #~ msgstr "недопустимая экранирующая последовательность: %s"

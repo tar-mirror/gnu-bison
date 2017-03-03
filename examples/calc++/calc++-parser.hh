@@ -1,8 +1,9 @@
-/* A Bison parser, made by GNU Bison 2.4.2.  */
+/* A Bison parser, made by GNU Bison 2.4.3.  */
 
 /* Skeleton interface for Bison LALR(1) parsers in C++
    
-      Copyright (C) 2002-2010 Free Software Foundation, Inc.
+      Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free
+   Software Foundation, Inc.
    
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,16 +38,16 @@
 
 /* "%code requires" blocks.  */
 
-/* Line 34 of lalr1.cc  */
-#line 8429 "../../doc/bison.texinfo"
+/* Line 35 of lalr1.cc  */
+#line 8440 "../../doc/bison.texinfo"
 
 # include <string>
 class calcxx_driver;
 
 
 
-/* Line 34 of lalr1.cc  */
-#line 50 "./calc++-parser.hh"
+/* Line 35 of lalr1.cc  */
+#line 51 "./calc++-parser.hh"
 
 
 #include <string>
@@ -56,15 +57,15 @@ class calcxx_driver;
 
 namespace yy {
 
-/* Line 34 of lalr1.cc  */
-#line 61 "./calc++-parser.hh"
+/* Line 35 of lalr1.cc  */
+#line 62 "./calc++-parser.hh"
   class position;
   class location;
 
 } // yy
 
-/* Line 34 of lalr1.cc  */
-#line 68 "./calc++-parser.hh"
+/* Line 35 of lalr1.cc  */
+#line 69 "./calc++-parser.hh"
 
 #include "location.hh"
 
@@ -108,8 +109,8 @@ do {							\
 
 namespace yy {
 
-/* Line 34 of lalr1.cc  */
-#line 113 "./calc++-parser.hh"
+/* Line 35 of lalr1.cc  */
+#line 114 "./calc++-parser.hh"
 
   /// A Bison parser.
   class calcxx_parser
@@ -120,16 +121,16 @@ namespace yy {
     union semantic_type
     {
 
-/* Line 34 of lalr1.cc  */
-#line 8481 "../../doc/bison.texinfo"
+/* Line 35 of lalr1.cc  */
+#line 8492 "../../doc/bison.texinfo"
 
   int          ival;
   std::string *sval;
 
 
 
-/* Line 34 of lalr1.cc  */
-#line 133 "./calc++-parser.hh"
+/* Line 35 of lalr1.cc  */
+#line 134 "./calc++-parser.hh"
     };
 #else
     typedef YYSTYPE semantic_type;
@@ -317,8 +318,8 @@ namespace yy {
 
 } // yy
 
-/* Line 34 of lalr1.cc  */
-#line 322 "./calc++-parser.hh"
+/* Line 35 of lalr1.cc  */
+#line 323 "./calc++-parser.hh"
 
 
 

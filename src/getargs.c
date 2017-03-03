@@ -1,7 +1,7 @@
 /* Parse command line arguments for Bison.
 
-   Copyright (C) 1984, 1986, 1989, 1992, 2000-2010 Free Software
-   Foundation, Inc.
+   Copyright (C) 1984, 1986, 1989, 1992, 2000, 2001, 2002, 2003, 2004,
+   2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -370,9 +370,9 @@ skeleton_arg (char const *arg, int prio, location const *loc)
       char const *msg =
 	_("multiple skeleton declarations are invalid");
       if (loc)
-	complain_at (*loc, msg);
+	complain_at (*loc, "%s", msg);
       else
-	complain (msg);
+	complain ("%s", msg);
     }
 }
 

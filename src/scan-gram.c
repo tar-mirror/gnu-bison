@@ -36,7 +36,7 @@
 #define FLEX_SCANNER
 #define YY_FLEX_MAJOR_VERSION 2
 #define YY_FLEX_MINOR_VERSION 5
-#define YY_FLEX_SUBMINOR_VERSION 34
+#define YY_FLEX_SUBMINOR_VERSION 35
 #if YY_FLEX_SUBMINOR_VERSION > 0
 #define FLEX_BETA
 #endif
@@ -97,7 +97,6 @@ typedef int flex_int32_t;
 typedef unsigned char flex_uint8_t; 
 typedef unsigned short int flex_uint16_t;
 typedef unsigned int flex_uint32_t;
-#endif /* ! C99 */
 
 /* Limits of integral types. */
 #ifndef INT8_MIN
@@ -127,6 +126,8 @@ typedef unsigned int flex_uint32_t;
 #ifndef UINT32_MAX
 #define UINT32_MAX             (4294967295U)
 #endif
+
+#endif /* ! C99 */
 
 #endif /* ! FLEXINT_H */
 
@@ -202,7 +203,15 @@ typedef unsigned int flex_uint32_t;
 
 /* Size of default input buffer. */
 #ifndef YY_BUF_SIZE
+#ifdef __ia64__
+/* On IA-64, the buffer size is 16k, not 8k.
+ * Moreover, YY_BUF_SIZE is 2*YY_READ_BUF_SIZE in the general case.
+ * Ditto for the __ia64__ case accordingly.
+ */
+#define YY_BUF_SIZE 32768
+#else
 #define YY_BUF_SIZE 16384
+#endif /* __ia64__ */
 #endif
 
 /* The state buf must be large enough to hold one state per character in the main buffer.
@@ -245,13 +254,6 @@ extern FILE *gram_in, *gram_out;
 	while ( 0 )
 
 #define unput(c) yyunput( c, (yytext_ptr)  )
-
-/* The following is because we cannot portably get our hands on size_t
- * (without autoconf's help, which isn't available because we want
- * flex-generated scanners to compile on their own).
- * Given that the standard has decreed that size_t exists since 1989,
- * I guess we can afford to depend on it. Manoj.
- */
 
 #ifndef YY_TYPEDEF_YY_SIZE_T
 #define YY_TYPEDEF_YY_SIZE_T
@@ -862,18 +864,18 @@ int gram__flex_debug = 1;
 
 static yyconst flex_int16_t yy_rule_linenum[102] =
     {   0,
-      135,  136,  137,  138,  146,  157,  158,  159,  160,  161,
-      162,  163,  164,  165,  166,  167,  168,  169,  170,  171,
-      172,  173,  174,  175,  176,  177,  178,  179,  180,  181,
-      182,  183,  184,  185,  186,  187,  188,  189,  190,  191,
-      192,  193,  194,  195,  196,  197,  198,  200,  204,  205,
-      206,  207,  208,  210,  216,  220,  226,  229,  232,  235,
-      243,  251,  258,  275,  280,  301,  302,  313,  324,  325,
-      337,  363,  390,  400,  409,  419,  420,  421,  422,  423,
-      424,  425,  428,  430,  438,  455,  460,  461,  467,  468,
-      479,  485,  491,  497,  513,  514,  515,  531,  550,  590,
+      136,  137,  138,  139,  147,  158,  159,  160,  161,  162,
+      163,  164,  165,  166,  167,  168,  169,  170,  171,  172,
+      173,  174,  175,  176,  177,  178,  179,  180,  181,  182,
+      183,  184,  185,  186,  187,  188,  189,  190,  191,  192,
+      193,  194,  195,  196,  197,  198,  199,  201,  205,  206,
+      207,  208,  209,  211,  217,  221,  227,  230,  233,  236,
+      244,  252,  259,  276,  281,  302,  303,  314,  325,  326,
+      338,  364,  391,  401,  410,  420,  421,  422,  423,  424,
+      425,  426,  429,  431,  439,  456,  461,  462,  468,  469,
+      480,  486,  492,  498,  514,  515,  516,  532,  551,  591,
 
-      591
+      592
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -887,7 +889,8 @@ char *gram_text;
 #line 1 "scan-gram.l"
 /* Bison Grammar Scanner                             -*- C -*-
 
-   Copyright (C) 2002-2007, 2009-2010 Free Software Foundation, Inc.
+   Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2009, 2010 Free
+   Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -904,7 +907,7 @@ char *gram_text;
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 #define YY_NO_INPUT 1
-#line 24 "scan-gram.l"
+#line 25 "scan-gram.l"
 /* Work around a bug in flex 2.5.31.  See Debian bug 333231
    <http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=333231>.  */
 #undef gram_wrap
@@ -975,7 +978,7 @@ to capture the sequence `identifier :'. */
    NUL and newline, as this simplifies our implementation.  */
 /* Zero or more instances of backslash-newline.  Following GCC, allow
    white space between the backslash and the newline.  */
-#line 979 "scan-gram.c"
+#line 982 "scan-gram.c"
 
 #define INITIAL 0
 #define SC_YACC_COMMENT 1
@@ -1015,9 +1018,39 @@ static int yy_init_globals (void );
 /* %endif */
 /* %if-reentrant */
 /* %endif */
+/* %endif End reentrant structures and macros. */
+
+/* Accessor methods to globals.
+   These are made visible to non-reentrant scanners for convenience. */
+
+int gram_lex_destroy (void );
+
+int gram_get_debug (void );
+
+void gram_set_debug (int debug_flag  );
+
+YY_EXTRA_TYPE gram_get_extra (void );
+
+void gram_set_extra (YY_EXTRA_TYPE user_defined  );
+
+FILE *gram_get_in (void );
+
+void gram_set_in  (FILE * in_str  );
+
+FILE *gram_get_out (void );
+
+void gram_set_out  (FILE * out_str  );
+
+int gram_get_leng (void );
+
+char *gram_get_text (void );
+
+int gram_get_lineno (void );
+
+void gram_set_lineno (int line_number  );
+
 /* %if-bison-bridge */
 /* %endif */
-/* %endif End reentrant structures and macros. */
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -1065,7 +1098,12 @@ static int input (void );
 
 /* Amount of stuff to slurp up with each read. */
 #ifndef YY_READ_BUF_SIZE
+#ifdef __ia64__
+/* On IA-64, the buffer size is 16k, not 8k */
+#define YY_READ_BUF_SIZE 16384
+#else
 #define YY_READ_BUF_SIZE 8192
+#endif /* __ia64__ */
 #endif
 
 /* Copy whatever the last rule matched to the standard output. */
@@ -1074,7 +1112,7 @@ static int input (void );
 /* This used to be an fputs(), but since the string might contain NUL's,
  * we now use fwrite().
  */
-#define ECHO fwrite( gram_text, gram_leng, 1, gram_out )
+#define ECHO do { if (fwrite( gram_text, gram_leng, 1, gram_out )) {} } while (0)
 /* %endif */
 /* %if-c++-only C++ definition */
 /* %endif */
@@ -1089,7 +1127,7 @@ static int input (void );
 	if ( YY_CURRENT_BUFFER_LVALUE->yy_is_interactive ) \
 		{ \
 		int c = '*'; \
-		int n; \
+		size_t n; \
 		for ( n = 0; n < max_size && \
 			     (c = getc( gram_in )) != EOF && c != '\n'; ++n ) \
 			buf[n] = (char) c; \
@@ -1199,7 +1237,7 @@ YY_DECL
 	register int yy_act;
     
 /* %% [7.0] user's declarations go here */
-#line 106 "scan-gram.l"
+#line 107 "scan-gram.l"
 
 
   /* Nesting level of the current code in braces.  */
@@ -1226,7 +1264,7 @@ YY_DECL
   | Scanning white space.  |
   `-----------------------*/
 
-#line 1230 "scan-gram.c"
+#line 1268 "scan-gram.c"
 
 	if ( !(yy_init) )
 		{
@@ -1340,21 +1378,21 @@ do_action:	/* This label is used only to access EOF actions. */
 /* Comments and white space.  */
 case 1:
 YY_RULE_SETUP
-#line 135 "scan-gram.l"
+#line 136 "scan-gram.l"
 warn_at (*loc, _("stray `,' treated as white space"));
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
-#line 137 "scan-gram.l"
+#line 138 "scan-gram.l"
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 137 "scan-gram.l"
+#line 138 "scan-gram.l"
 ;
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 138 "scan-gram.l"
+#line 139 "scan-gram.l"
 {
     token_start = loc->start;
     context_state = YY_START;
@@ -1366,7 +1404,7 @@ YY_RULE_SETUP
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 146 "scan-gram.l"
+#line 147 "scan-gram.l"
 {
     handle_syncline (gram_text + sizeof "#line " - 1, *loc);
   }
@@ -1379,249 +1417,249 @@ YY_RULE_SETUP
 
 case 6:
 YY_RULE_SETUP
-#line 157 "scan-gram.l"
+#line 158 "scan-gram.l"
 return PERCENT_NONASSOC;
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 158 "scan-gram.l"
+#line 159 "scan-gram.l"
 return PERCENT_CODE;
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 159 "scan-gram.l"
+#line 160 "scan-gram.l"
 return PERCENT_DEBUG;
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 160 "scan-gram.l"
+#line 161 "scan-gram.l"
 return PERCENT_DEFAULT_PREC;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 161 "scan-gram.l"
+#line 162 "scan-gram.l"
 return PERCENT_DEFINE;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 162 "scan-gram.l"
+#line 163 "scan-gram.l"
 return PERCENT_DEFINES;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 163 "scan-gram.l"
+#line 164 "scan-gram.l"
 return PERCENT_DESTRUCTOR;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 164 "scan-gram.l"
+#line 165 "scan-gram.l"
 return PERCENT_DPREC;
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 165 "scan-gram.l"
+#line 166 "scan-gram.l"
 return PERCENT_ERROR_VERBOSE;
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 166 "scan-gram.l"
+#line 167 "scan-gram.l"
 return PERCENT_EXPECT;
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 167 "scan-gram.l"
+#line 168 "scan-gram.l"
 return PERCENT_EXPECT_RR;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 168 "scan-gram.l"
+#line 169 "scan-gram.l"
 return PERCENT_FILE_PREFIX;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 169 "scan-gram.l"
+#line 170 "scan-gram.l"
 return PERCENT_YACC;
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 170 "scan-gram.l"
+#line 171 "scan-gram.l"
 return PERCENT_INITIAL_ACTION;
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 171 "scan-gram.l"
+#line 172 "scan-gram.l"
 return PERCENT_GLR_PARSER;
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 172 "scan-gram.l"
+#line 173 "scan-gram.l"
 return PERCENT_LANGUAGE;
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 173 "scan-gram.l"
+#line 174 "scan-gram.l"
 return PERCENT_LEFT;
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 174 "scan-gram.l"
+#line 175 "scan-gram.l"
 return PERCENT_LEX_PARAM;
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 175 "scan-gram.l"
+#line 176 "scan-gram.l"
 return PERCENT_LOCATIONS;
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 176 "scan-gram.l"
+#line 177 "scan-gram.l"
 return PERCENT_MERGE;
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 177 "scan-gram.l"
+#line 178 "scan-gram.l"
 return PERCENT_NAME_PREFIX;
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 178 "scan-gram.l"
+#line 179 "scan-gram.l"
 return PERCENT_NO_DEFAULT_PREC;
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 179 "scan-gram.l"
+#line 180 "scan-gram.l"
 return PERCENT_NO_LINES;
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 180 "scan-gram.l"
+#line 181 "scan-gram.l"
 return PERCENT_NONASSOC;
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 181 "scan-gram.l"
+#line 182 "scan-gram.l"
 return PERCENT_NONDETERMINISTIC_PARSER;
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 182 "scan-gram.l"
+#line 183 "scan-gram.l"
 return PERCENT_NTERM;
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 183 "scan-gram.l"
+#line 184 "scan-gram.l"
 return PERCENT_OUTPUT;
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 184 "scan-gram.l"
+#line 185 "scan-gram.l"
 return PERCENT_PARSE_PARAM;
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 185 "scan-gram.l"
+#line 186 "scan-gram.l"
 return PERCENT_PREC;
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 186 "scan-gram.l"
+#line 187 "scan-gram.l"
 return PERCENT_PRINTER;
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 187 "scan-gram.l"
+#line 188 "scan-gram.l"
 return PERCENT_PURE_PARSER;
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 188 "scan-gram.l"
+#line 189 "scan-gram.l"
 return PERCENT_REQUIRE;
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 189 "scan-gram.l"
+#line 190 "scan-gram.l"
 return PERCENT_RIGHT;
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 190 "scan-gram.l"
+#line 191 "scan-gram.l"
 return PERCENT_SKELETON;
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 191 "scan-gram.l"
+#line 192 "scan-gram.l"
 return PERCENT_START;
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 192 "scan-gram.l"
+#line 193 "scan-gram.l"
 return PERCENT_TOKEN;
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 193 "scan-gram.l"
+#line 194 "scan-gram.l"
 return PERCENT_TOKEN;
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 194 "scan-gram.l"
+#line 195 "scan-gram.l"
 return PERCENT_TOKEN_TABLE;
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 195 "scan-gram.l"
+#line 196 "scan-gram.l"
 return PERCENT_TYPE;
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 196 "scan-gram.l"
+#line 197 "scan-gram.l"
 return PERCENT_UNION;
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 197 "scan-gram.l"
+#line 198 "scan-gram.l"
 return PERCENT_VERBOSE;
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 198 "scan-gram.l"
+#line 199 "scan-gram.l"
 return PERCENT_YACC;
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 200 "scan-gram.l"
+#line 201 "scan-gram.l"
 {
     complain_at (*loc, _("invalid directive: %s"), quote (gram_text));
   }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 204 "scan-gram.l"
+#line 205 "scan-gram.l"
 return EQUAL;
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 205 "scan-gram.l"
+#line 206 "scan-gram.l"
 return PIPE;
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 206 "scan-gram.l"
+#line 207 "scan-gram.l"
 return SEMICOLON;
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 207 "scan-gram.l"
+#line 208 "scan-gram.l"
 return TYPE_TAG_ANY;
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 208 "scan-gram.l"
+#line 209 "scan-gram.l"
 return TYPE_TAG_NONE;
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 210 "scan-gram.l"
+#line 211 "scan-gram.l"
 {
     val->uniqstr = uniqstr_new (gram_text);
     id_loc = *loc;
@@ -1630,7 +1668,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 216 "scan-gram.l"
+#line 217 "scan-gram.l"
 {
     val->integer = scan_integer (gram_text, 10, *loc);
     return INT;
@@ -1638,7 +1676,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 220 "scan-gram.l"
+#line 221 "scan-gram.l"
 {
     val->integer = scan_integer (gram_text, 16, *loc);
     return INT;
@@ -1647,25 +1685,25 @@ YY_RULE_SETUP
 /* Characters.  We don't check there is only one.  */
 case 57:
 YY_RULE_SETUP
-#line 226 "scan-gram.l"
+#line 227 "scan-gram.l"
 STRING_GROW; token_start = loc->start; BEGIN SC_ESCAPED_CHARACTER;
 	YY_BREAK
 /* Strings. */
 case 58:
 YY_RULE_SETUP
-#line 229 "scan-gram.l"
+#line 230 "scan-gram.l"
 token_start = loc->start; BEGIN SC_ESCAPED_STRING;
 	YY_BREAK
 /* Prologue. */
 case 59:
 YY_RULE_SETUP
-#line 232 "scan-gram.l"
+#line 233 "scan-gram.l"
 code_start = loc->start; BEGIN SC_PROLOGUE;
 	YY_BREAK
 /* Code in between braces.  */
 case 60:
 YY_RULE_SETUP
-#line 235 "scan-gram.l"
+#line 236 "scan-gram.l"
 {
     STRING_GROW;
     braces_level = 0;
@@ -1676,7 +1714,7 @@ YY_RULE_SETUP
 /* A type. */
 case 61:
 YY_RULE_SETUP
-#line 243 "scan-gram.l"
+#line 244 "scan-gram.l"
 {
     obstack_grow (&obstack_for_string, gram_text + 1, gram_leng - 2);
     STRING_FINISH;
@@ -1687,7 +1725,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 251 "scan-gram.l"
+#line 252 "scan-gram.l"
 {
     static int percent_percent_count;
     if (++percent_percent_count == 2)
@@ -1697,13 +1735,13 @@ YY_RULE_SETUP
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 258 "scan-gram.l"
+#line 259 "scan-gram.l"
 {
     complain_at (*loc, _("invalid character: %s"), quote (gram_text));
   }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 262 "scan-gram.l"
+#line 263 "scan-gram.l"
 {
     loc->start = loc->end = scanner_cursor;
     yyterminate ();
@@ -1717,7 +1755,7 @@ case YY_STATE_EOF(INITIAL):
 
 case 64:
 YY_RULE_SETUP
-#line 275 "scan-gram.l"
+#line 276 "scan-gram.l"
 {
     *loc = id_loc;
     BEGIN INITIAL;
@@ -1726,7 +1764,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 280 "scan-gram.l"
+#line 281 "scan-gram.l"
 {
     scanner_cursor.column -= mbsnwidth (gram_text, gram_leng, 0);
     yyless (0);
@@ -1736,7 +1774,7 @@ YY_RULE_SETUP
   }
 	YY_BREAK
 case YY_STATE_EOF(SC_AFTER_IDENTIFIER):
-#line 287 "scan-gram.l"
+#line 288 "scan-gram.l"
 {
     *loc = id_loc;
     BEGIN INITIAL;
@@ -1751,17 +1789,17 @@ case YY_STATE_EOF(SC_AFTER_IDENTIFIER):
 
 case 66:
 YY_RULE_SETUP
-#line 301 "scan-gram.l"
+#line 302 "scan-gram.l"
 BEGIN context_state;
 	YY_BREAK
 case 67:
 /* rule 67 can match eol */
 YY_RULE_SETUP
-#line 302 "scan-gram.l"
+#line 303 "scan-gram.l"
 ;
 	YY_BREAK
 case YY_STATE_EOF(SC_YACC_COMMENT):
-#line 303 "scan-gram.l"
+#line 304 "scan-gram.l"
 unexpected_eof (token_start, "*/"); BEGIN context_state;
 	YY_BREAK
 
@@ -1773,11 +1811,11 @@ unexpected_eof (token_start, "*/"); BEGIN context_state;
 case 68:
 /* rule 68 can match eol */
 YY_RULE_SETUP
-#line 313 "scan-gram.l"
+#line 314 "scan-gram.l"
 STRING_GROW; BEGIN context_state;
 	YY_BREAK
 case YY_STATE_EOF(SC_COMMENT):
-#line 314 "scan-gram.l"
+#line 315 "scan-gram.l"
 unexpected_eof (token_start, "*/"); BEGIN context_state;
 	YY_BREAK
 
@@ -1789,17 +1827,17 @@ unexpected_eof (token_start, "*/"); BEGIN context_state;
 case 69:
 /* rule 69 can match eol */
 YY_RULE_SETUP
-#line 324 "scan-gram.l"
+#line 325 "scan-gram.l"
 STRING_GROW; BEGIN context_state;
 	YY_BREAK
 case 70:
 /* rule 70 can match eol */
 YY_RULE_SETUP
-#line 325 "scan-gram.l"
+#line 326 "scan-gram.l"
 STRING_GROW;
 	YY_BREAK
 case YY_STATE_EOF(SC_LINE_COMMENT):
-#line 326 "scan-gram.l"
+#line 327 "scan-gram.l"
 BEGIN context_state;
 	YY_BREAK
 
@@ -1812,7 +1850,7 @@ BEGIN context_state;
 case 71:
 /* rule 71 can match eol */
 YY_RULE_SETUP
-#line 337 "scan-gram.l"
+#line 338 "scan-gram.l"
 {
     if (gram_text[0] == '\n')
       unexpected_newline (token_start, "\"");
@@ -1824,7 +1862,7 @@ YY_RULE_SETUP
   }
 	YY_BREAK
 case YY_STATE_EOF(SC_ESCAPED_STRING):
-#line 346 "scan-gram.l"
+#line 347 "scan-gram.l"
 {
     unexpected_eof (token_start, "\"");
     STRING_FINISH;
@@ -1844,7 +1882,7 @@ case YY_STATE_EOF(SC_ESCAPED_STRING):
 case 72:
 /* rule 72 can match eol */
 YY_RULE_SETUP
-#line 363 "scan-gram.l"
+#line 364 "scan-gram.l"
 {
     if (gram_text[0] == '\n')
       unexpected_newline (token_start, "'");
@@ -1858,7 +1896,7 @@ YY_RULE_SETUP
   }
 	YY_BREAK
 case YY_STATE_EOF(SC_ESCAPED_CHARACTER):
-#line 374 "scan-gram.l"
+#line 375 "scan-gram.l"
 {
     unexpected_eof (token_start, "'");
     STRING_FINISH;
@@ -1877,7 +1915,7 @@ case YY_STATE_EOF(SC_ESCAPED_CHARACTER):
 
 case 73:
 YY_RULE_SETUP
-#line 390 "scan-gram.l"
+#line 391 "scan-gram.l"
 complain_at (*loc, _("invalid null character"));
 	YY_BREAK
 
@@ -1888,7 +1926,7 @@ complain_at (*loc, _("invalid null character"));
 
 case 74:
 YY_RULE_SETUP
-#line 400 "scan-gram.l"
+#line 401 "scan-gram.l"
 {
     unsigned long int c = strtoul (gram_text + 1, NULL, 8);
     if (!c || UCHAR_MAX < c)
@@ -1900,7 +1938,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 409 "scan-gram.l"
+#line 410 "scan-gram.l"
 {
     verify (UCHAR_MAX < ULONG_MAX);
     unsigned long int c = strtoul (gram_text + 2, NULL, 16);
@@ -1913,48 +1951,48 @@ YY_RULE_SETUP
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 419 "scan-gram.l"
+#line 420 "scan-gram.l"
 obstack_1grow (&obstack_for_string, '\a');
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
-#line 420 "scan-gram.l"
+#line 421 "scan-gram.l"
 obstack_1grow (&obstack_for_string, '\b');
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 421 "scan-gram.l"
+#line 422 "scan-gram.l"
 obstack_1grow (&obstack_for_string, '\f');
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 422 "scan-gram.l"
+#line 423 "scan-gram.l"
 obstack_1grow (&obstack_for_string, '\n');
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
-#line 423 "scan-gram.l"
+#line 424 "scan-gram.l"
 obstack_1grow (&obstack_for_string, '\r');
 	YY_BREAK
 case 81:
 YY_RULE_SETUP
-#line 424 "scan-gram.l"
+#line 425 "scan-gram.l"
 obstack_1grow (&obstack_for_string, '\t');
 	YY_BREAK
 case 82:
 YY_RULE_SETUP
-#line 425 "scan-gram.l"
+#line 426 "scan-gram.l"
 obstack_1grow (&obstack_for_string, '\v');
 	YY_BREAK
 /* \\[\"\'?\\] would be shorter, but it confuses xgettext.  */
 case 83:
 YY_RULE_SETUP
-#line 428 "scan-gram.l"
+#line 429 "scan-gram.l"
 obstack_1grow (&obstack_for_string, gram_text[1]);
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
-#line 430 "scan-gram.l"
+#line 431 "scan-gram.l"
 {
     int c = convert_ucn_to_byte (gram_text);
     if (c <= 0)
@@ -1967,7 +2005,7 @@ YY_RULE_SETUP
 case 85:
 /* rule 85 can match eol */
 YY_RULE_SETUP
-#line 438 "scan-gram.l"
+#line 439 "scan-gram.l"
 {
     char const *p = gram_text + 1;
     /* Quote only if escaping won't make the character visible.  */
@@ -1987,7 +2025,7 @@ YY_RULE_SETUP
 case 86:
 /* rule 86 can match eol */
 YY_RULE_SETUP
-#line 455 "scan-gram.l"
+#line 456 "scan-gram.l"
 STRING_GROW;
 	YY_BREAK
 
@@ -1995,17 +2033,17 @@ STRING_GROW;
 
 case 87:
 YY_RULE_SETUP
-#line 460 "scan-gram.l"
+#line 461 "scan-gram.l"
 STRING_GROW; BEGIN context_state;
 	YY_BREAK
 case 88:
 /* rule 88 can match eol */
 YY_RULE_SETUP
-#line 461 "scan-gram.l"
+#line 462 "scan-gram.l"
 unexpected_newline (token_start, "'"); BEGIN context_state;
 	YY_BREAK
 case YY_STATE_EOF(SC_CHARACTER):
-#line 462 "scan-gram.l"
+#line 463 "scan-gram.l"
 unexpected_eof (token_start, "'"); BEGIN context_state;
 	YY_BREAK
 
@@ -2013,17 +2051,17 @@ unexpected_eof (token_start, "'"); BEGIN context_state;
 
 case 89:
 YY_RULE_SETUP
-#line 467 "scan-gram.l"
+#line 468 "scan-gram.l"
 STRING_GROW; BEGIN context_state;
 	YY_BREAK
 case 90:
 /* rule 90 can match eol */
 YY_RULE_SETUP
-#line 468 "scan-gram.l"
+#line 469 "scan-gram.l"
 unexpected_newline (token_start, "\""); BEGIN context_state;
 	YY_BREAK
 case YY_STATE_EOF(SC_STRING):
-#line 469 "scan-gram.l"
+#line 470 "scan-gram.l"
 unexpected_eof (token_start, "\""); BEGIN context_state;
 	YY_BREAK
 
@@ -2034,7 +2072,7 @@ unexpected_eof (token_start, "\""); BEGIN context_state;
 
 case 91:
 YY_RULE_SETUP
-#line 479 "scan-gram.l"
+#line 480 "scan-gram.l"
 {
     STRING_GROW;
     context_state = YY_START;
@@ -2044,7 +2082,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 92:
 YY_RULE_SETUP
-#line 485 "scan-gram.l"
+#line 486 "scan-gram.l"
 {
     STRING_GROW;
     context_state = YY_START;
@@ -2055,7 +2093,7 @@ YY_RULE_SETUP
 case 93:
 /* rule 93 can match eol */
 YY_RULE_SETUP
-#line 491 "scan-gram.l"
+#line 492 "scan-gram.l"
 {
     STRING_GROW;
     context_state = YY_START;
@@ -2066,7 +2104,7 @@ YY_RULE_SETUP
 case 94:
 /* rule 94 can match eol */
 YY_RULE_SETUP
-#line 497 "scan-gram.l"
+#line 498 "scan-gram.l"
 {
     STRING_GROW;
     context_state = YY_START;
@@ -2083,18 +2121,18 @@ YY_RULE_SETUP
 case 95:
 /* rule 95 can match eol */
 YY_RULE_SETUP
-#line 513 "scan-gram.l"
+#line 514 "scan-gram.l"
 STRING_GROW; braces_level++;
 	YY_BREAK
 case 96:
 /* rule 96 can match eol */
 YY_RULE_SETUP
-#line 514 "scan-gram.l"
+#line 515 "scan-gram.l"
 STRING_GROW; braces_level--;
 	YY_BREAK
 case 97:
 YY_RULE_SETUP
-#line 515 "scan-gram.l"
+#line 516 "scan-gram.l"
 {
     obstack_1grow (&obstack_for_string, '}');
 
@@ -2114,11 +2152,11 @@ YY_RULE_SETUP
 case 98:
 /* rule 98 can match eol */
 YY_RULE_SETUP
-#line 531 "scan-gram.l"
+#line 532 "scan-gram.l"
 STRING_GROW;
 	YY_BREAK
 case YY_STATE_EOF(SC_BRACED_CODE):
-#line 533 "scan-gram.l"
+#line 534 "scan-gram.l"
 {
     unexpected_eof (code_start, "}");
     STRING_FINISH;
@@ -2136,7 +2174,7 @@ case YY_STATE_EOF(SC_BRACED_CODE):
 
 case 99:
 YY_RULE_SETUP
-#line 550 "scan-gram.l"
+#line 551 "scan-gram.l"
 {
     STRING_FINISH;
     loc->start = code_start;
@@ -2146,7 +2184,7 @@ YY_RULE_SETUP
   }
 	YY_BREAK
 case YY_STATE_EOF(SC_PROLOGUE):
-#line 558 "scan-gram.l"
+#line 559 "scan-gram.l"
 {
     unexpected_eof (code_start, "%}");
     STRING_FINISH;
@@ -2164,7 +2202,7 @@ case YY_STATE_EOF(SC_PROLOGUE):
 
 
 case YY_STATE_EOF(SC_EPILOGUE):
-#line 576 "scan-gram.l"
+#line 577 "scan-gram.l"
 {
     STRING_FINISH;
     loc->start = code_start;
@@ -2178,19 +2216,19 @@ case YY_STATE_EOF(SC_EPILOGUE):
   | By default, grow the string obstack with the input.  |
   `-----------------------------------------------------*/
 case 100:
-#line 591 "scan-gram.l"
+#line 592 "scan-gram.l"
 case 101:
 /* rule 101 can match eol */
 YY_RULE_SETUP
-#line 591 "scan-gram.l"
+#line 592 "scan-gram.l"
 STRING_GROW;
 	YY_BREAK
 case 102:
 YY_RULE_SETUP
-#line 593 "scan-gram.l"
+#line 594 "scan-gram.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 2194 "scan-gram.c"
+#line 2232 "scan-gram.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -3009,8 +3047,8 @@ YY_BUFFER_STATE gram__scan_string (yyconst char * yystr )
 /* %if-c-only */
 /** Setup the input buffer state to scan the given bytes. The next call to gram_lex() will
  * scan from a @e copy of @a bytes.
- * @param bytes the byte buffer to scan
- * @param len the number of bytes in the buffer pointed to by @a bytes.
+ * @param yybytes the byte buffer to scan
+ * @param _yybytes_len the number of bytes in the buffer pointed to by @a bytes.
  * 
  * @return the newly allocated buffer state object.
  */
@@ -3279,7 +3317,7 @@ void gram_free (void * ptr )
 
 /* %ok-for-header */
 
-#line 593 "scan-gram.l"
+#line 594 "scan-gram.l"
 
 
 

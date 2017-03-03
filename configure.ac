@@ -1,6 +1,7 @@
 # Configure template for GNU Bison.                   -*-Autoconf-*-
 #
-# Copyright (C) 2001-2010 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+# 2010 Free Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,8 +16,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# We have strange test case titles, so we need Autoconf 2.61 or better.
-AC_PREREQ(2.61)
+# In order for some versions of Sun Studio to compile our C++ test cases
+# correctly, we need Autoconf 2.64 or better to handle the restrict
+# keyword in at least string.h from gnulib.
+AC_PREREQ(2.64)
 
 AC_INIT([GNU Bison],
         m4_esyscmd([build-aux/git-version-gen .tarball-version]),
@@ -34,11 +37,15 @@ AC_CONFIG_MACRO_DIR([m4])
 #
 # To avoid 1.11, we make 1.11.1 the minimum version.
 #
-# We want gnits strictness only when rolling a formal release so that we can,
-# for example, run make dist at other times without being required to add a
-# bogus NEWS entry.
+# We want gnits strictness only when rolling a stable release.  For
+# release candidates, we use version strings like 2.4.3_rc1, but gnits
+# doesn't like that, so we let the underscore disable gnits.  Between
+# releases, we want to be able run make dist without being required to
+# add a bogus NEWS entry.  In that case, the version string
+# automatically contains a dash, which we also let disable gnits.
 AM_INIT_AUTOMAKE([1.11.1 dist-bzip2]
-                 m4_bmatch(m4_defn([AC_PACKAGE_VERSION]), [-], [gnu], [gnits]))
+                 m4_bmatch(m4_defn([AC_PACKAGE_VERSION]), [[-_]],
+                           [gnu], [gnits]))
 AC_CONFIG_HEADERS([lib/config.h:lib/config.hin])
 
 # Checks for the compiler.
@@ -127,9 +134,10 @@ BISON_PREREQ_SUBPIPE
 BISON_PREREQ_TIMEVAR
 
 # Gettext.
-# We've never tested with gettext versions before 0.15, so play it safe.
+# We use gnulib, which is only guaranteed to work properly with the
+# latest Gettext.
 AM_GNU_GETTEXT([external], [need-ngettext])
-AM_GNU_GETTEXT_VERSION([0.15])
+AM_GNU_GETTEXT_VERSION([0.18])
 BISON_I18N
 
 # Internationalized parsers.

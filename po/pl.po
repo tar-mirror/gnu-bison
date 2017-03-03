@@ -5,24 +5,24 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bison 2.4.1b\n"
+"Project-Id-Version: bison 2.4.3-rc1\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2010-03-20 13:15-0400\n"
-"PO-Revision-Date: 2010-02-24 23:08+0100\n"
+"POT-Creation-Date: 2010-08-05 21:01-0400\n"
+"PO-Revision-Date: 2010-07-30 21:42+0200\n"
 "Last-Translator: Wojciech Polak <polak@gnu.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
-#: src/complain.c:93 src/complain.c:100 src/gram.c:311 src/reduce.c:387
-#: src/reduce.c:396
+#: src/complain.c:101 src/complain.c:108
 msgid "warning"
 msgstr "ostrzeżenie"
 
-#: src/complain.c:130 src/complain.c:137
+#: src/complain.c:138 src/complain.c:145
 msgid "fatal error"
 msgstr "fatalny błąd"
 
@@ -315,20 +315,20 @@ msgstr "brakujący argument za `%s'"
 msgid "extra operand `%s'"
 msgstr "dodatkowy argument `%s'"
 
-#: src/gram.c:112
+#: src/gram.c:113
 msgid "empty"
 msgstr "pusta"
 
-#: src/gram.c:201
+#: src/gram.c:202
 msgid "Grammar"
 msgstr "Gramatyka"
 
-#: src/location.c:92 src/scan-gram.l:733
+#: src/location.c:94 src/scan-gram.l:734
 #, c-format
 msgid "line number overflow"
 msgstr "przepełnienie numeru linii"
 
-#: src/location.c:94
+#: src/location.c:96
 #, c-format
 msgid "column number overflow"
 msgstr "przepełnienie numeru kolumny"
@@ -337,17 +337,17 @@ msgstr "przepełnienie numeru kolumny"
 msgid "rule useless in parser due to conflicts"
 msgstr "bezużyteczna reguła w analizatorze z powodu konfliktów"
 
-#: src/muscle_tab.c:419
+#: src/muscle_tab.c:420
 #, c-format
 msgid "%s `%s' redefined"
 msgstr "%s zredefiniowany symbol `%s'"
 
-#: src/muscle_tab.c:422
+#: src/muscle_tab.c:423
 #, c-format
 msgid "previous definition"
 msgstr "poprzednia definicja"
 
-#: src/muscle_tab.c:458
+#: src/muscle_tab.c:459
 #, c-format
 msgid ""
 "undefined %%define variable `%s' passed to muscle_percent_define_get_loc"
@@ -355,7 +355,7 @@ msgstr ""
 "niezdefiniowana zmienna %%define `%s' przekazana do "
 "muscle_percent_define_get_loc"
 
-#: src/muscle_tab.c:472
+#: src/muscle_tab.c:473
 #, c-format
 msgid ""
 "undefined %%define variable `%s' passed to muscle_percent_define_get_syncline"
@@ -363,12 +363,12 @@ msgstr ""
 "niezdefiniowana zmienna %%define `%s' przekazana do "
 "muscle_percent_define_get_syncline"
 
-#: src/muscle_tab.c:518
+#: src/muscle_tab.c:519
 #, c-format
 msgid "invalid value for %%define Boolean variable `%s'"
 msgstr "nieprawidłowa wartość dla boole'owskiej zmiennej %%define `%s'"
 
-#: src/muscle_tab.c:524
+#: src/muscle_tab.c:525
 #, c-format
 msgid ""
 "undefined %%define variable `%s' passed to muscle_percent_define_flag_if"
@@ -376,12 +376,12 @@ msgstr ""
 "niezdefiniowana zmienna %%define `%s' przekazana do "
 "muscle_percent_define_flag_if"
 
-#: src/muscle_tab.c:580
+#: src/muscle_tab.c:581
 #, c-format
 msgid "invalid value for %%define variable `%s': `%s'"
 msgstr "nieprawidłowa wartość dla zmiennej %%define `%s': `%s'"
 
-#: src/muscle_tab.c:585
+#: src/muscle_tab.c:586
 #, c-format
 msgid ""
 "undefined %%define variable `%s' passed to muscle_percent_define_check_values"
@@ -389,7 +389,7 @@ msgstr ""
 "niezdefiniowana zmienna %%define `%s' przekazana do "
 "muscle_percent_define_check_values"
 
-#: src/parse-gram.y:692
+#: src/parse-gram.y:693
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "brakujący identyfikator w deklaracji parametrów"
@@ -547,7 +547,7 @@ msgstr "Nieużywane symbole terminalne w gramatyce"
 msgid "Rules useless in grammar"
 msgstr "Bezużyteczne reguły w gramatyce"
 
-#: src/reduce.c:388
+#: src/reduce.c:386
 #, c-format
 msgid "%d nonterminal useless in grammar"
 msgid_plural "%d nonterminals useless in grammar"
@@ -555,7 +555,7 @@ msgstr[0] "%d bezużyteczny symbol nieterminalny w gramatyce"
 msgstr[1] "%d bezużyteczne symbole nieterminalne w gramatyce"
 msgstr[2] "%d bezużytecznych symboli nieterminalnych w gramatyce"
 
-#: src/reduce.c:397
+#: src/reduce.c:391
 #, c-format
 msgid "%d rule useless in grammar"
 msgid_plural "%d rules useless in grammar"
@@ -563,99 +563,99 @@ msgstr[0] "%d bezużyteczna reguła w gramatyce"
 msgstr[1] "%d bezużyteczne reguły w gramatyce"
 msgstr[2] "%d bezużytecznych reguł w gramatyce"
 
-#: src/reduce.c:428
+#: src/reduce.c:420
 #, c-format
 msgid "start symbol %s does not derive any sentence"
 msgstr "początkowy symbol %s nie dziedziczy żadnego zdania"
 
-#: src/scan-code.l:163
+#: src/scan-code.l:164
 #, c-format
 msgid "stray `$'"
 msgstr "zabłąkany `$'"
 
-#: src/scan-code.l:167
+#: src/scan-code.l:168
 #, c-format
 msgid "stray `@'"
 msgstr "zabłąkany `@'"
 
-#: src/scan-code.l:280
+#: src/scan-code.l:281
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr "jawny typ w gramatyce beztypowej"
 
-#: src/scan-code.l:295
+#: src/scan-code.l:296
 #, c-format
 msgid "$$ for the midrule at $%d of `%s' has no declared type"
 msgstr ""
 "$$ w pozycji $%d należący do pośredniej reguły `%s' nie posiada "
 "zadeklarowanego typu"
 
-#: src/scan-code.l:300
+#: src/scan-code.l:301
 #, c-format
 msgid "$$ of `%s' has no declared type"
 msgstr "$$ należący do `%s' nie posiada zadeklarowanego typu"
 
-#: src/scan-code.l:328
+#: src/scan-code.l:329
 #, c-format
 msgid "$%d of `%s' has no declared type"
 msgstr "$%d należący do `%s' nie posiada zadeklarowanego typu"
 
-#: src/scan-code.l:343 src/scan-code.l:378 src/scan-gram.l:655
+#: src/scan-code.l:344 src/scan-code.l:379 src/scan-gram.l:656
 #, c-format
 msgid "integer out of range: %s"
 msgstr "liczba całkowita poza zakresem: %s"
 
-#: src/scan-gram.l:135
+#: src/scan-gram.l:136
 #, c-format
 msgid "stray `,' treated as white space"
 msgstr "zabłąkany znak `,' potraktowany jako biały znak"
 
-#: src/scan-gram.l:201
+#: src/scan-gram.l:202
 #, c-format
 msgid "invalid directive: %s"
 msgstr "nieprawidłowa dyrektywa: %s"
 
-#: src/scan-gram.l:259
+#: src/scan-gram.l:260
 #, c-format
 msgid "invalid character: %s"
 msgstr "nieprawidłowy znak: %s"
 
-#: src/scan-gram.l:390
+#: src/scan-gram.l:391
 #, c-format
 msgid "invalid null character"
 msgstr "nieprawidłowy pusty znak"
 
-#: src/scan-gram.l:403 src/scan-gram.l:413 src/scan-gram.l:433
+#: src/scan-gram.l:404 src/scan-gram.l:414 src/scan-gram.l:434
 #, c-format
 msgid "invalid number after \\-escape: %s"
 msgstr "nieprawidłowa liczba po \\-escape: %s"
 
-#: src/scan-gram.l:445
+#: src/scan-gram.l:446
 #, c-format
 msgid "invalid character after \\-escape: %s"
 msgstr "nieprawidłowy znak po \\-escape: %s"
 
-#: src/scan-gram.l:765
+#: src/scan-gram.l:766
 #, c-format
 msgid "missing `%s' at end of file"
 msgstr "brakujący `%s' na końcu pliku"
 
-#: src/scan-gram.l:776
+#: src/scan-gram.l:777
 #, c-format
 msgid "missing `%s' at end of line"
 msgstr "brakujący `%s' na końcu linii"
 
-#: src/scan-skel.l:145
+#: src/scan-skel.l:146
 #, c-format
 msgid "unclosed %s directive in skeleton"
 msgstr "niedomknięta dyrektywa %s w szkielecie"
 
-#: src/scan-skel.l:290
+#: src/scan-skel.l:291
 #, c-format
 msgid "too few arguments for %s directive in skeleton"
 msgstr "za mało argumentów dla dyrektywy %s w szkielecie"
 
-#: src/scan-skel.l:297
+#: src/scan-skel.l:298
 #, c-format
 msgid "too many arguments for %s directive in skeleton"
 msgstr "za dużo argumentów dla dyrektywy %s w szkielecie"
@@ -762,44 +762,44 @@ msgstr "niejednoznaczny argument %s dla %s"
 msgid "Valid arguments are:"
 msgstr "Prawidłowe argumenty to:"
 
-#: lib/bitset_stats.c:175
+#: lib/bitset_stats.c:178
 #, c-format
 msgid "%u bitset_allocs, %u freed (%.2f%%).\n"
 msgstr "%u bitset_allocs, %u zwolnione (%.2f%%).\n"
 
-#: lib/bitset_stats.c:178
+#: lib/bitset_stats.c:181
 #, c-format
 msgid "%u bitset_sets, %u cached (%.2f%%)\n"
 msgstr "%u bitset_sets, %u zapamiętane (%.2f%%)\n"
 
-#: lib/bitset_stats.c:181
+#: lib/bitset_stats.c:184
 #, c-format
 msgid "%u bitset_resets, %u cached (%.2f%%)\n"
 msgstr "%u bitset_resets, %u zapamiętane (%.2f%%)\n"
 
-#: lib/bitset_stats.c:184
+#: lib/bitset_stats.c:187
 #, c-format
 msgid "%u bitset_tests, %u cached (%.2f%%)\n"
 msgstr "%u bitset_tests, %u zapamiętane (%.2f%%)\n"
 
-#: lib/bitset_stats.c:188
+#: lib/bitset_stats.c:191
 #, c-format
 msgid "%u bitset_lists\n"
 msgstr "%u bitset_lists\n"
 
-#: lib/bitset_stats.c:190
+#: lib/bitset_stats.c:193
 msgid "count log histogram\n"
 msgstr "histogram rejestru zliczeń\n"
 
-#: lib/bitset_stats.c:193
+#: lib/bitset_stats.c:196
 msgid "size log histogram\n"
 msgstr "histogram rejestru wielkości\n"
 
-#: lib/bitset_stats.c:196
+#: lib/bitset_stats.c:199
 msgid "density histogram\n"
 msgstr "histogram gęstości\n"
 
-#: lib/bitset_stats.c:210
+#: lib/bitset_stats.c:213
 #, c-format
 msgid ""
 "Bitset statistics:\n"
@@ -808,85 +808,100 @@ msgstr ""
 "Statystyki bitset:\n"
 "\n"
 
-#: lib/bitset_stats.c:213
+#: lib/bitset_stats.c:216
 #, c-format
 msgid "Accumulated runs = %u\n"
 msgstr "Zakumulowane przebiegi = %u\n"
 
-#: lib/bitset_stats.c:257 lib/bitset_stats.c:262
+#: lib/bitset_stats.c:260 lib/bitset_stats.c:265
 msgid "Could not read stats file."
 msgstr "Nie można odczytać pliku statystyk."
 
-#: lib/bitset_stats.c:259
+#: lib/bitset_stats.c:262
 #, c-format
 msgid "Bad stats file size.\n"
 msgstr "Zły rozmiar pliku statystyk.\n"
 
-#: lib/bitset_stats.c:285 lib/bitset_stats.c:287
+#: lib/bitset_stats.c:288 lib/bitset_stats.c:290
 msgid "Could not write stats file."
 msgstr "Nie można zapisać pliku statystyk."
 
-#: lib/bitset_stats.c:290
+#: lib/bitset_stats.c:293
 msgid "Could not open stats file for writing."
 msgstr "Nie można otworzyć pliku statystyk do zapisu."
 
-#: lib/error.c:153
+#: lib/error.c:181
 msgid "Unknown system error"
 msgstr "Nieznany błąd systemu"
 
-#: lib/getopt.c:529 lib/getopt.c:545
+#: lib/getopt.c:527 lib/getopt.c:543
 #, c-format
 msgid "%s: option '%s' is ambiguous\n"
 msgstr "%s: opcja '%s' jest niejednoznaczna\n"
 
-#: lib/getopt.c:578 lib/getopt.c:582
+#: lib/getopt.c:576 lib/getopt.c:580
 #, c-format
 msgid "%s: option '--%s' doesn't allow an argument\n"
 msgstr "%s: opcja '--%s' nie może mieć argumentów\n"
 
-#: lib/getopt.c:591 lib/getopt.c:596
+#: lib/getopt.c:589 lib/getopt.c:594
 #, c-format
 msgid "%s: option '%c%s' doesn't allow an argument\n"
 msgstr "%s: opcja '%c%s' nie może mieć argumentów\n"
 
-#: lib/getopt.c:639 lib/getopt.c:658 lib/getopt.c:961 lib/getopt.c:980
+#: lib/getopt.c:637 lib/getopt.c:656
 #, c-format
-msgid "%s: option '%s' requires an argument\n"
-msgstr "%s: opcja '%s' wymaga argumentu\n"
+msgid "%s: option '--%s' requires an argument\n"
+msgstr "%s: opcja '--%s' wymaga argumentu\n"
 
-#: lib/getopt.c:696 lib/getopt.c:699
+#: lib/getopt.c:694 lib/getopt.c:697
 #, c-format
 msgid "%s: unrecognized option '--%s'\n"
 msgstr "%s: nieznana opcja '--%s'\n"
 
-#: lib/getopt.c:707 lib/getopt.c:710
+#: lib/getopt.c:705 lib/getopt.c:708
 #, c-format
 msgid "%s: unrecognized option '%c%s'\n"
 msgstr "%s: nieznana opcja '%c%s'\n"
 
-#: lib/getopt.c:759 lib/getopt.c:762
+#: lib/getopt.c:757 lib/getopt.c:760
 #, c-format
 msgid "%s: invalid option -- '%c'\n"
 msgstr "%s: błędna opcja -- '%c'\n"
 
-#: lib/getopt.c:812 lib/getopt.c:829 lib/getopt.c:1032 lib/getopt.c:1050
+#: lib/getopt.c:810 lib/getopt.c:827 lib/getopt.c:1035 lib/getopt.c:1053
 #, c-format
 msgid "%s: option requires an argument -- '%c'\n"
 msgstr "%s: opcja wymaga argumentu -- '%c'\n"
 
-#: lib/getopt.c:882 lib/getopt.c:898
+#: lib/getopt.c:883 lib/getopt.c:899
 #, c-format
 msgid "%s: option '-W %s' is ambiguous\n"
 msgstr "%s: opcja '-W %s' jest niejednoznaczna\n"
 
-#: lib/getopt.c:922 lib/getopt.c:940
+#: lib/getopt.c:923 lib/getopt.c:941
 #, c-format
 msgid "%s: option '-W %s' doesn't allow an argument\n"
 msgstr "%s: opcja '-W %s' nie może mieć argumentów\n"
 
+#: lib/getopt.c:962 lib/getopt.c:980
+#, c-format
+msgid "%s: option '-W %s' requires an argument\n"
+msgstr "%s: opcja '-W %s' wymaga argumentu\n"
+
 #: lib/obstack.c:423 lib/obstack.c:425 lib/xalloc-die.c:34
 msgid "memory exhausted"
 msgstr "pamięć wyczerpana"
+
+#: lib/pipe.c:138 lib/pipe.c:141 lib/pipe.c:262 lib/pipe.c:265
+#, c-format
+msgid "cannot create pipe"
+msgstr "nie można utworzyć potoku"
+
+#: lib/pipe.c:232 lib/pipe.c:346 lib/wait-process.c:282 lib/wait-process.c:356
+#, c-format
+msgid "%s subprocess failed"
+msgstr "podproces %s nie powiódł się"
 
 #. TRANSLATORS:
 #. Get translations for open and closing quotation marks.
@@ -915,7 +930,7 @@ msgstr "`"
 msgid "'"
 msgstr "'"
 
-#: lib/timevar.c:473
+#: lib/timevar.c:475
 msgid ""
 "\n"
 "Execution times (seconds)\n"
@@ -923,14 +938,34 @@ msgstr ""
 "\n"
 "Czas wykonania (w sekundach)\n"
 
-#: lib/timevar.c:523
+#: lib/timevar.c:525
 msgid " TOTAL                 :"
 msgstr " CAŁKOWITY             :"
 
-#: lib/timevar.c:559
+#: lib/timevar.c:561
 #, c-format
 msgid "time in %s: %ld.%06ld (%ld%%)\n"
 msgstr "czas w %s: %ld.%06ld (%ld%%)\n"
+
+#: lib/w32spawn.h:40
+#, c-format
+msgid "_open_osfhandle failed"
+msgstr "_open_osfhandle nie powiodło się"
+
+#: lib/w32spawn.h:81
+#, c-format
+msgid "cannot restore fd %d: dup2 failed"
+msgstr "nie można odzyskać fd %d: wywołanie dup2 nie powiodło się"
+
+#: lib/wait-process.c:223 lib/wait-process.c:255 lib/wait-process.c:317
+#, c-format
+msgid "%s subprocess"
+msgstr "podproces %s"
+
+#: lib/wait-process.c:274 lib/wait-process.c:346
+#, c-format
+msgid "%s subprocess got fatal signal %d"
+msgstr "podproces %s otrzymał nieprawidłowy sygnał %d"
 
 #~ msgid "subsidiary program `%s' could not be invoked"
 #~ msgstr "dodatkowy program `%s' nie mógł być wywołany"

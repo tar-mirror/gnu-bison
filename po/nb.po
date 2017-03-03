@@ -22,21 +22,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bison 2.0\n"
 "Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
-"POT-Creation-Date: 2010-03-20 13:15-0400\n"
+"POT-Creation-Date: 2010-08-05 21:01-0400\n"
 "PO-Revision-Date: 2005-03-01 10:06+0100\n"
 "Last-Translator: Trond Endrestøl <Trond.Endrestol@gtf.ol.no>\n"
 "Language-Team: Norwegian Bokmaal <i18n-nb@lister.ping.uio.no>\n"
+"Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/complain.c:93 src/complain.c:100 src/gram.c:311 src/reduce.c:387
-#: src/reduce.c:396
+#: src/complain.c:101 src/complain.c:108
 msgid "warning"
 msgstr "advarsel"
 
-#: src/complain.c:130 src/complain.c:137
+#: src/complain.c:138 src/complain.c:145
 #, fuzzy
 msgid "fatal error"
 msgstr "alvorlig feil: "
@@ -294,20 +294,20 @@ msgstr "mangler operand etter «%s»"
 msgid "extra operand `%s'"
 msgstr "ekstra operand «%s»"
 
-#: src/gram.c:112
+#: src/gram.c:113
 msgid "empty"
 msgstr "tom"
 
-#: src/gram.c:201
+#: src/gram.c:202
 msgid "Grammar"
 msgstr "Grammatikk"
 
-#: src/location.c:92 src/scan-gram.l:733
+#: src/location.c:94 src/scan-gram.l:734
 #, c-format
 msgid "line number overflow"
 msgstr ""
 
-#: src/location.c:94
+#: src/location.c:96
 #, c-format
 msgid "column number overflow"
 msgstr ""
@@ -317,51 +317,51 @@ msgstr ""
 msgid "rule useless in parser due to conflicts"
 msgstr "regel ble aldri redusert på grunn av konflikter"
 
-#: src/muscle_tab.c:419
+#: src/muscle_tab.c:420
 #, fuzzy, c-format
 msgid "%s `%s' redefined"
 msgstr "symbolet %s ble redefinert"
 
-#: src/muscle_tab.c:422
+#: src/muscle_tab.c:423
 #, c-format
 msgid "previous definition"
 msgstr ""
 
-#: src/muscle_tab.c:458
+#: src/muscle_tab.c:459
 #, c-format
 msgid ""
 "undefined %%define variable `%s' passed to muscle_percent_define_get_loc"
 msgstr ""
 
-#: src/muscle_tab.c:472
+#: src/muscle_tab.c:473
 #, c-format
 msgid ""
 "undefined %%define variable `%s' passed to muscle_percent_define_get_syncline"
 msgstr ""
 
-#: src/muscle_tab.c:518
+#: src/muscle_tab.c:519
 #, c-format
 msgid "invalid value for %%define Boolean variable `%s'"
 msgstr ""
 
-#: src/muscle_tab.c:524
+#: src/muscle_tab.c:525
 #, c-format
 msgid ""
 "undefined %%define variable `%s' passed to muscle_percent_define_flag_if"
 msgstr ""
 
-#: src/muscle_tab.c:580
+#: src/muscle_tab.c:581
 #, c-format
 msgid "invalid value for %%define variable `%s': `%s'"
 msgstr ""
 
-#: src/muscle_tab.c:585
+#: src/muscle_tab.c:586
 #, c-format
 msgid ""
 "undefined %%define variable `%s' passed to muscle_percent_define_check_values"
 msgstr ""
 
-#: src/parse-gram.y:692
+#: src/parse-gram.y:693
 #, c-format
 msgid "missing identifier in parameter declaration"
 msgstr "mangler identifikator i parameterdeklarasjonen"
@@ -530,111 +530,111 @@ msgstr "ingen regler i den angitte grammatikken"
 msgid "Rules useless in grammar"
 msgstr "ingen regler i den angitte grammatikken"
 
-#: src/reduce.c:388
+#: src/reduce.c:386
 #, c-format
 msgid "%d nonterminal useless in grammar"
 msgid_plural "%d nonterminals useless in grammar"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/reduce.c:397
+#: src/reduce.c:391
 #, fuzzy, c-format
 msgid "%d rule useless in grammar"
 msgid_plural "%d rules useless in grammar"
 msgstr[0] "ingen regler i den angitte grammatikken"
 msgstr[1] "ingen regler i den angitte grammatikken"
 
-#: src/reduce.c:428
+#: src/reduce.c:420
 #, c-format
 msgid "start symbol %s does not derive any sentence"
 msgstr "startsymbolet %s avleder ingen setninger"
 
-#: src/scan-code.l:163
+#: src/scan-code.l:164
 #, c-format
 msgid "stray `$'"
 msgstr ""
 
-#: src/scan-code.l:167
+#: src/scan-code.l:168
 #, c-format
 msgid "stray `@'"
 msgstr ""
 
-#: src/scan-code.l:280
+#: src/scan-code.l:281
 #, c-format
 msgid "explicit type given in untyped grammar"
 msgstr ""
 
-#: src/scan-code.l:295
+#: src/scan-code.l:296
 #, fuzzy, c-format
 msgid "$$ for the midrule at $%d of `%s' has no declared type"
 msgstr "$%d av «%s» har ingen deklarert type"
 
-#: src/scan-code.l:300
+#: src/scan-code.l:301
 #, c-format
 msgid "$$ of `%s' has no declared type"
 msgstr "$$ til «%s» har ingen deklarert type"
 
-#: src/scan-code.l:328
+#: src/scan-code.l:329
 #, c-format
 msgid "$%d of `%s' has no declared type"
 msgstr "$%d av «%s» har ingen deklarert type"
 
-#: src/scan-code.l:343 src/scan-code.l:378 src/scan-gram.l:655
+#: src/scan-code.l:344 src/scan-code.l:379 src/scan-gram.l:656
 #, c-format
 msgid "integer out of range: %s"
 msgstr "heltall utenfor tallområde: %s"
 
-#: src/scan-gram.l:135
+#: src/scan-gram.l:136
 #, c-format
 msgid "stray `,' treated as white space"
 msgstr "overflødig «,» ble behandlet som tomrom"
 
-#: src/scan-gram.l:201
+#: src/scan-gram.l:202
 #, c-format
 msgid "invalid directive: %s"
 msgstr "ugyldig direktiv: %s"
 
-#: src/scan-gram.l:259
+#: src/scan-gram.l:260
 #, c-format
 msgid "invalid character: %s"
 msgstr "ugyldig tegn: %s"
 
-#: src/scan-gram.l:390
+#: src/scan-gram.l:391
 #, c-format
 msgid "invalid null character"
 msgstr "ugyldig null-tegn"
 
-#: src/scan-gram.l:403 src/scan-gram.l:413 src/scan-gram.l:433
+#: src/scan-gram.l:404 src/scan-gram.l:414 src/scan-gram.l:434
 #, fuzzy, c-format
 msgid "invalid number after \\-escape: %s"
 msgstr "ugyldig null-tegn: %s"
 
-#: src/scan-gram.l:445
+#: src/scan-gram.l:446
 #, fuzzy, c-format
 msgid "invalid character after \\-escape: %s"
 msgstr "ugyldig tegn: %s"
 
-#: src/scan-gram.l:765
+#: src/scan-gram.l:766
 #, c-format
 msgid "missing `%s' at end of file"
 msgstr "mangler «%s» ved slutten av filen"
 
-#: src/scan-gram.l:776
+#: src/scan-gram.l:777
 #, c-format
 msgid "missing `%s' at end of line"
 msgstr "mangler «%s» på slutten av linjen"
 
-#: src/scan-skel.l:145
+#: src/scan-skel.l:146
 #, c-format
 msgid "unclosed %s directive in skeleton"
 msgstr ""
 
-#: src/scan-skel.l:290
+#: src/scan-skel.l:291
 #, c-format
 msgid "too few arguments for %s directive in skeleton"
 msgstr ""
 
-#: src/scan-skel.l:297
+#: src/scan-skel.l:298
 #, c-format
 msgid "too many arguments for %s directive in skeleton"
 msgstr ""
@@ -740,44 +740,44 @@ msgstr "flertydig argument %s for %s"
 msgid "Valid arguments are:"
 msgstr "Gyldige argumenter er:"
 
-#: lib/bitset_stats.c:175
+#: lib/bitset_stats.c:178
 #, c-format
 msgid "%u bitset_allocs, %u freed (%.2f%%).\n"
 msgstr "%u bitset_allocs, %u frigjort (%.2f%%).\n"
 
-#: lib/bitset_stats.c:178
+#: lib/bitset_stats.c:181
 #, c-format
 msgid "%u bitset_sets, %u cached (%.2f%%)\n"
 msgstr "%u bitset_sets, %u mellomlagret (%.2f%%)\n"
 
-#: lib/bitset_stats.c:181
+#: lib/bitset_stats.c:184
 #, c-format
 msgid "%u bitset_resets, %u cached (%.2f%%)\n"
 msgstr "%u bitset_resets, %u mellomlagret (%.2f%%)\n"
 
-#: lib/bitset_stats.c:184
+#: lib/bitset_stats.c:187
 #, c-format
 msgid "%u bitset_tests, %u cached (%.2f%%)\n"
 msgstr "%u bitset_tests, %u mellomlagret (%.2f%%)\n"
 
-#: lib/bitset_stats.c:188
+#: lib/bitset_stats.c:191
 #, c-format
 msgid "%u bitset_lists\n"
 msgstr "%u bitset_lists\n"
 
-#: lib/bitset_stats.c:190
+#: lib/bitset_stats.c:193
 msgid "count log histogram\n"
 msgstr "count log histogram\n"
 
-#: lib/bitset_stats.c:193
+#: lib/bitset_stats.c:196
 msgid "size log histogram\n"
 msgstr "size log histogram\n"
 
-#: lib/bitset_stats.c:196
+#: lib/bitset_stats.c:199
 msgid "density histogram\n"
 msgstr "tetthetshistogram\n"
 
-#: lib/bitset_stats.c:210
+#: lib/bitset_stats.c:213
 #, c-format
 msgid ""
 "Bitset statistics:\n"
@@ -786,85 +786,100 @@ msgstr ""
 "Bitmengdestatistikk:\n"
 "\n"
 
-#: lib/bitset_stats.c:213
+#: lib/bitset_stats.c:216
 #, c-format
 msgid "Accumulated runs = %u\n"
 msgstr "Akkumulerte kjøringer = %u\n"
 
-#: lib/bitset_stats.c:257 lib/bitset_stats.c:262
+#: lib/bitset_stats.c:260 lib/bitset_stats.c:265
 msgid "Could not read stats file."
 msgstr "Kunne ikke lese statsfilen."
 
-#: lib/bitset_stats.c:259
+#: lib/bitset_stats.c:262
 #, c-format
 msgid "Bad stats file size.\n"
 msgstr "Feil størrelse på statsfilen.\n"
 
-#: lib/bitset_stats.c:285 lib/bitset_stats.c:287
+#: lib/bitset_stats.c:288 lib/bitset_stats.c:290
 msgid "Could not write stats file."
 msgstr "Kunne ikke skrive statsfilen."
 
-#: lib/bitset_stats.c:290
+#: lib/bitset_stats.c:293
 msgid "Could not open stats file for writing."
 msgstr "Kunne ikke åpne statsfilen for skriving."
 
-#: lib/error.c:153
+#: lib/error.c:181
 msgid "Unknown system error"
 msgstr "Ukjent systemfeil"
 
-#: lib/getopt.c:529 lib/getopt.c:545
+#: lib/getopt.c:527 lib/getopt.c:543
 #, fuzzy, c-format
 msgid "%s: option '%s' is ambiguous\n"
 msgstr "%s: valget «%s» er flertydig\n"
 
-#: lib/getopt.c:578 lib/getopt.c:582
+#: lib/getopt.c:576 lib/getopt.c:580
 #, fuzzy, c-format
 msgid "%s: option '--%s' doesn't allow an argument\n"
 msgstr "%s: valget «--%s» tillater ikke et argument\n"
 
-#: lib/getopt.c:591 lib/getopt.c:596
+#: lib/getopt.c:589 lib/getopt.c:594
 #, fuzzy, c-format
 msgid "%s: option '%c%s' doesn't allow an argument\n"
 msgstr "%s: valget «%c%s» tillater ikke et argument\n"
 
-#: lib/getopt.c:639 lib/getopt.c:658 lib/getopt.c:961 lib/getopt.c:980
+#: lib/getopt.c:637 lib/getopt.c:656
 #, fuzzy, c-format
-msgid "%s: option '%s' requires an argument\n"
+msgid "%s: option '--%s' requires an argument\n"
 msgstr "%s: valget «%s» krever et argument\n"
 
-#: lib/getopt.c:696 lib/getopt.c:699
+#: lib/getopt.c:694 lib/getopt.c:697
 #, fuzzy, c-format
 msgid "%s: unrecognized option '--%s'\n"
 msgstr "%s: ukjent valg «--%s»\n"
 
-#: lib/getopt.c:707 lib/getopt.c:710
+#: lib/getopt.c:705 lib/getopt.c:708
 #, fuzzy, c-format
 msgid "%s: unrecognized option '%c%s'\n"
 msgstr "%s: ukjent valg «%c%s»\n"
 
-#: lib/getopt.c:759 lib/getopt.c:762
+#: lib/getopt.c:757 lib/getopt.c:760
 #, fuzzy, c-format
 msgid "%s: invalid option -- '%c'\n"
 msgstr "%s: ugyldig valg -- %c\n"
 
-#: lib/getopt.c:812 lib/getopt.c:829 lib/getopt.c:1032 lib/getopt.c:1050
+#: lib/getopt.c:810 lib/getopt.c:827 lib/getopt.c:1035 lib/getopt.c:1053
 #, fuzzy, c-format
 msgid "%s: option requires an argument -- '%c'\n"
 msgstr "%s: valget krevet et argument -- %c\n"
 
-#: lib/getopt.c:882 lib/getopt.c:898
+#: lib/getopt.c:883 lib/getopt.c:899
 #, fuzzy, c-format
 msgid "%s: option '-W %s' is ambiguous\n"
 msgstr "%s: valget «-W %s» er flertydig\n"
 
-#: lib/getopt.c:922 lib/getopt.c:940
+#: lib/getopt.c:923 lib/getopt.c:941
 #, fuzzy, c-format
 msgid "%s: option '-W %s' doesn't allow an argument\n"
 msgstr "%s: valget «-W %s» tillater ikke et argument\n"
 
+#: lib/getopt.c:962 lib/getopt.c:980
+#, fuzzy, c-format
+msgid "%s: option '-W %s' requires an argument\n"
+msgstr "%s: valget «%s» krever et argument\n"
+
 #: lib/obstack.c:423 lib/obstack.c:425 lib/xalloc-die.c:34
 msgid "memory exhausted"
 msgstr "minne er uttømt"
+
+#: lib/pipe.c:138 lib/pipe.c:141 lib/pipe.c:262 lib/pipe.c:265
+#, fuzzy, c-format
+msgid "cannot create pipe"
+msgstr "kan ikke lukke filen"
+
+#: lib/pipe.c:232 lib/pipe.c:346 lib/wait-process.c:282 lib/wait-process.c:356
+#, c-format
+msgid "%s subprocess failed"
+msgstr ""
 
 #. TRANSLATORS:
 #. Get translations for open and closing quotation marks.
@@ -893,7 +908,7 @@ msgstr "«"
 msgid "'"
 msgstr "»"
 
-#: lib/timevar.c:473
+#: lib/timevar.c:475
 msgid ""
 "\n"
 "Execution times (seconds)\n"
@@ -901,14 +916,34 @@ msgstr ""
 "\n"
 "Utføringstider (sekunder)\n"
 
-#: lib/timevar.c:523
+#: lib/timevar.c:525
 msgid " TOTAL                 :"
 msgstr " TOTAL                 :"
 
-#: lib/timevar.c:559
+#: lib/timevar.c:561
 #, c-format
 msgid "time in %s: %ld.%06ld (%ld%%)\n"
 msgstr "tid for %s: %ld.%06ld (%ld%%)\n"
+
+#: lib/w32spawn.h:40
+#, c-format
+msgid "_open_osfhandle failed"
+msgstr ""
+
+#: lib/w32spawn.h:81
+#, c-format
+msgid "cannot restore fd %d: dup2 failed"
+msgstr ""
+
+#: lib/wait-process.c:223 lib/wait-process.c:255 lib/wait-process.c:317
+#, c-format
+msgid "%s subprocess"
+msgstr ""
+
+#: lib/wait-process.c:274 lib/wait-process.c:346
+#, c-format
+msgid "%s subprocess got fatal signal %d"
+msgstr ""
 
 #~ msgid "warning: "
 #~ msgstr "advarsel: "

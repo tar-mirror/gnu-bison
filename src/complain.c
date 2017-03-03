@@ -1,7 +1,7 @@
 /* Declaration for error-reporting function for Bison.
 
-   Copyright (C) 2000-2002, 2004-2006, 2009-2010 Free Software
-   Foundation, Inc.
+   Copyright (C) 2000, 2001, 2002, 2004, 2005, 2006, 2009, 2010 Free
+   Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,7 +37,10 @@ bool complaint_issued;
  * \param loc     the location, defaulting to the current file,
  *                or the program name.
  * \param prefix  put before the message (e.g., "warning").
- * \param message the error message, a printf format string.
+ * \param message the error message, a printf format string.  Iff it
+ *                ends with ": ", then no trailing newline is printed,
+ *                and the caller should print the remaining
+ *                newline-terminated message to stderr.
  * \param args    the arguments of the format string.
  */
 static
@@ -56,8 +59,13 @@ error_message (location *loc,
     fprintf (stderr, "%s: ", prefix);
 
   vfprintf (stderr, message, args);
-  putc ('\n', stderr);
-  fflush (stderr);
+  {
+    size_t l = strlen (message);
+    if (l < 2 || message[l-2] != ':' || message[l-1] != ' ') {
+      putc ('\n', stderr);
+      fflush (stderr);
+    }
+  }
 }
 
 /** Wrap error_message() with varargs handling. */

@@ -36,7 +36,7 @@
 #define FLEX_SCANNER
 #define YY_FLEX_MAJOR_VERSION 2
 #define YY_FLEX_MINOR_VERSION 5
-#define YY_FLEX_SUBMINOR_VERSION 34
+#define YY_FLEX_SUBMINOR_VERSION 35
 #if YY_FLEX_SUBMINOR_VERSION > 0
 #define FLEX_BETA
 #endif
@@ -97,7 +97,6 @@ typedef int flex_int32_t;
 typedef unsigned char flex_uint8_t; 
 typedef unsigned short int flex_uint16_t;
 typedef unsigned int flex_uint32_t;
-#endif /* ! C99 */
 
 /* Limits of integral types. */
 #ifndef INT8_MIN
@@ -127,6 +126,8 @@ typedef unsigned int flex_uint32_t;
 #ifndef UINT32_MAX
 #define UINT32_MAX             (4294967295U)
 #endif
+
+#endif /* ! C99 */
 
 #endif /* ! FLEXINT_H */
 
@@ -202,7 +203,15 @@ typedef unsigned int flex_uint32_t;
 
 /* Size of default input buffer. */
 #ifndef YY_BUF_SIZE
+#ifdef __ia64__
+/* On IA-64, the buffer size is 16k, not 8k.
+ * Moreover, YY_BUF_SIZE is 2*YY_READ_BUF_SIZE in the general case.
+ * Ditto for the __ia64__ case accordingly.
+ */
+#define YY_BUF_SIZE 32768
+#else
 #define YY_BUF_SIZE 16384
+#endif /* __ia64__ */
 #endif
 
 /* The state buf must be large enough to hold one state per character in the main buffer.
@@ -245,13 +254,6 @@ extern FILE *code_in, *code_out;
 	while ( 0 )
 
 #define unput(c) yyunput( c, (yytext_ptr)  )
-
-/* The following is because we cannot portably get our hands on size_t
- * (without autoconf's help, which isn't available because we want
- * flex-generated scanners to compile on their own).
- * Given that the standard has decreed that size_t exists since 1989,
- * I guess we can afford to depend on it. Manoj.
- */
 
 #ifndef YY_TYPEDEF_YY_SIZE_T
 #define YY_TYPEDEF_YY_SIZE_T
@@ -593,9 +595,9 @@ int code__flex_debug = 1;
 
 static yyconst flex_int16_t yy_rule_linenum[24] =
     {   0,
-       99,  109,  110,  120,  125,  130,  135,  139,  143,  147,
-      155,  158,  162,  166,  171,  172,  201,  205,  218,  219,
-      220,  221,  228
+      100,  110,  111,  121,  126,  131,  136,  140,  144,  148,
+      156,  159,  163,  167,  172,  173,  202,  206,  219,  220,
+      221,  222,  229
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -609,7 +611,8 @@ char *code_text;
 #line 1 "scan-code.l"
 /* Bison Action Scanner                             -*- C -*-
 
-   Copyright (C) 2006-2010 Free Software Foundation, Inc.
+   Copyright (C) 2006, 2007, 2008, 2009, 2010 Free Software
+   Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -626,7 +629,7 @@ char *code_text;
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 #define YY_NO_INPUT 1
-#line 24 "scan-code.l"
+#line 25 "scan-code.l"
 /* Work around a bug in flex 2.5.31.  See Debian bug 333231
    <http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=333231>.  */
 #undef code_wrap
@@ -674,7 +677,7 @@ of $ and @.  */
    NUL and newline, as this simplifies our implementation.  */
 /* Zero or more instances of backslash-newline.  Following GCC, allow
    white space between the backslash and the newline.  */
-#line 678 "scan-code.c"
+#line 681 "scan-code.c"
 
 #define INITIAL 0
 #define SC_COMMENT 1
@@ -709,9 +712,39 @@ static int yy_init_globals (void );
 /* %endif */
 /* %if-reentrant */
 /* %endif */
+/* %endif End reentrant structures and macros. */
+
+/* Accessor methods to globals.
+   These are made visible to non-reentrant scanners for convenience. */
+
+int code_lex_destroy (void );
+
+int code_get_debug (void );
+
+void code_set_debug (int debug_flag  );
+
+YY_EXTRA_TYPE code_get_extra (void );
+
+void code_set_extra (YY_EXTRA_TYPE user_defined  );
+
+FILE *code_get_in (void );
+
+void code_set_in  (FILE * in_str  );
+
+FILE *code_get_out (void );
+
+void code_set_out  (FILE * out_str  );
+
+int code_get_leng (void );
+
+char *code_get_text (void );
+
+int code_get_lineno (void );
+
+void code_set_lineno (int line_number  );
+
 /* %if-bison-bridge */
 /* %endif */
-/* %endif End reentrant structures and macros. */
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -759,7 +792,12 @@ static int input (void );
 
 /* Amount of stuff to slurp up with each read. */
 #ifndef YY_READ_BUF_SIZE
+#ifdef __ia64__
+/* On IA-64, the buffer size is 16k, not 8k */
+#define YY_READ_BUF_SIZE 16384
+#else
 #define YY_READ_BUF_SIZE 8192
+#endif /* __ia64__ */
 #endif
 
 /* Copy whatever the last rule matched to the standard output. */
@@ -768,7 +806,7 @@ static int input (void );
 /* This used to be an fputs(), but since the string might contain NUL's,
  * we now use fwrite().
  */
-#define ECHO fwrite( code_text, code_leng, 1, code_out )
+#define ECHO do { if (fwrite( code_text, code_leng, 1, code_out )) {} } while (0)
 /* %endif */
 /* %if-c++-only C++ definition */
 /* %endif */
@@ -783,7 +821,7 @@ static int input (void );
 	if ( YY_CURRENT_BUFFER_LVALUE->yy_is_interactive ) \
 		{ \
 		int c = '*'; \
-		int n; \
+		size_t n; \
 		for ( n = 0; n < max_size && \
 			     (c = getc( code_in )) != EOF && c != '\n'; ++n ) \
 			buf[n] = (char) c; \
@@ -890,7 +928,7 @@ YY_DECL
 	register int yy_act;
     
 /* %% [7.0] user's declarations go here */
-#line 78 "scan-code.l"
+#line 79 "scan-code.l"
 
 
 
@@ -910,7 +948,7 @@ YY_DECL
   | Scanning a C comment.  The initial `/ *' is already eaten.  |
   `------------------------------------------------------------*/
 
-#line 914 "scan-code.c"
+#line 952 "scan-code.c"
 
 	if ( !(yy_init) )
 		{
@@ -1023,7 +1061,7 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 99 "scan-code.l"
+#line 100 "scan-code.l"
 STRING_GROW; BEGIN sc_context;
 	YY_BREAK
 
@@ -1035,13 +1073,13 @@ STRING_GROW; BEGIN sc_context;
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 109 "scan-code.l"
+#line 110 "scan-code.l"
 STRING_GROW; BEGIN sc_context;
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 110 "scan-code.l"
+#line 111 "scan-code.l"
 STRING_GROW;
 	YY_BREAK
 
@@ -1053,7 +1091,7 @@ STRING_GROW;
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 120 "scan-code.l"
+#line 121 "scan-code.l"
 STRING_GROW;
 	YY_BREAK
 
@@ -1061,7 +1099,7 @@ STRING_GROW;
 
 case 5:
 YY_RULE_SETUP
-#line 125 "scan-code.l"
+#line 126 "scan-code.l"
 STRING_GROW; BEGIN sc_context;
 	YY_BREAK
 
@@ -1069,14 +1107,14 @@ STRING_GROW; BEGIN sc_context;
 
 case 6:
 YY_RULE_SETUP
-#line 130 "scan-code.l"
+#line 131 "scan-code.l"
 STRING_GROW; BEGIN sc_context;
 	YY_BREAK
 
 
 case 7:
 YY_RULE_SETUP
-#line 135 "scan-code.l"
+#line 136 "scan-code.l"
 {
     STRING_GROW;
     BEGIN SC_CHARACTER;
@@ -1084,7 +1122,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 139 "scan-code.l"
+#line 140 "scan-code.l"
 {
     STRING_GROW;
     BEGIN SC_STRING;
@@ -1093,7 +1131,7 @@ YY_RULE_SETUP
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 143 "scan-code.l"
+#line 144 "scan-code.l"
 {
     STRING_GROW;
     BEGIN SC_COMMENT;
@@ -1102,7 +1140,7 @@ YY_RULE_SETUP
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 147 "scan-code.l"
+#line 148 "scan-code.l"
 {
     STRING_GROW;
     BEGIN SC_LINE_COMMENT;
@@ -1113,21 +1151,21 @@ YY_RULE_SETUP
 
 case 11:
 YY_RULE_SETUP
-#line 155 "scan-code.l"
+#line 156 "scan-code.l"
 {
     handle_action_dollar (self->rule, code_text, *loc);
   }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 158 "scan-code.l"
+#line 159 "scan-code.l"
 {
     handle_action_at (self->rule, code_text, *loc);
   }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 162 "scan-code.l"
+#line 163 "scan-code.l"
 {
     warn_at (*loc, _("stray `$'"));
     obstack_sgrow (&obstack_for_string, "$][");
@@ -1135,7 +1173,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 166 "scan-code.l"
+#line 167 "scan-code.l"
 {
     warn_at (*loc, _("stray `@'"));
     obstack_sgrow (&obstack_for_string, "@@");
@@ -1143,12 +1181,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 171 "scan-code.l"
+#line 172 "scan-code.l"
 STRING_GROW; ++braces_level;
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 172 "scan-code.l"
+#line 173 "scan-code.l"
 {
     bool outer_brace = --braces_level == 0;
 
@@ -1180,7 +1218,7 @@ YY_RULE_SETUP
 
 case 17:
 YY_RULE_SETUP
-#line 201 "scan-code.l"
+#line 202 "scan-code.l"
 {
     obstack_sgrow (&obstack_for_string, "]b4_dollar_dollar[");
     self->is_value_used = true;
@@ -1188,7 +1226,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 205 "scan-code.l"
+#line 206 "scan-code.l"
 {
     obstack_sgrow (&obstack_for_string, "]b4_at_dollar[");
     locations_flag = true;
@@ -1202,22 +1240,22 @@ YY_RULE_SETUP
 
 case 19:
 YY_RULE_SETUP
-#line 218 "scan-code.l"
+#line 219 "scan-code.l"
 obstack_sgrow (&obstack_for_string, "$][");
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 219 "scan-code.l"
+#line 220 "scan-code.l"
 obstack_sgrow (&obstack_for_string, "@@");
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 220 "scan-code.l"
+#line 221 "scan-code.l"
 obstack_sgrow (&obstack_for_string, "@{");
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 221 "scan-code.l"
+#line 222 "scan-code.l"
 obstack_sgrow (&obstack_for_string, "@}");
 	YY_BREAK
 
@@ -1227,7 +1265,7 @@ obstack_sgrow (&obstack_for_string, "@}");
 case 23:
 /* rule 23 can match eol */
 YY_RULE_SETUP
-#line 228 "scan-code.l"
+#line 229 "scan-code.l"
 STRING_GROW;
 	YY_BREAK
 /* End of processing. */
@@ -1238,7 +1276,7 @@ case YY_STATE_EOF(SC_STRING):
 case YY_STATE_EOF(SC_CHARACTER):
 case YY_STATE_EOF(SC_RULE_ACTION):
 case YY_STATE_EOF(SC_SYMBOL_ACTION):
-#line 231 "scan-code.l"
+#line 232 "scan-code.l"
 {
                    STRING_FINISH;
                    return last_string;
@@ -1246,10 +1284,10 @@ case YY_STATE_EOF(SC_SYMBOL_ACTION):
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 236 "scan-code.l"
+#line 237 "scan-code.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 1253 "scan-code.c"
+#line 1291 "scan-code.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2066,8 +2104,8 @@ YY_BUFFER_STATE code__scan_string (yyconst char * yystr )
 /* %if-c-only */
 /** Setup the input buffer state to scan the given bytes. The next call to code_lex() will
  * scan from a @e copy of @a bytes.
- * @param bytes the byte buffer to scan
- * @param len the number of bytes in the buffer pointed to by @a bytes.
+ * @param yybytes the byte buffer to scan
+ * @param _yybytes_len the number of bytes in the buffer pointed to by @a bytes.
  * 
  * @return the newly allocated buffer state object.
  */
@@ -2336,7 +2374,7 @@ void code_free (void * ptr )
 
 /* %ok-for-header */
 
-#line 236 "scan-code.l"
+#line 237 "scan-code.l"
 
 
 

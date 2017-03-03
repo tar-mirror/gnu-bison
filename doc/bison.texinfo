@@ -33,13 +33,14 @@
 This manual (@value{UPDATED}) is for @acronym{GNU} Bison (version
 @value{VERSION}), the @acronym{GNU} parser generator.
 
-Copyright @copyright{} 1988-1993, 1995, 1998-2010 Free Software
-Foundation, Inc.
+Copyright @copyright{} 1988, 1989, 1990, 1991, 1992, 1993, 1995, 1998, 1999,
+2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free
+Software Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the @acronym{GNU} Free Documentation License,
-Version 1.2 or any later version published by the Free Software
+Version 1.3 or any later version published by the Free Software
 Foundation; with no Invariant Sections, with the Front-Cover texts
 being ``A @acronym{GNU} Manual,'' and with the Back-Cover Texts as in
 (a) below.  A copy of the license is included in the section entitled
@@ -4493,8 +4494,8 @@ number which Bison printed.  With @acronym{GLR} parsers, add an
 @code{%expect-rr} declaration as well.
 @end itemize
 
-Now Bison will warn you if you introduce an unexpected conflict, but
-will keep silent otherwise.
+Now Bison will report an error if you introduce an unexpected conflict,
+but will keep silent otherwise.
 
 @node Start Decl
 @subsection The Start-Symbol
@@ -6171,8 +6172,10 @@ This particular ambiguity was first encountered in the specifications of
 Algol 60 and is called the ``dangling @code{else}'' ambiguity.
 
 To avoid warnings from Bison about predictable, legitimate shift/reduce
-conflicts, use the @code{%expect @var{n}} declaration.  There will be no
-warning as long as the number of shift/reduce conflicts is exactly @var{n}.
+conflicts, use the @code{%expect @var{n}} declaration.
+There will be no warning as long as the number of shift/reduce conflicts
+is exactly @var{n}, and Bison will report an error if there is a
+different number.
 @xref{Expect Decl, ,Suppressing Conflict Warnings}.
 
 The definition of @code{if_stmt} above is solely to blame for the
@@ -7812,8 +7815,8 @@ Treat warnings as errors.
 @end table
 
 A category can be turned off by prefixing its name with @samp{no-}.  For
-instance, @option{-Wno-syntax} will hide the warnings about unused
-variables.
+instance, @option{-Wno-yacc} will hide the warnings about
+@acronym{POSIX} Yacc incompatibilities.
 @end table
 
 @noindent
@@ -8013,8 +8016,8 @@ int yyparse (void);
 @c - initial action
 
 The C++ @acronym{LALR}(1) parser is selected using the skeleton directive,
-@samp{%skeleton "lalr1.c"}, or the synonymous command-line option
-@option{--skeleton=lalr1.c}.
+@samp{%skeleton "lalr1.cc"}, or the synonymous command-line option
+@option{--skeleton=lalr1.cc}.
 @xref{Decl Summary}.
 
 When run, @command{bison} will create several entities in the @samp{yy}
@@ -8163,9 +8166,17 @@ this class is detailed below.  It can be extended using the
 it describes an additional member of the parser class, and an
 additional argument for its constructor.
 
-@defcv {Type} {parser} {semantic_value_type}
-@defcvx {Type} {parser} {location_value_type}
+@defcv {Type} {parser} {semantic_type}
+@defcvx {Type} {parser} {location_type}
 The types for semantics value and locations.
+@end defcv
+
+@defcv {Type} {parser} {token}
+A structure that contains (only) the definition of the tokens as the
+@code{yytokentype} enumeration.  To refer to the token @code{FOO}, the
+scanner should use @code{yy::parser::token::FOO}.  The scanner can use
+@samp{typedef yy::parser::token token;} to ``import'' the token enumeration
+(@pxref{Calc++ Scanner}).
 @end defcv
 
 @deftypemethod {parser} {} parser (@var{type1} @var{arg1}, ...)
@@ -8206,7 +8217,7 @@ The parser invokes the scanner by calling @code{yylex}.  Contrary to C
 parsers, C++ parsers are always pure: there is no point in using the
 @code{%define api.pure} directive.  Therefore the interface is as follows.
 
-@deftypemethod {parser} {int} yylex (semantic_value_type& @var{yylval}, location_type& @var{yylloc}, @var{type1} @var{arg1}, ...)
+@deftypemethod {parser} {int} yylex (semantic_type* @var{yylval}, location_type* @var{yylloc}, @var{type1} @var{arg1}, ...)
 Return the next token.  Its type is the return value, its semantic
 value and location being @var{yylval} and @var{yylloc}.  Invocations of
 @samp{%lex-param @{@var{type1} @var{arg1}@}} yield additional arguments.
@@ -8850,7 +8861,7 @@ The first, inclusive, position of the range, and the first beyond.
 @end deftypeivar
 
 @deftypeop {Constructor} {Location} {} Location (Position @var{loc})
-Create a @code{Location} denoting an empty range located at a given point. 
+Create a @code{Location} denoting an empty range located at a given point.
 @end deftypeop
 
 @deftypeop {Constructor} {Location} {} Location (Position @var{begin}, Position @var{end})
@@ -9064,7 +9075,7 @@ Return immediately from the parser, indicating success.
 @end deffn
 
 @deffn {Statement} {return YYERROR;}
-Start error recovery without printing an error message. 
+Start error recovery without printing an error message.
 @xref{Error Recovery}.
 @end deffn
 
