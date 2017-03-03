@@ -1,6 +1,6 @@
 # Configure template for GNU Bison.                   -*-Autoconf-*-
 #
-# Copyright (C) 2001, 2002 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2002, 2003 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 # We need a recent Autoconf to run a recent Autotest.
 AC_PREREQ(2.54)
 
-AC_INIT([GNU Bison], [1.75], [bug-bison@gnu.org])
+AC_INIT([GNU Bison], [1.875], [bug-bison@gnu.org])
 AC_CONFIG_AUX_DIR(config)
 
 AM_INIT_AUTOMAKE([1.7 check-news readme-alpha dist-bzip2])
@@ -56,10 +56,11 @@ if test "${enableval}" = yes; then
   BISON_WARNING(-Wshadow)
   BISON_WARNING(-Wstrict-prototypes)
   BISON_WARNING(-Wwrite-strings)
+  AC_DEFINE([lint], 1, [Define to 1 if the compiler is checking for lint.])
 fi
 
 # Checks for programs.
-AM_PROG_LEX
+AC_PROG_LEX
 AC_PROG_YACC
 AC_PROG_RANLIB
 BISON_PROG_GNU_M4
@@ -71,31 +72,33 @@ AC_DEFINE_UNQUOTED([M4], ["$M4"], [Define to the GNU M4 executable name.])
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([ctype.h locale.h memory.h stdlib.h string.h unistd.h])
+AC_HEADER_STDBOOL
 
 # Checks for compiler characteristics.
-AC_C_CONST
 AC_C_INLINE
-AM_C_PROTOTYPES
+
+# Checks for types.
+AC_CHECK_TYPES([uintptr_t])
 
 # Checks for library functions.
 AC_FUNC_ALLOCA
 AC_FUNC_OBSTACK
 AC_FUNC_ERROR_AT_LINE
 AC_FUNC_STRNLEN
-UTILS_FUNC_MKSTEMP
 AC_CHECK_FUNCS(setlocale)
 AC_CHECK_DECLS([free, getenv, getopt,
                 stpcpy, strchr, strspn, strnlen,
                 malloc, memchr, memrchr])
 AC_REPLACE_FUNCS(memchr memrchr \
-                 strchr stpcpy strrchr strspn strtol)
+                 strchr stpcpy strrchr strspn strtol strtoul)
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
+jm_PREREQ_MBSWIDTH
 jm_PREREQ_QUOTEARG
 jm_FUNC_ARGMATCH
 jm_PREREQ_ERROR
-jm_PREREQ_TEMPNAME
 AM_WITH_DMALLOC
+BISON_PREREQ_SUBPIPE
 BISON_PREREQ_TIMEVAR
 
 # Gettext.

@@ -1,4 +1,4 @@
-/* Definitions for macrotab.c and callers, part of bison,
+/* Muscle table manager for Bison,
    Copyright (C) 2001, 2002 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
@@ -19,20 +19,12 @@
    Boston, MA 02111-1307, USA.  */
 
 #ifndef MUSCLE_TAB_H_
-# define MUSCLE_TAB_H
+# define MUSCLE_TAB_H_
 
-# define MTABSIZE 101
-
-typedef struct muscle_entry_s
-{
-  const char *key;
-  const char *value;
-} muscle_entry_t;
-
-void muscle_init PARAMS ((void));
-void muscle_insert PARAMS ((const char *key, const char *value));
-const char *muscle_find PARAMS ((const char *key));
-void muscle_free PARAMS ((void));
+void muscle_init (void);
+void muscle_insert (const char *key, char *value);
+char *muscle_find (const char *key);
+void muscle_free (void);
 
 
 /* An obstack dedicated to receive muscle keys and values.  */
@@ -59,15 +51,43 @@ extern struct obstack muscle_obstack;
   muscle_insert (Key, obstack_finish (&muscle_obstack));	\
 }
 
-#define MUSCLE_INSERT_PREFIX(Key, Value)	       			\
-{									\
-  obstack_fgrow2 (&muscle_obstack, "%s%s", 				\
-		  spec_name_prefix ? spec_name_prefix : "yy", Value);	\
-  obstack_1grow (&muscle_obstack, 0);					\
-  muscle_insert (Key, obstack_finish (&muscle_obstack));	       	\
+#define MUSCLE_OBSTACK_SGROW(Obstack, Value)			\
+{								\
+  char const *s;						\
+  for (s = Value; *s; s++)					\
+    switch (*s)							\
+      {								\
+      case '$':	obstack_sgrow (Obstack, "$]["); break;		\
+      case '@':	obstack_sgrow (Obstack, "@@" ); break;		\
+      case '[':	obstack_sgrow (Obstack, "@{" ); break;		\
+      case ']':	obstack_sgrow (Obstack, "@}" ); break;		\
+      default: obstack_1grow (Obstack, *s); break;		\
+      }								\
 }
 
+#define MUSCLE_INSERT_C_STRING(Key, Value)			\
+{								\
+  MUSCLE_OBSTACK_SGROW (&muscle_obstack,			\
+			quotearg_style (c_quoting_style,	\
+					Value));		\
+  obstack_1grow (&muscle_obstack, 0);				\
+  muscle_insert (Key, obstack_finish (&muscle_obstack));	\
+}
 
-void muscles_m4_output PARAMS ((FILE *out));
+/* Insert (KEY, VALUE).  If KEY already existed, overwrite the
+   previous value.  Uses MUSCLE_OBSTACK.  De-allocates the previously
+   associated value.  VALUE and SEPARATOR are copied.  */
+
+void muscle_grow (const char *key, const char *value, const char *separator);
+
+/* MUSCLE is an M4 list of pairs.  Create or extend it with the pair
+   (A1, A2).  Note that because the muscle values are output *double*
+   quoted, one needs to strip the first level of quotes to reach the
+   list itself.  */
+
+void muscle_pair_list_grow (const char *muscle,
+			    const char *a1, const char *a2);
+
+void muscles_m4_output (FILE *out);
 
 #endif /* not MUSCLE_TAB_H_ */

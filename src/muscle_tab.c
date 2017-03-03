@@ -1,4 +1,5 @@
-/* Macro table manager for Bison,
+/* Muscle table manager for Bison.
+
    Copyright (C) 2001, 2002 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
@@ -19,11 +20,19 @@
    Boston, MA 02111-1307, USA.  */
 
 #include "system.h"
-#include "hash.h"
+
+#include <hash.h>
+#include <quotearg.h>
+
 #include "files.h"
 #include "muscle_tab.h"
 #include "getargs.h"
 
+typedef struct
+{
+  const char *key;
+  char *value;
+} muscle_entry;
 
 /* An obstack used to create some entries.  */
 struct obstack muscle_obstack;
@@ -36,15 +45,15 @@ struct hash_table *muscle_table = NULL;
 static bool
 hash_compare_muscles (void const *x, void const *y)
 {
-  const muscle_entry_t *m1 = x;
-  const muscle_entry_t *m2 = y;
-  return strcmp (m1->key, m2->key) ? FALSE : TRUE;
+  muscle_entry const *m1 = x;
+  muscle_entry const *m2 = y;
+  return strcmp (m1->key, m2->key) == 0;
 }
 
 static unsigned int
 hash_muscle (const void *x, unsigned int tablesize)
 {
-  const muscle_entry_t *m = x;
+  muscle_entry const *m = x;
   return hash_string (m->key, tablesize);
 }
 
@@ -56,31 +65,15 @@ hash_muscle (const void *x, unsigned int tablesize)
 void
 muscle_init (void)
 {
+  /* Initialize the muscle obstack.  */
+  obstack_init (&muscle_obstack);
+
   muscle_table = hash_initialize (HT_INITIAL_CAPACITY, NULL, hash_muscle,
 				  hash_compare_muscles, free);
 
   /* Version and input file.  */
-  muscle_insert ("version", VERSION);
-  muscle_insert ("filename", infile);
-
-  /* FIXME: there should probably be no default here, only in the
-     skeletons.  */
-
-  /* Types.  */
-  muscle_insert ("ltype", "yyltype");
-
-  /* Default #line formatting.  */
-  muscle_insert ("linef", "#line %d %s\n");
-
-  /* Stack parameters.  */
-  muscle_insert ("maxdepth", "10000");
-  muscle_insert ("initdepth", "200");
-
-  /* C++ macros.  */
-  muscle_insert ("name", "Parser");
-
-  /* Initialize the muscle obstack.  */
-  obstack_init (&muscle_obstack);
+  MUSCLE_INSERT_STRING ("version", VERSION);
+  MUSCLE_INSERT_C_STRING ("filename", grammar_file);
 }
 
 
@@ -97,56 +90,130 @@ muscle_free (void)
 
 
 
-void
-muscle_insert (const char *key, const char *value)
-{
-  muscle_entry_t pair;
-  muscle_entry_t *entry = NULL;
+/*------------------------------------------------------------.
+| Insert (KEY, VALUE).  If KEY already existed, overwrite the |
+| previous value.                                             |
+`------------------------------------------------------------*/
 
-  pair.key = key;
-  entry = hash_lookup (muscle_table, &pair);
+void
+muscle_insert (const char *key, char *value)
+{
+  muscle_entry probe;
+  muscle_entry *entry = NULL;
+
+  probe.key = key;
+  entry = hash_lookup (muscle_table, &probe);
 
   if (!entry)
     {
       /* First insertion in the hash. */
-      entry = XMALLOC (muscle_entry_t, 1);
+      MALLOC (entry, 1);
       entry->key = key;
       hash_insert (muscle_table, entry);
     }
   entry->value = value;
 }
 
-const char*
+
+/*-------------------------------------------------------------------.
+| Insert (KEY, VALUE).  If KEY already existed, overwrite the        |
+| previous value.  Uses MUSCLE_OBSTACK.  De-allocates the previously |
+| associated value.  VALUE and SEPARATOR are copied.                 |
+`-------------------------------------------------------------------*/
+
+void
+muscle_grow (const char *key, const char *val, const char *separator)
+{
+  muscle_entry probe;
+  muscle_entry *entry = NULL;
+
+  probe.key = key;
+  entry = hash_lookup (muscle_table, &probe);
+
+  if (!entry)
+    {
+      /* First insertion in the hash. */
+      MALLOC (entry, 1);
+      entry->key = key;
+      hash_insert (muscle_table, entry);
+      entry->value = xstrdup (val);
+    }
+  else
+    {
+      /* Grow the current value. */
+      char *new_val;
+      obstack_sgrow (&muscle_obstack, entry->value);
+      free (entry->value);
+      obstack_sgrow (&muscle_obstack, separator);
+      obstack_sgrow (&muscle_obstack, val);
+      obstack_1grow (&muscle_obstack, 0);
+      new_val = obstack_finish (&muscle_obstack);
+      entry->value = xstrdup (new_val);
+      obstack_free (&muscle_obstack, new_val);
+    }
+}
+
+
+/*-------------------------------------------------------------------.
+| MUSCLE is an M4 list of pairs.  Create or extend it with the pair  |
+| (A1, A2).  Note that because the muscle values are output *double* |
+| quoted, one needs to strip the first level of quotes to reach the  |
+| list itself.                                                       |
+`-------------------------------------------------------------------*/
+
+void muscle_pair_list_grow (const char *muscle,
+			    const char *a1, const char *a2)
+{
+  char *pair;
+  obstack_fgrow2 (&muscle_obstack, "[[[%s]], [[%s]]]", a1, a2);
+  obstack_1grow (&muscle_obstack, 0);
+  pair = obstack_finish (&muscle_obstack);
+  muscle_grow (muscle, pair, ",\n");
+  obstack_free (&muscle_obstack, pair);
+}
+
+/*-------------------------------.
+| Find the value of muscle KEY.  |
+`-------------------------------*/
+
+char*
 muscle_find (const char *key)
 {
-  muscle_entry_t pair;
-  muscle_entry_t *result = NULL;
+  muscle_entry probe;
+  muscle_entry *result = NULL;
 
-  pair.key = key;
-  result = hash_lookup (muscle_table, &pair);
+  probe.key = key;
+  result = hash_lookup (muscle_table, &probe);
   return result ? result->value : NULL;
 }
 
 
-/* Output the definition of all the current muscles into a list of
-   m4_defines.  */
+/*------------------------------------------------.
+| Output the definition of ENTRY as a m4_define.  |
+`------------------------------------------------*/
 
-static int
-muscle_m4_output (muscle_entry_t *entry, FILE *out)
+static inline bool
+muscle_m4_output (muscle_entry *entry, FILE *out)
 {
   fprintf (out, "m4_define([b4_%s],\n", entry->key);
-  fprintf (out, "          [[%s]])\n\n\n", entry->value);
-  return 1;
+  fprintf (out, "[[%s]])\n\n\n", entry->value);
+  return true;
+}
+
+static bool
+muscle_m4_output_processor (void *entry, void *out)
+{
+  return muscle_m4_output (entry, out);
 }
 
 
-/* Output the definition of all the current muscles into a list of
-   m4_defines.  */
+/*----------------------------------------------------------------.
+| Output the definition of all the current muscles into a list of |
+| m4_defines.                                                     |
+`----------------------------------------------------------------*/
 
 void
 muscles_m4_output (FILE *out)
 {
-  hash_do_for_each (muscle_table,
-		    (Hash_processor) muscle_m4_output,
-		    out);
+  hash_do_for_each (muscle_table, muscle_m4_output_processor, out);
 }

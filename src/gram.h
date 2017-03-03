@@ -1,4 +1,5 @@
-/* Data definitions for internal representation of bison's input,
+/* Data definitions for internal representation of Bison's input.
+
    Copyright (C) 1984, 1986, 1989, 1992, 2001, 2002
    Free Software Foundation, Inc.
 
@@ -52,7 +53,7 @@
    The rules themselves are described by several arrays: amongst which
    RITEM, and RULES.
 
-   RULES is an array of struct rule_s, which members are:
+   RULES is an array of rules, whose members are:
 
    RULES[R].lhs -- the symbol of the left hand side of rule R.
 
@@ -76,7 +77,7 @@
 
    RULES[R].line -- the line where R was defined.
 
-   RULES[R].useful -- TRUE iff the rule is used (i.e., FALSE if thrown
+   RULES[R].useful -- true iff the rule is used (i.e., false if thrown
    away by reduce).
 
    The right hand side is stored as symbol numbers in a portion of
@@ -113,105 +114,121 @@ extern int nsyms;
 extern int ntokens;
 extern int nvars;
 
-typedef int item_number_t;
-# define ITEM_NUMBER_MAX ((item_number_t) INT_MAX)
-# define ITEM_NUMBER_MIN ((item_number_t) INT_MIN)
-extern item_number_t *ritem;
+typedef int item_number;
+extern item_number *ritem;
 extern unsigned int nritems;
 
-/* There is weird relationship between OT1H item_number_t and OTOH
-   symbol_number_t and rule_number_t: we store the latter in
-   item_number_t.  symbol_number_t are stored as are, while
-   the negation of (rule_number_t + 1) are stored.
+/* There is weird relationship between OT1H item_number and OTOH
+   symbol_number and rule_number: we store the latter in
+   item_number.  symbol_number values are stored as-is, while
+   the negation of (rule_number + 1) is stored.
 
-   Therefore, an symbol_number_t must be a valid item_number_t, and we
+   Therefore, a symbol_number must be a valid item_number, and we
    sometimes have to perform the converse transformation.  */
-# define symbol_number_as_item_number(Tok) ((item_number_t) (Tok))
-# define item_number_as_symbol_number(Ite) ((symbol_number_t) (Ite))
 
-extern symbol_number_t start_symbol;
+static inline item_number
+symbol_number_as_item_number (symbol_number s)
+{
+  return s;
+}
 
-/* Rules numbers. */
-typedef short rule_number_t;
-# define RULE_NUMBER_MAX ((rule_number_t) SHRT_MAX)
-extern rule_number_t nrules;
-# define int_of_rule_number(RNum) ((int) (RNum))
-# define rule_number_as_item_number(RNum) ((item_number_t) (- RNum - 1))
-# define item_number_as_rule_number(INum) ((rule_number_t) (- INum - 1))
+static inline symbol_number
+item_number_as_symbol_number (item_number i)
+{
+  return i;
+}
+
+extern symbol_number start_symbol;
+
+/* Rule numbers.  */
+typedef short rule_number;
+extern rule_number nrules;
+
+static inline item_number
+rule_number_as_item_number (rule_number r)
+{
+  return -1 - r;
+}
+
+static inline rule_number
+item_number_as_rule_number (item_number i)
+{
+  return -1 - i;
+}
 
 
 /*--------.
 | Rules.  |
 `--------*/
 
-typedef struct rule_s
+typedef struct
 {
   /* The number of the rule in the source.  It is usually the index in
      RULES too, except if there are useless rules.  */
-  rule_number_t user_number;
+  rule_number user_number;
 
   /* The index in RULES.  Usually the rule number in the source,
      except if some rules are useless.  */
-  rule_number_t number;
+  rule_number number;
 
-  symbol_t *lhs;
-  item_number_t *rhs;
+  symbol *lhs;
+  item_number *rhs;
 
   /* This symbol provides both the associativity, and the precedence. */
-  symbol_t *prec;
+  symbol *prec;
 
   short dprec;
   short merger;
 
   /* This symbol was attached to the rule via %prec. */
-  symbol_t *precsym;
+  symbol *precsym;
 
-  location_t location;
+  location location;
   bool useful;
 
   const char *action;
-  location_t action_location;
-} rule_t;
+  location action_location;
+} rule;
 
-extern struct rule_s *rules;
+extern rule *rules;
 
 /* A function that selects a rule.  */
-typedef bool (*rule_filter_t) PARAMS ((rule_t *r));
+typedef bool (*rule_filter) (rule *);
 
 /* Return true IFF the rule has a `number' smaller than NRULES.  */
-bool rule_useful_p PARAMS ((rule_t *r));
+bool rule_useful_p (rule *r);
 
 /* Return true IFF the rule has a `number' higher than NRULES.  */
-bool rule_useless_p PARAMS ((rule_t *r));
+bool rule_useless_p (rule *r);
 
 /* Return true IFF the rule is not flagged as useful *and* is useful.
    In other words, it was discarded because of conflicts.  */
-bool rule_never_reduced_p PARAMS ((rule_t *r));
+bool rule_never_reduced_p (rule *r);
 
-/* Print this RULE's number and lhs on OUT.  If a PREVIOUS_LHS was
+/* Print this rule's number and lhs on OUT.  If a PREVIOUS_LHS was
    already displayed (by a previous call for another rule), avoid
    useless repetitions.  */
-void rule_lhs_print PARAMS ((rule_t *rule, symbol_t *previous_lhs, FILE *out));
+void rule_lhs_print (rule *r, symbol *previous_lhs, FILE *out);
 
 /* Return the length of the RHS.  */
-int rule_rhs_length PARAMS ((rule_t *rule));
+int rule_rhs_length (rule *r);
 
-/* Print this RULE's RHS on OUT.  */
-void rule_rhs_print PARAMS ((rule_t *rule, FILE *out));
+/* Print this rule's RHS on OUT.  */
+void rule_rhs_print (rule *r, FILE *out);
 
-/* Print this RULE on OUT.  */
-void rule_print PARAMS ((rule_t *rule, FILE *out));
+/* Print this rule on OUT.  */
+void rule_print (rule *r, FILE *out);
 
 
 
 
 /* Table of the symbols, indexed by the symbol number. */
-extern symbol_t **symbols;
+extern symbol **symbols;
 
 /* TOKEN_TRANSLATION -- a table indexed by a token number as returned
    by the user's yylex routine, it yields the internal token number
    used by the parser and throughout bison.  */
-extern symbol_number_t *token_translations;
+extern symbol_number *token_translations;
 extern int max_user_token_number;
 
 
@@ -228,29 +245,29 @@ extern int glr_parser;
 extern int pure_parser;
 
 /* Dump RITEM for traces. */
-void ritem_print PARAMS ((FILE *out));
+void ritem_print (FILE *out);
 
 /* Return the size of the longest rule RHS.  */
-size_t ritem_longest_rhs PARAMS ((void));
+size_t ritem_longest_rhs (void);
 
 /* Print the grammar's rules numbers from BEGIN (inclusive) to END
    (exclusive) on OUT under TITLE.  */
-void grammar_rules_partial_print PARAMS ((FILE *out, const char *title,
-					  rule_filter_t filter));
+void grammar_rules_partial_print (FILE *out, const char *title,
+				  rule_filter filter);
 
 /* Print the grammar's rules on OUT.  */
-void grammar_rules_print PARAMS ((FILE *out));
+void grammar_rules_print (FILE *out);
 
 /* Dump the grammar. */
-void grammar_dump PARAMS ((FILE *out, const char *title));
+void grammar_dump (FILE *out, const char *title);
 
 /* Report on STDERR the rules that are not flagged USEFUL, using the
    MESSAGE (which can be `useless rule' when invoked after grammar
    reduction, or `never reduced' after conflicts were taken into
    account).  */
-void grammar_rules_never_reduced_report PARAMS ((const char *message));
+void grammar_rules_never_reduced_report (const char *message);
 
 /* Free the packed grammar. */
-void grammar_free PARAMS ((void));
+void grammar_free (void);
 
 #endif /* !GRAM_H_ */

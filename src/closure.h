@@ -1,5 +1,7 @@
 /* Subroutines for bison
-   Copyright (C) 1984, 1989, 2000, 2001, 2002  Free Software Foundation, Inc.
+
+   Copyright (C) 1984, 1989, 2000, 2001, 2002 Free Software
+   Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -21,11 +23,13 @@
 #ifndef CLOSURE_H_
 # define CLOSURE_H_
 
+# include "gram.h"
+
 /* Allocates the itemset and ruleset vectors, and precomputes useful
    data so that closure can be called.  n is the number of elements to
    allocate for itemset.  */
 
-void new_closure PARAMS ((int n));
+void new_closure (int n);
 
 
 /* Given the kernel (aka core) of a state (a vector of item numbers
@@ -42,14 +46,14 @@ void new_closure PARAMS ((int n));
    significant).  CLOSURE places there the indices of all items which
    represent units of input that could arrive next.  */
 
-void closure PARAMS ((item_number_t *items, int n));
+void closure (item_number *items, int n);
 
 
 /* Frees ITEMSET, RULESET and internal data.  */
 
-void free_closure PARAMS ((void));
+void free_closure (void);
 
-extern item_number_t *itemset;
+extern item_number *itemset;
 extern int nritemset;
 
 #endif /* !CLOSURE_H_ */

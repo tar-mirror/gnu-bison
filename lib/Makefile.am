@@ -15,16 +15,17 @@
 ## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 ## 02111-1307  USA
 
-AUTOMAKE_OPTIONS = ansi2knr
-
 AM_CFLAGS = $(WARNING_CFLAGS)
 
+lib_LIBRARIES = liby.a
 noinst_LIBRARIES = libbison.a
 
 # config.h is in build/., and system.h is in src/src/.
 INCLUDES = -I$(top_builddir)      \
            -I$(top_srcdir)/src \
            -I$(top_srcdir)/lib
+
+liby_a_SOURCES = main.c yyerror.c
 
 # Heck, we are still using an old version of Automake which does not
 # understand inner AC_LIBOBJ (i.e., from Autoconf itself, not from
@@ -34,10 +35,12 @@ EXTRA_DIST = malloc.c realloc.c strnlen.c
 libbison_a_SOURCES = \
   gettext.h \
   basename.c dirname.h dirname.c \
+  get-errno.h get-errno.c \
   getopt.h getopt.c getopt1.c \
   hash.h hash.c \
+  mbswidth.h mbswidth.c \
   quote.h quote.c quotearg.h quotearg.c \
-  readpipe.c unlocked-io.h \
+  subpipe.h subpipe.c unlocked-io.h \
   xalloc.h xmalloc.c xstrdup.c xstrndup.c \
   $(bitsets_sources) $(additional_bitsets_sources) $(timevars_sources)
 

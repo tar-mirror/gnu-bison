@@ -1,4 +1,4 @@
-/* system-dependent definitions for Bison.
+/* System-dependent definitions for Bison.
    Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
 
    This program is free software; you can redistribute it and/or modify
@@ -18,30 +18,19 @@
 #ifndef BISON_SYSTEM_H
 #define BISON_SYSTEM_H
 
-#ifdef HAVE_CONFIG_H
+#if HAVE_CONFIG_H
 # include <config.h>
 #endif
 
-/* AIX requires this to be the first thing in the file.  */
-#ifdef __GNUC__
-# define alloca(Size) __builtin_alloca (Size)
-#else
-# if HAVE_ALLOCA_H
-#  include <alloca.h>
-# else
-#  ifdef _AIX
- #pragma alloca
-#  else
-#   ifndef alloca /* predefined by HP cc +Olibcalls */
-char *alloca ();
-#   endif
-#  endif
-# endif
-#endif
-
+#include <stddef.h>
 #include <stdio.h>
 
-#include <assert.h>
+/* Verify a requirement at compile-time (unlike assert, which is runtime).  */
+#define verify(name, assertion) struct name {char name[(assertion) ? 1 : -1];}
+
+#if HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
 
 #if HAVE_STDLIB_H
 # include <stdlib.h>
@@ -74,69 +63,57 @@ char *alloca ();
 /* memory.h and strings.h conflict on some systems.  */
 #endif /* not STDC_HEADERS and not HAVE_STRING_H */
 
-#include <errno.h>
-#ifndef errno
-extern int errno;
-#endif
+#include <limits.h>
 
-#ifndef PARAMS
-# if defined PROTOTYPES || defined __STDC__
-#  define PARAMS(Args) Args
+#if HAVE_UINTPTR_T
+# if HAVE_INTTYPES_H
+#  include <inttypes.h>
 # else
-#  define PARAMS(Args) ()
+#  if HAVE_STDINT_H
+#   include <stdint.h>
+#  endif
 # endif
+#else
+/* This isn't perfect, but it's good enough for Bison, which needs
+   only to hash pointers.  */
+typedef size_t uintptr_t;
 #endif
 
-#if HAVE_LIMITS_H
-# include <limits.h>
-#endif
-#ifndef SHRT_MIN
-# define SHRT_MIN (-32768)
-#endif
-#ifndef SHRT_MAX
-# define SHRT_MAX 32767
-#endif
-
-# include "xalloc.h"
+#include <xalloc.h>
+#define CALLOC(P, N) ((P) = xcalloc (N, sizeof *(P)))
+#define MALLOC(P, N) ((P) = xmalloc ((N) * sizeof *(P)))
+#define REALLOC(P, N) ((P) = xrealloc (P, (N) * sizeof *(P)))
 
 /* From xstrndup.c.  */
-char *xstrndup PARAMS ((const char *s, size_t n));
-
-
-/*----------------.
-| Using timevar.  |
-`----------------*/
-
-#include "timevar.h"
-extern int time_report;
+char *xstrndup (const char *s, size_t n);
 
 
 /*---------------------.
 | Missing prototypes.  |
 `---------------------*/
 
-#if !HAVE_DECL_STPCPY
-char *stpcpy PARAMS ((char *dest, const char *src));
+#if defined HAVE_DECL_STPCPY && !HAVE_DECL_STPCPY
+char *stpcpy (char *dest, const char *src);
 #endif
 
-#if !HAVE_DECL_STRCHR
-char *strchr(const char *s, int c);
+#if defined HAVE_DECL_STRCHR && !HAVE_DECL_STRCHR
+char *strchr (const char *s, int c);
 #endif
 
-#if !HAVE_DECL_STRSPN
-size_t strspn(const char *s, const char *accept);
+#if defined HAVE_DECL_STRSPN && !HAVE_DECL_STRSPN
+size_t strspn (const char *s, const char *accept);
 #endif
 
-#if !HAVE_DECL_STRNLEN
-size_t strnlen PARAMS ((const char *s, size_t maxlen));
+#if defined HAVE_DECL_STRNLEN && !HAVE_DECL_STRNLEN
+size_t strnlen (const char *s, size_t maxlen);
 #endif
 
-#if !HAVE_DECL_MEMCHR
-void *memchr PARAMS ((const void *s, int c, size_t n));
+#if defined HAVE_DECL_MEMCHR && !HAVE_DECL_MEMCHR
+void *memchr (const void *s, int c, size_t n);
 #endif
 
-#if !HAVE_DECL_MEMRCHR
-void *memrchr PARAMS ((const void *s, int c, size_t n));
+#if defined HAVE_DECL_MEMRCHR && !HAVE_DECL_MEMRCHR
+void *memrchr (const void *s, int c, size_t n);
 #endif
 
 
@@ -144,6 +121,14 @@ void *memrchr PARAMS ((const void *s, int c, size_t n));
 /*-----------------.
 | GCC extensions.  |
 `-----------------*/
+
+/* Use this to suppress gcc's `...may be used before initialized'
+   warnings.  */
+#ifdef lint
+# define IF_LINT(Code) Code
+#else
+# define IF_LINT(Code) /* empty */
+#endif
 
 #ifndef __attribute__
 /* This feature is available in gcc versions 2.5 and later.  */
@@ -172,14 +157,14 @@ void *memrchr PARAMS ((const void *s, int c, size_t n));
 | NLS.  |
 `------*/
 
-#ifdef HAVE_LOCALE_H
+#if HAVE_LOCALE_H
 # include <locale.h>
 #endif
-#ifndef HAVE_SETLOCALE
+#if !HAVE_SETLOCALE
 # define setlocale(Category, Locale)
 #endif
 
-#include "gettext.h"
+#include <gettext.h>
 #define _(Msgid)  gettext (Msgid)
 #define N_(Msgid) (Msgid)
 
@@ -197,11 +182,11 @@ void *memrchr PARAMS ((const void *s, int c, size_t n));
 | Booleans.  |
 `-----------*/
 
-#ifndef TRUE
-# define TRUE	(1)
-# define FALSE	(0)
+#if HAVE_STDBOOL_H
+# include <stdbool.h>
+#else
+typedef enum {false = 0, true = 1} bool;
 #endif
-typedef int bool;
 
 
 /*-----------.
@@ -210,7 +195,7 @@ typedef int bool;
 
 # define obstack_chunk_alloc xmalloc
 # define obstack_chunk_free  free
-# include "obstack.h"
+# include <obstack.h>
 
 #define obstack_sgrow(Obs, Str) \
   obstack_grow (Obs, Str, strlen (Str))
@@ -251,17 +236,17 @@ do {								\
 
 #ifdef VMS
   /* VMS. */
-# define EXT_TAB	"_tab"
-# define EXT_OUTPUT	".output"
+# define TAB_EXT	"_tab"
+# define OUTPUT_EXT	".output"
 #else /* ! VMS */
 # ifdef MSDOS
    /* MS DOS. */
-#  define EXT_TAB	"_tab"
-#  define EXT_OUTPUT	".out"
+#  define TAB_EXT	"_tab"
+#  define OUTPUT_EXT	".out"
 # else /* ! MSDOS */
   /* Standard. */
-#  define EXT_TAB	".tab"
-#  define EXT_OUTPUT	".output"
+#  define TAB_EXT	".tab"
+#  define OUTPUT_EXT	".output"
 # endif /* ! MSDOS */
 #endif /* ! VMS */
 

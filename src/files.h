@@ -21,6 +21,8 @@
 #ifndef FILES_H_
 # define FILES_H_
 
+# include "uniqstr.h"
+
 /* File name specified with -o for the output file, or 0 if no -o.  */
 extern char *spec_outfile;
 
@@ -50,25 +52,20 @@ extern FILE *finput;
 extern struct obstack pre_prologue_obstack;
 extern struct obstack post_prologue_obstack;
 
-extern char *infile;
+/* The file name as given on the command line.
+   Not named "input_file" because Flex uses this name for an argument,
+   and therefore GCC warns about a name clash. */
+extern uniqstr grammar_file;
 
-void compute_output_file_names PARAMS((void));
+/* The current file name.  Might change with %include, or with #line.  */
+extern uniqstr current_file;
 
-FILE *xfopen PARAMS ((const char *name, const char *mode));
-int xfclose PARAMS ((FILE *ptr));
+void compute_output_file_names (void);
 
-/* Is SUFFIX ending STRING?  */
-int strsuffix (const char* string, const char* suffix);
-
-/* Return a newly allocated string composed of the concatenation of
-   STRING1, and STRING2.  */
-char* stringappend (const char* string1, const char* string2);
+FILE *xfopen (const char *name, const char *mode);
+void xfclose (FILE *ptr);
 
 /* Prefix used to generate output file names.  */
 extern char *short_base_name;
-
-/* Infix used to generate output file names (i.e., `.tab', or `_tab',
-   or `').  */
-extern char *output_infix;
 
 #endif /* !FILES_H_ */

@@ -29,7 +29,7 @@ AT_SETUP([Early token definitions])
 # Found in GCJ: they expect the tokens to be defined before the user
 # prologue, so that they can use the token definitions in it.
 
-AT_DATA([input.y],
+AT_DATA_GRAMMAR([input.y],
 [[%{
 void yyerror (const char *s);
 int yylex (void);
@@ -284,7 +284,7 @@ AT_DATA([input.y],
 ?
 default: 'a' }
 %&
-%a
+%a-does-not-exist
 %-
 %{
 ]])
@@ -294,11 +294,11 @@ AT_CHECK([bison input.y], [1], [],
 input.y:3.14: invalid character: `}'
 input.y:4.1: invalid character: `%'
 input.y:4.2: invalid character: `&'
-input.y:5.1: invalid character: `%'
+input.y:5.1-17: invalid directive: `%a-does-not-exist'
 input.y:6.1: invalid character: `%'
 input.y:6.2: invalid character: `-'
-input.y:7.1-8.0: unexpected end of file in a prologue
-input.y:7.1-8.0: parse error, unexpected "%{...%}", expecting ";" or "|"
+input.y:7.1-8.0: missing `%}' at end of file
+input.y:7.1-8.0: syntax error, unexpected "%{...%}"
 ]])
 
 AT_CLEANUP
@@ -313,12 +313,12 @@ AT_CLEANUP
 AT_SETUP([Token definitions])
 
 # Bison managed, when fed with `%token 'f' "f"' to #define 'f'!
-AT_DATA([input.y],
+AT_DATA_GRAMMAR([input.y],
 [%{
 void yyerror (const char *s);
 int yylex (void);
 %}
-[%token YYEOF 0 "end of file"
+[%token MYEOF 0 "end of file"
 %token 'a' "a"
 %token b "b"
 %token c 'c'
@@ -340,7 +340,7 @@ AT_CLEANUP
 
 AT_SETUP([Characters Escapes])
 
-AT_DATA([input.y],
+AT_DATA_GRAMMAR([input.y],
 [%{
 void yyerror (const char *s);
 int yylex (void);
@@ -352,6 +352,7 @@ exp:
 | '"'  "'"
 ;
 ]])
+# Pacify font-lock-mode: "
 
 AT_CHECK([bison -o input.c input.y])
 AT_COMPILE([input.o], [-c input.c])

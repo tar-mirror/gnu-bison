@@ -5,32 +5,20 @@
 From Franc,ois: should we keep the directory part in the CPP guard?
 
 
+* Yacc.c: CPP Macros
+
+Do some people use YYPURE, YYLSP_NEEDED like we do in the test suite?
+They should not: it is not documented.  But if they need to, let's
+find something clean (not like YYLSP_NEEDED...).
+
+
 * URGENT: Documenting C++ output
 Write a first documentation for C++ output.
 
 
 * Documentation
-Before releasing, make sure the documentation refers to the current
-`output' format.
-
-
-* Error messages
-Some are really funky.  For instance
-
-	type clash (`%s' `%s') on default action
-
-is really weird.  Revisit them all.
-
-
-* read_pipe.c
-This is not portable to DOS for instance.  Implement a more portable
-scheme.  Sources of inspiration include GNU diff, and Free Recode.
-
-
-* value_components_used
-Was defined but not used: where was it coming from?  It can't be to
-check if %union is used, since the user is free to $<foo>n on her
-union, doesn't she?
+Before releasing, make sure the documentation ("Understanding your
+parser") refers to the current `output' format.
 
 
 * GLR & C++
@@ -64,10 +52,40 @@ DeRemer and Penello: they already provide the algorithm.
 
 * Extensions
 
-** yyerror, yysymprint interface
+** %destructor
+I think we should document it as experimental, and allow its use in
+the next releases.  But we also need to port it to GLR.  What about
+lalr1.cc?  Well, read what Hans reported, maybe we don't want
+%detructor.  On the other hand, there is no reason not to provide it:
+users can avoid its use.
+
+** $foo
+Have a look at the Lemon parser generator: instead of $1, $2 etc. they
+can name the values.  This is much more pleasant.  For instance:
+
+       exp (res): exp (a) '+' exp (b) { $res = $a + $b; };
+
+I love this.  I have been bitten too often by the removal of the
+symbol, and forgetting to shift all the $n to $n-1.  If you are
+unlucky, it compiles...
+
+** $-1
+We should find a means to provide an access to values deep in the
+stack.  For instance, instead of
+
+	baz: qux { $$ = $<foo>-1 + $<bar>0 + $1; }
+
+we should be able to have:
+
+  foo($foo) bar($bar) baz($bar): qux($qux) { $baz = $foo + $bar + $qux; }
+
+Or something like this.
+
+
+** yysymprint interface
 It should be improved, in particular when using Bison features such as
-locations, and YYPARSE_PARAMS.  For the time being, it is recommended
-to #define yyerror and yyprint to steal internal variables...
+locations, and YYPARSE_PARAMS.  For the time being, it is almost
+recommended to yyprint to steal internal variables...
 
 ** Several %unions
 I think this is a pleasant (but useless currently) feature, but in the
@@ -89,6 +107,17 @@ When implementing multiple-%union support, bare the following in mind:
 	#line 23 "foo.y"
 	  char *sval;
 	}
+
+** %if and the like
+It should be possible to have %if/%else/%endif.  The implementation is
+not clear: should it be lexical or syntactic.  Vadim Maslow thinks it
+must be in the scanner: we must not parse what is in a switched off
+part of %if.  Akim Demaille thinks it should be in the parser, so as
+to avoid falling into another CPP mistake.
+
+** -D, --define-muscle NAME=VALUE
+To define muscles via cli.  Or maybe support directly NAME=VALUE?
+
 
 * Unit rules
 Maybe we could expand unit rules, i.e., transform
@@ -156,21 +185,11 @@ Paul notes:
 Show reductions.	[]
 
 * Broken options ?
-** %no-lines		[ok]
 ** %no-parser		[]
-** %pure-parser		[]
 ** %token-table		[]
-** Options which could use parse_dquoted_param ().
-Maybe transferred in lex.c.
-*** %skeleton		[ok]
-*** %output		[]
-*** %file-prefix	[]
-*** %name-prefix	[]
-
 ** Skeleton strategy.	[]
 Must we keep %no-parser?
 	     %token-table?
-*** New skeletons.	[]
 
 * src/print_graph.c
 Find the best graph parameters.	[]
@@ -186,13 +205,12 @@ skeleton muscles.	[]
 ** tests/pure-parser.at	[]
 New tests.
 
-* input synclines
-Some users create their foo.y files, and equip them with #line.  Bison
-should recognize these, and preserve them.
-
 * BTYacc
-See if we can integrate backtracking in Bison.  Contact the BTYacc
-maintainers.
+See if we can integrate backtracking in Bison.  Charles-Henri de
+Boysson <de-boy_c@epita.fr> is working on this, and already has some
+results.  Vadim Maslow, the maintainer of BTYacc was contacted, and we
+stay in touch with him.  Adjusting the Bison grammar parser will be
+needed to support some extra BTYacc features.  This is less urgent.
 
 ** Keeping the conflicted actions
 First, analyze the differences between byacc and btyacc (I'm referring

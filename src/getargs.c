@@ -1,5 +1,6 @@
-/* Parse command line arguments for bison.
-   Copyright 1984, 1986, 1989, 1992, 2000, 2001, 2002
+/* Parse command line arguments for Bison.
+
+   Copyright (C) 1984, 1986, 1989, 1992, 2000, 2001, 2002
    Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
@@ -20,11 +21,27 @@
    02111-1307, USA.  */
 
 #include "system.h"
-#include "getopt.h"
-#include "argmatch.h"
+
+#include <argmatch.h>
+#include <error.h>
+
+/* Hack to get <getopt.h> to declare getopt with a prototype.  */
+#if lint && ! defined __GNU_LIBRARY__
+# define __GNU_LIBRARY__
+# define HACK_FOR___GNU_LIBRARY___PROTOTYPE 1
+#endif
+
+#include <getopt.h>
+
+#ifdef HACK_FOR___GNU_LIBRARY___PROTOTYPE
+# undef __GNU_LIBRARY__
+# undef HACK_FOR___GNU_LIBRARY___PROTOTYPE
+#endif
+
 #include "complain.h"
-#include "getargs.h"
 #include "files.h"
+#include "getargs.h"
+#include "uniqstr.h"
 
 int debug_flag = 0;
 int defines_flag = 0;
@@ -52,13 +69,16 @@ static const char * const trace_args[] =
   /* In a series of synonyms, present the most meaningful first, so
      that argmatch_valid be more readable.  */
   "none       - no report",
+  "scan       - grammar scanner traces",
+  "parse      - grammar parser traces",
   "automaton  - contruction of the automaton",
   "bitsets    - use of bitsets",
   "grammar    - reading, reducing of the grammar",
   "resource   - memory consumption (where available)",
   "sets       - grammar sets: firsts, nullable etc.",
-  "time       - time consumption",
   "tools      - m4 invocation and preserve the temporary file",
+  "skeleton   - skeleton postprocessing",
+  "time       - time consumption",
   "all        - all of the above",
   0
 };
@@ -66,13 +86,16 @@ static const char * const trace_args[] =
 static const int trace_types[] =
 {
   trace_none,
+  trace_scan,
+  trace_parse,
   trace_automaton,
   trace_bitsets,
   trace_grammar,
   trace_resource,
   trace_sets,
-  trace_time,
   trace_tools,
+  trace_skeleton,
+  trace_time,
   trace_all
 };
 
@@ -80,7 +103,7 @@ static const int trace_types[] =
 static void
 trace_argmatch (char *args)
 {
-  ARGMATCH_ASSERT (trace_args, trace_types);
+  verify (trace_constraint, ARGMATCH_CONSTRAINT (trace_args, trace_types));
   if (args)
     {
       args = strtok (args, ",");
@@ -131,7 +154,7 @@ static const int report_types[] =
 static void
 report_argmatch (char *args)
 {
-  ARGMATCH_ASSERT (report_args, report_types);
+  verify (report_constraint, ARGMATCH_CONSTRAINT (report_args, report_types));
   args = strtok (args, ",");
   do
     {
@@ -145,37 +168,45 @@ report_argmatch (char *args)
   while ((args = strtok (NULL, ",")));
 }
 
-/*---------------------------.
-| Display the help message.  |
-`---------------------------*/
+
+/*-------------------------------------------.
+| Display the help message and exit STATUS.  |
+`-------------------------------------------*/
+
+static void usage (int) ATTRIBUTE_NORETURN;
 
 static void
-usage (FILE *stream)
+usage (int status)
 {
-  /* Some efforts were made to ease the translators' task, please
-     continue.  */
-  fputs (_("\
-GNU bison generates parsers for LALR(1) grammars.\n"), stream);
-  putc ('\n', stream);
+  if (status != 0)
+    fprintf (stderr, _("Try `%s --help' for more information.\n"),
+	     program_name);
+  else
+    {
+      /* Some efforts were made to ease the translators' task, please
+	 continue.  */
+      fputs (_("\
+GNU bison generates parsers for LALR(1) grammars.\n"), stdout);
+      putc ('\n', stdout);
 
-  fprintf (stream, _("\
+      fprintf (stdout, _("\
 Usage: %s [OPTION]... FILE\n"), program_name);
-  putc ('\n', stream);
+      putc ('\n', stdout);
 
-  fputs (_("\
+      fputs (_("\
 If a long option shows an argument as mandatory, then it is mandatory\n\
 for the equivalent short option also.  Similarly for optional arguments.\n"),
-	 stream);
-  putc ('\n', stream);
+	     stdout);
+      putc ('\n', stdout);
 
-  fputs (_("\
+      fputs (_("\
 Operation modes:\n\
   -h, --help      display this help and exit\n\
   -V, --version   output version information and exit\n\
-  -y, --yacc      emulate POSIX yacc\n"), stream);
-  putc ('\n', stream);
+  -y, --yacc      emulate POSIX yacc\n"), stdout);
+      putc ('\n', stdout);
 
-  fputs (_("\
+      fputs (_("\
 Parser:\n\
   -S, --skeleton=FILE        specify the skeleton to use\n\
   -t, --debug                instrument the parser for debugging\n\
@@ -184,10 +215,10 @@ Parser:\n\
   -l, --no-lines             don't generate `#line' directives\n\
   -n, --no-parser            generate the tables only\n\
   -k, --token-table          include a table of token names\n\
-"), stream);
-  putc ('\n', stream);
+"), stdout);
+      putc ('\n', stdout);
 
-  fputs (_("\
+      fputs (_("\
 Output:\n\
   -d, --defines              also produce a header file\n\
   -r, --report=THINGS        also produce details on the automaton\n\
@@ -195,10 +226,10 @@ Output:\n\
   -b, --file-prefix=PREFIX   specify a PREFIX for output files\n\
   -o, --output=FILE          leave output to FILE\n\
   -g, --graph                also produce a VCG description of the automaton\n\
-"), stream);
-  putc ('\n', stream);
+"), stdout);
+      putc ('\n', stdout);
 
-  fputs (_("\
+      fputs (_("\
 THINGS is a list of comma separated words that can include:\n\
   `state'        describe the states\n\
   `itemset'      complete the core item sets with their closure\n\
@@ -206,11 +237,14 @@ THINGS is a list of comma separated words that can include:\n\
   `solved'       describe shift/reduce conflicts solving\n\
   `all'          include all the above information\n\
   `none'         disable the report\n\
-"), stream);
-  putc ('\n', stream);
+"), stdout);
+      putc ('\n', stdout);
 
-  fputs (_("\
-Report bugs to <bug-bison@gnu.org>.\n"), stream);
+      fputs (_("\
+Report bugs to <bug-bison@gnu.org>.\n"), stdout);
+    }
+
+  exit (status);
 }
 
 
@@ -219,23 +253,23 @@ Report bugs to <bug-bison@gnu.org>.\n"), stream);
 `------------------------------*/
 
 static void
-version (FILE *stream)
+version (void)
 {
   /* Some efforts were made to ease the translators' task, please
      continue.  */
-  fprintf (stream, _("bison (GNU Bison) %s"), VERSION);
-  putc ('\n', stream);
-  fputs (_("Written by Robert Corbett and Richard Stallman.\n"), stream);
-  putc ('\n', stream);
+  printf (_("bison (GNU Bison) %s"), VERSION);
+  putc ('\n', stdout);
+  fputs (_("Written by Robert Corbett and Richard Stallman.\n"), stdout);
+  putc ('\n', stdout);
 
-  fprintf (stream,
+  fprintf (stdout,
 	   _("Copyright (C) %d Free Software Foundation, Inc.\n"), 2002);
 
   fputs (_("\
 This is free software; see the source for copying conditions.  There is NO\n\
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\
 "),
-	 stream);
+	 stdout);
 }
 
 
@@ -266,18 +300,6 @@ static struct option const long_options[] =
 
   /* Hidden. */
   { "trace",         optional_argument,   0,     'T' },
-
-  /* FIXME: semantic parsers will output an `include' of an
-     output file: be sure that the naem included is indeed the name of
-     the output file.  */ /* FIXME Should we activate this options ?
-     */
-  { "output",      required_argument,     0, 'o' },
-  { "file-prefix", required_argument,     0, 'b' },
-  { "name-prefix", required_argument,     0, 'p' },
-
-  /*
-   * Percent and command line declarations.
-   */
 
   /* Output.  */
   { "defines",     optional_argument,   0,   'd' },
@@ -311,7 +333,8 @@ getargs (int argc, char *argv[])
 {
   int c;
 
-  while ((c = getopt_long (argc, argv, short_options, long_options, NULL)) != EOF)
+  while ((c = getopt_long (argc, argv, short_options, long_options, NULL))
+	 != -1)
     switch (c)
       {
       case 0:
@@ -323,17 +346,17 @@ getargs (int argc, char *argv[])
 	break;
 
       case 'h':
-	usage (stdout);
-	exit (0);
+	usage (EXIT_SUCCESS);
 
       case 'V':
-	version (stdout);
-	exit (0);
+	version ();
+	exit (EXIT_SUCCESS);
 
       case 'g':
 	/* Here, the -g and --graph=FILE options are differentiated.  */
 	graph_flag = 1;
-	spec_graph_file = AS_FILE_NAME (optarg);
+	if (optarg)
+	  spec_graph_file = AS_FILE_NAME (optarg);
 	break;
 
       case 'v':
@@ -392,19 +415,17 @@ getargs (int argc, char *argv[])
 	break;
 
       default:
-	fprintf (stderr, _("Try `%s --help' for more information.\n"),
-		 program_name);
-	exit (1);
+	usage (EXIT_FAILURE);
       }
 
-  if (optind == argc)
+  if (argc - optind != 1)
     {
-      fprintf (stderr, _("%s: no grammar file given\n"), program_name);
-      exit (1);
+      if (argc - optind < 1)
+	error (0, 0, _("missing operand after `%s'"), argv[argc - 1]);
+      else
+	error (0, 0, _("extra operand `%s'"), argv[optind + 1]);
+      usage (EXIT_FAILURE);
     }
-  if (optind < argc - 1)
-    fprintf (stderr, _("%s: extra arguments ignored after `%s'\n"),
-	     program_name, argv[optind]);
 
-  infile = argv[optind];
+  current_file = grammar_file = uniqstr_new (argv[optind]);
 }

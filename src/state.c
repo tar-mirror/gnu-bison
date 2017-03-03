@@ -1,5 +1,6 @@
-/* Type definitions for nondeterministic finite state machine for bison,
-   Copyright (C) 2001, 2002  Free Software Foundation, Inc.
+/* Type definitions for nondeterministic finite state machine for Bison.
+
+   Copyright (C) 2001, 2002 Free Software Foundation, Inc.
 
    This file is part of Bison, the GNU Compiler Compiler.
 
@@ -20,7 +21,9 @@
 
 
 #include "system.h"
-#include "hash.h"
+
+#include <hash.h>
+
 #include "complain.h"
 #include "gram.h"
 #include "state.h"
@@ -31,31 +34,28 @@
 			`-------------------*/
 
 
-/*---------------------------------------.
-| Create a new array of N shifts/gotos.  |
-`---------------------------------------*/
+/*-----------------------------------------.
+| Create a new array of NUM shifts/gotos.  |
+`-----------------------------------------*/
 
-#define TRANSITIONS_ALLOC(Num)						\
-  (transitions_t *) xcalloc ((sizeof (transitions_t)			\
-                                  + (Num - 1) * sizeof (state_t *)), 1)
-
-static transitions_t *
-transitions_new (int num, state_t **the_states)
+static transitions *
+transitions_new (int num, state **the_states)
 {
-  transitions_t *res = TRANSITIONS_ALLOC (num);
+  size_t states_size = num * sizeof *the_states;
+  transitions *res = xmalloc (offsetof (transitions, states) + states_size);
   res->num = num;
-  memcpy (res->states, the_states, num * sizeof (the_states[0]));
+  memcpy (res->states, the_states, states_size);
   return res;
 }
 
 
 /*-------------------------------------------------------------------.
 | Return the state such these TRANSITIONS contain a shift/goto to it |
-| on SYMBOL.  Aborts if none found.                                  |
+| on S.  Abort if none found.                                        |
 `-------------------------------------------------------------------*/
 
-state_t *
-transitions_to (transitions_t *shifts, symbol_number_t s)
+state *
+transitions_to (transitions *shifts, symbol_number s)
 {
   int j;
   for (j = 0; j < shifts->num; j++)
@@ -70,21 +70,17 @@ transitions_to (transitions_t *shifts, symbol_number_t s)
 			`--------------------*/
 
 
-/*-------------------------------.
-| Create a new array of N errs.  |
-`-------------------------------*/
+/*---------------------------------.
+| Create a new array of NUM errs.  |
+`---------------------------------*/
 
-#define ERRS_ALLOC(Nerrs)				\
-  (errs_t *) xcalloc ((sizeof (errs_t)			\
-                      + (Nerrs - 1) * sizeof (symbol_t *)), 1)
-
-
-errs_t *
-errs_new (int num, symbol_t **tokens)
+errs *
+errs_new (int num, symbol **tokens)
 {
-  errs_t *res = ERRS_ALLOC (num);
+  size_t symbols_size = num * sizeof *tokens;
+  errs *res = xmalloc (offsetof (errs, symbols) + symbols_size);
   res->num = num;
-  memcpy (res->symbols, tokens, num * sizeof (tokens[0]));
+  memcpy (res->symbols, tokens, symbols_size);
   return res;
 }
 
@@ -96,21 +92,18 @@ errs_new (int num, symbol_t **tokens)
 			`-------------*/
 
 
-/*-------------------------------------.
-| Create a new array of N reductions.  |
-`-------------------------------------*/
+/*---------------------------------------.
+| Create a new array of NUM reductions.  |
+`---------------------------------------*/
 
-#define REDUCTIONS_ALLOC(Nreductions)                          \
-  (reductions_t *) xcalloc ((sizeof (reductions_t)             \
-                            + (Nreductions - 1) * sizeof (rule_t *)), 1)
-
-static reductions_t *
-reductions_new (int num, rule_t **reductions)
+static reductions *
+reductions_new (int num, rule **reds)
 {
-  reductions_t *res = REDUCTIONS_ALLOC (num);
+  size_t rules_size = num * sizeof *reds;
+  reductions *res = xmalloc (offsetof (reductions, rules) + rules_size);
   res->num = num;
-  memcpy (res->rules, reductions, num * sizeof (reductions[0]));
   res->lookaheads = NULL;
+  memcpy (res->rules, reds, rules_size);
   return res;
 }
 
@@ -121,37 +114,38 @@ reductions_new (int num, rule_t **reductions)
 			`---------*/
 
 
-state_number_t nstates = 0;
+state_number nstates = 0;
 /* FINAL_STATE is properly set by new_state when it recognizes its
    accessing symbol: $end.  */
-state_t *final_state = NULL;
+state *final_state = NULL;
 
-#define STATE_ALLOC(Nitems)						\
-  (state_t *) xcalloc ((sizeof (state_t) 		       		\
-			+ (Nitems - 1) * sizeof (item_number_t)), 1)
 
 /*------------------------------------------------------------------.
 | Create a new state with ACCESSING_SYMBOL, for those items.  Store |
 | it in the state hash table.                                       |
 `------------------------------------------------------------------*/
 
-state_t *
-state_new (symbol_number_t accessing_symbol,
-	   size_t core_size, item_number_t *core)
+state *
+state_new (symbol_number accessing_symbol,
+	   size_t nitems, item_number *core)
 {
-  state_t *res;
+  state *res;
+  size_t items_size = nitems * sizeof *core;
 
-  if (nstates >= STATE_NUMBER_MAX)
-    fatal (_("too many states (max %d)"), STATE_NUMBER_MAX);
+  if (STATE_NUMBER_MAXIMUM <= nstates)
+    abort ();
 
-  res = STATE_ALLOC (core_size);
+  res = xmalloc (offsetof (state, items) + items_size);
+  res->number = nstates++;
   res->accessing_symbol = accessing_symbol;
-  res->number = nstates;
-  ++nstates;
+  res->transitions = NULL;
+  res->reductions = NULL;
+  res->errs = NULL;
+  res->consistent = 0;
   res->solved_conflicts = NULL;
 
-  res->nitems = core_size;
-  memcpy (res->items, core, core_size * sizeof (core[0]));
+  res->nitems = nitems;
+  memcpy (res->items, core, items_size);
 
   state_hash_insert (res);
 
@@ -159,80 +153,83 @@ state_new (symbol_number_t accessing_symbol,
 }
 
 
-/*-------------.
-| Free STATE.  |
-`-------------*/
+/*---------.
+| Free S.  |
+`---------*/
 
 static void
-state_free (state_t *state)
+state_free (state *s)
 {
-  free (state->transitions);
-  free (state->reductions);
-  free (state->errs);
-  free (state);
+  free (s->transitions);
+  free (s->reductions);
+  free (s->errs);
+  free (s);
 }
 
 
-/*-------------------------------.
-| Set the transitions of STATE.  |
-`-------------------------------*/
+/*---------------------------.
+| Set the transitions of S.  |
+`---------------------------*/
 
 void
-state_transitions_set (state_t *state, int num, state_t **transitions)
+state_transitions_set (state *s, int num, state **trans)
 {
-  assert (!state->transitions);
-  state->transitions = transitions_new (num, transitions);
+  if (s->transitions)
+    abort ();
+  s->transitions = transitions_new (num, trans);
 }
 
 
-/*------------------------------.
-| Set the reductions of STATE.  |
-`------------------------------*/
+/*--------------------------.
+| Set the reductions of S.  |
+`--------------------------*/
 
 void
-state_reductions_set (state_t *state, int num, rule_t **reductions)
+state_reductions_set (state *s, int num, rule **reds)
 {
-  assert (!state->reductions);
-  state->reductions = reductions_new (num, reductions);
+  if (s->reductions)
+    abort ();
+  s->reductions = reductions_new (num, reds);
 }
 
 
 int
-state_reduction_find (state_t *state, rule_t *rule)
+state_reduction_find (state *s, rule *r)
 {
   int i;
-  reductions_t *reds = state->reductions;
+  reductions *reds = s->reductions;
   for (i = 0; i < reds->num; ++i)
-    if (reds->rules[i] == rule)
+    if (reds->rules[i] == r)
       return i;
   return -1;
 }
 
 
-/*------------------------.
-| Set the errs of STATE.  |
-`------------------------*/
+/*--------------------.
+| Set the errs of S.  |
+`--------------------*/
 
 void
-state_errs_set (state_t *state, int num, symbol_t **tokens)
+state_errs_set (state *s, int num, symbol **tokens)
 {
-  assert (!state->errs);
-  state->errs = errs_new (num, tokens);
+  if (s->errs)
+    abort ();
+  s->errs = errs_new (num, tokens);
 }
 
 
 
-/*--------------------------------------------------------------.
-| Print on OUT all the lookaheads such that this STATE wants to |
-| reduce this RULE.                                             |
-`--------------------------------------------------------------*/
+/*-----------------------------------------------------.
+| Print on OUT all the lookaheads such that S wants to |
+| reduce R.                                            |
+`-----------------------------------------------------*/
 
 void
-state_rule_lookaheads_print (state_t *state, rule_t *rule, FILE *out)
+state_rule_lookaheads_print (state *s, rule *r, FILE *out)
 {
   /* Find the reduction we are handling.  */
-  reductions_t *reds = state->reductions;
-  int red = state_reduction_find (state, rule);
+  reductions *reds = s->reductions;
+  int red = state_reduction_find (s, r);
 
   /* Print them if there are.  */
   if (reds->lookaheads && red != -1)
@@ -260,30 +257,42 @@ state_rule_lookaheads_print (state_t *state, rule_t *rule, FILE *out)
 static struct hash_table *state_table = NULL;
 
 /* Two states are equal if they have the same core items.  */
-static bool
-state_compare (const state_t *s1, const state_t *s2)
+static inline bool
+state_compare (state const *s1, state const *s2)
 {
   int i;
 
   if (s1->nitems != s2->nitems)
-    return FALSE;
+    return false;
 
   for (i = 0; i < s1->nitems; ++i)
     if (s1->items[i] != s2->items[i])
-      return FALSE;
+      return false;
 
-  return TRUE;
+  return true;
+}
+
+static bool
+state_comparator (void const *s1, void const *s2)
+{
+  return state_compare (s1, s2);
+}
+
+static inline unsigned int
+state_hash (state const *s, unsigned int tablesize)
+{
+  /* Add up the state's item numbers to get a hash key.  */
+  unsigned int key = 0;
+  int i;
+  for (i = 0; i < s->nitems; ++i)
+    key += s->items[i];
+  return key % tablesize;
 }
 
 static unsigned int
-state_hash (const state_t *state, unsigned int tablesize)
+state_hasher (void const *s, unsigned int tablesize)
 {
-  /* Add up the state's item numbers to get a hash key.  */
-  int key = 0;
-  int i;
-  for (i = 0; i < state->nitems; ++i)
-    key += state->items[i];
-  return key % tablesize;
+  return state_hash (s, tablesize);
 }
 
 
@@ -296,9 +305,9 @@ state_hash_new (void)
 {
   state_table = hash_initialize (HT_INITIAL_CAPACITY,
 				 NULL,
-				 (Hash_hasher) state_hash,
-				 (Hash_comparator) state_compare,
-				 (Hash_data_freer) NULL);
+				 state_hasher,
+				 state_comparator,
+				 NULL);
 }
 
 
@@ -313,14 +322,14 @@ state_hash_free (void)
 }
 
 
-/*---------------------------------------.
-| Insert STATE in the state hash table.  |
-`---------------------------------------*/
+/*-----------------------------------.
+| Insert S in the state hash table.  |
+`-----------------------------------*/
 
 void
-state_hash_insert (state_t *state)
+state_hash_insert (state *s)
 {
-  hash_insert (state_table, state);
+  hash_insert (state_table, s);
 }
 
 
@@ -329,21 +338,22 @@ state_hash_insert (state_t *state)
 | not exist yet, return NULL.                                       |
 `------------------------------------------------------------------*/
 
-state_t *
-state_hash_lookup (size_t core_size, item_number_t *core)
+state *
+state_hash_lookup (size_t nitems, item_number *core)
 {
-  state_t *probe = STATE_ALLOC (core_size);
-  state_t *entry;
+  size_t items_size = nitems * sizeof *core;
+  state *probe = xmalloc (offsetof (state, items) + items_size);
+  state *entry;
 
-  probe->nitems = core_size;
-  memcpy (probe->items, core, core_size * sizeof (core[0]));
+  probe->nitems = nitems;
+  memcpy (probe->items, core, items_size);
   entry = hash_lookup (state_table, probe);
   free (probe);
   return entry;
 }
 
 /* All the decorated states, indexed by the state number.  */
-state_t **states = NULL;
+state **states = NULL;
 
 
 /*----------------------.
@@ -353,7 +363,7 @@ state_t **states = NULL;
 void
 states_free (void)
 {
-  state_number_t i;
+  state_number i;
   for (i = 0; i < nstates; ++i)
     state_free (states[i]);
   free (states);

@@ -30,141 +30,134 @@
 
 %{
 #include "system.h"
+
 #include "complain.h"
-#include "muscle_tab.h"
+#include "conflicts.h"
 #include "files.h"
 #include "getargs.h"
-#include "output.h"
-#include "symlist.h"
 #include "gram.h"
+#include "muscle_tab.h"
+#include "output.h"
 #include "reader.h"
-#include "conflicts.h"
+#include "symlist.h"
 
-/* Produce verbose parse errors.  */
+/* Produce verbose syntax errors.  */
 #define YYERROR_VERBOSE 1
-#define YYLLOC_DEFAULT(Current, Rhs, N)			\
-do {							\
-  if (N)						\
-  {							\
-    Current.first_column  = Rhs[1].first_column;	\
-    Current.first_line    = Rhs[1].first_line;		\
-    Current.last_column   = Rhs[N].last_column;		\
-    Current.last_line     = Rhs[N].last_line;		\
-  }							\
-  else							\
-  {							\
-    Current = Rhs[0];					\
-  }							\
-} while (0)
 
-/* Pass the control structure to YYPARSE and YYLEX. */
-#define YYPARSE_PARAM gram_control
-#define YYLEX_PARAM gram_control
-/* YYPARSE receives GRAM_CONTROL as a void *.  Provide a
-   correctly typed access to it.  */
-#define yycontrol ((gram_control_t *) gram_control)
+#define YYLLOC_DEFAULT(Current, Rhs, N)  (Current) = lloc_default (Rhs, N)
+static YYLTYPE lloc_default (YYLTYPE const *, int);
 
-/* Request detailed parse error messages, and pass them to GRAM_ERROR.
-   FIXME: depends on the undocumented availability of YYLLOC.t */
+/* Request detailed syntax error messages, and pass them to GRAM_ERROR.
+   FIXME: depends on the undocumented availability of YYLLOC.  */
 #undef  yyerror
 #define yyerror(Msg) \
         gram_error (&yylloc, Msg)
+static void gram_error (location const *, char const *);
 
 #define YYPRINT(File, Type, Value) \
-        yyprint (File, Type, &Value)
-static void yyprint (FILE *file, int type, const yystype *value);
+	print_token_value (File, Type, &Value)
+static void print_token_value (FILE *, int, YYSTYPE const *);
+
+static void add_param (char const *, char *, location);
 
 symbol_class current_class = unknown_sym;
-char *current_type = 0;
-symbol_t *current_lhs;
-location_t current_lhs_location;
-assoc_t current_assoc;
+uniqstr current_type = 0;
+symbol *current_lhs;
+location current_lhs_location;
+assoc current_assoc;
 int current_prec = 0;
-braced_code_t current_braced_code = action_braced_code;
 %}
 
 
 /* Only NUMBERS have a value.  */
 %union
 {
-  symbol_t *symbol;
-  symbol_list_t *list;
+  symbol *symbol;
+  symbol_list *list;
   int integer;
-  char *string;
-  assoc_t assoc;
+  char *chars;
+  assoc assoc;
+  uniqstr uniqstr;
 };
 
 /* Define the tokens together with their human representation.  */
 %token GRAM_EOF 0 "end of file"
 %token STRING     "string"
-%token CHARACTER  "character"
 %token INT        "integer"
 
 %token PERCENT_TOKEN       "%token"
 %token PERCENT_NTERM       "%nterm"
 
 %token PERCENT_TYPE        "%type"
-%token PERCENT_DESTRUCTOR  "%destructor"
-%token PERCENT_PRINTER     "%printer"
+%token PERCENT_DESTRUCTOR  "%destructor {...}"
+%token PERCENT_PRINTER     "%printer {...}"
 
-%token PERCENT_UNION       "%union"
+%token PERCENT_UNION       "%union {...}"
 
 %token PERCENT_LEFT        "%left"
 %token PERCENT_RIGHT       "%right"
 %token PERCENT_NONASSOC    "%nonassoc"
 
-%token PERCENT_EXPECT        "%expect"
-%token PERCENT_START         "%start"
 %token PERCENT_PREC          "%prec"
 %token PERCENT_DPREC         "%dprec"
 %token PERCENT_MERGE         "%merge"
-%token PERCENT_VERBOSE       "%verbose"
-%token PERCENT_ERROR_VERBOSE "%error-verbose"
 
-%token PERCENT_OUTPUT      "%output"
-%token PERCENT_FILE_PREFIX "%file-prefix"
-%token PERCENT_NAME_PREFIX "%name-prefix"
 
-%token PERCENT_DEFINE      "%define"
-%token PERCENT_PURE_PARSER "%pure-parser"
-%token PERCENT_GLR_PARSER  "%glr-parser"
+/*----------------------.
+| Global Declarations.  |
+`----------------------*/
 
-%token PERCENT_DEFINES "%defines"
-
-%token PERCENT_YACC "%yacc"
-
-%token PERCENT_DEBUG       "%debug"
-%token PERCENT_LOCATIONS   "%locations"
-%token PERCENT_NO_LINES    "%no-lines"
-%token PERCENT_SKELETON    "%skeleton"
-%token PERCENT_TOKEN_TABLE "%token-table"
+%token
+  PERCENT_DEBUG         "%debug"
+  PERCENT_DEFINE        "%define"
+  PERCENT_DEFINES       "%defines"
+  PERCENT_ERROR_VERBOSE "%error-verbose"
+  PERCENT_EXPECT        "%expect"
+  PERCENT_FILE_PREFIX   "%file-prefix"
+  PERCENT_GLR_PARSER    "%glr-parser"
+  PERCENT_LEX_PARAM     "%lex-param {...}"
+  PERCENT_LOCATIONS     "%locations"
+  PERCENT_NAME_PREFIX   "%name-prefix"
+  PERCENT_NO_LINES      "%no-lines"
+  PERCENT_OUTPUT        "%output"
+  PERCENT_PARSE_PARAM   "%parse-param {...}"
+  PERCENT_PURE_PARSER   "%pure-parser"
+  PERCENT_SKELETON      "%skeleton"
+  PERCENT_START         "%start"
+  PERCENT_TOKEN_TABLE   "%token-table"
+  PERCENT_VERBOSE       "%verbose"
+  PERCENT_YACC          "%yacc"
+;
 
 %token TYPE            "type"
 %token EQUAL           "="
 %token SEMICOLON       ";"
-%token COLON           ":"
 %token PIPE            "|"
 %token ID              "identifier"
+%token ID_COLON        "identifier:"
 %token PERCENT_PERCENT "%%"
 %token PROLOGUE        "%{...%}"
 %token EPILOGUE        "epilogue"
 %token BRACED_CODE     "{...}"
 
 
-%type <string> CHARACTER TYPE STRING string_content
-               BRACED_CODE PROLOGUE EPILOGUE epilogue.opt action
+%type <chars> STRING string_content
+	      "%destructor {...}"
+	      "%lex-param {...}"
+	      "%parse-param {...}"
+	      "%printer {...}"
+	      "%union {...}"
+	      BRACED_CODE action
+	      PROLOGUE EPILOGUE
+%type <uniqstr> TYPE
 %type <integer> INT
-%type <symbol> ID symbol string_as_id
+%type <symbol> ID ID_COLON symbol string_as_id
 %type <assoc> precedence_declarator
 %type <list>  symbols.1
 %%
 
 input:
   declarations "%%" grammar epilogue.opt
-    {
-      yycontrol->errcode = 0;
-      epilogue_set ($4, @4);
-    }
 ;
 
 
@@ -174,7 +167,7 @@ input:
 
 declarations:
   /* Nothing */
-| declarations declaration semi_colon.opt
+| declarations declaration
 ;
 
 declaration:
@@ -186,16 +179,19 @@ declaration:
 | "%error-verbose"                         { error_verbose = 1; }
 | "%expect" INT                            { expected_conflicts = $2; }
 | "%file-prefix" "=" string_content        { spec_file_prefix = $3; }
+| "%glr-parser" 			   { glr_parser = 1; }
+| "%lex-param {...}"			   { add_param ("lex_param", $1, @1); }
 | "%locations"                             { locations_flag = 1; }
 | "%name-prefix" "=" string_content        { spec_name_prefix = $3; }
 | "%no-lines"                              { no_lines_flag = 1; }
 | "%output" "=" string_content             { spec_outfile = $3; }
+| "%parse-param {...}"			 { add_param ("parse_param", $1, @1); }
 | "%pure-parser"                           { pure_parser = 1; }
-| "%glr-parser" 			   { glr_parser = 1; }
 | "%skeleton" string_content               { skeleton = $2; }
 | "%token-table"                           { token_table_flag = 1; }
-| "%verbose"                               { report_flag = 1; }
+| "%verbose"                               { report_flag = report_states; }
 | "%yacc"                                  { yacc_flag = 1; }
+| ";"
 ;
 
 grammar_declaration:
@@ -205,31 +201,25 @@ grammar_declaration:
     {
       grammar_start_symbol_set ($2, @2);
     }
-| "%union" BRACED_CODE
+| "%union {...}"
     {
       typed = 1;
-      MUSCLE_INSERT_INT ("stype_line", @2.first_line);
-      muscle_insert ("stype", $2);
+      MUSCLE_INSERT_INT ("stype_line", @1.start.line);
+      muscle_insert ("stype", $1);
     }
-| "%destructor"
-    { current_braced_code = destructor_braced_code; }
-  BRACED_CODE symbols.1
+| "%destructor {...}" symbols.1
     {
-      symbol_list_t *list;
-      for (list = $4; list; list = list->next)
-	symbol_destructor_set (list->sym, $3, @3);
-      symbol_list_free ($4);
-      current_braced_code = action_braced_code;
+      symbol_list *list;
+      for (list = $2; list; list = list->next)
+	symbol_destructor_set (list->sym, $1, @1);
+      symbol_list_free ($2);
     }
-| "%printer"
-    { current_braced_code = printer_braced_code; }
-  BRACED_CODE symbols.1
+| "%printer {...}" symbols.1
     {
-      symbol_list_t *list;
-      for (list = $4; list; list = list->next)
-	symbol_printer_set (list->sym, $3, list->location);
-      symbol_list_free ($4);
-      current_braced_code = action_braced_code;
+      symbol_list *list;
+      for (list = $2; list; list = list->next)
+	symbol_printer_set (list->sym, $1, list->location);
+      symbol_list_free ($2);
     }
 ;
 
@@ -246,7 +236,7 @@ symbol_declaration:
     }
 | "%type" TYPE symbols.1
     {
-      symbol_list_t *list;
+      symbol_list *list;
       for (list = $3; list; list = list->next)
 	symbol_type_set (list->sym, $2, @2);
       symbol_list_free ($3);
@@ -256,7 +246,7 @@ symbol_declaration:
 precedence_declaration:
   precedence_declarator type.opt symbols.1
     {
-      symbol_list_t *list;
+      symbol_list *list;
       ++current_prec;
       for (list = $3; list; list = list->next)
 	{
@@ -275,7 +265,7 @@ precedence_declarator:
 ;
 
 type.opt:
-  /* Nothing. */ { current_type = NULL;}
+  /* Nothing. */ { current_type = NULL; }
 | TYPE           { current_type = $1; }
 ;
 
@@ -321,9 +311,7 @@ symbol_def:
 /* One or more symbol definitions. */
 symbol_defs.1:
   symbol_def
-    {;}
 | symbol_defs.1 symbol_def
-    {;}
 ;
 
 
@@ -337,11 +325,10 @@ grammar:
 ;
 
 /* As a Bison extension, one can use the grammar declarations in the
-   body of the grammar.  But to remain LALR(1), they must be ended
-   with a semi-colon.  */
+   body of the grammar.  */
 rules_or_grammar_declaration:
   rules
-| grammar_declaration ";"
+| grammar_declaration
     {
       if (yacc_flag)
 	complain_at (@$, _("POSIX forbids declarations in the grammar"));
@@ -350,11 +337,11 @@ rules_or_grammar_declaration:
     {
       yyerrok;
     }
+| ";"
 ;
 
 rules:
-  ID ":" { current_lhs = $1; current_lhs_location = @1; } rhses.1 ";"
-    {;}
+  ID_COLON { current_lhs = $1; current_lhs_location = @1; } rhses.1
 ;
 
 rhses.1:
@@ -380,7 +367,6 @@ rhs:
 symbol:
   ID              { $$ = $1; }
 | string_as_id    { $$ = $1; }
-| CHARACTER       { $$ = symbol_get ($1, @1); }
 ;
 
 action:
@@ -408,35 +394,97 @@ string_content:
 
 epilogue.opt:
   /* Nothing.  */
-    {
-      $$ = xstrdup ("");
-    }
 | "%%" EPILOGUE
     {
-      $$ = $2;
+      epilogue_augment ($2, @2);
+      scanner_last_string_free ();
     }
 ;
 
-semi_colon.opt:
-  /* Nothing.  */
-| ";"
-;
 %%
-/*------------------------------------------------------------------.
-| When debugging the parser, display tokens' locations and values.  |
-`------------------------------------------------------------------*/
+
+
+/* Return the location of the left-hand side of a rule whose
+   right-hand side is RHS[1] ... RHS[N].  Ignore empty nonterminals in
+   the right-hand side, and return an empty location equal to the end
+   boundary of RHS[0] if the right-hand side is empty.  */
+
+static YYLTYPE
+lloc_default (YYLTYPE const *rhs, int n)
+{
+  int i;
+  YYLTYPE r;
+  r.start = r.end = rhs[n].end;
+
+  /* Ignore empty nonterminals the start of the the right-hand side.
+     Do not bother to ignore them at the end of the right-hand side,
+     since empty nonterminals have the same end as their predecessors.  */
+  for (i = 1; i <= n; i++)
+    if (! equal_boundaries (rhs[i].start, rhs[i].end))
+      {
+	r.start = rhs[i].start;
+	break;
+      }
+
+  return r;
+}
+
+
+/* Add a lex-param or a parse-param (depending on TYPE) with
+   declaration DECL and location LOC.  */
 
 static void
-yyprint (FILE *file,
-         int type, const yystype *value)
+add_param (char const *type, char *decl, location loc)
+{
+  static char const alphanum[] =
+    "0123456789"
+    "abcdefghijklmnopqrstuvwxyz"
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    "_";
+  char const *alpha = alphanum + 10;
+  char const *name_start = NULL;
+  char *p;
+
+  for (p = decl; *p; p++)
+    if ((p == decl || ! strchr (alphanum, p[-1])) && strchr (alpha, p[0]))
+      name_start = p;
+
+  /* Strip the surrounding '{' and '}'.  */
+  decl++;
+  p[-1] = '\0';
+
+  if (! name_start)
+    complain_at (loc, _("missing identifier in parameter declaration"));
+  else
+    {
+      char *name;
+      size_t name_len;
+
+      for (name_len = 1;
+	   name_start[name_len] && strchr (alphanum, name_start[name_len]);
+	   name_len++)
+	continue;
+
+      name = xmalloc (name_len + 1);
+      memcpy (name, name_start, name_len);
+      name[name_len] = '\0';
+      muscle_pair_list_grow (type, decl, name);
+      free (name);
+    }
+
+  scanner_last_string_free ();
+}
+
+/*----------------------------------------------------.
+| When debugging the parser, display tokens' values.  |
+`----------------------------------------------------*/
+
+static void
+print_token_value (FILE *file, int type, YYSTYPE const *value)
 {
   fputc (' ', file);
   switch (type)
     {
-    case CHARACTER:
-      fprintf (file, " = '%s'", value->string);
-      break;
-
     case ID:
       fprintf (file, " = %s", value->symbol->tag);
       break;
@@ -446,23 +494,38 @@ yyprint (FILE *file,
       break;
 
     case STRING:
-      fprintf (file, " = \"%s\"", value->string);
+      fprintf (file, " = \"%s\"", value->chars);
       break;
 
     case TYPE:
-      fprintf (file, " = <%s>", value->string);
+      fprintf (file, " = <%s>", value->uniqstr);
       break;
 
     case BRACED_CODE:
+    case PERCENT_DESTRUCTOR:
+    case PERCENT_LEX_PARAM:
+    case PERCENT_PARSE_PARAM:
+    case PERCENT_PRINTER:
+    case PERCENT_UNION:
     case PROLOGUE:
     case EPILOGUE:
-      fprintf (file, " = {{ %s }}", value->string);
+      fprintf (file, " = {{ %s }}", value->chars);
+      break;
+
+    default:
+      fprintf (file, "unknown token type");
       break;
     }
 }
 
-void
-gram_error (location_t *yylloc, const char *msg)
+static void
+gram_error (location const *loc, char const *msg)
 {
-  complain_at (*yylloc, "%s", msg);
+  complain_at (*loc, "%s", msg);
+}
+
+char const *
+token_name (int type)
+{
+  return yytname[type];
 }

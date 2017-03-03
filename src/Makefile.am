@@ -15,8 +15,6 @@
 ## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 ## 02111-1307  USA
 
-AUTOMAKE_OPTIONS = ../lib/ansi2knr
-
 DEFS = @DEFS@ \
   -DPKGDATADIR=\"$(pkgdatadir)\" \
   -DLOCALEDIR=\"$(datadir)/locale\"
@@ -28,9 +26,10 @@ AM_YFLAGS = "-dv"
 INCLUDES = -I$(top_builddir)      \
            -I$(top_srcdir)/lib
 
-LDADD = $(INTLLIBS) ../lib/libbison.a
+LDADD = ../lib/libbison.a $(LIBINTL)
 
 bin_PROGRAMS = bison
+bin_SCRIPTS = yacc
 
 bison_SOURCES = 				  \
 	LR0.c LR0.h				  \
@@ -61,14 +60,18 @@ bison_SOURCES = 				  \
 	symtab.c symtab.h			  \
 	system.h				  \
 	tables.h tables.c			  \
+	uniqstr.c uniqstr.h			  \
 	vcg.c vcg.h				  \
 	vcg_defaults.h
 
 BUILT_SOURCES = scan-skel.c scan-gram.c parse-gram.c parse-gram.h
 
-EXTRA_bison_SOURCES = vmsgetargs.c
+MOSTLYCLEANFILES = yacc
 
-EXTRA_DIST = build.com bison.cld vmshlp.mar
+yacc:
+	echo '#! /bin/sh' >$@
+	echo 'exec $(bindir)/bison -y "$$@"' >>$@
+	chmod a+x $@
 
 echo:
 	echo $(bison_SOURCES) $(noinst_HEADERS)

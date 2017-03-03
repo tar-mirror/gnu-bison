@@ -1,4 +1,5 @@
-/* Top level entry point of bison,
+/* Top level entry point of Bison.
+
    Copyright (C) 1984, 1986, 1989, 1992, 1995, 2000, 2001, 2002
    Free Software Foundation, Inc.
 
@@ -21,25 +22,29 @@
 
 
 #include "system.h"
-#include "bitset_stats.h"
-#include "bitset.h"
-#include "getargs.h"
-#include "symtab.h"
-#include "gram.h"
-#include "files.h"
-#include "complain.h"
-#include "derives.h"
-#include "tables.h"
-#include "output.h"
-#include "reader.h"
-#include "lalr.h"
-#include "reduce.h"
-#include "nullable.h"
-#include "print.h"
+
+#include <bitset_stats.h>
+#include <bitset.h>
+#include <timevar.h>
+
 #include "LR0.h"
+#include "complain.h"
 #include "conflicts.h"
-#include "print_graph.h"
+#include "derives.h"
+#include "files.h"
+#include "getargs.h"
+#include "gram.h"
+#include "lalr.h"
 #include "muscle_tab.h"
+#include "nullable.h"
+#include "output.h"
+#include "print.h"
+#include "print_graph.h"
+#include "reader.h"
+#include "reduce.h"
+#include "symtab.h"
+#include "tables.h"
+#include "uniqstr.h"
 
 /* The name this program was run with, for messages.  */
 char *program_name;
@@ -54,9 +59,11 @@ main (int argc, char *argv[])
   (void) bindtextdomain (PACKAGE, LOCALEDIR);
   (void) textdomain (PACKAGE);
 
+  uniqstrs_new ();
+
   getargs (argc, argv);
 
-  time_report = trace_flag & trace_time;
+  timevar_report = trace_flag & trace_time;
   init_timevar ();
   timevar_start (TV_TOTAL);
 
@@ -73,8 +80,8 @@ main (int argc, char *argv[])
   reader ();
   timevar_pop (TV_READER);
 
-  if (complain_message_count)
-    exit (1);
+  if (complaint_issued)
+    goto finish;
 
   /* Find useless nonterminals and productions and reduce the grammar. */
   timevar_push (TV_REDUCE);
@@ -137,8 +144,8 @@ main (int argc, char *argv[])
 
   /* Stop if there were errors, to avoid trashing previous output
      files.  */
-  if (complain_message_count)
-    exit (1);
+  if (complaint_issued)
+    goto finish;
 
   /* Lookaheads are no longer needed. */
   timevar_push (TV_FREE);
@@ -163,19 +170,25 @@ main (int argc, char *argv[])
      contains things such as user actions, prologue, epilogue etc.  */
   scanner_free ();
   muscle_free ();
+  uniqstrs_free ();
   /* If using alloca.c, flush the alloca'ed memory for the benefit of
      people running Bison as a library in IDEs.  */
 #if C_ALLOCA
-  alloca (0);
+  {
+    extern void *alloca (size_t);
+    alloca (0);
+  }
 #endif
   timevar_pop (TV_FREE);
 
   if (trace_flag & trace_bitsets)
     bitset_stats_dump (stderr);
 
+ finish:
+
   /* Stop timing and print the times.  */
   timevar_stop (TV_TOTAL);
   timevar_print (stderr);
 
-  return complain_message_count ? EXIT_FAILURE : EXIT_SUCCESS;
+  return complaint_issued ? EXIT_FAILURE : EXIT_SUCCESS;
 }

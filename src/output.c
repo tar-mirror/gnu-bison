@@ -1,4 +1,5 @@
-/* Output the generated parsing program for bison,
+/* Output the generated parsing program for Bison.
+
    Copyright (C) 1984, 1986, 1989, 1992, 2000, 2001, 2002
    Free Software Foundation, Inc.
 
@@ -20,86 +21,26 @@
    02111-1307, USA.  */
 
 
-/* The parser tables consist of these tables.
-
-   YYTRANSLATE = vector mapping yylex's token numbers into bison's
-   token numbers.
-
-   YYTNAME = vector of string-names indexed by bison token number.
-
-   YYTOKNUM = vector of yylex token numbers corresponding to entries
-   in YYTNAME.
-
-   YYRLINE = vector of line-numbers of all rules.  For yydebug
-   printouts.
-
-   YYRHS = vector of items of all rules.  This is exactly what RITEMS
-   contains.  For yydebug and for semantic parser.
-
-   YYPRHS[R] = index in YYRHS of first item for rule R.
-
-   YYR1[R] = symbol number of symbol that rule R derives.
-
-   YYR2[R] = number of symbols composing right hand side of rule R.
-
-   YYSTOS[S] = the symbol number of the symbol that leads to state S.
-
-   YYDEFACT[S] = default rule to reduce with in state s, when YYTABLE
-   doesn't specify something else to do.  Zero means the default is an
-   error.
-
-   YYDEFGOTO[I] = default state to go to after a reduction of a rule
-   that generates variable NTOKENS + I, except when YYTABLE specifies
-   something else to do.
-
-   YYPACT[S] = index in YYTABLE of the portion describing state S.
-   The lookahead token's type is used to index that portion to find
-   out what to do.
-
-   If the value in YYTABLE is positive, we shift the token and go to
-   that state.
-
-   If the value is negative, it is minus a rule number to reduce by.
-
-   If the value is zero, the default action from YYDEFACT[S] is used.
-
-   YYPGOTO[I] = the index in YYTABLE of the portion describing what to
-   do after reducing a rule that derives variable I + NTOKENS.  This
-   portion is indexed by the parser state number, S, as of before the
-   text for this nonterminal was read.  The value from YYTABLE is the
-   state to go to if the corresponding value in YYCHECK is S.
-
-   YYTABLE = a vector filled with portions for different uses, found
-   via YYPACT and YYPGOTO.
-
-   YYCHECK = a vector indexed in parallel with YYTABLE.  It indicates,
-   in a roundabout way, the bounds of the portion you are trying to
-   examine.
-
-   Suppose that the portion of YYTABLE starts at index P and the index
-   to be examined within the portion is I.  Then if YYCHECK[P+I] != I,
-   I is outside the bounds of what is actually allocated, and the
-   default (from YYDEFACT or YYDEFGOTO) should be used.  Otherwise,
-   YYTABLE[P+I] should be used.
-
-   YYFINAL = the state number of the termination state.  YYFLAG = most
-   negative short int.  Used to flag ??  */
-
 #include "system.h"
-#include "quotearg.h"
-#include "error.h"
-#include "getargs.h"
-#include "files.h"
-#include "gram.h"
+
+#include <error.h>
+#include <get-errno.h>
+#include <quotearg.h>
+#include <subpipe.h>
+#include <timevar.h>
+
 #include "complain.h"
+#include "files.h"
+#include "getargs.h"
+#include "gram.h"
+#include "muscle_tab.h"
 #include "output.h"
 #include "reader.h"
 #include "symtab.h"
 #include "tables.h"
-#include "muscle_tab.h"
 
 /* From src/scan-skel.l. */
-void m4_invoke PARAMS ((const char *definitions));
+void scan_skel (FILE *);
 
 
 static struct obstack format_obstack;
@@ -127,6 +68,8 @@ Name (const char *name,							\
 {									\
   Type min = first;							\
   Type max = first;							\
+  long int lmin;							\
+  long int lmax;							\
   int i;								\
   int j = 1;								\
 									\
@@ -150,40 +93,70 @@ Name (const char *name,							\
   obstack_1grow (&format_obstack, 0);					\
   muscle_insert (name, obstack_finish (&format_obstack));		\
 									\
+  lmin = min;								\
+  lmax = max;								\
   /* Build `NAME_min' and `NAME_max' in the obstack. */			\
   obstack_fgrow1 (&format_obstack, "%s_min", name);			\
   obstack_1grow (&format_obstack, 0);					\
-  MUSCLE_INSERT_LONG_INT (obstack_finish (&format_obstack),		\
-			  (long int) min);				\
+  MUSCLE_INSERT_LONG_INT (obstack_finish (&format_obstack), lmin);	\
   obstack_fgrow1 (&format_obstack, "%s_max", name);			\
   obstack_1grow (&format_obstack, 0);					\
-  MUSCLE_INSERT_LONG_INT (obstack_finish (&format_obstack),		\
-			  (long int) max);				\
+  MUSCLE_INSERT_LONG_INT (obstack_finish (&format_obstack), lmax);	\
 }
 
 GENERATE_MUSCLE_INSERT_TABLE(muscle_insert_unsigned_int_table, unsigned int)
 GENERATE_MUSCLE_INSERT_TABLE(muscle_insert_int_table, int)
 GENERATE_MUSCLE_INSERT_TABLE(muscle_insert_short_table, short)
-GENERATE_MUSCLE_INSERT_TABLE(muscle_insert_base_table, base_t)
-GENERATE_MUSCLE_INSERT_TABLE(muscle_insert_rule_number_table, rule_number_t)
-GENERATE_MUSCLE_INSERT_TABLE(muscle_insert_symbol_number_table, symbol_number_t)
-GENERATE_MUSCLE_INSERT_TABLE(muscle_insert_item_number_table, item_number_t)
-GENERATE_MUSCLE_INSERT_TABLE(muscle_insert_state_number_table, state_number_t)
+GENERATE_MUSCLE_INSERT_TABLE(muscle_insert_base_table, base_number)
+GENERATE_MUSCLE_INSERT_TABLE(muscle_insert_rule_number_table, rule_number)
+GENERATE_MUSCLE_INSERT_TABLE(muscle_insert_symbol_number_table, symbol_number)
+GENERATE_MUSCLE_INSERT_TABLE(muscle_insert_item_number_table, item_number)
+GENERATE_MUSCLE_INSERT_TABLE(muscle_insert_state_number_table, state_number)
 
 
-/*-----------------------------------------------------------------.
-| Prepare the muscles related to the tokens: translate, tname, and |
-| toknum.                                                          |
-`-----------------------------------------------------------------*/
+/*----------------------------------------------------------------------.
+| Print to OUT a representation of FILENAME escaped both for C and M4.  |
+`----------------------------------------------------------------------*/
 
 static void
-prepare_tokens (void)
+escaped_file_name_output (FILE *out, char const *filename)
 {
+  char const *p;
+  fprintf (out, "[[");
+
+  for (p = quotearg_style (c_quoting_style, filename); *p; p++)
+    switch (*p)
+      {
+      case '$': fputs ("$][", out); break;
+      case '@': fputs ("@@",  out); break;
+      case '[': fputs ("@{",  out); break;
+      case ']': fputs ("@}",  out); break;
+      default: fputc (*p, out); break;
+      }
+
+  fprintf (out, "]]");
+}
+
+
+/*------------------------------------------------------------------.
+| Prepare the muscles related to the symbols: translate, tname, and |
+| toknum.                                                           |
+`------------------------------------------------------------------*/
+
+static void
+prepare_symbols (void)
+{
+  MUSCLE_INSERT_INT ("tokens_number", ntokens);
+  MUSCLE_INSERT_INT ("nterms_number", nvars);
+  MUSCLE_INSERT_INT ("undef_token_number", undeftoken->number);
+  MUSCLE_INSERT_INT ("user_token_number_max", max_user_token_number);
+
   muscle_insert_symbol_number_table ("translate",
 				     token_translations,
 				     token_translations[0],
 				     1, max_user_token_number + 1);
 
+  /* tname -- token names.  */
   {
     int i;
     int j = 0;
@@ -194,19 +167,19 @@ prepare_tokens (void)
 	const char *cp =
 	  quotearg_n_style (1, c_quoting_style,
 			    symbols[i]->tag);
-	/* Width of the next token, including the two quotes, the coma
+	/* Width of the next token, including the two quotes, the comma
 	   and the space.  */
-	int strsize = strlen (cp) + 2;
+	int width = strlen (cp) + 2;
 
-	if (j + strsize > 75)
+	if (j + width > 75)
 	  {
 	    obstack_sgrow (&format_obstack, "\n  ");
 	    j = 2;
 	  }
 
-	obstack_sgrow (&format_obstack, cp);
+	MUSCLE_OBSTACK_SGROW (&format_obstack, cp);
 	obstack_sgrow (&format_obstack, ", ");
-	j += strsize;
+	j += width;
       }
     /* Add a NULL entry to list of tokens (well, 0, as NULL might not be
        defined).  */
@@ -220,7 +193,7 @@ prepare_tokens (void)
   /* Output YYTOKNUM. */
   {
     int i;
-    int *values = XCALLOC (int, ntokens);
+    int *values = MALLOC (values, ntokens);
     for (i = 0; i < ntokens; ++i)
       values[i] = symbols[i]->user_token_number;
     muscle_insert_int_table ("toknum", values,
@@ -232,25 +205,25 @@ prepare_tokens (void)
 
 /*-------------------------------------------------------------.
 | Prepare the muscles related to the rules: rhs, prhs, r1, r2, |
-| rline, dprec, merger                                         |
+| rline, dprec, merger.                                        |
 `-------------------------------------------------------------*/
 
 static void
 prepare_rules (void)
 {
-  rule_number_t r;
+  rule_number r;
   unsigned int i = 0;
-  item_number_t *rhs = XMALLOC (item_number_t, nritems);
-  unsigned int *prhs = XMALLOC (unsigned int, nrules);
-  unsigned int *rline = XMALLOC (unsigned int, nrules);
-  symbol_number_t *r1 = XMALLOC (symbol_number_t, nrules);
-  unsigned int *r2 = XMALLOC (unsigned int, nrules);
-  short *dprec = XMALLOC (short, nrules);
-  short *merger = XMALLOC (short, nrules);
+  item_number *rhs = MALLOC (rhs, nritems);
+  unsigned int *prhs = MALLOC (prhs, nrules);
+  unsigned int *rline = MALLOC (rline, nrules);
+  symbol_number *r1 = MALLOC (r1, nrules);
+  unsigned int *r2 = MALLOC (r2, nrules);
+  short *dprec = MALLOC (dprec, nrules);
+  short *merger = MALLOC (merger, nrules);
 
   for (r = 0; r < nrules; ++r)
     {
-      item_number_t *rhsp = NULL;
+      item_number *rhsp = NULL;
       /* Index of rule R in RHS. */
       prhs[r] = i;
       /* RHS of the rule R. */
@@ -263,13 +236,14 @@ prepare_rules (void)
       /* Separator in RHS. */
       rhs[i++] = -1;
       /* Line where rule was defined. */
-      rline[r] = rules[r].location.first_line;
-      /* Dynamic precedence (GLR) */
+      rline[r] = rules[r].location.start.line;
+      /* Dynamic precedence (GLR).  */
       dprec[r] = rules[r].dprec;
-      /* Merger-function index (GLR) */
+      /* Merger-function index (GLR).  */
       merger[r] = rules[r].merger;
     }
-  assert (i == nritems);
+  if (i != nritems)
+    abort ();
 
   muscle_insert_item_number_table ("rhs", rhs, ritem[0], 1, nritems);
   muscle_insert_unsigned_int_table ("prhs", prhs, 0, 0, nrules);
@@ -278,6 +252,8 @@ prepare_rules (void)
   muscle_insert_unsigned_int_table ("r2", r2, 0, 0, nrules);
   muscle_insert_short_table ("dprec", dprec, 0, 0, nrules);
   muscle_insert_short_table ("merger", merger, 0, 0, nrules);
+
+  MUSCLE_INSERT_INT ("rules_number", nrules);
 
   free (rhs);
   free (prhs);
@@ -295,25 +271,29 @@ prepare_rules (void)
 static void
 prepare_states (void)
 {
-  state_number_t i;
-  symbol_number_t *values =
-    (symbol_number_t *) alloca (sizeof (symbol_number_t) * nstates);
+  state_number i;
+  symbol_number *values = MALLOC (values, nstates);
   for (i = 0; i < nstates; ++i)
     values[i] = states[i]->accessing_symbol;
   muscle_insert_symbol_number_table ("stos", values,
 				     0, 1, nstates);
+  free (values);
+
+  MUSCLE_INSERT_INT ("last", high);
+  MUSCLE_INSERT_INT ("final_state_number", final_state->number);
+  MUSCLE_INSERT_INT ("states_number", nstates);
 }
 
 
 
-/*----------------------------------.
-| Output the user actions to OOUT.  |
-`----------------------------------*/
+/*---------------------------------.
+| Output the user actions to OUT.  |
+`---------------------------------*/
 
 static void
 user_actions_output (FILE *out)
 {
-  rule_number_t r;
+  rule_number r;
 
   fputs ("m4_define([b4_actions], \n[[", out);
   for (r = 0; r < nrules; ++r)
@@ -321,11 +301,10 @@ user_actions_output (FILE *out)
       {
 	fprintf (out, "  case %d:\n", r + 1);
 
-	if (!no_lines_flag)
-	  fprintf (out, muscle_find ("linef"),
-		   rules[r].action_location.first_line,
-		   quotearg_style (c_quoting_style,
-				   muscle_find ("filename")));
+	fprintf (out, "]b4_syncline([[%d]], ",
+		 rules[r].action_location.start.line);
+	escaped_file_name_output (out, rules[r].action_location.start.file);
+	fprintf (out, ")[\n");
 	fprintf (out, "    %s\n    break;\n\n",
 		 rules[r].action);
       }
@@ -355,9 +334,9 @@ merger_output (FILE *out)
   fputs ("]])\n\n", out);
 }
 
-/*---------------------------------------.
-| Output the tokens definition to OOUT.  |
-`---------------------------------------*/
+/*--------------------------------------.
+| Output the tokens definition to OUT.  |
+`--------------------------------------*/
 
 static void
 token_definitions_output (FILE *out)
@@ -368,36 +347,37 @@ token_definitions_output (FILE *out)
   fputs ("m4_define([b4_tokens], \n[", out);
   for (i = 0; i < ntokens; ++i)
     {
-      symbol_t *symbol = symbols[i];
-      int number = symbol->user_token_number;
+      symbol *sym = symbols[i];
+      int number = sym->user_token_number;
 
       /* At this stage, if there are literal aliases, they are part of
 	 SYMBOLS, so we should not find symbols which are the aliases
 	 here.  */
-      assert (number != USER_NUMBER_ALIAS);
+      if (number == USER_NUMBER_ALIAS)
+	abort ();
 
       /* Skip error token.  */
-      if (symbol == errtoken)
+      if (sym == errtoken)
 	continue;
 
       /* If this string has an alias, then it is necessarily the alias
 	 which is to be output.  */
-      if (symbol->alias)
-	symbol = symbol->alias;
+      if (sym->alias)
+	sym = sym->alias;
 
       /* Don't output literal chars or strings (when defined only as a
 	 string).  Note that must be done after the alias resolution:
 	 think about `%token 'f' "f"'.  */
-      if (symbol->tag[0] == '\'' || symbol->tag[0] == '\"')
+      if (sym->tag[0] == '\'' || sym->tag[0] == '\"')
 	continue;
 
       /* Don't #define nonliteral tokens whose names contain periods
 	 or '$' (as does the default value of the EOF token).  */
-      if (strchr (symbol->tag, '.') || strchr (symbol->tag, '$'))
+      if (strchr (sym->tag, '.') || strchr (sym->tag, '$'))
 	continue;
 
       fprintf (out, "%s[[[%s]], [%d]]",
-	       first ? "" : ",\n", symbol->tag, number);
+	       first ? "" : ",\n", sym->tag, number);
 
       first = 0;
     }
@@ -405,9 +385,9 @@ token_definitions_output (FILE *out)
 }
 
 
-/*----------------------------------------.
-| Output the symbol destructors to OOUT.  |
-`----------------------------------------*/
+/*---------------------------------------.
+| Output the symbol destructors to OUT.  |
+`---------------------------------------*/
 
 static void
 symbol_destructors_output (FILE *out)
@@ -419,18 +399,20 @@ symbol_destructors_output (FILE *out)
   for (i = 0; i < nsyms; ++i)
     if (symbols[i]->destructor)
       {
-	symbol_t *symbol = symbols[i];
+	symbol *sym = symbols[i];
 
 	/* Filename, lineno,
 	   Symbol-name, Symbol-number,
 	   destructor, typename. */
-	fprintf (out, "%s[[[%s]], [[%d]], [[%s]], [[%d]], [[%s]], [[%s]]]",
-		 first ? "" : ",\n",
-		 infile, symbol->destructor_location.first_line,
-		 symbol->tag,
-		 symbol->number,
-		 symbol->destructor,
-		 symbol->type_name);
+	fprintf (out, "%s[",
+		 first ? "" : ",\n");
+	escaped_file_name_output (out, sym->destructor_location.start.file);
+	fprintf (out, ", [[%d]], [[%s]], [[%d]], [[%s]], [[%s]]]",
+		 sym->destructor_location.start.line,
+		 sym->tag,
+		 sym->number,
+		 sym->destructor,
+		 sym->type_name);
 
 	first = 0;
       }
@@ -438,9 +420,9 @@ symbol_destructors_output (FILE *out)
 }
 
 
-/*-------------------------------------.
-| Output the symbol printers to OOUT.  |
-`-------------------------------------*/
+/*------------------------------------.
+| Output the symbol printers to OUT.  |
+`------------------------------------*/
 
 static void
 symbol_printers_output (FILE *out)
@@ -452,18 +434,20 @@ symbol_printers_output (FILE *out)
   for (i = 0; i < nsyms; ++i)
     if (symbols[i]->destructor)
       {
-	symbol_t *symbol = symbols[i];
+	symbol *sym = symbols[i];
 
 	/* Filename, lineno,
 	   Symbol-name, Symbol-number,
-	   destructor, typename. */
-	fprintf (out, "%s[[[%s]], [[%d]], [[%s]], [[%d]], [[%s]], [[%s]]]",
-		 first ? "" : ",\n",
-		 infile, symbol->printer_location.first_line,
-		 symbol->tag,
-		 symbol->number,
-		 symbol->printer,
-		 symbol->type_name);
+	   printer, typename. */
+	fprintf (out, "%s[",
+		 first ? "" : ",\n");
+	escaped_file_name_output (out, sym->printer_location.start.file);
+	fprintf (out, ", [[%d]], [[%s]], [[%d]], [[%s]], [[%s]]]",
+		 sym->printer_location.start.line,
+		 sym->tag,
+		 sym->number,
+		 sym->printer,
+		 sym->type_name);
 
 	first = 0;
       }
@@ -513,7 +497,7 @@ prepare_actions (void)
      that case.  Nevertheless, it seems even better to be able to use
      the GLR skeletons even without the non-deterministic tables.  */
   muscle_insert_unsigned_int_table ("conflict_list_heads", conflict_table,
-				    conflict_table[0], 1, high+1);
+				    conflict_table[0], 1, high + 1);
   muscle_insert_unsigned_int_table ("conflicting_rules", conflict_list,
 				    conflict_list[0], 1, conflict_list_cnt);
 }
@@ -526,27 +510,63 @@ prepare_actions (void)
 static void
 output_skeleton (void)
 {
-  /* Store the definition of all the muscles. */
-  const char *tempdir = getenv ("TMPDIR");
-  char *tempfile = NULL;
-  FILE *out = NULL;
-  int fd;
+  FILE *in;
+  FILE *out;
+  int filter_fd[2];
+  char const *argv[6];
+  pid_t pid;
 
-  if (tempdir == NULL)
-    tempdir = DEFAULT_TMPDIR;
-  tempfile = xmalloc (strlen (tempdir) + 11);
-  sprintf (tempfile, "%s/bsnXXXXXX", tempdir);
-  fd = mkstemp (tempfile);
-  if (fd == -1)
-    error (EXIT_FAILURE, errno, "%s", tempfile);
+  /* Compute the names of the package data dir and skeleton file.
+     Test whether m4sugar.m4 is readable, to check for proper
+     installation.  A faulty installation can cause deadlock, so a
+     cheap sanity check is worthwhile.  */
+  char const m4sugar[] = "m4sugar/m4sugar.m4";
+  char *full_m4sugar;
+  char *full_cm4;
+  char *full_path;
+  char const *p;
+  char const *m4 = (p = getenv ("M4")) ? p : M4;
+  char const *pkgdatadir = (p = getenv ("BISON_PKGDATADIR")) ? p : PKGDATADIR;
+  size_t skeleton_size = strlen (skeleton) + 1;
+  size_t pkgdatadirlen = strlen (pkgdatadir);
+  while (pkgdatadirlen && pkgdatadir[pkgdatadirlen - 1] == '/')
+    pkgdatadirlen--;
+  full_path = xmalloc (pkgdatadirlen + 1
+		       + (skeleton_size < sizeof m4sugar
+			  ? sizeof m4sugar : skeleton_size));
+  strcpy (full_path, pkgdatadir);
+  full_path[pkgdatadirlen] = '/';
+  strcpy (full_path + pkgdatadirlen + 1, m4sugar);
+  full_m4sugar = xstrdup (full_path);
+  strcpy (full_path + pkgdatadirlen + 1, "c.m4");
+  full_cm4 = xstrdup (full_path);
+  strcpy (full_path + pkgdatadirlen + 1, skeleton);
+  xfclose (xfopen (full_m4sugar, "r"));
 
-  out = fdopen (fd, "w");
-  if (out == NULL)
-    error (EXIT_FAILURE, errno, "%s", tempfile);
+  /* Create an m4 subprocess connected to us via two pipes.  */
 
-  /* There are no comments, especially not `#': we do want M4 expansion
-     after `#': think of CPP macros!  */
-  fputs ("m4_changecom()\n", out);
+  if (trace_flag & trace_tools)
+    fprintf (stderr, "running: %s %s - %s %s\n",
+	     m4, full_m4sugar, full_cm4, full_path);
+
+  argv[0] = m4;
+  argv[1] = full_m4sugar;
+  argv[2] = "-";
+  argv[3] = full_cm4;
+  argv[4] = full_path;
+  argv[5] = NULL;
+
+  init_subpipe ();
+  pid = create_subpipe (argv, filter_fd);
+  free (full_m4sugar);
+  free (full_cm4);
+  free (full_path);
+
+  out = fdopen (filter_fd[0], "w");
+  if (! out)
+    error (EXIT_FAILURE, get_errno (), "fdopen");
+
+  /* Output the definitions of all the muscles.  */
   fputs ("m4_init()\n", out);
 
   user_actions_output (out);
@@ -561,48 +581,30 @@ output_skeleton (void)
   fputs ("m4_divert_push(0)dnl\n", out);
   xfclose (out);
 
+  /* Read and process m4's output.  */
   timevar_push (TV_M4);
-  m4_invoke (tempfile);
+  in = fdopen (filter_fd[1], "r");
+  if (! in)
+    error (EXIT_FAILURE, get_errno (), "fdopen");
+  scan_skel (in);
+  xfclose (in);
+  reap_subpipe (pid, m4);
   timevar_pop (TV_M4);
-
-  /* If `debugging', keep this file alive. */
-  if (!(trace_flag & trace_tools))
-    unlink (tempfile);
-
-  free (tempfile);
 }
 
 static void
 prepare (void)
 {
   /* Flags. */
-  MUSCLE_INSERT_INT ("locations_flag", locations_flag);
+  MUSCLE_INSERT_INT ("debug", debug_flag);
   MUSCLE_INSERT_INT ("defines_flag", defines_flag);
   MUSCLE_INSERT_INT ("error_verbose", error_verbose);
+  MUSCLE_INSERT_INT ("locations_flag", locations_flag);
   MUSCLE_INSERT_INT ("pure", pure_parser);
-  MUSCLE_INSERT_INT ("debug", debug_flag);
+  MUSCLE_INSERT_INT ("synclines_flag", !no_lines_flag);
 
-  /* FIXME: This is wrong: the muscles should decide whether they hold
-     a copy or not, but the situation is too obscure currently.  */
+  /* File names.  */
   MUSCLE_INSERT_STRING ("prefix", spec_name_prefix ? spec_name_prefix : "yy");
-  MUSCLE_INSERT_STRING ("output_infix", output_infix ? output_infix : "");
-  MUSCLE_INSERT_STRING ("output_prefix", short_base_name);
-  MUSCLE_INSERT_STRING ("output_parser_name", parser_file_name);
-  MUSCLE_INSERT_STRING ("output_header_name", spec_defines_file);
-
-  /* Symbols. */
-  MUSCLE_INSERT_INT ("tokens_number", ntokens);
-  MUSCLE_INSERT_INT ("nterms_number", nvars);
-  MUSCLE_INSERT_INT ("undef_token_number", undeftoken->number);
-  MUSCLE_INSERT_INT ("user_token_number_max", max_user_token_number);
-
-  /* Rules. */
-  MUSCLE_INSERT_INT ("rules_number", nrules);
-
-  /* States. */
-  MUSCLE_INSERT_INT ("last", high);
-  MUSCLE_INSERT_INT ("final_state_number", final_state->number);
-  MUSCLE_INSERT_INT ("states_number", nstates);
 
   /* User Code.  */
   obstack_1grow (&pre_prologue_obstack, 0);
@@ -620,7 +622,7 @@ prepare (void)
     }
 
   /* Parse the skeleton file and output the needed parsers.  */
-  muscle_insert ("skeleton", skeleton);
+  MUSCLE_INSERT_C_STRING ("skeleton", skeleton);
 }
 
 
@@ -633,7 +635,7 @@ output (void)
 {
   obstack_init (&format_obstack);
 
-  prepare_tokens ();
+  prepare_symbols ();
   prepare_rules ();
   prepare_states ();
   prepare_actions ();

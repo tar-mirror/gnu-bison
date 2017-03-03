@@ -1,4 +1,5 @@
-/* Open and close files for bison,
+/* Open and close files for Bison.
+
    Copyright (C) 1984, 1986, 1989, 1992, 2000, 2001, 2002
    Free Software Foundation, Inc.
 
@@ -21,14 +22,18 @@
 
 
 #include "system.h"
-#include "getargs.h"
-#include "files.h"
-#include "gram.h"
-#include "error.h"
+
+#include <error.h>
+#include <get-errno.h>
+#include <quote.h>
+
 #include "complain.h"
+#include "files.h"
+#include "getargs.h"
+#include "gram.h"
 
 /* From basename.c.  Almost a lie, as it returns a char *. */
-const char *base_name PARAMS ((char const *name));
+const char *base_name (char const *name);
 
 FILE *finput = NULL;
 
@@ -50,52 +55,32 @@ char *spec_graph_file = NULL;   /* for -g. */
 char *spec_defines_file = NULL; /* for --defines. */
 char *parser_file_name = NULL;
 
-char *infile = NULL;
+uniqstr grammar_file = NULL;
+uniqstr current_file = NULL;
 
 static char *full_base_name = NULL;
 
 /* Prefix used to generate output file names.  */
 char *short_base_name = NULL;
 
-/* Infix used to generate output file names (i.e., `.tab', or `_tab',
-   or `').  */
-char *output_infix = NULL;
-
 /* C source file extension (the parser source).  */
 const char *src_extension = NULL;
 /* Header file extension (if option ``-d'' is specified).  */
 const char *header_extension = NULL;
 
-
-/*--------------------------.
-| Is SUFFIX ending STRING?  |
-`--------------------------*/
-
-int
-strsuffix (const char *string, const char *suffix)
-{
-  size_t string_len = strlen (string);
-  size_t suffix_len = strlen (suffix);
-  if (suffix_len <= string_len)
-    return !strcmp (string + string_len - suffix_len, suffix);
-  else
-    return 0;
-}
-
-
 /*-----------------------------------------------------------------.
 | Return a newly allocated string composed of the concatenation of |
-| STRING1, and STRING2.                                            |
+| STR1, and STR2.                                                  |
 `-----------------------------------------------------------------*/
 
-char*
-stringappend (const char *string1, const char *string2)
+static char *
+concat2 (char const *str1, char const *str2)
 {
-  size_t len = strlen (string1) + strlen (string2);
-  char *res = XMALLOC (char, len + 1);
+  size_t len = strlen (str1) + strlen (str2);
+  char *res = xmalloc (len + 1);
   char *cp;
-  cp = stpcpy (res, string1);
-  cp = stpcpy (cp, string2);
+  cp = stpcpy (res, str1);
+  cp = stpcpy (cp, str2);
   return res;
 }
 
@@ -111,7 +96,7 @@ xfopen (const char *name, const char *mode)
 
   ptr = fopen (name, mode);
   if (!ptr)
-    error (2, errno, _("cannot open file `%s'"), name);
+    error (EXIT_FAILURE, get_errno (), _("cannot open file `%s'"), name);
 
   return ptr;
 }
@@ -120,25 +105,23 @@ xfopen (const char *name, const char *mode)
 | Try to close file PTR, and print an error message if fails.  |
 `-------------------------------------------------------------*/
 
-int
+void
 xfclose (FILE *ptr)
 {
-  int result;
-
   if (ptr == NULL)
-    return 0;
+    return;
 
-  result = fclose (ptr);
-  if (result == EOF)
-    error (2, errno, _("cannot close file"));
+  if (ferror (ptr))
+    error (EXIT_FAILURE, 0, _("I/O error"));
 
-  return result;
+  if (fclose (ptr) != 0)
+    error (EXIT_FAILURE, get_errno (), _("cannot close file"));
 }
 
 
-/*----------------------------------------------------------------.
-| Compute BASE_NAME, SHORT_BASE_NAME and output files extensions. |
-`----------------------------------------------------------------*/
+/*---------------------------------------------------------------------.
+| Compute FULL_BASE_NAME, SHORT_BASE_NAME and output files extensions. |
+`---------------------------------------------------------------------*/
 
 /* Replace all characters FROM by TO in the string IN.
    and returns a new allocated string.  */
@@ -146,9 +129,7 @@ static char *
 tr (const char *in, char from, char to)
 {
   char *temp;
-  char *out;
-
-  out = XMALLOC (char, strlen (in) + 1);
+  char *out = xmalloc (strlen (in) + 1);
 
   for (temp = out; *in; in++, out++)
     if (*in == from)
@@ -220,13 +201,17 @@ filename_split (const char *filename,
   *ext = strrchr (*base, '.');
   *tab = NULL;
 
-  /* If there is an exentension, check if there is a `.tab' part right
+  /* If there is an extension, check if there is a `.tab' part right
      before.  */
-  if (*ext
-      && (*ext - *base) > (int) strlen (".tab")
-      && (!strncmp (*ext - strlen (".tab"), ".tab", strlen (".tab"))
-	  || !strncmp (*ext - strlen ("_tab"), "_tab", strlen ("_tab"))))
-    *tab = *ext - strlen (".tab");
+  if (*ext)
+    {
+      size_t baselen = *ext - *base;
+      size_t dottablen = 4;
+      if (dottablen < baselen
+	  && (strncmp (*ext - dottablen, ".tab", dottablen) == 0
+	      || strncmp (*ext - dottablen, "_tab", dottablen) == 0))
+	*tab = *ext - dottablen;
+    }
 }
 
 
@@ -238,10 +223,10 @@ compute_base_names (void)
   const char *base, *tab, *ext;
 
   /* If --output=foo.c was specified (SPEC_OUTFILE == foo.c),
-     BASE_NAME and SHORT_BASE_NAME are `foo'.
+     FULL_BASE_NAME and SHORT_BASE_NAME are `foo'.
 
-     If --output=foo.tab.c was specified, BASE_NAME is `foo.tab' and
-     SHORT_BASE_NAME is `foo'.
+     If --output=foo.tab.c was specified, FULL_BASE_NAME is `foo.tab'
+     and SHORT_BASE_NAME is `foo'.
 
      The precise -o name will be used for FTABLE.  For other output
      files, remove the ".c" or ".tab.c" suffix.  */
@@ -259,10 +244,6 @@ compute_base_names (void)
 	xstrndup (spec_outfile,
 		  (strlen (spec_outfile)
 		   - (tab ? strlen (tab) : (ext ? strlen (ext) : 0))));
-
-      if (tab)
-	output_infix = xstrndup (tab,
-				 (strlen (tab) - (ext ? strlen (ext) : 0)));
 
       if (ext)
 	compute_exts_from_src (ext);
@@ -289,34 +270,35 @@ compute_base_names (void)
 	{
 	  /* Otherwise, the short base name is computed from the input
 	     grammar: `foo/bar.yy' => `bar'.  */
-	  filename_split (infile, &base, &tab, &ext);
+	  filename_split (grammar_file, &base, &tab, &ext);
 	  short_base_name =
 	    xstrndup (base,
 		      (strlen (base) - (ext ? strlen (ext) : 0)));
 	}
 
-      /* In these cases, always append `.tab'. */
-      output_infix = xstrdup (EXT_TAB);
-
-      full_base_name = XMALLOC (char,
-				strlen (short_base_name)
-				+ strlen (EXT_TAB) + 1);
-      stpcpy (stpcpy (full_base_name, short_base_name), EXT_TAB);
+      full_base_name = xmalloc (strlen (short_base_name)
+				+ strlen (TAB_EXT) + 1);
+      stpcpy (stpcpy (full_base_name, short_base_name), TAB_EXT);
 
       /* Computes the extensions from the grammar file name.  */
-      filename_split (infile, &base, &tab, &ext);
+      filename_split (grammar_file, &base, &tab, &ext);
       if (ext && !yacc_flag)
 	compute_exts_from_gf (ext);
     }
 }
 
-/*-------------------------------------------------------.
-| Close the open files, compute the output files names.  |
-`-------------------------------------------------------*/
+
+/* Compute the output file names.  Warn if we detect conflicting
+   outputs to the same file.  */
 
 void
 compute_output_file_names (void)
 {
+  char const *name[4];
+  int i;
+  int j;
+  int names = 0;
+
   compute_base_names ();
 
   /* If not yet done. */
@@ -325,16 +307,31 @@ compute_output_file_names (void)
   if (!header_extension)
     header_extension = ".h";
 
-  parser_file_name =
-    spec_outfile ? spec_outfile : stringappend (full_base_name, src_extension);
+  name[names++] = parser_file_name =
+    spec_outfile ? spec_outfile : concat2 (full_base_name, src_extension);
 
-  /* It the defines filename if not given, we create it.  */
-  if (!spec_defines_file)
-    spec_defines_file = stringappend (full_base_name, header_extension);
+  if (defines_flag)
+    {
+      if (! spec_defines_file)
+	spec_defines_file = concat2 (full_base_name, header_extension);
+      name[names++] = spec_defines_file;
+    }
 
-  /* It the graph filename if not given, we create it.  */
-  if (!spec_graph_file)
-    spec_graph_file = stringappend (short_base_name, ".vcg");
+  if (graph_flag)
+    {
+      if (! spec_graph_file)
+	spec_graph_file = concat2 (short_base_name, ".vcg");
+      name[names++] = spec_graph_file;
+    }
 
-  spec_verbose_file = stringappend (short_base_name, EXT_OUTPUT);
+  if (report_flag)
+    {
+      spec_verbose_file = concat2 (short_base_name, OUTPUT_EXT);
+      name[names++] = spec_verbose_file;
+    }
+
+  for (j = 0; j < names; j++)
+    for (i = 0; i < j; i++)
+      if (strcmp (name[i], name[j]) == 0)
+	warn (_("conflicting outputs to file %s"), quote (name[i]));
 }

@@ -38,7 +38,7 @@ e: 'e' | /* Nothing. */;
 ]])
 
 AT_CHECK([bison -o input.c input.y], 0, [],
-[[input.y:4.8: warning: rule never reduced because of conflicts: e: /* empty */
+[[input.y:4.9: warning: rule never reduced because of conflicts: e: /* empty */
 ]])
 
 AT_CLEANUP
@@ -50,12 +50,9 @@ AT_CLEANUP
 
 AT_SETUP([%nonassoc and eof])
 
-AT_DATA([input.y],
+AT_DATA_GRAMMAR([input.y],
 [[
 %{
-#include <config.h>
-/* We don't need a perfect malloc for these tests. */
-#undef malloc
 #include <stdio.h>
 
 #if STDC_HEADERS
@@ -111,16 +108,16 @@ AT_PARSER_CHECK([./input '0<0'])
 # no one has ever spotted it!  The messages are *wrong*: there should
 # be nothing there, it should be expected eof.
 AT_PARSER_CHECK([./input '0<0<0'], [1], [],
-         [parse error, unexpected '<', expecting '<' or '>'
+         [syntax error, unexpected '<', expecting '<' or '>'
 ])
 
 AT_PARSER_CHECK([./input '0>0'])
 AT_PARSER_CHECK([./input '0>0>0'], [1], [],
-         [parse error, unexpected '>', expecting '<' or '>'
+         [syntax error, unexpected '>', expecting '<' or '>'
 ])
 
 AT_PARSER_CHECK([./input '0<0>0'], [1], [],
-         [parse error, unexpected '>', expecting '<' or '>'
+         [syntax error, unexpected '>', expecting '<' or '>'
 ])
 
 AT_CLEANUP
@@ -142,12 +139,12 @@ exp: exp OP exp | NUM;
 ]])
 
 AT_CHECK([bison -o input.c --report=all input.y], 0, [],
-[input.y: warning: 1 shift/reduce conflict
+[input.y: conflicts: 1 shift/reduce
 ])
 
 # Check the contents of the report.
 AT_CHECK([cat input.output], [],
-[[State 5 contains 1 shift/reduce conflict.
+[[State 5 conflicts: 1 shift/reduce
 
 
 Grammar
@@ -372,8 +369,8 @@ id : '0';
 ]])
 
 AT_CHECK([bison -o input.c --report=all input.y], 0, [],
-[[input.y: warning: 1 reduce/reduce conflict
-input.y:4.4-8: warning: rule never reduced because of conflicts: id: '0'
+[[input.y: conflicts: 1 reduce/reduce
+input.y:4.6-8: warning: rule never reduced because of conflicts: id: '0'
 ]])
 
 # Check the contents of the report.
@@ -383,7 +380,7 @@ AT_CHECK([cat input.output], [],
     4 id: '0'
 
 
-State 1 contains 1 reduce/reduce conflict.
+State 1 conflicts: 1 reduce/reduce
 
 
 Grammar
@@ -489,7 +486,7 @@ exp: exp OP exp | NUM;
 ]])
 
 AT_CHECK([bison -o input.c input.y], 1, [],
-[input.y: warning: 1 shift/reduce conflict
+[input.y: conflicts: 1 shift/reduce
 input.y: expected 0 shift/reduce conflicts
 ])
 AT_CLEANUP
@@ -526,7 +523,27 @@ exp: exp OP exp | NUM;
 ]])
 
 AT_CHECK([bison -o input.c input.y], 1, [],
-[input.y: warning: 1 shift/reduce conflict
+[input.y: conflicts: 1 shift/reduce
 input.y: expected 2 shift/reduce conflicts
+])
+AT_CLEANUP
+
+
+## ------------------------------ ##
+## %expect with reduce conflicts  ##
+## ------------------------------ ##
+
+AT_SETUP([%expect with reduce conflicts])
+
+AT_DATA([input.y],
+[[%expect 0
+%%
+program: a 'a' | a a;
+a: 'a';
+]])
+
+AT_CHECK([bison -o input.c input.y], 1, [],
+[input.y: conflicts: 1 reduce/reduce
+input.y: expected 0 reduce/reduce conflicts
 ])
 AT_CLEANUP

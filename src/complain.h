@@ -25,49 +25,35 @@
 extern "C" {
 # endif
 
-# ifdef __STDC__
+/* Informative messages, but we proceed.  */
 
-/* Informative messages, but we proceed. */
-
-void warn (const char *format, ...)
+void warn (char const *format, ...)
   __attribute__ ((__format__ (__printf__, 1, 2)));
 
-void warn_at (location_t location, const char *format, ...)
+void warn_at (location loc, char const *format, ...)
   __attribute__ ((__format__ (__printf__, 2, 3)));
 
-/* Something bad happen, but let's continue and die later. */
+/* Something bad happened, but let's continue and die later.  */
 
-void complain (const char *format, ...)
+void complain (char const *format, ...)
   __attribute__ ((__format__ (__printf__, 1, 2)));
 
-void complain_at (location_t location, const char *format, ...)
+void complain_at (location loc, char const *format, ...)
   __attribute__ ((__format__ (__printf__, 2, 3)));
 
-/* Something bad happen and we die now. */
+/* Something bad happened, and let's die now.  */
 
-void fatal (const char *format, ...)
-  __attribute__ ((__format__ (__printf__, 1, 2)));
+void fatal (char const *format, ...)
+  __attribute__ ((__noreturn__, __format__ (__printf__, 1, 2)));
 
-void fatal_at (location_t location, const char *format, ...)
-  __attribute__ ((__format__ (__printf__, 2, 3)));
+void fatal_at (location loc, char const *format, ...)
+  __attribute__ ((__noreturn__, __format__ (__printf__, 2, 3)));
 
-# else
-void warn ();
-void warn_at ();
-void complain ();
-void complain_at ();
-void fatal ();
-void fatal_at ();
-# endif
+/* This variable is set each time `warn' is called.  */
+extern bool warning_issued;
 
-/* Position in the current input file. */
-extern char *infile;
-
-/* This variable is incremented each time `warn' is called.  */
-extern unsigned int warn_message_count;
-
-/* This variable is incremented each time `complain' is called.  */
-extern unsigned int complain_message_count;
+/* This variable is set each time `complain' is called.  */
+extern bool complaint_issued;
 
 # ifdef	__cplusplus
 }

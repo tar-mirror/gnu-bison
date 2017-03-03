@@ -3,14 +3,12 @@ src/conflicts.c
 src/files.c
 src/getargs.c
 src/gram.c
-src/lalr.c
 src/main.c
-src/parse-gram.c
+src/parse-gram.y
 src/print.c
 src/reader.c
 src/reduce.c
-src/scan-gram.c
-src/state.c
+src/scan-gram.l
 src/symlist.c
 src/symtab.c
 
@@ -20,5 +18,6 @@ lib/error.c
 lib/getopt.c
 lib/obstack.c
 lib/quotearg.c
+lib/subpipe.c
 lib/timevar.c
 lib/xmalloc.c

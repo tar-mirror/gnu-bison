@@ -1,7 +1,100 @@
 Bison News
 ----------
 
-Changes in version 1.75:
+Changes in version 1.875, 2003-01-01:
+
+* The documentation license has been upgraded to version 1.2
+  of the GNU Free Documentation License.
+
+* syntax error processing
+
+  - In Yacc-style parsers YYLLOC_DEFAULT is now used to compute error
+    locations too.  This fixes bugs in error-location computation.
+
+  - %destructor
+    It is now possible to reclaim the memory associated to symbols
+    discarded during error recovery.  This feature is still experimental.
+
+  - %error-verbose
+    This new directive is preferred over YYERROR_VERBOSE.
+
+  - #defining yyerror to steal internal variables is discouraged.
+    It is not guaranteed to work forever.
+
+* POSIX conformance
+
+  - Semicolons are once again optional at the end of grammar rules.
+    This reverts to the behavior of Bison 1.33 and earlier, and improves
+    compatibility with Yacc.
+
+  - `parse error' -> `syntax error'
+    Bison now uniformly uses the term `syntax error'; formerly, the code
+    and manual sometimes used the term `parse error' instead.  POSIX
+    requires `syntax error' in diagnostics, and it was thought better to
+    be consistent.
+
+  - The documentation now emphasizes that yylex and yyerror must be
+    declared before use.  C99 requires this.
+
+  - Bison now parses C99 lexical constructs like UCNs and
+    backslash-newline within C escape sequences, as POSIX 1003.1-2001 requires.
+
+  - File names are properly escaped in C output.  E.g., foo\bar.y is
+    output as "foo\\bar.y".
+
+  - Yacc command and library now available
+    The Bison distribution now installs a `yacc' command, as POSIX requires.
+    Also, Bison now installs a small library liby.a containing
+    implementations of Yacc-compatible yyerror and main functions.
+    This library is normally not useful, but POSIX requires it.
+
+  - Type clashes now generate warnings, not errors.
+
+  - If the user does not define YYSTYPE as a macro, Bison now declares it
+    using typedef instead of defining it as a macro.
+    For consistency, YYLTYPE is also declared instead of defined.
+
+* Other compatibility issues
+
+  - %union directives can now have a tag before the `{', e.g., the
+    directive `%union foo {...}' now generates the C code
+    `typedef union foo { ... } YYSTYPE;'; this is for Yacc compatibility.
+    The default union tag is `YYSTYPE', for compatibility with Solaris 9 Yacc.
+    For consistency, YYLTYPE's struct tag is now `YYLTYPE' not `yyltype'.
+    This is for compatibility with both Yacc and Bison 1.35.
+
+  - `;' is output before the terminating `}' of an action, for
+    compatibility with Bison 1.35.
+
+  - Bison now uses a Yacc-style format for conflict reports, e.g.,
+    `conflicts: 2 shift/reduce, 1 reduce/reduce'.
+
+  - `yystype' and `yyltype' are now obsolescent macros instead of being
+    typedefs or tags; they are no longer documented and are planned to be
+    withdrawn in a future release.
+
+* GLR parser notes
+
+  - GLR and inline
+    Users of Bison have to decide how they handle the portability of the
+    C keyword `inline'.
+
+  - `parsing stack overflow...' -> `parser stack overflow'
+    GLR parsers now report `parser stack overflow' as per the Bison manual.
+
+* Bison now warns if it detects conflicting outputs to the same file,
+  e.g., it generates a warning for `bison -d -o foo.h foo.y' since
+  that command outputs both code and header to foo.h.
+
+* #line in output files
+  - --no-line works properly.
+
+* Bison can no longer be built by a K&R C compiler; it requires C89 or
+  later to be built.  This change originally took place a few versions
+  ago, but nobody noticed until we recently asked someone to try
+  building Bison with a K&R C compiler.
+
+Changes in version 1.75, 2002-10-14:
 
 * Bison should now work on 64-bit hosts.
 
@@ -129,9 +222,9 @@ Changes in version 1.50, 2002-10-04:
   the user symbol is used in the reports, the graphs, and the verbose
   error messages instead of `$end', which remains being the default.
   For instance
-     %token YYEOF 0
+     %token MYEOF 0
   or
-     %token YYEOF 0 "end of file"
+     %token MYEOF 0 "end of file"
 
 * Semantic parser
   This old option, which has been broken for ages, is removed.
@@ -311,8 +404,8 @@ Changes in version 1.31, 2002-01-14:
 
 Changes in version 1.30, 2001-10-26:
 
-* `--defines' and `--graph' have now an optionnal argument which is the
-  output file name. `-d' and `-g' do not change, they do not take any
+* `--defines' and `--graph' have now an optional argument which is the
+  output file name. `-d' and `-g' do not change; they do not take any
   argument.
 
 * `%source_extension' and `%header_extension' are removed, failed
@@ -435,16 +528,17 @@ End:
 
 -----
 
-Copyright (C) 2001, 2002 Free Software Foundation, Inc.
+Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003
+Free Software Foundation, Inc.
 
-This file is part of GNU Autoconf.
+This file is part of Bison, the GNU Compiler Compiler.
 
-GNU Autoconf is free software; you can redistribute it and/or modify
+Bison is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2, or (at your option)
 any later version.
 
-GNU Autoconf is distributed in the hope that it will be useful,
+Bison is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.

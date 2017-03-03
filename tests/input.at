@@ -33,7 +33,7 @@ exp: { $$ = $1 ; };
 ]])
 
 AT_CHECK([bison input.y], [1], [],
-[[input.y:2.6-14: invalid value: $1
+[[input.y:2.13-14: integer out of range: `$1'
 ]])
 
 AT_CLEANUP
@@ -51,7 +51,7 @@ exp: { @$ = @1 ; };
 ]])
 
 AT_CHECK([bison input.y], [1], [],
-[[input.y:2.6-14: invalid value: @1
+[[input.y:2.13-14: integer out of range: `@1'
 ]])
 
 AT_CLEANUP
@@ -73,10 +73,10 @@ exp: foo {} foo
    ;
 ]])
 
-AT_CHECK([bison input.y], [1], [],
-[[input.y:4.4-15: type clash (`bar' `') on default action
-input.y:5.4-8: type clash (`bar' `') on default action
-input.y:6.4: empty rule for typed nonterminal, and no action
+AT_CHECK([bison input.y], [], [],
+[[input.y:4.6-15: warning: type clash on default action: <bar> != <>
+input.y:5.6-8: warning: type clash on default action: <bar> != <>
+input.y:6.5: warning: empty rule for typed nonterminal, and no action
 ]])
 
 AT_CLEANUP
@@ -92,10 +92,39 @@ AT_CLEANUP
 
 AT_SETUP([Torturing the Scanner])
 
-AT_DATA([input.y],
+AT_DATA_GRAMMAR([input.y],
 [[%{
 /* This is seen in GCC: a %{ and %} in middle of a comment. */
 const char *foo = "So %{ and %} can be here too.";
+
+#if 0
+/* These examples test Bison while not stressing C compilers too much.
+   Many C compilers mishandle backslash-newlines, so this part of the
+   test is inside "#if 0".  The comment and string are written so that
+   the "#endif" will be seen regardless of the C compiler bugs that we
+   know about, namely:
+
+     HP C (as of late 2002) mishandles *\[newline]\[newline]/ within a
+     comment.
+
+     The Apple Darwin compiler (as of late 2002) mishandles
+     \\[newline]' within a character constant.
+
+   */
+
+/\
+* A comment with backslash-newlines in it. %} *\
+\
+/
+/* { Close the above comment, if the C compiler mishandled it.  */
+
+char str[] = "\\
+" A string with backslash-newlines in it %{ %} \\
+\
+"";
+
+char apostrophe = '\'';
+#endif
 
 #include <stdio.h>
 %}
@@ -103,7 +132,7 @@ const char *foo = "So %{ and %} can be here too.";
 
 %{
 /* Exercise pre-prologue dependency to %union.  */
-typedef int value_t;
+typedef int value;
 %}
 
 /* Exercise M4 quoting: '@:>@@:>@', 0.  */
@@ -111,13 +140,13 @@ typedef int value_t;
 /* Also exercise %union. */
 %union
 {
-  value_t ival; /* A comment to exercise an old bug. */
+  value ival; /* A comment to exercise an old bug. */
 };
 
 
 /* Exercise post-prologue dependency to %union.  */
 %{
-static YYSTYPE value_t_as_yystype (value_t val);
+static YYSTYPE value_as_yystype (value val);
 
 /* Exercise quotes in declarations.  */
 char quote[] = "@:>@@:>@,";
@@ -128,25 +157,29 @@ static void yyerror (const char *s);
 static int yylex (void);
 %}
 
-%type <ival> '1'
+%type <ival> '@<:@'
 
 /* Exercise quotes in strings.  */
-%token FAKE "fake @<:@@:>@,"
+%token FAKE "fake @<:@@:>@ \a\b\f\n\r\t\v\"\'\?\\\u005B\U0000005c ??!??'??(??)??-??/??<??=??> \x0\0"
 
 %%
-/* Exercise M4 quoting: '@:>@@:>@', 1.  */
-exp: '1'
+/* Exercise M4 quoting: '@:>@@:>@', @<:@, 1.  */
+exp: '@<:@' '\1' two '$' '@' '{' oline output
   {
     /* Exercise quotes in braces.  */
     char tmp[] = "@<:@%c@:>@,\n";
     printf (tmp, $1);
   }
 ;
+
+two: '\x000000000000000000000000000000000000000000000000000000000000000000002';
+oline: '@' 'o' 'l' 'i' 'n' 'e' '@' '_' '_' 'o' 'l' 'i' 'n' 'e' '_' '_';
+output: '#' 'o' 'u' 't' 'p' 'u' 't' ' ';
 %%
-/* Exercise M4 quoting: '@:>@@:>@', 2.  */
+/* Exercise M4 quoting: '@:>@@:>@', @<:@, 2.  */
 
 static YYSTYPE
-value_t_as_yystype (value_t val)
+value_as_yystype (value val)
 {
   YYSTYPE res;
   res.ival = val;
@@ -156,8 +189,10 @@ value_t_as_yystype (value_t val)
 static int
 yylex (void)
 {
-  static const char *input = "1";
-  yylval = value_t_as_yystype (*input);
+  static const char *input = "@<:@\1\2$@{@oline@__@&t@oline__\
+#output "; /* "
+  */
+  yylval = value_as_yystype (*input);
   return *input++;
 }
 
@@ -168,8 +203,10 @@ yyerror (const char *msg)
 }
 ]])
 
+# Pacify Emacs'font-lock-mode: "
+
 AT_DATA([main.c],
-[[typedef int value_t;
+[[typedef int value;
 #include "input.h"
 
 int yyparse (void);
@@ -182,9 +219,11 @@ main (void)
 ]])
 
 AT_CHECK([bison -d -v -o input.c input.y])
-AT_COMPILE([input], [input.c main.c])
+AT_COMPILE([input.o], [-c input.c])
+AT_COMPILE([main.o], [-c main.c])
+AT_COMPILE([input], [input.o main.o])
 AT_PARSER_CHECK([./input], 0,
-[[[1],
+[[[@<:@],
 ]])
 
 AT_CLEANUP
